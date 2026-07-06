@@ -6,7 +6,8 @@ This repository follows the LLM-wiki pattern: three layers with different mutati
 
 1. **`sources/`** — immutable. Historical drafts (v000–v078), PDFs, residue data. Read for provenance; never edit, never delete. New monolith drafts are no longer created — the wiki pages are the live document.
 2. **Wiki pages** (`index.md`, `spine.md`, `program.md`, `stage1.md`–`stage3.md`, `open-problems.md`, `archive/`) — evergreen. Each carries front matter (`status`, `scope`, `updated`) and a "Current state" paragraph. Pages are rewritten in place to carry the current best answer; history is git's job, not the page's.
-3. **This file** — the schema. Update it when the structure or workflows change.
+3. **`experiments/`** — verification and pilot code. Each script states which page/result it supports. Scripts are kept runnable; results (counts, ranges, dates) are quoted in the owning page.
+4. **This file** — the schema. Update it when the structure or workflows change.
 
 ## Conventions
 
@@ -42,3 +43,4 @@ Occasionally diff every page's claims about *other* pages against those pages' o
 
 - 2026-07-06 — wiki split from `sources/drafts/collatz_reduction_rewrite_v078.md`; concatenation of page bodies reproduces the monolith byte-identically.
 - 2026-07-06 — independent numeric verification of: unified depth-side law (11.8.5.6.2), entry-depth law all six classes (11.8.6.3), orbit projection + fiber of (1,1) (9.8), 8,000 random states + orbit traces, zero failures.
+- 2026-07-07 — low-order anchor-increment law (11.8.7.3.1, stage4.md): predictor-from-truncations test (4,046 checks) and lift-invariance test (10,092 pairs), k ∈ {1,3,6}, zero failures. Code: experiments/anchor_increment.py.

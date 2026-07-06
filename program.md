@@ -1,11 +1,11 @@
 ---
 status: program / status ledger
-scope: monolith 11.8 intro, guardrail, stage prospectus, 11.8.7, 11.8.8, 11.9
-updated: 2026-07-06
+scope: monolith 11.8 intro, guardrail, stage prospectus, 11.8.8, 11.9 (11.8.7 moved to stage4.md)
+updated: 2026-07-07
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
-> **Current state.** The Route A program: guardrail, stage architecture, and strategic summary. Stages 1-3 are closed per reduced step (see stage1.md-stage3.md); Stage 4 — the odd core ω_+, equivalently the anchor increment law — is the terminal open problem. The compact status ledger lives at stage1.md 11.8.4.5.
+> **Current state.** The Route A program: guardrail, stage architecture, and strategic summary. Stages 1-3 are closed per reduced step (see stage1.md-stage3.md); Stage 4 — the odd core ω_+, equivalently the anchor increment law — is the terminal open problem and now has its own page (stage4.md), where its first result is proved: the exact low-order law for the anchor increment (11.8.7.3.1). The compact status ledger lives at stage1.md 11.8.4.5.
 
 ## 11.8. A Guarded Route A Program
 
@@ -89,22 +89,7 @@ This direction is natural because the reduced formalism has already isolated `s`
 
 ### 11.8.7. Stage 4. Only Then Refine `ω_+`
 
-The final stage is a sharper classification of the odd core
-
-```text
-ω_+ = C / (2^(v_2(C)) 3^(v_3(C))).
-```
-
-This should be treated as a later objective rather than the first one. The quantity `ω_+` is the most refined part of the next reduced state, and attempts to classify it too early are especially likely to fall into unproductive case-splitting.
-
-Accordingly, the natural order of difficulty is:
-
-1. control `s`,
-2. understand `3`-gain,
-3. obtain laws for `d_+`,
-4. and only then seek a more transparent description of `ω_+`.
-
-Items `1`–`3` are now closed per reduced step (the exact global law of `11.8.4.1`, the `3`-gain law of `11.8.5`, and the entry-depth and absorption laws of `11.8.6.2`–`11.8.6.3`). Stage 4 is thus the live front, and by `11.8.5.6` it coincides with the anchor increment law — the fiber-to-orbit bridge.
+Stage 4 is the live front and now has its own page: **stage4.md**, which owns section `11.8.7` and its results. In brief: the odd core `ω_+` coincides, by `11.8.5.6`, with the anchor increment law; its low-order truncations obey an exact `σ`-graded law (Theorem `11.8.7.3.1`, proved 2026-07-07), and the residual open content is displacement propagation at unbounded depth (`11.8.7.5`).
 
 ### 11.8.8. Strategic Summary
 

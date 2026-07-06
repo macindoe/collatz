@@ -1,11 +1,11 @@
 ---
 status: closed (3-gain law proved on both lifting components); fiber-versus-orbit bridge OPEN
 scope: monolith 11.8.5
-updated: 2026-07-06
+updated: 2026-07-07
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
-> **Current state.** Stage 2: the exact 3-gain law, the orbit anchor M(ω) = N(ω^2), the unified depth-side law s = 2 + v_2(d - M(ω)), and the fiber-versus-orbit gap (11.8.5.6) — the program's terminal open problem, equivalent to Stage 4.
+> **Current state.** Stage 2: the exact 3-gain law, the orbit anchor M(ω) = N(ω^2), the unified depth-side law s = 2 + v_2(d - M(ω)), and the fiber-versus-orbit gap (11.8.5.6) — the program's terminal open problem, equivalent to Stage 4. Sub-question 1 of the bridge question (low-order law for ΔM) is now closed: Theorem 11.8.7.3.1, stage4.md.
 
 ### 11.8.5. Stage 2: The `3`-gain law on the lifting branch
 
@@ -241,6 +241,8 @@ Three graded sub-questions, in increasing order of ambition:
 3. *Statistical behavior.* Along typical orbits, do the successive anchors `M(ω_t)` equidistribute in `Z_2` (as fair-coin digit behavior of logarithms would suggest), and does the `3`-gain sequence inherit the corresponding shell-parity statistics?
 
 A positive answer at any of the three levels would convert the Stage 1–2 statics into orbit-level statements. A negative structural answer — for instance, that `ΔM` is as hard as the digits of the logarithms themselves — would locate the difficulty of the full problem precisely at the fiber-to-orbit bridge.
+
+**Resolution note (2026-07-07).** Sub-question `1` is answered in the affirmative: `ΔM mod 2^k` obeys an exact law in the state's residues modulo `σ`-graded powers of `2`, with modulus fixed in advance per `(s, m_+)` stratum — Theorem `11.8.7.3.1` (stage4.md), verified independently (`11.8.7.4`). Sub-questions `2` and `3` remain open; the residual hardness of the bridge is now confined to unbounded-depth digit questions (`11.8.7.5`).
 
 **Remark (relation to the trivial cycle).** The fixed point of the reduced dynamics is `(ω, d) = (1, 1)` with `M(1) = 0`, and by the convergence translation (Theorem `9.8.3`) the conjecture is exactly the statement that every orbit drives the pair `(d - M(ω), M(ω))` to `(1, 0)`. The reformulation in anchor coordinates fixes the language in which the increment question above would have to be answered; nothing beyond the translation is claimed.
 

@@ -1,7 +1,7 @@
 ---
 status: closed (proved + imported bounds); anchor digit statistics exported to classical p-adic analysis
 scope: monolith 11.8.1-11.8.4
-updated: 2026-07-06
+updated: 2026-07-07
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -2087,7 +2087,9 @@ formal:
     uniform 3-gain law on the lifting branch,
     unconditional polylog spike-height bound (imported: p-adic Baker theory),
     target-shift entry-depth law m_+ and per-step depth law d_+,
-        all residue classes (11.8.6.3)
+        all residue classes (11.8.6.3),
+    low-order anchor-increment law ΔM mod 2^k,
+        σ-graded moduli, fixed per stratum (11.8.7.3, stage4.md)
 
 dissolved or exported:
     tower-type classification (no dichotomy: anchor digit density),
@@ -2101,8 +2103,10 @@ heuristic, empirically sharp (11.8.4.4):
 
 open:
     intrinsic form of the correction term beyond valuation,
-    the odd core ω_+ of C — Stage 4, equivalently the anchor
-        increment law (11.8.5.6): the terminal bottleneck
+    the anchor increment law at unbounded depth — Stage 4,
+        equivalently displacement propagation (11.8.5.6.3 sub-q. 2,
+        11.8.7.5): the terminal bottleneck
+        (low-order truncations of ΔM are now formal, 11.8.7.3)
 ```
 
 The first part of the conversion from valuation synthesis to reduced dynamics is now complete. Section `11.8.5` proves the exact `3`-gain law for all families on both components of the lifting branch,

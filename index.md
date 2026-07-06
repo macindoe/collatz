@@ -1,6 +1,6 @@
 ---
 status: index
-updated: 2026-07-06
+updated: 2026-07-07
 ---
 
 # Collatz Reduction — Wiki Index
@@ -18,6 +18,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 | `stage1.md` | §11.8.1–11.8.4: valuation synthesis — mod-8 classification, anchor `N(ω)`, exact global law for `s`, Baker bounds, ledgers, status snapshot (11.8.4.5) | closed |
 | `stage2.md` | §11.8.5: 3-gain law, orbit anchor `M(ω)`, unified depth-side law, fiber-versus-orbit gap (11.8.5.6) | closed / bridge OPEN |
 | `stage3.md` | §11.8.6: decomposition of `C`, target-shift lemma, entry-depth law, per-step depth law | closed per step |
+| `stage4.md` | §11.8.7: the odd core `ω_+` / anchor increment — pilot experiment, digit-determinacy lemmas, low-order law (11.8.7.3.1) | live front |
 | `open-problems.md` | §11–11.7: the open-questions layer, with calibration notes | open / calibrated |
 | `archive/appendix-a.md` | Appendix A: discovery path, worked examples, refuted claims with audit data | archive |
 | `sources/` | Immutable: drafts v000–v078, PDFs, residue data | never edited |
@@ -26,11 +27,11 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 
 Monolith section numbers remain the citation anchors throughout (`11.8.6.3` etc.). To find one:
 
-§1–9 → `spine.md` · §10 → this page (below) · §11.1–11.7 → `open-problems.md` · §11.8 intro/guardrail/Stage-1 prospectus → `program.md` · §11.8.1–11.8.4 → `stage1.md` · §11.8.5 → `stage2.md` · §11.8.6 → `stage3.md` · §11.8.7–11.8.8, §11.9 → `program.md` · Appendix A → `archive/appendix-a.md`
+§1–9 → `spine.md` · §10 → this page (below) · §11.1–11.7 → `open-problems.md` · §11.8 intro/guardrail/Stage-1 prospectus → `program.md` · §11.8.1–11.8.4 → `stage1.md` · §11.8.5 → `stage2.md` · §11.8.6 → `stage3.md` · §11.8.7 → `stage4.md` · §11.8.8, §11.9 → `program.md` · Appendix A → `archive/appendix-a.md` · verification code → `experiments/`
 
 ## Current status (one paragraph)
 
-The per-step arithmetic of the reduced transition is formal: the valuation `s` has an exact global law (stage1.md 11.8.4.1; unified form stage2.md 11.8.5.6.2), the 3-gain trigger is a theorem (stage2.md), and the depth evolution `d_+ = m_+ + a_+` is closed on all residue classes (stage3.md 11.8.6.3.6). The terminal open problem is the odd core `ω_+` — equivalently the anchor increment law / fiber-to-orbit bridge (stage2.md 11.8.5.6). Full ledger: stage1.md 11.8.4.5. What Route A can and cannot deliver: stage1.md 11.8.4.4.
+The per-step arithmetic of the reduced transition is formal: the valuation `s` has an exact global law (stage1.md 11.8.4.1; unified form stage2.md 11.8.5.6.2), the 3-gain trigger is a theorem (stage2.md), the depth evolution `d_+ = m_+ + a_+` is closed on all residue classes (stage3.md 11.8.6.3.6), and the anchor increment `ΔM` now has an exact low-order law with `σ`-graded moduli (stage4.md 11.8.7.3.1). The terminal open problem is the anchor increment at unbounded depth — displacement propagation, sub-question 2 of the bridge question (stage2.md 11.8.5.6.3; scope in stage4.md 11.8.7.5). Full ledger: stage1.md 11.8.4.5. What Route A can and cannot deliver: stage1.md 11.8.4.4.
 
 ## Directory of empirical material (formerly §10)
 
