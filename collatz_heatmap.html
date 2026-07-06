@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collatz s(ω, d) Heatmap</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0f0f14;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+  h1 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #a0b4d0;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+  }
+  .subtitle {
+    font-size: 0.8rem;
+    color: #556;
+    margin-bottom: 20px;
+    font-family: monospace;
+  }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+    background: #16161e;
+    border: 1px solid #2a2a38;
+    border-radius: 8px;
+    padding: 14px 18px;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  label {
+    font-size: 0.72rem;
+    color: #778;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  input[type=number] {
+    width: 80px;
+    background: #0f0f14;
+    border: 1px solid #333;
+    color: #ccc;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+  }
+  input[type=range] {
+    width: 120px;
+    accent-color: #5080c0;
+  }
+  button {
+    background: #2a4070;
+    color: #a0c4ff;
+    border: 1px solid #3a5090;
+    border-radius: 5px;
+    padding: 7px 16px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.15s;
+    align-self: flex-end;
+  }
+  button:hover { background: #3a5090; }
+  .canvas-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+  }
+  canvas {
+    display: block;
+    border: 1px solid #2a2a38;
+    border-radius: 6px;
+    cursor: crosshair;
+    width: 100%;
+  }
+  .tooltip {
+    position: fixed;
+    background: #16161e;
+    border: 1px solid #3a4060;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    display: none;
+    z-index: 100;
+    color: #cde;
+    font-family: monospace;
+    line-height: 1.6;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 0.75rem;
+    color: #667;
+  }
+  .legend-bar {
+    height: 12px;
+    width: 200px;
+    border-radius: 3px;
+    border: 1px solid #333;
+  }
+  .legend-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    font-size: 0.7rem;
+    color: #556;
+    margin-top: 3px;
+    font-family: monospace;
+  }
+  .info-bar {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: #556;
+    font-family: monospace;
+    min-height: 1.2em;
+    text-align: center;
+  }
+  .spike-btn {
+    background: #2a3850;
+    border-color: #3a5070;
+    color: #80b0e0;
+    font-size: 0.75rem;
+  }
+</style>
+</head>
+<body>
+
+<h1>s(ω, d) = v₂(3<sup>d</sup>ω − 1) &nbsp;·&nbsp; Lifting Branch Heatmap</h1>
+<p class="subtitle">ω ≡ 1 (mod 8), d even &nbsp;|&nbsp; hover to inspect, click to centre</p>
+
+<div class="controls">
+  <div class="control-group">
+    <label>ω start (≡1 mod 8)</label>
+    <input type="number" id="omegaStart" value="1" min="1" step="8">
+  </div>
+  <div class="control-group">
+    <label>ω count</label>
+    <input type="number" id="omegaCount" value="40" min="4" max="120" step="4">
+  </div>
+  <div class="control-group">
+    <label>d start (even)</label>
+    <input type="number" id="dStart" value="0" min="0" step="2">
+  </div>
+  <div class="control-group">
+    <label>d count</label>
+    <input type="number" id="dCount" value="80" min="10" max="200" step="10">
+  </div>
+  <div class="control-group">
+    <label>max s cap</label>
+    <input type="number" id="maxS" value="20" min="8" max="32" step="1">
+  </div>
+  <button onclick="render()">Render</button>
+  <button class="spike-btn" onclick="centreOnSpike()">Centre on spike</button>
+</div>
+
+<div class="canvas-wrap">
+  <canvas id="heatmap"></canvas>
+</div>
+
+<div id="infoBar" class="info-bar">hover over the heatmap to inspect values</div>
+
+<div class="legend">
+  <span>s =</span>
+  <div>
+    <canvas id="legendBar" class="legend-bar" width="200" height="12"></canvas>
+    <div class="legend-labels">
+      <span id="legendMin">0</span>
+      <span id="legendMid"></span>
+      <span id="legendMax"></span>
+    </div>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// ── Arithmetic ──────────────────────────────────────────────────────────────
+
+function computeS(omega, d, maxK) {
+  // v_2(3^d * omega - 1), capped at maxK
+  // Use BigInt mod 2^maxK for exact low-order bits
+  const mod = 1n << BigInt(maxK);
+  let pow = 1n;
+  const base = 3n;
+  const om = BigInt(omega);
+  for (let i = 0; i < d; i++) pow = (pow * base) & (mod - 1n);
+  const val = (pow * om - 1n + mod) & (mod - 1n);
+  if (val === 0n) return maxK;
+  let s = 0;
+  let v = val;
+  while ((v & 1n) === 0n) { s++; v >>= 1n; }
+  return s;
+}
+
+// ── Colour map (dark blue → teal → yellow → white) ──────────────────────────
+
+function sToColour(s, maxS) {
+  if (s === 0) return [18, 18, 26];  // near-black for 0
+  const t = Math.min(s, maxS) / maxS;
+  // 4-stop gradient
+  const stops = [
+    [20,  30,  60],   // 0.0 deep blue
+    [20, 120, 160],   // 0.33 teal
+    [220, 180,  30],  // 0.67 amber
+    [255, 255, 255],  // 1.0 white
+  ];
+  const scaled = t * (stops.length - 1);
+  const i = Math.min(Math.floor(scaled), stops.length - 2);
+  const f = scaled - i;
+  const a = stops[i], b = stops[i+1];
+  return [
+    Math.round(a[0] + f*(b[0]-a[0])),
+    Math.round(a[1] + f*(b[1]-a[1])),
+    Math.round(a[2] + f*(b[2]-a[2])),
+  ];
+}
+
+// ── State ────────────────────────────────────────────────────────────────────
+
+let grid = [];      // grid[iOmega][iD] = s value
+let omegas = [];
+let ds = [];
+let currentMaxS = 20;
+let lastSpike = null;
+
+// ── Render ───────────────────────────────────────────────────────────────────
+
+function getParams() {
+  let omegaStart = parseInt(document.getElementById('omegaStart').value);
+  const omegaCount = parseInt(document.getElementById('omegaCount').value);
+  let dStart = parseInt(document.getElementById('dStart').value);
+  const dCount = parseInt(document.getElementById('dCount').value);
+  const maxS = parseInt(document.getElementById('maxS').value);
+
+  // Snap to ω ≡ 1 mod 8
+  omegaStart = omegaStart < 1 ? 1 : omegaStart;
+  const rem = ((omegaStart - 1) % 8 + 8) % 8;
+  if (rem !== 0) omegaStart += (8 - rem);
+
+  // Snap d to even
+  if (dStart % 2 !== 0) dStart++;
+
+  return { omegaStart, omegaCount, dStart, dCount, maxS };
+}
+
+function render() {
+  const { omegaStart, omegaCount, dStart, dCount, maxS } = getParams();
+  currentMaxS = maxS;
+
+  omegas = [];
+  for (let i = 0; i < omegaCount; i++) omegas.push(omegaStart + i * 8);
+
+  ds = [];
+  for (let j = 0; j < dCount; j++) ds.push(dStart + j * 2);
+
+  // Compute grid
+  grid = [];
+  let globalMax = 0;
+  for (let i = 0; i < omegas.length; i++) {
+    grid[i] = [];
+    for (let j = 0; j < ds.length; j++) {
+      const s = computeS(omegas[i], ds[j], maxS);
+      grid[i][j] = s;
+      if (s > globalMax) { globalMax = s; lastSpike = { i, j }; }
+    }
+  }
+
+  drawHeatmap();
+  drawLegend();
+}
+
+function drawHeatmap() {
+  const canvas = document.getElementById('heatmap');
+  const cellW = Math.max(6, Math.floor(840 / omegas.length));
+  const cellH = Math.max(4, Math.floor(600 / ds.length));
+  const W = cellW * omegas.length;
+  const H = cellH * ds.length;
+  canvas.width = W;
+  canvas.height = H;
+
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(W, H);
+  const data = img.data;
+
+  for (let i = 0; i < omegas.length; i++) {
+    for (let j = 0; j < ds.length; j++) {
+      const s = grid[i][j];
+      const [r, g, b] = sToColour(s, currentMaxS);
+      const px = i * cellW;
+      const py = j * cellH;
+      for (let x = px; x < px + cellW; x++) {
+        for (let y = py; y < py + cellH; y++) {
+          const idx = (y * W + x) * 4;
+          data[idx]   = r;
+          data[idx+1] = g;
+          data[idx+2] = b;
+          data[idx+3] = 255;
+        }
+      }
+    }
+  }
+
+  ctx.putImageData(img, 0, 0);
+
+  // Draw axis tick labels on top (lightweight, every N columns/rows)
+  ctx.fillStyle = 'rgba(180,200,220,0.7)';
+  ctx.font = `${Math.max(9, Math.min(11, cellW - 1))}px monospace`;
+  const omegaStep = Math.max(1, Math.floor(40 / cellW));
+  for (let i = 0; i < omegas.length; i += omegaStep) {
+    ctx.fillText(omegas[i], i * cellW + 1, 10);
+  }
+
+  ctx.font = `${Math.max(9, 10)}px monospace`;
+  const dStep = Math.max(1, Math.floor(20 / cellH));
+  for (let j = 0; j < ds.length; j += dStep) {
+    ctx.fillText(ds[j], 1, j * cellH + 10);
+  }
+}
+
+function drawLegend() {
+  const canvas = document.getElementById('legendBar');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  for (let x = 0; x < W; x++) {
+    const s = (x / W) * currentMaxS;
+    const [r, g, b] = sToColour(s, currentMaxS);
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillRect(x, 0, 1, H);
+  }
+  document.getElementById('legendMin').textContent = '0';
+  document.getElementById('legendMid').textContent = Math.round(currentMaxS / 2);
+  document.getElementById('legendMax').textContent = `≥${currentMaxS}`;
+}
+
+// ── Hover tooltip ─────────────────────────────────────────────────────────────
+
+const heatmap = document.getElementById('heatmap');
+const tooltip = document.getElementById('tooltip');
+const infoBar = document.getElementById('infoBar');
+
+heatmap.addEventListener('mousemove', e => {
+  if (!omegas.length) return;
+  const rect = heatmap.getBoundingClientRect();
+  const scaleX = heatmap.width / rect.width;
+  const scaleY = heatmap.height / rect.height;
+  const px = (e.clientX - rect.left) * scaleX;
+  const py = (e.clientY - rect.top) * scaleY;
+  const cellW = heatmap.width / omegas.length;
+  const cellH = heatmap.height / ds.length;
+  const i = Math.min(Math.floor(px / cellW), omegas.length - 1);
+  const j = Math.min(Math.floor(py / cellH), ds.length - 1);
+  const s = grid[i][j];
+  const om = omegas[i];
+  const d = ds[j];
+
+  tooltip.style.display = 'block';
+  tooltip.style.left = (e.clientX + 14) + 'px';
+  tooltip.style.top  = (e.clientY - 10) + 'px';
+  tooltip.innerHTML = `ω = ${om} &nbsp;(≡ ${om % 64} mod 64)<br>d = ${d} &nbsp;(n = ${d/2})<br>s = v₂(3<sup>${d}</sup>·${om} − 1) = <strong style="color:#ffe080">${s}${s >= currentMaxS ? '+' : ''}</strong>`;
+
+  infoBar.textContent = `ω=${om}, d=${d} → s=${s}${s >= currentMaxS ? '+' : ''} | 3^${d}·${om}−1 divisible by 2^${s}${s >= currentMaxS ? '+' : ''}`;
+});
+
+heatmap.addEventListener('mouseleave', () => {
+  tooltip.style.display = 'none';
+  infoBar.textContent = 'hover over the heatmap to inspect values';
+});
+
+// Click to centre on that cell
+heatmap.addEventListener('click', e => {
+  if (!omegas.length) return;
+  const rect = heatmap.getBoundingClientRect();
+  const scaleX = heatmap.width / rect.width;
+  const scaleY = heatmap.height / rect.height;
+  const px = (e.clientX - rect.left) * scaleX;
+  const py = (e.clientY - rect.top) * scaleY;
+  const cellW = heatmap.width / omegas.length;
+  const cellH = heatmap.height / ds.length;
+  const i = Math.min(Math.floor(px / cellW), omegas.length - 1);
+  const j = Math.min(Math.floor(py / cellH), ds.length - 1);
+
+  const omegaCentre = omegas[i];
+  const dCentre = ds[j];
+
+  const omCount = parseInt(document.getElementById('omegaCount').value);
+  const dCount  = parseInt(document.getElementById('dCount').value);
+
+  // Centre ω window
+  let newOmStart = omegaCentre - Math.floor(omCount / 2) * 8;
+  if (newOmStart < 1) newOmStart = 1;
+  const rem = ((newOmStart - 1) % 8 + 8) % 8;
+  if (rem !== 0) newOmStart += (8 - rem);
+
+  // Centre d window
+  let newDStart = dCentre - Math.floor(dCount / 2) * 2;
+  if (newDStart < 0) newDStart = 0;
+  if (newDStart % 2 !== 0) newDStart++;
+
+  document.getElementById('omegaStart').value = newOmStart;
+  document.getElementById('dStart').value = newDStart;
+  render();
+});
+
+function centreOnSpike() {
+  if (!lastSpike) { render(); return; }
+  const { i, j } = lastSpike;
+  const omegaCentre = omegas[i];
+  const dCentre = ds[j];
+
+  const omCount = parseInt(document.getElementById('omegaCount').value);
+  const dCount  = parseInt(document.getElementById('dCount').value);
+
+  let newOmStart = omegaCentre - Math.floor(omCount / 2) * 8;
+  if (newOmStart < 1) newOmStart = 1;
+  const rem = ((newOmStart - 1) % 8 + 8) % 8;
+  if (rem !== 0) newOmStart += (8 - rem);
+
+  let newDStart = dCentre - Math.floor(dCount / 2) * 2;
+  if (newDStart < 0) newDStart = 0;
+  if (newDStart % 2 !== 0) newDStart++;
+
+  document.getElementById('omegaStart').value = newOmStart;
+  document.getElementById('dStart').value = newDStart;
+  render();
+}
+
+// ── Initial render ────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
