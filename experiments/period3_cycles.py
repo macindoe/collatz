@@ -179,3 +179,44 @@ for n in [61, 63, 70, 73, 75, 78, 80, 82, 87, 94, 99]:
             if minR((m0, m1, m2), (s0, s1, S - s0 - s1)) >= q:
                 viol += 1; print("VIOLATION(b):", n, (m0, m1, m2))
 print(f"audited {checked} cells (skipped region + box boundary); violations: {viol}")
+
+# ---- Part D: trim-lemma verification (12.7.4/12.7.6): every exact size-passer
+#      satisfies gamma > 0.1157 n - 2 (trim3.py) ----
+# Verify the period-3 trim lemma (gamma > 0.1158 n - 2) against every
+# composition that passes the EXACT size test q <= min_r R_r, n <= 20000.
+# (Re-runs the search but records size-passers and their gamma margin.)
+import math
+L3 = math.log2(3)
+def R_exact(ms, ss):
+    R = 0; Spre = 0
+    for t in range(3):
+        R += 3**sum(ms[t+1:]) * (1 << Spre) * ((1 << ss[t]) - 1)
+        Spre += ss[t] + ms[(t + 1) % 3]
+    return R
+
+T3 = 27; worst = (1e9, None); count = 0
+for n in range(3, 20001):
+    if n > 3: T3 *= 3
+    K = T3.bit_length(); q = (1 << K) - T3; S = K - n
+    if S < 3: continue
+    Lq = q.bit_length(); gub = K - (Lq - 1)
+    if n > 60 and gub < 0.098 * n - 5: continue
+    gamma = K - math.log2(q) if q.bit_length() < 900 else K - (Lq - 1 + math.log2(int(q >> (Lq-53)) / 2**52))
+    mb = min(n - 2, max(int(0.3691*n + 0.631*gub) + 6, int(2.41*gub) + 10))
+    for m0 in range((n+2)//3, mb + 1):
+        for m1 in range(max(1, n - 2*m0), m0 + 1):
+            m2 = n - m0 - m1
+            if m2 < 1 or m2 > m0: continue
+            ms = (m0, m1, m2)
+            for s0 in range(1, S - 1):
+                for s1 in range(1, S - s0):
+                    ss = (s0, s1, S - s0 - s1)
+                    Rs = [R_exact((ms[r], ms[(r+1)%3], ms[(r+2)%3]),
+                                  (ss[r], ss[(r+1)%3], ss[(r+2)%3])) for r in range(3)]
+                    if min(Rs) < q: continue
+                    count += 1
+                    margin = gamma - (0.1158 * n - 2)
+                    if margin < worst[0]: worst = (margin, (n, ms, ss, round(gamma, 2)))
+print(f"exact size-passers: {count}")
+print(f"worst trim margin (gamma - (0.1158n - 2)): {worst[0]:.3f} at {worst[1]}")
+print("lemma holds on all size-passers:", worst[0] > 0)
