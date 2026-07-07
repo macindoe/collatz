@@ -19,6 +19,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 | `stage2.md` | §11.8.5: 3-gain law, orbit anchor `M(ω)`, unified depth-side law, fiber-versus-orbit gap (11.8.5.6) | closed / bridge OPEN |
 | `stage3.md` | §11.8.6: decomposition of `C`, target-shift lemma, entry-depth law, per-step depth law | closed per step |
 | `stage4.md` | §11.8.7: the odd core `ω_+` / anchor increment — low-order law (11.8.7.3.1), one-step propagation (11.8.7.6.1), digit budget (11.8.7.7) | live front |
+| `cycles.md` | §12: cycles in reduced coordinates — cycle product equation (12.1), period-1 classification = Steiner contact (12.2), stratum congruence system (12.3), m-cycle translation (12.4) | period 1 closed |
 | `open-problems.md` | §11–11.7: the open-questions layer, with calibration notes | open / calibrated |
 | `archive/appendix-a.md` | Appendix A: discovery path, worked examples, refuted claims with audit data | archive |
 | `sources/` | Immutable: drafts v000–v078, PDFs, residue data | never edited |
@@ -27,11 +28,11 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 
 Monolith section numbers remain the citation anchors throughout (`11.8.6.3` etc.). To find one:
 
-§1–9 → `spine.md` · §10 → this page (below) · §11.1–11.7 → `open-problems.md` · §11.8 intro/guardrail/Stage-1 prospectus → `program.md` · §11.8.1–11.8.4 → `stage1.md` · §11.8.5 → `stage2.md` · §11.8.6 → `stage3.md` · §11.8.7 → `stage4.md` · §11.8.8, §11.9 → `program.md` · Appendix A → `archive/appendix-a.md` · verification code → `experiments/`
+§1–9 → `spine.md` · §10 → this page (below) · §11.1–11.7 → `open-problems.md` · §11.8 intro/guardrail/Stage-1 prospectus → `program.md` · §11.8.1–11.8.4 → `stage1.md` · §11.8.5 → `stage2.md` · §11.8.6 → `stage3.md` · §11.8.7 → `stage4.md` · §11.8.8, §11.9 → `program.md` · §12 (post-monolith) → `cycles.md` · Appendix A → `archive/appendix-a.md` · verification code → `experiments/`
 
 ## Current status (one paragraph)
 
-The per-step arithmetic of the reduced transition is formal: the valuation `s` has an exact global law (stage1.md 11.8.4.1; unified form stage2.md 11.8.5.6.2), the 3-gain trigger is a theorem (stage2.md), the depth evolution `d_+ = m_+ + a_+` is closed on all residue classes (stage3.md 11.8.6.3.6), the anchor increment `ΔM` has an exact low-order law with `σ`-graded moduli (stage4.md 11.8.7.3.1), and one-step propagation decides the next `3`-gain from the window in an error-free trichotomy (stage4.md 11.8.7.6.1). The digit budget (stage4.md 11.8.7.7) splits the remaining content of the bridge: anchor equidistribution for typical orbits, rigidity of closed anchor walks for cycles — the latter is the recommended next front. Full ledger: stage1.md 11.8.4.5. What Route A can and cannot deliver: stage1.md 11.8.4.4.
+The per-step arithmetic of the reduced transition is formal: the valuation `s` has an exact global law (stage1.md 11.8.4.1; unified form stage2.md 11.8.5.6.2), the 3-gain trigger is a theorem (stage2.md), the depth evolution `d_+ = m_+ + a_+` is closed on all residue classes (stage3.md 11.8.6.3.6), the anchor increment `ΔM` has an exact low-order law with `σ`-graded moduli (stage4.md 11.8.7.3.1), and one-step propagation decides the next `3`-gain from the window in an error-free trichotomy (stage4.md 11.8.7.6.1). The digit budget (stage4.md 11.8.7.7) splits the remaining content of the bridge: anchor equidistribution for typical orbits, rigidity of closed anchor walks for cycles. The cycle front is open (cycles.md §12): the reduced cycle equation reproduces the classical Baker engine in four lines, period 1 is completely classified — exact contact with Steiner's circuit theorem — and the stratum congruence system awaits period 2. Full ledger: stage1.md 11.8.4.5. What Route A can and cannot deliver: stage1.md 11.8.4.4.
 
 ## Directory of empirical material (formerly §10)
 
