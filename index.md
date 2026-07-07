@@ -18,7 +18,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 | `stage1.md` | §11.8.1–11.8.4: valuation synthesis — mod-8 classification, anchor `N(ω)`, exact global law for `s`, Baker bounds, ledgers, status snapshot (11.8.4.5) | closed |
 | `stage2.md` | §11.8.5: 3-gain law, orbit anchor `M(ω)`, unified depth-side law, fiber-versus-orbit gap (11.8.5.6) | closed / bridge OPEN |
 | `stage3.md` | §11.8.6: decomposition of `C`, target-shift lemma, entry-depth law, per-step depth law | closed per step |
-| `stage4.md` | §11.8.7: the odd core `ω_+` / anchor increment — pilot experiment, digit-determinacy lemmas, low-order law (11.8.7.3.1) | live front |
+| `stage4.md` | §11.8.7: the odd core `ω_+` / anchor increment — low-order law (11.8.7.3.1), one-step propagation (11.8.7.6.1), digit budget (11.8.7.7) | live front |
 | `open-problems.md` | §11–11.7: the open-questions layer, with calibration notes | open / calibrated |
 | `archive/appendix-a.md` | Appendix A: discovery path, worked examples, refuted claims with audit data | archive |
 | `sources/` | Immutable: drafts v000–v078, PDFs, residue data | never edited |
@@ -31,7 +31,7 @@ Monolith section numbers remain the citation anchors throughout (`11.8.6.3` etc.
 
 ## Current status (one paragraph)
 
-The per-step arithmetic of the reduced transition is formal: the valuation `s` has an exact global law (stage1.md 11.8.4.1; unified form stage2.md 11.8.5.6.2), the 3-gain trigger is a theorem (stage2.md), the depth evolution `d_+ = m_+ + a_+` is closed on all residue classes (stage3.md 11.8.6.3.6), and the anchor increment `ΔM` now has an exact low-order law with `σ`-graded moduli (stage4.md 11.8.7.3.1). The terminal open problem is the anchor increment at unbounded depth — displacement propagation, sub-question 2 of the bridge question (stage2.md 11.8.5.6.3; scope in stage4.md 11.8.7.5). Full ledger: stage1.md 11.8.4.5. What Route A can and cannot deliver: stage1.md 11.8.4.4.
+The per-step arithmetic of the reduced transition is formal: the valuation `s` has an exact global law (stage1.md 11.8.4.1; unified form stage2.md 11.8.5.6.2), the 3-gain trigger is a theorem (stage2.md), the depth evolution `d_+ = m_+ + a_+` is closed on all residue classes (stage3.md 11.8.6.3.6), the anchor increment `ΔM` has an exact low-order law with `σ`-graded moduli (stage4.md 11.8.7.3.1), and one-step propagation decides the next `3`-gain from the window in an error-free trichotomy (stage4.md 11.8.7.6.1). The digit budget (stage4.md 11.8.7.7) splits the remaining content of the bridge: anchor equidistribution for typical orbits, rigidity of closed anchor walks for cycles — the latter is the recommended next front. Full ledger: stage1.md 11.8.4.5. What Route A can and cannot deliver: stage1.md 11.8.4.4.
 
 ## Directory of empirical material (formerly §10)
 

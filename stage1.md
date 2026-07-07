@@ -2089,7 +2089,9 @@ formal:
     target-shift entry-depth law m_+ and per-step depth law d_+,
         all residue classes (11.8.6.3),
     low-order anchor-increment law ΔM mod 2^k,
-        σ-graded moduli, fixed per stratum (11.8.7.3, stage4.md)
+        σ-graded moduli, fixed per stratum (11.8.7.3, stage4.md),
+    one-step displacement propagation: next s and 3-gain from the
+        window, error-free trichotomy (11.8.7.6, stage4.md)
 
 dissolved or exported:
     tower-type classification (no dichotomy: anchor digit density),
@@ -2103,10 +2105,11 @@ heuristic, empirically sharp (11.8.4.4):
 
 open:
     intrinsic form of the correction term beyond valuation,
-    the anchor increment law at unbounded depth — Stage 4,
-        equivalently displacement propagation (11.8.5.6.3 sub-q. 2,
-        11.8.7.5): the terminal bottleneck
-        (low-order truncations of ΔM are now formal, 11.8.7.3)
+    the unbounded-depth residue of the bridge (11.8.7.7) — split:
+        typical orbits: anchor equidistribution (11.8.5.6.3 sub-q. 3),
+            now the precise missing statistical hypothesis
+        cycles: rigidity of closed anchor walks — recommended front
+        (bounded-depth content fully formal: 11.8.7.3, 11.8.7.6)
 ```
 
 The first part of the conversion from valuation synthesis to reduced dynamics is now complete. Section `11.8.5` proves the exact `3`-gain law for all families on both components of the lifting branch,

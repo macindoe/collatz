@@ -44,3 +44,4 @@ Occasionally diff every page's claims about *other* pages against those pages' o
 - 2026-07-06 — wiki split from `sources/drafts/collatz_reduction_rewrite_v078.md`; concatenation of page bodies reproduces the monolith byte-identically.
 - 2026-07-06 — independent numeric verification of: unified depth-side law (11.8.5.6.2), entry-depth law all six classes (11.8.6.3), orbit projection + fiber of (1,1) (9.8), 8,000 random states + orbit traces, zero failures.
 - 2026-07-07 — low-order anchor-increment law (11.8.7.3.1, stage4.md): predictor-from-truncations test (4,046 checks) and lift-invariance test (10,092 pairs), k ∈ {1,3,6}, zero failures. Code: experiments/anchor_increment.py.
+- 2026-07-07 — one-step propagation (11.8.7.6.1, stage4.md): window-only decision along real orbits, k ∈ {4,8}, 21,296 steps — 21,000 decided with zero errors, 296 undecided with zero violations of the deep-cascade bound s_+ >= k+2. Code: experiments/one_step_propagation.py.
