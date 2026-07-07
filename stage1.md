@@ -2109,8 +2109,9 @@ open:
         typical orbits: anchor equidistribution (11.8.5.6.3 sub-q. 3),
             now the precise missing statistical hypothesis
         cycles: rigidity of closed anchor walks — front OPEN (§12,
-            cycles.md): periods 1-2 closed (Steiner contact 12.2.3,
-            Simons-de Weger 2-cycle contact 12.5.3), period p >= 3 next
+            cycles.md): periods 1-2 closed, period 3 to n <= 20,000
+            (12.7.1); general-p elimination + ceiling lemma (12.6);
+            crossover target p > 91
         (bounded-depth content fully formal: 11.8.7.3, 11.8.7.6)
 ```
 

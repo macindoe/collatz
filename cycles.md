@@ -1,11 +1,11 @@
 ---
-status: periods 1 and 2 CLOSED (12.2 Steiner contact; 12.5 Simons–de Weger 2-cycle contact); general framework stated (12.1, 12.3); translation dividend recorded (12.4)
+status: periods 1, 2 CLOSED; period 3 closed to n <= 20,000 (12.7); general-p elimination + ceiling lemma proved (12.6)
 scope: new section 12 (post-monolith; first page with no monolith source)
 updated: 2026-07-07
 source: new material, 2026-07-07; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md)
 ---
 
-> **Current state.** Cycles in reduced coordinates. The reduced cycle equation (12.1) reproduces the classical `2^K`-vs-`3^n` balance in four lines. Period 1 is completely classified (Theorem 12.2.3): the fixed-point equation reproduces Steiner's circuit theorem. Period 2 is completely classified (Theorem 12.5.3): the two-step elimination pair plus the size-trim lemma collapse the `n <= 20,000` search to eleven divisibility tests, all failing — matching the Simons–de Weger 2-cycle case with strikingly little apparatus. The open front is period `p >= 3` via the same elimination schema (12.5.5): the first place the program could exceed the classical results rather than match them.
+> **Current state.** Cycles in reduced coordinates. Period 1: closed, reproducing Steiner (12.2.3). Period 2: closed, matching the Simons–de Weger 2-cycle case (12.5.3). Period 3: closed for `n <= 20,000` (12.7.1), with the general-`p` elimination (12.6.1) and the ceiling lemma (12.6.2) — `K` above `⌈n log_2 3⌉` forces a tiny cycle element — making every search unconditional in `K`. Scaling is mild (`p = 2 → 3`: candidate `n` 19 → 76, exact tests 11 → 886). Open: the `p = 3` closed-form trim for `n > 20,000`, then `p = 4, 5, ...` — the crossover target is `p > 91`, beyond the current `m`-cycle record (12.7.3).
 
 # 12. Cycles in Reduced Coordinates
 
@@ -108,3 +108,37 @@ verified numerically on `3,000` random orbit pairs with zero failures. Imposing 
 **Remark 12.5.4 (numerical record; pruning power).** The raw parameter space for `n <= 20,000` — quadruples `(m_0, m_1, s_0, s_1)` with `m_0 + m_1 = n`, `s_0 + s_1 = K - n` — has on the order of `10^12` cells. The window prune (`q` is pinned by `(n, K)` with no free exponent to slide, so `q <= R_t` bounds `min(m_0, m_1)` from below) leaves open windows at only `19` values of `n` — the small range `n <= 17` plus the `log_2 3` near-convergents `n = 20, 22, 29` — and exact size tests pass for only `11` quadruples in the entire range. All fail divisibility except the degenerate `(m_0, m_1, s_0, s_1) = (1, 1, 1, 1)`, which reconstructs the fixed point `(1,1)` twice, not a `2`-cycle. Search and identity checks: `experiments/period2_cycles.py`. (Method note: the first run of the search carried an off-by-one in the power of `3`; it was caught by an internal consistency check on the `s`-split and corrected before this record. The recorded run passes the sanity assertions.)
 
 **Remark 12.5.5 (what the second benchmark point shows).** The two-block case lands the same way as period 1: the reduced coordinates compress the problem to a single displayed elimination pair plus a window argument, reproducing the known `2`-cycle exclusion with strikingly little apparatus — eleven divisibility tests where the classical analysis runs lattice reduction. The schema visibly extends: for period `p`, the elimination yields `p` cyclic equations `ω_t · 3^(·) · (2^K - 3^n) = R_t` with `R_t` explicit in the `2p` shallow parameters, and the same double-sided size trim applies. Whether the reduced pruning stays this sharp as `p` grows — where Simons–de Weger's analysis becomes heavy — is now a concrete, testable question, and it is the first place the program could *exceed* the classical results rather than match them.
+
+**Method note (K-completeness, added after 12.6).** The searches of `12.5.4` and `12.7` take `K = ⌈n·log_2 3⌉`. That this loses no generality is not automatic — `K = Σ s_t + n` could a priori exceed the ceiling — and is supplied by the ceiling lemma `12.6.2`: any cycle with larger `K` contains an odd exit value below `p/ln 2`, and for `p <= 5` all such values (`1, 3, 5, 7`) reach `1` by direct iteration. The period-2 search was run before this lemma was isolated; the lemma retroactively completes its proof.
+
+## 12.6. The General Elimination and the Ceiling Lemma
+
+**Proposition 12.6.1 (period-`p` elimination).** Let `(ω_t, d_t)`, `t ∈ Z/pZ`, be a period-`p` cycle with entry depths `m_t` and exit valuations `s_t`, and let `n = Σ m_t`, `K = Σ s_t + n`, `q = 2^K - 3^n`. Then for every rotation `r`,
+
+```text
+ω_r · 3^(a_(r-1)) · q = R_r := Σ_(t=0)^(p-1) 3^(M_t) · 2^(S_t) · (2^(s_t) - 1),
+```
+
+where, reading indices in rotation order starting at `r`: `M_t = Σ_(j>t) m_j` and `S_t = Σ_(j<t) σ_j`. In particular `q > 0` divides all `p` numbers `R_r`, and `q <= min_r R_r`.
+
+**Proof.** Unrolling the step identity `p` times gives, for any state, `ω_p · 2^(Σσ) 3^(Σa) = 3^(Σd) ω_0 + Σ_t 3^(D_t + A_t) 2^(S_t) (2^(s_t) - 1)` with `D_t = Σ_(j>t) d_j`, `A_t = Σ_(j<t) a_j` — verified numerically for `p = 3, 4, 5` on random orbits, zero failures. Imposing closure and substituting `d_j = m_j + a_(j-1)` gives `D_t + A_t = M_t + Σ a - a_(p-1)`; cancelling `3^(Σa - a_(p-1))` yields the displayed equation, and rotations give the rest. Positivity: the right side is positive. ∎
+
+**Remark (sanity identity).** For the trivial cycle traversed as a fake period-`p` cycle (`m_t = s_t = 1` for all `t`), the formula gives `R = Σ_t 3^(p-1-t) 4^t = 4^p - 3^p = q` exactly, matching `ω·3^a = 1` — confirmed computationally for `p ∈ {1, 2, 3, 4, 7}`.
+
+**Lemma 12.6.2 (ceiling forcing).** If a period-`p` cycle has `K > ⌈n·log_2 3⌉`, then some block exit satisfies `x_exit < p / ln 2 < 1.443·p`.
+
+**Proof.** `K` above the ceiling gives `2^K / 3^n >= 2`, so by the cycle product equation (`12.1.1`) `Π (1 + ε_t) >= 2`, so some `1 + ε_t >= 2^(1/p)`, hence `ε_t >= 2^(1/p) - 1 >= (ln 2)/p`. Then `3^(d_t) ω_t <= p(2^(s_t) - 1)/ln 2`, and `x_exit,t = (3^(d_t) ω_t - 1)/2^(s_t) < p/ln 2`. ∎
+
+**Corollary 12.6.3 (`K` is the ceiling, unconditionally for `p <= 5`).** For `p <= 5` the bound gives an odd exit `<= 7`; the `T`-orbits of `1, 3, 5, 7` reach `1` by direct iteration, so no nontrivial cycle contains them. Hence every nontrivial cycle of period `p <= 5` has `K = ⌈n·log_2 3⌉`. For general `p` the same conclusion holds whenever `p/ln 2` is below the exhaustively verified range of the conjecture, i.e., for all `p` of any conceivable relevance. [#TODO cite: current verification frontier (Barina-type distributed computation).]
+
+**Remark (where the trivial cycle lives).** The trivial cycle itself has `K = 2p = ⌈p·log_2 3⌉ + 1` — *above* the ceiling. It is exactly the tiny-element case the lemma routes to, which is a satisfying consistency check: the ceiling searches below never see it, and never need to.
+
+## 12.7. Period 3: Classification to `n <= 20,000`
+
+**Theorem 12.7.1.** No nontrivial period-`3` cycle of `F` has `n = m_0 + m_1 + m_2 <= 20,000`.
+
+**Proof.** By Corollary `12.6.3` (unconditional at `p = 3`), `K = ⌈n·log_2 3⌉`. The exact search then proceeds per `n` with two proved reductions. *Box:* writing `γ = K - log_2 q`, every block satisfies `m_t <= max(0.3691·n + 0.631·γ, 2.41·γ) + O(1)` — each rotation `r` needs some term of `R_r` to reach `q`, and the three term-shapes (`3`-heavy first term, mixed middle term, `2`-heavy last term) each force this bound on the rotation's leading block. *Budget:* summing the per-rotation requirements over the `s`-composition budget `Σ s_t = S` shows candidates require `γ >= 0.098·n - O(1)`, an exponentially strong near-convergent condition on `n·log_2 3` that fails for every `n ∈ (99, 20,000]`. The `76` surviving `n` were enumerated in full: `886` compositions passed exact size tests, and none passed the triple divisibility `q | R_0, R_1, R_2`. ∎
+
+**Remark 12.7.2 (verification record).** Search and audits in `experiments/period3_cycles.py` (2026-07-07). The pruning constants were slack-padded, and audited: `4,798` random cells sampled from the skipped region and from just outside the box boundary all fail the exact size test `min_r R_r >= q`. Two constant errors in the first filter derivation (a one-small-block escape lowering `0.138` to `0.098`, and a missing second branch in the box bound) were caught during this session's soundness review and corrected before this record; the corrected run enlarged the treated set from `62` to `76` values of `n` and changed no outcomes.
+
+**Remark 12.7.3 (scaling picture and honest scope).** Growth across periods is mild: candidate `n` values `19 → 76`, exact tests `11 → 886` from `p = 2` to `p = 3`, against a raw space growing by a factor `~n·S`. The engine — ceiling lemma, box, budget filter, divisibility — is `p`-generic, and running `p = 4, 5` is now an engineering exercise. Two gaps keep this below a full classification: the `n > 20,000` tail needs a proved closed-form trim (the budget analysis suggests `q/2^K < 2^(-cn)` with `c ≈ 0.098`; writing that lemma converts Theorem `12.7.1` into an analogue of `12.5.3`), and by the translation of `12.4` all `p <= 68` remain subsumed by Simons–de Weger, so the schema's claim is efficiency and self-containedness, not yet new exclusions. The crossover target is `p > 91` — beyond the current `m`-cycle record — where the per-`n` collapse observed here, if it persists, would produce genuinely new results with modest computation. [#TODO pin current record: Hercher-type bounds.]
