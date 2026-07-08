@@ -21,6 +21,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 | `stage2.md` | §11.8.5: 3-gain law, orbit anchor `M(ω)`, unified depth-side law, fiber-versus-orbit gap (11.8.5.6) | closed / bridge OPEN |
 | `stage3.md` | §11.8.6: decomposition of `C`, target-shift lemma, entry-depth law, per-step depth law | closed per step |
 | `stage4.md` | §11.8.7: the odd core `ω_+` / anchor increment — low-order law (11.8.7.3.1), one-step propagation (11.8.7.6.1), digit budget (11.8.7.7) | live front |
+| `aeh.md` | §13: the Anchor Equidistribution Hypothesis — precise bulk formulation (13.2), conditional theorems (13.3), calibration record (13.4), open anomaly (13.5) | formalized; anomaly open |
 | `cycles.md` | §12: cycles in reduced coordinates — cycle equation (12.1), period 1 = Steiner (12.2), congruence system (12.3), m-cycle translation (12.4), period 2 (12.5), general-p elimination + ceiling lemma (12.6), period 3 + trim (12.7), uniform trim resolution (12.8) | periods 1–3 closed; front PARKED |
 | `open-problems.md` | §11–11.7: the open-questions layer, with calibration notes | open / calibrated |
 | `archive/appendix-a.md` | Appendix A: discovery path, worked examples, refuted claims with audit data | archive |
@@ -30,7 +31,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 
 Monolith section numbers remain the citation anchors throughout (`11.8.6.3` etc.). To find one:
 
-§1–9 → `spine.md` · §10 → this page (below) · §11.1–11.7 → `open-problems.md` · §11.8 intro/guardrail/Stage-1 prospectus → `program.md` · §11.8.1–11.8.4 → `stage1.md` · §11.8.5 → `stage2.md` · §11.8.6 → `stage3.md` · §11.8.7 → `stage4.md` · §11.8.8, §11.9 → `program.md` · §12 (post-monolith) → `cycles.md` · Appendix A → `archive/appendix-a.md` · verification code → `experiments/`
+§1–9 → `spine.md` · §10 → this page (below) · §11.1–11.7 → `open-problems.md` · §11.8 intro/guardrail/Stage-1 prospectus → `program.md` · §11.8.1–11.8.4 → `stage1.md` · §11.8.5 → `stage2.md` · §11.8.6 → `stage3.md` · §11.8.7 → `stage4.md` · §11.8.8, §11.9 → `program.md` · §12 (post-monolith) → `cycles.md` · §13 (post-monolith) → `aeh.md` · Appendix A → `archive/appendix-a.md` · verification code → `experiments/`
 
 ## Current status (one paragraph)
 
