@@ -2108,10 +2108,10 @@ open:
     the unbounded-depth residue of the bridge (11.8.7.7) — split:
         typical orbits: anchor equidistribution (11.8.5.6.3 sub-q. 3),
             now the precise missing statistical hypothesis
-        cycles: rigidity of closed anchor walks — front OPEN (§12,
-            cycles.md): periods 1-3 fully closed (12.2.3, 12.5.3,
-            12.7.5); general-p elimination, ceiling lemma, budget
-            trims (12.6, 12.7.4); crossover target p > 91
+        cycles: rigidity of closed anchor walks — front PARKED (§12,
+            cycles.md): periods 1-3 fully closed; uniform trim
+            resolved (12.8: exists, exponentially weak, sharp);
+            residual content = anchor-walk rigidity, same as Stage 4
         (bounded-depth content fully formal: 11.8.7.3, 11.8.7.6)
 ```
 

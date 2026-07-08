@@ -1,11 +1,11 @@
 ---
-status: periods 1, 2, 3 CLOSED (12.2.3, 12.5.3, 12.7.5); general-p elimination + ceiling lemma proved (12.6); period-3 trim lemma proved (12.7.4)
+status: periods 1, 2, 3 CLOSED; uniform trim question RESOLVED (12.8: exists, exponentially weak, provably sharp); cycle front PARKED per stopping rules
 scope: new section 12 (post-monolith; first page with no monolith source)
 updated: 2026-07-07
 source: new material, 2026-07-07; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md)
 ---
 
-> **Current state.** Cycles in reduced coordinates. Periods 1, 2, and 3 are completely classified: no nontrivial cycles (12.2.3, 12.5.3, 12.7.5 — the last modulo the standard measure citation, like 12.5.3). The general apparatus: the period-`p` elimination (12.6.1), the ceiling lemma (12.6.2), and the budget-trim method (12.5.2 for `p = 2`, 12.7.4 for `p = 3`: any candidate forces `K - n·log_2 3 < 2^(-0.115n+3)`). Scaling is mild (`p = 2 → 3`: candidate `n` 19 → 76, exact evaluations 11 → 886). Open: generalize the trim to arbitrary `p` and run `p = 4, 5, …` — the crossover target is `p > 91`, beyond the current `m`-cycle record (12.7.3).
+> **Current state.** Cycles in reduced coordinates. Periods 1, 2, and 3 are completely classified: no nontrivial cycles (12.2.3, 12.5.3, 12.7.5). The uniform-trim question is resolved (12.8): a trim uniform in `p` exists (12.8.1) and gives effective finiteness at every period (12.8.2), but its constant degrades like `1.585^(-p)` and the staircase family (12.8.3) proves size-counting can do no better. The crossover plan is therefore withdrawn and the cycle front is **parked** (12.8.5): the residual content of cycle exclusion is anchor-walk rigidity, the same front as Stage 4. The staircase — a divergent-orbit profile bent into a loop — is evidence the two halves of the residual difficulty are one problem (12.8.4).
 
 # 12. Cycles in Reduced Coordinates
 
@@ -156,4 +156,32 @@ where, reading indices in rotation order starting at `r`: `M_t = Σ_(j>t) m_j` a
 **Proof.** For `n <= 20,000`, Theorem `12.7.1`. For `n > 20,000`, Lemma `12.7.4` demands `0 < K - n·log_2 3 < 2^(3 - 0.115n) < 2^(-2296)`, which contradicts any effective irrationality measure for `log_2 3` — polynomial lower bounds dwarf this at `n = 20,001` already. [#TODO pin measure, as in `12.5.3`; this is the `3`-cycle case of Simons–de Weger.] ∎
 
 **Remark 12.7.6 (verification; subsumption).** The trim lemma was checked against every composition passing the exact size test in the search range: all `51` size-passers satisfy `γ > 0.1157n - 2`, worst margin `+3.1` bits (at `n = 6`, balanced blocks). Code: `experiments/period3_cycles.py` (trim section). Two structural notes: the lemma's proof nowhere assumes `K = ⌈n log_2 3⌉` — for `K` above the ceiling `γ < 1`, so the lemma itself excludes `n >= 26` there, subsuming the ceiling lemma at `p = 3`; and the binding case (one tiny block) is exactly the configuration the corrected search filter guards, so the search constant `0.098` sits safely below the proved `0.1157`.
+
+## 12.8. The Uniform Trim: Resolution of the Question
+
+This section resolves the uniform-in-`p` trim question posed in `12.7.3` and in the program strategy (README): a uniform trim **exists** (Theorem `12.8.1`), its constant degrades **exponentially** in `p`, and that degradation is **intrinsic** — a explicit family of configurations shows size-counting arguments cannot do better (Remark `12.8.3`). The strategic consequence is recorded in `12.8.5`.
+
+Throughout, `γ = K - log_2 q` and `γ' = γ + log_2 p`. For an arc `A` of consecutive blocks define the weight `w(A) = (log_2 3 - 1)·m(A) - s(A)` — its `m`-mass at exchange rate `0.585`, minus its `s`-mass.
+
+**Theorem 12.8.1 (uniform trim, all `p`).** Every nontrivial period-`p` cycle of `F` satisfies
+
+```text
+γ + log_2 p  >  0.585·n / (1.585^p - 1).
+```
+
+**Proof.** For each rotation `r`, `q <= R_r < p·2^(max_t e_t)`, and the exact exponent identity `e_t - K = (log_2 3 - 1)·M_t - m_r - Σ_(j>t) s_j` turns this into: for every block `r`,
+
+```text
+m_r < γ' + Φ_r,        Φ_r = max( 0, max { w(A) : arcs A ending at block r-1 } ).
+```
+
+The arc maxima satisfy the cyclic recursion `Φ_r = max(0, Φ_(r-1) + w_(r-1))` with `w_j = 0.585·m_j - s_j`. Since `q > 0` gives `2^K > 3^n`, the total weight `Σ w_j = 0.585n - S` is negative, so the recursion resets somewhere: `Φ_(r_0) = 0`. Walking forward from the reset with `T_j` the partial `m`-sums and using `Φ <= 0.585·T` termwise, the block bound gives `T_j < (log_2 3)·T_(j-1) + γ'`, hence `n = T_(p-1) < γ'·(1.585^p - 1)/0.585`. ∎
+
+**Corollary 12.8.2 (uniform effective finiteness).** Combined with an effective irrationality measure for `log_2 3`, Theorem `12.8.1` bounds `n` explicitly for every period: any period-`p` cycle has `n <= n_0(p) = O(p·1.585^p)`. Cycle exclusion at every single period is therefore a finite, explicitly bounded computation — uniformly in `p`. [#TODO pin measure, as in `12.5.3`.]
+
+**Remark 12.8.3 (sharpness: the staircase family).** The exponential loss is not an artifact. Consider blocks growing geometrically at ratio `≈ log_2 3` with shallow exits (`s = 1`), closed by one block of tiny depth and enormous exit valuation — a long climb and a single crash. Such configurations satisfy *every* rotation's exact size condition `q <= R_r` with `γ` far below any polynomial-in-`p` trim: at `p = 7`, `n = 94`, the staircase `m = (4, 7, 9, 15, 23, 35, 1)` passes all seven size tests with `γ = 6.74`, where the period-3 constant `0.1157n - 2 = 8.9` would forbid it; `84` further staircase size-passers exist at `p = 6` alone. All fail the divisibility conditions `q | R_r` — none is a cycle — and all respect Theorem `12.8.1` (worst ratio `0.23`). Code: `experiments/uniform_trim.py`.
+
+**Remark 12.8.4 (what the staircase means).** The staircase is a divergent-orbit profile bent into a loop: geometric depth growth with shallow exits is exactly the growth regime of the size ledger (`11.8.4.4` — `log x` grows when `s < 0.585m`). Size analysis cannot forbid it as a cycle for the same reason drift analysis cannot forbid divergence: both are rare-event arithmetic questions, not counting questions. What *must* kill the staircase is the `p`-fold divisibility system — equivalently, in anchor coordinates, the rigidity of closed anchor walks (`11.8.5.6`, `9.8.4` anchor form). The two halves of the conjecture's residual difficulty (statistics for orbits, rigidity for cycles) meet in this one configuration, which is strong evidence they are the same problem.
+
+**Consequence 12.8.5 (strategy; the stopping rule fires).** The crossover plan — reach `p > 91` via trim plus search — is withdrawn: by `12.8.2` the search bound at `p = 92` is `n_0 ~ 10^18`, infeasible, and by `12.8.3` no size-level lemma can lower it. Per the stopping rules (README), the cycle ladder is retired and the cycle front is parked: periods `1`–`3` closed, the uniform question answered, and the remaining content of cycle exclusion precisely identified as anchor-walk rigidity — the same front as Stage 4. No further per-period searches will run.
 

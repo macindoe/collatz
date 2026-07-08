@@ -101,6 +101,8 @@ Under this guarded interpretation, Route A provides a disciplined path forward: 
 
 The frequency and size ledgers of `11.8.4.4` fix the scope of that path. The typical step is governed by the classical drift picture, which Route A confirms but does not improve. Route A's proper target is the exact arithmetic of the exceptional set — the deep cascades and their anchor structure — together with the fiber-to-orbit bridge of `11.8.5.6`. Claims on behalf of the program should be calibrated accordingly.
 
+**Strategy and stopping rules.** The program-level strategy — which fronts are open, what each is for, what counts as done, and what triggers parking a front — lives in `README.md` and is binding (see also `AGENTS.md`). In brief: the cycle ladder (§12) is not climbed per period; work there serves only the uniform trim lemma. The guardrail above applies to computational fronts exactly as it applies to residue refinement: results without structure are engineering, not progress.
+
 ## 11.9. Closing Perspective
 
 The framework developed in this note still does not resolve the Collatz conjecture, and the equivalence of Section `9.8` should not be mistaken for progress toward resolving it: it proves only that the conjecture and the reduced statement "every `F`-orbit reaches `(1,1)`" stand or fall together, with nontrivial cycles of the original map in bijection with nontrivial cycles of `F`. What has changed is the status of the reduction, not of the conjecture: the main issue is no longer whether the reduced system is mathematically legitimate or faithful — it is both — but whether its arithmetic can be classified at a deeper level.
