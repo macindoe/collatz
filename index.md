@@ -5,6 +5,8 @@ updated: 2026-07-07
 
 # Collatz Reduction — Wiki Index
 
+New here? `README.md` is the plain-language map and carries the program's strategy and stopping rules.
+
 A reduced structural formalism for the Collatz map: deterministic valuation blocks are factored out, and the induced dynamics are studied on reduced states `(ω, d)`. The reduced system is a faithful arena for the conjecture itself — the convergence translation (spine.md §9.8) proves the exact equivalence.
 
 This repository is a wiki, not a versioned monolith. Each page carries its current status at the top; history lives in git. The last monolith draft is preserved at `sources/drafts/collatz_reduction_rewrite_v078.md`, and every page below was split from it with byte-identical content (verified 2026-07-06).

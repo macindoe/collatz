@@ -7,7 +7,8 @@ This repository follows the LLM-wiki pattern: three layers with different mutati
 1. **`sources/`** — immutable. Historical drafts (v000–v078), PDFs, residue data. Read for provenance; never edit, never delete. New monolith drafts are no longer created — the wiki pages are the live document.
 2. **Wiki pages** (`index.md`, `spine.md`, `program.md`, `stage1.md`–`stage3.md`, `open-problems.md`, `archive/`) — evergreen. Each carries front matter (`status`, `scope`, `updated`) and a "Current state" paragraph. Pages are rewritten in place to carry the current best answer; history is git's job, not the page's.
 3. **`experiments/`** — verification and pilot code. Each script states which page/result it supports. Scripts are kept runnable; results (counts, ranges, dates) are quoted in the owning page.
-4. **This file** — the schema. Update it when the structure or workflows change.
+4. **`README.md`** — the human-facing map, including the program's strategy and stopping rules. Those rules are binding on agents too: check them before opening new computational fronts (in particular: no per-period cycle searches unless they serve the uniform trim lemma).
+5. **This file** — the schema. Update it when the structure or workflows change.
 
 ## Conventions
 
