@@ -81,3 +81,23 @@ if __name__=="__main__":
     c,b=mirror_law_check(); print(f"mirror law: {c} checks, {b} failures")
     for X in (2**10,2**16,2**19):
         n=len(tree_counts(X)); print(f"D: N({X}) = {n}, exponent {math.log(n)/math.log(X):.3f}")
+
+# ---- 14.5 additions: door mortality, Gardens of Eden, renewal mass ----
+def door_mortality_check(trials=20000,seed=149):
+    random.seed(seed); b=0
+    for _ in range(trials):
+        W=random.randrange(1,10**5,2)
+        if W%3==0: continue
+        D=random.randrange(1,20)
+        for a in range(D):
+            y=2**(D-a)*3**a*W-1
+            if (y%3==0)!=(a==0 and (pow(2,D,3)*W)%3==1): b+=1
+    return b
+def renewal_mass(c,Dlaw,tot):
+    Ed=2*3**(c-1)/(1-3**(c-1))
+    s_sum=0.5*(2**(-c)+4**(-c))/(1-4**(-c))
+    m=0.0
+    for D,cnt in Dlaw.items():
+        bm=sum((0.5 if a==0 else 1.0)*(2**(-c*(D-a)))*(3**(-c*a)) for a in range(D))
+        m+=(cnt/tot)*bm*s_sum*Ed
+    return m

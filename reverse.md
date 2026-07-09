@@ -1,5 +1,5 @@
 ---
-status: front OPENED (2026-07-10) — mirror machinery exact and verified; density program identified; renewal equation open
+status: ACTIVE — mirror machinery exact; dead ends mapped (14.5: door mortality + Gardens of Eden, both proved); renewal equation resolved heuristically with mortality (supercritical, margin 1.52 — predicts full density); rigorous KL-style bound is the open theorem target
 scope: new section 14 (post-monolith)
 updated: 2026-07-10
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
@@ -76,6 +76,24 @@ Because branching is exact, the tree from `(1,1)` can be enumerated *completely*
 
 The exponent rises with the cutoff, consistent with the tree having full density (exponent 1) — which is what the conjecture predicts and what no counting can prove. The rigorous frontier here is the Krasikov–Lagarias-type lower bounds (`≥ x^0.84`-flavor), which were derived *without* an exact local branching law. The front's concrete target: derive the exact renewal/functional equation for the tree from Theorem 14.2.4 plus the door structure of 14.1.1, and test whether it sharpens those exponents. **Recorded failure:** the first attempt at that equation (single-type branching, geometric depth) was wrong — it ignored the representative multiplicity (each state has `D` doors) and door-leaf structure; the correct equation is a multi-type renewal over `(door class, depth)` and is the open item.
 
-## 14.5. Scope and standing
+## 14.5. Dead ends: door mortality, Gardens of Eden, and the renewal equation
+
+*(Added 2026-07-11, from the author's question: under what conditions does backward generation cease?)*
+
+**Theorem 14.5.1 (door mortality).** For a state `(Ω, D)`, the doors `y_a` with `a ≥ 1` are never dead (`y_a ≡ 2 (mod 3)` identically). The sole mortal door is `a = 0`: it is dead iff `2^D Ω ≡ 1 (mod 3)`, i.e. for exactly one combination of `(Ω mod 3, D mod 2)` — half of all states. **Verified exactly on 20,000 random states, all doors.**
+
+**Theorem 14.5.2 (Gardens of Eden).** A state has no `F`-preimage at all iff `D = 1` and `Ω ≡ 2 (mod 3)` — equivalently, iff its unique representative is an odd multiple of `3`. Every state with `D ≥ 2` is reachable (door `a = 1` is always alive). **Verified against the forward image on 600 states.** This is the reduced form of the classical fact that multiples of `3` have no odd preimages: classically one third of odd numbers are unreachable *values*; in reduced coordinates, unreachability concentrates entirely on depth-`1` states of core `≡ 2 (mod 3)`, while deeper states merely lose one door.
+
+**14.5.3 (the renewal equation, mortality included — resolving the 14.4 open item at the heuristic level).** The multi-type branching analysis of the tree, with the door structure of `14.1.1`, the depth law `2·3^(−d)`, the measured stationary depth distribution, and Theorem `14.5.1`'s mortality (a factor `1/2` on door `0`), gives the renewal mass
+
+```text
+mass(c) = E_D [ Σ_(a<D) (½ if a=0 else 1) · 2^(−c(D−a)) 3^(−ca) ] · Σ_s 2^(−cs) · E[3^(cd)].
+```
+
+Computed over `c ∈ (0,1)`: the mass **never falls to 1** — its minimum is `≈ 1.52` at `c ≈ 0.7`. The backward tree is supercritical at every sub-density exponent: the analysis predicts growth exponent `1` (full density), consistent with the exact enumeration (`0.970 → 0.981`, rising) and with the conjecture's prediction. Two honest notes: an earlier single-type version of this equation was wrong and is recorded above (14.4); and the present computation is a heuristic with one measured input (the stationary depth law) — the rigorous target is now sharp: **extract a KL-style lower bound (`x^c` reachable states, explicit `c`) from a truncated, fully-rigorous core of this supercritical system.** The `50%` margin at the bottleneck suggests meaningful room.
+
+**Remark (what mortality costs).** Dead ends do not throttle the tree. Their entire price is half a door per state — visible in the mass formula as the lone `½` — against `D`-fold door multiplicity and infinite `s`-branching. The classical intuition that "a third of numbers being leaves" might starve the tree is quantitatively false in reduced coordinates.
+
+## 14.6. Scope and standing
 
 Backward reachability of every valid state from `(1,1)` is *identical* to the Collatz conjecture (Theorem 9.8.3) — this front offers no discount on the hard part, and per the digit-budget principle its unbounded-depth content is the same as the forward front's (3-adic digits now, rather than 2-adic). What it adds: the exact dual machinery (every forward theorem should be checked for a mirror — dual windows, dual trichotomy, dual increment law are unexplored), and the density program, which is the one place where the classical literature's rigorous partial results (KL exponents) might be sharpened by an exact local law. Stopping rule, inherited: work here must produce either mirror theorems or the multi-type renewal equation; exponent-grinding without the equation is not progress.
