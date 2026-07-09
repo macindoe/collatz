@@ -35,7 +35,7 @@ updated: 2026-07-09
 
 ## Provenance (novelty-relevant)
 
-The framework's origin is documented and predates all three contemporary neighbors: a hand-drawn note of 13 March 2023 (`sources/origin_scribble_2023-03-13.png`, transcribed in README) already contains the seed/odd-core concept, the block cascade, the base-9 structure, and the Stage-4 question. Independent origination, three years before arXiv:2603.11066, with a complete draft history (sources/drafts v000–v078) and verification records. For a methodology-documenting paper this provenance chain is itself an asset.
+The framework's origin is documented and predates all three contemporary neighbors: a hand-drawn note of 13 March 2023 (`sources/Collatz_conjecture_part1.png`, original file timestamp preserved, transcribed in README) already contains the seed/odd-core concept, the block cascade, the base-9 structure, and the Stage-4 question. Independent origination, three years before arXiv:2603.11066, with a complete draft history (sources/drafts v000–v078) and verification records. For a methodology-documenting paper this provenance chain is itself an asset.
 
 ## Framing recommendation
 
