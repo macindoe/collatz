@@ -52,6 +52,10 @@ This section exists because open-ended research programs die of drift. These rul
 | `sources/` | Immutable history: drafts v000–v078, PDFs, data. Never edited |
 | `AGENTS.md` | Maintenance schema: layers, workflows, verification records |
 
+## Provenance
+
+The framework originated as a hand-drawn note in Microsoft Paint, dated 13 March 2023, 1:49 AM — before this repository, before the drafts, before any AI collaboration (`sources/origin_scribble_2023-03-13.png`). The scribble already contains, in embryo: the *seed* (the odd core, later `ω`) — "3x+1 only introduces factors of 3, all other prime factors are preserved"; the *block cascade* (later Layer 2) — "consecutive 3x+1÷2 operations continue until all factors of 2 are replaced with factors of 3"; the role of *base 9* — the iteration `9n−2 → 9(n/2)−1` with parity branching, which matured into the lifting congruence `9^n ≡ ω^(−1)` and the anchor `N(ω) = −log ω / log 9`; and the program's driving question, verbatim — "**Part Two: What does halving do to the Seed?**" — whose mature answer is the anchor increment law (stage4.md), and whose remaining depths are exactly what is still open. Everything since has been refinement of that page, first by hand, then in collaboration with AI (2023–2026).
+
 ## House norms
 
 Every "proved" claim has an independent numerical check recorded in `AGENTS.md`, run with fresh code rather than the code that suggested the result. Refuted conjectures are archived with their refutation data so they cannot quietly regenerate. Errors caught mid-work are documented in the record, not smoothed over — two search-filter bugs and one silent assumption are on file in cycles.md, found and fixed by the process working as intended. The section numbers (`11.8.6.3`, `12.7.4`, …) are permanent anchors; `index.md` resolves any number to its page.
