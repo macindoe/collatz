@@ -1,5 +1,7 @@
 # Collatz, in reduced coordinates
 
+**Paper:** *Reduced coordinates for the Collatz map* — published preprint, DOI [10.5281/zenodo.21273548](https://doi.org/10.5281/zenodo.21273548) (July 2026). Source and PDF in `paper/`. This repository is the paper's complete research record.
+
 This repository is a live research program on the Collatz conjecture, kept as a wiki rather than a paper. Every page carries its current status at the top; history lives in git; nothing empirical is ever passed off as proved. If you are an agent, read `AGENTS.md` for the maintenance rules. If you are a human — probably Ben — this page is the map.
 
 ## The idea, in plain language
