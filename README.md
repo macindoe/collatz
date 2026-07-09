@@ -51,6 +51,7 @@ This section exists because open-ended research programs die of drift. These rul
 | `cycles.md` | §12: cycles in reduced coordinates; periods 1–3 closed; the uniform trim lemma is the open objective |
 | `archive/` | Discovery paths and refuted claims, kept with the evidence that killed them |
 | `experiments/` | Runnable verification code for every computational claim in the wiki |
+| `viz/` | Interactive visualizations — `anchor_field_explorer.html`: the exit-valuation field over (ω, d) with click-to-trace orbits |
 | `sources/` | Immutable history: drafts v000–v078, PDFs, data. Never edited |
 | `AGENTS.md` | Maintenance schema: layers, workflows, verification records |
 

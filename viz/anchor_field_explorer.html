@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anchor field explorer — reduced Collatz dynamics</title>
+<style>
+:root{--surface-1:#f4f4f2;--surface-2:#fff;--text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;--border:#d9dce3;--border-strong:#b8bdc9;}
+@media (prefers-color-scheme: dark){:root{--surface-1:#22252c;--surface-2:#1a1c22;--text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;--border:#3a3e48;--border-strong:#565c6a;}
+body{background:#14161b;}}
+body{font-family:system-ui,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);}
+h1{font-size:20px;font-weight:500;}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+select,button{font:inherit;padding:6px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2);color:var(--text-primary);}
+</style>
+</head>
+<body>
+<h1>Anchor field explorer</h1>
+<p>The exit valuation s = v&#8322;(3&#7496;&omega; &minus; 1) over reduced Collatz states (&omega;, d). Bright towers in the lifting columns are depths matching the 2-adic digits of the anchor M(&omega;) = &minus;2 log &omega; / log 9. Click any cell to trace its F-orbit. Companion to <em>Reduced coordinates for the Collatz map</em>, DOI 10.5281/zenodo.21273548.</p>
+<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
+<label style="font-size:13px;color:var(--text-secondary);">color
+<select id="mode"><option value="s">exit valuation s</option><option value="gain">3-gain (s even)</option></select></label>
+<button id="clearBtn">clear orbit</button>
+<span style="font-size:13px;color:var(--text-muted);">hover to inspect &middot; click to trace</span>
+</div>
+<div id="wrap" style="position:relative;">
+<canvas id="cv" style="width:100%;display:block;border:1px solid var(--border);border-radius:8px;"></canvas>
+<div id="tip" style="position:absolute;display:none;pointer-events:none;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5;max-width:230px;"></div>
+</div>
+<div style="display:flex;gap:14px;align-items:center;margin-top:8px;font-size:12px;color:var(--text-secondary);flex-wrap:wrap;">
+<span id="legend"></span><span style="margin-left:auto;">x: &omega; (odd, 3&nmid;&omega;) &middot; y: d</span>
+</div>
+<div id="orbitPanel" style="display:none;margin-top:10px;background:var(--surface-1);border-radius:8px;padding:10px 12px;">
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;" id="orbitTitle"></div>
+<div id="orbitList" style="font-family:ui-monospace,monospace;font-size:12px;line-height:1.8;overflow-x:auto;white-space:nowrap;"></div>
+</div>
+<script>
+const NC=88, ND=44, CELL=7, LM=34, TM=6;
+const omegas=[];
+for(let x=1; omegas.length<NC; x+=2){ if(x%3!==0) omegas.push(x); }
+const colIdx=new Map(); omegas.forEach((w,i)=>colIdx.set(w,i));
+const pow3=[1n]; for(let i=1;i<=ND+2;i++) pow3.push(pow3[i-1]*3n);
+function v2(x){let v=0; while((x&1n)===0n){x>>=1n;v++;} return v;}
+function v3(x){let v=0; while(x%3n===0n){x/=3n;v++;} return v;}
+function stepState(w,d){
+  const A=pow3[d]*w-1n, s=v2(A), C=A+(1n<<BigInt(s));
+  const sig=v2(C); let u=C>>BigInt(sig); const a=v3(u); u/=pow3[a];
+  return {s:s, w2:u, d2:sig-s+a};
+}
+const S=[], F2=[];
+for(let c=0;c<NC;c++){ S[c]=[]; F2[c]=[];
+  const w=BigInt(omegas[c]);
+  for(let d=1;d<=ND;d++){ const r=stepState(w,d); S[c][d]=r.s; F2[c][d]=r; }
+}
+const cv=document.getElementById('cv'), tip=document.getElementById('tip');
+const W=LM+NC*CELL+6, H=TM+ND*CELL+22, dpr=window.devicePixelRatio||1;
+cv.width=W*dpr; cv.height=H*dpr; cv.style.aspectRatio=W+'/'+H;
+const ctx=cv.getContext('2d'); ctx.scale(dpr,dpr);
+const dark=matchMedia('(prefers-color-scheme: dark)').matches;
+const ramp=['#c7cede','#8fa8d9','#5d84cf','#3f68b8','#e0a13c','#e0762e','#d9482b','#b81f3c','#8f0f56','#640c78'];
+const rampD=['#3a4356','#42557e','#4f6ea8','#5d84cf','#e0a13c','#e0762e','#d9482b','#c2325a','#a8309f','#b06ae8'];
+function colS(s){const r=dark?rampD:ramp; return r[Math.min(s-1,r.length-1)];}
+const gainCol=dark?['#3a4356','#3fa66f']:['#c7cede','#2c8a57'];
+let mode='s', orbit=null;
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.font='10px sans-serif'; ctx.textAlign='right';
+  ctx.fillStyle=dark?'#9aa3b5':'#6b7280';
+  for(let d=4;d<=ND;d+=8){ ctx.fillText(d, LM-5, TM+(ND-d)*CELL+CELL); }
+  ctx.fillText('d', LM-5, TM+8);
+  ctx.textAlign='center';
+  for(let c=0;c<NC;c+=12){ ctx.fillText(omegas[c], LM+c*CELL+CELL/2, H-8); }
+  for(let c=0;c<NC;c++) for(let d=1;d<=ND;d++){
+    ctx.fillStyle = mode==='s' ? colS(S[c][d]) : gainCol[S[c][d]%2===0?1:0];
+    ctx.fillRect(LM+c*CELL, TM+(ND-d)*CELL, CELL-0.6, CELL-0.6);
+  }
+  if(orbit){
+    ctx.strokeStyle=dark?'#f2f4f8':'#141821'; ctx.lineWidth=1.4;
+    ctx.beginPath(); let started=false;
+    for(const p of orbit){ if(p.c===null){started=false;continue;}
+      const x=LM+p.c*CELL+CELL/2, y=TM+(ND-p.d)*CELL+CELL/2;
+      if(!started){ctx.moveTo(x,y);started=true;} else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    orbit.filter(p=>p.c!==null).forEach((p,i)=>{
+      const x=LM+p.c*CELL+CELL/2, y=TM+(ND-p.d)*CELL+CELL/2;
+      ctx.beginPath(); ctx.arc(x,y,i===0?4:2.8,0,7);
+      ctx.fillStyle=i===0?(dark?'#ffd166':'#b8860b'):(dark?'#f2f4f8':'#141821');
+      ctx.fill();
+    });
+  }
+}
+function legend(){
+  const el=document.getElementById('legend');
+  if(mode==='s'){ let h='s: ';
+    for(let s=1;s<=10;s++) h+='<span style="display:inline-block;width:13px;height:13px;vertical-align:-2px;border-radius:3px;background:'+colS(s)+'"></span><span style="margin:0 6px 0 2px;">'+(s===10?'10+':s)+'</span>';
+    el.innerHTML=h;
+  } else el.innerHTML='<span style="display:inline-block;width:13px;height:13px;vertical-align:-2px;border-radius:3px;background:'+gainCol[1]+'"></span> gains a factor of 3 &nbsp; <span style="display:inline-block;width:13px;height:13px;vertical-align:-2px;border-radius:3px;background:'+gainCol[0]+'"></span> no gain';
+}
+function cellAt(ev){
+  const r=cv.getBoundingClientRect(), sc=W/r.width;
+  const x=(ev.clientX-r.left)*sc, y=(ev.clientY-r.top)*sc;
+  const c=Math.floor((x-LM)/CELL), d=ND-Math.floor((y-TM)/CELL);
+  if(c<0||c>=NC||d<1||d>ND) return null; return {c,d};
+}
+cv.addEventListener('mousemove',ev=>{
+  const cd=cellAt(ev);
+  if(!cd){tip.style.display='none';return;}
+  const w=omegas[cd.c], d=cd.d, r=F2[cd.c][d], s=S[cd.c][d];
+  const lift=(w%8===1&&d%2===0)||(w%8===3&&d%2===1);
+  tip.innerHTML='(&omega;, d) = ('+w+', '+d+')<br>s = '+s+(lift?' &middot; lifting class':'')+'<br>F &rarr; ('+r.w2.toString()+', '+r.d2+')<br>'+(s%2===0?'gains a 3':'no 3-gain');
+  const rect=cv.getBoundingClientRect();
+  let lx=ev.clientX-rect.left+14, ly=ev.clientY-rect.top+10;
+  if(lx>rect.width-240) lx-=260;
+  tip.style.left=lx+'px'; tip.style.top=ly+'px'; tip.style.display='block';
+});
+cv.addEventListener('mouseleave',()=>tip.style.display='none');
+cv.addEventListener('click',ev=>{
+  const cd=cellAt(ev); if(!cd) return;
+  let w=BigInt(omegas[cd.c]), d=cd.d;
+  orbit=[]; const rows=[];
+  for(let i=0;i<40;i++){
+    const wn=Number(w), inView=(w<400n&&colIdx.has(wn)&&d>=1&&d<=ND);
+    orbit.push({c:inView?colIdx.get(wn):null, d:d});
+    const ws=w.toString(); rows.push('('+(ws.length>10?ws.slice(0,8)+'…':ws)+', '+d+')');
+    if(w===1n&&d===1){ rows.push('fixed point'); break; }
+    const r=stepState(w,d); w=r.w2; d=r.d2;
+  }
+  draw();
+  document.getElementById('orbitPanel').style.display='block';
+  document.getElementById('orbitTitle').textContent='F-orbit from ('+omegas[cd.c]+', '+cd.d+') — dots shown while the orbit stays in view';
+  document.getElementById('orbitList').textContent=rows.join('  →  ');
+});
+document.getElementById('mode').addEventListener('change',e=>{mode=e.target.value;legend();draw();});
+document.getElementById('clearBtn').addEventListener('click',()=>{orbit=null;document.getElementById('orbitPanel').style.display='none';draw();});
+legend(); draw();
+</script>
+</body>
+</html>
