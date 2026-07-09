@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block family decomposer — reduced Collatz coordinates</title>
+<style>
+:root{--surface-1:#f4f4f2;--surface-2:#fff;--text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;--border:#d9dce3;--border-strong:#b8bdc9;--bg-accent:#e8f0fb;--text-accent:#2f5fb3;}
+@media (prefers-color-scheme: dark){:root{--surface-1:#22252c;--surface-2:#1a1c22;--text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;--border:#3a3e48;--border-strong:#565c6a;--bg-accent:#243350;--text-accent:#8fb0e8;}
+body{background:#14161b;}}
+body{font-family:system-ui,sans-serif;max-width:980px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);}
+h1{font-size:20px;font-weight:500;}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+input,button{font:inherit;padding:6px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2);color:var(--text-primary);}
+sup{font-size:9px;}
+</style>
+</head>
+<body>
+<h1>Block family decomposer</h1>
+<p>A Collatz orbit unpacked into reduced blocks. Each card is one representative family of a state (&omega;, d): rows show x, x+1, and the factorization 2<sup>i</sup>&middot;3<sup>j</sup>&middot;&omega;. Blue arrows are rising steps (&times;3+1 then &divide;2); each family ends at its even lid A = 3<sup>d</sup>&omega; &minus; 1, then s halvings exit to the next family. Solid cells are on this orbit; faded cells are entries other orbits use. Companion to <em>Reduced coordinates for the Collatz map</em>, DOI 10.5281/zenodo.21273548.</p>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+<label style="font-size:13px;color:var(--text-secondary);">start (odd)
+<input id="x0" type="number" value="99" min="3" step="2" style="width:110px;margin-left:6px;"></label>
+<button id="go">decompose</button>
+<button id="rnd">random</button>
+</div>
+<div id="blocks" style="display:flex;gap:0;overflow-x:auto;align-items:stretch;padding-bottom:6px;"></div>
+<div id="chain" style="margin-top:12px;font-family:ui-monospace,monospace;font-size:14px;overflow-x:auto;white-space:nowrap;"></div>
+<script>
+const G='#2c8a57',P='#7c5cd6',R='#d9482b',B='#3f68b8';
+function v2(x){let v=0n,y=x;while((y&1n)===0n){y>>=1n;v++;}return Number(v);}
+function v3(x){let v=0,y=x;while(y%3n===0n){y/=3n;v++;}return v;}
+function pw(b,e){let r=1n;for(let i=0;i<e;i++)r*=b;return r;}
+function fmt(n){const s=n.toString();return s.length>9?s.slice(0,7)+'…':s;}
+function decompose(x0){
+  let x=BigInt(x0);const out=[];
+  for(let b=0;b<9;b++){
+    const m=v2(x+1n);let u=(x+1n)>>BigInt(m);const a=v3(u);const w=u/pw(3n,a);const d=m+a;
+    const A=pw(3n,d)*w-1n,s=v2(A),xe=A>>BigInt(s);
+    out.push({w,d,m,a,A,s,xe,entry:x});
+    if(x===1n)break;
+    x=xe;
+    if(x===1n){out.push({w:1n,d:1,m:1,a:0,A:2n,s:1,xe:1n,entry:1n});break;}
+  }
+  return out;
+}
+function card(bk,isLast){
+  const cols=[];
+  const dd=bk.d, show=dd<=7?[...Array(dd+1).keys()]:[0,1,2,-1,dd-1,dd];
+  for(const a of show){
+    if(a<0){cols.push('<div style="padding:0 6px;align-self:center;color:var(--text-muted);">…</div>');continue;}
+    const xv=pw(2n,dd-a)*pw(3n,a)*bk.w-1n;
+    const isEntry=(a===bk.a), lid=(a===dd);
+    const op=(a<bk.a)?'0.32':'1';
+    let bg=isEntry?'var(--bg-accent)':(lid?'var(--surface-1)':'transparent');
+    cols.push('<div style="opacity:'+op+';background:'+bg+';border-radius:6px;padding:6px 8px;text-align:center;min-width:56px;">'
+      +'<div style="font-size:15px;font-weight:500;">'+fmt(xv)+(lid?'<span style="font-size:10px;color:var(--text-muted);"> (even)</span>':'')+'</div>'
+      +'<div style="font-size:12px;color:var(--text-secondary);border-top:0.5px solid var(--border);margin-top:3px;padding-top:3px;">'+fmt(xv+1n)+'</div>'
+      +'<div style="font-size:12px;margin-top:3px;"><span style="color:'+P+';">2<sup>'+(dd-a)+'</sup></span>&middot;<span style="color:'+P+';">3<sup>'+a+'</sup></span></div>'
+      +(isEntry?'<div style="font-size:10px;color:var(--text-accent);margin-top:2px;">orbit enters</div>':'')
+      +'</div>');
+  }
+  const casc=isLast?'':'<div style="font-size:12px;margin-top:8px;color:var(--text-secondary);">exit: <span style="color:'+R+';font-weight:500;">s = '+bk.s+'</span> halvings from the lid &rarr; <span style="font-family:ui-monospace,monospace;">'+fmt(bk.xe)+'</span></div>';
+  return '<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-right:10px;flex-shrink:0;">'
+    +'<div style="font-size:13px;margin-bottom:8px;">state (<span style="color:'+G+';font-weight:500;">'+bk.w.toString()+'</span>, <span style="color:'+P+';font-weight:500;">'+bk.d+'</span>)'
+    +' <span style="color:var(--text-muted);">&middot; entered at m = '+bk.m+(bk.a>0?', '+bk.a+' rise'+(bk.a>1?'s':'')+' pre-converted to 3s':'')+'</span></div>'
+    +'<div style="display:flex;gap:4px;align-items:stretch;">'+cols.join('<div style="align-self:center;color:'+B+';font-size:13px;">&rarr;</div>')+'</div>'
+    +'<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">rows: x &middot; x+1 &middot; 2<sup>i</sup>&middot;3<sup>j</sup> (&times;<span style="color:'+G+';">'+bk.w.toString()+'</span>) &mdash; <span style="color:'+B+';">&rarr;</span> = one &times;3+1, &divide;2 rise</div>'
+    +casc+'</div>';
+}
+function run(){
+  const x0=parseInt(document.getElementById('x0').value);
+  if(!x0||x0%2===0||x0<1)return;
+  const bks=decompose(x0);
+  document.getElementById('blocks').innerHTML=bks.map((b,i)=>card(b,i===bks.length-1&&b.w===1n&&b.d===1)).join('');
+  document.getElementById('chain').innerHTML='reduced chain: '+bks.map((b,i)=>{
+    const arrow=i<bks.length-1?' <span style="color:'+R+';">&rarr;</span><sup style="color:'+R+';">'+b.s+'</sup> ':'';
+    return '(<span style="color:'+G+';">'+fmt(b.w)+'</span>,<span style="color:'+P+';">'+b.d+'</span>)'+arrow;
+  }).join('');
+}
+document.getElementById('go').addEventListener('click',run);
+document.getElementById('x0').addEventListener('keydown',e=>{if(e.key==='Enter')run();});
+document.getElementById('rnd').addEventListener('click',()=>{
+  let x=1+2*Math.floor(Math.random()*5000);
+  if(x%3===0)x+=2;
+  document.getElementById('x0').value=x;run();
+});
+run();
+</script>
+</body>
+</html>
