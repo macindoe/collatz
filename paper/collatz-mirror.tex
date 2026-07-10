@@ -27,7 +27,9 @@
 \maketitle
 
 \begin{abstract}
-The companion paper \cite{paper1} compresses the Collatz dynamics into a self-map $F$ on states $(\w,d)$, with forward per-step arithmetic governed by a $2$-adic anchor. Here we run the map backward, in three movements. First, the inverse structure: the predecessors of a state are parameterized completely by its representatives (\emph{doors}) and one free exponent $s$, and the backward depth obeys the exact law $d = 1 + \vth{s - M_3(y)}$, where the backward anchor $M_3(y)$ is an affine discrete logarithm base $2$ in the $3$-adic exponent group --- the precise mirror of the forward law $s = 2 + \vt{d - M(\w)}$, with the primes $2$ and $3$ and the coordinates $s$ and $d$ exchanged. The forward per-step theory admits a systematic $3$-adic mirror in this sense, with four structural asymmetries whose causes are identified. Second, applications of the inverse parameterization: backward generation dies only through a single mortal door per state, dead on exactly two of the four admissible residue--parity classes; the states with no predecessors at all are precisely the depth-one states whose unique door is divisible by $3$; and \emph{steering} laws show that backward branching controls the $3$-adic data completely, freezes the $2$-adic residues, and --- through the freeze --- places the predecessor's forward anchor on an exact lattice to any prescribed precision, so that the anchor walk, unsolved in the forward direction, is controllable in reverse. Third, a density application: a deliberately impoverished sub-tree yields a self-contained proof that at least $2^{-3.6}X^{0.3}$ odd integers below $X$ reach $1$. The bound is far weaker than the linear-programming results of Krasikov--Lagarias; its contribution is a derivation in which the local branching law is exact rather than bounded by inequalities.
+The companion paper \cite{paper1} compresses the Collatz dynamics into a self-map $F$ on states $(\w,d)$, with forward per-step arithmetic governed by a $2$-adic anchor. Here we run the map backward, in three movements. First, the inverse structure: the predecessors of a state are parameterized completely by its representatives (\emph{doors}) and one free exponent $s$, and the backward depth obeys the exact law $d = 1 + \vth{s - M_3(y)}$, where the backward anchor $M_3(y)$ is an affine discrete logarithm base $2$ in the $3$-adic exponent group --- the corresponding $3$-adic mirror of the forward law $s = 2 + \vt{d - M(\w)}$, with the primes $2$ and $3$ and the coordinates $s$ and $d$ exchanged. The forward per-step theory admits a systematic $3$-adic mirror in this sense, with four structural asymmetries whose causes are identified.
+
+Second, applications of the inverse parameterization: backward generation dies only through a single mortal door per state, dead on exactly two of the four admissible residue--parity classes; the states with no predecessors at all are precisely the depth-one states whose unique door is divisible by $3$; and \emph{steering} laws show that backward branching controls the $3$-adic data completely, freezes the $2$-adic residues, and --- through the freeze --- places the predecessor's forward anchor on an exact lattice to any prescribed precision, so that the anchor walk, unsolved in the forward direction, is controllable in reverse. Third, a density application: a deliberately impoverished sub-tree yields a self-contained proof that at least $2^{-3.6}X^{0.3}$ odd integers below $X$ reach $1$. The bound is far weaker than the linear-programming results of Krasikov--Lagarias; its contribution is a derivation in which the local branching law is exact rather than bounded by inequalities.
 \end{abstract}
 
 \section{Introduction}
@@ -80,6 +82,14 @@ $M_3(1)$ is the distinguished exponent class representing the discrete logarithm
 $(2^{3^{k-1}})^2 = 2^{2\cdot3^{k-1}} \equiv 1 \pmod{3^k}$ and $2^{3^{k-1}} \not\equiv 1$ (its order is not a divisor of $3^{k-1}$, as $2$ generates), so $2^{3^{k-1}} \equiv -1$. The affine law is immediate from $2^{M_3(y_i)} = -y_i^{-1}$: the product of the right sides is $y_1^{-1}y_2^{-1}$, and dividing by $2^{M_3(1)} = -1$ restores the sign.
 \end{proof}
 
+\begin{lemma}[mirror isometry]\label{lem:iso3}
+If $t \in \E$ has vanishing parity component and $t \neq 0$, then $\vth{2^t - 1} = 1 + \vth{t}$.
+\end{lemma}
+
+\begin{proof}
+For an even integer $t$: $\vth{2^t - 1} = \vth{4^{t/2} - 1} = \vth{4 - 1} + \vth{t/2} = 1 + \vth{t}$ by lifting-the-exponent (valid since $3 \mid 4 - 1$ and $3 \nmid 4$). The statement passes to $\E$ coordinatewise: both sides depend on $t$ only through its truncations, and every parity-zero truncation is realized by an even integer.
+\end{proof}
+
 \begin{theorem}[backward valuation law]\label{thm:blaw}
 For every door $y$ with $3\nmid y$ and every $s$ of the admissible parity, the element $s - M_3(y) \in \E$ has vanishing parity component, and
 \[ d \;=\; \vth{2^s y + 1} \;=\; 1 + \vth{\,s - M_3(y)\,}. \]
@@ -88,7 +98,7 @@ For every door $y$ with $3\nmid y$ and every $s$ of the admissible parity, the e
 \begin{proof}
 The parity component of $M_3(y)$ equals the admissible parity of $s$ (Definition~\ref{def:m3}), so $s - M_3(y)$ is even in $\E$ and its $\Z_3$-valuation is defined. Factor
 \[ 2^s y + 1 \;=\; y\,2^{M_3(y)}\bigl(2^{\,s - M_3(y)} - 1\bigr), \]
-using $2^{-M_3(y)}y^{-1} = -1$; the prefactor is a $3$-adic unit. For even $t \in \E$, lifting-the-exponent gives the mirror isometry $\vth{2^t - 1} = 1 + \vth t$ (from $\vth{4 - 1} = 1$ and the standard LTE step, valid in the inverse limit coordinatewise). Apply it to the bracket.
+using $2^{-M_3(y)}y^{-1} = -1$; the prefactor is a $3$-adic unit. Lemma~\ref{lem:iso3} applies to the bracket.
 \end{proof}
 
 \begin{corollary}[backward ledger]\label{cor:ledger}
@@ -96,7 +106,7 @@ Along the branch family of any live door, the set of admissible $s$ with $d = j$
 \end{corollary}
 
 \begin{proof}
-$d = j$ iff $\vth{s - M_3(y)} = j - 1$, which cuts an exact residue condition mod $3^j$ on the admissible arithmetic progression, of density $(3^{j-1} - 3^{j-2}\cdot\ldots) $ --- directly, $2\cdot 3^{-j}$, since among $s$ in a full period mod $2\cdot3^{j}$ exactly $2\cdot3^{j-1} - 2\cdot3^{j-2}\cdot 3 = 2(3^{j-1}-3^{j-2})\cdot\ldots$; equivalently: $\vth{t} = j-1$ has density $3^{-(j-1)} - 3^{-j} = 2\cdot3^{-j}\cdot\tfrac{3}{2}\cdot\tfrac{2}{3} = 2\cdot 3^{-j}$ among all $t$, and the admissible $s$ sweep all residues.
+The admissible $s$ form one arithmetic progression of step $2$; since $\gcd(2, 3^j) = 1$, among any $3^j$ consecutive admissible values, $s \bmod 3^j$ takes each residue exactly once. By Theorem~\ref{thm:blaw}, $d = j$ iff $\vth{s - M_3(y)} = j - 1$, i.e.\ iff $s \equiv M_3(y) + 3^{j-1}u \pmod{3^j}$ with $u \in \{1, 2\}$: exactly two residue classes mod $3^j$, hence exact density $2\cdot3^{-j}$.
 \end{proof}
 
 Table~\ref{tab:dual} summarizes the correspondence.
@@ -181,7 +191,7 @@ A state has no $F$-preimage iff $D = 1$ and its unique door $2\Omega - 1$ is div
 By Theorem~\ref{thm:pred}, predecessors exist iff some door is live. For $D \ge 2$ the door $a = 1$ is live by Theorem~\ref{thm:mort}; for $D = 1$ the only door is $y_0 = 2\Omega - 1$, live iff $3 \nmid y_0$.
 \end{proof}
 
-Classically, one third of odd integers are unreachable values. In reduced coordinates the phenomenon concentrates: states of depth $\ge 2$ merely lose one door on the mortal classes, and total barrenness occurs only at depth one. (A mortality-corrected branching heuristic for the full tree, with the measured stationary depth law as its one non-rigorous input, gives a renewal mass exceeding $1$ at every exponent below $1$, consistent with exact enumeration of the tree to $\w \le 2^{19}$; we do not use this heuristic anywhere below and flag it as such. The rigorous extraction is Section~\ref{sec:density}.)
+Classically, one third of odd integers have no odd predecessor. In reduced coordinates the phenomenon concentrates: states of depth $\ge 2$ merely lose one door on the mortal classes, and total barrenness occurs only at depth one. (A mortality-corrected branching heuristic for the full tree, with the measured stationary depth law as its one non-rigorous input, gives a renewal mass exceeding $1$ at every exponent below $1$, consistent with exact enumeration of the tree to $\w \le 2^{19}$; we do not use this heuristic anywhere below and flag it as such. The rigorous extraction is Section~\ref{sec:density}.)
 
 \section{Steering}\label{sec:steer}
 
@@ -232,7 +242,7 @@ Consecutive admissible $s$ differ by $2$, and $2^{s+2}y + 1 - (2^s y + 1) = 3\cd
 \end{proof}
 
 \begin{lemma}[unique parent, distinct values]\label{lem:distinct}
-Every kept child satisfies $y' > y$, except that the root's children satisfy $y' \ge 5$. Each node value determines its generating edge: $y'$ determines its state (if $y' \equiv 1 \bmod 3$ the state is $((y'+1)/2, 1)$; if $y' \equiv 2$, the state is recovered from $\vth{(y'+1)/2}$), the state determines the parent door $y = x_{\mathrm{exit}}$ of that state, and then $s$ is determined by $2^{s+1}y = 3y' + 1$. Consequently all node values in the door tree are pairwise distinct integers.
+Every kept child satisfies $y' > y$, except that the root's children satisfy $y' \ge 5$. Each node value determines its generating edge: $y'$ determines its state (if $y' \equiv 1 \bmod 3$ the state is $((y'+1)/2, 1)$; if $y' \equiv 2 \bmod 3$, then for generated nodes $y'$ is the terminal door of its state, so $d = 1 + \vth{(y'+1)/2}$ and $\w = (y'+1)/(2\cdot3^{d-1})$), the state determines the parent door $y = x_{\mathrm{exit}}$ of that state, and then $s$ is determined by $2^{s+1}y = 3y' + 1$. Consequently all node values in the door tree are pairwise distinct integers.
 \end{lemma}
 
 \begin{proof}
@@ -261,7 +271,7 @@ Let $c = 0.3$ and $A = 2^{-12c}$. For every node $y$ of the door tree and every 
 \end{lemma}
 
 \begin{proof}
-Strong induction on $\lceil X/y \rceil$. If $X < 2^{12} y$: $f \ge 1 \ge A(X/y)^c$ since $A\,2^{12c} = 1$. If $X \ge 2^{12}y$: every $z \in I(y)$ (Lemma~\ref{lem:mass}; at the root, the three children of Lemma~\ref{lem:rootmass}) satisfies $z < 2^{12} y \le X$, so the inductive hypothesis applies to each at the strictly smaller scale $X/z$, and the descendant sets of distinct children are disjoint (Lemma~\ref{lem:distinct}). Hence
+Strong induction on $\lceil X/y \rceil$. If $X < 2^{12} y$: $f \ge 1 \ge A(X/y)^c$ since $A\,2^{12c} = 1$. If $X \ge 2^{12}y$: every $z \in I(y)$ (Lemma~\ref{lem:mass}; at the root, the three children of Lemma~\ref{lem:rootmass}) satisfies $z < 2^{12} y \le X$. Moreover every child satisfies $z \ge \tfrac{19}{15}y$ (non-root: $z \ge (4y-1)/3$ with $y \ge 5$; root: $z \ge 5$), so $X/z \le \tfrac{15}{19}(X/y)$, and since $X/y \ge 2^{12}$ the drop exceeds $1$: $\lceil X/z \rceil < \lceil X/y \rceil$, and the inductive hypothesis applies to each child. The descendant sets of distinct children are disjoint (Lemma~\ref{lem:distinct}). Hence
 \[ f(y,X) \;\ge\; \sum_{z \in I(y)} f(z, X) \;\ge\; A X^c \sum_{z\in I(y)} z^{-c} \;\ge\; A\,(X/y)^c \cdot 1.05 \;\ge\; A\,(X/y)^c. \qedhere \]
 \end{proof}
 
