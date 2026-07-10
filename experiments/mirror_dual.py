@@ -7,6 +7,7 @@
 #   14.8  top-door anchor increment law (Delta M3) + door-mortality freeze
 #   14.9  one-step dichotomy (window decides predecessor depth d exactly,
 #         undecided rate ~ 3^-K)
+#   14.10 depth ladder mirror: predecessors at adjacent s, fixed door
 import random
 
 
@@ -260,6 +261,40 @@ def one_step_dichotomy(K, trials=20000, seed=21):
     return dec, und, err, deep_viol
 
 
+# ---------------------------------------------------------------------------
+# 14.10  depth ladder mirror: predecessors at adjacent s (step 2), fixed door
+# ---------------------------------------------------------------------------
+
+def T3(w):
+    v = 4 * w - 1
+    a = v3(v)
+    return v // 3 ** a, 1 + a
+
+
+def ladder_dichotomy(trials=30000, seed=31):
+    random.seed(seed)
+    bad1 = bad2 = n1 = n2 = 0
+    for _ in range(trials):
+        y = random.randrange(1, 10 ** 7, 2)
+        if y % 3 == 0:
+            continue
+        parity = 1 if y % 3 == 1 else 0
+        s = random.randrange(1, 2000)
+        if s % 2 != parity:
+            s += 1
+        w, d, _ = predecessor(y, s)
+        w2, d2, _ = predecessor(y, s + 2)
+        if d == 1:
+            n1 += 1
+            if T3(w) != (w2, d2):
+                bad1 += 1
+        else:
+            n2 += 1
+            if 4 * 3 ** (d - 1) * w - 1 != w2 or d2 != 1:
+                bad2 += 1
+    return n1, bad1, n2, bad2
+
+
 if __name__ == "__main__":
     print("== 14.7 digit-determinacy facts ==")
     print("fact (a'):", fact_a())
@@ -279,3 +314,8 @@ if __name__ == "__main__":
         tot = dec + und
         print(f"K={K}: {tot} trials | decided {dec} err {err} | undecided {und} "
               f"rate {und/tot:.5f} vs 3^-K={3.0**-K:.5f} | deep-bound violations {viol}")
+
+    print("== 14.10 ladder dichotomy (adjacent s, fixed door) ==")
+    n1, bad1, n2, bad2 = ladder_dichotomy()
+    print(f"(i) d=1 branch (T3): {n1} cases, {bad1} failures")
+    print(f"(ii) d>=2 branch (affine): {n2} cases, {bad2} failures")
