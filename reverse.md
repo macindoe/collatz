@@ -117,3 +117,15 @@ Paper Theorem 3.5 (`thm:deltaM`) is proved by chaining three digit-determinacy f
 **Finding — the missing cross-prime step (this *is* the honest mirror, not a gap).** Forward's fact (c) needs the order of `3` mod `2^r` because `ω_next` is obtained by dividing a *2-adically analyzed* quantity `C` by a `3`-power — a genuine cross-prime removal. Backward's (c') needs no such fact: `N = 2^s y + 1` is odd by construction (`y` odd, `2^s y` even), so there is never a `2`-power to strip; the only removal, `3^d`, is same-prime relative to the `3`-adic residue being computed. The backward digit flow has one fewer cross-prime step than the forward one — a real structural asymmetry, not a forced analogy.
 
 **Verification.** Facts (a'), (b'), (c'): 3,000 random checks each, zero failures. Theorem 14.7.2, window-only (generous `W = d+r+2`): `r ∈ {1,3,6}`, ≈2,670 checks each, zero failures. Code: `experiments/mirror_dual.py`.
+
+## 14.8. The top-door anchor increment law, and the frozen case identified
+
+Paper Theorem 3.5 also gives `ΔM = M(ω_next) − M(ω)`, the 2-adic anchor increment across a forward step — a *total* function of the state. Its backward mirror tracks the 3-adic anchor of *doors*, not cores, across a backward step.
+
+**Definition 14.8.1.** For a state `(κ,K)`, write `y₀(κ,K) = 2^K κ − 1` for its `a=0` representative (the mortal door of 14.5.1). Given `(Ω,D)`, door `y = y₀(Ω,D)` (alive), branch `s`, predecessor `(ω,d)` (14.1.1): write `y' = y₀(ω,d) = 2^d ω − 1` for the predecessor's own top door.
+
+**Theorem 14.8.2 (graded increment law, mirror of Thm 3.5's `ΔM`).** Whenever `y'` is alive, `ΔM₃ := M₃(y') − M₃(y) mod 3^k` is determined by, and explicitly computable from, `y mod 3^(d+k+1)` and `s mod 3^(d+k)` — chaining 14.7.1 with one further fact, `2^d mod 3^(k+1)` determined by `d mod 2·3^k` (order of `2` mod `3^(k+1)`), where `d` is already exact from the same window.
+
+**Theorem 14.8.3 (the freeze, identified).** `ΔM` is total — Theorem 3.5 never fails, because `ω_next` always exists. `ΔM₃` is *partial*: it is undefined exactly when `y'` is dead, i.e. (Theorem 14.5.1) `2^d ω ≡ 1 (mod 3)`. **This is the mirror the brief asked to identify:** the forward low-order law has no failure mode; the backward one has a hard, discrete, exactly-characterized failure mode — door mortality — occurring on exactly half of all top-door lineages. Forward orbits under `F` never die; backward top-door lineages sometimes do, and the increment law inherits that asymmetry exactly, rather than the "frozen digit" phenomenon of the ladder (15.3) or the trichotomy (14.9) that were the brief's other candidates — both of those turn out to be soft (more window resolves them); mortality is hard (no window helps; the branch is simply absent).
+
+**Verification.** 6,000 random `(Ω,D,s)` trials: 965 alive / 988 dead, freeze rate `0.5059` (vs. Theorem 14.5.1's exact `1/2`, consistent); window-only recovery of `ΔM₃ mod 3^5` on all 965 alive cases, zero failures. Code: `experiments/mirror_dual.py`.
