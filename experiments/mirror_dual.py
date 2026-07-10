@@ -5,6 +5,8 @@
 #
 #   14.7  digit-determinacy facts (a'),(b'),(c') + combined window theorem
 #   14.8  top-door anchor increment law (Delta M3) + door-mortality freeze
+#   14.9  one-step dichotomy (window decides predecessor depth d exactly,
+#         undecided rate ~ 3^-K)
 import random
 
 
@@ -220,6 +222,44 @@ def delta_m3_window(trials=6000, seed=41, K=5):
     return alive, dead, checked, bad
 
 
+# ---------------------------------------------------------------------------
+# 14.9  one-step dichotomy: window decides predecessor depth d exactly
+# ---------------------------------------------------------------------------
+
+def dichotomy_decide(y, s, K):
+    y_t = y % (3 ** (K + 1))
+    s_t = s % (3 ** K)
+    m3 = M3_full(y_t, K) % (3 ** K)
+    eps = (s_t - m3) % (3 ** K)
+    if eps == 0:
+        return ('deep', K)
+    return ('decided', 1 + v3(eps))
+
+
+def one_step_dichotomy(K, trials=20000, seed=21):
+    random.seed(seed)
+    dec = und = err = deep_viol = 0
+    for _ in range(trials):
+        y = random.randrange(1, 10 ** 8, 2)
+        if y % 3 == 0:
+            continue
+        parity = 1 if y % 3 == 1 else 0
+        s = random.randrange(1, 3000)
+        if s % 2 != parity:
+            s += 1
+        _, d_true, _ = predecessor(y, s)
+        verdict, val = dichotomy_decide(y, s, K)
+        if verdict == 'decided':
+            dec += 1
+            if val != d_true:
+                err += 1
+        else:
+            und += 1
+            if d_true <= K:
+                deep_viol += 1
+    return dec, und, err, deep_viol
+
+
 if __name__ == "__main__":
     print("== 14.7 digit-determinacy facts ==")
     print("fact (a'):", fact_a())
@@ -232,3 +272,10 @@ if __name__ == "__main__":
     alive, dead, checked, bad = delta_m3_window()
     print(f"alive {alive}, dead(frozen) {dead}, freeze rate {dead/(alive+dead):.4f}")
     print(f"window recovery of Delta M3 mod 3^5: {checked} checked, {bad} failures")
+
+    print("== 14.9 one-step dichotomy ==")
+    for K in (2, 4, 6, 8):
+        dec, und, err, viol = one_step_dichotomy(K)
+        tot = dec + und
+        print(f"K={K}: {tot} trials | decided {dec} err {err} | undecided {und} "
+              f"rate {und/tot:.5f} vs 3^-K={3.0**-K:.5f} | deep-bound violations {viol}")
