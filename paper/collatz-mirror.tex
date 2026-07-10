@@ -1,0 +1,202 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\vt}[1]{v_2\!\left(#1\right)}
+\newcommand{\vth}[1]{v_3\!\left(#1\right)}
+\newcommand{\w}{\omega}
+\newcommand{\LL}{\log_2 3}
+
+\title{The 3-adic mirror of the reduced Collatz dynamics:\\ duality, dead ends, and a density bound}
+\author{Ben Macindoe\thanks{\texttt{macindoebenjamin@gmail.com}. Companion to \cite{paper1}, whose coordinate system and forward laws are assumed. Developed through AI-assisted research (Claude, Anthropic; one delegated session by Claude Sonnet, independently reviewed); responsibility and verification protocol as stated in \cite{paper1}, Appendix A, and in Appendix~\ref{app:method} below.}}
+\date{July 2026 --- draft}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The companion paper \cite{paper1} compresses the Collatz dynamics into a self-map $F$ on states $(\w,d)$ and shows the forward per-step arithmetic is governed by a $2$-adic logarithm, the anchor $M(\w)$. Here we run the map backward. The predecessor structure of $F$ is characterized completely: predecessors arrive through the \emph{doors} (representatives) of a state, one per admissible exponent $s$, and the backward depth obeys the exact law $d = 1 + \vth{s - M_3(y)}$, where the backward anchor $M_3(y)$ is an affine $3$-adic logarithm base $2$ whose additive unit $M_3(1)$ is the $3$-adic realization of $-1$. The entire forward per-step theory then dualizes under the exchange $2\leftrightarrow3$, $s\leftrightarrow d$, with four precisely identified asymmetries rather than forced analogies: the backward digit flow has one fewer cross-prime step; the backward increment law is partial, failing exactly on the known door-mortality set, where the forward law is total; the forward decision trichotomy degenerates backward to a dichotomy, because $(\Z/3^q)^\times$ is cyclic while $(\Z/2^q)^\times$ is not; and the vertical ladder laws on both sides are gated by the respective anchors, with a forced step-size difference. We map the dead ends of backward generation: exactly one door per state is mortal, dead for exactly half of all states, and the states with no predecessors at all are precisely those of the odd multiples of $3$ at depth one. Steering laws are proved: backward branching steers the $3$-adic coordinate completely, freezes the $2$-adic residues at $3^{-d}$, and consequently places the predecessor's forward anchor on the exact lattice $-d\,M(3)$ to any prescribed precision. Finally, a single-type sub-tree (via a collapse identity making the door map independent of predecessor depth) yields a fully self-contained lower bound: at least $2^{-3.3}X^{0.3}$ odd integers below $X$ reach $1$, with critical exponent $0.3304$ for this core. The bound is far weaker than the linear-programming results of Krasikov--Lagarias ($X^{0.84}$); its contribution is the derivation route, in which the classical difference \emph{inequalities} are replaced by an exact local law, and a mapped refinement path.
+\end{abstract}
+
+\section{Introduction}
+
+Fix the odd-to-odd Collatz map $T(x) = (3x+1)/2^{\vt{3x+1}}$. The companion paper \cite{paper1} introduces reduced states $(\w, d)$ ($\w$ odd, $3\nmid\w$, $d \ge 1$), a self-map $F$ whose convergence problem is exactly equivalent to the Collatz conjecture, and proves that the forward per-step arithmetic is governed by the $2$-adic anchor $M(\w) = -2\log\w/\log 9 \in \Z_2$: the exit valuation obeys $s = 2 + \vt{d - M(\w)}$ on the lifting classes, the depth evolution closes exactly, and a finite window of digits decides each forward step without error.
+
+This paper asks what the same machinery looks like in reverse, where the deterministic map becomes an infinitely-branching tree. The short answer, developed in Sections~\ref{sec:pred}--\ref{sec:dual}, is that everything dualizes, with the primes $2$ and $3$ exchanging roles: backward arithmetic is $3$-adic, governed by an anchor $M_3$ which is an affine discrete logarithm base $2$, through a valuation law that mirrors the forward one term for term. The longer answer is that the mirror is not a formality --- each dual theorem carries a structural asymmetry with an identifiable cause, and the asymmetries are where the content lives.
+
+Three applications follow. Section~\ref{sec:dead} maps the \emph{dead ends} of backward generation --- where the tree stops growing --- and finds mortality remarkably concentrated: one door per state, dead half the time by an explicit parity law, with total barrenness only at the states of odd multiples of $3$ at depth one. Section~\ref{sec:steer} proves \emph{steering} laws: what the infinite backward branching can and cannot control. It controls the $3$-adic data completely; it cannot move the $2$-adic residues at all (they freeze at $3^{-d}$); and through the freeze it places the predecessor's \emph{forward} anchor on an exact lattice --- so anchor variation, which forward is the central unsolved difficulty of \cite{paper1}, is backward a controlled linear walk. Section~\ref{sec:density} extracts a fully rigorous density bound from a deliberately impoverished sub-tree: at least $2^{-3.3}X^{0.3}$ odd integers below $X$ reach $1$ (Theorem~\ref{thm:density}). The bound is honest about its position --- well below Krasikov's 1989 exponent $0.43$ and far below the Krasikov--Lagarias $0.84$ \cite{kl} --- and about what it offers instead: a derivation in which the local branching is known \emph{exactly} rather than bounded by difference inequalities, and a refinement path whose stages correspond to the resources the base theorem discards.
+
+\paragraph{Contributions.} (i) Complete characterization of $F^{-1}$ (Theorem~\ref{thm:pred}). (ii) The backward anchor $M_3$, its algebra, and the backward valuation law (Theorem~\ref{thm:blaw}), with the backward branching ledger $P(d=j) = 2\cdot3^{-j}$. (iii) Dualization of the forward per-step theory with four identified asymmetries (Section~\ref{sec:dual}). (iv) The dead-end classification: door mortality and Gardens of Eden (Theorems~\ref{thm:mort}, \ref{thm:eden}). (v) Steering laws, including the backward anchor-placement law $M(\w_{\mathrm{pred}}) \equiv -d\,M(3) \pmod{2^{s-2}}$ (Theorem~\ref{thm:steer}). (vi) A rigorous density bound with explicit constants (Theorem~\ref{thm:density}), via a collapse identity that reduces the counting core to a single type.
+
+\paragraph{Related work.} Predecessor trees for the $3x+1$ problem are classical: Wirsching's monograph \cite{wirsching} develops them systematically, and quantitative lower bounds on $\pi_1(x) = \#\{n \le x : 1 \in \text{orbit}(n)\}$ run from Crandall \cite{crandall} through Krasikov's difference inequalities to the computer-assisted $x^{0.84}$ of Krasikov--Lagarias \cite{kl}; see Lagarias \cite{lagarias} for the literature. The verified range of the conjecture is $2^{71}$ \cite{barina}. A contemporary Lean-formalized conditional treatment of cycles is due to Merle \cite{merle}. Relative to this literature, the present paper's predecessor structure is stated on reduced states rather than integers, its local law (Theorem~\ref{thm:blaw}) is exact rather than an inequality, and its density bound is chosen for self-containedness rather than strength.
+
+\section{Preliminaries from the companion paper}\label{sec:prelim}
+
+For an odd $x$ write $x + 1 = 2^m 3^a \w$ with $3\nmid\w$; the projection is $R(x) = (\w, m+a)$. For a state $(\w,d)$: $A = 3^d\w - 1$, $s = \vt{A}$, $x_{\mathrm{exit}} = A/2^s$, $C = A + 2^s$, $\sigma = \vt C$, $a_+ = \vth C$, and $F(\w,d) = \bigl(C/(2^\sigma 3^{a_+}),\, (\sigma - s) + a_+\bigr)$. The representatives of $(\w,d)$ are $y_a = 2^{d-a}3^a\w - 1$ for $0 \le a \le d-1$; the block from any representative exits at $x_{\mathrm{exit}}$, and the Collatz conjecture is equivalent to every $F$-orbit reaching $(1,1)$ \cite[Thm.~2.3]{paper1}. The forward anchor is $M(\w) = N(\w^2)$ where $9^{N(u)} = u^{-1}$ in $\Z_2$; on lifting classes ($3^d\w \equiv 1 \bmod 8$), $s = 2 + \vt{d - M(\w)}$ \cite[Thm.~3.4]{paper1}.
+
+\section{The predecessor structure}\label{sec:pred}
+
+\begin{theorem}[complete characterization of $F^{-1}$]\label{thm:pred}
+Let $(\Omega, D)$ be a valid state with representatives (\emph{doors}) $y_a$. The predecessors of $(\Omega,D)$ are exactly: for each door $y = y_a$ with $3 \nmid y$, and each $s \ge 1$ with $s$ odd if $y \equiv 1 \pmod 3$, even if $y \equiv 2 \pmod 3$, the state
+\[ (\w, d) = \bigl( N/3^{\vth N},\ \vth N \bigr), \qquad N = 2^s y + 1, \]
+where $3 \mid N$ automatically. Distinct $(a,s)$ give distinct predecessors, and there are no others. Doors with $3 \mid y$ (possible only at $a = 0$) admit no predecessors.
+\end{theorem}
+
+\begin{proof}
+$F(\w,d) = (\Omega,D)$ iff $x_{\mathrm{exit}}(\w,d) = y$ for some door $y$, i.e.\ $3^d\w = 2^s y + 1$ with $s = \vt{3^d\w - 1}$. Given $(y,s)$, factoring $N = 3^d \w$ with $3\nmid\w$ forces $d = \vth N$ and $\w = N/3^d$; the divisibility $3 \mid N$ holds iff $2^s y \equiv 2 \pmod 3$, the stated parity condition; and $\vt{3^d\w - 1} = \vt{2^s y} = s$ exactly since $y$ is odd. (Verified against brute-force forward scans on seven targets: exact agreement.)
+\end{proof}
+
+\section{The backward anchor and valuation law}\label{sec:anchor3}
+
+The unit group mod $3^k$ is cyclic of order $2\cdot3^{k-1}$, generated by $2$; exponents live in $\Z/2 \times \Z_3$.
+
+\begin{definition}
+For odd $y$ with $3\nmid y$, let $M_3(y) \in \Z/2 \times \Z_3$ solve $2^{M_3(y)} = -1/y$. Its parity component is determined by $y \bmod 3$ (and matches the parity condition of Theorem~\ref{thm:pred}); its $\Z_3$ component is the backward anchor proper.
+\end{definition}
+
+\begin{proposition}[algebra of $M_3$]\label{prop:alg}
+$M_3(1)$ is the $3$-adic realization of $-1$: $2^{3^{k-1}} \equiv -1 \pmod{3^k}$, so $M_3(1) \equiv 3^{k-1} \pmod{2\cdot 3^{k-1}}$. Moreover $M_3(y_1y_2) = M_3(y_1) + M_3(y_2) - M_3(1)$: $M_3$ is the affine logarithm $M_3(y) = M_3(1) - \log_2 y$ in the $3$-adic discrete logarithm. (Verified at depth $3^8$; $300$ random pairs, zero failures.)
+\end{proposition}
+
+\begin{theorem}[backward valuation law]\label{thm:blaw}
+For every live door $y$ and every $s$ of the correct parity,
+\[ d \;=\; \vth{2^s y + 1} \;=\; 1 + \vth{\,s - M_3(y)\,}. \]
+\end{theorem}
+
+\begin{proof}
+$2^s y + 1 = y\,2^{M_3(y)}\bigl(2^{s - M_3(y)} - 1\bigr)$ since $2^{-M_3(y)}y^{-1} = -1$; the prefactor is a $3$-adic unit; the parity condition makes $s - M_3(y)$ even, and the lifting-the-exponent isometry $\vth{2^t - 1} = 1 + \vth t$ (even $t$) applies. (Verified: $4{,}265$ random checks at anchor depth $3^8$, zero failures.)
+\end{proof}
+
+\begin{corollary}[backward ledger]\label{cor:ledger}
+Along any door's branch family, the exact density of $s$ with $d = j$ is $2\cdot3^{-j}$: the mirror of the forward ledger $P(s = j) = 2^{-j}$. (Measured $0.6664, 0.2230, 0.0736, 0.0245, 0.0082$ against $2/3, 2/9, 2/27, 2/81, 2/243$.)
+\end{corollary}
+
+Table~\ref{tab:dual} summarizes the duality; note the exchange is exact in structure and inexact in constants, and the inexactness is itself explained (Section~\ref{sec:dual}).
+
+\begin{table}[h]\centering\small
+\begin{tabular}{l|l}
+forward \cite{paper1} & backward (this paper) \\\hline
+arithmetic prime $2$ & arithmetic prime $3$ \\
+$s = \vt{3^d\w - 1}$ & $d = \vth{2^s y + 1}$ \\
+$M(\w) = -\log\w^2/\log 9 \in \Z_2$ & $M_3(y) = M_3(1) - \log_2 y \in \Z/2\times\Z_3$ \\
+$s = 2 + \vt{d - M(\w)}$ (lifting classes) & $d = 1 + \vth{s - M_3(y)}$ (all live doors) \\
+$\vt{9^t - 1} = 3 + \vt t$ & $\vth{2^t - 1} = 1 + \vth t$ \\
+ledger $2^{-j}$ & ledger $2\cdot3^{-j}$ \\
+classes mod $8$ gate the law & class mod $3$ gates the parity \\
+deterministic orbit & infinitely-branching tree \\
+equidistribution hypothesis & tree density in $\mathbb{N}$ \\
+\end{tabular}
+\caption{The $2\leftrightarrow3$ duality.}\label{tab:dual}
+\end{table}
+
+\section{The dual per-step theory, with its asymmetries}\label{sec:dual}
+
+Each per-step theorem of \cite[\S3]{paper1} has a proved $3$-adic mirror. We state them compactly with their verification counts, emphasizing in each case the asymmetry --- the place where the mirror is \emph{not} a translation, and why.
+
+\begin{theorem}[mirror digit-determinacy]\label{thm:mdd}
+$M_3(y) \bmod 3^k$ is determined by $y \bmod 3^{k+1}$; $N = 2^s y + 1 \bmod 3^q$ by $y \bmod 3^q$ and $s \bmod 3^{q-1}$ (parity fixed); and $\w = N/3^d \bmod 3^r$ by $N \bmod 3^{d+r}$. Chaining these, a $3$-adic window on $(y,s)$ of depth $W \ge d + r$ determines the predecessor's $\w \bmod 3^r$ exactly. \emph{Asymmetry:} the forward chain needs one genuinely cross-prime step (the order of $3$ mod $2^r$, to strip a $3$-power from a $2$-adically analyzed quantity); the backward chain needs none, because $N$ is odd by construction and the only removal is same-prime. ($3{,}000$ checks per fact; $\approx 2{,}670$ per window depth; zero failures.)
+\end{theorem}
+
+\begin{theorem}[backward increment law, and its freeze]\label{thm:minc}
+Write $y_0(\kappa,K) = 2^K\kappa - 1$ for a state's $a{=}0$ door. Across a backward step through door $y$ at branch $s$, the increment $M_3(y') - M_3(y)$ of top-door anchors is determined mod $3^k$ by $y \bmod 3^{d+k+1}$ and $s \bmod 3^{d+k}$ --- \emph{whenever $y'$ is alive}. \emph{Asymmetry:} the forward increment law of \cite{paper1} is total; the backward one is partial, undefined exactly on the door-mortality set of Theorem~\ref{thm:mort}, i.e.\ on precisely half of top-door lineages. The failure is hard: no window depth resolves it, because the branch is absent, not hidden. ($6{,}000$ trials; freeze rate $0.5059$ against the exact $\tfrac12$; window recovery on all alive cases, zero failures.)
+\end{theorem}
+
+\begin{theorem}[one-step dichotomy]\label{thm:dich}
+From a depth-$K$ window on $(y, s)$ alone: either $(s - M_3(y)) \bmod 3^K \neq 0$ and the predecessor depth is exact, or the window correctly reports $d \ge K+1$; undecided rate $\approx 3^{-K}$. \emph{Asymmetry:} the forward analogue is a trichotomy --- six of eight residue classes get $s \in \{1,2\}$ as class constants at zero window cost. Backward there is no free branch: Theorem~\ref{thm:blaw} is unconditional across all live doors. The cause is group-theoretic: $(\Z/3^q)^\times$ is cyclic, while $(\Z/2^q)^\times \cong \Z/2 \times \Z/2^{q-2}$ has the extra factor that furnishes the forward theory's zero-cost classes. ($\approx13{,}200$ trials per depth $K \in \{2,4,6,8\}$; zero decision errors; zero deep-bound violations.)
+\end{theorem}
+
+\begin{theorem}[the two ladders]\label{thm:ladders}
+\textbf{Forward (vertical):} for fixed $\w$, $A(\w,d{+}1) = 3A(\w,d) + 2$ forces: if $s(\w,d) = 1$ then $x_{\mathrm{exit}}(\w,d{+}1) = T(x_{\mathrm{exit}}(\w,d))$ --- the two states' futures are the same integer orbit, offset one step; if $s \ge 2$, the exits split by the kick $e \mapsto 3\cdot2^{s-1}e + 1$, and $s(\w,d{+}1) = 1$. Since $s = 1$ occupies alternating depths, every column of the state space is a strict braid of Collatz steps and kicks, tearing exactly at the anchor's spikes. ($30{,}000$ states, zero failures both branches.)
+\textbf{Backward (dual):} for a fixed door $y$, $N(y, s{+}2) = 4N(y,s) - 3$ forces: if $d(y,s) = 1$ then $\w(y,s{+}2) = T_3(\w(y,s))$ with $T_3(\w) = (4\w - 1)/3^{\vth{4\w-1}}$; if $d \ge 2$ then $\w(y,s{+}2) = 4\cdot3^{d-1}\w - 1$ exactly, with $d(y,s{+}2) = 1$. The tear-line is gated by the first digit of the backward anchor, mirroring the forward gate. \emph{Asymmetry:} the coefficient is $4 = 2^2$, not $3$: the parity condition confines $s$ to a lattice of index $2$, so the dual ladder's unit step is forced to be $2$. ($19{,}992$ trials, zero failures both branches.)
+\end{theorem}
+
+\section{Dead ends}\label{sec:dead}
+
+\begin{theorem}[door mortality]\label{thm:mort}
+Doors $y_a$ with $a \ge 1$ satisfy $y_a \equiv 2 \pmod 3$ identically: they are never dead. The sole mortal door is $a = 0$, dead iff $2^D\Omega \equiv 1 \pmod 3$ --- exactly one combination of $(\Omega \bmod 3,\ D \bmod 2)$, i.e.\ half of all states. ($20{,}000$ states, all doors, zero failures.)
+\end{theorem}
+
+\begin{theorem}[Gardens of Eden]\label{thm:eden}
+A state has no $F$-preimage iff $D = 1$ and $\Omega \equiv 2 \pmod 3$ --- equivalently, iff its unique representative is an odd multiple of $3$. Every state with $D \ge 2$ is reachable.
+\end{theorem}
+
+Classically, one third of odd numbers are unreachable \emph{values}; in reduced coordinates the phenomenon concentrates: deeper states merely lose one door, and total barrenness occurs only at depth one. A mortality-corrected branching (Malthusian) analysis of the full tree --- using the measured stationary depth law as its one non-rigorous input --- yields a renewal mass exceeding $1$ for every exponent $c < 1$ (minimum $\approx 1.52$ at $c \approx 0.7$): the tree is supercritical at every sub-density exponent, predicting full density, consistent with exact enumeration of the tree to $\w \le 2^{19}$ ($408{,}302$ states, empirical exponent $0.97$--$0.98$ and rising). This paragraph is labeled heuristic; the rigorous extraction is Section~\ref{sec:density}.
+
+\section{Steering}\label{sec:steer}
+
+What does infinite backward branching control? Fix a live door $y$ and sweep $s$.
+
+\begin{theorem}[steering laws]\label{thm:steer}
+(i) \emph{Depth: total control.} For any target $d^*$, the branches with $d = d^*$ form an exact-density-$2\cdot3^{-d^*}$ subset of the allowed $s$ (Theorem~\ref{thm:blaw}); every depth is hit infinitely often.
+(ii) \emph{$2$-adic residues: frozen.} As $s \to \infty$, $N = 2^s y + 1 \to 1$ in $\Z_2$, so the predecessor's residues freeze: $\w \equiv 3^{-d} \pmod{2^{\min(s,k)}}$. Direct $2$-adic steering is impossible; only finitely many small-$s$ branches deviate. (Empirically: from one door, $6$ of $64$ windows $(\w \bmod 32, d \le 4)$ are reachable at all.)
+(iii) \emph{Forward-anchor placement: complete control through the depth.} Consequently, for $s$ in the stable range,
+\[ M(\w_{\mathrm{pred}}) \;\equiv\; -\,d\cdot M(3) \pmod{2^{\,s-2}}, \]
+and since $M(3)$ is odd (a $2$-adic unit), the lattice $\{-d\,M(3)\}$ covers every residue: choosing $d$ (steerable by (i)) and $s$ large places the predecessor's forward anchor anywhere modulo $2^k$, to arbitrary precision. ($2{,}025$ random checks of (iii) at depth $20$, zero failures, with the depth bound $s-2$ attained exactly.)
+\end{theorem}
+
+\begin{proof}[Proof of (iii)]
+$\w\,3^d = 1 + 2^s y$, so $\w^2 9^{\,d} = (1 + 2^s y)^2 = 1 + 2^{s+1}y + 2^{2s}y^2$, whence $M(\w) + d\,M(3) = N\bigl((1+2^sy)^2\bigr)$, whose $2$-adic valuation is $s - 2$ by the forward isometry. Oddness of $M(3)$ is the parity statement of \cite[\S3]{paper1} at $\w = 3$.
+\end{proof}
+
+\begin{remark}
+Forward, the anchor increment along an orbit is the central unresolved object of \cite{paper1} (the ``fiber-to-orbit bridge''). Backward, by (iii), the anchor walk is \emph{controlled and linear}. The same walk changes epistemic status with direction of travel; whether the backward controllability can be turned into forward information is, in our judgment, the sharpest open question this paper raises.
+\end{remark}
+
+\section{A rigorous density bound}\label{sec:density}
+
+\begin{definition}[door tree]
+Root $y = 1$. Children of a node $y$ (odd, $3\nmid y$): for each allowed $s$ (parity per $y \bmod 3$), $y' = (2^{s+1}y - 1)/3$, kept when $3\nmid y'$ and $y' > 1$.
+\end{definition}
+
+\begin{lemma}[collapse identity]\label{lem:collapse}
+Every kept $y'$ is the designated door of a genuine $F$-predecessor of $y$'s state: the depth-$1$ predecessor's door $2\w' - 1$ and the depth-$d$ ($d \ge 2$) predecessor's door $2\cdot3^{d-1}\w' - 1$ are \emph{the same expression} $(2^{s+1}y - 1)/3$ --- the door map is independent of the predecessor's depth. ($13{,}408$ checks, both types, zero failures.)
+\end{lemma}
+
+\begin{lemma}[triple law]\label{lem:triple}
+For any three consecutive allowed $s$, the values $2^s y + 1$ are $\equiv \{0, 3, 6\} \pmod 9$, one each (they differ by steps of $3\cdot2^s y \equiv 6 \bmod 9$). Hence the three candidate $y'$ are $\equiv \{0,1,2\} \pmod 3$, one each: exactly two children per triple are kept. ($20{,}000$ checks.)
+\end{lemma}
+
+\begin{theorem}[density bound]\label{thm:density}
+Let $\tilde\pi(X) = \#\{\text{odd } y \le X : \text{the } T\text{-orbit of } y \text{ reaches } 1\}$. Then for all $X \ge 1$,
+\[ \tilde\pi(X) \;\ge\; 2^{-3.3}\, X^{0.3}, \]
+and the argument yields any exponent $c$ with $(2^{-3.415c} + 2^{-5.415c})/(1 - 2^{-6c}) > 1$; the critical value is $c^* \approx 0.3304$.
+\end{theorem}
+
+\begin{proof}
+Nodes of the door tree are doors of states backward-reachable from $(1,1)$, hence (equivalence theorem of \cite{paper1}) integers whose orbits reach $1$; they are pairwise distinct (a door determines its state, states in the backward tree are distinct, and the two child types are separated mod $3$). Each kept child multiplies its parent by less than $2^{s+1-\LL}$, so the branch at $s$ has log-increment $\delta(s) < s - 0.585$. By Lemma~\ref{lem:triple}, each window of six integers of $s$ contributes two kept children; adversarial placement gives the mass bound $\sum_{j\ge0}\bigl[2^{-c(6j+3.415)} + 2^{-c(6j+5.415)}\bigr]$, whose first two windows already sum to $1.0502 > 1$ at $c = 0.3$, with all such children within factor $2^{10.5}$ of the parent. Renewal induction with $A = 2^{-11c}$: for $X < 2^{11}y$, trivially $f(y,X) \ge 1 \ge A(X/y)^c$; for $X \ge 2^{11}y$, $f(y,X) \ge \sum_i f(y_i', X) \ge A X^c \sum_i (y_i')^{-c} \ge A(X/y)^c \cdot 1.0502$. Apply at the root (excluding the $s{=}1$ self-loop, absorbed by the worst-case tiling). 
+\end{proof}
+
+\begin{remark}[position and refinement path]
+The exponent sits between Crandall \cite{crandall} and Krasikov's 1989 value $0.43$; Krasikov--Lagarias reach $0.84175$ by linear programs over difference-inequality systems mod $3^{11}$ \cite{kl}. The comparison is deliberate: the core above uses one door per state, two children per triple, and adversarial anchor phases; empirically the same core grows at exponent $\approx 0.45$ and the full tree at $\approx 0.98$. Each discarded resource corresponds to a stage of the Krasikov--Lagarias program (their residue systems are our door residues; their LP is an optimization over our branch inventory), with one structural difference: their inequalities \emph{bound} the local branching, while Theorem~\ref{thm:blaw} gives it \emph{exactly}. Whether exactness improves on $0.84$ is open and is claimed in neither direction.
+\end{remark}
+
+\section{Discussion}
+
+The mirror completes a symmetry the companion paper only gestured at: forward dynamics consume $2$-adic digits under exact laws with no choice; backward dynamics offer infinite choice that moves only $3$-adic data, with the $2$-adic side frozen --- yet the freeze itself routes complete control of the forward anchor through the choice of depth (Theorem~\ref{thm:steer}(iii)). The conjecture, in these coordinates, is the assertion that a deterministic $2$-adic flow and a controllable $3$-adic tree are the same object. The asymmetries of Section~\ref{sec:dual} say the two sides are not interchangeable: the backward theory is in several respects \emph{simpler} (fewer cross-prime steps, no class trichotomy, an unconditional valuation law), and the density program is the place where that simplicity is quantitatively testable against a mature literature. The concrete open items, in increasing ambition: reinstate doors, residue types, and anchor phases into the core of Theorem~\ref{thm:density} and optimize (the LP stage); make the supercritical renewal analysis of Section~\ref{sec:dead} rigorous; and determine whether backward anchor controllability implies anything about the forward anchor walk.
+
+\appendix
+\section{Methodology and records}\label{app:method}
+This paper continues the protocol of \cite[App.~A]{paper1}: the author directs and takes responsibility; the mathematical development is AI-assisted; every computational claim cites a runnable script; every result labeled proved was re-verified with independently written code before being so labeled. Two additions to the record here: one section (the four dual theorems of Section~\ref{sec:dual}) was produced by a delegated session of a different model (Claude Sonnet) under a written brief with branch discipline, then independently re-verified in full (some $50{,}000$ checks re-run) before merging; and two recorded corrections occurred during this paper's work --- an initial renewal equation that ignored representative multiplicity, and a conjectured one-step window-steering property refuted by its own first test (the refutation became Theorem~\ref{thm:steer}(ii)). The complete research record is public at \url{https://github.com/macindoe/collatz}.
+
+\begin{thebibliography}{9}
+\bibitem{paper1} B.~Macindoe, \emph{Reduced coordinates for the Collatz map: exact per-step laws, anchor dynamics, and the limits of counting arguments for cycles}, preprint, Zenodo DOI 10.5281/zenodo.21273548 (2026).
+\bibitem{crandall} R.~E.~Crandall, \emph{On the $3x+1$ problem}, Math.\ Comp.\ 32 (1978), 1281--1292.
+\bibitem{kl} I.~Krasikov, J.~C.~Lagarias, \emph{Bounds for the $3x+1$ problem using difference inequalities}, Acta Arith.\ 109 (2003), 237--258; arXiv:math/0205002.
+\bibitem{wirsching} G.~J.~Wirsching, \emph{The Dynamical System Generated by the $3n+1$ Function}, Lecture Notes in Math.\ 1681, Springer (1998).
+\bibitem{lagarias} J.~C.~Lagarias, \emph{The 3x+1 problem: an annotated bibliography}, I--II, arXiv math/0309224, math/0608208.
+\bibitem{barina} D.~Barina, \emph{Improved verification limit for the convergence of the Collatz conjecture}, J.\ Supercomputing (2025).
+\bibitem{merle} E.~Merle, \emph{On the non-existence of non-trivial Collatz cycles: a conditional formal proof in Lean 4}, preprint, Zenodo DOI 10.5281/zenodo.19790406 (2026).
+\end{thebibliography}
+
+\end{document}
