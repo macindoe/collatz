@@ -21,7 +21,7 @@
 
 \title{The 3-adic mirror of the reduced Collatz dynamics:\\ duality, dead ends, and a density bound}
 \author{Ben Macindoe\thanks{\texttt{macindoebenjamin@gmail.com}. Companion to \cite{paper1}, whose coordinate system and forward laws are assumed. Developed through AI-assisted research; the methodology and verification protocol are described in Appendix~\ref{app:method}.}}
-\date{July 2026 --- draft, second revision}
+\date{July 2026}
 
 \begin{document}
 \maketitle
@@ -211,8 +211,12 @@ where $d = d(y,s)$. (Equivalently $M(\w) \equiv -d\,M(3)$, since $M(3) = N(9) = 
 with odd second factor, so $\vt{\w^29^{\,d} - 1} = s + 1 \ge 4$: the argument lies in $1 + 8\Z_2$, where $N$ is defined, and $N$ is a homomorphism there. Thus $N(\w^2 9^{\,d}) = M(\w) + d\,N(9) = M(\w) - d$, since $9^{N(9)} = 9^{-1}$ gives $N(9) = -1$. The forward isometry gives $\vt{N(u)} = \vt{u - 1} - 3$, so $\vt{M(\w) - d} = s - 2$, which is the display (with equality of valuation, so the modulus is sharp).
 \end{proof}
 
+\begin{remark}[relation to the forward valuation law]\label{rem:samelaw}
+Unwound, Theorem~\ref{thm:steer}(iii) is not a new identity: since $\w\,3^d = 1 + 2^s y$ is precisely the exit equation of the forward step, the sharp congruence $\vt{M(\w) - d} = s - 2$ is the forward valuation law $s = 2 + \vt{d - M(\w)}$ of \cite{paper1}, encountered from the other side. What is new is the reading: forward, the state $(\w, d)$ is given and the law \emph{reveals} $s$; backward, the pair $(y, s)$ is chosen freely and the same law \emph{places} $d$ --- and with it, by this congruence, the predecessor's anchor residue. The two papers' central laws are one identity viewed from opposite ends of the step.
+\end{remark}
+
 \begin{corollary}[anchor placement to arbitrary precision]\label{cor:place}
-For every $k$ and every target residue $\rho \bmod 2^k$ there exist infinitely many admissible $s$ whose predecessor satisfies $M(\w) \equiv \rho \pmod{2^k}$: choose any $d^* \ge 1$ with $d^* \equiv \rho \pmod{2^k}$, apply Theorem~\ref{thm:steer}(i) to obtain infinitely many admissible $s \ge k + 2$ with $d = d^*$, and Theorem~\ref{thm:steer}(iii) to each.
+For the fixed live door $y$: for every $k$ and every target residue $\rho \bmod 2^k$ there exist infinitely many admissible $s$ whose predecessor satisfies $M(\w) \equiv \rho \pmod{2^k}$: choose any $d^* \ge 1$ with $d^* \equiv \rho \pmod{2^k}$, apply Theorem~\ref{thm:steer}(i) to obtain infinitely many admissible $s \ge k + 2$ with $d = d^*$, and Theorem~\ref{thm:steer}(iii) to each.
 \end{corollary}
 
 \begin{remark}
@@ -282,7 +286,7 @@ The same argument yields any exponent $c$ with $(2^{-3.415c} + 2^{-5.415c})/(1 -
 \end{theorem}
 
 \begin{proof}
-Nodes of the door tree are doors of states backward-reachable from $(1,1)$; by the equivalence theorem of \cite{paper1}, each node's $T$-orbit reaches $1$. Nodes are pairwise distinct odd integers (Lemma~\ref{lem:distinct}). Apply Lemma~\ref{lem:renewal} at the root: $\tilde\pi(X) \ge f(1, X) \ge 2^{-3.6}X^{0.3}$.
+Nodes of the door tree are doors of states backward-reachable from $(1,1)$; by the equivalence theorem of \cite{paper1}, each node's $T$-orbit reaches $1$. Nodes are pairwise distinct odd integers (Lemma~\ref{lem:distinct}). Apply Lemma~\ref{lem:renewal} at the root: $\tilde\pi(X) \ge f(1, X) \ge 2^{-3.6}X^{0.3}$. For general $c < c^*$: take sufficiently many non-root windows that the finite partial mass exceeds $1$ at that $c$, and sufficiently many root children likewise; the induction of Lemma~\ref{lem:renewal} then runs verbatim with a correspondingly larger scale threshold and smaller constant $A$.
 \end{proof}
 
 \begin{remark}[position]
