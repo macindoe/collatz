@@ -1,7 +1,7 @@
 ---
-status: ACTIVE — mirror machinery exact; dead ends mapped (14.5: door mortality + Gardens of Eden, both proved); renewal equation resolved heuristically with mortality (supercritical, margin 1.52 — predicts full density); rigorous KL-style bound is the open theorem target; the forward per-step machinery is now fully dualized (14.7–14.10: digit-determinacy, anchor increment, one-step dichotomy, depth ladder — all proved and verified)
+status: ACTIVE — mirror machinery exact; dead ends mapped (14.5: door mortality + Gardens of Eden, both proved); renewal equation resolved heuristically with mortality (supercritical, margin 1.52 — predicts full density); rigorous density bound PROVED at base level (14.6: X^0.3, critical c* = 0.3304; KL refinement path mapped); the forward per-step machinery is now fully dualized (14.7–14.10: digit-determinacy, anchor increment, one-step dichotomy, depth ladder — all proved and verified)
 scope: new section 14 (post-monolith)
-updated: 2026-07-10
+updated: 2026-07-11
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
 ---
 
@@ -94,11 +94,41 @@ Computed over `c ∈ (0,1)`: the mass **never falls to 1** — its minimum is `�
 
 **Remark (what mortality costs).** Dead ends do not throttle the tree. Their entire price is half a door per state — visible in the mass formula as the lone `½` — against `D`-fold door multiplicity and infinite `s`-branching. The classical intuition that "a third of numbers being leaves" might starve the tree is quantitatively false in reduced coordinates.
 
-## 14.6. Scope and standing
+## 14.6. A rigorous density bound from the door tree
 
-Backward reachability of every valid state from `(1,1)` is *identical* to the Collatz conjecture (Theorem 9.8.3) — this front offers no discount on the hard part, and per the digit-budget principle its unbounded-depth content is the same as the forward front's (3-adic digits now, rather than 2-adic). What it adds: the exact dual machinery (every forward theorem should be checked for a mirror — dual windows, dual trichotomy, dual increment law are unexplored), and the density program, which is the one place where the classical literature's rigorous partial results (KL exponents) might be sharpened by an exact local law. Stopping rule, inherited: work here must produce either mirror theorems or the multi-type renewal equation; exponent-grinding without the equation is not progress.
+*(Added 2026-07-11. The front's open theorem target, executed at base level. Reference point: Krasikov–Lagarias 2002 [arXiv:math/0205002] prove `π₁(x) > x^0.84` via linear programs over difference inequalities mod `3^11`; earlier milestones Crandall 1978 (first `x^β`), Krasikov 1989 (`0.43`), Wirsching (`0.48`). The result below is numerically far weaker than all but Crandall; its content is the derivation — fully self-contained in the reduced formalism — and the collapse identity that makes it single-type.)*
 
-*(14.7–14.10 close the "dual windows, dual trichotomy, dual increment law" item above: every forward per-step theorem of paper §3 (`sec:anchor`) now has a proved, verified 3-adic mirror.)*
+**Definition (the door tree `𝒟`).** Root: `y = 1` (the door of `(1,1)`). Children of a node `y` (odd, `3 ∤ y`): for each `s` in the parity class of `y` (`s` odd iff `y ≡ 1 mod 3`), the value
+
+```text
+y' = (2^(s+1) y − 1) / 3        (always an integer for allowed s),
+```
+
+kept when `3 ∤ y'` and `y' > 1`.
+
+**Lemma 14.6.1 (collapse identity).** Every kept `y'` is the designated door of a genuine `F`-predecessor of `y`'s state: if `d = v₃(2^s y + 1) = 1` the child state is `(ω', 1)` with door `2ω' − 1 = y'`; if `d ≥ 2` it is `(ω', d)` with door `2·3^(d−1)ω' − 1 = y'` — *the same formula in both cases*, independent of `d`. (Algebra: both equal `2(2^s y + 1)/3 − 1`. Verified on `13,408` cases, both types, zero failures.)
+
+**Lemma 14.6.2 (triple law).** For any `3` consecutive allowed `s`, the values `2^s y + 1` are `≡ {0, 3, 6} (mod 9)`, one each. (The three values differ by `3·2^s y ≡ 6 (mod 9)` steps, are distinct mod `9`, and all `≡ 0 (mod 3)`.) Consequently the three candidate `y'` are `≡ {0, 1, 2} (mod 3)`, one each: per triple, exactly **two** children are kept (one from a depth-`1` predecessor, one from depth `≥ 2`), and one door dies.
+
+**Lemma 14.6.3 (validity and distinctness).** Every node of `𝒟` is the door of a state backward-reachable from `(1,1)`; hence (Theorem 9.8.3) every node's `T`-orbit reaches `1`. Distinct nodes are distinct integers: a door determines its state (`(ω,1) = ((y+1)/2, 1)` if `y ≡ 1 mod 3`; else `ω, d` recovered from `v₃((y+1)/2)`), states in the backward tree are distinct, and the two door types are separated mod `3`. (Spot-verified: `800` sampled nodes, all reach `1`.)
+
+**Theorem 14.6.4 (density bound).** Let `π̃(X) = #{odd y ≤ X : the T-orbit of y reaches 1}`. Then for all `X ≥ 1`,
+
+```text
+π̃(X) ≥ 2^(−3.3) · X^(0.3),
+```
+
+and the same argument yields exponent `c` for any `c` with `(2^(−3.415c) + 2^(−5.415c))/(1 − 2^(−6c)) > 1`; the critical value is `c* ≈ 0.3304`.
+
+**Proof.** Each kept child multiplies its parent by exactly `2^(s+1)/3 · (1 − 1/(2^(s+1)y)) < 2^(s + 1 − log₂3)`, so the log-size increment of the branch at `s` is `δ(s) < s − 0.585`. By Lemma 14.6.2, each consecutive triple of allowed `s` (spanning `6` integers) contributes two kept children; placing them adversarially at the two largest slots of each window gives, for the tiling starting at the worst offset `s₀ = 2`, the mass lower bound
+
+```text
+mass(c) ≥ Σ_{j≥0} [ 2^(−c(6j+3.415)) + 2^(−c(6j+5.415)) ].
+```
+
+At `c = 0.3` the first two windows alone give `1.0502 > 1`, and every child in those windows satisfies `y' ≤ y·2^(10.5)`. Renewal induction on `X`: let `f(y, X)` be the number of `𝒟`-descendants of `y` (inclusive) with value `≤ X`, and `A = 2^(−11c)`. If `X < 2^(11) y` then `f ≥ 1 ≥ A(X/y)^c`. If `X ≥ 2^(11) y`, the four children of the first two windows all have `y' ≤ X`, and by induction `f(y,X) ≥ Σ f(y'_i, X) ≥ A X^c Σ y_i'^(−c) ≥ A (X/y)^c · 1.0502 ≥ A(X/y)^c`. Apply at the root `y = 1` (excluding the `s = 1` self-loop, which costs one window offset already absorbed in the worst-case tiling) and use Lemma 14.6.3 to convert node counts to distinct odd integers reaching `1`. ∎
+
+**Remark (position and the refinement path).** The bound sits between Crandall (1978) and Krasikov's original `0.43` — deliberately: the core uses *one* door per state, *two* children per triple, and adversarial anchor phases. The empirical core already grows at exponent `≈ 0.45`, and the full tree at `≈ 0.98` (14.4). Each discarded resource maps onto a stage of the Krasikov–Lagarias program (their residue systems mod `3^k` = our door residues; their LP = optimizing over our branch inventory), with one structural difference: their difference inequalities *bound* the local branching, while the anchor law `14.2.4` gives it *exactly*. Whether exactness buys anything beyond `0.84` is an open question and is claimed in neither direction.
 
 ## 14.7. Digit-determinacy: the 3-adic mirror
 
@@ -161,4 +191,10 @@ d(y,s) ≥ 2   ⟹   ω(y,s+2) = 4·3^(d−1)·ω(y,s) − 1   exactly,   and   
 
 **Finding — the gate, and the forced step.** The pivot `d=1` vs `d≥2` is exactly Theorem 14.2.4's own first digit: `d=1` iff `v₃(s − M₃(y)) = 0`. As the brief anticipated, the dual ladder's tear-line is gated by the 3-adic anchor, exactly mirroring the forward ladder's tear-line being gated by `s(ω,d)=1` via the 2-adic anchor `M(ω)`. The coefficient `4` (not forward's `3`) is not a broken mirror: it is `2^2`, forced by the step size `2` (not `1`) that the parity condition of 14.1.1 imposes on `s` — the ladder's "unit step" is a lattice-of-index-2 step here, a direct and expected consequence of already-proved structure, not a new asymmetry.
 
-**Verification.** 30,000 random `(y,s)` trials (19,992 valid after the `3∤y` filter): 13,445 in the `d=1`/`T₃` branch, 6,547 in the `d≥2`/affine branch, zero failures in both. Code: `experiments/mirror_dual.py`.
+**Verification.** 30,000 random `(y,s)` trials (19,992 valid after the `3∤y` filter): 13,445 in the `d=1`/`T₃` branch, 6,547 in the `d≥2`/affine branch, zero failures in both. Code:
+
+## 14.11. Scope and standing
+
+Backward reachability of every valid state from `(1,1)` is *identical* to the Collatz conjecture (Theorem 9.8.3) — this front offers no discount on the hard part, and per the digit-budget principle its unbounded-depth content is the same as the forward front's (3-adic digits now, rather than 2-adic). What it adds: the exact dual machinery (every forward theorem should be checked for a mirror — dual windows, dual trichotomy, dual increment law are unexplored), and the density program, which is the one place where the classical literature's rigorous partial results (KL exponents) might be sharpened by an exact local law. Stopping rule, inherited: work here must produce either mirror theorems or the multi-type renewal equation; exponent-grinding without the equation is not progress.
+
+*(14.7–14.10 close the "dual windows, dual trichotomy, dual increment law" item above: every forward per-step theorem of paper §3 (`sec:anchor`) now has a proved, verified 3-adic mirror.)*

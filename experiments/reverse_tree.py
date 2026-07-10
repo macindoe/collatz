@@ -101,3 +101,22 @@ def renewal_mass(c,Dlaw,tot):
         bm=sum((0.5 if a==0 else 1.0)*(2**(-c*(D-a)))*(3**(-c*a)) for a in range(D))
         m+=(cnt/tot)*bm*s_sum*Ed
     return m
+
+# ---- 14.6 additions: door-tree core for the rigorous density bound ----
+def door_tree_core(X):
+    import collections
+    q=collections.deque([1]); out={1}
+    while q:
+        y=q.popleft()
+        s0=1 if y%3==1 else 2
+        s=s0
+        while (1<<(s+1))*y//3 <= 4*X and s<s0+400:
+            yp=((1<<(s+1))*y-1)
+            if yp%3==0:
+                yp//=3
+                if yp%3!=0 and yp>1 and yp<=X and yp not in out:
+                    out.add(yp); q.append(yp)
+            s+=2
+    return out
+def density_mass(c):
+    return (2**(-3.415*c)+2**(-5.415*c))/(1-2**(-6*c))
