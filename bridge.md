@@ -1,7 +1,7 @@
 ---
 status: OPEN — the terminal open object of the program, consolidated. The forward increment law is proved to low order (11.8.7.3.1) and the reverse mirror is verified (14.13); what is open in both directions is the increment at unbounded depth, and that is the whole remaining difficulty. No proof effort lives on this page — it states the object and records its observed mechanisms.
 scope: new section 16 (post-monolith); cross-cutting — owned by neither stage4.md nor reverse.md §14
-updated: 2026-07-11
+updated: 2026-07-12
 source: consolidation of 11.8.5.6 (forward bridge), 11.8.7.7 (digit budget), 14.13 (reverse precision loss); the author's framing — "the bridge between the M(ω)'s is itself the question"
 ---
 
@@ -68,6 +68,7 @@ The core-extraction deficit (16.2): the forward digit budget (stage4.md 11.8.7.7
 
 - **The exact target.** A nontrivial cycle is a finite closed anchor walk with `Σ ΔM_t = 0` (spine.md 9.8.4, anchor form); cycle exclusion is a rigidity statement about such walks.
 - **The tools with traction.** Effective `p`-adic Baker theory (stage1.md 11.8.3.11): an unconditional polylogarithmic spike-height bound and an effective irrationality measure for the anchor — the one regime where existing mathematics bites the object directly.
+- **Was softer than it looked; fully re-hardened (2026-07-12).** Two numeric parameters the traction claim needs were unpinned as of the first perimeter check: the effective irrationality measure for `log_2 3` (needed at cycles.md 12.5.3, 12.7.5, 12.8.2), and the spike-height exponent in `C(ω)·(log d)^exponent` (stage1.md 11.8.3.11). Both are now pinned and numerically checked, from the actual primary sources (supplied by the author after the sandbox's own tooling hit scanned-PDF and paywall dead ends): G. Rhin's effective bound (via Simons–de Weger 2005, Lemma 12) gives `K log2 - n log3 > exp(-13.3(0.46057+log n))` unconditionally, closing cycles.md 12.5.3 and 12.7.5's `n > 20,000` cases by thousands of bits; Bugeaud–Laurent's Corollaire 2 (1996; the `g=1` case, automatic for `p=2`) gives `v_2(9^n·ω-1) <= 208·log9·logω·(max{...})^2`, confirming the exponent is exactly `2` with an explicit `C(ω)`. The residual — cycles.md 12.8.2's general `n_0(p)` — is also now closed: a full `γ↔Λ` conversion (`Λ < exp(p - γ·log2)` unconditionally) combines with Theorem 12.8.1 and Rhin's bound into an explicit equation for `n_0(p)`, solved and tabulated (`n_0(91) ~ 3*10^21`, e.g.). All three derivations are in stage1.md 11.8.3.11 and cycles.md 12.5.3/12.7.5/12.8.2; the chase is recorded in open-problems.md §11.8. Net: the cycle-side traction is now solid in shape, constant, *and* the corollary that was previously only a shape claim — the perimeter's softest point, found and closed in the same session.
 - **The counting limit.** A trim uniform in `p` exists and gives effective finiteness at every period (cycles.md 12.8.1–2), but its constant degrades like `1.585^(−p)`; the staircase family proves no size-counting argument does better (cycles.md 12.8.3).
 
 ### 16.4.5. The reverse face — the mirror
@@ -84,4 +85,6 @@ The core-extraction deficit (16.2): the forward digit budget (stage4.md 11.8.7.7
 ## 16.5. What the map shows (the grounding)
 
 The open object is narrow and completely encircled. The floor (16.4.1) determines everything up to the odd core's unbounded-depth digits; the wall (16.4.2) is exactly why it stops there; and on every side — statistics (16.4.3), rigidity (16.4.4), mirror (16.4.5) — the known ground runs right up to the same edge and no further. Two escapes are marked, equidistribution and rigidity; they share one exceptional configuration (16.4.6); and only the second touches tools that presently have traction (11.8.3.11), which is why the program's stated bet (README; stage1.md 11.8.4.4) is the cycle side. That is the grounding: the perimeter is solid and mutually consistent, and the hole is precisely the unbounded-depth anchor digits — one object, bounded on all sides by proved statements, open in exactly one place.
+
+**Stress-tested (2026-07-12).** This grounding claim was checked edge by edge against its owning theorems. One soft spot turned up — the cycle-rigidity edge's "tools with present traction" rested on unpinned constants (Rhin's measure, the Bugeaud–Laurent exponent, cycles.md 12.8.2's `n_0(p)`) — and all three are now pinned and numerically verified (16.4.4, cycles.md 12.5.3/12.7.5/12.8.2, stage1.md 11.8.3.11). This makes the perimeter's claim of solidity itself checked, not merely asserted; it does not narrow the hole. The open object is exactly what it was.
 

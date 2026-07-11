@@ -1,8 +1,8 @@
 ---
 status: periods 1, 2, 3 CLOSED; uniform trim question RESOLVED (12.8: exists, exponentially weak, provably sharp); cycle front PARKED per stopping rules
 scope: new section 12 (post-monolith; first page with no monolith source)
-updated: 2026-07-07
-source: new material, 2026-07-07; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md)
+updated: 2026-07-12
+source: new material, 2026-07-07; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md); 12.5.3/12.7.5's citation debt pinned 2026-07-12 (G. Rhin 1987, via Simons–de Weger 2005); 12.8.2's n_0(p) made fully explicit 2026-07-12 (same tool)
 ---
 
 > **Current state.** Cycles in reduced coordinates. Periods 1, 2, and 3 are completely classified: no nontrivial cycles (12.2.3, 12.5.3, 12.7.5). The uniform-trim question is resolved (12.8): a trim uniform in `p` exists (12.8.1) and gives effective finiteness at every period (12.8.2), but its constant degrades like `1.585^(-p)` and the staircase family (12.8.3) proves size-counting can do no better. The crossover plan is therefore withdrawn and the cycle front is **parked** (12.8.5): the residual content of cycle exclusion is anchor-walk rigidity, the same front as Stage 4. The staircase — a divergent-orbit profile bent into a loop — is evidence the two halves of the residual difficulty are one problem (12.8.4).
@@ -103,7 +103,15 @@ verified numerically on `3,000` random orbit pairs with zero failures. Imposing 
 
 **Proof sketch.** From `q <= R_0` and `q <= R_1`, `q^2 <= R_0 R_1`. Expanding, `R_0 R_1 < 2^(S+2) · (3^n + 3^(m_1) 2^(m_0+s_0) + 3^(m_0) 2^(m_1+s_1) + 2^K)` with `S = s_0 + s_1`. Each of the four terms is at most `2^(K+S+2)` (the mixed terms via `3^m < 2^(1.585 m)` and `0.585 n < S + 2`, which follows from `3^n < 2^K`). Hence `q <= 2^((2S + K)/2 + 3)`, so `q / 2^K <= 2^((S - n)/2 + 3) <= 2^(5 - n/5)` using `S <= 0.585 n + 1`, and `K log 2 - n log 3 = -log(1 - q/2^K) < 2 q/2^K` once `q/2^K < 1/2` (smaller `n` are covered by the search below). ∎
 
-**Theorem 12.5.3 (period-2 classification).** No nontrivial period-`2` cycle of `F` has `n = m_0 + m_1 <= 20,000` (exact computation). For `n > 20,000`, Lemma `12.5.2` requires `K log 2 - n log 3 < 2^(6 - n/5)`, which contradicts any effective irrationality measure for `log 3 / log 2` beyond an explicit threshold far below `20,000`; hence `F` has no period-`2` cycles at all, i.e., the reduced system has no `2`-block cycles. [#TODO pin measure and threshold: effective irrationality measures for log 3/log 2 (Rhin-type); this matches the `2`-cycle case of Simons–de Weger.]
+**Theorem 12.5.3 (period-2 classification).** No nontrivial period-`2` cycle of `F` has `n = m_0 + m_1 <= 20,000` (exact computation). For `n > 20,000`, Lemma `12.5.2` requires `K log 2 - n log 3 < 2^(6 - n/5)`, which contradicts the effective bound below; hence `F` has no period-`2` cycles at all, i.e., the reduced system has no `2`-block cycles.
+
+**Measure, pinned.** G. Rhin's effective bound (*Approximants de Padé et mesures effectives d'irrationalité*, Progr. Math. 71, Birkhäuser 1987, p. 160), applied exactly as in Simons–de Weger (2005, *Theoretical and computational bounds for m-cycles of the 3n+1-problem*, Acta Arith. 117, Lemma 12, `u_0=0, H=u_1=K+L, u_2=-K` in their notation — their `K` is our `n`, their `K+L` is our `K`) gives, unconditionally,
+
+```text
+K log 2 - n log 3 > exp(-13.3·(0.46057 + log n)).
+```
+
+At `n = 20,001` this is `> 2^(-198.9)`, while the lemma's requirement is `< 2^(6 - 20001/5) = 2^(-3994.2)` — a contradiction by `~3795` bits, checked numerically (`python`, `2026-07-12`). The threshold is not "far below 20,000" in a hand-waved sense: it is crossed by orders of magnitude at `n = 20,000` itself, so no case is left unaccounted for between the exact search and this bound.
 
 **Remark 12.5.4 (numerical record; pruning power).** The raw parameter space for `n <= 20,000` — quadruples `(m_0, m_1, s_0, s_1)` with `m_0 + m_1 = n`, `s_0 + s_1 = K - n` — has on the order of `10^12` cells. The window prune (`q` is pinned by `(n, K)` with no free exponent to slide, so `q <= R_t` bounds `min(m_0, m_1)` from below) leaves open windows at only `19` values of `n` — the small range `n <= 17` plus the `log_2 3` near-convergents `n = 20, 22, 29` — and exact size tests pass for only `11` quadruples in the entire range. All fail divisibility except the degenerate `(m_0, m_1, s_0, s_1) = (1, 1, 1, 1)`, which reconstructs the fixed point `(1,1)` twice, not a `2`-cycle. Search and identity checks: `experiments/period2_cycles.py`. (Method note: the first run of the search carried an off-by-one in the power of `3`; it was caught by an internal consistency check on the `s`-split and corrected before this record. The recorded run passes the sanity assertions.)
 
@@ -153,7 +161,7 @@ where, reading indices in rotation order starting at `r`: `M_t = Σ_(j>t) m_j` a
 
 **Theorem 12.7.5 (period-3 classification, complete).** `F` has no nontrivial period-`3` cycles: the reduced system has no `3`-block cycles.
 
-**Proof.** For `n <= 20,000`, Theorem `12.7.1`. For `n > 20,000`, Lemma `12.7.4` demands `0 < K - n·log_2 3 < 2^(3 - 0.115n) < 2^(-2296)`, which contradicts any effective irrationality measure for `log_2 3` — polynomial lower bounds dwarf this at `n = 20,001` already. [#TODO pin measure, as in `12.5.3`; this is the `3`-cycle case of Simons–de Weger.] ∎
+**Proof.** For `n <= 20,000`, Theorem `12.7.1`. For `n > 20,000`, Lemma `12.7.4` demands `0 < K - n·log_2 3 < 2^(3 - 0.115n) < 2^(-2297.1)` at `n = 20,001`, which contradicts G. Rhin's effective bound (pinned at `12.5.3`: `K log 2 - n log 3 > exp(-13.3·(0.46057+log n))`, giving `> 2^(-198.9)` at `n = 20,001`) by `~2098` bits. This is the `3`-cycle analogue of Simons–de Weger's own Lemma 12, and the same numeric check (`2026-07-12`) confirms it closes every `n > 20,000`, since the gap only widens as `n` grows (the trim's exponential term dominates Rhin's logarithmic one). ∎
 
 **Remark 12.7.6 (verification; subsumption).** The trim lemma was checked against every composition passing the exact size test in the search range: all `51` size-passers satisfy `γ > 0.1157n - 2`, worst margin `+3.1` bits (at `n = 6`, balanced blocks). Code: `experiments/period3_cycles.py` (trim section). Two structural notes: the lemma's proof nowhere assumes `K = ⌈n log_2 3⌉` — for `K` above the ceiling `γ < 1`, so the lemma itself excludes `n >= 26` there, subsuming the ceiling lemma at `p = 3`; and the binding case (one tiny block) is exactly the configuration the corrected search filter guards, so the search constant `0.098` sits safely below the proved `0.1157`.
 
@@ -177,7 +185,48 @@ m_r < γ' + Φ_r,        Φ_r = max( 0, max { w(A) : arcs A ending at block r-1 
 
 The arc maxima satisfy the cyclic recursion `Φ_r = max(0, Φ_(r-1) + w_(r-1))` with `w_j = 0.585·m_j - s_j`. Since `q > 0` gives `2^K > 3^n`, the total weight `Σ w_j = 0.585n - S` is negative, so the recursion resets somewhere: `Φ_(r_0) = 0`. Walking forward from the reset with `T_j` the partial `m`-sums and using `Φ <= 0.585·T` termwise, the block bound gives `T_j < (log_2 3)·T_(j-1) + γ'`, hence `n = T_(p-1) < γ'·(1.585^p - 1)/0.585`. ∎
 
-**Corollary 12.8.2 (uniform effective finiteness).** Combined with an effective irrationality measure for `log_2 3`, Theorem `12.8.1` bounds `n` explicitly for every period: any period-`p` cycle has `n <= n_0(p) = O(p·1.585^p)`. Cycle exclusion at every single period is therefore a finite, explicitly bounded computation — uniformly in `p`. [#TODO pin measure, as in `12.5.3`.]
+**Corollary 12.8.2 (uniform effective finiteness).** Combined with G. Rhin's effective bound (pinned at `12.5.3`), Theorem `12.8.1` bounds `n` explicitly for every period: any period-`p` cycle has `n <= n_0(p)`, the unique solution (in `n`) of
+
+```text
+0.585·n / (1.585^p - 1)  =  log_2(p) + (p + 13.3·(0.46057 + log n)) / log 2.
+```
+
+Cycle exclusion at every single period is therefore a finite, explicitly bounded computation — uniformly in `p`.
+
+**Proof.** Write `q = 2^(K-γ)` (the definition of `γ = K - log_2 q`, `12.8`) and `Λ = K log 2 - n log 3` (Rhin's linear form, `12.5.3`). Since `2^K = 3^n + q` (`12.1.1`), `Λ = log(1 + q/3^n)`. Using `log(1+x) < x` for `x > 0`, and `q/3^n = 2^(K - γ - n log_2 3) = 2^(Λ/log2 - γ)` (because `Λ/log 2 = K - n log_2 3` exactly):
+
+```text
+Λ  <  2^(Λ/log2 - γ).                                                              (i)
+```
+
+By Corollary `12.1.2`, `Λ < Σ_t 1/x_t <= p` unconditionally (every `x_t >= 1`), so `Λ/log 2 < p/log 2`; substituting into `(i)` (the right side is increasing in its exponent):
+
+```text
+Λ  <  2^(p/log2 - γ)  =  exp(p - γ·log 2).                                          (ii)
+```
+
+Combining `(ii)` with Rhin's lower bound `Λ > exp(-13.3(0.46057+log n))` (`12.5.3`) gives, for any period-`p` cycle,
+
+```text
+γ  <  (p + 13.3·(0.46057 + log n)) / log 2.                                        (iii)
+```
+
+But Theorem `12.8.1` forces `γ > 0.585n/(1.585^p-1) - log_2 p` for every such cycle. When the trim's lower bound on `γ` meets or exceeds `(iii)`'s upper bound — i.e. at and beyond the `n` solving the displayed equation — no `γ` can satisfy both, a contradiction; hence no cycle with that `n` exists. ∎
+
+**Verification.** Solved numerically (`python`, this session) for representative periods, and checked that the contradiction persists (widens) for all `n` beyond the threshold, not just nearby it — `n_0(p)` is a genuine ceiling, not a local artifact:
+
+```text
+p =   4:  n_0 ~ 1.41 * 10^3
+p =   5:  n_0 ~ 2.61 * 10^3
+p =  10:  n_0 ~ 3.88 * 10^4
+p =  20:  n_0 ~ 5.84 * 10^6
+p =  50:  n_0 ~ 1.14 * 10^13
+p =  91:  n_0 ~ 2.99 * 10^21
+p =  92:  n_0 ~ 4.78 * 10^21
+p = 100:  n_0 ~ 2.05 * 10^23
+```
+
+This is a genuine `n_0(p)`, not merely the `O(p·1.585^p)` shape — the ratio `n_0(p) / (p·1.585^p)` is `~39` at `p=10`, falling to `~20` by `p=100` (still decreasing; the extra factor over `1.585^p` alone comes from Rhin's own `13.3·log n` cost, and `log(n_0(p)) ~ p·log(1.585)`, so the self-reference in `(iii)`'s `log n` term is consistent, not circular — no closed-form limiting constant is claimed here, only the checked table above). At `p = 91` the crossover target, `n_0(91) ~ 3*10^21` — far beyond any feasible search, consistent with `12.8.5`'s withdrawal of the crossover plan; this corollary's contribution is that the withdrawal is now backed by a checked number, not just a shape.
 
 **Remark 12.8.3 (sharpness: the staircase family).** The exponential loss is not an artifact. Consider blocks growing geometrically at ratio `≈ log_2 3` with shallow exits (`s = 1`), closed by one block of tiny depth and enormous exit valuation — a long climb and a single crash. Such configurations satisfy *every* rotation's exact size condition `q <= R_r` with `γ` far below any polynomial-in-`p` trim: at `p = 7`, `n = 94`, the staircase `m = (4, 7, 9, 15, 23, 35, 1)` passes all seven size tests with `γ = 6.74`, where the period-3 constant `0.1157n - 2 = 8.9` would forbid it; `84` further staircase size-passers exist at `p = 6` alone. All fail the divisibility conditions `q | R_r` — none is a cycle — and all respect Theorem `12.8.1` (worst ratio `0.23`). Code: `experiments/uniform_trim.py`.
 

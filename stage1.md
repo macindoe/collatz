@@ -1,7 +1,7 @@
 ---
 status: closed (proved + imported bounds); anchor digit statistics exported to classical p-adic analysis
 scope: monolith 11.8.1-11.8.4
-updated: 2026-07-07
+updated: 2026-07-12
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -1882,9 +1882,16 @@ s = v_2(ω·3^d - 1) = v_2(n·log 9 + log ω),
 
 so `s` is the `2`-adic valuation of a linear form in two `2`-adic logarithms of fixed integers, with integer coefficients `(n, 1)`. Equivalently, in exponential form, `s = v_2(9^n·ω - 1)` measures the `2`-adic distance of a two-term power product from `1`. Effective upper bounds for exactly such quantities are the subject of `p`-adic Baker theory: linear forms in `p`-adic logarithms (Yu), with sharper two-logarithm bounds by Bugeaud–Laurent via Padé approximation.
 
-[#TODO cite precisely at formal writeup: K. Yu, *Linear forms in p-adic logarithms* I–III (Compositio Math. 1990, ...); Y. Bugeaud, M. Laurent, *Minoration effective de la distance p-adique entre puissances de nombres algébriques*, J. Number Theory 61 (1996), 311–342.]
+**Pinned (2026-07-12).** Y. Bugeaud, M. Laurent, *Minoration effective de la distance p-adique entre puissances de nombres algébriques*, J. Number Theory 61 (1996), 311–342, Corollaire 2 — the case `g = 1`, which is *automatic* here: for `p = 2` the residue field is `F_2`, so every odd number is already a principal unit (`U_v = U_v^1`), and `9 ≡ 1 (mod 8)` confirms it directly. Their `D = [Q(α_1,α_2):Q]/f = 1` too, since `α_1 = 9` and `α_2 = ω^(-1)` are both rational. Taking `α_1 = 9, b_1 = n, α_2 = ω^(-1), b_2 = 1` (multiplicatively independent whenever `3 ∤ ω`, which holds for every valid odd core by definition) gives `Λ = 9^n - ω^(-1)`, and `v_2(9^n·ω - 1) = v_2(Λ)` exactly (`ω` odd). Their Corollaire 2, specialized to `D = 1, p = 2`:
 
-**Imported bound (qualitative form).** For each fixed odd `ω ≡ 1 (mod 8)` there is an effectively computable constant `C(ω)` such that for all `n >= 2`,
+```text
+v_2(9^n·ω - 1) <= 208 · log 9 · log ω · (max{log b' + log(log 2) + 0.4, 10·log 2, 10})^2,
+   where b' = n / log ω + 1 / log 9.
+```
+
+This is fully explicit and unconditional (no asymptotic threshold, unlike their Théorème 2) — a genuine `C(ω) = 208·log 9·log ω` and a genuine exponent of exactly `2`, confirming the wiki's existing choice over the hedge ("particular variants... yield `log n`"): the `log n`-exponent variants in the literature are for *large-coefficient* asymptotic regimes (their Théorème 2), not the small-fixed-`α`, one-growing-exponent case here, where the interpolation-determinant method gives `(log n)^2` cleanly. Sanity-checked numerically (`python`, this session): for `ω = 5`, the bound is `~73,555` for `n` up to `~34,000` (dominated by the theorem's own floor of `10` in the max), then grows as `(log n)^2` beyond that — e.g. `~131,500` at `n = 10^6`, `~302,500` at `n = 10^9` — large but finite and slow-growing, exactly the qualitative picture already claimed.
+
+**Imported bound (now with a pinned constant).** For each fixed odd `ω` coprime to `3`, there is an effectively computable constant `C(ω) = 208·log 9·log ω` (up to the floor described above) such that for all `n >= 2`,
 
 ```text
 v_2(9^n·ω - 1) <= C(ω) · (log n)^2.
