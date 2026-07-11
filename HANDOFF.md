@@ -13,18 +13,18 @@ Written 2026-07-11, ahead of the primary assistant's access ending. This documen
 
 **The author's role:** Ben directs. Empirically, the project's load-bearing ideas — the coordinate system itself, the family diagram, the mirror front, the ladder, the dead-ends map — originated as his plain-language questions. Take his naive-sounding questions seriously and work them before defaulting to queued engineering.
 
-## State of the fronts (2026-07-11)
+## State of the fronts (2026-07-12)
 
 - **Forward per-step theory** (spine, stages 1–4): closed per step; terminal open object is the anchor increment at unbounded depth ("the bridge", stage4.md 11.8.5.6).
 - **Cycles** (cycles.md §12): periods 1–3 closed; uniform trim resolved with sharpness (staircase); front PARKED by stopping rule — reopens only with a divisibility-aware idea.
 - **Statistics / AEH** (aeh.md §13): hypothesis formalized, calibration clean (four dissolved anomalies, methodology fixed); proof effort parked.
 - **Reverse / mirror** (reverse.md §14): ACTIVE. Mirror machinery complete (14.1–14.4), dead ends mapped (14.5), rigorous density bound proved (14.6: X^0.3), dual per-step theory complete (14.7–14.10, delegated to Sonnet, reviewed, merged).
 - **Ladder** (ladder.md §15): closed as local law.
-- **Papers**: v1 published (Zenodo 10.5281/zenodo.21273548, cited by repo README). Paper 2 drafted at `paper/collatz-mirror.tex` (7 pp., compiles clean) — **draft only, not yet refereed**.
+- **Papers**: BOTH PUBLISHED. Paper 1: Zenodo 10.5281/zenodo.21273548. Paper 2 (the mirror): Zenodo 10.5281/zenodo.21303918, linked via a Continues relation; two external referee cycles completed before publication. Sources at `paper/collatz-reduced-v1.tex`, `paper/collatz-mirror-v1.tex`.
 
 ## Open work items, in priority order
 
-1. **Paper 2 referee passes.** First external skeptical pass (ChatGPT, 2026-07-11) received and fully implemented in revision 2 (commit 132851c): exponent group formalized, M₃(1) language corrected, all Section-5 theorems given in-paper proofs, verification counts moved to an appendix table, density proof rewritten as five lemmas (constant corrected to 2^(−3.6)), steering law simplified to M(pred) ≡ d mod 2^(s−2) with explicit threshold, KL comparison softened. FINALIZED as v1 (commit 2e92824) after the referee's third pass (two final fixes + the equivalence remark). Remaining: Ben's author's note (his words), then Zenodo as a separate DOI.
+1. **Paper 2 referee passes.** First external skeptical pass (ChatGPT, 2026-07-11) received and fully implemented in revision 2 (commit 132851c): exponent group formalized, M₃(1) language corrected, all Section-5 theorems given in-paper proofs, verification counts moved to an appendix table, density proof rewritten as five lemmas (constant corrected to 2^(−3.6)), steering law simplified to M(pred) ≡ d mod 2^(s−2) with explicit threshold, KL comparison softened. PUBLISHED: DOI 10.5281/zenodo.21303918 (2026-07-12), linked to paper 1 via a Continues relation. Item closed.
 2. ~~Back-port to the wiki~~ DONE 2026-07-12: steering laws paged as reverse.md 14.12 (simplified form `M(pred) ≡ d mod 2^(s−2)`), with experiments/steering.py; the one-identity synthesis (steering ≡ forward valuation law) recorded in both the paper (Remark 7.2) and the wiki (14.12.3).
 3. **The KL–LP refinement program** (the front's defined open theorem): reinstate doors, residue types mod 3^k, and anchor phases into the density core; optimize the branch inventory (linear programming, mirroring Krasikov–Lagarias arXiv:math/0205002). Needs its own brief before anyone starts; the brief should set an explicit success/stop criterion (e.g., beat c = 0.43 rigorously or record the obstruction).
 4. **Community feedback processing.** Outreach (r/Collatz, ccchallenge) is in the author's hands. Any model can process responses: verify claims against the wiki, draft replies in the author's calibrated register, record any found errors per house norms.
