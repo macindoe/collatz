@@ -42,6 +42,7 @@ Occasionally diff every page's claims about *other* pages against those pages' o
 
 ## Verification record
 
+- 2026-07-11 — KL–LP refinement stage 1 (reverse.md 14.6.5, branch `kl-lp`, delegated session per `briefs/kl-lp-brief.md`): generic-door validity + distinctness (12,668 states, 21,169 live doors to ω≤2^14, zero collisions/recovery failures; 342 middle-door T-orbit checks, zero failures); exact ternary ledger (753 windows, k∈{2,3,4}, zero failures); multi-door critical exponent lifted 0.3304→0.33515 (bonus-disabled sanity check reproduces 0.3304 exactly). Falls short of the 0.43 success bar; proceeding to stage 2 (mod-3^k LP). Code: `experiments/density_lp.py`.
 - 2026-07-06 — wiki split from `sources/drafts/collatz_reduction_rewrite_v078.md`; concatenation of page bodies reproduces the monolith byte-identically.
 - 2026-07-06 — independent numeric verification of: unified depth-side law (11.8.5.6.2), entry-depth law all six classes (11.8.6.3), orbit projection + fiber of (1,1) (9.8), 8,000 random states + orbit traces, zero failures.
 - 2026-07-07 — low-order anchor-increment law (11.8.7.3.1, stage4.md): predictor-from-truncations test (4,046 checks) and lift-invariance test (10,092 pairs), k ∈ {1,3,6}, zero failures. Code: experiments/anchor_increment.py.
