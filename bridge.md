@@ -42,3 +42,46 @@ The deficit is a **diagnostic, not a lever.** It answers, once and uniformly, th
 It does **not** narrow what is provable. Closing the bridge still requires the statistical hypothesis (AEH, §13) for typical orbits, or a rigidity argument on finite closed anchor walks (`Σ ΔM_t = 0`, spine.md 9.8.4; effective `p`-adic tools, stage1.md 11.8.3.11) for cycles — exactly as before. The deficit explains the wall; it does not lower it.
 
 One asymmetry, recorded honestly: the forward state is two-dimensional — both `ω` and `d` feed `2`-adic precision — while the reverse door `y` is a single coordinate that determines its state. So the duality is exact at the level of *core-extraction loss*, not of the whole state. This matches the mirror asymmetries already noted in §14 (the forward trichotomy collapsing to a reverse dichotomy, door mortality having no forward analogue).
+
+## 16.4. The perimeter: mapping the edges
+
+The open object is narrow and well-surrounded. Everything below charts the known ground that borders it: where each result stops touching the Bridge is where the solid ground ends. This is a map — pointers only; each fact lives on its own page (AGENTS.md), and is characterized here solely by *how it bounds the open object*.
+
+### 16.4.1. The floor — what is determined, below the open part
+
+- **The increment is not a new unknown.** `ΔM = N((ω_+/ω)^2)` is a deterministic function of the current `C` (stage2.md 11.8.5.6). In anchor coordinates the fiber-to-orbit bridge and Stage 3 are literally the same problem; with `v₂(C)` and `v₃(C)` formal per step (stage3.md 11.8.6.3, 11.8.6.2), the *entire* unresolved content of `ΔM` is the odd core `ω_+` itself.
+- **Low order is closed.** `ΔM mod 2^k` obeys an exact law, modulus fixed in advance per `(s, m_+)` stratum — sub-question 1 of 11.8.5.6.3, answered (stage4.md 11.8.7.3.1).
+- **Bounded depth is closed.** The depth-`k` window decides the next `3`-gain in an error-free trichotomy, undecided only at rate `≈ 2^(−(k+1))` — sub-question 2 in its bounded-depth form (stage4.md 11.8.7.6.1).
+- **A finite-state chart exists.** Composing the per-step laws yields an exact countable-state transition chart whose only unresolved inputs are the shell labels at unbounded depth (stage4.md 11.8.7.3.1, finite-state remark; this answers the finite-state-shadow question, open-problems.md 11.6).
+
+### 16.4.2. The wall — why the floor stops
+
+The core-extraction deficit (16.2): the forward digit budget (stage4.md 11.8.7.7) and the reverse precision loss (reverse.md 14.13), one phenomenon read from both ends.
+
+### 16.4.3. The forward escape — what closing the Bridge buys typical orbits
+
+- **The exact missing hypothesis.** Anchor equidistribution in its precise bulk form `π_k` (aeh.md 13.2); the conditional theorems fix what it buys — the frequency ledger, the `1/3` `3`-gain rate, the classical drift, all almost-everywhere — and what it cannot — individual staircase tails (aeh.md 13.3, esp. 13.3.3).
+- **The empirical texture.** Fair-coin anchor digits, density `0.497` (stage1.md 11.8.4.2); the frequency and size ledgers, empirically sharp to three decimals (stage1.md 11.8.4.4).
+- **The regime split.** The open object lives in the *bulk* (while `x` is large), where uniformity stands unqualified; the wild statistics are confined to the fixed *bottom* drainage basin of small integers (aeh.md 13.1).
+
+### 16.4.4. The cycle escape — rigidity, where finite data can beat depth
+
+- **The exact target.** A nontrivial cycle is a finite closed anchor walk with `Σ ΔM_t = 0` (spine.md 9.8.4, anchor form); cycle exclusion is a rigidity statement about such walks.
+- **The tools with traction.** Effective `p`-adic Baker theory (stage1.md 11.8.3.11): an unconditional polylogarithmic spike-height bound and an effective irrationality measure for the anchor — the one regime where existing mathematics bites the object directly.
+- **The counting limit.** A trim uniform in `p` exists and gives effective finiteness at every period (cycles.md 12.8.1–2), but its constant degrades like `1.585^(−p)`; the staircase family proves no size-counting argument does better (cycles.md 12.8.3).
+
+### 16.4.5. The reverse face — the mirror
+
+- **The object's mirror.** The exact backward branching law carried by the `3`-adic anchor (reverse.md 14.2.4).
+- **Placeable in reverse.** The steering laws show the anchor walk — unsolved forward — can be *placed* backward, via the same identity as the forward valuation law read from the other end (reverse.md 14.12, 14.12.3).
+- **The mirror wall, and what backward buys.** Reverse precision loss (reverse.md 14.13) is the deficit's other face; the rigorous density program and its proved bound live on this side (reverse.md 14.4–14.6).
+
+### 16.4.6. The seam — where the two escapes meet
+
+- **One configuration, both halves.** The staircase — a divergent-orbit profile bent into a loop — is simultaneously the cycle-sharpness family (cycles.md 12.8.3) and the AEH-exceptional set (aeh.md 13.3.3): size analysis cannot forbid it as a cycle for the same reason drift cannot forbid divergence (cycles.md 12.8.4). Strong evidence the statistics-half and the rigidity-half are one problem.
+- **The vertical neighbor.** The depth ladder relates `(ω,d)` and `(ω,d+1)` at fixed core by an exact dichotomy — one Collatz step off-spike, an affine kick at spikes — answering the divergence question as a local law (ladder.md §15); it borders the divergence half from the fixed-core direction.
+
+## 16.5. What the map shows (the grounding)
+
+The open object is narrow and completely encircled. The floor (16.4.1) determines everything up to the odd core's unbounded-depth digits; the wall (16.4.2) is exactly why it stops there; and on every side — statistics (16.4.3), rigidity (16.4.4), mirror (16.4.5) — the known ground runs right up to the same edge and no further. Two escapes are marked, equidistribution and rigidity; they share one exceptional configuration (16.4.6); and only the second touches tools that presently have traction (11.8.3.11), which is why the program's stated bet (README; stage1.md 11.8.4.4) is the cycle side. That is the grounding: the perimeter is solid and mutually consistent, and the hole is precisely the unbounded-depth anchor digits — one object, bounded on all sides by proved statements, open in exactly one place.
+
