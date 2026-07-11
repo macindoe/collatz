@@ -155,6 +155,61 @@ def critical_c(bonus=True, lo=0.2, hi=0.9, **kw):
         lo, hi = (mid, hi) if f(mid) > 0 else (lo, mid)
     return (lo + hi) / 2
 
+
+# --- 14.13 (stages 2-3): the precision-loss obstruction, recorded as code ---
+# (D) REFUTES the naive claim that a parent known only mod 3^k pins its
+#     child's full k-digit residue whenever d=v3(N)<k. This is the bug
+#     behind the first (unsound) stage-2 LP attempt.
+# (E) the CORRECT law used in its place: parent mod 3^k pins the child only
+#     mod 3^(k-d) -- exactly d digits of precision are spent per step, and
+#     since admissible s forces d>=1 always, no step is free. This is why a
+#     stationary same-precision residue LP does not exist for this map.
+
+def check_D_naive_precision_refuted(k=4, trials_per_edge=20, seed=7):
+    random.seed(seed)
+    checked = bad = 0
+    for r in range(1, 3**k):
+        if r % 3 == 0:
+            continue
+        s0 = 1 if r % 3 == 1 else 2
+        for s in (s0, s0 + 2, s0 + 4):
+            Nr = (1 << s) * r + 1
+            d = v3(Nr)
+            if d == 0 or d >= k:
+                continue
+            base_child = (Nr // 3**d) % (3**k)  # WRONG: claims full k digits
+            for _ in range(trials_per_edge):
+                m = random.randrange(0, 10**5)
+                y = r + 3**k * m
+                N = (1 << s) * y + 1
+                checked += 1
+                if v3(N) != d or (N // 3**d) % (3**k) != base_child:
+                    bad += 1
+    return checked, bad
+
+def check_E_correct_precision_law(k=4, trials_per_edge=20, seed=7):
+    random.seed(seed)
+    checked = bad = 0
+    for r in range(1, 3**k):
+        if r % 3 == 0:
+            continue
+        s0 = 1 if r % 3 == 1 else 2
+        for s in (s0, s0 + 2, s0 + 4, s0 + 6):
+            Nr = (1 << s) * r + 1
+            d = v3(Nr)
+            if d == 0 or d >= k:
+                continue
+            target_mod = 3**(k - d)
+            base_child = (Nr // 3**d) % target_mod  # correct: k-d digits only
+            for _ in range(trials_per_edge):
+                m = random.randrange(0, 10**5)
+                y = r + 3**k * m
+                N = (1 << s) * y + 1
+                checked += 1
+                if v3(N) != d or (N // 3**d) % target_mod != base_child:
+                    bad += 1
+    return checked, bad
+
 if __name__ == "__main__":
     print("(A) generic-door validity + distinctness:")
     print("   ", check_A_generic_doors())
@@ -168,3 +223,9 @@ if __name__ == "__main__":
     print(f"(C) critical c, multi-door (guaranteed a=1.. extra doors, worst case):        {c_new:.6f}")
     print("    mass(0.33) with bonus at n_level1_triples=9 (window s in [2,54]):",
           total_mass(0.33, n_level1_triples=9))
+
+    checked, bad = check_D_naive_precision_refuted()
+    print(f"(D) naive 'child known mod 3^k when d<k' claim: {checked} checked, {bad} failures (REFUTED, as expected)")
+
+    checked, bad = check_E_correct_precision_law()
+    print(f"(E) correct 'child known mod 3^(k-d)' law:       {checked} checked, {bad} failures (should be 0)")
