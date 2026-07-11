@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anchor digit visualizer — single-sequence structure in M(&omega;)</title>
+<style>
+:root{--surface-1:#f4f4f2;--surface-2:#fff;--text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;--border:#d9dce3;--border-strong:#b8bdc9;}
+@media (prefers-color-scheme: dark){:root{--surface-1:#22252c;--surface-2:#1a1c22;--text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;--border:#3a3e48;--border-strong:#565c6a;}
+body{background:#14161b;}}
+body{font-family:system-ui,sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);}
+h1{font-size:20px;font-weight:500;}
+h2{font-size:15px;font-weight:600;margin-top:2rem;}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+select,button{font:inherit;padding:6px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2);color:var(--text-primary);}
+label{font-size:13px;color:var(--text-secondary);}
+.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+canvas{border:1px solid var(--border);border-radius:8px;background:var(--surface-2);}
+#recCanvas{image-rendering:pixelated;image-rendering:crisp-edges;width:480px;height:480px;}
+#cgCanvas{width:480px;height:480px;}
+.note{font-size:12px;color:var(--text-muted);margin-top:6px;}
+.panelgrid{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start;}
+.panel{flex:0 0 auto;}
+code{font-family:ui-monospace,monospace;font-size:12px;background:var(--surface-1);padding:1px 5px;border-radius:4px;}
+</style>
+</head>
+<body>
+<h1>Anchor digit visualizer</h1>
+<p>First-tier visualizations for the single-sequence digit-structure search (anchors.md &sect;17.9): does <b>one</b> M(&omega;) bit string, read on its own, show self-similarity, periodicity, or bias — as opposed to the cross-sectional (many-orbit) statistics aeh.md already checked. Companion to the statistical battery in <code>experiments/anchor_digit_structure.py</code> and <code>experiments/anchor_compressibility.py</code> (brief: <code>briefs/anchor-digit-search-brief.md</code>).</p>
+<p>Pick an &omega; from the <b>bottom</b> group (small, historically flagged in archive/appendix-a.md A.4.6 — expect visible structure, e.g. &omega;=1 and &omega;=3 are exact algebraic degeneracies) or the <b>bulk</b> group (large, generic &omega; — the actually-open regime) and compare. Bit strings are 8192 bits, computed via the same fresh 2-adic-log generator as the statistical battery (<code>experiments/anchor_visualize.py</code>), validated against the worked-example table in anchors.md &sect;17.7.</p>
+
+<div class="row">
+<label>&omega; <select id="omegaSel"></select></label>
+</div>
+
+<div class="panelgrid">
+<div class="panel">
+<h2>Recurrence plot</h2>
+<p style="max-width:480px;">Compares a <code>w</code>-bit window at every sampled offset <code>i</code> against every offset <code>j</code>; darker = more similar (lower Hamming distance). A random string lights up only the diagonal, in a faint uniform haze off it. Self-similarity or periodicity shows as off-diagonal stripes or blocks.</p>
+<div class="row">
+<label>window width w <select id="recW"><option>8</option><option selected>12</option><option>16</option><option>20</option></select></label>
+<label>samples <select id="recK"><option>120</option><option selected>200</option><option>300</option></select></label>
+</div>
+<canvas id="recCanvas" width="200" height="200"></canvas>
+<div class="note" id="recNote"></div>
+</div>
+
+<div class="panel">
+<h2>Chaos game representation</h2>
+<p style="max-width:480px;">Walks a point halfway toward a target corner of a square, one target per step. True randomness fills the plotted region as uniform fog; bias or forbidden patterns show as visible gaps or self-similar (fractal) structure.</p>
+<div class="row">
+<label>mode
+<select id="cgMode">
+<option value="4">4-corner, 2 bits/step (standard CGR — reveals 2-D structure)</option>
+<option value="2">2-corner, 1 bit/step (brief's literal spec — provably confined to one line segment; still shows 1-D clustering/bias along it)</option>
+</select></label>
+</div>
+<canvas id="cgCanvas" width="480" height="480"></canvas>
+<div class="note" id="cgNote"></div>
+</div>
+</div>
+
+<script>
+const ANCHOR_DATA = [{"omega": 1, "label": "omega=1 (fixed point, M=0 exactly)", "group": "bottom", "bits": 8192, "hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}, {"omega": 3, "label": "omega=3 (M=-1 exactly, 3^2=9 is the log's own base)", "group": "bottom", "bits": 8192, "hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}, {"omega": 25, "label": "omega=25 (A.4.6 'regular' tower)", "group": "bottom", "bits": 8192, "hex": "ae58f64502f2a09b50d70e2001d93d5ad1ac9a7082328db3573948583cfe17304da14eecddab39f484c4a39506c77bce103b02fd35406b7a07311a12899bf0cda72d5d1dc03c4a1123e0b58167e059817fa01a3418894fea3a0c7b3d94a9eed5d531fe119fe1c0d1c20aff9205ef3a72d56e7b77d500569ef946c91010ef5cfc29b0c66623c464986aabbad320d1044ede9be56ba87c8eef0067a481a54d1bf5d9c8421b709d52f0cc086f6b6776d839eb69e0ad0956f9207a6ebbda09a11538685d6bf33e4bf06fb46c829623f9496e97ceff27eb8a66d0076c95d6ea445fbc1e587db4c853b3a3a3805b087332953f9d969d9147fa449f99493cc032871ebb36ffa9174ee74a904335e52d5a7366d4cb84245d610382703e8c115f159aa4607c2df45849a294c92310d1ab235f7116d846332493d2ff3d789f1d37f9d0ac7829f55006f4a061b9c12680c8cea8e4ba5164c1736d21bc29913724e893c33024656c5fdd7dfad69b0301e2b6e3009ee0c53d75baac81c73cf4ad7513c063df480c265199c772ea6d5f5421912801f038ea1252c52a9f59781f5a9357a4fc65031f5086f73dcb22614401a7493b20132cd688697fb716e223d36abcb72fbc2fc63bea4448a10ee2b7d647c8397e385f51e349d34296a81b58f1051cd8c4584155b910a30368d81b3e300164ad67326121e04f18f52468e4d3f2c4497c5b4ba64e1ced1fc4cfbc9965438a77142cd1ed0cdf5cc76d5f572eef474815935cc6f2b709566c9a0e48e47de671ba1eff43cb737c9ed181d20d8013feaa74123e5474a0d4f2ccd39172b328af39c57f7e098becdf27f2430774c6dfb58636a9822db9e8f5624feeefb8a80a30daed571b9bf3afad34e2778782eae37e8ae616e17cd741738d648e8550ec54198fd4e47c2ce48abf21b218247bd515ab0ec024f868829c120db8d375adcbaad4147adff2c94cc2182433114afa4a29c6fd73ca0a52376b85b655651671cf959c840ce0c50665ad076fdea6be5be6823bfbb99f6a01ff2312508823402b1b49e772a7dc842996785c4cd59f8ef130a526a9faf92ad55041d1f73ff03051205acef795b57c53615c7f30038cafe538771a08f95ec067da303ad25bcdc4ee23fe2d9fa7bbd44da264a750006e3fda4da4e8132c5e93ea93429a8c81a6d5b67eb0f14a5c2fb3fda1291b596952e228f6c22e5ec40cc965a6d70bc20eba9f8650f6cdd1b720d31d53f5f8bf17ddb53e23f81d142c8e6e101bd5143984afac3596a3c798433cfdc8225ec09674f3006fab3dc33aa40293213d251c0c0cbdb31c90d6fcc29ff6d3135f1b9411a3d2a9d5247aaa9b07993a40fc536d1f2b34ceaf1df5c948551d9b8a588edb554441bb5023a6e7f432cc4ddf5bcbb1a1e9b82d660a5da00a24bb65b0855e3c38b9b0601332bae61d3e91163fa943"}, {"omega": 49, "label": "omega=49 (A.4.6 'regular' tower)", "group": "bottom", "bits": 8192, "hex": "4a6f769ff94c1c44f3abe540e43d4cbbc83677d253993ab18e686ce28d131163f6d38d4141b390ca3dc06bb4141fc0892109f8b759ab314313788b8030fe8bb96c9663f9aebb573317b19f3eb2b7127e7d8adf695a24b7df666789f8525cff201bb513aface7f5b27744ea645781a55e02fd92310550f4effbb0712e004885ba703efb15e82c355aa9b2bd53e5524d51413cd1d0bf3bd49f2eceb208ff8d62e97306026498f7c6d7572bf03b313868ae45464c836b63b2d0023175f27a15af5ca16aa8824ef03c4010f3bac822da7022feb08ee0cd09352852d0f8c76f219144818bd04caf9a6775eb23e39a515477ce7b20d69d81e0d772af17e9aa3b7f85f7cd37424cad287d757143c2db9465bdfed2276824f29286472730b8762f3c5336352a1998db89152261059e8bda1390e2b157e5cabd94c9c5ce140222c49bc59e01a8d004e703127f7a874b9bd0f4f6153025b9b4016295f1fc71509721670c7e8588e1983890f7c319ed19812b3bafef909177a6ea5b23538d29b1bdb66663ebe94cd3d749564373a08ef8b6f445e583d24f5649be3874194484dccea919f14e9744008fce1f75610533a5ffedca4df62ef135ba92beecc5e4f1b5a4889ff0cf4432af701780304b7babc7faae4981fc9c3cd9dc9bd30d7f06284b84a62bfc03c4629d414c376ee1a0b2c570e5e3cc9b328a3f05bd38e475f6da1558ab7bfc8cc2656a790e7d29715ee5f1870b2de913cce952787f7b129f35a8e2b28fc0998fb05d667b88733c0c748aa1a4aa685a5a82ab8ec327cff3ec1195dfd8a6ceb949fd9b98e138e45d0240be2c73d63d280724ceb08c790f4892a1f324edf34cb7f3cb4e6a73d51d9ad5101c1113a693c59c01971d900b55e576b43dc0aa37f86254252ae5494a76328225b4daa000c94ed456a44410e52f3579e5f7842b7374acb78d417e086c9ca339e839b711d89dfc4c837a75a4c28b94aa687bb5ceb2ed688df689ac0994ddbebefcb0fb2b8f08db7d7c136e9e4e847a662acbda838503521616f05d793d1a744d81e7dfaed5bfc231039a59338b1fc0a04c1bdf06884fc1006cf40fae30502be0c834da74a83f048655030c7b6b7646e9c8f7cfad3085d0145197d276b5d943071c23ee30b74856545077e85287ad2f98cc4d925dbbbe0fe91d4f045b1a163ec328e5ae25ca027edf40e2f93fb6bbb44919678818cda8b77f95d9344a19578f1c60e0a7aba7d99ca928a10fd3bcf2f41c31e47546c1ee93e689052b9ee49c3067289a2d888f40816abd87539d8402509506513a31bcca179b06bcc36a78fac1b0e1e6d726b27ebbf3ff10f3615c31264794114adc3af9b6ee766b58a88fcef1e01fedf6464196f8b6af47b172ff0ff64e87de5ff75d9c2821482e331d5b81b789a708661b00da6d1338aa8315c6cb9f60e0f249429492eea2"}, {"omega": 17, "label": "omega=17 (A.4.6 'irregular' tower)", "group": "bottom", "bits": 8192, "hex": "c42263d1fd641fbf6f5e3367b71bfc940d903d1750334fd474191419f55afbd00a3f060e6ba9b3b090b0186f6a963d839ef81ca9003a1e7f1af578374d9150bb256943f4c49cdd842b166c272382e074ea0c78bd6c7266eb1c6db5767e6ea0f1f77d2028ec807ee48690c36737278f6990f566e892136b553f71d00dfa70a83610f5b8dd625b5cc41c96b87a0af9ec850012b05f029293d45ff7c32ed532a68ecf980add0696ac482d97d97543cbd7220c7f153442bba0cc62cd1443c52bd5a9715e25cfb6444d96cbd01b8e67bb12f30ef1e48dffaa9de93212738c66b9dc270d3679b8575280a4a74cfca35936705f8b48b739f6c7fc5233c2961ed50bf6fa55eae141c8f0e86b10000aa4031c8be2e732f0822ba5238345f9f85c7635902d14d9a5b725b7884a8d4933680f5b65136db5c841d4fc2fc6316db2f1b0ca726fad9fa4176c86702acc64df2830daaa1fe45326a34ced48f1e1e78f77dbbc1b201f77d9dd220382f266315589a081be2e6f546011f6bf86c38753aa6b278bc6d0eb03cae79e83bf600265d648501477fa85b73ba539f75ce0e1e9c332e5eea9ae5c7a72c8729488b8f2f9834bc1270116812b7e00d9f66a388c2fa2e44fd55b579fa64ee662ddb4bad2da2869f0e6635b8cfda586081f898f49b247dc4fb4994ab2ac5d64ae5812956424ced8f7c3c740961dca880593d64d333689f7f6256ce0e84756f5f16656a62a022386ed1da331a72605815d8254397db893dc4f93c5a71297bc1e6f70824288e531552f944233fa8ee39b5cc706f62eaeceedbdf53d326d4ec5b835f9e01751aa9d1ad9d0914698c82c7b26b7f92b91cd6ac07d4dd945d6af6a224931b3e262bf17155e2979836544b76cf227ab95a0432f6e73f5d2d97f92705512bb0aa3de7f4b4084da34ca63a71f81df7a4468eab82e368312b165d96f637cd5fcbe526b68c41cb87b51b6a14bce7ce8ce4817535e98618e37b502f8325d0c3f38c8ec56f92cc01c7bd2589e908b590058a866e61a627e595af9dfc53b2f6efea6bb81da0db2273dc62447bbd47796c72e2c0dcc7f5c941b5bf52d0a9d238be0c3c28d1730c45cb977d53fbea83171e1166c38af353db35c6baf20c2ce8d53a7c8b67fbd253524e6ef341741186bac1651542de36983796cbf31504c8e756d66cab539444de96be8caf775039c9e71f82f3d022763f864371eca4ab4d23d345a7fa3a1a66ea4749a47f33664bae671681d54d7c19489dd2883b0f2b1773464f76dd51fb99166436174b90b54c2567dbb9a5fddd55ca3f703286ab501cb054e672df23f6fe301860725227b89879e3c8630c8f4127a976e3d9f60cd8d6773dac1a3e0627043b57a8e52bdc013d78aad41cdf43bcbbb854c3262edda721834b5334562bf4788ba288575ae3af560dc088e3fe2dd0d476d7616f35d9c"}, {"omega": 41, "label": "omega=41 (A.4.6 'irregular' tower)", "group": "bottom", "bits": 8192, "hex": "6156d85d6b95a02201b68aceb64c40f7bed57aca23769b6bc051cbab24c6161babac0d8ca2b9017c904ec9a1bb790e15471a3c6a3c52c34befc84e0851e7e668c4b1ff3bdd49a4c3fa7fa5344d686300ee05c405c1aa24094edfbd05bbcd1d6f5174a2282a26eee8c6e917d68229630879c78a6bd77230b9812fbc48cff53d81f55824d4839b45bbc80d58043d7c51c41703c052f7788999b83ad78162f3810ef215c097852b6e96e9418d5e88148af4e7b5cae868364f1b480756a330c7e5536d9e86ff606456ef160385c5012ebc649c73a0c6b3977911ec28a8161c741f71e1667491316c7a09776f25e7257e6a87819d7d172b92ebb1816bd588370921571757ac749bd39020a590290302ddbb2f0ac7e5d1df50250b348cccfcfd6b1acdf351823c5b8e8fd6965a1b61dbd6155de47f397a67670b2d7fcbc61dc9f72fff68247d6cc558c383ab71747ec1dda8556d5c92ebc7bb6f0743fe4597f7dfec3f97fdafe28740e8d08984f2a9da2e27acd698a3de94fa60d3035d1bfa91d94fac2753f13c5c1aa3716200ef679cb96e0ce004efa4d48eaae3c39d3edbbd2d9a818e3d6c01640efb751863306f7748b35b826ce5cc92cf6efe236642c258317ed12a05b0a656a3a5bcbf275757c35e9ac76bb076ca3bee0b1da44e0538b05555cc929ef261f9d9eba9d58eb2f170066e8c547e9da9a800a91c3c1771cd614e13a7d8376c646cc9fdccc6215365d51b1a2f56927d33324159240346a87a39bb17a37cb18415635a2af09ab8881577a6a46882b02a49228952f325e4934ab59f6cc3d9792905f2fec5426430a9efb3f4e7026bcca73552fb8668a33d80f1b339dda5fa86389c35c18f3aeb4627a74a60ee42f0a39614aad8a6c62aeaf8eec8ad914be45db3ffd27e7fe55425ec4a32863eeb50f8097667bdd0708808edcd7c017ce8832456198d0880cdd171fc00be685e3bff10e8e18d02c3b64c4904936c7b3437f104542f15a6ab498a5962d5e2d14cc4c2be91824ec18bc7d0ed460344981bb3d40d645513b761fec0dfb184b41afae8d21b5e56cacc083396c0ad2b7de42759cb483f6c5614774da71eab73cd630769c9a7c0ecdf1295ce29344b4e1b0e56f19f415705656e8ea3e6a4174e76af5592630a4700eefc694fa8acaa10aa4b4c4632e281d18bd46861c90ca9d2161bc7cc45c8a7e955af3fcdaeacb56f6157fa255cae02f84f1f4d3b278deade765bdbf0f0b830c0a1b65506865e53bfca97e47255f6cfe859026835ff674cee05040a388ab0c1db8173006ad7436c92bcea2b1980e5127694f3bd1bcb931148b7bc0e523604c7084e9c4aaf2813c04838cde640cddd1721da4bac2f4d68b44686a441568a0d854b77492873875b645bb713adb431d7b2df267839ddf9bd338bf87f2136d64c8d88e38bb25890591faa4cf0b716"}, {"omega": 1234567891, "label": "omega=1234567891 (bulk)", "group": "bulk", "bits": 8192, "hex": "3b9070549990654d99c07ec59e70173b8fc2b57a00fb8590d15ed5e4264fbdefc7e75cde22744dcc6d1902a1d8fa9a5af76380575a63dcff1048a5c51d1eeac5f6bedc1c0e22bc6a8e5b6bbdd6d6242f6b954669f2b6b23c92c7c4599a2a55815140a4fe35d700722cf993bc8f00c0966543c1ba96a59be92d79c09d48b2f7cbfc1d0ba6875d500f81d9ab309198a773ae3283c4ba356295e38fc48a36f6ee26159bdb60c6c0212e4207a016e31cdccf4d12338e6f364c3e8b682756e17df3419a374877cf62788724da1badbd337f028f2a17cb7f76f413ba108d800e373b73c50f3062854d4d6affa4fd88ddec272332c92416f294bf38e69042513e6322eef2c0df333f5984ae212bb82580c6261a01ce7949b53432b3d3208382340637b117e887edad9bab0c4c805efc883d9773b9dfe67dce46d5736f30b1fc490456fe82ce61b3d35bb44df1812cbe88e3134774cacf9a3bcea542b75462e000bfde50d5c297c7a30d00f6cd1bcc8d3fd3d85d9f7c65226de5e744fae536ad370324791cfe3e502a0fa8e1c3143a6e57012ed6fda6545d6e4e0f6337db294e46f53bc358e0bb169278039a0a3ff9564fe6113a1bbeb2c1f7e9a7d184211f6201b015b941dfc19a11e03bbd1a05327a91639b22b93936485409336e75f2be861e16d1cdc7925679a4a277fbf546306c81a3d3ff9f203d3265a86a03003783bf49df3055e5152be3425af914008d6226a4a91ad6a13f764a1ec7fd299904be87e681a29fa31b6d887b0e1ba7da14a829d6fcc1eb5b72a108de7ce4dc3e431bddaeb72e6524e227e848f98df37f84db5ac86c75d32b27ed9f5d9570a386ddb2ee0982162b33f949f6e6d65b7ce5b269127f323cb8bd514cb8563972faac451f9333765f7934306bcaa7a0d92a50a36de165526acf2edcbd5a4e02ab9444ad965b27e8e06c6c9b5dc2cfa5321b9a021c744a5214aedb1385ddf36dfe07bb1e957e102b451f5bf5e23ce00401e3785ecc78c35d21453d9036fa75a2201c8be42be3136ab2f4989b4aa48a950f38faa41164b27a679d45f9fc55625b6f184819194c090e646f53764aec07c12f0a32ce64f0db92f87d24c564c0e0ce4f01beb6098b036012381a3632e5d7f98b9f38e2080f5c68b2111b1f168ac9e8554b5333385552d707468766783209a525418b6ba7b3cf599b022ca986914194a265ed0d732fac726da479eec4c8ea1ac072f1787612f50b8d0a3ed5f89a97559d9a2411014a5da1ec445d5a53acafa53a92214ad4f7769c7e59562d5b3ed60c96381a4e74f088d95fc4ae9dec0d944154614049bab3716091fe2cff1f12d922bd29f0b797dc391172c03ad8eb44295d0436325e76a0fb9bf051389748d34c92633656b8b703075fd8b9dc355af1dba209fb80bb83309ccc5f759141b71313bc1ba67febce37a140b897"}, {"omega": 9876543211, "label": "omega=9876543211 (bulk)", "group": "bulk", "bits": 8192, "hex": "1116940f8533c1607c242c1125c071b774867380a7e0dde6440ce11d19bbaab20676498d953ba605f188bb352f8793db894284d1be55608659ec8f5143c4bec909007b52d3c5fc625246aed430b007369501076fdda4612f6d4f1140aca58d9ca9a627f0349b98e73d3ef5de5c8da0fe7599b95d02aa5452775fe332e8a15cdee5b525eb39da81723e98a15b9eee5ca4ae33f921b2a21ac6484d157bcefe06094918ae80ed5d116b8e1b9aa306681c2e4310e02141a7bebbe7d10e50451700c90cff7ed8791074f649953d3e1d6deadc742a46ea670d8685b6fd6bd0f077a1c1f87a9c58e309a61a7a9bdb0d846efc9a61c5a89a107a163b6953ada1cd7fb04aa8f9ea6bf9c621b531ac976f80f1cb9938b7b3bb87ea6386ef8bf0d8f8730afbf4c08d874b918e609ae37667fc3d5da8d22516f9424f35860f7e6298ccf645bd13a0d9bfde0cf1e9e68fca5efb214983fd761a09cfe44fa4ac2d25d5e870f81700dbd65329aee8afd8ea7d7886bd2454e74f50f7d0b8f0e180d4b43b2684e34c2e59f938f67d3835ee7af57a469eeb9895f9a82462744da5d31ded645fcc81622fc5dde17e7e285530c7ffde204c251f0b0edfecdda2731f3f6dadda968545f502f4f7282c47a7733cf69797434430d73fc38461b0b9b1d89eade0e2790a4b6a207a2d930c6fa74b40e46ed013ba8b0669c2e6bc17bd082d6dad9ff4341dcd9bf4b5198eea34be9343ee09bfd2fe257c4680292a3578aa25712a7499b66aea0cf3c6c7c7ec6b1226c1497eab68c05e0d63501edd2d33fd2d3dc16a8aac165a2a28a72eb682859718f58c7ffa53891966d0d171edc1bbdf9ab2089800939a17ffd0cdb8ce249fb029f3ca2fbdd333ee309c3c435659651a3d9d6907e0b68902bf1aea51c73e63143c98be0c245993a2378419a4c85d343bf29961010ac15461162e39b4b5a44e1dea4073fc3ba6e1123cf8455bc5770df91cdd55625adf5f69382a785086677062405e86f4ec6b78c6c0ab69754d0aba92970eac326885fd317df9a00d6005e5a4f166770c4532aaf809fce19ca5e6b657c6c4ebf1729641d5f749412858c3783756099398ce13c160e96327cb01101700adbdca365464d3693da819fadfcf3a96b9f40b0bc221f6fe879f190a9b5585998863024356bb5c1f7968fbe540f8d8884264388a11192f5a6df8a9a9adef27411fb3e86bc74fdd4caae24e928616eea0cf018803e16c902bc045e66d1fddc0ea090f5d17a0d021c31b7f230e920bcd217b62890ef121c32dc4688bf57092c02ee75ffd2fa278de916a6df1704846195d695b38a22c99618ccf9885736a5b679bc8e0b0d23ce35eb24c75cc9b95a5ef85ca190e08bc67b79baea0d7019e1e60b00999b03c326b8e11d59421bbcd8c60f307ea8dce0c383ff01699446118320deb2ae583af9a13b4ad0d"}, {"omega": 1125899906842711, "label": "omega=2^50+87 (bulk)", "group": "bulk", "bits": 8192, "hex": "6beedca5f0a102cb1301bdd68c52e22cda7e14b2510991f1cee81f7f9db85ceb20951e7547d8a67bb5ee0939a3c1c55e374d90a6285de30be83fde7c6647564696db788a9bf2a2018563b22b2a3b0fbeaa52f69ab13e4c353d17aebf7ccc07d29662c8afd486b0c87fa14a7826375c6175557fe6d235ffc8931aaa6f40fb2282c2bd507543774dd01752c61eb6516be3f5afb1587a9a84182da1ec0b3fe654de000f1e9c77ba3ae95c406a83481e4a2417fda0fd7e3c5ed20f2a6cb1fe9e39c57b6b7aa5fbacf46c40f548c8df0bdb702b91f3d58b294844836695bacc8645ab10484858d9ded1b4194b9da26a0b5039b92489fcf4f55a660643900f0080dd5e070ca8f9cf13599dd61e90847228f109a5f9a7dfe196f2c7af7b9ffec2d615fc64f9304900f1c838bda899ac572b4d3c8d7411939a308ced95ec3f364a7676f74ed354641e4d9e2971e997ace1a75a5d7c27356a7b6d3b8557e6caa29c00623d6e7e8b8dad2ce86733cef7bfa4b3e5e12c35a57249c0b76e64bf2af759bac7a8f4dfea8f8b7cee51014a397fd53e12077d839c13f8f7f3f5420b5980613f8940998213ed5353b0ce80872bbac5858c3d27a8a60a16b404ab9449fd86289460fed7738bd395cdf25f65f1b4c2eeae894bd2ae998165627c9c43ac239e2ae4fb99a9cc3f5efd1cbb5dcdca962a000de482e6f4cfd7b8de80313764bab1bbee0f9c09f45e1eba5540297321490445197ebeb7937fa11f7d841469eb69e6f3f93ae51d1e93c57c57c4789dfc1132d72f77e12954b2021c78c34d606f9991fe096815b685723e3c6bb27cf2207b3aa8d5d954b87b23a111191333dd63d24c5959eb7df032cb4551d664c9e956b4e1e06e7ff406f37ea653f18f384069f83a88f7a45f080db8e6edf523cd38b9a9b1a0bdf76d80615983e019b41b8e5f564eb681512fa3d64393925be3250709f131f3f8ce00fd6d04bc26bbc21c92ab93eadf3c6d095a327eb2f1e3be77959f459948e1dfc9b7054ab63156e075f2f65dab6dd180bc6f97a4ec4488711bfb5db4f9dba67c1707e875737dc04c7126aaaddb8c51ecaa6cea5df98edebcbe86f1e883b34286830582ad8dd49160d47b7a7141ba1651874b1da27ad2f4b8e431e5f75ea807a4019ff240ffc47b396f344f7b23942abc3c1bdaf7118854c770b858540a0e91cd0d5a2a58769bc3b181e1b5d0eff1ec842a3c74969b676930f3245647bdecde47cdcd3d49688f8a09d9b315ccab2fa1d3bac24d75b869b2fe53ddc66fa05f5de851aca7f79ed4fbfa6c7b4b133dc1326e4078798625d6a317fbad4f796f6d0c45c2735f6c6c14c0dfb66ab7665b37fffdd556710bcaafb3fbddabea3e13b3e4b71a0a0e4fca7ba94a8b6c4633e2b534a0644729e1f281c4b58124001b811fc4f9cc1837d32b3b56950ccc9bf01988fc2717"}, {"omega": 1152921504606847169, "label": "omega=2^60+193 (bulk, 3|w+ excluded, using nearby coprime)", "group": "bulk", "bits": 8192, "hex": "01606b3569dca239784b1dde9e81c551153c38e428c3bcdadbe81fb4c950aa43fcb12c0aee839182302c0bf31cbe9b7945b22f515dc05880fb5dff38e4550289cf7deb439cbb023bdbd71ea466effaeb98591707e7f321d85375e5dd62892246a263d7b500b7e0fd6be32b1cfa3bacf1123354ce79ea1174d1b7bf04e175ffe79494664442ce6da676b2841fdbaab001f4d091093c7bf6aa98a861b40670e940c15a7a10b9216e0ec9079f72e6c065dc457965978ef7bb7e5395dc2b70bec57c38edcd47f0d743e8d94d25ebbc76b2bae63a1c9defcce12fd9560835dac051eff2c9e0923b56715b4bc0d0df54134c3ebb49c19f8d2e34a241458acead9f7bbb10f56272c1959a61a4a65aec255e7bcb73710830a49535d88765da0151884dcf78b96ba41fb4a5779650efcc9c3633735cbc99c1ff4f40acdb6b78b78e5f9c5d7c937b1491076562f4fd5851e6eb5b44992e10d595a8bd6ae9ebdfbd2a6c1d96f0efcb1e742a0cdc6de9417825803041a6b4bd973da5fb188719790129a40eaf279252978bcf983745497da9bae7822c927cd1a8cc533ae6dd902548e38c7435875668dc8d3952aeec7bfa2098236c30b13a107d4ee1758770ea13eee64c53ae0fefd8f3f60c7407f62126184205abc78e9039564731c12f1696e0bb53e0ffbcd6d77f2b96dc4dd204d769437221b16d18d5177dee513b784db483909d6f46384df9afa14fc1bae62e316b9dd53e8ad4e3ea0e7c32719dc44eedf3781978d7d0f8e192a0dbabee71623b0bd5c0247257c2f06610370ec4f9c8672418315c6b60ed078a228a6c81d3124248219c796a747db13ab9eb55bf8dcc7899b13ed2411e9b650bb0382339f0a9741c160d82623dd58c858e29616cfab26d40e1231f44bfe78a7660629641ecd1e506af2697966068f055acfd848fb306f0cb584c10bb0fa1686a4b726889add779e1a741e7c45859ce4700095385a1a5724df371d84b6fcaaf02a5e66f4d843a80bd66b9b86b082fb62161cc3d45abf812d7f29a4629c3567ea698af6c993dbed0b9a6e6c287dcad52fae61a1477e02af88822499613f564fd353bf629192bc4d32ece61741e939114356a206727c3900f323e49a29a6a2fb823664dd059e91f78a7239e52885d9283cc35a649b28df21afe08d79de91250a43f769fecea6dc414f2bbaa8756dec0c53bf212e2bb29433b7d0ce97bfddfc2ce182a43323322152a54f6943069e64378234e5f58d03aba2d1b2744adb971ce2e2c7a1a2a69114d345767e8c19041c866e60c44eba3f41631fc75cbf7a84dd00abf430160a7bbd4d25d0b3edba85ce17a0872fb0d2576d249dd6c21f412e5dd4a02fb4dfff01f631f642906f45eaaff411589d884d13ff7e473c952e43e4d611fefb26e9ac1a238b5f0c72d2df0ba230ca7a54357cc8f01b171e7dca31fbd"}];
+
+function hexToBits(hex, n) {
+  const bits = new Uint8Array(n);
+  for (let i = 0; i < hex.length; i++) {
+    const nibble = parseInt(hex[i], 16);
+    for (let b = 0; b < 4; b++) {
+      const idx = i * 4 + b;
+      if (idx < n) bits[idx] = (nibble >> b) & 1;
+    }
+  }
+  return bits;
+}
+
+const sel = document.getElementById('omegaSel');
+const groups = {};
+ANCHOR_DATA.forEach((d, idx) => { (groups[d.group] = groups[d.group] || []).push(idx); });
+['bottom', 'bulk'].forEach(g => {
+  if (!groups[g]) return;
+  const og = document.createElement('optgroup');
+  og.label = g;
+  groups[g].forEach(idx => {
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = ANCHOR_DATA[idx].label;
+    og.appendChild(opt);
+  });
+  sel.appendChild(og);
+});
+// default to the first bulk option (genuinely-open case), not a degenerate bottom omega
+if (groups['bulk']) sel.value = groups['bulk'][0];
+
+function currentBits() {
+  const d = ANCHOR_DATA[+sel.value];
+  return { bits: hexToBits(d.hex, d.bits), n: d.bits, label: d.label };
+}
+
+function drawRecurrence() {
+  const { bits, n } = currentBits();
+  const w = +document.getElementById('recW').value;
+  const K = +document.getElementById('recK').value;
+  const stride = Math.floor((n - w) / K);
+  const offsets = [];
+  for (let i = 0; i < K; i++) offsets.push(i * stride);
+
+  const cv = document.getElementById('recCanvas');
+  cv.width = K; cv.height = K;
+  const ctx = cv.getContext('2d');
+  const img = ctx.createImageData(K, K);
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+
+  for (let i = 0; i < K; i++) {
+    for (let j = 0; j < K; j++) {
+      let dist = 0;
+      const oi = offsets[i], oj = offsets[j];
+      for (let k = 0; k < w; k++) if (bits[oi + k] !== bits[oj + k]) dist++;
+      const frac = dist / w; // 0 = identical, 1 = fully opposite
+      // grayscale: identical -> bright, dissimilar -> background
+      const v = dark ? Math.round(255 * frac * 0.85) : Math.round(255 * (1 - (1 - frac) * 0.9));
+      const p = (i * K + j) * 4;
+      img.data[p] = v; img.data[p + 1] = v; img.data[p + 2] = v; img.data[p + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  document.getElementById('recNote').textContent =
+    `${K}x${K} samples, stride ${stride} bits, window w=${w} bits, over the first ${offsets[K-1]+w} of ${n} bits of ${currentBits().label}.`;
+}
+
+function drawChaosGame() {
+  const { bits, n, label } = currentBits();
+  const mode = document.getElementById('cgMode').value;
+  const cv = document.getElementById('cgCanvas');
+  const W = cv.width, H = cv.height;
+  const ctx = cv.getContext('2d');
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  ctx.fillStyle = dark ? '#1a1c22' : '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = dark ? 'rgba(93,132,207,0.55)' : 'rgba(63,104,184,0.45)';
+
+  let x = W / 2, y = H / 2, plotted = 0;
+  if (mode === '2') {
+    const corners = [[0, 0], [W, H]]; // brief's literal 2-corner spec
+    for (let i = 0; i < n; i++) {
+      const c = corners[bits[i]];
+      x = (x + c[0]) / 2; y = (y + c[1]) / 2;
+      ctx.fillRect(x, y, 1, 1);
+      plotted++;
+    }
+  } else {
+    const corners = [[0, 0], [W, 0], [0, H], [W, H]]; // 2 bits -> 1 of 4 corners
+    for (let i = 0; i + 1 < n; i += 2) {
+      const idx = bits[i] | (bits[i + 1] << 1);
+      const c = corners[idx];
+      x = (x + c[0]) / 2; y = (y + c[1]) / 2;
+      ctx.fillRect(x, y, 1, 1);
+      plotted++;
+    }
+  }
+  document.getElementById('cgNote').textContent =
+    `${plotted} points plotted (${mode === '2' ? '1 bit/step, 2 corners' : '2 bits/step, 4 corners'}) from ${n} bits of ${label}.`;
+}
+
+function redraw() { drawRecurrence(); drawChaosGame(); }
+sel.addEventListener('change', redraw);
+document.getElementById('recW').addEventListener('change', drawRecurrence);
+document.getElementById('recK').addEventListener('change', drawRecurrence);
+document.getElementById('cgMode').addEventListener('change', drawChaosGame);
+redraw();
+</script>
+</body>
+</html>

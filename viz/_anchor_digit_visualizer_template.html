@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anchor digit visualizer — single-sequence structure in M(&omega;)</title>
+<style>
+:root{--surface-1:#f4f4f2;--surface-2:#fff;--text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;--border:#d9dce3;--border-strong:#b8bdc9;}
+@media (prefers-color-scheme: dark){:root{--surface-1:#22252c;--surface-2:#1a1c22;--text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;--border:#3a3e48;--border-strong:#565c6a;}
+body{background:#14161b;}}
+body{font-family:system-ui,sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);}
+h1{font-size:20px;font-weight:500;}
+h2{font-size:15px;font-weight:600;margin-top:2rem;}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+select,button{font:inherit;padding:6px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2);color:var(--text-primary);}
+label{font-size:13px;color:var(--text-secondary);}
+.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+canvas{border:1px solid var(--border);border-radius:8px;background:var(--surface-2);}
+#recCanvas{image-rendering:pixelated;image-rendering:crisp-edges;width:480px;height:480px;}
+#cgCanvas{width:480px;height:480px;}
+.note{font-size:12px;color:var(--text-muted);margin-top:6px;}
+.panelgrid{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start;}
+.panel{flex:0 0 auto;}
+code{font-family:ui-monospace,monospace;font-size:12px;background:var(--surface-1);padding:1px 5px;border-radius:4px;}
+</style>
+</head>
+<body>
+<h1>Anchor digit visualizer</h1>
+<p>First-tier visualizations for the single-sequence digit-structure search (anchors.md &sect;17.9): does <b>one</b> M(&omega;) bit string, read on its own, show self-similarity, periodicity, or bias — as opposed to the cross-sectional (many-orbit) statistics aeh.md already checked. Companion to the statistical battery in <code>experiments/anchor_digit_structure.py</code> and <code>experiments/anchor_compressibility.py</code> (brief: <code>briefs/anchor-digit-search-brief.md</code>).</p>
+<p>Pick an &omega; from the <b>bottom</b> group (small, historically flagged in archive/appendix-a.md A.4.6 — expect visible structure, e.g. &omega;=1 and &omega;=3 are exact algebraic degeneracies) or the <b>bulk</b> group (large, generic &omega; — the actually-open regime) and compare. Bit strings are 8192 bits, computed via the same fresh 2-adic-log generator as the statistical battery (<code>experiments/anchor_visualize.py</code>), validated against the worked-example table in anchors.md &sect;17.7.</p>
+
+<div class="row">
+<label>&omega; <select id="omegaSel"></select></label>
+</div>
+
+<div class="panelgrid">
+<div class="panel">
+<h2>Recurrence plot</h2>
+<p style="max-width:480px;">Compares a <code>w</code>-bit window at every sampled offset <code>i</code> against every offset <code>j</code>; darker = more similar (lower Hamming distance). A random string lights up only the diagonal, in a faint uniform haze off it. Self-similarity or periodicity shows as off-diagonal stripes or blocks.</p>
+<div class="row">
+<label>window width w <select id="recW"><option>8</option><option selected>12</option><option>16</option><option>20</option></select></label>
+<label>samples <select id="recK"><option>120</option><option selected>200</option><option>300</option></select></label>
+</div>
+<canvas id="recCanvas" width="200" height="200"></canvas>
+<div class="note" id="recNote"></div>
+</div>
+
+<div class="panel">
+<h2>Chaos game representation</h2>
+<p style="max-width:480px;">Walks a point halfway toward a target corner of a square, one target per step. True randomness fills the plotted region as uniform fog; bias or forbidden patterns show as visible gaps or self-similar (fractal) structure.</p>
+<div class="row">
+<label>mode
+<select id="cgMode">
+<option value="4">4-corner, 2 bits/step (standard CGR — reveals 2-D structure)</option>
+<option value="2">2-corner, 1 bit/step (brief's literal spec — provably confined to one line segment; still shows 1-D clustering/bias along it)</option>
+</select></label>
+</div>
+<canvas id="cgCanvas" width="480" height="480"></canvas>
+<div class="note" id="cgNote"></div>
+</div>
+</div>
+
+<script>
+const ANCHOR_DATA = /*__ANCHOR_DATA__*/;
+
+function hexToBits(hex, n) {
+  const bits = new Uint8Array(n);
+  for (let i = 0; i < hex.length; i++) {
+    const nibble = parseInt(hex[i], 16);
+    for (let b = 0; b < 4; b++) {
+      const idx = i * 4 + b;
+      if (idx < n) bits[idx] = (nibble >> b) & 1;
+    }
+  }
+  return bits;
+}
+
+const sel = document.getElementById('omegaSel');
+const groups = {};
+ANCHOR_DATA.forEach((d, idx) => { (groups[d.group] = groups[d.group] || []).push(idx); });
+['bottom', 'bulk'].forEach(g => {
+  if (!groups[g]) return;
+  const og = document.createElement('optgroup');
+  og.label = g;
+  groups[g].forEach(idx => {
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = ANCHOR_DATA[idx].label;
+    og.appendChild(opt);
+  });
+  sel.appendChild(og);
+});
+// default to the first bulk option (genuinely-open case), not a degenerate bottom omega
+if (groups['bulk']) sel.value = groups['bulk'][0];
+
+function currentBits() {
+  const d = ANCHOR_DATA[+sel.value];
+  return { bits: hexToBits(d.hex, d.bits), n: d.bits, label: d.label };
+}
+
+function drawRecurrence() {
+  const { bits, n } = currentBits();
+  const w = +document.getElementById('recW').value;
+  const K = +document.getElementById('recK').value;
+  const stride = Math.floor((n - w) / K);
+  const offsets = [];
+  for (let i = 0; i < K; i++) offsets.push(i * stride);
+
+  const cv = document.getElementById('recCanvas');
+  cv.width = K; cv.height = K;
+  const ctx = cv.getContext('2d');
+  const img = ctx.createImageData(K, K);
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+
+  for (let i = 0; i < K; i++) {
+    for (let j = 0; j < K; j++) {
+      let dist = 0;
+      const oi = offsets[i], oj = offsets[j];
+      for (let k = 0; k < w; k++) if (bits[oi + k] !== bits[oj + k]) dist++;
+      const frac = dist / w; // 0 = identical, 1 = fully opposite
+      // grayscale: identical -> bright, dissimilar -> background
+      const v = dark ? Math.round(255 * frac * 0.85) : Math.round(255 * (1 - (1 - frac) * 0.9));
+      const p = (i * K + j) * 4;
+      img.data[p] = v; img.data[p + 1] = v; img.data[p + 2] = v; img.data[p + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  document.getElementById('recNote').textContent =
+    `${K}x${K} samples, stride ${stride} bits, window w=${w} bits, over the first ${offsets[K-1]+w} of ${n} bits of ${currentBits().label}.`;
+}
+
+function drawChaosGame() {
+  const { bits, n, label } = currentBits();
+  const mode = document.getElementById('cgMode').value;
+  const cv = document.getElementById('cgCanvas');
+  const W = cv.width, H = cv.height;
+  const ctx = cv.getContext('2d');
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  ctx.fillStyle = dark ? '#1a1c22' : '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = dark ? 'rgba(93,132,207,0.55)' : 'rgba(63,104,184,0.45)';
+
+  let x = W / 2, y = H / 2, plotted = 0;
+  if (mode === '2') {
+    const corners = [[0, 0], [W, H]]; // brief's literal 2-corner spec
+    for (let i = 0; i < n; i++) {
+      const c = corners[bits[i]];
+      x = (x + c[0]) / 2; y = (y + c[1]) / 2;
+      ctx.fillRect(x, y, 1, 1);
+      plotted++;
+    }
+  } else {
+    const corners = [[0, 0], [W, 0], [0, H], [W, H]]; // 2 bits -> 1 of 4 corners
+    for (let i = 0; i + 1 < n; i += 2) {
+      const idx = bits[i] | (bits[i + 1] << 1);
+      const c = corners[idx];
+      x = (x + c[0]) / 2; y = (y + c[1]) / 2;
+      ctx.fillRect(x, y, 1, 1);
+      plotted++;
+    }
+  }
+  document.getElementById('cgNote').textContent =
+    `${plotted} points plotted (${mode === '2' ? '1 bit/step, 2 corners' : '2 bits/step, 4 corners'}) from ${n} bits of ${label}.`;
+}
+
+function redraw() { drawRecurrence(); drawChaosGame(); }
+sel.addEventListener('change', redraw);
+document.getElementById('recW').addEventListener('change', drawRecurrence);
+document.getElementById('recK').addEventListener('change', drawRecurrence);
+document.getElementById('cgMode').addEventListener('change', drawChaosGame);
+redraw();
+</script>
+</body>
+</html>
