@@ -1,8 +1,8 @@
 ---
-status: REFERENCE — consolidates the anchor concept across the wiki (no proofs restated, pointers only); owns the digit-structure search program (17.7-17.9), EXECUTED 2026-07-12 (branch `anchor-digits`) with a clean pass on every planned test — no single-sequence structure found beyond what was already proved or already known
+status: REFERENCE — consolidates the anchor concept across the wiki (pointers only, no proofs restated); owns the single-sequence digit-structure search (17.7-17.9), executed with a clean pass (17.7.1) — no intra-sequence structure found beyond what is already proved or known
 scope: new section 17 (post-monolith); cross-cutting reference — owned by no single stage/reverse/cycles/aeh page
 updated: 2026-07-12
-source: consolidation of stage1.md 11.8.3.6/11.8.3.11/11.8.4.2, stage2.md 11.8.5.6, stage4.md 11.8.7, reverse.md 14.2/14.12–14.13, ladder.md §15, cycles.md 12.3/9.8.4, aeh.md §13, bridge.md §16, archive/appendix-a.md A.4.6–A.6; the author's request to centralize anchor exploration in one place (2026-07-12)
+source: consolidation of stage1-synthesis.md 11.8.3.6/11.8.3.11, stage1.md 11.8.4.2, stage2.md 11.8.5.6, stage4.md 11.8.7, reverse.md 14.2/14.12–14.13, ladder.md §15, cycles.md 12.3/9.8.4, aeh.md §13, bridge.md §16, archive/appendix-a.md A.4.6–A.6; the author's request to centralize anchor exploration in one place (2026-07-12)
 ---
 
 # 17. The Anchor: a consolidated reference
@@ -13,7 +13,7 @@ source: consolidation of stage1.md 11.8.3.6/11.8.3.11/11.8.4.2, stage2.md 11.8.5
 
 Two anchors, one family, plus a mirror:
 
-- **`N(ω)`, the 2-adic anchor** (stage1.md 11.8.3.6): defined by the congruence tower `9^n ≡ ω⁻¹ (mod 2^k)` for all `k`; identified as `N(ω) = -log ω / log 9`, a 2-adic logarithm. Native only to `ω ≡ 1 (mod 8)`.
+- **`N(ω)`, the 2-adic anchor** (stage1-synthesis.md 11.8.3.6): defined by the congruence tower `9^n ≡ ω⁻¹ (mod 2^k)` for all `k`; identified as `N(ω) = -log ω / log 9`, a 2-adic logarithm. Native only to `ω ≡ 1 (mod 8)`.
 - **`M(ω)`, the unified anchor** (stage2.md 11.8.5.6.1): `M(ω) = N(ω²)`, defined for every odd `ω`. This is the coordinate the rest of the program actually runs on — one number carries both lifting components.
 - **`M₃(y)`, the 3-adic mirror anchor** (reverse.md 14.2.2): `2^(M₃(y)) = -1/y`, living in `Z/2 × Z₃` — an *affine* logarithm, not linear, the source of a real (not forced) forward/backward asymmetry.
 
@@ -21,10 +21,10 @@ Each is an infinite string of digits (base `2` for `N`/`M`, base `3` for `M₃`)
 
 ## 17.2. Algebra
 
-- `N` is a homomorphism (stage1.md 11.8.3.7.1) — the load-bearing fact that makes an increment law possible at all.
+- `N` is a homomorphism (stage1-synthesis.md 11.8.3.7.1) — the load-bearing fact that makes an increment law possible at all.
 - `M(ω)`'s parity tracks the lifting branch (stage2.md 11.8.5.6.2).
 - `M₃` is affine, not linear (reverse.md 14.2.3) — later identified (14.13) as the reason no stationary residue system exists backward.
-- Computable by a convergent series to any precision (stage1.md, remark after 11.8.3.6.6) — the practical route to any actual digit, as opposed to the astronomically-large-but-effective Baker constants (17.4).
+- Computable by a convergent series to any precision (stage1-synthesis.md, remark after 11.8.3.6.6) — the practical route to any actual digit, as opposed to the astronomically-large-but-effective Baker constants (17.4).
 
 ## 17.3. Per-step laws built on it
 
@@ -41,7 +41,7 @@ Pointers only, in dependency order:
 
 ## 17.4. Effective bounds
 
-- stage1.md 11.8.3.11: Bugeaud–Laurent (1996), Corollaire 2 — `C(ω) = 208·log9·logω`, exponent exactly `2`. Pinned and numerically checked 2026-07-12.
+- stage1-synthesis.md 11.8.3.11: Bugeaud–Laurent (1996), Corollaire 2 — `C(ω) = 208·log9·logω`, exponent exactly `2`. Pinned and numerically checked 2026-07-12.
 - Corollary 11.8.3.11.2: the same bound read as a digit-match cap — an integer of size `n` matches at most `O((log n)²)` leading anchor digits. This is an unconditional ceiling on how long an agreement can last; it says nothing about how often agreements of a given length actually occur (that's §17.6/17.7's territory).
 
 ## 17.5. Cycles: the anchor walk
@@ -86,7 +86,7 @@ Everything in 17.1–17.6 either proves an exact law or checks an ensemble avera
 
 ### 17.7.1. Search executed: a clean pass (2026-07-12, branch `anchor-digits`)
 
-The plan in §17.8–17.9 was run in full, including the "if time remains" spectral item. Four independent implementations of the `M(ω)` generator were written (one per code file below, none imported from another, per AGENTS.md's fresh-code-per-claim rule) — each computes the 2-adic logarithm directly from its convergent series (stage1.md, remark after Theorem 11.8.3.6.6: `9^N(ω) = ω⁻¹`, `M(ω) = N(ω²)`), and each was validated exactly against the 12-value worked-example table above before use. Every test's null model is stated precisely as in the brief: `M(ω)`'s bits modeled as i.i.d. fair-coin (independent, `P(bit=1)=1/2`).
+The plan in §17.8–17.9 was run in full, including the "if time remains" spectral item. Four independent implementations of the `M(ω)` generator were written (one per code file below, none imported from another, per AGENTS.md's fresh-code-per-claim rule) — each computes the 2-adic logarithm directly from its convergent series (stage1-synthesis.md, remark after Theorem 11.8.3.6.6: `9^N(ω) = ω⁻¹`, `M(ω) = N(ω²)`), and each was validated exactly against the 12-value worked-example table above before use. Every test's null model is stated precisely as in the brief: `M(ω)`'s bits modeled as i.i.d. fair-coin (independent, `P(bit=1)=1/2`).
 
 **Single-sequence statistics** (`experiments/anchor_digit_structure.py`; 200 independent `ω`, uniform random in `[2²⁰, 2⁶⁴)`, odd, `3∤ω`, seed `20260712`, 4096 bits each):
 
