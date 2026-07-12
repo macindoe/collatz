@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Single-anchor deep digit structure — one M(ω) to 2^17 bits</title>
+<style>
+:root{--surface-1:#f4f4f2;--surface-2:#fff;--text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;--border:#d9dce3;--border-strong:#b8bdc9;--m:#3b6ea5;--ctrl:#b8bdc9;--null:#c0562e;}
+@media (prefers-color-scheme: dark){:root{--surface-1:#22252c;--surface-2:#1a1c22;--text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;--border:#3a3e48;--border-strong:#565c6a;--m:#5b9bd5;--ctrl:#565c6a;--null:#e0794b;}body{background:#14161b;}}
+body{font-family:system-ui,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);}
+h1{font-size:20px;font-weight:500;}
+h2{font-size:15px;font-weight:600;margin:1.6rem 0 .3rem;}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+.cap{font-size:12.5px;color:var(--text-muted);margin:.2rem 0 .5rem;}
+canvas{width:100%;display:block;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);}
+.legend{font-size:12px;color:var(--text-secondary);display:flex;gap:14px;flex-wrap:wrap;margin:.4rem 0 0;}
+.sw{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:4px;}
+code{font-family:ui-monospace,monospace;font-size:12.5px;}
+</style>
+</head>
+<body>
+<h1>One anchor, read deep</h1>
+<p>The single-sequence digit structure of <b>one</b> bulk anchor <code>M(ω)</code>, ω = 4996160569905494617, computed to 2<sup>17</sup> = 131,072 two-adic bits — 32× deeper than the 4,096-bit breadth battery (anchors.md §17.7.1). Every panel plots the anchor (blue) against a matched i.i.d. fair-coin control (grey) and the exact fair-coin null (orange). The question is whether one number's own digit string, read as far as we can afford, departs from a coin — the single-sequence formalization of the equidistribution AEH conjectures. Companion to <em>Reduced coordinates for the Collatz map</em>, DOI 10.5281/zenodo.21273548.</p>
+
+<h2>1 · Run-length distribution</h2>
+<p class="cap">Counts of maximal runs of identical bits. Fair-coin null: <code>P(L=k)=2<sup>−k</sup></code> — geometric decay, <b>not</b> a bell curve. Log scale.</p>
+<canvas id="c1" height="300"></canvas>
+<div class="legend"><span><span class="sw" style="background:var(--m)"></span>M(ω)</span><span><span class="sw" style="background:var(--ctrl)"></span>control</span><span><span class="sw" style="background:var(--null)"></span>geometric null 2<sup>−k</sup></span></div>
+
+<h2>2 · Window bit-sum — the "bell curve"</h2>
+<p class="cap">Number of 1s in each of 512 non-overlapping 256-bit windows. Fair-coin null: <code>Binomial(256,½) ≈ Normal(128, 8²)</code> — this <b>is</b> a bell curve. (Necessary, not sufficient: the CLT makes almost any bit-sum look Gaussian even under correlation — panels 1, 3 are the discriminating tests.)</p>
+<canvas id="c2" height="300"></canvas>
+<div class="legend"><span><span class="sw" style="background:var(--m)"></span>M(ω) windows</span><span><span class="sw" style="background:var(--null)"></span>Normal(128, 8) null</span></div>
+
+<h2>3 · Block-entropy scaling</h2>
+<p class="cap">Empirical entropy <code>H<sub>k</sub></code> of overlapping k-bit blocks, plotted as <code>H<sub>k</sub>/k</code>. Fair-coin null: <code>H<sub>k</sub>=k</code>, so <code>H<sub>k</sub>/k=1</code>. The droop past k≈10 is finite-sample undercounting — the control droops identically, so only the <b>M−control gap</b> (near zero here) would signal real compressibility.</p>
+<canvas id="c3" height="280"></canvas>
+<div class="legend"><span><span class="sw" style="background:var(--m)"></span>M(ω)</span><span><span class="sw" style="background:var(--ctrl)"></span>control</span><span><span class="sw" style="background:var(--null)"></span>ideal H<sub>k</sub>/k = 1</span></div>
+
+<p style="margin-top:1.6rem">Verdict (anchors.md §17.7.2): a clean pass on this bulk anchor across run-length, window bit-sum, autocorrelation (max |z| = 2.78 over lags 1–512, below the Bonferroni bar 4.27), block entropy, and zlib — all matching the control. Deep single-sequence calibration; not a statement about AEH, which concerns the measure-zero set of integer orbits (see §17.8 item 5).</p>
+
+<script>
+const DATA = {"nbits": 131072, "primary_omega": "4996160569905494617", "seed": 20260713, "window": {"W": 256, "hist": [116, 135, 126, 134, 127, 124, 136, 118, 119, 133, 131, 126, 125, 128, 142, 142, 131, 133, 112, 123, 118, 122, 135, 120, 126, 137, 125, 134, 131, 124, 109, 138, 137, 136, 126, 142, 121, 132, 137, 129, 126, 137, 131, 124, 125, 125, 121, 120, 127, 125, 109, 135, 124, 116, 127, 127, 146, 115, 142, 128, 118, 138, 143, 126, 121, 131, 131, 138, 129, 132, 122, 123, 119, 127, 146, 126, 129, 125, 138, 134, 129, 130, 140, 131, 116, 129, 138, 134, 123, 123, 127, 140, 122, 111, 130, 135, 126, 124, 116, 141, 113, 126, 137, 131, 125, 127, 124, 129, 129, 126, 125, 121, 128, 111, 120, 128, 121, 121, 136, 120, 131, 125, 139, 121, 136, 129, 136, 129, 118, 118, 118, 123, 123, 127, 112, 140, 136, 127, 119, 121, 119, 140, 127, 124, 135, 135, 124, 124, 123, 133, 131, 134, 123, 118, 142, 113, 115, 128, 122, 134, 125, 112, 125, 128, 104, 129, 105, 114, 130, 130, 132, 134, 140, 135, 116, 129, 126, 137, 115, 135, 147, 124, 129, 127, 124, 136, 123, 121, 128, 121, 118, 122, 129, 134, 140, 118, 131, 124, 117, 119, 126, 126, 122, 125, 122, 128, 124, 118, 124, 132, 135, 126, 133, 136, 113, 110, 136, 117, 134, 138, 127, 113, 117, 139, 138, 126, 139, 117, 133, 110, 132, 132, 124, 112, 120, 125, 128, 122, 131, 131, 132, 118, 132, 126, 129, 119, 129, 134, 137, 118, 126, 121, 122, 142, 119, 127, 137, 138, 132, 135, 138, 132, 136, 114, 111, 122, 139, 115, 129, 149, 135, 149, 124, 132, 135, 136, 125, 126, 133, 118, 126, 133, 125, 145, 124, 134, 131, 126, 131, 122, 142, 129, 131, 129, 125, 136, 137, 126, 136, 116, 123, 134, 115, 130, 127, 137, 131, 126, 123, 115, 126, 112, 132, 128, 128, 129, 106, 134, 133, 123, 117, 124, 125, 129, 121, 146, 116, 130, 122, 130, 114, 133, 129, 125, 135, 132, 122, 136, 139, 127, 128, 123, 140, 136, 126, 125, 127, 134, 129, 114, 141, 133, 123, 126, 115, 127, 121, 122, 125, 126, 131, 139, 126, 118, 131, 132, 125, 123, 140, 123, 111, 132, 133, 136, 132, 133, 126, 123, 125, 116, 135, 130, 122, 135, 125, 136, 128, 130, 135, 122, 122, 146, 129, 127, 128, 128, 119, 129, 124, 131, 140, 122, 131, 133, 116, 128, 143, 122, 138, 127, 110, 123, 133, 137, 117, 119, 126, 124, 136, 128, 136, 121, 153, 134, 125, 134, 136, 132, 143, 149, 131, 122, 116, 117, 127, 135, 118, 136, 130, 134, 139, 124, 135, 129, 126, 125, 130, 140, 118, 128, 129, 124, 124, 116, 128, 141, 128, 132, 135, 121, 129, 123, 130, 130, 132, 140, 140, 122, 137, 126, 120, 119, 127, 133, 124, 136, 128, 116, 132, 128, 127, 120, 138, 138, 125, 142, 123, 126, 119, 140, 126, 119, 133, 123, 128, 120, 121, 133, 138, 130, 138, 137, 136, 123, 127, 131, 126, 114, 129, 125, 136, 144]}, "runlength_M": [0, 32503, 16356, 8220, 3956, 2147, 1077, 530, 250, 126, 61, 31, 13, 13, 4, 0, 0, 0, 0, 0, 0], "runlength_ctrl": [0, 32732, 16491, 8141, 4133, 2018, 1054, 524, 248, 127, 45, 28, 15, 10, 4, 2, 0, 0, 1, 0, 1], "block_entropy_M": {"1": 0.999998814931722, "2": 1.9999872116135404, "3": 2.999960648744726, "4": 3.999920558122658, "5": 4.999804848403966, "6": 5.999492630424221, "7": 6.99898582662469, "8": 7.998061946121294, "9": 8.996239509220485, "10": 9.99310910835482, "11": 10.987319072039151, "12": 11.975571456714905, "13": 12.952111426613818, "14": 13.905303352971995, "15": 14.806916392397167, "16": 15.587235784316556}, "block_entropy_ctrl": {"1": 0.9999925226046606, "2": 1.99998480007138, "3": 2.999968341136194, "4": 3.999949116407783, "5": 4.999810991079123, "6": 5.999585173187594, "7": 6.999159339791859, "8": 7.998446536674559, "9": 8.996966386676764, "10": 9.994109458707328, "11": 10.988460537216682, "12": 11.976966602743365, "13": 12.953635535920403, "14": 13.906383329515183, "15": 14.806395864249936, "16": 15.586450742447315}};
+
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function setup(cv){const r=window.devicePixelRatio||1;const w=cv.clientWidth,h=cv.height;cv.width=w*r;cv.height=h*r;const x=cv.getContext('2d');x.scale(r,r);x.clearRect(0,0,w,h);return {x,w,h};}
+function axes(x,w,h,pad){x.strokeStyle=css('--border-strong');x.lineWidth=1;x.beginPath();x.moveTo(pad.l,pad.t);x.lineTo(pad.l,h-pad.b);x.lineTo(w-pad.r,h-pad.b);x.stroke();x.fillStyle=css('--text-muted');x.font='11px system-ui';}
+
+// Panel 1: run-length, log y
+(function(){const {x,w,h}=setup(c1);const pad={l:42,r:12,t:14,b:26};const M=DATA.runlength_M,C=DATA.runlength_ctrl;const K=15;const total=M.reduce((a,b)=>a+b,0);
+ const maxv=Math.max(...M.slice(1,K+1),...C.slice(1,K+1));const y=v=>{const lv=v<1?0:Math.log10(v);const lm=Math.log10(maxv);return (h-pad.b)-(lv/lm)*(h-pad.b-pad.t);};
+ axes(x,w,h,pad);for(let e=0;e<=Math.ceil(Math.log10(maxv));e++){const yy=y(Math.pow(10,e));x.strokeStyle=css('--border');x.beginPath();x.moveTo(pad.l,yy);x.lineTo(w-pad.r,yy);x.stroke();x.fillStyle=css('--text-muted');x.fillText('10'+['⁰','¹','²','³','⁴','⁵'][e],6,yy+3);}
+ const bw=(w-pad.l-pad.r)/K;for(let k=1;k<=K;k++){const cx=pad.l+(k-1)*bw;
+   x.fillStyle=css('--ctrl');const hc=(h-pad.b)-y(C[k]);if(C[k]>0)x.fillRect(cx+bw*0.12,y(C[k]),bw*0.76,hc);
+   x.fillStyle=css('--m');const hm=(h-pad.b)-y(M[k]);if(M[k]>0)x.fillRect(cx+bw*0.28,y(M[k]),bw*0.44,hm);
+   if(k%2===1){x.fillStyle=css('--text-muted');x.fillText(k,cx+bw*0.35,h-pad.b+13);}}
+ x.strokeStyle=css('--null');x.lineWidth=2;x.beginPath();for(let k=1;k<=K;k++){const cx=pad.l+(k-1)*bw+bw*0.5;const yy=y(total*Math.pow(2,-k));k===1?x.moveTo(cx,yy):x.lineTo(cx,yy);}x.stroke();
+ x.fillStyle=css('--text-muted');x.fillText('run length k',w-pad.r-70,h-pad.b+13);})();
+
+// Panel 2: window bell curve
+(function(){const {x,w,h}=setup(c2);const pad={l:38,r:12,t:14,b:26};const H=DATA.window.hist;const n=H.length;const mu=128,sd=8;
+ const lo=100,hi=156;const bins={};H.forEach(v=>{const b=Math.max(lo,Math.min(hi,v));bins[b]=(bins[b]||0)+1;});
+ const maxc=Math.max(...Object.values(bins));const nullPeak=n*(1/(sd*Math.sqrt(2*Math.PI)));const ymax=Math.max(maxc,nullPeak)*1.1;
+ const X=v=>pad.l+((v-lo)/(hi-lo))*(w-pad.l-pad.r);const Y=c=>(h-pad.b)-(c/ymax)*(h-pad.b-pad.t);
+ axes(x,w,h,pad);const bw=(w-pad.l-pad.r)/(hi-lo);
+ x.fillStyle=css('--m');for(const b in bins){x.fillRect(X(+b)-bw*0.42,Y(bins[b]),bw*0.84,(h-pad.b)-Y(bins[b]));}
+ x.strokeStyle=css('--null');x.lineWidth=2;x.beginPath();for(let v=lo;v<=hi;v+=0.5){const d=n*Math.exp(-((v-mu)**2)/(2*sd*sd))/(sd*Math.sqrt(2*Math.PI));v===lo?x.moveTo(X(v),Y(d)):x.lineTo(X(v),Y(d));}x.stroke();
+ x.fillStyle=css('--text-muted');[112,128,144].forEach(t=>{x.fillText(t,X(t)-8,h-pad.b+13);});x.fillText('#ones per 256-bit window',w-pad.r-150,h-pad.b+13);})();
+
+// Panel 3: block entropy H_k/k
+(function(){const {x,w,h}=setup(c3);const pad={l:44,r:12,t:16,b:26};const K=16;
+ const M=[],C=[];for(let k=1;k<=K;k++){M.push(DATA.block_entropy_M[k]/k);C.push(DATA.block_entropy_ctrl[k]/k);}
+ const ymin=0.90,ymax=1.005;const X=k=>pad.l+((k-1)/(K-1))*(w-pad.l-pad.r);const Y=v=>(h-pad.b)-((v-ymin)/(ymax-ymin))*(h-pad.b-pad.t);
+ axes(x,w,h,pad);for(let g=90;g<=100;g+=2){const yy=Y(g/100);x.strokeStyle=css('--border');x.beginPath();x.moveTo(pad.l,yy);x.lineTo(w-pad.r,yy);x.stroke();x.fillStyle=css('--text-muted');x.fillText((g/100).toFixed(2),6,yy+3);}
+ x.strokeStyle=css('--null');x.setLineDash([4,3]);x.lineWidth=1.5;x.beginPath();x.moveTo(pad.l,Y(1));x.lineTo(w-pad.r,Y(1));x.stroke();x.setLineDash([]);
+ const line=(arr,col)=>{x.strokeStyle=col;x.lineWidth=2;x.beginPath();arr.forEach((v,i)=>{i===0?x.moveTo(X(i+1),Y(v)):x.lineTo(X(i+1),Y(v));});x.stroke();arr.forEach((v,i)=>{x.fillStyle=col;x.beginPath();x.arc(X(i+1),Y(v),2.2,0,7);x.fill();});};
+ line(C,css('--ctrl'));line(M,css('--m'));
+ x.fillStyle=css('--text-muted');[1,4,8,12,16].forEach(k=>x.fillText(k,X(k)-3,h-pad.b+13));x.fillText('block width k',w-pad.r-70,h-pad.b+13);})();
+
+addEventListener('resize',()=>location.reload());
+</script>
+</body>
+</html>
