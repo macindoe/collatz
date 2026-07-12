@@ -2,7 +2,7 @@
 status: periods 1, 2, 3 CLOSED; uniform trim question RESOLVED (12.8: exists, exponentially weak, provably sharp); cycle front PARKED per stopping rules
 scope: new section 12 (post-monolith; first page with no monolith source)
 updated: 2026-07-12
-source: new material, 2026-07-07; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md); 12.5.3/12.7.5's citation debt pinned 2026-07-12 (G. Rhin 1987, via Simons–de Weger 2005); 12.8.2's n_0(p) made fully explicit 2026-07-12 (same tool)
+source: new material; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md)
 ---
 
 > **Current state.** Cycles in reduced coordinates. Periods 1, 2, and 3 are completely classified: no nontrivial cycles (12.2.3, 12.5.3, 12.7.5). The uniform-trim question is resolved (12.8): a trim uniform in `p` exists (12.8.1) and gives effective finiteness at every period (12.8.2), but its constant degrades like `1.585^(-p)` and the staircase family (12.8.3) proves size-counting can do no better. The crossover plan is therefore withdrawn and the cycle front is **parked** (12.8.5): the residual content of cycle exclusion is anchor-walk rigidity, the same front as Stage 4. The staircase — a divergent-orbit profile bent into a loop — is evidence the two halves of the residual difficulty are one problem (12.8.4).
