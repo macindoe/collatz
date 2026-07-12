@@ -118,8 +118,11 @@ function drawRecurrence() {
       const oi = offsets[i], oj = offsets[j];
       for (let k = 0; k < w; k++) if (bits[oi + k] !== bits[oj + k]) dist++;
       const frac = dist / w; // 0 = identical, 1 = fully opposite
-      // grayscale: identical -> bright, dissimilar -> background
-      const v = dark ? Math.round(255 * frac * 0.85) : Math.round(255 * (1 - (1 - frac) * 0.9));
+      // grayscale: identical is always the high-contrast feature against
+      // the theme's background, so the diagonal (and any real similarity
+      // stripe) stays visible regardless of theme -- light bg is bright,
+      // so identical maps dark; dark bg is dark, so identical maps bright.
+      const v = dark ? Math.round(255 * (1 - frac * 0.85)) : Math.round(255 * (1 - (1 - frac) * 0.9));
       const p = (i * K + j) * 4;
       img.data[p] = v; img.data[p + 1] = v; img.data[p + 2] = v; img.data[p + 3] = 255;
     }
