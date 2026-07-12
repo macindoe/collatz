@@ -29,7 +29,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 | `anchors.md` | §17: consolidated reference for the anchor across the wiki (pointers only, 17.1–17.6); single-sequence digit-structure search program (17.7–17.9), executed with a clean pass (17.7.1, branch `anchor-digits`) | REFERENCE + executed search (clean pass) |
 | `reverse.md` | §14: the reverse dynamics — predecessor characterization (14.1), 3-adic anchor + valuation law (14.2), duality (14.3), density program (14.4), dead ends (14.5), density bound (14.6), dual per-step theory (14.7–14.10), steering + one-identity synthesis (14.12) | active; papers' canonical proofs in paper 2 |
 | `cycles.md` | §12: cycles in reduced coordinates — cycle equation (12.1), period 1 = Steiner (12.2), congruence system (12.3), m-cycle translation (12.4), period 2 (12.5), general-p elimination + ceiling lemma (12.6), period 3 + trim (12.7), uniform trim resolution (12.8) | periods 1–3 closed; front PARKED |
-| `open-problems.md` | §11–11.7: the open-questions layer, with calibration notes; §11.8: index of live #TODOs (citation/constant debt) | open / calibrated |
+| `open-problems.md` | §11–11.7: the open-questions layer, with calibration notes; §11.8: citation/constant debt (discharged) | open / calibrated |
 | `archive/appendix-a.md` | Appendix A: discovery path, worked examples, refuted claims with audit data | archive |
 | `sources/` | Immutable: drafts v000–v078, PDFs, residue data | never edited |
 

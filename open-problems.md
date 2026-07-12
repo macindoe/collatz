@@ -1,6 +1,6 @@
 ---
 status: open / calibrated
-scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (#TODO index)
+scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record)
 updated: 2026-07-12
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
@@ -152,11 +152,11 @@ This comparison matters for two reasons. First, it may show that some parts of t
 
 One concrete point of contact is now established (`11.8.3.11`): the valuation `s` on the lifting branch is a linear form in two `2`-adic logarithms, and the effective theory that bounds it — `p`-adic Baker theory together with lattice-reduction methods — is the same machinery underlying the known lower bounds on nontrivial Collatz cycle lengths (Steiner; Simons–de Weger). The reduced formalism and the classical cycle analyses therefore terminate on common arithmetic ground, which calibrates both the novelty and the expected difficulty of the remaining questions.
 
-## 11.8. Outstanding #TODOs: citation and constant debt
+## 11.8. Citation and constant debt: discharged
 
-Housekeeping, not a new mathematical question layer — an index of every live `#TODO` marker in the wiki (excluding `sources/`, immutable per AGENTS.md), so debt is one findable list rather than scattered inline markers. Compiled 2026-07-12, following the bridge-perimeter stress test (bridge.md 16.4.4).
+Housekeeping, not a new mathematical question layer. No live `#TODO` marker remains in the wiki (`sources/` excluded, immutable per AGENTS.md): the debt indexed here after the bridge-perimeter stress test (bridge.md 16.4.4) is fully discharged, and every citation is now written in place at its use site rather than deferred. This section is retained as the record of what the debt was and how it closed.
 
-**Resolved bibliographically** (publication.md's citation-pinning pass, 2026-07-09) — the citation exists and is correct, no further action:
+**Citations pinned in place** (bibliography in publication.md; now cited inline at each location):
 
 * stage1-synthesis.md 11.8.3.11 — `p`-adic Baker theory: K. Yu; Bugeaud–Laurent (1996).
 * stage1-synthesis.md 11.8.3.11 (remark after `11.8.3.11.2`) — Steiner (1977); Simons–de Weger (2005).

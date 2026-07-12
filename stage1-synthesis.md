@@ -1467,7 +1467,7 @@ This is fully explicit and unconditional (no asymptotic threshold, unlike their 
 v_2(9^n·ω - 1) <= C(ω) · (log n)^2.
 ```
 
-The exponent `2` is the conservative shape given by the general two-logarithm statements; particular variants and parameter regimes yield `log n`. Every use below survives with either exponent. [#TODO: pin the exponent to the precise theorem version at formal writeup.]
+The exponent is exactly `2`, pinned above via Bugeaud–Laurent's Corollaire 2; the `log n`-exponent variants in the literature are large-coefficient asymptotic regimes (their Théorème 2), not the small-fixed-`α`, one-growing-exponent case here. Every use below survives with either exponent regardless.
 
 **Corollary 11.8.3.11.1 (unconditional spike-height bound).** On both lifting components, spike heights grow at most polylogarithmically in depth: there is an effective `C(ω)` with
 
@@ -1489,7 +1489,7 @@ Equivalently: an integer of size `n` can match at most `O((log n)^2)` leading `2
 
 **Proof.** Immediate from the imported bound and `s = 3 + v_2(n - N(ω))`. ∎
 
-**Remark (relation to known cycle-length bounds).** This is not a new toolbox invented for the present program. Effective linear forms in logarithms — Archimedean forms in `log 2, log 3` and their `p`-adic counterparts, combined with de Weger's lattice-reduction methods — are exactly what underlies the known lower bounds on the length of hypothetical nontrivial Collatz cycles (Steiner; Simons–de Weger). Route A's Stage 1 thus terminates on the same classical ground as the strongest known partial results on the cycle side. [#TODO cite: R. Steiner (1977); J. Simons, B. de Weger, *Theoretical and computational bounds for m-cycles of the 3n+1 problem* (2005).]
+**Remark (relation to known cycle-length bounds).** This is not a new toolbox invented for the present program. Effective linear forms in logarithms — Archimedean forms in `log 2, log 3` and their `p`-adic counterparts, combined with de Weger's lattice-reduction methods — are exactly what underlies the known lower bounds on the length of hypothetical nontrivial Collatz cycles (Steiner; Simons–de Weger). Route A's Stage 1 thus terminates on the same classical ground as the strongest known partial results on the cycle side. (R. P. Steiner, *A theorem on the Syracuse problem*, Proc. 7th Manitoba Conf., 1977; J. Simons, B. de Weger, *Theoretical and computational bounds for m-cycles of the 3n+1 problem*, Acta Arith., 2005.)
 
 **Remark (what the constants are and are not good for).** The constants `C(ω)` are effectively computable but astronomically large. They are useful for unconditional asymptotic statements — spike heights cannot grow like a power of `d`, digit matches cannot persist — and useless for window computations, where the exact law plus direct series computation of `N(ω)` (Remark after Theorem `11.8.3.6.6`) is strictly better.
 
