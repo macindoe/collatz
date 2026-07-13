@@ -127,6 +127,25 @@ The plan in §17.8–17.9 was run in full, including the "if time remains" spect
 
 **Conclusion.** A **clean pass on the deep single-sequence axis for bulk anchors**, extending §17.7.1 by 32× in depth. It does not prove AEH (a measure-zero statement about integer orbits, §17.8 item 5), does not touch the proof-effort stopping rule, and leaves two higher-power follow-ups explicitly **un-run**: the TestU01/PractRand PRNG batteries (stronger statistical detectors than anything here) and an **automaticity / algebraicity screen** (Christol's theorem — is the bit sequence 2-automatic?), a *structural*, non-statistical notion of order that no test in §17.7 addresses. Visualization: `viz/anchor_single_deep_visualizer.html` (run-length vs geometric, the window bell curve, block-entropy scaling — all against the matched control). Verified 2026-07-13 (fresh generator 12/12; matched controls throughout; seed `20260713`).
 
+### 17.7.3. Automaticity / algebraicity screen: `M(ω)` is not 2-automatic (2026-07-13, branch `anchor-automaticity`; pending verification)
+
+Everything in §17.7.1–17.7.2 is **statistical** — does `M(ω)` look like a fair coin. There is a sharper, **structural** notion of order that no statistical test can see: is the bit sequence **2-automatic**, i.e. output by a finite automaton reading the base-2 digits of the index `n`? This matters because of a chain of classical theorems:
+
+- **Christol's theorem** (Christol 1979; Christol–Kamae–Mendès France–Rauzy, *Bull. SMF* 108 (1980), 401–419): `(a_n)` over `F_2` is 2-automatic **iff** its generating function `F(x) = Σ a_n x^n` is **algebraic over `F_2(x)`**.
+- **Eilenberg:** 2-automatic **iff** the 2-kernel `{(a_{2^e n + r}) : e≥0, 0≤r<2^e}` is **finite**.
+- **Cobham:** an automatic sequence has **linear subword complexity** `p(k) = O(k)` (number of distinct length-`k` factors).
+
+So "does `M(ω)`'s bit string hide algebraic structure over `F_2(x)`?" is a decidable-in-practice screen — and it is the exact structural meaning of §17.7.2's block-entropy observation `H_k ≈ k`.
+
+**Method** (`experiments/anchor_automaticity.py`, fresh generator validated 12/12): two automaticity signatures — 2-kernel growth and subword complexity `p(k)` — each run on **three** sequences so the test's discriminating power is visible: **Thue–Morse** (the textbook 2-automatic sequence, positive control), a **fair coin** (non-automatic pole), and one bulk `M(ω)` to `2^17` bits.
+
+**Result — the test works, and `M(ω)` fails to be automatic.** Thue–Morse's 2-kernel plateaus at exactly **2** distinct elements through depth 10 (of 2047 generated), and its subword complexity is flat (52 distinct factors at `k=18`) — the test correctly detects automaticity. `M(ω)` instead tracks the fair coin on both signatures:
+
+- **2-kernel:** all **2047/2047** subsequences through depth 10 distinct (coin: 2047/2047; Thue–Morse: 2/2047). A ≥2047-element kernel means the minimal automaton, were there one, would need >2047 states.
+- **Subword complexity:** `p(k) = 2^k` **fully saturated** for `k ≤ 12` (all 4096 length-12 factors present), matching the coin (Thue–Morse: 36). Exponential subword complexity is flatly incompatible with the linear `p(k)=O(k)` Cobham forces on any automatic sequence.
+
+**Conclusion.** To the tested depth, `M(ω)`'s bit sequence is **not 2-automatic**, hence (Christol) its generating function is **not algebraic over `F_2(x)`**. This is the **first structural, non-statistical** order test in the §17.7 program, and it comes back negative — ruling out the entire automatic/algebraic family of hidden structure, not merely a correlation. It is the rigorous content of §17.7.2's `H_k ≈ k`: maximal subword complexity. A finite computation is not a proof, but the signature (saturated `2^k` complexity, all-distinct kernel, exact tracking of the coin against a *working* positive control) is unambiguous, and it is consistent with expectation — `M(ω)` is a 2-adic logarithm of an algebraic number, an object nothing suggested would be automaton-generated. Does not touch AEH or the proof-effort stopping rule. **Status: branch `anchor-automaticity`, not merged — pending independent verification, same discipline as §17.7.2.**
+
 ## 17.8. Search plan (scoped 2026-07-12; executed — results in §17.7.1)
 
 The plan below is retained as the record of what was scoped and why. Items 1–4 were executed on 2026-07-12 (branch `anchor-digits`; a clean pass, §17.7.1); item 5 (the reading task) was closed 2026-07-13 (verdict inline below). In order of cost and how surprising a positive finding would be:
