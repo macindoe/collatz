@@ -337,7 +337,7 @@ For a live door `y`, write `m = v_2(y+1)` and `r = v_2(3^m q - 1)` (`q = (y+1)/2
 G(y) = 3^m 2^{-(m+r)} · y + (3^m − 2^m) · 2^{-(m+r)}      (as an identity in Z_3, on the stratum with exit valuation r),
 ```
 
-with unit multiplier `3^m 2^{-(m+r)}` valued in the fixed data `(m,r)` alone. Consequently, for `y, z` on the same `(m,r)`-stratum,
+with multiplier `3^m 2^{-(m+r)}` of exact `3`-adic valuation `m`, computable from the fixed data `(m,r)` alone. Consequently, for `y, z` on the same `(m,r)`-stratum,
 
 ```text
 v_3(G(y) − G(z)) = v_3(y − z) + m.
@@ -345,7 +345,7 @@ v_3(G(y) − G(z)) = v_3(y − z) + m.
 
 **Proof.** `G(y) = (3^m(y+1)/2^m - 1)/2^r = (3^m(y+1) - 2^m)/2^{m+r}` directly from Definition 14.14.3.1, which is affine in `y` with the stated coefficients; `2^{m+r}` is a unit in `Z_3` (coprime to `3`), so both coefficients are honest elements of `Z_3`, and `3^m 2^{-(m+r)}` has `v_3 = m` exactly (`2^{-(m+r)}` is a unit). For `y, z` on the same stratum, subtracting gives `G(y) - G(z) = 3^m 2^{-(m+r)}(y-z)`, so `v_3(G(y)-G(z)) = m + v_3(y-z)`, using that `v_3(u·x) = v_3(x)` for any `3`-adic unit `u`. ∎
 
-**Content.** `G` restricted to a stratum is not merely bounded or Lipschitz in the `3`-adic metric — it is an honest affine isometry-up-to-shift, gaining exactly `m` digits of `3`-adic agreement per application. This is the precise opposite of the core-extraction deficit's forward accounting (`16.2`: knowing `ω` to `2^{σ+r}` pins `ω_+` to only `2^r`, a *loss* of `σ` digits): here the exit map *gains* `m` digits, because its only arithmetic operations on `y` are multiplication by `3^m` (adds digits) and division by a power of `2` (a `3`-adic unit operation, costing nothing `3`-adically). No contradiction with `16.2`, since `G` never extracts a coprime core — that is exactly what `14.14.3`(3) already established (`G`'s image needs no stripping). The gain is not quoted as progress on its own; `14.14.6` prices what it costs.
+**Content.** `G` restricted to a stratum is not merely bounded or Lipschitz in the `3`-adic metric — it is an honest affine contraction of exact ratio `3^{-m}`, gaining exactly `m` digits of `3`-adic agreement per application. This is the precise opposite of the core-extraction deficit's forward accounting (`16.2`: knowing `ω` to `2^{σ+r}` pins `ω_+` to only `2^r`, a *loss* of `σ` digits): here the exit map *gains* `m` digits, because its only arithmetic operations on `y` are multiplication by `3^m` (adds digits) and division by a power of `2` (a `3`-adic unit operation, costing nothing `3`-adically). No contradiction with `16.2`, since `G` never extracts a coprime core — that is exactly what `14.14.3`(3) already established (`G`'s image needs no stripping). The gain is not quoted as progress on its own; `14.14.6` prices what it costs.
 
 **Verified** — `experiments/door_seam.py`, function `test_item4`. `4,000` random pairs `(y,z)` matched to a common `(m,r)`-stratum by rejection sampling (`35,870` draws), `y, z < 10^7`: `v_3(G(y)-G(z)) = v_3(y-z) + m` exactly in every case, `0` failures (2026-07-14).
 
