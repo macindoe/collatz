@@ -304,3 +304,25 @@ This is bookkeeping over `14.1.1`/`14.6.5.1` — it is stated once, cleanly, bec
 **Content and standing.** This relocates the increment `ΔM` — previously stated only as `N((ω_+/ω)^2)`, a function of the *whole next core* — to the mismatch of one fixed operation (`J`, "strip `3`s, then apply `M`") evaluated at the two integers flanking a single door `y`: `1+2^sy` on the incoming side, `(y+1)/2^m` on the outgoing side. This is a reformulation, derived in three lines from `11.8.3.7.1`, `11.8.5.6`, and `14.6.5.1` — not new information about `ΔM`'s unbounded-depth behavior, and it is not presented as such (register warning per the brief, honored here).
 
 **Verified** — `experiments/door_seam.py`, functions `test_item2` and `test_M3_facts`. Bridge identity: `6,000` random reduced steps, `ΔM mod 2^8` computed both directly and via `J(n_1) - J(n_2)`, `0` failures. Supporting facts: `M(3) ≡ -1 (mod 2^12)`, and complete multiplicativity of `M` over `1,000` random odd pairs, `0` failures (2026-07-14).
+
+### 14.14.3. The exit map
+
+**Definition 14.14.3.1 (the exit map `G`).** For a live door `y` (odd, `3 ∤ y`), let `m = v_2(y+1)`, `q = (y+1)/2^m`, and set
+
+```text
+G(y) = (3^m q − 1) / 2^{v_2(3^m q − 1)}.
+```
+
+Write `state(y)` for the state recovered from `y` by `14.6.5.1` (Ω `= (y+1)/(2^m 3^{v_3(y+1)})`, `D = m + v_3(y+1)`).
+
+**Theorem 14.14.3.2 (three properties of `G`).** For every live door `y`:
+
+1. **`G` conjugates `F`.** `state(G(y)) = F(state(y))`. In particular `G` is not a new dynamical system: it is the reduced map `F`, read in door coordinates.
+2. **Fiber-constancy.** If `y, y'` are two of the `D` doors of the same state (`state(y) = state(y') = (Ω, D)`), then `G(y) = G(y')`.
+3. **Totality and live image.** `G(y)` is always defined, and `3 ∤ G(y)` — `G` maps live doors to live doors.
+
+**Proof.** Write `(Ω, D) = state(y)`, so `y + 1 = 2^m 3^a Ω` with `a = v_3(y+1)`, `D = m+a` (14.6.5.1), hence `q = (y+1)/2^m = 3^a Ω` and `3^m q = 3^{m+a} Ω = 3^D Ω` — **independent of `a`**, which is (2): every door of `(Ω,D)` shares one `q`-image `3^m q = 3^D Ω`, so `G` is constant on the fiber. Now `3^D Ω - 1` is exactly the numerator `A` of the forward step from `(Ω, D)` (stage4.md 11.8.7.2, with `s' := v_2(A)`), so `G(y) = A / 2^{s'}` is the exit value of the forward step `(Ω,D) → F(Ω,D)` — this is (1), since the exit value of a step is by construction a live door of the state it leads to (`14.1.1`, `14.6.5.1`'s recovery formula applies to it), giving `state(G(y)) = F(Ω,D)`. For (3): `D ≥ 1` for every valid state, so `3^D Ω ≡ 0 (mod 3)`, hence `A = 3^DΩ - 1 ≡ 2 (mod 3)`. Since `2^{s'} G(y) = A ≡ 2 (mod 3)` and `2^{s'}` is a unit mod `3`, `G(y) ≡ 2 · (2^{s'})^{-1} ≢ 0 (mod 3)`. `G(y)` is a finite integer for every live door because `A = 3^DΩ - 1 > 0` is a nonzero even number, so `v_2(A)` is finite — totality. ∎
+
+**Content.** `G = E ∘ R` in the brief's notation: `R` is the reduced map `F` and `E` extracts the exit door of the resulting state; Theorem 14.14.3.2(1) makes precise that this composite, read on the door coordinate alone, needs no reference to `(Ω,D)` at all — a fact used throughout `14.14.4`–`14.14.6`. Property (3) sharpens `14.8.3`'s door-mortality freeze (a *partial* backward increment law) by contrast: the top-door lineage of `14.8` dies on exactly half of all cases, but the forward exit map `G` is total and its image is always live — there is no freeze in this direction, because `D ≥ 1` alone forces it, with no further condition on `Ω`.
+
+**Verified** — `experiments/door_seam.py`, function `test_item3`. `5,561` random live doors of random valid states (`Ω < 10^5`, `1 ≤ D < 30`): totality, live image, `state(G(y)) = F(state(y))`, all `0` failures; fiber-constancy (a second, independently sampled door of the same state, `D ≥ 2`), `5,212` pairs, `0` failures (2026-07-14).

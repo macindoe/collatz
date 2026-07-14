@@ -6,6 +6,8 @@
 #   14.14.1  global edge parameterization: exit equation + door-recovery
 #            dictionary (C = 2^s(y+1), sigma = s+m, a_+ = a)
 #   14.14.2  the door-centred Bridge identity  Delta M = J(n1) - J(n2)
+#   14.14.3  the exit map G = E o R: totality, live image, conjugacy to F,
+#            fiber-constancy across a state's doors
 import random
 
 
@@ -55,11 +57,38 @@ def J(n, k):
     return M_anchor(core, k)
 
 
+def state_of_door(y):
+    """Recover (Omega, D) from a live door y (reverse.md 14.6.5.1)."""
+    m = v2(y + 1)
+    a = v3(y + 1)
+    Om = (y + 1) // ((1 << m) * 3 ** a)
+    D = m + a
+    return Om, D, m, a
+
+
+def G(y):
+    """The exit map, Def 14.14.3.1: m=v2(y+1), q=(y+1)/2^m, G(y)=(3^m q -1)/2^r."""
+    m = v2(y + 1)
+    q = (y + 1) >> m
+    val = 3 ** m * q - 1
+    r = v2(val)
+    return val >> r, m, r
+
+
 def random_odd_not3(rng, hi):
     while True:
         y = rng.randrange(1, hi, 2)
         if y % 3 != 0:
             return y
+
+
+def random_valid_door(rng, hi_om, hi_d):
+    """A live door y_a of a random valid state (Omega, D)."""
+    Om = random_odd_not3(rng, hi_om)
+    D = rng.randrange(1, hi_d)
+    a = rng.randrange(0, D)
+    y = (1 << (D - a)) * 3 ** a * Om - 1
+    return y, Om, D, a
 
 
 # ---------------------------------------------------------------------------
@@ -129,6 +158,44 @@ def test_M3_facts(trials=1000, seed=1003):
     return bad_m3, trials, bad_mult
 
 
+# ---------------------------------------------------------------------------
+# 14.14.3  the exit map G: totality, live image, conjugacy, fiber-constancy
+# ---------------------------------------------------------------------------
+
+def test_item3(trials=6000, seed=1004):
+    rng = random.Random(seed)
+    n_total = bad_total = 0
+    n_live = bad_live = 0
+    n_conj = bad_conj = 0
+    n_fiber = bad_fiber = 0
+    for _ in range(trials):
+        y, Om, D, a = random_valid_door(rng, 10 ** 5, 30)
+        if y % 3 == 0:
+            continue
+        n_total += 1
+        gy, m, r = G(y)
+        if gy % 2 == 0:
+            bad_total += 1
+        n_live += 1
+        if gy % 3 == 0:
+            bad_live += 1
+        n_conj += 1
+        wp, dp, _, _, _, _ = forward_step(Om, D)
+        Om2, D2, _, _ = state_of_door(gy)
+        if (Om2, D2) != (wp, dp):
+            bad_conj += 1
+        if D >= 2:
+            a2 = rng.randrange(0, D)
+            y2 = (1 << (D - a2)) * 3 ** a2 * Om - 1
+            if y2 % 3 != 0:
+                n_fiber += 1
+                gy2, _, _ = G(y2)
+                if gy2 != gy:
+                    bad_fiber += 1
+    return dict(total=(n_total, bad_total), live=(n_live, bad_live),
+                conj=(n_conj, bad_conj), fiber=(n_fiber, bad_fiber))
+
+
 if __name__ == "__main__":
     print("== 14.14.1 global edge parameterization ==")
     checked, bad = test_item1()
@@ -140,3 +207,8 @@ if __name__ == "__main__":
     bad_m3, nmult, bad_mult = test_M3_facts()
     print(f"M(3) = -1 check: {'ok' if bad_m3 == 0 else 'FAIL'}; "
           f"multiplicativity of M: {nmult} checked, {bad_mult} failures")
+
+    print("== 14.14.3 the exit map G ==")
+    res = test_item3()
+    for k, (n, b) in res.items():
+        print(f"  {k}: {n} checked, {b} failures")
