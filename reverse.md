@@ -251,3 +251,32 @@ Fix a live door `y` and sweep the admissible `s`. Proofs in `paper/collatz-mirro
 **Answering the 14.6 remark's open question.** *Whether exactness buys anything beyond `0.84`* is not resolved in the affirmative by this program: the one avenue that would have delivered it (a stationary exact-residue LP exploiting `14.2.4`) is obstructed by the precision loss above. The multi-door resource (14.6.5) is exact and does compose, and it buys a real but small lift. Whether a *correctly* size-threshold-coupled version of construction 3 recovers real gains from residues remains open — it is a well-defined technical question (couple the DAG in `(j,r)` to the outer renewal induction's own accumulated-offset variable, rather than crediting exhaustion for free) but was not resolved here.
 
 **Status.** Primary success bar (`c > 0.43`, Krasikov 1989) **not reached** as a verified theorem. Stage 1 (14.6.5) stands as the session's one verified gain: `c* : 0.3304 → 0.33515`. Stages 2–3 close with the obstruction above, precisely stated, per the brief's equally-valid stop condition. No code from attempt 3 is presented as a result; the diagnostic scripts are not committed (dead ends recorded here in prose, per house norms, rather than as unrunnable/misleading code).
+
+## 14.14. The door/exit seam
+
+*(Added 2026-07-14, branch `door-seam`, per `briefs/door-seam-brief.md`. Prompted by an external suggestion, pre-checked against the live pages before delegation: both the forward anchor increment (stage2.md 11.8.5.6) and the reverse predecessor recovery (14.6.5.1) pass through a single intermediate integer, the exit — equivalently, live door — `y` of a reduced edge. This section makes that coordinate change precise: it re-expresses the forward Bridge increment `ΔM` around `y` (14.14.2), and asks whether the forward reduced map itself, written in door coordinates (14.14.3), carries a total graded law for the 3-adic anchor that the core-extraction step of `16.2` provably cannot (14.14.5). It does — with a genuinely constant offset — and 14.14.6 accounts for where the core-extraction deficit's unbounded-depth content sits once the seam is used. The exit map is a coordinate change on already-proved dynamics, not a new dynamical system; the register below is flat throughout, per the brief's register norm.)*
+
+### 14.14.1. Global edge parameterization
+
+Every reduced edge `(ω,d) → (Ω,D)` (14.1.1) factors through one intermediate integer, its exit `y`, and one further parameter, its exit valuation `s = v_2(3^d ω - 1)`:
+
+```text
+3^d ω = 1 + 2^s y                          (exit equation)
+y + 1 = 2^m 3^a Ω,   m = v_2(y+1),  a = v_3(y+1),  D = m + a     (door recovery, 14.6.5.1)
+```
+
+The first line is `14.1.1`'s defining relation for `x_exit`, restated as an equation in `y`; the second is `14.6.5.1`'s recovery formula, restated with `m := D - a` named. Together they parameterize the edge by `(y, s)` exactly as `14.1`–`14.2` already do — nothing here is a new fact.
+
+**Proposition 14.14.1.1 (dictionary with stage4's `C`).** Let `C = 3^d ω - 1 + 2^s` be stage4.md 11.8.7.2's derived quantity, `σ = v_2(C)`, `a_+ = v_3(C)`. Then
+
+```text
+C = 2^s (y + 1),      σ = s + m,      a_+ = a,
+```
+
+and the forward core `ω_+ = C / (2^σ 3^{a_+})` equals the recovered `Ω` above — i.e. `ω_+ = Ω`, the same integer both routes name.
+
+**Proof.** From the exit equation, `3^d ω - 1 = 2^s y`, so `C = 2^s y + 2^s = 2^s(y+1)`. Since `2^s` is a `3`-adic unit and coprime to the odd factor structure of `y+1`, `v_2(C) = s + v_2(y+1) = s + m` and `v_3(C) = v_3(y+1) = a`. Substituting the door-recovery line, `C / 2^σ = 2^s(y+1)/2^{s+m} = (y+1)/2^m = 3^a Ω`, so `ω_+ = C/(2^σ 3^{a_+}) = 3^a Ω / 3^a = Ω`. ∎
+
+This is bookkeeping over `14.1.1`/`14.6.5.1` — it is stated once, cleanly, because every later result in this section is phrased in the `(y,s)` coordinates it fixes.
+
+**Verified** — `experiments/door_seam.py`, fresh code, function `test_item1`. `6,000` random reduced steps (`ω < 10^6`, `1 ≤ d < 45`): the exit equation, the door-recovery identity, and all three dictionary equalities (`C`, `σ`, `a_+`) hold exactly in every case, `0` failures (2026-07-14).
