@@ -280,3 +280,27 @@ and the forward core `ω_+ = C / (2^σ 3^{a_+})` equals the recovered `Ω` above
 This is bookkeeping over `14.1.1`/`14.6.5.1` — it is stated once, cleanly, because every later result in this section is phrased in the `(y,s)` coordinates it fixes.
 
 **Verified** — `experiments/door_seam.py`, fresh code, function `test_item1`. `6,000` random reduced steps (`ω < 10^6`, `1 ≤ d < 45`): the exit equation, the door-recovery identity, and all three dictionary equalities (`C`, `σ`, `a_+`) hold exactly in every case, `0` failures (2026-07-14).
+
+### 14.14.2. The door-centred Bridge identity
+
+**Definition 14.14.2.1.** For odd `n`, `J(n) := M(n / 3^{v_3(n)})`. This is well-defined for *every* odd `n`, not only `n` coprime to `3`: `M(ω) = N(ω^2)` (stage2.md 11.8.5.6.1) is defined for any odd `ω`, since `ω^2 ≡ 1 (mod 8)` regardless of `ω`'s relation to `3`.
+
+**Lemma 14.14.2.2 (`M` is completely multiplicative, and `M(3) = -1`).** `M(ω_1 ω_2) = M(ω_1) + M(ω_2)` for all odd `ω_1, ω_2`, and `M(3) = -1`.
+
+**Proof.** `M(ω_1ω_2) = N((ω_1ω_2)^2) = N(ω_1^2 ω_2^2) = N(ω_1^2) + N(ω_2^2) = M(ω_1) + M(ω_2)`, using that `N` is a homomorphism on `1 + 8Z_2` (Theorem 11.8.3.7.1) and `ω_1^2, ω_2^2 ∈ 1+8Z_2`. For `M(3)`: `M(3) = N(9)`, and `N(9)` solves `9^n ≡ 9^{-1} (mod 2^k)` for every `k`, i.e. `n = -1` in `Z_2`. ∎
+
+**Corollary 14.14.2.3 (closed form for `J`).** `J(n) = M(n) + v_3(n)`.
+
+**Proof.** Write `n = 3^{v_3(n)} · n'` with `n' = n/3^{v_3(n)}` coprime to `3`. By 14.14.2.2, `M(n) = v_3(n)·M(3) + M(n') = M(n') - v_3(n)`, so `M(n') = M(n) + v_3(n)`, and `M(n') = J(n)` by definition. ∎
+
+**Theorem 14.14.2.4 (door-centred Bridge identity).** For a reduced edge `(ω,d) → (Ω,D)` with exit `y` and exit valuation `s` (14.14.1),
+
+```text
+ΔM = J((y+1) / 2^{v_2(y+1)}) − J(1 + 2^s y).
+```
+
+**Proof.** By the door-recovery line of 14.14.1, `(y+1)/2^m = 3^a Ω` with `m = v_2(y+1)`, `a = v_3(y+1)`; this integer is already coprime to `3` (its `3`-part is exactly the displayed `3^a`), so `J((y+1)/2^m) = M(Ω)` directly from Definition 14.14.2.1. By the exit equation, `1 + 2^s y = 3^d ω` with `ω` coprime to `3`, so likewise `J(1+2^sy) = M(ω)`. Subtracting, the right side is `M(Ω) - M(ω) = M(ω_+) - M(ω) = ΔM` (14.14.1.1: `ω_+ = Ω`). ∎
+
+**Content and standing.** This relocates the increment `ΔM` — previously stated only as `N((ω_+/ω)^2)`, a function of the *whole next core* — to the mismatch of one fixed operation (`J`, "strip `3`s, then apply `M`") evaluated at the two integers flanking a single door `y`: `1+2^sy` on the incoming side, `(y+1)/2^m` on the outgoing side. This is a reformulation, derived in three lines from `11.8.3.7.1`, `11.8.5.6`, and `14.6.5.1` — not new information about `ΔM`'s unbounded-depth behavior, and it is not presented as such (register warning per the brief, honored here).
+
+**Verified** — `experiments/door_seam.py`, functions `test_item2` and `test_M3_facts`. Bridge identity: `6,000` random reduced steps, `ΔM mod 2^8` computed both directly and via `J(n_1) - J(n_2)`, `0` failures. Supporting facts: `M(3) ≡ -1 (mod 2^12)`, and complete multiplicativity of `M` over `1,000` random odd pairs, `0` failures (2026-07-14).
