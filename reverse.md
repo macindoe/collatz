@@ -326,3 +326,25 @@ Write `state(y)` for the state recovered from `y` by `14.6.5.1` (Ω `= (y+1)/(2^
 **Content.** `G = E ∘ R` in the brief's notation: `R` is the reduced map `F` and `E` extracts the exit door of the resulting state; Theorem 14.14.3.2(1) makes precise that this composite, read on the door coordinate alone, needs no reference to `(Ω,D)` at all — a fact used throughout `14.14.4`–`14.14.6`. Property (3) sharpens `14.8.3`'s door-mortality freeze (a *partial* backward increment law) by contrast: the top-door lineage of `14.8` dies on exactly half of all cases, but the forward exit map `G` is total and its image is always live — there is no freeze in this direction, because `D ≥ 1` alone forces it, with no further condition on `Ω`.
 
 **Verified** — `experiments/door_seam.py`, function `test_item3`. `5,561` random live doors of random valid states (`Ω < 10^5`, `1 ≤ D < 30`): totality, live image, `state(G(y)) = F(state(y))`, all `0` failures; fiber-constancy (a second, independently sampled door of the same state, `D ≥ 2`), `5,212` pairs, `0` failures (2026-07-14).
+
+### 14.14.4. The fixed-stratum affine/contraction law
+
+For a live door `y`, write `m = v_2(y+1)` and `r = v_2(3^m q - 1)` (`q = (y+1)/2^m`) — so `r` is exactly the exit valuation `s'` of `14.14.3`'s proof, and `(m, r)` is the **stratum** of `y`.
+
+**Theorem 14.14.4.1 (affine law on a fixed stratum).** On the set of `y` with given `v_2(y+1) = m`, `G` extends to a map affine over `Z_3`:
+
+```text
+G(y) = 3^m 2^{-(m+r)} · y + (3^m − 2^m) · 2^{-(m+r)}      (as an identity in Z_3, on the stratum with exit valuation r),
+```
+
+with unit multiplier `3^m 2^{-(m+r)}` valued in the fixed data `(m,r)` alone. Consequently, for `y, z` on the same `(m,r)`-stratum,
+
+```text
+v_3(G(y) − G(z)) = v_3(y − z) + m.
+```
+
+**Proof.** `G(y) = (3^m(y+1)/2^m - 1)/2^r = (3^m(y+1) - 2^m)/2^{m+r}` directly from Definition 14.14.3.1, which is affine in `y` with the stated coefficients; `2^{m+r}` is a unit in `Z_3` (coprime to `3`), so both coefficients are honest elements of `Z_3`, and `3^m 2^{-(m+r)}` has `v_3 = m` exactly (`2^{-(m+r)}` is a unit). For `y, z` on the same stratum, subtracting gives `G(y) - G(z) = 3^m 2^{-(m+r)}(y-z)`, so `v_3(G(y)-G(z)) = m + v_3(y-z)`, using `v_3(uv\!\cdot\!x) = v_3(x)` for a unit `u`. ∎
+
+**Content.** `G` restricted to a stratum is not merely bounded or Lipschitz in the `3`-adic metric — it is an honest affine isometry-up-to-shift, gaining exactly `m` digits of `3`-adic agreement per application. This is the precise opposite of the core-extraction deficit's forward accounting (`16.2`: knowing `ω` to `2^{σ+r}` pins `ω_+` to only `2^r`, a *loss* of `σ` digits): here the exit map *gains* `m` digits, because its only arithmetic operations on `y` are multiplication by `3^m` (adds digits) and division by a power of `2` (a `3`-adic unit operation, costing nothing `3`-adically). No contradiction with `16.2`, since `G` never extracts a coprime core — that is exactly what `14.14.3`(3) already established (`G`'s image needs no stripping). The gain is not quoted as progress on its own; `14.14.6` prices what it costs.
+
+**Verified** — `experiments/door_seam.py`, function `test_item4`. `4,000` random pairs `(y,z)` matched to a common `(m,r)`-stratum by rejection sampling (`35,870` draws), `y, z < 10^7`: `v_3(G(y)-G(z)) = v_3(y-z) + m` exactly in every case, `0` failures (2026-07-14).

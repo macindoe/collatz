@@ -8,6 +8,7 @@
 #   14.14.2  the door-centred Bridge identity  Delta M = J(n1) - J(n2)
 #   14.14.3  the exit map G = E o R: totality, live image, conjugacy to F,
 #            fiber-constancy across a state's doors
+#   14.14.4  fixed-stratum affine / contraction law for G
 import random
 
 
@@ -196,6 +197,29 @@ def test_item3(trials=6000, seed=1004):
                 conj=(n_conj, bad_conj), fiber=(n_fiber, bad_fiber))
 
 
+# ---------------------------------------------------------------------------
+# 14.14.4  fixed-stratum affine / contraction law
+# ---------------------------------------------------------------------------
+
+def test_item4(target=4000, seed=1005, cap_hi=10 ** 7, max_attempts=300000):
+    rng = random.Random(seed)
+    bad = n = attempts = 0
+    while n < target and attempts < max_attempts:
+        attempts += 1
+        y = random_odd_not3(rng, cap_hi)
+        z = random_odd_not3(rng, cap_hi)
+        if v2(y + 1) != v2(z + 1):
+            continue
+        gy, m, r = G(y)
+        gz, mz, rz = G(z)
+        if r != rz:
+            continue
+        n += 1
+        if v3(gy - gz) != v3(y - z) + m:
+            bad += 1
+    return n, bad, attempts
+
+
 if __name__ == "__main__":
     print("== 14.14.1 global edge parameterization ==")
     checked, bad = test_item1()
@@ -212,3 +236,7 @@ if __name__ == "__main__":
     res = test_item3()
     for k, (n, b) in res.items():
         print(f"  {k}: {n} checked, {b} failures")
+
+    print("== 14.14.4 fixed-stratum affine/contraction law ==")
+    n, bad, attempts = test_item4()
+    print(f"v3(G(y)-G(z)) = v3(y-z)+m: {n} checked ({attempts} attempts), {bad} failures")
