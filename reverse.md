@@ -1,11 +1,11 @@
 ---
-status: ACTIVE — predecessor structure and 3-adic mirror machinery exact and fully dualized (14.1–14.10); dead ends classified (14.5); rigorous density bound proved (14.6, c* = 0.3304; canonical five-lemma proof in paper 2); steering laws back-ported (14.12); KL–LP density refinement closed short of the 0.43 bar (14.6.5, 14.13, structural obstruction recorded)
+status: ACTIVE — predecessor structure and 3-adic mirror machinery exact and fully dualized (14.1–14.10); dead ends classified (14.5); rigorous density bound proved (14.6, c* = 0.3304; canonical five-lemma proof in paper 2); steering laws back-ported (14.12); KL–LP density refinement closed short of the 0.43 bar (14.6.5, 14.13, structural obstruction recorded); the door/exit seam proved and placed (14.14) — a total, constant-offset graded law for the 3-adic anchor along forward orbits, with the core-extraction deficit shown to relocate onto it exactly rather than dissolve
 scope: new section 14 (post-monolith)
-updated: 2026-07-11
+updated: 2026-07-14
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
 ---
 
-> **Current state.** The reduced map run backward. The predecessor structure of `F` is completely characterized (14.1, verified exactly against brute force), and it is governed by a **3-adic anchor** `M₃(y)` — an affine logarithm base 2 — through the exact law `d = 1 + v₃(s − M₃(y))` (14.2): the precise mirror of the forward 2-adic law, with the roles of 2 and 3, and of `s` and `d`, exchanged (duality table, 14.3). The backward branching ledger is `P(d = j) = 2·3^(−j)`, verified. The backward tree from `(1,1)` is enumerable exactly in increasing `ω`; its empirical growth exponent is ≈ 0.97–0.98 and rising with the cutoff, consistent with density one (14.4). Honest scope: backward reachability of all states *is* the conjecture (9.8), so this front proves no shortcut — its target is the density program: an exact renewal equation for the tree from the exact branching law, aimed at the Krasikov–Lagarias-type exponents. The first naive renewal equation was wrong (representative multiplicity) and is recorded as the open item. **The queue of dual per-step theorems (14.7–14.10) is now closed**: digit-determinacy, the anchor-increment law, the one-step decision procedure, and the depth ladder all have exact 3-adic mirrors, each verified independently — and each also carries a genuine, non-forced asymmetry against its forward counterpart, precisely identified rather than papered over (no cross-prime step in 14.7's division; a hard mortality-freeze in 14.8 with no forward analogue; a trichotomy collapsing to a dichotomy in 14.9; a forced step-size-2 in 14.10's ladder).
+> **Current state.** The reduced map run backward. The predecessor structure of `F` is completely characterized (14.1, verified exactly against brute force), and it is governed by a **3-adic anchor** `M₃(y)` — an affine logarithm base 2 — through the exact law `d = 1 + v₃(s − M₃(y))` (14.2): the precise mirror of the forward 2-adic law, with the roles of 2 and 3, and of `s` and `d`, exchanged (duality table, 14.3). The backward branching ledger is `P(d = j) = 2·3^(−j)`, verified. The backward tree from `(1,1)` is enumerable exactly in increasing `ω`; its empirical growth exponent is ≈ 0.97–0.98 and rising with the cutoff, consistent with density one (14.4). Honest scope: backward reachability of all states *is* the conjecture (9.8), so this front proves no shortcut — its target is the density program: an exact renewal equation for the tree from the exact branching law, aimed at the Krasikov–Lagarias-type exponents. The first naive renewal equation was wrong (representative multiplicity) and is recorded as the open item. **The queue of dual per-step theorems (14.7–14.10) is now closed**: digit-determinacy, the anchor-increment law, the one-step decision procedure, and the depth ladder all have exact 3-adic mirrors, each verified independently — and each also carries a genuine, non-forced asymmetry against its forward counterpart, precisely identified rather than papered over (no cross-prime step in 14.7's division; a hard mortality-freeze in 14.8 with no forward analogue; a trichotomy collapsing to a dichotomy in 14.9; a forced step-size-2 in 14.10's ladder). **The door/exit seam (14.14, 2026-07-14)** re-expresses the forward Bridge increment and the reduced map itself around one coordinate, the live door `y` shared by both directions: the exit map `G` (14.14.3) is `F` conjugated to door coordinates, is total and lives entirely on live doors (no mortality), and on fixed `2`-adic strata is an honest `3`-adic contraction (14.14.4) that supports a total graded `ΔM₃` law with a *constant* modulus offset (14.14.5) — sharper in form than either the forward law (11.8.7.3.1) or the top-door mirror (14.8.2), both of which need a growing modulus. The reconciliation (14.14.6) shows this is not new leverage on the Bridge: the seam's stratum labels are exactly stage3.md/stage4.md's own `(s, m_+)` digit-cost pair, so the gain is bought at the core-extraction deficit's own price, relocated rather than escaped.
 
 # 14. The Reverse Dynamics: a 3-adic Mirror
 
@@ -251,3 +251,135 @@ Fix a live door `y` and sweep the admissible `s`. Proofs in `paper/collatz-mirro
 **Answering the 14.6 remark's open question.** *Whether exactness buys anything beyond `0.84`* is not resolved in the affirmative by this program: the one avenue that would have delivered it (a stationary exact-residue LP exploiting `14.2.4`) is obstructed by the precision loss above. The multi-door resource (14.6.5) is exact and does compose, and it buys a real but small lift. Whether a *correctly* size-threshold-coupled version of construction 3 recovers real gains from residues remains open — it is a well-defined technical question (couple the DAG in `(j,r)` to the outer renewal induction's own accumulated-offset variable, rather than crediting exhaustion for free) but was not resolved here.
 
 **Status.** Primary success bar (`c > 0.43`, Krasikov 1989) **not reached** as a verified theorem. Stage 1 (14.6.5) stands as the session's one verified gain: `c* : 0.3304 → 0.33515`. Stages 2–3 close with the obstruction above, precisely stated, per the brief's equally-valid stop condition. No code from attempt 3 is presented as a result; the diagnostic scripts are not committed (dead ends recorded here in prose, per house norms, rather than as unrunnable/misleading code).
+
+## 14.14. The door/exit seam
+
+*(Added 2026-07-14, branch `door-seam`, per `briefs/door-seam-brief.md`. Prompted by an external suggestion, pre-checked against the live pages before delegation: both the forward anchor increment (stage2.md 11.8.5.6) and the reverse predecessor recovery (14.6.5.1) pass through a single intermediate integer, the exit — equivalently, live door — `y` of a reduced edge. This section makes that coordinate change precise: it re-expresses the forward Bridge increment `ΔM` around `y` (14.14.2), and asks whether the forward reduced map itself, written in door coordinates (14.14.3), carries a total graded law for the 3-adic anchor that the core-extraction step of `16.2` provably cannot (14.14.5). It does — with a genuinely constant offset — and 14.14.6 accounts for where the core-extraction deficit's unbounded-depth content sits once the seam is used. The exit map is a coordinate change on already-proved dynamics, not a new dynamical system; the register below is flat throughout, per the brief's register norm.)*
+
+### 14.14.1. Global edge parameterization
+
+Every reduced edge `(ω,d) → (Ω,D)` (14.1.1) factors through one intermediate integer, its exit `y`, and one further parameter, its exit valuation `s = v_2(3^d ω - 1)`:
+
+```text
+3^d ω = 1 + 2^s y                          (exit equation)
+y + 1 = 2^m 3^a Ω,   m = v_2(y+1),  a = v_3(y+1),  D = m + a     (door recovery, 14.6.5.1)
+```
+
+The first line is `14.1.1`'s defining relation for `x_exit`, restated as an equation in `y`; the second is `14.6.5.1`'s recovery formula, restated with `m := D - a` named. Together they parameterize the edge by `(y, s)` exactly as `14.1`–`14.2` already do — nothing here is a new fact.
+
+**Proposition 14.14.1.1 (dictionary with stage4's `C`).** Let `C = 3^d ω - 1 + 2^s` be stage4.md 11.8.7.2's derived quantity, `σ = v_2(C)`, `a_+ = v_3(C)`. Then
+
+```text
+C = 2^s (y + 1),      σ = s + m,      a_+ = a,
+```
+
+and the forward core `ω_+ = C / (2^σ 3^{a_+})` equals the recovered `Ω` above — i.e. `ω_+ = Ω`, the same integer both routes name.
+
+**Proof.** From the exit equation, `3^d ω - 1 = 2^s y`, so `C = 2^s y + 2^s = 2^s(y+1)`. Since `2^s` is a `3`-adic unit and coprime to the odd factor structure of `y+1`, `v_2(C) = s + v_2(y+1) = s + m` and `v_3(C) = v_3(y+1) = a`. Substituting the door-recovery line, `C / 2^σ = 2^s(y+1)/2^{s+m} = (y+1)/2^m = 3^a Ω`, so `ω_+ = C/(2^σ 3^{a_+}) = 3^a Ω / 3^a = Ω`. ∎
+
+This is bookkeeping over `14.1.1`/`14.6.5.1` — it is stated once, cleanly, because every later result in this section is phrased in the `(y,s)` coordinates it fixes.
+
+**Verified** — `experiments/door_seam.py`, fresh code, function `test_item1`. `6,000` random reduced steps (`ω < 10^6`, `1 ≤ d < 45`): the exit equation, the door-recovery identity, and all three dictionary equalities (`C`, `σ`, `a_+`) hold exactly in every case, `0` failures (2026-07-14).
+
+### 14.14.2. The door-centred Bridge identity
+
+**Definition 14.14.2.1.** For odd `n`, `J(n) := M(n / 3^{v_3(n)})`. This is well-defined for *every* odd `n`, not only `n` coprime to `3`: `M(ω) = N(ω^2)` (stage2.md 11.8.5.6.1) is defined for any odd `ω`, since `ω^2 ≡ 1 (mod 8)` regardless of `ω`'s relation to `3`.
+
+**Lemma 14.14.2.2 (`M` is completely multiplicative, and `M(3) = -1`).** `M(ω_1 ω_2) = M(ω_1) + M(ω_2)` for all odd `ω_1, ω_2`, and `M(3) = -1`.
+
+**Proof.** `M(ω_1ω_2) = N((ω_1ω_2)^2) = N(ω_1^2 ω_2^2) = N(ω_1^2) + N(ω_2^2) = M(ω_1) + M(ω_2)`, using that `N` is a homomorphism on `1 + 8Z_2` (Theorem 11.8.3.7.1) and `ω_1^2, ω_2^2 ∈ 1+8Z_2`. For `M(3)`: `M(3) = N(9)`, and `N(9)` solves `9^n ≡ 9^{-1} (mod 2^k)` for every `k`, i.e. `n = -1` in `Z_2`. ∎
+
+**Corollary 14.14.2.3 (closed form for `J`).** `J(n) = M(n) + v_3(n)`.
+
+**Proof.** Write `n = 3^{v_3(n)} · n'` with `n' = n/3^{v_3(n)}` coprime to `3`. By 14.14.2.2, `M(n) = v_3(n)·M(3) + M(n') = M(n') - v_3(n)`, so `M(n') = M(n) + v_3(n)`, and `M(n') = J(n)` by definition. ∎
+
+**Theorem 14.14.2.4 (door-centred Bridge identity).** For a reduced edge `(ω,d) → (Ω,D)` with exit `y` and exit valuation `s` (14.14.1),
+
+```text
+ΔM = J((y+1) / 2^{v_2(y+1)}) − J(1 + 2^s y).
+```
+
+**Proof.** By the door-recovery line of 14.14.1, `(y+1)/2^m = 3^a Ω` with `m = v_2(y+1)`, `a = v_3(y+1)`; this integer is already coprime to `3` (its `3`-part is exactly the displayed `3^a`), so `J((y+1)/2^m) = M(Ω)` directly from Definition 14.14.2.1. By the exit equation, `1 + 2^s y = 3^d ω` with `ω` coprime to `3`, so likewise `J(1+2^sy) = M(ω)`. Subtracting, the right side is `M(Ω) - M(ω) = M(ω_+) - M(ω) = ΔM` (14.14.1.1: `ω_+ = Ω`). ∎
+
+**Content and standing.** This relocates the increment `ΔM` — previously stated only as `N((ω_+/ω)^2)`, a function of the *whole next core* — to the mismatch of one fixed operation (`J`, "strip `3`s, then apply `M`") evaluated at the two integers flanking a single door `y`: `1+2^sy` on the incoming side, `(y+1)/2^m` on the outgoing side. This is a reformulation, derived in three lines from `11.8.3.7.1`, `11.8.5.6`, and `14.6.5.1` — not new information about `ΔM`'s unbounded-depth behavior, and it is not presented as such (register warning per the brief, honored here).
+
+**Verified** — `experiments/door_seam.py`, functions `test_item2` and `test_M3_facts`. Bridge identity: `6,000` random reduced steps, `ΔM mod 2^8` computed both directly and via `J(n_1) - J(n_2)`, `0` failures. Supporting facts: `M(3) ≡ -1 (mod 2^12)`, and complete multiplicativity of `M` over `1,000` random odd pairs, `0` failures (2026-07-14).
+
+### 14.14.3. The exit map
+
+**Definition 14.14.3.1 (the exit map `G`).** For a live door `y` (odd, `3 ∤ y`), let `m = v_2(y+1)`, `q = (y+1)/2^m`, and set
+
+```text
+G(y) = (3^m q − 1) / 2^{v_2(3^m q − 1)}.
+```
+
+Write `state(y)` for the state recovered from `y` by `14.6.5.1` (Ω `= (y+1)/(2^m 3^{v_3(y+1)})`, `D = m + v_3(y+1)`).
+
+**Theorem 14.14.3.2 (three properties of `G`).** For every live door `y`:
+
+1. **`G` conjugates `F`.** `state(G(y)) = F(state(y))`. In particular `G` is not a new dynamical system: it is the reduced map `F`, read in door coordinates.
+2. **Fiber-constancy.** If `y, y'` are two of the `D` doors of the same state (`state(y) = state(y') = (Ω, D)`), then `G(y) = G(y')`.
+3. **Totality and live image.** `G(y)` is always defined, and `3 ∤ G(y)` — `G` maps live doors to live doors.
+
+**Proof.** Write `(Ω, D) = state(y)`, so `y + 1 = 2^m 3^a Ω` with `a = v_3(y+1)`, `D = m+a` (14.6.5.1), hence `q = (y+1)/2^m = 3^a Ω` and `3^m q = 3^{m+a} Ω = 3^D Ω` — **independent of `a`**, which is (2): every door of `(Ω,D)` shares one `q`-image `3^m q = 3^D Ω`, so `G` is constant on the fiber. Now `3^D Ω - 1` is exactly the numerator `A` of the forward step from `(Ω, D)` (stage4.md 11.8.7.2, with `s' := v_2(A)`), so `G(y) = A / 2^{s'}` is the exit value of the forward step `(Ω,D) → F(Ω,D)` — this is (1), since the exit value of a step is by construction a live door of the state it leads to (`14.1.1`, `14.6.5.1`'s recovery formula applies to it), giving `state(G(y)) = F(Ω,D)`. For (3): `D ≥ 1` for every valid state, so `3^D Ω ≡ 0 (mod 3)`, hence `A = 3^DΩ - 1 ≡ 2 (mod 3)`. Since `2^{s'} G(y) = A ≡ 2 (mod 3)` and `2^{s'}` is a unit mod `3`, `G(y) ≡ 2 · (2^{s'})^{-1} ≢ 0 (mod 3)`. `G(y)` is a finite integer for every live door because `A = 3^DΩ - 1 > 0` is a nonzero even number, so `v_2(A)` is finite — totality. ∎
+
+**Content.** `G = E ∘ R` in the brief's notation: `R` is the reduced map `F` and `E` extracts the exit door of the resulting state; Theorem 14.14.3.2(1) makes precise that this composite, read on the door coordinate alone, needs no reference to `(Ω,D)` at all — a fact used throughout `14.14.4`–`14.14.6`. Property (3) sharpens `14.8.3`'s door-mortality freeze (a *partial* backward increment law) by contrast: the top-door lineage of `14.8` dies on exactly half of all cases, but the forward exit map `G` is total and its image is always live — there is no freeze in this direction, because `D ≥ 1` alone forces it, with no further condition on `Ω`.
+
+**Verified** — `experiments/door_seam.py`, function `test_item3`. `5,561` random live doors of random valid states (`Ω < 10^5`, `1 ≤ D < 30`): totality, live image, `state(G(y)) = F(state(y))`, all `0` failures; fiber-constancy (a second, independently sampled door of the same state, `D ≥ 2`), `5,212` pairs, `0` failures (2026-07-14).
+
+### 14.14.4. The fixed-stratum affine/contraction law
+
+For a live door `y`, write `m = v_2(y+1)` and `r = v_2(3^m q - 1)` (`q = (y+1)/2^m`) — so `r` is exactly the exit valuation `s'` of `14.14.3`'s proof, and `(m, r)` is the **stratum** of `y`.
+
+**Theorem 14.14.4.1 (affine law on a fixed stratum).** On the set of `y` with given `v_2(y+1) = m`, `G` extends to a map affine over `Z_3`:
+
+```text
+G(y) = 3^m 2^{-(m+r)} · y + (3^m − 2^m) · 2^{-(m+r)}      (as an identity in Z_3, on the stratum with exit valuation r),
+```
+
+with multiplier `3^m 2^{-(m+r)}` of exact `3`-adic valuation `m`, computable from the fixed data `(m,r)` alone. Consequently, for `y, z` on the same `(m,r)`-stratum,
+
+```text
+v_3(G(y) − G(z)) = v_3(y − z) + m.
+```
+
+**Proof.** `G(y) = (3^m(y+1)/2^m - 1)/2^r = (3^m(y+1) - 2^m)/2^{m+r}` directly from Definition 14.14.3.1, which is affine in `y` with the stated coefficients; `2^{m+r}` is a unit in `Z_3` (coprime to `3`), so both coefficients are honest elements of `Z_3`, and `3^m 2^{-(m+r)}` has `v_3 = m` exactly (`2^{-(m+r)}` is a unit). For `y, z` on the same stratum, subtracting gives `G(y) - G(z) = 3^m 2^{-(m+r)}(y-z)`, so `v_3(G(y)-G(z)) = m + v_3(y-z)`, using that `v_3(u·x) = v_3(x)` for any `3`-adic unit `u`. ∎
+
+**Content.** `G` restricted to a stratum is not merely bounded or Lipschitz in the `3`-adic metric — it is an honest affine contraction of exact ratio `3^{-m}`, gaining exactly `m` digits of `3`-adic agreement per application. This is the precise opposite of the core-extraction deficit's forward accounting (`16.2`: knowing `ω` to `2^{σ+r}` pins `ω_+` to only `2^r`, a *loss* of `σ` digits): here the exit map *gains* `m` digits, because its only arithmetic operations on `y` are multiplication by `3^m` (adds digits) and division by a power of `2` (a `3`-adic unit operation, costing nothing `3`-adically). No contradiction with `16.2`, since `G` never extracts a coprime core — that is exactly what `14.14.3`(3) already established (`G`'s image needs no stripping). The gain is not quoted as progress on its own; `14.14.6` prices what it costs.
+
+**Verified** — `experiments/door_seam.py`, function `test_item4`. `4,000` random pairs `(y,z)` matched to a common `(m,r)`-stratum by rejection sampling (`35,870` draws), `y, z < 10^7`: `v_3(G(y)-G(z)) = v_3(y-z) + m` exactly in every case, `0` failures (2026-07-14).
+
+### 14.14.5. A total graded law for the 3-adic anchor along forward orbits
+
+**Definition 14.14.5.1.** `ΔM_3(y) := M_3(G(y)) − M_3(y)`, for a live door `y`. This is total on live doors (14.14.3(3) makes `G(y)` always a live door, so `M_3(G(y))` is always defined) — unlike `14.8`'s top-door increment, which is undefined exactly when the top door of the predecessor is dead (`14.8.3`, rate `1/2`).
+
+**Lemma 14.14.5.2 (affine-log form).** `ΔM_3(y) = −log_2(G(y)/y)`, meaning: `2^{ΔM_3(y)} = y/G(y)` in the exponent group `E_3` of `14.2.2`.
+
+**Proof.** By Definition 14.2.2, `2^{M_3(y)} = −1/y` and `2^{M_3(G(y))} = −1/G(y)`; dividing, `2^{M_3(G(y)) − M_3(y)} = y/G(y)`. ∎
+
+**Theorem 14.14.5.3 (graded `ΔM_3` law, constant offset).** Fix `k ≥ 1`. On every stratum `(m,r)`, the truncation `ΔM_3(y) mod 3^k` is determined by, and explicitly computable from, `y mod 3^{k+1}` together with the stratum labels `(m,r)` — an offset `f(m,r) ≡ 1`, independent of both `m` and `r`.
+
+**Proof.** By fact `(a')` (`14.7.1`), `M_3(y) mod 3^k` is determined by `y mod 3^{k+1}`, with no reference to any stratum. Apply the same fact to `G(y)`: `M_3(G(y)) mod 3^k` is determined by `G(y) mod 3^{k+1}`. By `14.14.4.1`, on the `(m,r)`-stratum `G(y) ≡ 3^m U y + c_0 (mod 3^{k+1})` for the stratum constants `U = 2^{-(m+r)}`, `c_0 = (3^m − 2^m)U` (both computable from `(m,r)` alone, reduced mod `3^{k+1}`); since `3^m U y mod 3^{k+1}` depends on `y` only through `y mod 3^{max(k+1−m,\,0)}`, and `k+1−m ≤ k+1`, `G(y) mod 3^{k+1}` is determined by `y mod 3^{k+1}` and `(m,r)` — with room to spare when `m > 0`. Combining, `ΔM_3 mod 3^k = (M_3(G(y)) mod 3^k) − (M_3(y) mod 3^k) mod 3^k` is determined by `y mod 3^{k+1}` and `(m,r)`. ∎
+
+**Tightness.** The bound `y mod 3^{k+1}` cannot be relaxed to `y mod 3^k`: the `M_3(y)` term alone already needs the full `3^{k+1}` (fact `(a')` is tight — `2` is a primitive root mod `3^{k+1}`, order exactly `2·3^k`, so the discrete log is not determined by one fewer digit), and this requirement passes through to `ΔM_3` unweakened, since the `G(y)` term needs *fewer* digits, never more.
+
+**Content — the decision point, resolved.** `ΔM_3`, restricted to the door coordinate, obeys the graded law the brief asked for, in the mold of `14.8.2` and `11.8.7.3.1` — but with one structural difference worth recording plainly, not as a claimed advance: both of those laws need a modulus that *grows* with the stratum (`3^{d+k+1}` in `14.8.2`, `2^{σ+k+2}` in `11.8.7.3.1`), because both track a step that extracts a coprime core and so *loses* digits proportional to the extracted valuation. Here the offset is the constant `1` at every stratum, because `G` never extracts a core (`14.14.3`(3)) and is an honest affine map on the door coordinate (`14.14.4.1`) — applying `G` costs no extra `y`-precision beyond what computing `M_3(y)` itself already spends. This is a direct corollary of `14.14.4`'s contraction property, not an independent discovery, and `14.14.6` is where its cost is priced rather than left as a free gain.
+
+**Verified** — `experiments/door_seam.py`, functions `test_item5_offset` and `test_item5_deep_strata`. Graded law at offset `f=1`, `K ∈ {2,4,6,8}`: `250` base points and `1,250` lifted pairs per `K` (each pair shares `y mod 3^{K+1}` and the `(m,r)`-stratum with its base point, differs by a large multiple of `3^{K+1}·2^{m+r+10}`), `0` failures at every `K`. Deep-stratum stress test, `m ∈ {1,5,10,15,20}` forced by construction, `K=4`: `120` base points each, `0` failures — the constant offset holds even at large `m`. Tightness: the same test at offset `f=0` (`y` known only mod `3^K`), `K=5`: `1,250` pairs, `873` failures, confirming `f=1` is not slack (2026-07-14).
+
+### 14.14.6. Reconciliation with the core-extraction deficit
+
+The stratum labels `(m,r)` driving `14.14.4`–`14.14.5` are `2`-adic data about `y`, even though the law they grade is stated `3`-adically. This is the question the brief poses as the mandatory closing step: does the door/exit seam **evade** the core-extraction deficit (`16.2`), or **relocate** it?
+
+**It relocates it, term for term — not evades it.** Two identifications, both already on file rather than newly needed:
+
+- `m = v_2(y+1)` is not merely *analogous* to stage3.md's entry-depth exponent — it is the *same quantity by definition*: stage3.md 11.8.6.3 defines `m_+ = v_2(x_exit + 1)` for the forward step whose exit value is `x_exit`, and `x_exit = y` is exactly `14.1.1`'s exit equation. So the door's `m`-label *is* `m_+`, the `2`-adic half of that same step's digit cost `σ = s + m_+` (stage3.md, stage4.md 11.8.7.2).
+- `r`, from the proof of `14.14.3.2`(1), is `v_2(3^DΩ - 1)` — the exit valuation `s` of the *next* forward step, the one from `state(y)` to `state(G(y))`, taken deterministically (forward `s` is not a free branch choice, `14.1`).
+
+So the stratum pair `(m,r)` attached to a door `y` is exactly `(m_+` of the edge whose exit is `y`, `s` of the edge `y`'s state emits`)` — the two labels stage4.md's own digit-cost decomposition `σ = s + m_+` already tracks, read off the two edges meeting at the door. Composing `14.14.5` along a chain of states `(Ω_0,D_0) → ⋯ → (Ω_N,D_N)` via doors `y_0, y_1 = G(y_0), …, y_N = G(y_{N-1})` needs the stratum pair `(m_i, r_i)` at every step `i`; by the identifications above, `r_i` is the `s` of edge `i → i+1` and `m_{i+1}` is the `m_+` of that *same* edge. So each forward edge contributes exactly one `(s, m_+)` pair to the chain's stratum data — split across two consecutive door-steps, but counted once — and summing over `N` edges reproduces `Σ_i (s_i + m_+^{(i)}) = Σ_i σ_i`, stage4.md 11.8.7.7's own accumulated digit cost, exactly, with no double-counting and no term dropped (up to the two boundary labels `m_0, r_N`, which do not grow with `N`).
+
+**The accounting.** `14.14.4`'s "gain" — `G` sharpening `3`-adic agreement by `m` digits per step, in contrast to `16.2`'s forward loss of `σ` `2`-adic digits per step — is real, and it is bought at *exactly* `16.2`'s own price, not a lower one: identifying which stratum a door sits in (the prerequisite for applying `14.14.4`/`14.14.5` at all) costs precisely the `2`-adic digits `11.8.7.7` already prices as consumed and unregenerated. The seam does not touch that supply; it relabels it. What changes is where the *bookkeeping* looks free: the `3`-adic side of the ledger, which used to look like irrecoverable loss in the naive predecessor picture (`14.13`'s affine-collapse obstruction — a parent known mod `3^k` pins the child only mod `3^{k-d}`), is in door coordinates a bounded, even contracting, computation at every single step. But the unbounded-depth content of the Bridge has not shrunk: it now sits entirely and visibly in the `2`-adic stratum-label sequence `(m_i, r_i)_i`, which *is* the forward `(s, m_+)` sequence, term for term. Composing the graded law along an infinite orbit still requires unboundedly much of that sequence, for the same reason `11.8.7.7` already gives: nothing regenerates it.
+
+**Standing.** This is the honest form of "seam versus deficit": the door/exit coordinate change makes the `3`-adic residue tracking *free* — a genuine simplification, and the reason `14.14.5`'s offset is constant where `14.8.2`'s and `11.8.7.3.1`'s are not — but it does so by making visible, rather than by discharging, the `2`-adic cost that `16.2` and `11.8.7.7` already identified as the Bridge's one hard fact. The core-extraction deficit is not evaded by this section; it is relocated onto a single, already-known, already-priced axis, and the diagnostic reach of `16.2` is extended by having a second, independently-derived route (through the forward direction's *own* deterministic exit sequence, rather than through backward branching) land on the identical accounting.
+
+**Closing status.** What this section changed about the Bridge: a working formulation. `ΔM` now has a coordinate (the door `y`) on which it is a mismatch of one fixed operation (`14.14.2`) rather than an opaque function of the next core; the reduced map itself has a door-coordinate presentation (`G`, `14.14.3`) that is total, mortality-free, and — restricted to a `2`-adic stratum — an exact `3`-adic contraction (`14.14.4`) supporting the strongest-graded increment law in the program to date, constant offset rather than growing (`14.14.5`). What it did not change: the Bridge is exactly as open as it was. `14.14.6`'s accounting shows the `3`-adic gain is paid for, in full and exactly, by `2`-adic stratum data identical to the forward digit budget (`11.8.7.7`) already on file — no bounded amount of that data exists along an infinite orbit, for the same reason `11.8.7.7` gives, and the seam supplies no new argument against it. Both halves of the program's stated escape routes — equidistribution (`aeh.md` §13) for typical orbits, rigidity (`11.8.3.11`) for cycles — stand exactly where `bridge.md` §16 left them. Per the brief's stop criterion: this closes items 1–6 at the floor-plus-primary bar (all six proved, item 5 resolved affirmatively rather than obstructed), and per §16.4.6/16.5's own register, no further front is opened from here — no density-exponent computation, no numerical iteration of `G` hunting statistics, no equidistribution proof attempt. If composing `14.14.5`'s law along orbits suggests further structure, that composition is a separate decision for the main session, not continued here.
