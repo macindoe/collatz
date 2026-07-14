@@ -9,6 +9,7 @@
 #   14.14.3  the exit map G = E o R: totality, live image, conjugacy to F,
 #            fiber-constancy across a state's doors
 #   14.14.4  fixed-stratum affine / contraction law for G
+#   14.14.5  graded Delta M3 law along G, with tightness check
 import random
 
 
@@ -81,6 +82,26 @@ def random_odd_not3(rng, hi):
         y = rng.randrange(1, hi, 2)
         if y % 3 != 0:
             return y
+
+
+def M3_anchor(y, k):
+    """t with 2^t = -1/y (mod 3^(k+1)); integer rep of t mod 2*3^k."""
+    t = 0 if pow(2, 0, 3) == (-pow(y, -1, 3)) % 3 else 1
+    for j in range(1, k + 1):
+        m = 3 ** (j + 1)
+        tgt = (-pow(y, -1, m)) % m
+        stride = 2 * 3 ** (j - 1)
+        for c in range(3):
+            cand = t + c * stride
+            if pow(2, cand, m) == tgt:
+                t = cand
+                break
+    return t
+
+
+def delta_m3(y, k):
+    gy, m, r = G(y)
+    return (M3_anchor(gy, k) - M3_anchor(y, k)) % (3 ** k), m, r
 
 
 def random_valid_door(rng, hi_om, hi_d):
@@ -220,6 +241,76 @@ def test_item4(target=4000, seed=1005, cap_hi=10 ** 7, max_attempts=300000):
     return n, bad, attempts
 
 
+# ---------------------------------------------------------------------------
+# 14.14.5  graded Delta M3 law along G (constant offset f = 1)
+# ---------------------------------------------------------------------------
+
+def test_item5_offset(K, offset, seed, base_points=250, lifts=5, hi=10 ** 6,
+                       max_attempts=60000):
+    """offset=1 is the claimed law (y mod 3^(K+offset)); offset=0 probes tightness."""
+    rng = random.Random(seed)
+    bad = n_base = n_pairs = attempts = 0
+    while n_base < base_points and attempts < max_attempts:
+        attempts += 1
+        y0 = random_odd_not3(rng, hi)
+        gy0, m, r = G(y0)
+        dM0, _, _ = delta_m3(y0, K)
+        step = (1 << (m + r + 10)) * 3 ** (K + offset)
+        got = False
+        for _ in range(lifts):
+            t = rng.randrange(1, 60)
+            y1 = y0 + t * step
+            if y1 % 3 == 0 or v2(y1 + 1) != m:
+                continue
+            gy1, m1, r1 = G(y1)
+            if r1 != r:
+                continue
+            dM1, _, _ = delta_m3(y1, K)
+            got = True
+            n_pairs += 1
+            if dM1 != dM0:
+                bad += 1
+        if got:
+            n_base += 1
+    return n_base, n_pairs, bad
+
+
+def test_item5_deep_strata(K=4, m_targets=(1, 5, 10, 15, 20), seed=1006,
+                            base_points=120, lifts=4, max_attempts=40000):
+    rng = random.Random(seed)
+    out = {}
+    for m_target in m_targets:
+        bad = n_base = attempts = 0
+        while n_base < base_points and attempts < max_attempts:
+            attempts += 1
+            odd_part = random_odd_not3(rng, 10 ** 5)
+            y0 = (1 << m_target) * odd_part - 1
+            if y0 % 3 == 0:
+                continue
+            gy0, m, r = G(y0)
+            if m != m_target:
+                continue
+            dM0, _, _ = delta_m3(y0, K)
+            step = (1 << (m + r + 10)) * 3 ** (K + 1)
+            got = False
+            for _ in range(lifts):
+                t = rng.randrange(1, 60)
+                y1 = y0 + t * step
+                if y1 % 3 == 0 or v2(y1 + 1) != m:
+                    continue
+                gy1, m1, r1 = G(y1)
+                if r1 != r:
+                    continue
+                dM1, _, _ = delta_m3(y1, K)
+                got = True
+                if dM1 != dM0:
+                    bad += 1
+            if got:
+                n_base += 1
+        out[m_target] = (n_base, bad)
+    return out
+
+
 if __name__ == "__main__":
     print("== 14.14.1 global edge parameterization ==")
     checked, bad = test_item1()
@@ -240,3 +331,16 @@ if __name__ == "__main__":
     print("== 14.14.4 fixed-stratum affine/contraction law ==")
     n, bad, attempts = test_item4()
     print(f"v3(G(y)-G(z)) = v3(y-z)+m: {n} checked ({attempts} attempts), {bad} failures")
+
+    print("== 14.14.5 graded Delta M3 law (offset f=1) ==")
+    for K in (2, 4, 6, 8):
+        n_base, n_pairs, bad = test_item5_offset(K, offset=1, seed=2000 + K)
+        print(f"  K={K}: {n_base} base points, {n_pairs} lifted pairs, {bad} failures")
+
+    print("-- tightness: offset f=0 (y mod 3^K only) should fail --")
+    n_base, n_pairs, bad = test_item5_offset(5, offset=0, seed=3005)
+    print(f"  K=5, offset=0: {n_base} base points, {n_pairs} pairs, {bad} failures (expect > 0)")
+
+    print("-- deep-stratum stress test (large m) --")
+    for m_target, (n_base, bad) in test_item5_deep_strata().items():
+        print(f"  m={m_target}: {n_base} base points, {bad} failures")
