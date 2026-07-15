@@ -367,6 +367,33 @@ v_3(G(y) − G(z)) = v_3(y − z) + m.
 
 **Verified** — `experiments/door_seam.py`, functions `test_item5_offset` and `test_item5_deep_strata`. Graded law at offset `f=1`, `K ∈ {2,4,6,8}`: `250` base points and `1,250` lifted pairs per `K` (each pair shares `y mod 3^{K+1}` and the `(m,r)`-stratum with its base point, differs by a large multiple of `3^{K+1}·2^{m+r+10}`), `0` failures at every `K`. Deep-stratum stress test, `m ∈ {1,5,10,15,20}` forced by construction, `K=4`: `120` base points each, `0` failures — the constant offset holds even at large `m`. Tightness: the same test at offset `f=0` (`y` known only mod `3^K`), `K=5`: `1,250` pairs, `873` failures, confirming `f=1` is not slack (2026-07-14).
 
+**Theorem 14.14.5.4 (the total two-case metric law).** *(Added 2026-07-15, branch `block-map`, per `briefs/block-map-brief.md`, item 3 — a strengthening of the tightness paragraph above, which stands and is not being repaired.)* For live doors `y, z` on the same `(m,r)`-stratum (`14.14.4`), `y ≠ z`:
+
+```text
+(i)  v_3(z−y) = 0   ⟺   ΔM_3(z) − ΔM_3(y) is odd (the parity component in E_3);
+(ii) v_3(z−y) ≥ 1   ⟹   the difference is even, and
+     v_3(ΔM_3(z) − ΔM_3(y)) = v_3(z−y) − 1   exactly.
+```
+
+**Proof.** Put `H(u) = u/G(u)`, so `2^{ΔM_3(u)} = H(u)` for every live door `u` (Lemma `14.14.5.2`). By the affine law `14.14.4.1` on the shared stratum, `G(u) = (3^m(u+1) − 2^m)/2^{m+r}`, so `H(u) = u·2^{m+r} / (3^m u + 3^m − 2^m)`. Hence
+
+```text
+H(z)/H(y) − 1 = [z(3^m y+3^m-2^m) − y(3^m z+3^m-2^m)] / [y(3^m z+3^m-2^m)]
+              = (3^m − 2^m)(z−y) / [y·(3^m z + 3^m − 2^m)],
+```
+
+the `3^m yz` cross-terms cancelling. Rearranging `14.14.4.1` for `z`, `3^m z + 3^m − 2^m = 2^{m+r} G(z)`, so the denominator is `y·2^{m+r}·G(z)`, a `3`-adic unit: `3 ∤ y` (`y` a live door), `3 ∤ G(z)` (`14.14.3.2(3)`), and `2^{m+r}` a unit trivially. Also `v_3(3^m−2^m) = 0` since `m ≥ 1` (`3^m ≡ 0`, `2^m ≢ 0 (mod 3)`). So
+
+```text
+v_3(H(z)/H(y) − 1) = v_3(z−y).                                        (*)
+```
+
+Write `Δ := ΔM_3(z) − ΔM_3(y) ∈ E_3`, so `H(z)/H(y) = 2^Δ`. Since `H(z)/H(y)` is a `3`-adic unit it is `≡ 1` or `2 (mod 3)`, and `2^Δ ≡ (−1)^Δ (mod 3)` depends only on `Δ`'s parity component: `≡ 1` iff `Δ` even, `≡ 2` iff `Δ` odd. If `v_3(z−y) = 0`, `(*)` gives `H(z)/H(y) ≢ 1`, i.e. `≡ 2`, i.e. `Δ` odd — case (i), and conversely. If `v_3(z−y) ≥ 1`, `(*)` gives `H(z)/H(y) ≡ 1 (mod 3)`, so `Δ` is even; Lemma `14.2.1` — already proved on this page, cited rather than re-derived, exactly the fact the brief asks for (`v_3(2^t−1) = 1+v_3(t)` for even `t`) — applied to an integer representative of `Δ` gives `v_3(2^Δ−1) = 1+v_3(Δ)`, i.e. `v_3(H(z)/H(y)−1) = 1+v_3(Δ)`. Combined with `(*)`, `v_3(z−y) = 1+v_3(Δ)`, i.e. `v_3(Δ) = v_3(z−y)−1` — case (ii). ∎
+
+**Content.** This strengthens the tightness paragraph above from an existence statement (the offset cannot be relaxed below `f=1`) into an exact per-stratum metric law: taking `v_3(z−y)=k` in case (ii) re-derives tightness quantitatively — the offset `1` is not merely un-slack at the sampled points but a local law at every same-stratum pair, with `k=0` exactly the boundary case (i) where one fewer `3`-adic digit genuinely loses the answer.
+
+**Verified** — `experiments/block_map.py`, fresh code, functions `test_metric_law_algebra` and `test_metric_law_cases`. Algebraic step `(*)` (exact `Fraction` arithmetic, no anchor computation, no precision truncation): `3,000` same-stratum pairs (`y, z < 10^7`, `27,621` draws by rejection sampling), `0` failures. Full two-case law via a fresh `2·3^K`-modulus anchor computation (`K=10`, tracking both the parity and `Z_3` components of `E_3`): `2,500` same-stratum pairs (`22,272` draws), split `1,250` at `v_3(z−y)=0` (case (i), parity check) and `1,250` at `v_3(z−y) ≥ 1` (case (ii), exact valuation check), `0` failures in either case (seed `15005`–`15006`, 2026-07-15).
+
 ### 14.14.6. Reconciliation with the core-extraction deficit
 
 The stratum labels `(m,r)` driving `14.14.4`–`14.14.5` are `2`-adic data about `y`, even though the law they grade is stated `3`-adically. This is the question the brief poses as the mandatory closing step: does the door/exit seam **evade** the core-extraction deficit (`16.2`), or **relocate** it?

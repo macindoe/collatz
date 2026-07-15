@@ -154,6 +154,103 @@ def test_block_remark(trials=4000, seed=15003, hi_om=10 ** 5, hi_D=25):
     return checked, bad
 
 
+# ---------------------------------------------------------------------------
+# 14.14.5.4  the total two-case metric law
+# ---------------------------------------------------------------------------
+
+def v3_rational(fr):
+    """v3 of a Fraction (well-defined regardless of representation)."""
+    if fr == 0:
+        return None
+    return v3(fr.numerator) - v3(fr.denominator)
+
+
+def matched_stratum_pairs(rng, target, hi=10 ** 7, max_attempts=400000):
+    """A batch of (y, z) live-door pairs sharing one (m, r)-stratum."""
+    pairs = []
+    attempts = 0
+    while len(pairs) < target and attempts < max_attempts:
+        attempts += 1
+        y = random_odd_not3(rng, hi)
+        z = random_odd_not3(rng, hi)
+        if y == z:
+            continue
+        _, my, ry = G(y)
+        _, mz, rz = G(z)
+        if my == mz and ry == rz:
+            pairs.append((y, z))
+    return pairs, attempts
+
+
+def test_metric_law_algebra(trials=3000, seed=15005, hi=10 ** 7):
+    """The core algebraic step: v3(H(z)/H(y) - 1) = v3(z-y) exactly, for
+    H(u) = u/G(u), on a shared (m,r)-stratum. Exact Fraction arithmetic --
+    no anchor computation, no precision truncation."""
+    rng = random.Random(seed)
+    pairs, attempts = matched_stratum_pairs(rng, trials, hi=hi)
+    bad = 0
+    for y, z in pairs:
+        gy, _, _ = G(y)
+        gz, _, _ = G(z)
+        Hy = Fraction(y, gy)
+        Hz = Fraction(z, gz)
+        lhs = Hz / Hy - 1
+        if v3_rational(lhs) != v3(z - y):
+            bad += 1
+    return len(pairs), attempts, bad
+
+
+def M3_full(y, K):
+    """Integer representative of M3(y), mod 2*3^K -- both the parity (Z/2)
+    and Z_3 components of the exponent group E_3 (Def 14.2.2), via digit-by-
+    digit Hensel lifting of 2^t = -1/y."""
+    t = 0 if pow(2, 0, 3) == (-pow(y, -1, 3)) % 3 else 1
+    for j in range(1, K + 1):
+        mod = 3 ** (j + 1)
+        tgt = (-pow(y, -1, mod)) % mod
+        stride = 2 * 3 ** (j - 1)
+        for c in range(3):
+            cand = t + c * stride
+            if pow(2, cand, mod) == tgt:
+                t = cand
+                break
+    return t
+
+
+def test_metric_law_cases(trials=2500, seed=15006, K=10, hi=10 ** 7):
+    """(i) v3(z-y)=0  <=>  Delta M3(z)-Delta M3(y) odd (parity in E_3).
+    (ii) v3(z-y)>=1  =>  the difference is even and v3(Delta) = v3(z-y)-1."""
+    rng = random.Random(seed)
+    pairs, attempts = matched_stratum_pairs(rng, trials, hi=hi)
+    mod = 2 * 3 ** K
+    n_case1 = n_case2 = bad1 = bad2 = skipped = 0
+    for y, z in pairs:
+        gy, _, _ = G(y)
+        gz, _, _ = G(z)
+        dM_y = (M3_full(gy, K) - M3_full(y, K)) % mod
+        dM_z = (M3_full(gz, K) - M3_full(z, K)) % mod
+        Delta = (dM_z - dM_y) % mod
+        vzy = v3(z - y)
+        parity_odd = (Delta % 2 == 1)
+        if vzy == 0:
+            n_case1 += 1
+            if not parity_odd:
+                bad1 += 1
+        else:
+            n_case2 += 1
+            if parity_odd:
+                bad2 += 1
+                continue
+            if vzy - 1 >= K:
+                skipped += 1
+                continue
+            Delta3 = Delta % (3 ** K)
+            v_delta = v3(Delta3) if Delta3 != 0 else K
+            if v_delta != vzy - 1:
+                bad2 += 1
+    return len(pairs), attempts, n_case1, n_case2, bad1, bad2, skipped
+
+
 if __name__ == "__main__":
     print("== 14.14.7 block-map identity ==")
     trials, bad, word_bad = test_block_map_iterates()
@@ -169,3 +266,13 @@ if __name__ == "__main__":
     checked, bad = test_block_remark()
     print(f"block remark (m=D-a, G(y)=block's x_exit for any position a): "
           f"{checked} checked, {bad} failures")
+
+    print("== 14.14.5.4 total two-case metric law ==")
+    n, attempts, bad = test_metric_law_algebra()
+    print(f"algebra: v3(H(z)/H(y)-1) = v3(z-y): {n} pairs ({attempts} attempts), "
+          f"{bad} failures")
+
+    n, attempts, n1, n2, bad1, bad2, skipped = test_metric_law_cases()
+    print(f"cases: {n} pairs ({attempts} attempts); case(i) v3=0: {n1} pairs, "
+          f"{bad1} failures; case(ii) v3>=1: {n2} pairs, {bad2} failures, "
+          f"{skipped} skipped (v3(z-y)-1 >= K)")
