@@ -423,7 +423,7 @@ So the stratum pair `(m,r)` attached to a door `y` is exactly `(m_+` of the edge
 T^j(y) = 3^j 2^(m-j) q − 1,
 ```
 
-and `T^m(y) = G(y)`. Consequently `G` is the **variable-return-time block map** of `T`: applying `T` to a live door `y` for exactly `m = v_2(y+1)` iterations reaches `G(y)`, and no fewer suffice or more are needed.
+and `T^m(y) = G(y)`. Consequently `G` is the **variable-return-time block map** of `T`: applying `T` to a live door `y` for exactly `m = v_2(y+1)` iterations reaches `G(y)`. The return time `m` is read off the door itself, not defined as a first-hitting time — no minimality claim is made or needed (at the trivial door `y = 1`, the value `G(1) = 1` is already present at step `0`).
 
 The valuation word of the passage — the successive values `v_2(3 T^j(y) + 1)` for `j = 0, ..., m−1` — is
 
