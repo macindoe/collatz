@@ -383,3 +383,42 @@ So the stratum pair `(m,r)` attached to a door `y` is exactly `(m_+` of the edge
 **Standing.** This is the honest form of "seam versus deficit": the door/exit coordinate change makes the `3`-adic residue tracking *free* — a genuine simplification, and the reason `14.14.5`'s offset is constant where `14.8.2`'s and `11.8.7.3.1`'s are not — but it does so by making visible, rather than by discharging, the `2`-adic cost that `16.2` and `11.8.7.7` already identified as the Bridge's one hard fact. The core-extraction deficit is not evaded by this section; it is relocated onto a single, already-known, already-priced axis, and the diagnostic reach of `16.2` is extended by having a second, independently-derived route (through the forward direction's *own* deterministic exit sequence, rather than through backward branching) land on the identical accounting.
 
 **Closing status.** What this section changed about the Bridge: a working formulation. `ΔM` now has a coordinate (the door `y`) on which it is a mismatch of one fixed operation (`14.14.2`) rather than an opaque function of the next core; the reduced map itself has a door-coordinate presentation (`G`, `14.14.3`) that is total, mortality-free, and — restricted to a `2`-adic stratum — an exact `3`-adic contraction (`14.14.4`) supporting the strongest-graded increment law in the program to date, constant offset rather than growing (`14.14.5`). What it did not change: the Bridge is exactly as open as it was. `14.14.6`'s accounting shows the `3`-adic gain is paid for, in full and exactly, by `2`-adic stratum data identical to the forward digit budget (`11.8.7.7`) already on file — no bounded amount of that data exists along an infinite orbit, for the same reason `11.8.7.7` gives, and the seam supplies no new argument against it. Both halves of the program's stated escape routes — equidistribution (`aeh.md` §13) for typical orbits, rigidity (`11.8.3.11`) for cycles — stand exactly where `bridge.md` §16 left them. Per the brief's stop criterion: this closes items 1–6 at the floor-plus-primary bar (all six proved, item 5 resolved affirmatively rather than obstructed), and per §16.4.6/16.5's own register, no further front is opened from here — no density-exponent computation, no numerical iteration of `G` hunting statistics, no equidistribution proof attempt. If composing `14.14.5`'s law along orbits suggests further structure, that composition is a separate decision for the main session, not continued here.
+
+### 14.14.7. The block-map identity
+
+*(Added 2026-07-15, branch `block-map`, per `briefs/block-map-brief.md`. An interpretation of `G`, not a new fact about it: the exit map is the accelerated Collatz map itself, run for a return time read directly off the door.)*
+
+**Setup.** Let `T(x) = (3x+1)/2^(v_2(3x+1))` be the accelerated odd Collatz map (spine.md §9.8). For a live door `y`, write `m = v_2(y+1)`, `q = (y+1)/2^m` (odd, by definition of `m`), and `r = v_2(3^m q - 1)`, matching `14.14.4`'s stratum labels.
+
+**Theorem 14.14.7.1 (block-map identity).** For `0 ≤ j < m`,
+
+```text
+T^j(y) = 3^j 2^(m-j) q − 1,
+```
+
+and `T^m(y) = G(y)`. Consequently `G` is the **variable-return-time block map** of `T`: applying `T` to a live door `y` for exactly `m = v_2(y+1)` iterations reaches `G(y)`, and no fewer suffice or more are needed.
+
+The valuation word of the passage — the successive values `v_2(3 T^j(y) + 1)` for `j = 0, ..., m−1` — is
+
+```text
+(1, ..., 1  [m−1 times],  r+1),
+```
+
+whose sum is `m + r`, matching the power of `2` in the affine law `14.14.4.1`'s denominator `2^(m+r)` — a consistency check between this section and `14.14.4`, not an independent fact.
+
+**Proof.** Write `x_j := 3^j 2^(m-j) q − 1` for `0 ≤ j ≤ m`, so `x_0 = 2^m q − 1 = y` and `x_m = 3^m q − 1`. Directly,
+
+```text
+3x_j + 1 = 3^(j+1) 2^(m-j) q − 2 = 2(3^(j+1) 2^(m-j-1) q − 1) = 2 x_(j+1),
+```
+
+an identity for every `0 ≤ j ≤ m−1`. For `j ≤ m−2`, the exponent `m-j-1 ≥ 1`, so `2^(m-j-1) q` is even and `x_(j+1) = 3^(j+1) 2^(m-j-1) q − 1` is odd; hence `v_2(3x_j+1) = v_2(2x_(j+1)) = 1`, so `T(x_j) = x_(j+1)` exactly — a single halving. Chaining `j = 0, ..., m−2` gives `T^j(y) = x_j` for `0 ≤ j ≤ m−1`. At `j = m−1`: `x_(m-1) = 2·3^(m-1) q − 1`, and `3x_(m-1)+1 = 2x_m = 2(3^m q − 1)`; since `q` is odd, `3^m q` is odd and `x_m` is even, so writing `r := v_2(x_m) = v_2(3^m q − 1)` (matching `14.14.3`'s own `r`), `v_2(3x_(m-1)+1) = 1+r`, and `T(x_(m-1)) = 2x_m/2^(1+r) = x_m/2^r`, which is exactly `G(y)` by Definition `14.14.3.1`. This gives both `T^m(y) = G(y)` and the valuation word: `1` at each of `j = 0, ..., m−2` (`m−1` entries) and `r+1` at `j = m−1`, sum `(m-1) + (r+1) = m+r`. ∎
+
+**Cross-checks.**
+
+- *Totality and live image, re-derived.* `T` is total on every positive odd integer (`3x+1` is a positive even number for odd `x`, so `v_2(3x+1)` is finite), and it never outputs a multiple of `3`: mod `3`, `3x+1 ≡ 1` and `2^(v_2(3x+1)) ≡ ±1`, so `T(x) ≡ ±1 ≢ 0 (mod 3)` for *every* odd `x`, whether or not `3 | x`. Since `G(y) = T^m(y)` is, by this theorem, the output of an application of `T`, both totality and `3 ∤ G(y)` (`14.14.3.2(3)`) follow again — from a fact about `T` alone, rather than the state-based argument used in `14.14.3`'s own proof.
+- *Worked instance.* `y = 7`: `m = v_2(8) = 3`, `q = 1`. `T(7) = 11`, `T(11) = 17`, `T(17) = 13`; valuations `(1,1,2)`, sum `4 = m+r` with `r = 1`; and `G(7) = 13`.
+
+**Remark (relation to the block/cascade decomposition, spine.md §9.1) — clean, not forced.** Write `(Ω,D) = state(y)` (`14.14.1`), so `y+1 = 2^m 3^a Ω` with `a = v_3(y+1)`, `D = m+a` — i.e. `y` is exactly the representative `x_a` of `(Ω,D)`'s own block, in the indexing of Proposition `9.1.1` (`x_a = 2^(D-a) 3^a Ω − 1`; `m = D-a` matches `9.1.1`'s decreasing `m`-index there). Theorem `14.14.7.1`, applied with `q = 3^a Ω`, says exactly that continuing the block from position `a` for its `D-a` remaining steps reaches the block's exit. The special case `a=0` (`y = x_0 = 2^D Ω − 1`) is Proposition `9.1.1` itself, recovered clause for clause: its "forced halving cascade [of] length `s`" is this section's final valuation `r+1`, with `r=s`. So `m` is not merely analogous to a block length; for a general door it is the *remaining* length of the classical block-cascade from wherever `y` sits within it, and `9.1.1`'s fiber-independence of the exit (every representative shares the same exit law) is exactly `G`'s fiber-constancy (`14.14.3.2(2)`), now carrying an explicit iteration count. Both descriptions name the same object; nothing here is an analogy under strain.
+
+**Verified** — `experiments/block_map.py`, fresh code, functions `test_block_map_iterates`, `test_T_general_facts`, `test_worked_instance`, `test_block_remark`; imports nothing from `experiments/door_seam.py` or elsewhere in the repository (AGENTS.md house norm). Block-map identity and valuation word: `6,000` random live doors (`y < 10^6`), `0` failures in the `T^j(y)` formula, `T^m(y)=G(y)`, and the word/sum check. `T`'s own totality and non-`3`-divisibility, tested on `8,000` random odd `x < 10^7` (not filtered to live doors, and not filtered away from multiples of `3`): `0` failures. Worked instance `7 → 11 → 17 → 13` reproduced exactly (`m=3`, `r=1`, word `(1,1,2)`). Block/cascade remark: `3,704` valid random states (`Ω < 10^5`, `1 ≤ D < 25`, random block position `a`), `0` failures in `m=D-a`, `G(y)` matching the state's own `x_exit`, and direct `m`-fold `T`-iteration matching `x_exit` (seed `15001`–`15003`, 2026-07-15).
