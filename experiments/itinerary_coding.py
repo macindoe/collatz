@@ -236,6 +236,201 @@ def test_completeness_and_liveness(trials=1500, seed=25003, n_max=5,
     return trials, bad_a, bad_b
 
 
+# ---------------------------------------------------------------------------
+# item 3(a): the future determines the 2-adic coordinate -- injectivity
+# ---------------------------------------------------------------------------
+
+def test_word_injectivity(trials=8000, seed=25004, hi=10 ** 6, n_cap=200):
+    """For distinct odd y != z, find the least n such that the n-letter
+    itinerary's S_n exceeds v2(y-z); confirm the length-n words differ at
+    or before that point (as the cylinder theorem forces), and confirm they
+    do NOT necessarily differ earlier (both are possible) -- only that they
+    cannot still agree once S_n > v2(y-z)."""
+    rng = random.Random(seed)
+    bad = 0
+    checked = 0
+    for _ in range(trials):
+        y = random_odd(rng, hi)
+        z = random_odd(rng, hi)
+        if y == z:
+            continue
+        D = v2(y - z)
+        sy, sz = [], []
+        cy, cz = y, z
+        S = 0
+        n = 0
+        while S <= D and n < n_cap:
+            gy, my, ry = stratum_and_G(cy)
+            gz, mz, rz = stratum_and_G(cz)
+            sy.append((my, ry))
+            sz.append((mz, rz))
+            S += my + ry
+            cy, cz = gy, gz
+            n += 1
+        checked += 1
+        if sy == sz:
+            bad += 1
+    return checked, bad
+
+
+# ---------------------------------------------------------------------------
+# item 3(b): the past determines the 3-adic coordinate
+# ---------------------------------------------------------------------------
+
+def predecessor_door(y0, s):
+    """Fresh reimplementation of reverse.md 14.1.1's predecessor formula
+    (state (omega,d) recovered from y0 and an admissible exit valuation s,
+    odd if y0 = 1 mod 3, even if y0 = 2 mod 3), reading off a live
+    representative door via spine.md 9.1.1's chain x_a = 2^(d-a) 3^a omega
+    - 1: try a=0 first (m=d); if that representative is dead (3 | x_0,
+    reverse.md 14.5.1), fall back to a=1 (m=d-1), which 14.5.1 guarantees
+    is never dead, whenever d >= 2. G(x_a) = y0 for every a, by
+    fiber-constancy (14.14.3.2(2)) -- re-derived below, not assumed.
+    Returns (y_prev, m, r) with r=s always, or (None, None, None) if d=1
+    and the sole representative is dead (caller should redraw s)."""
+    N = (1 << s) * y0 + 1
+    d = v3(N)
+    omega = N // (3 ** d)
+    x0 = (1 << d) * omega - 1
+    if x0 % 3 != 0:
+        return x0, d, s
+    if d >= 2:
+        x1 = (1 << (d - 1)) * 3 * omega - 1
+        return x1, d - 1, s
+    return None, None, None
+
+
+def admissible_s(rng, y0, s_hi=60):
+    parity_needed = 1 if y0 % 3 == 1 else 0
+    while True:
+        s = rng.randrange(1, s_hi)
+        if (s % 2) == parity_needed:
+            return s
+
+
+def build_backward_chain(y0, n, rng, max_redraws=200):
+    """A genuine n-step chain of integer live doors y0, y_{-1}, ..., y_{-n}
+    with G(y_{-(i+1)}) = y_{-i} exactly. Returns chain (chain[0]=y0, ...,
+    chain[n]=y_{-n}) and strata_near_to_far[i] = stratum of y_{-(i+1)} =
+    (m_{-(i+1)}, r_{-(i+1)}), i.e. index 0 is nearest the present. Redraws
+    s whenever the d=1 dead-end case is hit (reverse.md 14.5.2's Garden of
+    Eden edge, not a chain-building bug)."""
+    chain = [y0]
+    strata_near_to_far = []
+    cur = y0
+    for _ in range(n):
+        for _ in range(max_redraws):
+            s = admissible_s(rng, cur)
+            y_prev, m, r = predecessor_door(cur, s)
+            if y_prev is not None:
+                break
+        else:
+            return None, None
+        chain.append(y_prev)
+        strata_near_to_far.append((m, r))
+        cur = y_prev
+    return chain, strata_near_to_far
+
+
+def test_predecessor_sanity(trials=10000, seed=25005, hi=10 ** 6):
+    """G(predecessor_door(y0,s)) = y0 exactly, and the predecessor's own
+    stratum is exactly (m, s) with m as returned (d on the a=0 branch,
+    d-1 on the a=1 fallback) -- checked directly against stratum_and_G,
+    for both branches (forcing the d=1 dead case to be skipped, and
+    otherwise letting whichever branch actually triggers be exercised)."""
+    rng = random.Random(seed)
+    bad = 0
+    checked = 0
+    fallback_used = 0
+    for _ in range(trials):
+        y0 = random_odd_not3(rng, hi)
+        s = admissible_s(rng, y0)
+        y_prev, m, r = predecessor_door(y0, s)
+        if y_prev is None:
+            continue
+        checked += 1
+        gy, gm, gr = stratum_and_G(y_prev)
+        if gy != y0 or (gm, gr) != (m, r):
+            bad += 1
+        # detect which branch fired: a=0 has m=d=v3((1<<s)*y0+1); a=1 has m=d-1
+        d_true = v3((1 << s) * y0 + 1)
+        if m == d_true - 1:
+            fallback_used += 1
+    return checked, bad, fallback_used
+
+
+def test_past_determines_3adic(trials=500, seed=25006, n_depth=100, K=8):
+    """The convergence claim: for real backward chains of depth n_depth
+    from a real live door y0, build the composed-affine offset B_{n'} of
+    the nearest n' letters (n'=1..n_depth) and find, for each k=1..K, the
+    least n' with M_{n'} = sum of the near m's >= k+1; confirm B_{n'} mod
+    3^(k+1) equals y0 mod 3^(k+1) exactly, as 14.14.8.3 plus the limit
+    argument predicts -- independent of the deep-past seed y_{-n_depth}."""
+    rng = random.Random(seed)
+    bad = 0
+    checked = 0
+    skipped_chain = 0
+    for _ in range(trials):
+        y0 = random_odd_not3(rng, 10 ** 5)
+        chain, strata_near_to_far = build_backward_chain(y0, n_depth, rng)
+        if chain is None or any(chain[i] % 3 == 0 for i in range(1, len(chain))):
+            skipped_chain += 1
+            continue
+        for k in range(1, K + 1):
+            M = 0
+            nprime = 0
+            for (m, r) in strata_near_to_far:
+                M += m
+                nprime += 1
+                if M >= k + 1:
+                    break
+            if M < k + 1:
+                continue
+            sub_word_forward = list(reversed(strata_near_to_far[:nprime]))
+            A, B = compose_affine(sub_word_forward)
+            mod = 3 ** (k + 1)
+            Bmod = (B.numerator * pow(B.denominator, -1, mod)) % mod
+            checked += 1
+            if y0 % mod != Bmod:
+                bad += 1
+    return trials, skipped_chain, checked, bad
+
+
+def test_offset_cauchy(trials=1500, seed=25007, n_max=30):
+    """Pure-algebra check of the derivation used above: for a random word,
+    successively prepending letters, v3(B_{n+1}-B_n) = M_n (sum of m over
+    the pre-prepend n-suffix) exactly, so (B_n) is 3-adically Cauchy since
+    M_n >= n -> infinity. Exact Fraction arithmetic; no integer realization
+    needed here."""
+    rng = random.Random(seed)
+    bad = 0
+    for _ in range(trials):
+        n = rng.randrange(1, n_max)
+        # word_forward[0..n-1] will be prepended one at a time, so
+        # word_forward is built back-to-front: index n-1 is nearest the
+        # present (added first as the length-1 word), index 0 is added last
+        # (farthest into the past).
+        word_forward = [(rng.randrange(1, 6), rng.randrange(1, 6))
+                         for _ in range(n)]
+        B_prev = None
+        M_running = 0
+        for i in range(n - 1, -1, -1):
+            sub = word_forward[i:]
+            A, B = compose_affine(sub)
+            if B_prev is not None:
+                diff = B - B_prev
+                Mn = sum(m for m, r in word_forward[i + 1:])
+                if diff == 0:
+                    bad += 1
+                else:
+                    num_v3 = v3(diff.numerator) or 0
+                    den_v3 = v3(diff.denominator) or 0
+                    if (num_v3 - den_v3) != Mn:
+                        bad += 1
+            B_prev = B
+    return trials, bad
+
+
 if __name__ == "__main__":
     print("== item 1: single-stratum exhaustive scan ==")
     n_buckets, bad_class, missing = test_single_stratum_exhaustive()
@@ -259,3 +454,21 @@ if __name__ == "__main__":
     trials, bad_a, bad_b = test_completeness_and_liveness()
     print(f"{trials} words; completeness failures: {bad_a}; "
           f"liveness failures: {bad_b}")
+
+    print("== item 3(a): word injectivity ==")
+    checked, bad = test_word_injectivity()
+    print(f"{checked} distinct pairs checked, {bad} failures")
+
+    print("== item 3(b): predecessor-door sanity ==")
+    checked, bad, fallback_used = test_predecessor_sanity()
+    print(f"{checked} checked ({fallback_used} used the a=1 fallback), "
+          f"{bad} failures")
+
+    print("== item 3(b): past determines the 3-adic coordinate ==")
+    trials, skipped, checked, bad = test_past_determines_3adic()
+    print(f"{trials} chains ({skipped} skipped: dead a=0 representative), "
+          f"{checked} (chain,k) checks, {bad} failures")
+
+    print("== item 3(b): offset sequence is 3-adically Cauchy (algebra) ==")
+    trials, bad = test_offset_cauchy()
+    print(f"{trials} checked, {bad} failures")
