@@ -392,6 +392,14 @@ Write `Δ := ΔM_3(z) − ΔM_3(y) ∈ E_3`, so `H(z)/H(y) = 2^Δ`. Since `H(z)/
 
 **Content.** This strengthens the tightness paragraph above from an existence statement (the offset cannot be relaxed below `f=1`) into an exact per-stratum metric law: taking `v_3(z−y)=k` in case (ii) re-derives tightness quantitatively — the offset `1` is not merely un-slack at the sampled points but a local law at every same-stratum pair, with `k=0` exactly the boundary case (i) where one fewer `3`-adic digit genuinely loses the answer.
 
+**Remark (the one-case form).** The two-case statement is the `(parity, v_3)`-coordinate expression of a single unconditional law, not two separate facts. Substituting `H(z)/H(y) = 2^Δ` (`Δ := ΔM_3(z) − ΔM_3(y)`, Lemma `14.14.5.2`) into line `(*)` of the proof above gives, for every `y ≠ z` on a shared stratum,
+
+```text
+v_3(2^Δ − 1) = v_3(z − y),
+```
+
+with no case split — immediate from `(*)` and `14.14.5.2`, not re-derived. Cases (i)–(ii) are this one identity read off in the coordinates `(parity, v_3) ∈ Z/2 × Z_3` of the exponent group `E_3` (`14.2.2`): a `Z_3`-only reading of the `k=0` level would ask for `v_3(Δ) = −1`, which is meaningless (`v_3` takes values in `{0,1,2,…} ∪ {∞}`, never `−1`), so the parity component of `Δ` is what carries that boundary level instead — case (i)'s "`Δ` odd" is the coordinate that expresses the level a `Z_3`-valuation alone cannot. No mathematical content changes; the single law was already present, in line `(*)`, before the case split. **Verified** — the unified form is exactly what `test_metric_law_algebra` in `experiments/block_map.py` already checked, via `(*)` itself (2026-07-15).
+
 **Verified** — `experiments/block_map.py`, fresh code, functions `test_metric_law_algebra` and `test_metric_law_cases`. Algebraic step `(*)` (exact `Fraction` arithmetic, no anchor computation, no precision truncation): `3,000` same-stratum pairs (`y, z < 10^7`, `27,621` draws by rejection sampling), `0` failures. Full two-case law via a fresh `2·3^K`-modulus anchor computation (`K=10`, tracking both the parity and `Z_3` components of `E_3`): `2,500` same-stratum pairs (`22,272` draws), split `1,250` at `v_3(z−y)=0` (case (i), parity check) and `1,250` at `v_3(z−y) ≥ 1` (case (ii), exact valuation check), `0` failures in either case (seed `15005`–`15006`, 2026-07-15).
 
 ### 14.14.6. Reconciliation with the core-extraction deficit
