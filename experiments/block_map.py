@@ -251,6 +251,133 @@ def test_metric_law_cases(trials=2500, seed=15006, K=10, hi=10 ** 7):
     return len(pairs), attempts, n_case1, n_case2, bad1, bad2, skipped
 
 
+# ---------------------------------------------------------------------------
+# 14.14.8  composition along fixed itineraries
+# ---------------------------------------------------------------------------
+
+def itinerary_of(y, n):
+    """The actual n-step stratum itinerary [(m_0,r_0),...,(m_{n-1},r_{n-1})]
+    realized by iterating G from y, plus the resulting door G^n(y)."""
+    strata = []
+    cur = y
+    for _ in range(n):
+        g, m, r = G(cur)
+        strata.append((m, r))
+        cur = g
+    return strata, cur
+
+
+def compose_affine(strata):
+    """A_n, B_n (exact Fractions) for G^n(y) = A_n*y + B_n on doors following
+    the given itinerary: A_0=1,B_0=0; A_{i+1}=alpha_i*A_i, B_{i+1}=alpha_i*B_i+beta_i."""
+    A = Fraction(1)
+    B = Fraction(0)
+    for m, r in strata:
+        alpha = Fraction(3) ** m / Fraction(2) ** (m + r)
+        beta = (Fraction(3) ** m - Fraction(2) ** m) / Fraction(2) ** (m + r)
+        B = alpha * B + beta
+        A = alpha * A
+    return A, B
+
+
+def test_composed_affine(trials=1500, seed=15007, n=4, hi=10 ** 6):
+    """G^n(y) = A_n y + B_n exactly (integer identity), and v3(A_n) = sum(m_i)."""
+    rng = random.Random(seed)
+    bad = 0
+    for _ in range(trials):
+        y0 = random_odd_not3(rng, hi)
+        strata, yn_direct = itinerary_of(y0, n)
+        A, B = compose_affine(strata)
+        yn_formula = A * y0 + B
+        if yn_formula != yn_direct:
+            bad += 1
+        Sm = sum(m for m, r in strata)
+        if v3(A.numerator) != Sm or A.denominator % 3 == 0:
+            bad += 1
+    return trials, bad
+
+
+def test_composed_difference(trials=800, seed=15008, n=3, hi=10 ** 6, max_attempts=900000):
+    """v3(G^n(y) - G^n(z)) = v3(y-z) + sum(m_i) for y,z sharing an itinerary."""
+    rng = random.Random(seed)
+    bad = n_pairs = attempts = 0
+    while n_pairs < trials and attempts < max_attempts:
+        attempts += 1
+        y = random_odd_not3(rng, hi)
+        z = random_odd_not3(rng, hi)
+        if y == z:
+            continue
+        sy, yn = itinerary_of(y, n)
+        sz, zn = itinerary_of(z, n)
+        if sy != sz:
+            continue
+        n_pairs += 1
+        expected = v3(y - z) + sum(m for m, r in sy)
+        if v3(yn - zn) != expected:
+            bad += 1
+    return n_pairs, attempts, bad
+
+
+def test_synchronization(trials=600, seed=15009, n=3, hi=10 ** 6, max_attempts=1500000, k=2):
+    """Once sum(m_i) >= k+1, y_n mod 3^(k+1) is itinerary-determined --
+    matches across different y_0 sharing the itinerary, and matches B_n."""
+    rng = random.Random(seed)
+    bad = n_checked = n_pairs = attempts = 0
+    while n_pairs < trials and attempts < max_attempts:
+        attempts += 1
+        y = random_odd_not3(rng, hi)
+        z = random_odd_not3(rng, hi)
+        if y == z:
+            continue
+        sy, yn = itinerary_of(y, n)
+        sz, zn = itinerary_of(z, n)
+        if sy != sz:
+            continue
+        n_pairs += 1
+        Sm = sum(m for m, r in sy)
+        if Sm < k + 1:
+            continue
+        n_checked += 1
+        mod = 3 ** (k + 1)
+        A, B = compose_affine(sy)
+        Bmod = (B.numerator * pow(B.denominator, -1, mod)) % mod
+        if yn % mod != zn % mod:
+            bad += 1
+        if yn % mod != Bmod:
+            bad += 1
+    return n_pairs, n_checked, attempts, bad
+
+
+def test_periodic_fixed_point_algebra(trials=500, seed=15010, n_max=4, hi=10 ** 5):
+    """For any itinerary (not necessarily from a real periodic orbit), the
+    algebraic fixed point y* = B_n/(1-A_n) satisfies A_n*y*+B_n = y* exactly."""
+    rng = random.Random(seed)
+    bad = 0
+    for _ in range(trials):
+        n = rng.randrange(1, n_max + 1)
+        y0 = random_odd_not3(rng, hi)
+        strata, _ = itinerary_of(y0, n)
+        A, B = compose_affine(strata)
+        if A == 1:
+            continue
+        ystar = B / (1 - A)
+        got = A * ystar + B
+        if got != ystar:
+            bad += 1
+    return trials, bad
+
+
+def test_trivial_fixed_point_sanity():
+    """The sanity instance in the brief: door y=1, word (m,r)=(1,1), A=3/4,
+    B=1/4, y* = (1/4)/(1/4) = 1."""
+    gy, m, r = G(1)
+    A = Fraction(3, 4)
+    B = Fraction(1, 4)
+    ystar = B / (1 - A)
+    ok = (gy == 1 and m == 1 and r == 1 and ystar == 1)
+    return ok, gy, m, r, ystar
+
+
 if __name__ == "__main__":
     print("== 14.14.7 block-map identity ==")
     trials, bad, word_bad = test_block_map_iterates()
@@ -276,3 +403,23 @@ if __name__ == "__main__":
     print(f"cases: {n} pairs ({attempts} attempts); case(i) v3=0: {n1} pairs, "
           f"{bad1} failures; case(ii) v3>=1: {n2} pairs, {bad2} failures, "
           f"{skipped} skipped (v3(z-y)-1 >= K)")
+
+    print("== 14.14.8 composition along fixed itineraries ==")
+    trials, bad = test_composed_affine()
+    print(f"G^n(y)=A_n y+B_n, v3(A_n)=sum(m_i): {trials} checked, {bad} failures")
+
+    n_pairs, attempts, bad = test_composed_difference()
+    print(f"v3(G^n(y)-G^n(z))=v3(y-z)+sum(m_i): {n_pairs} pairs ({attempts} "
+          f"attempts), {bad} failures")
+
+    n_pairs, n_checked, attempts, bad = test_synchronization()
+    print(f"synchronization: {n_pairs} shared-itinerary pairs ({attempts} "
+          f"attempts), {n_checked} with sum(m_i)>=k+1, {bad} failures")
+
+    trials, bad = test_periodic_fixed_point_algebra()
+    print(f"periodic fixed point algebra (A y*+B=y*): {trials} checked, "
+          f"{bad} failures")
+
+    ok, gy, m, r, ystar = test_trivial_fixed_point_sanity()
+    print(f"trivial fixed point sanity: G(1)={gy}, (m,r)=({m},{r}), "
+          f"y*={ystar}, ok={ok}")
