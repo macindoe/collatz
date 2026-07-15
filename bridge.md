@@ -1,7 +1,7 @@
 ---
 status: OPEN — the terminal open object of the program, consolidated. The forward increment law is proved to low order (11.8.7.3.1) and the reverse mirror is verified (14.13); what is open in both directions is the increment at unbounded depth, and that is the whole remaining difficulty. A third, door-centred coordinate on the same edge (reverse.md 14.14) gives a sharper graded law but relocates rather than closes the deficit (14.14.6). No proof effort lives on this page — it states the object and records its observed mechanisms.
 scope: new section 16 (post-monolith); cross-cutting — owned by neither stage4.md nor reverse.md §14
-updated: 2026-07-14
+updated: 2026-07-15
 source: consolidation of 11.8.5.6 (forward bridge), 11.8.7.7 (digit budget), 14.13 (reverse precision loss); the author's framing — "the bridge between the M(ω)'s is itself the question"
 ---
 
@@ -15,7 +15,7 @@ The per-step arithmetic of the reduced map is formal to low order: from a state'
 
 The author's framing, adopted here: *the bridge between successive anchors is itself the question.* Everything else is either downstream of it — the per-step laws are the bridge's bounded-depth shadow — or a statement of what closing it would buy: the statistical half forward (AEH, §13), the density half reverse (§14).
 
-**The door-centred formulation (2026-07-14).** `ΔM` and the reduced map both admit a coordinate change onto one shared integer, the live door `y` of a reduced edge — reverse.md 14.14. In door coordinates the increment is a mismatch of one fixed operation on the two integers flanking `y` (14.14.2), and the reduced map itself, conjugated to door coordinates (14.14.3), obeys a *total*, constant-modulus graded law for the `3`-adic anchor along forward orbits (14.14.5) — sharper in form than the forward law above or the reverse mirror's own top-door version (14.8.2). This is not new leverage on the object: 14.14.6 shows the gain is bought at exactly the core-extraction deficit's price (`16.2` below), relocated onto the same `2`-adic digit data `11.8.7.7` already prices, not escaped. The hole this page states is unchanged; it now has a second, independently-derived coordinate system pointing at it.
+**The door-centred formulation (2026-07-14).** `ΔM` and the reduced map both admit a coordinate change onto one shared integer, the live door `y` of a reduced edge — reverse.md 14.14. In door coordinates the increment is a mismatch of one fixed operation on the two integers flanking `y` (14.14.2), and the reduced map's door-coordinate presentation `G` — semiconjugate to `F`, not strictly conjugate (14.14.3) — obeys a *total*, constant-modulus graded law for the `3`-adic anchor along forward orbits (14.14.5) — sharper in form than the forward law above or the reverse mirror's own top-door version (14.8.2). This is not new leverage on the object: 14.14.6 shows the gain is bought at exactly the core-extraction deficit's price (`16.2` below), relocated onto the same `2`-adic digit data `11.8.7.7` already prices, not escaped. The hole this page states is unchanged; it now has a second, independently-derived coordinate system pointing at it.
 
 ## 16.2. Observed mechanism: the core-extraction deficit
 
@@ -78,7 +78,7 @@ The core-extraction deficit (16.2): the forward digit budget (stage4.md 11.8.7.7
 - **The object's mirror.** The exact backward branching law carried by the `3`-adic anchor (reverse.md 14.2.4).
 - **Placeable in reverse.** The steering laws show the anchor walk — unsolved forward — can be *placed* backward, via the same identity as the forward valuation law read from the other end (reverse.md 14.12, 14.12.3).
 - **The mirror wall, and what backward buys.** Reverse precision loss (reverse.md 14.13) is the deficit's other face; the rigorous density program and its proved bound live on this side (reverse.md 14.4–14.6).
-- **The door/exit seam.** A third coordinate on the same edge, neither the forward core nor the backward predecessor: the live door `y` (reverse.md 14.14). It gives `ΔM` a fixed-operation form (14.14.2) and the reduced map a total, mortality-free door-coordinate presentation with a constant-offset graded `3`-adic law (14.14.3–14.14.5) — and, per 14.14.6, relocates rather than escapes the deficit, landing exactly on `16.2`'s and `11.8.7.7`'s own `(s, m_+)` accounting.
+- **The door/exit seam.** A third coordinate on the same edge, neither the forward core nor the backward predecessor: the live door `y` (reverse.md 14.14). It gives `ΔM` a fixed-operation form (14.14.2) and the reduced map a total, mortality-free door-coordinate presentation with a constant-offset graded `3`-adic law (14.14.3–14.14.5) — and, per 14.14.6, relocates rather than escapes the deficit, landing exactly on `16.2`'s and `11.8.7.7`'s own `(s, m_+)` accounting. A corollary layer (reverse.md 14.14.7–14.14.8, 2026-07-15) reads `G` as `T`'s own variable-return-time block map and composes the graded law along fixed itineraries; the composed fixed point is identified with the classical cycle candidate (cycles.md §12.1) — a reconciliation, not a new lever. This object is unmoved by it.
 
 ### 16.4.6. The seam — where the two escapes meet
 
