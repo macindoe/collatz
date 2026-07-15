@@ -1,7 +1,7 @@
 ---
 status: open / calibrated
 scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record)
-updated: 2026-07-12
+updated: 2026-07-16
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -136,6 +136,8 @@ Possible formulations include:
 The first question is answered, and the answer calibrates the others. Off the lifting branch, `ω (mod 8)` and the parity of `d` determine `s` outright (`11.8.1.3.1`) — a bounded residue system in the strongest sense. On the lifting branch no fixed modulus suffices: the parity of `s` is governed by the anchor displacement `v_2(d - M(ω))` (`11.8.5.6.2`), so any finite-state shadow there is a truncation of the anchor digits, exact to its depth and silent beyond it. This is also a sharp answer to the last question: the full `2`-adic complexity reappears exactly at the anchor, and nowhere earlier.
 
 The strongest possible outcome would be a finite residue mechanism that controls large regions of the reduced state space. Even a weaker coarse-state model would already be significant.
+
+**Calibration (2026-07-16, reverse.md 14.15.2).** For the door/exit seam's own stratum word — the sequence `(m_i,r_i)` that stage4.md `11.8.7.3.1`'s finite-state remark leaves unresolved "at unbounded depth" — the question above is now answered sharply and negatively at every *finite* depth, not merely left open at the infinite one: the itinerary language is proved to be the **full shift** on `{(m,r):m,r≥1}` (reverse.md `14.15.1`–`14.15.2`), meaning every finite word is realized and no finite collection of forbidden transitions exists to find. So no finite-state approximation of any kind — bounded residue system, coarse-direction predictor, or otherwise — can organize the stratum word beyond what is already known (`11.8.1.3.1`'s bounded system off the lifting branch); the search is closed by proof, not left for further testing.
 
 ## 11.7. Relationship to Classical Collatz Formulations
 
