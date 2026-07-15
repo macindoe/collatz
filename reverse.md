@@ -499,3 +499,61 @@ If a genuine period-`n` cycle of `G` (an integer live door with `G^n(y_0)=y_0`) 
 **Closing status.** This layer changes nothing about the Bridge. It is a corollary layer on the already-closed seam (`14.14.1`–`14.14.6`): the block-map identity gives `G` its own meaning as `T`'s variable-return-time block map (`14.14.7`); the semiconjugacy has its accurate name (`14.14.3`'s retitled property); `14.14.5`'s tightness has an exact quantitative form (`14.14.5.4`); and the seam's per-step laws now have their composed form along orbits (`14.14.8.2`–`14.14.8.4`) — including the reminder, made explicit rather than left implicit, that the composed fixed point is the classical cycle candidate under a new name, not a new candidate. Both halves of the program's stated escape routes stand exactly where `bridge.md` §16 left them; per the brief's stop criterion, no cycle-exclusion attempt, no stratum-word statistics, no density computation, and no equidistribution proof attempt follow from any of this.
 
 **Verified** — `experiments/block_map.py`, fresh code, functions `test_composed_affine`, `test_composed_difference`, `test_synchronization`, `test_periodic_fixed_point_algebra`, `test_trivial_fixed_point_sanity`. Composed affine law: `1,500` random doors, itinerary length `n=4`, `G^n(y)` compared against `A_n y + B_n` (exact `Fraction` arithmetic) and `v_3(A_n)` against `Σm_i`, `0` failures. Difference law: `800` pairs sharing a length-`3` itinerary (`584,763` draws by rejection sampling), `0` failures. Synchronization: `600` pairs sharing a length-`3` itinerary (`431,680` draws), all with `Σm_i ≥ k+1 = 3` (guaranteed at `n=3`, `k=2`, since `m_i ≥ 1` always), `y_n mod 3^(k+1)` matching both across the pair and against the formula `B_n mod 3^(k+1)`, `0` failures. Periodic-word fixed-point algebra (`A_n y^*+B_n = y^*`, exact `Fraction` identity, for `500` random itineraries of length `1`–`4`, not necessarily from real periodic orbits): `0` failures. Trivial fixed point sanity instance (`y=1`, word `(1,1)`, `A=3/4`, `B=1/4`, `y*=1`): reproduced exactly (seeds `15007`–`15010`, 2026-07-15).
+
+## 14.15. The itinerary language: the cylinder theorem and the two-sided coding
+
+*(Added 2026-07-16, branch `itinerary-coding`, per `briefs/itinerary-coding-brief.md`. The seam `14.14` is closed and its numbering is untouched; this is a new top-level subsection. Prompted by an external suggestion (ChatGPT, 2026-07-16), reviewed against the live pages before delegation. Per the brief's framing mandate: the cylinder theorem below is **not new mathematics about `T`** — it is the classical Collatz coding fact (parity-vector periodicity, Terras 1976 and Everett 1977; the accelerated form standard, Lagarias's surveys, Wirsching) read in the door/`(m,r)` alphabet fixed by the seam, with its consequences for this program's search space stated once (`14.15.2`) and its two-sided `Z_2 × Z_3` extension formulated at the formulation grade the brief sets, with no new leverage on the Bridge (`14.15.3`). The register below is flat throughout, per the mandate.)*
+
+### 14.15.1. The finite-itinerary cylinder theorem
+
+**Definition 14.15.1.1 (stratum, general).** For odd `y > 0`, `m(y) := v_2(y+1)`, `q(y) := (y+1)/2^{m(y)}`, `r(y) := v_2(3^{m(y)} q(y) - 1)`, `stratum(y) := (m(y), r(y))` — the same quantities `14.14.4` names `(m,r)`, defined here for *every* odd `y`, not only live doors: nothing in the definitions of `m`, `q`, `r` uses `3 ∤ y`.
+
+**Remark (well-defined beyond live doors, already on file).** `14.14.3.1`'s formula for `G` uses exactly `m`, `q`, `r` above and likewise needs no coprimality hypothesis; `14.14.7.1` already proves `G(y) = T^{m(y)}(y)` and that `T` is total and never outputs a multiple of `3`, for *every* odd `x`, live door or not (its own cross-check paragraph makes this explicit). So `stratum` and `G` are total on all positive odd integers, and `G`'s output is always a live door regardless of its input's relation to `3`. This section uses that generality throughout: words below are not restricted to sequences of live doors, only their first letter's realizability as an actual chain is (Corollary `14.15.1.7`).
+
+**Definition 14.15.1.2 (word, follower).** A **word** of length `n` is `W = ((m_0,r_0), …, (m_{n-1},r_{n-1}))` with every `m_i, r_i ≥ 1`. An odd integer `y` **follows** `W` if, writing `y_0 := y`, `y_{i+1} := G(y_i)`, `stratum(y_i) = (m_i,r_i)` for every `i = 0, …, n-1`. Write `S(W) := Σ_i (m_i+r_i)`.
+
+**Lemma 14.15.1.3 (single-stratum cylinder and level shift).** Fix `m, r ≥ 1`.
+
+```text
+(i)  stratum(y) = (m,r)  iff  y ≡ 2^m - 1 (mod 2^(m+1))  and, writing q=(y+1)/2^m,
+                               q ≡ 3^(-m)(1+2^r) (mod 2^(r+1))
+     -- equivalently, iff y is congruent to a single fixed residue mod 2^(m+r+1).
+(ii) for y with stratum(y) = (m,r), and any integer t,
+     G(y + 2^(m+r+1) t) = G(y) + 2·3^m t                                exactly.
+```
+
+**Proof.** (i) `v_2(y+1) = m` iff `y+1 = 2^m·(\text{odd})`, i.e. `y ≡ 2^m-1 (mod 2^{m+1})`; this pins `y+1 mod 2^{m+r+1}`, hence `q=(y+1)/2^m mod 2^{r+1}` exactly. `v_2(3^mq-1)=r` iff the coefficient of `2^r` in `3^mq-1` is odd, i.e. `3^mq ≡ 1+2^r (mod 2^{r+1})`, i.e. `q ≡ 3^{-m}(1+2^r) (mod 2^{r+1})` (`3^m` a unit mod `2^{r+1}`). Both conditions together pin `y` to a single residue mod `2^{m+r+1}`.
+
+(ii) Let `y' = y+2^{m+r+1}t`. Since `m+r+1 > m`, `y' ≡ y (mod 2^{m+1})`, so `m(y')=m`, and `q' := (y'+1)/2^m = q+2^{r+1}t`. Write `3^mq-1 = 2^rc` with `c` odd (`v_2=r` by hypothesis); then `3^mq'-1 = 2^rc + 3^m2^{r+1}t = 2^r(c+2·3^mt)`, and `c+2·3^mt` is odd, so `v_2(3^mq'-1)=r` too (consistent with (i)) and `G(y') = (3^mq'-1)/2^r = c+2·3^mt = G(y)+2·3^mt`. ∎
+
+**Lemma 14.15.1.4 (composed cylinder and level shift).** For a word `W` of length `n`, `S=S(W)`, `M := Σ_i m_i`: the followers of `W` form exactly one residue class `y_W` mod `2^{S+1}`, and for every integer `t`,
+
+```text
+G^n(y_W + 2^(S+1) t) = G^n(y_W) + 2·3^M t                                exactly.
+```
+
+**Proof.** Induction on `n`. `n=1` is Lemma `14.15.1.3` (`S=m_0+r_0`, `M=m_0`). Suppose the claim holds for the length-`n` prefix `W_n`, with representative `y^{(n)}` and `G^n(y^{(n)}+2^{S_n+1}t) = z + 2·3^{M_n}t` (`z := G^n(y^{(n)})`, odd, since `G` always outputs an odd integer). Append `(m_n,r_n)`: `y` follows `W_{n+1}` iff `y=y^{(n)}+2^{S_n+1}t` (some `t`, by hypothesis) and `stratum(z+2·3^{M_n}t) = (m_n,r_n)`. By Lemma `14.15.1.3`(i), the latter holds iff `z+2·3^{M_n}t ≡ w_{m_n,r_n} (mod 2^{m_n+r_n+1})` for the fixed residue `w_{m_n,r_n}` of stratum `(m_n,r_n)`; since `z` and `w_{m_n,r_n}` are both odd, dividing the (even) difference by `2` and using that `3^{M_n}` is a unit mod every power of `2` gives a unique solution `t ≡ t_0 (mod 2^{m_n+r_n})`. So `t=t_0+2^{m_n+r_n}u`, and `y = y^{(n)}+2^{S_n+1}t_0 + 2^{S_n+1+m_n+r_n}u =: y^{(n+1)} + 2^{S_{n+1}+1}u` (`S_{n+1}=S_n+m_n+r_n`) — the single-class claim for `W_{n+1}`. For the shift identity, `w_1' := z+2·3^{M_n}t_0 = G^n(y^{(n+1)})` lies on stratum `(m_n,r_n)` by construction, so Lemma `14.15.1.3`(ii) applies at `w_1'` with integer shift-count `t'' = 3^{M_n}u` (since `2^{S_n+1+m_n+r_n}u = 2^{m_n+r_n+1}\cdot(3^{M_n}u)/\ldots` — directly: `G(w_1'+2^{m_n+r_n+1}(3^{M_n}u)) = G(w_1')+2·3^{m_n}(3^{M_n}u) = G^{n+1}(y^{(n+1)}) + 2·3^{M_n+m_n}u`), giving `G^{n+1}(y) = G^{n+1}(y^{(n+1)}) + 2·3^{M_{n+1}}u` (`M_{n+1}=M_n+m_n`), completing the induction. ∎
+
+**Theorem 14.15.1.5 (the finite-itinerary cylinder theorem).** For every word `W = ((m_0,r_0),…,(m_{n-1},r_{n-1}))`, `S = Σ_i(m_i+r_i)`:
+
+```text
+The odd integers following W (y_i on stratum (m_i,r_i) for all i, y_{i+1} = G(y_i))
+form exactly one odd residue class mod 2^(S+1).
+```
+
+**Proof.** The single-class clause of Lemma `14.15.1.4`, applied to the full word (`n` = word length). ∎
+
+**Corollary 14.15.1.6 (completeness).** Every word over the alphabet `{(m,r) : m,r ≥ 1}` is realized: the residue class of Theorem `14.15.1.5` is nonempty (a residue class mod any modulus has representatives), and in fact contains infinitely many odd integers.
+
+**Corollary 14.15.1.7 (liveness).** For every realized word `W`, the class of Theorem `14.15.1.5` contains infinitely many *live* doors (`3 ∤ y_0`).
+
+**Proof.** The modulus `2^{S+1}` is coprime to `3`; as the class's members increase by `2^{S+1}` each step and `2^{S+1}` is a unit mod `3`, their residues mod `3` cycle through all three values with period `3` in the step index, so at least one in every three consecutive members is coprime to `3`. Only `y_0` needs this check: `y_1,…,y_{n-1}` are automatically live regardless (Remark above, `14.14.7.1`). ∎
+
+**Corollary 14.15.1.8 (single-stratum base case).** A single letter `(m,r)` alone is one class mod `2^{m+r+1}` — Lemma `14.15.1.3`(i) restated as the `n=1` case of Theorem `14.15.1.5`.
+
+**Content — framing (per the brief's mandate).** This is the classical coding fact for the Collatz map, not new mathematics: Terras (1976) and Everett (1977) proved that the first `n` binary parities of an odd start are periodic in the start value with period `2^n`, each of the `2^n` parity vectors realized on exactly one residue class — the raw-bit case of Theorem `14.15.1.5`. The accelerated (block-valued) form is standard (Lagarias's surveys and annotated bibliographies; Wirsching's monograph). What this section adds is only: the same fact, read in the door/`(m,r)` alphabet fixed by the seam (`14.14`), tied to the seam's own strata, with its consequences for this program's search space stated once (`14.15.2`). No claim of new dynamics about `T` is made or intended, per the register norm.
+
+An equivalent proof route pulls the cylinders back through the block-map identity `14.14.7.1` letter by letter: each `(m_i,r_i)` expands to the `T`-valuation word `(1,…,1,r_i+1)` (`m_i` entries, sum `m_i+r_i`), and `3x+1 = 2^ax'` pulls cylinders back uniquely at each raw step since `3` is a unit mod every power of `2`; the two routes agree because the expansion's sum matches `14.14.4.1`'s own denominator `2^{m+r}`. Not re-derived here.
+
+**Verified** — `experiments/itinerary_coding.py`, fresh code (imports nothing from `door_seam.py` or `block_map.py`, per AGENTS.md), functions `test_single_stratum_exhaustive`, `test_two_step_exhaustive`, `test_single_stratum_level_shift`, `test_composed_level_shift`, `test_completeness_and_liveness`. Exhaustive scan, all odd `y < 2^23`, strata capped at `m,r ≤ 7`: `49` distinct strata realized, every one exactly one residue class mod `2^(m+r+1)`, `0` failures. Exhaustive two-step scan, all odd `y < 2^21`, letters capped at `≤ 5`: `625 = 5^4` length-2 words realized — every admissible word under the cap, matching Corollary `14.15.1.6`'s completeness exactly — every one exactly one residue class mod `2^(S+1)`, `0` failures. Single-stratum level-shift lemma, large random shifts (`|t| < 10^6`, `y < 10^7`): `15,000` checks, `0` failures. Composed level-shift (the induction step, checked against direct `n`-fold iteration rather than the affine formula, word lengths `1`–`6`): `6,000` checks, `0` failures. Completeness/liveness on random realized words: `1,500` words, `0` failures in either corollary (2026-07-16).
+
