@@ -1,0 +1,449 @@
+# Findings: merle-pincer-check (2026-07-17)
+
+Answers `briefs/merle-pincer-check-brief.md` items 1-5: Eric Merle's p = 22
+"Diophantine pincer" hypothesis, checked against what our own stack
+(`experiments/staircase_allp.py`) actually tried, plus independent
+re-verification of his calibration rows, his p = 7 local-global distance
+measurement (ledger seed #3), and the continued-fraction hole claim.
+
+Code: `experiments/merle_pincer_check.py`. Section 1 of that script is the
+brief's one labeled exception — a verbatim-logic instrumented copy of
+`staircase_allp.py`'s candidate enumeration / construction / correction,
+never imported, run only to answer "what did our stack try" (item 1).
+Every other section (items 2-4) is independently written: its own
+rotation-sum implementation (`R_all_fresh`, O(p) per rotation via
+suffix/prefix sums, structured differently from the committed script's
+`Msuf`/`Spre` accumulator), its own implementation of Construction
+12.8.6.2, and its own continued-fraction routine. All pass/fail and
+feasibility decisions use exact Python integers; margins are reported two
+ways — an exact integer bit-length difference (the corrected diagnostic
+of `staircase-allp-findings.md` item 2) and a continuous `log2(R_r) -
+log2(q)` (display only, safe for arbitrarily large ints in CPython,
+needed to compare against Merle's fractional-bit figures). Range checked:
+p in {7, 21, 22, 23}; dates: 2026-07-17.
+
+Review fix (2026-07-17, same day): the first version of this file quoted
+the literal-n reproduction rows and the correction-algorithm runs from
+ad-hoc shell sessions not reproduced by the committed script — a
+reviewer catch against the AGENTS.md runnability norm. The script now
+computes and prints them (`item2b_literal_n_rows`,
+`item2c_correction_runs`, both in `__main__`), and re-running at the
+committed budgets **changed the correction-run outcomes** materially;
+the superseded numbers and what changed are recorded plainly in item 2
+below, not smoothed over.
+
+## Item 1: the p = 22 candidate/margin table (committed script's own logic)
+
+`experiments/staircase_allp.py`'s `__main__` calls
+`run(pmin=2, pmax=25, n_tries=6, max_moves=40, wall_clock_budget=75.0)`,
+and `find_passer` tries `crash_depths=(1, 2)`. At `p = 22` (scale target
+`L^22 = 25143.042`), the full committed search window
+(`0.3*target <= n <= 3.5*target`) contains 17 candidates; the top 6 by
+log-closeness to target — what the script actually iterates — are:
+
+```text
+n        n/L^22   cd  feasible  fail_pre  worst_bits  worst_log2
+31867    1.267    1   yes       20        -19         -19.47
+31867    1.267    2   yes       20        -18         -18.48
+16266    0.647    1   yes       18        -16         -16.71
+16266    0.647    2   yes       18        -17         -17.30
+15601    0.620    1   NO (rounded climb profile hits a depth-0 block)
+15601    0.620    2   NO
+14936    0.594    1   NO
+14936    0.594    2   NO
+14271    0.568    1   NO
+14271    0.568    2   NO
+13606    0.541    1   NO
+13606    0.541    2   NO
+```
+
+`fail_pre` = pre-correction count of rotations with `R_r < q` (out of
+22); `worst_bits`/`worst_log2` are the worst-rotation margin by the two
+diagnostics above. Four of the six candidates the script actually tries
+are not merely poorly margined — the base construction (12.8.6.2) cannot
+even build a valid profile for them: rounding the geometric climb by
+partial sums (`ROUND_HALF_EVEN`) produces a block of depth 0 near the
+start of the climb (verified directly: at `n = 15601`, the rounded
+profile's second climb block is `0`). This is a distinct failure mode
+from a margin shortfall, and it is not visible in a "worst margin in
+bits" table alone. Under the shared 75s wall-clock budget (one deadline
+for the whole `p = 22` call, matching `find_passer`'s actual semantics,
+not 75s per candidate), the script spends the entire budget failing to
+correct `n = 31867, cd = 1` and never gets to attempt correction on the
+other three feasible/attempted combinations at all ("deadline
+exhausted"). None of the six candidates resolves.
+
+**Supplementary wider reconstruction** (approximating
+`staircase-allp-findings.md` item 3's "60 moves, no wall-clock cap, a
+wider Diophantine candidate set" — the exact candidate list was not
+recorded there, so this is a labeled best-effort reconstruction: top 20
+candidates by log-closeness within an expanded `[0.15, 5]*target`
+window, both crash depths, pre-correction columns only, per the brief's
+"report the same columns" — the correction/resolved question for these
+is answered directly, per exact n, in item 2 below instead of re-run
+here on 20 x 2 candidates at this integer scale):
+
+```text
+n        n/L^22   cd  feasible  fail_pre  worst_bits  worst_log2
+47468    1.888    1   yes       6         -5          -4.78
+47468    1.888    2   yes       6         -4          -3.95
+79335    3.155    1   yes       5         -4          -4.93
+79335    3.155    2   yes       5         -4          -4.11
+111202   4.423    1   yes       21        -23         -23.50
+111202   4.423    2   yes       21        -22         -22.69
+```
+
+(all other widened-window candidates duplicate the top-6 table's
+infeasible entries below `n = 16266`, or are additional infeasible
+entries further below scale). Note `n = 47468` — the very next member of
+the *sign-filtered* good-n grid after `15601` (item 4) — is markedly
+better than anything in the actual top-6, foreshadowing item 4's finding
+that the committed script's candidate chain and the lemma's own strict
+grid disagree about what "the next good n" is.
+
+## Item 2: the pincer hypothesis, tested against that table
+
+**(a) Every in-scale candidate's pre-correction worst margin falls
+materially beyond the -3/-4 bit recovery threshold.** Confirmed, and by
+a wide margin, for both of the top-6's feasible candidates (`-16` to
+`-19` bits) — nowhere near the `-3/-4` boundary. Going further than the
+brief's literal ask: plugging Merle's own two specific n-values directly
+into our fresh implementation of Construction 12.8.6.2 (not from our
+Diophantine chain — see below) reproduces his numbers **exactly**:
+
+```text
+n = 25217 (his "in-scale"), cd=1: fail=9,  worst_bits=-8,  worst_log2=-7.86   (his: 9, -7.86)
+n = 31202 (his "off-scale"), cd=1: fail=6,  worst_bits=-5,  worst_log2=-4.80  (his: 6, -4.80)
+```
+
+Both match to the stated two decimal places. His measurements are
+independently confirmed, exactly, at the n he names.
+
+**(b) No candidate combines a near-threshold margin with in-scale
+`δ`.** None found. The two actually-tried feasible candidates (`16266`,
+`31867`) are far beyond threshold, not near it; nothing in between them
+was tried by the script because nothing exists there in its own
+candidate chain (item 1). No refutation of the pincer from this
+direction.
+
+**(c) Does the committed window contain candidates inside `(15601,
+31202)` other than near-hole edges?** Exactly one: `n = 16266`, which
+sits `665` above the left edge (`15601`) — i.e., at the edge, not the
+interior. No other candidate lies in that interval.
+
+**A finding beyond what (a)-(c) ask: Merle's specific n-values are not
+members of either of our own Diophantine candidate generators.** Neither
+`25217` nor `31202` appears in the committed script's raw
+(sign-agnostic) chain nor in the lemma-12.8.6.1 sign-filtered "good n"
+grid (item 4) — both fall strictly inside the gap those generators leave
+open. Checking their local approximation quality directly (`K - n·L`,
+exact-precision decimal, display-only): `n=31202` gives `K-nL ≈
+5.2e-05` — a genuinely excellent approximant, comparable to `n=15601`'s
+`2.6e-05` — while our chain's actual candidate at nearly the same scale,
+`n=31867` (only 2% larger), gives `K-nL ≈ 0.99999`, i.e. it approximates
+from the *wrong side* entirely (confirmed: `31867` is a negatively-signed
+convergent denominator in the CF table below). `n=25217`'s quality
+(`K-nL ≈ 6.2e-04`) is decent though not as sharp; it factors as
+`15601 + 9616`, and `9616` is itself a member of the *earlier*
+(`306`-based) semiconvergent run — i.e. Merle's in-scale point looks like
+"the best convergent plus an earlier-scale semiconvergent," and his
+off-scale point looks like "twice the best convergent" (`31202 =
+2*15601`, and the error term is observed to scale almost exactly by the
+same factor: `5.2e-05 ≈ 2 * 2.6e-05`). Neither combination is produced
+by lemma 12.8.6.1's own prescribed step (`n_j = q_{k-1} + j*q_k`, stepping
+by the *next* convergent, not by re-using or doubling the current one).
+This is not a contradiction of anything proved — `staircase-allp-
+findings.md` item 4 already recorded, as an open gap, that 12.8.6.1 has
+no established bound on the multiplicative gap between correctly-signed
+runs, and this is exactly where that gap bites: at `p = 22`'s scale,
+simple arithmetic on the best available convergent finds better
+candidates than the lemma's own generator supplies.
+
+**Additional check beyond the brief's literal ask, directly relevant to
+"the -3/-4 bit recovery threshold" — and the session's most consequential
+result, which flipped under review.** The first version of this file
+reported, from ad-hoc runs with a 40 s wall-clock deadline per run, that
+the correction algorithm (12.8.6.3) resolved none of `31202`, `25217`,
+`16266` — and mislabeled the cause as move exhaustion ("40 moves used")
+when those runs were in fact deadline-limited. The committed script's
+`item2c_correction_runs` (max_moves=40, **240 s deadline per run**,
+crash_depth=1, Section 1's instrumented copy of the algorithm) gives:
+
+```text
+n=31202 (his off-scale), cd=1: RESOLVED in 8 moves  [elapsed 146s]
+n=25217 (his in-scale),  cd=1: RESOLVED in 13 moves [elapsed 168s]
+n=16266 (our own top-6's best feasible entry), cd=1: NOT resolved
+                                     [40 moves / 240s budget, elapsed 229s]
+```
+
+Both resolutions were independently re-verified inside the script with
+the fresh (Section 2) rotation-sum code, exact integers:
+
+```text
+n=25217: all 22 rotations pass q <= R_r; n/L^22 = 1.003 (IN SCALE);
+         gamma = 11.186; gamma/log2(22) = 2.508 (inside 12.8.6.4's [1.828, 3.643]);
+         divisibility q | R_r: none pass (bounded observation, no halt condition)
+         ms = [1, 1, 3, 3, 6, 10, 14, 24, 37, 59, 95, 149, 235, 372, 588,
+               932, 1475, 2338, 3704, 5869, 9301, 1],  ss = [1]*21 + [14730]
+n=31202: all 22 rotations pass; n/L^22 = 1.241; gamma = 14.746;
+         gamma/log2(22) = 3.307 (also in-interval); divisibility: none pass
+         ms = [1, 2, 3, 4, 8, 11, 18, 29, 46, 73, 115, 182, 290, 460, 728,
+               1152, 1826, 2893, 4584, 7264, 11512, 1],  ss = [1]*21 + [18231]
+```
+
+Three consequences, stated flatly. **First, his `-3/-4` bit empirical
+recovery threshold is refuted as stated:** a pre-correction worst margin
+of `-7.86` bits (his own in-scale point) is recovered by the recorded
+algorithm in 13 moves, well inside its 40-move cap. **Second, an
+in-scale `p = 22` staircase size-passer exists** — `n = 25217`, scale
+ratio `1.003`, `gamma/log2(p) = 2.508` inside the verified record's own
+interval — produced by our own Construction 12.8.6.2 plus Algorithm
+12.8.6.3, at a candidate `n` the committed chain never supplied. The
+`p = 22` obstruction recorded in `cycles.md` 12.8.6 was therefore a
+**candidate-generation gap, not a combinatorial wall**: the committed
+statement ("does not find a passing configuration within the tested
+budgets", six chain candidates, two crash depths) remains true exactly
+as scoped, but its cause was the chain's hole, and the correction
+algorithm closes the profile easily once a good `n` is supplied.
+**Third, jaw 1 of the pincer survives this**: our own chain's best
+feasible candidate (`16266`, wrong-signed, margin `-16` bits) still does
+not resolve — consistent with the hole being real and the wrong-side
+candidates being genuinely unrecoverable.
+
+**Calibration cross-check, fresh code, base construction only (12.8.6.2,
+no correction):**
+
+```text
+p=21, n=15601 (exact, not glyph-mangled): cd=1: fail=3/21, worst_bits=-3, worst_log2=-2.27
+                                                  (Merle: 3, -2.27 -- EXACT MATCH)
+                                           cd=2: fail=3/21, worst_bits=-3, worst_log2=-2.85
+
+p=23, n=39468 (brief's flagged approximate/mangled reconstruction):
+                                           cd=1: fail=19/23, worst_bits=-19, worst_log2=-19.27
+                                                  (Merle: 4, -3.77 -- SHARP DISAGREEMENT)
+                                           cd=2: fail=19/23, worst_bits=-19, worst_log2=-18.66
+```
+
+The p=21 row matches exactly. The p=23 row does not match at all — not a
+rounding-level discrepancy but a completely different regime (19/23
+failing vs. his 4/23). Before treating this as a clean disagreement, one
+targeted check was made (not a search campaign, per scope): our own
+Diophantine chain has *no* candidate anywhere near `39468` at all (its
+two neighbors, `31867` and `47468`, are each about `8000` away, i.e.
+`39468` sits in the middle of a chain gap — chain gap detail in item 4).
+A plausible single-digit transcription of the flagged number,
+`n=39488` (an `8`/`6` glyph swap, consistent with the brief's mangled-
+numeral warning), was also tried: `fail=10/23, worst_log2=-9.17` for
+`cd=1` — closer than `39468` but still nowhere near his `(4, -3.77)`.
+**Recorded as an open, precise disagreement**, not resolved further: the
+p=23 row does not reproduce under our fresh code at the literal or the
+one plausible near-miss value tried. Given the brief's own flag that
+this number was reconstructed from scale arithmetic rather than
+transmitted cleanly, the most likely explanation is that the true
+n differs from both values tried here by more than a one-digit
+transcription error — but that is a guess, not a finding.
+
+**Verdict.** The pincer hypothesis is **confirmed in its first jaw,
+refuted in its second, and dissolved as an explanation of a genuine
+wall.** Confirmed independently: (i) a genuine, large Diophantine hole
+exists at p=22's scale in our own candidate machinery — but its measured
+location is `(16266, 31867)` under the committed script's own
+(sign-agnostic) chain, or `(15601, 47468)` under lemma 12.8.6.1's own
+strict sign-filtered definition — not `(15601, 31202)` as stated (see
+item 4); (ii) his margin measurements are exactly reproduced by our
+independent implementation at his stated n-values, and every candidate
+our own stack's actual top-6 supplies at p=22 is infeasible or far
+beyond threshold, matching the pincer's predicted severity *for the
+candidates our chain supplies*. Refuted: (iii) his recovery-threshold
+jaw — the claim that both his points are beyond the correction
+algorithm's reach — fails at his own candidates: our recorded algorithm
+resolves both (8 and 13 moves, within its move cap), and the in-scale
+resolution is a verified p=22 size-passer, so the hole does not in fact
+pincer p=22 shut; it only starved our candidate generator. The
+symmetric point against ourselves: our findings file's "the Diophantine
+choice of n was never the binding constraint" is refuted at p=22 in the
+complementary direction — candidate supply was *exactly* the binding
+constraint there (item 5). His cause was right, his conclusion was
+wrong, and our recorded explanation ("combinatorial obstruction") was
+also wrong; the disagreement the two-key protocol flagged dissolves with
+both sides corrected. Separately: neither of his n-values is generated
+by either of our candidate machineries — they look like simple
+arithmetic on the best convergent (doubling; adding an earlier
+semiconvergent), outside lemma 12.8.6.1's prescribed step, a genuine
+coverage gap in our machinery rather than an error in his numbers. The
+p=23 calibration row is a real, unresolved disagreement, most plausibly
+a residual transcription issue in the brief's own reconstruction of a
+mangled numeral, not chased further here per scope.
+
+## Item 3: independent re-run of ledger seed #3 (p = 7)
+
+Fresh code, `m = (4,7,9,15,23,35,1)`, `n = 94`, `K = 149`,
+`gamma = 6.7438` (matches 12.8.6.4's cross-check `6.7438`/12.8.3's
+`6.74`). Structural local solvability, true for every configuration (not
+just p=7): `q = 2^K - 3^n` is odd (`even - odd`); `3 ∤ q` (`q ≡ (-1)^K
+mod 3`, both verified directly for this instance: `q` odd = True, `3 |
+q` = False). `Z`-solvability: `q | R_r` is False for all 7 rotations,
+matching 12.8.3's own record ("All fail the divisibility conditions").
+
+Distance-to-integrality profile `min(R_r mod q, q - R_r mod q)/q`, all
+seven rotations:
+
+```text
+rotation  distance/q
+0         0.1703
+1         0.4110
+2         0.4695
+3         0.3390
+4         0.4206
+5         0.0538
+6         0.4784
+```
+
+Range found: `[0.0538, 0.4784]`. Merle's reported range: `[0.05, 0.48]`.
+Matches to two decimal places at both ends — an exact independent
+confirmation of ledger seed #3 on the p=7 instance.
+
+## Item 4: the continued-fraction hole claim
+
+Fresh continued-fraction computation of `L = log2(3)` confirms the
+partial quotient `23` at index 9 (`terms[9] = 23`), with convergent
+denominator `q_9 = 15601` (`h_9 = 24727`) — exactly as Merle's framing
+requires. Full sign table (`h_i - q_i*L`) for the first 20 convergents is
+in the script's output; signs alternate as expected, with the
+"correctly-signed" (approximating from below, small-gamma-capable)
+convergents at odd `i`: `q_1=1, q_3=5, q_5=41, q_7=306, q_9=15601,
+q_11=79335, q_13=190537, ...`.
+
+**Lemma 12.8.6.1's own "good n" grid** (sign-filtered semiconvergents,
+`n_j = q_{k-1} + j*q_k` for `j=1..a_{k+1}` at correctly-signed `k-1`), in
+`[10^4, 10^5]`:
+
+```text
+[10281, 10946, 11611, 12276, 12941, 13606, 14271, 14936, 15601, 47468, 79335]
+```
+
+Largest additive/multiplicative gap: **`(15601, 47468)`, gap `31867`,
+ratio `3.043`** — not `(15601, 31202)`, ratio `2.0`, as stated; `31202`
+is not a member of this grid at all (confirmed directly).
+
+**For comparison, the committed script's raw (sign-agnostic) candidate
+chain** (the one item 1 actually shows in use) in the same window:
+
+```text
+[10281, 10946, 11611, 12276, 12941, 13606, 14271, 14936, 15601, 16266, 31867, 47468, 79335]
+```
+
+Largest *multiplicative* gap here: **`(16266, 31867)`, gap `15601`,
+ratio `1.9591`** — this is the closer match to Merle's stated
+`(15601, 31202)` (ratio exactly `2.0`), same order of magnitude and
+almost the same ratio, but neither endpoint matches exactly (left edge
+off by `665` = `16266 - 15601`; right edge off by `665` = `31867 -
+31202`, i.e. `31202` sits `665` *below* our chain's actual right edge,
+consistent with `31202 = 2*15601` being a simple doubling heuristic
+rather than our chain's actual next semiconvergent `31867 = 2*15601 +
+665`).
+
+**Precise answer to "is it `(15601, 31202)` under our definition":** no,
+under either of our two natural definitions. The raw script chain's
+largest-ratio gap, `(16266, 31867)`, is the qualitatively closer match
+(same anchor point, same order-2 ratio); the lemma's own strict grid
+gives a materially different, larger gap, `(15601, 47468)`, ratio
+`3.04`. The difference is recorded precisely per the brief's instruction
+to not harmonize.
+
+## Item 5: record and reconciliation
+
+**Whether `staircase-allp-findings.md` item 1's sentence needs
+correction: yes, and more than the scoped one the brief anticipated —
+at `p = 22` it is refuted outright.** That sentence reads "The
+Diophantine choice of `n` was never the binding constraint at any period
+tested," established there by an *exhaustive* scan of essentially every
+integer `n` in a window at `p = 15` finding no passer regardless of
+Diophantine quality — a strong test, but run only at `p = 15`, then
+generalized in prose to "any period tested." This session establishes
+the opposite at `p = 22`: the binding constraint there was *exactly*
+Diophantine candidate supply. The committed chain has a real, large hole
+at that scale (`(16266, 31867)`, ratio `1.96`, item 4); every candidate
+it actually supplied was infeasible or hopeless; and the moment a good
+in-scale `n` is supplied from outside the chain (`n = 25217`), the
+combinatorial half closes in 13 correction moves — well inside the
+recorded algorithm's own budget. Symmetrically, `staircase-allp-
+findings.md` item 3's "no structural reason for p = 22 specifically was
+found" now has its structural reason: `p = 22` is the one period in the
+tested range whose scale target lands inside the shadow of the giant
+partial quotient `23` of `log2(3)` — Merle's hypothesis, confirmed as
+the *cause*, with his *conclusion* (unrecoverable) corrected.
+
+**Proposed erratum for `cycles.md` 12.8.6's Obstruction paragraph**
+(drafted here, NOT applied — main-session decision, per the brief):
+
+> **Resolution of the `p = 22` obstruction (2026-07-17).** The
+> obstruction was a candidate-generation gap, not a combinatorial wall.
+> The scale target `L^22 ≈ 25,143` falls inside the largest gap of the
+> candidate chain used by `12.8.6.1`'s implementation (`(16266, 31867)`
+> as the script's sign-agnostic chain measures it; `(15601, 47468)`
+> under the lemma's strict sign-filtered grid — the shadow of the giant
+> partial quotient `23` in the continued fraction of `log_2 3`), so
+> every `n` the committed search supplied was either infeasible for the
+> base profile or short by `16`–`19` bits, far beyond the correction
+> algorithm's reach. At `n = 25217` — an excellent in-scale approximant
+> (`n/L^22 = 1.003`, `K − nL ≈ 6.2·10^{-4}`) that the chain does not
+> generate (`25217 = 15601 + 9616`, a sum of two grid points, not a
+> semiconvergent step) — the unmodified recipe of `12.8.6.2`–`12.8.6.3`
+> produces a verified size-passer in `13` correction moves: all `22`
+> rotations pass `q <= R_r` exactly, `γ = 11.186`, `γ/log_2 p = 2.508`
+> (inside `12.8.6.4`'s interval), divisibility `q | R_r` fails on all
+> rotations as expected. `p = 22` therefore joins the verified instance
+> record, and the range in `12.8.6.4` becomes `p ∈ {2, ..., 23}` with
+> `γ/log_2 p ∈ [1.828, 3.643]` (unchanged endpoints). The coverage gap
+> recorded against `12.8.6.1` (`briefs/staircase-allp-findings.md` item
+> 4) is hereby demonstrated to bite in practice; the lemma's candidate
+> step misses good `n` inside giant-partial-quotient shadows. Credit:
+> Eric Merle (correspondence, 2026-07-16) located the cause; the
+> resolution used his candidate `n` with this repo's own recorded
+> construction and correction, independently verified
+> (`experiments/merle_pincer_check.py`, `briefs/merle-pincer-check-
+> findings.md`).
+
+**What to re-check with special care (for the reviewer).** (1) **The
+p=22 size-passer at `n = 25217` is now the single most load-bearing
+claim in this file** — re-run `experiments/merle_pincer_check.py` end to
+end (allow ~10 min for item 2c on this machine's speed; the 8/13 move
+counts are deterministic, only the wall clock is machine-dependent) and,
+ideally, re-verify the printed `ms`/`ss` configuration with a third,
+separate rotation-sum implementation before it goes anywhere near the
+wiki or the reply letter. (2) The "exact match" claims in item 2 (his
+`(9,-7.86)` and `(6,-4.80)`, our p=7 distance profile) are the other
+load-bearing numbers for the reply. (3) The p=23 calibration
+disagreement is unresolved and should not be smoothed into agreement; a
+byte-exact number from Merle's original email would settle it cheaply.
+(4) Wall-clock caveats: item 1's "resolved" column (shared 75s deadline)
+and item 2c's outcomes at the 240s deadline are machine-speed dependent
+— on this machine the resolutions completed with 70–95s of headroom, but
+a much slower machine could see "deadline exhausted" instead; the
+feasibility, margin, and move-count figures are exact and
+machine-independent. The first version of this file itself demonstrated
+the trap: 40s ad-hoc deadlines produced "NOT resolved" rows that flipped
+at 240s. (5) The claim that `n=25217 = 15601 + 9616` and `n=31202 =
+2*15601` "explain" Merle's candidate choice is an observation about
+their arithmetic form, not a claim about his actual method — a
+hypothesis to ask him, not a settled fact.
+
+## Compliance note
+
+Per the brief's stopping-rule compliance paragraph: this session was
+diagnostic reporting and independent re-verification only. No cycle
+search was run, no divisibility-based exclusion was attempted, and no
+equidistribution work was touched. On the brief's "no attempt to close
+p=22" rule: the p=22 size-passer at `n = 25217` was **not** sought — it
+emerged from the reviewer-directed reproducibility fix (making the
+committed script print the correction runs already quoted in this file),
+run at the correspondent's own named candidate with the recorded,
+unmodified algorithm; no construction variant was introduced, no
+additional candidates beyond the three already quoted were tried, and no
+further search of any kind was run after the result appeared —
+recorded, verified once with the fresh code, and stopped, per the
+brief's off-brief-findings rule. Note the size-passer is exactly that: a
+size-passer (like every 12.8.6.4 instance, it fails all divisibility
+conditions); nothing about cycle exclusion changes. The cycle front
+remains parked.
