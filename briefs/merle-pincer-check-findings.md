@@ -248,3 +248,51 @@ rotation  distance/q
 Range found: `[0.0538, 0.4784]`. Merle's reported range: `[0.05, 0.48]`.
 Matches to two decimal places at both ends — an exact independent
 confirmation of ledger seed #3 on the p=7 instance.
+
+## Item 4: the continued-fraction hole claim
+
+Fresh continued-fraction computation of `L = log2(3)` confirms the
+partial quotient `23` at index 9 (`terms[9] = 23`), with convergent
+denominator `q_9 = 15601` (`h_9 = 24727`) — exactly as Merle's framing
+requires. Full sign table (`h_i - q_i*L`) for the first 20 convergents is
+in the script's output; signs alternate as expected, with the
+"correctly-signed" (approximating from below, small-gamma-capable)
+convergents at odd `i`: `q_1=1, q_3=5, q_5=41, q_7=306, q_9=15601,
+q_11=79335, q_13=190537, ...`.
+
+**Lemma 12.8.6.1's own "good n" grid** (sign-filtered semiconvergents,
+`n_j = q_{k-1} + j*q_k` for `j=1..a_{k+1}` at correctly-signed `k-1`), in
+`[10^4, 10^5]`:
+
+```text
+[10281, 10946, 11611, 12276, 12941, 13606, 14271, 14936, 15601, 47468, 79335]
+```
+
+Largest additive/multiplicative gap: **`(15601, 47468)`, gap `31867`,
+ratio `3.043`** — not `(15601, 31202)`, ratio `2.0`, as stated; `31202`
+is not a member of this grid at all (confirmed directly).
+
+**For comparison, the committed script's raw (sign-agnostic) candidate
+chain** (the one item 1 actually shows in use) in the same window:
+
+```text
+[10281, 10946, 11611, 12276, 12941, 13606, 14271, 14936, 15601, 16266, 31867, 47468, 79335]
+```
+
+Largest *multiplicative* gap here: **`(16266, 31867)`, gap `15601`,
+ratio `1.9591`** — this is the closer match to Merle's stated
+`(15601, 31202)` (ratio exactly `2.0`), same order of magnitude and
+almost the same ratio, but neither endpoint matches exactly (left edge
+off by `665` = `16266 - 15601`; right edge off by `665` = `31867 -
+31202`, i.e. `31202` sits `665` *below* our chain's actual right edge,
+consistent with `31202 = 2*15601` being a simple doubling heuristic
+rather than our chain's actual next semiconvergent `31867 = 2*15601 +
+665`).
+
+**Precise answer to "is it `(15601, 31202)` under our definition":** no,
+under either of our two natural definitions. The raw script chain's
+largest-ratio gap, `(16266, 31867)`, is the qualitatively closer match
+(same anchor point, same order-2 ratio); the lemma's own strict grid
+gives a materially different, larger gap, `(15601, 47468)`, ratio
+`3.04`. The difference is recorded precisely per the brief's instruction
+to not harmonize.
