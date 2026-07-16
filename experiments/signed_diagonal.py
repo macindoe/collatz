@@ -966,3 +966,136 @@ if __name__ == "__main__":
     print(f"{trials} orbits attempted, {built} built (n=1,2 both found), "
           f"{bad_shortfall} search-bound shortfalls, "
           f"{bad_monotone} monotonicity violations, {grew} strictly grew")
+
+
+# ---------------------------------------------------------------------------
+# Item 4: reconciliations -- the -5 instance now ordinary, the period-7
+# cycle as the G-period-2 word ((4,1),(3,3)) with y*=-17, and {-1}
+# genuinely outside the coding.
+# ---------------------------------------------------------------------------
+
+def test_negative_5_instance():
+    """Item 4(i), fresh independent computation (matches diagonal_converse.py's
+    already-merged 14.15.5(c) result, reproduced here with THIS file's own
+    primitives, per AGENTS.md's independent-verification norm): the
+    composed-affine fixed point of the single letter (2,1) is exactly
+    -5, and stratum(-5)=(2,1), G(-5)=-5 -- a genuine fixed point of the
+    signed exit map, cross-checked against T's classical 2-cycle
+    {-5,-7}."""
+    alpha, beta = letter_affine(2, 1)
+    y_star = beta / (1 - alpha)
+    checks = {
+        "y_star_is_-5": y_star == Fraction(-5),
+        "stratum_-5_is_(2,1)": stratum(-5) == (2, 1),
+        "G_-5_is_-5": G(-5) == -5,
+        "T_-5_is_-7": T(-5) == -7,
+        "T_T_-5_is_-5": T(T(-5)) == -5,
+    }
+    return checks, all(checks.values())
+
+
+def test_period7_cycle():
+    """Item 4(ii): the classical period-7 accelerated negative T-cycle
+    {-17,-25,-37,-55,-41,-61,-91} is exactly the G-period-2 word
+    ((4,1),(3,3)), composed fixed point y*=-17. Checks, all with fresh
+    code: stratum(-17)=(4,1), G(-17)=-41, stratum(-41)=(3,3), G(-41)=-17
+    (the G-period-2 closure); the composed-affine fixed point of the
+    2-letter word ((4,1),(3,3)) equals -17 exactly (Fraction algebra);
+    and 7 iterations of T starting at -17 visit exactly the 7 classical
+    values in order and return to -17 (block lengths 4+3=7 matching the
+    stratum letters' own m-values)."""
+    s17 = stratum(-17)
+    g17 = G(-17)
+    s41 = stratum(-41)
+    g41 = G(-41)
+
+    A2, B2 = compose_append([(4, 1), (3, 3)])  # deepest-first == the
+    # period's own natural order: applying (4,1) first (at -17) reaches
+    # -41, then (3,3) returns to -17 -- matching compose_append's
+    # left-to-right "applied first" convention exactly.
+    y_star = B2 / (1 - A2)
+
+    orbit = [-17]
+    cur = -17
+    for _ in range(7):
+        cur = T(cur)
+        orbit.append(cur)
+    classical = [-17, -25, -37, -55, -41, -61, -91, -17]
+
+    checks = {
+        "stratum_-17_is_(4,1)": s17 == (4, 1),
+        "G_-17_is_-41": g17 == -41,
+        "stratum_-41_is_(3,3)": s41 == (3, 3),
+        "G_-41_is_-17": g41 == -17,
+        "y_star_is_-17": y_star == Fraction(-17),
+        "T_orbit_matches_classical": orbit == classical,
+        "block_lengths_sum_to_7": (4 + 3 == 7),
+    }
+    return checks, all(checks.values()), orbit
+
+
+def test_minus1_outside_coding(trials=2000, seed=55031):
+    """Item 4(iii): {-1} is genuinely outside the signed coding, not
+    smoothed over -- its would-be door is the singular point itself.
+    Direct checks: stratum_and_G(-1) raises (undefined, not merely
+    'excluded by convention'); T(-1) = -1 classically (the trivial
+    negative fixed point DOES exist for T), confirming the gap is
+    specifically in the door/stratum coding, not in the classical
+    dynamics; and no random word's forward class representative ever
+    equals -1 (already covered structurally by
+    test_minus1_never_in_cylinder_class, re-confirmed here on random
+    multi-letter words rather than single letters)."""
+    raised = False
+    try:
+        stratum_and_G(-1)
+    except ValueError:
+        raised = True
+
+    t_minus1_fixed = (T(-1) == -1)
+
+    rng = random.Random(seed)
+    bad = 0
+    for _ in range(trials):
+        n = rng.randrange(1, 5)
+        letters = [(rng.randrange(1, 6), rng.randrange(1, 6)) for _ in range(n)]
+        y_rep, modulus = forward_class_representative(letters)
+        if (-1) % modulus == y_rep % modulus:
+            bad += 1
+
+    return raised, t_minus1_fixed, trials, bad
+
+
+def test_known_cycle_census():
+    """Item 4(iv), the three known G-periodic integer diagonal points,
+    verified together in one place: y=1 (word ((1,1))), y=-5 (word
+    ((2,1))), and {-17,-41} (word ((4,1),(3,3))) -- each a genuine fixed
+    point (or 2-cycle) of G on its own stratum word, with no other
+    candidate searched for (per the brief's stop line)."""
+    checks = {
+        "y=1_fixed_(1,1)": (stratum(1) == (1, 1) and G(1) == 1),
+        "y=-5_fixed_(2,1)": (stratum(-5) == (2, 1) and G(-5) == -5),
+        "y=-17,-41_2cycle": (stratum(-17) == (4, 1) and G(-17) == -41
+                              and stratum(-41) == (3, 3) and G(-41) == -17),
+    }
+    return checks, all(checks.values())
+
+
+if __name__ == "__main__":
+    print("== item 4: the -5 instance (fresh, independent recomputation) ==")
+    checks, ok = test_negative_5_instance()
+    print(checks, "OK" if ok else "MISMATCH")
+
+    print("== item 4: the period-7 cycle as the G-period-2 word "
+          "((4,1),(3,3)), y*=-17 ==")
+    checks, ok, orbit = test_period7_cycle()
+    print(checks, "OK" if ok else "MISMATCH")
+    print(f"T-orbit from -17: {orbit}")
+
+    print("== item 4: {-1} genuinely outside the signed coding ==")
+    raised, t_fixed, trials, bad = test_minus1_outside_coding()
+    print(f"stratum_and_G(-1) raised: {raised}; T(-1)=-1 classically: {t_fixed}; "
+          f"{trials} random words checked, {bad} times -1 fell in a forward class")
+
+    print("== item 4: known G-periodic integer diagonal census ==")
+    checks, ok = test_known_cycle_census()
+    print(checks, "OK" if ok else "MISMATCH")
