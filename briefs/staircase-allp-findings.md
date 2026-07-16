@@ -49,9 +49,12 @@ the strongest evidence in hand that `p = 22` is not simply under-resourced:
   `<= 75` s), needing `8` and `12` moves respectively.
 - `p = 22`: **not resolved** even with `60` moves and no time limit, across
   several `n` candidates and both crash depths tried.
-- `p = 23, 24`: **not resolved** by the committed script's default budget,
-  but **are resolved** by the larger supplementary budget (`8` moves each)
-  — i.e. these two are exactly the budget artifact `p = 22` is not.
+- `p = 24, 25`: **not resolved** by the committed script's default budget,
+  but **are resolved** by the larger supplementary budget (`8` moves each —
+  within the committed *move* cap; it is the `75` s per-period wall clock
+  that cuts them off, at their scale of `n`) — i.e. these two are exactly
+  the budget artifact `p = 22` is not. (`p = 23` resolves under the
+  committed budget itself, `8` moves; it appears in the verified record.)
 
 No structural reason for `p = 22` specifically was found. Candidate
 explanations not pursued further (out of scope for this session, and each
