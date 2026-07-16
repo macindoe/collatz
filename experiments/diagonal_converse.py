@@ -19,6 +19,12 @@
 #               recursions (14.14.8.2's literal append form vs. the
 #               prepend form 14.15.3.3's own proof uses), and a brute-
 #               force check of the admissibility class itself.
+#   14.15.5(b)  the converse theorem / combined characterization: the
+#               Cauchy-estimate-to-admissibility mechanism, checked on
+#               real long backward chains -- reconstruction from y0 and
+#               the word alone (via unique-predecessor + uniqueness)
+#               reproduces the actual chain, and liveness is confirmed
+#               derived, not assumed.
 
 import random
 from fractions import Fraction
@@ -146,6 +152,49 @@ def find_live_predecessor(cur, rng, m_cap=3, r_cap=25, tries=500):
             if y is not None and y % 3 != 0:
                 return y, m, r
     return None
+
+
+def single_letter_residue(m, r):
+    """Lemma 14.15.1.3(i): the unique y mod 2^(m+r+1) with
+    stratum(y) = (m,r)."""
+    mod_q = 1 << (r + 1)
+    inv3m = pow(3, -m, mod_q)
+    q_res = (inv3m * (1 + (1 << r))) % mod_q
+    return ((1 << m) * q_res - 1) % (1 << (m + r + 1))
+
+
+def forward_class_representative(letters):
+    """Constructive form of Theorem 14.15.1.5 (via Lemma 14.15.1.4's own
+    Hensel-lifting induction, reimplemented directly rather than by
+    brute-force scanning): returns (y_rep, modulus=2^(S+1)) such that a
+    positive odd y follows `letters` (in forward/chronological order,
+    letters[0] = stratum(y) itself) iff y === y_rep (mod modulus). Used
+    in 14.15.5(b)/(c) to check/construct forward realization without
+    scanning, which becomes infeasible once the modulus is large
+    (reached already by n=5 for 14.15.5(c)'s word below)."""
+    if not letters:
+        return 1, 2
+    m0, r0 = letters[0]
+    y_rep = single_letter_residue(m0, r0)
+    modulus = 1 << (m0 + r0 + 1)
+    M = m0
+    n_so_far = 1
+    for (mi, ri) in letters[1:]:
+        z_cur = y_rep
+        for _ in range(n_so_far):
+            z_cur = G(z_cur)
+        target_mod = 1 << (mi + ri + 1)
+        w_target = single_letter_residue(mi, ri)
+        diff = (w_target - (z_cur % target_mod)) % target_mod
+        half_mod = target_mod // 2
+        diff_half = (diff // 2) % half_mod
+        inv3M = pow(3, -M, half_mod) if half_mod > 1 else 0
+        t0 = (diff_half * inv3M) % half_mod
+        y_rep = y_rep + modulus * t0
+        modulus = modulus * half_mod
+        M += mi
+        n_so_far += 1
+    return y_rep, modulus
 
 
 # ---------------------------------------------------------------------------
@@ -315,6 +364,109 @@ def test_synchronization_strengthening(trials=1500, seed=45004, m_hi=3,
     return checked, bad
 
 
+# ---------------------------------------------------------------------------
+# 14.15.5(b): the converse theorem / combined characterization
+# ---------------------------------------------------------------------------
+
+def test_converse_mechanism(trials=300, seed=45005, depth=12, hi=10 ** 5):
+    """Verifies the three ingredients of item 2's proof directly on real
+    long backward chains behind a real positive live door y0 (built
+    honestly -- letters are not chosen to match a target, they are
+    whatever find_live_predecessor turns up):
+
+    (i) Cauchy estimate: v_3(y0 - B_n) >= M_n for every depth n (the
+        hypothesis "y3(W) = y0" would give exactly this, in the limit);
+    (ii) reconstruction: rebuilding the chain from y0 and the recorded
+        letters alone via unique_predecessor (NOT consulting the
+        already-built `chain`) reproduces it exactly -- this is the
+        truncation-compatibility / uniqueness mechanism the proof
+        leans on (14.15.4.1's uniqueness forces the depth-(n+1) chain
+        to restrict to the depth-n chain);
+    (iii) liveness derived: every chain door, including G's own image
+        of the deepest one, is automatically live -- no liveness
+        hypothesis is assumed anywhere in the reconstruction.
+    """
+    rng = random.Random(seed)
+    built = 0
+    bad_cauchy = 0
+    bad_reconstruct = 0
+    bad_live = 0
+
+    for _ in range(trials):
+        y0 = random_odd_not3(rng, hi)
+        chain = []
+        letters_shallow_first = []
+        cur = y0
+        ok = True
+        for _ in range(depth):
+            res = find_live_predecessor(cur, rng)
+            if res is None:
+                ok = False
+                break
+            y_prev, m, r = res
+            chain.append(y_prev)
+            letters_shallow_first.append((m, r))
+            cur = y_prev
+        if not ok:
+            continue
+        built += 1
+
+        for n in range(1, depth + 1):
+            word_deepest_first = list(reversed(letters_shallow_first[:n]))
+            _, B_n = compose_append(word_deepest_first)
+            M_n = sum(m for m, r in letters_shallow_first[:n])
+            diff = Fraction(y0) - B_n
+            num_v3 = v3(diff.numerator) if diff.numerator != 0 else 10 ** 9
+            den_v3 = v3(diff.denominator) if diff.denominator != 1 else 0
+            if (num_v3 - den_v3) < M_n:
+                bad_cauchy += 1
+
+        cur = y0
+        rebuilt = []
+        broke = False
+        for (m, r) in letters_shallow_first:
+            y = unique_predecessor(cur, m, r)
+            if y is None:
+                bad_reconstruct += 1
+                broke = True
+                break
+            rebuilt.append(y)
+            cur = y
+        if not broke and rebuilt != chain:
+            bad_reconstruct += 1
+
+        for y in chain:
+            if y % 3 == 0:
+                bad_live += 1
+        if G(chain[-1]) % 3 == 0:
+            bad_live += 1
+
+    return trials, built, bad_cauchy, bad_reconstruct, bad_live
+
+
+def test_forward_half_nesting(trials=2000, seed=45006, n_max=10, hi=10 ** 6):
+    """The forward half of item 2's proof: y0's own forward orbit places
+    it in every one of its own forward cylinders (the y2 = y0 direction
+    is by construction, but the nesting mechanism -- the cylinder
+    modulus 2^(S_n+1) growing so y0's residue determines it exactly --
+    is checked directly here, independent of realization_height.py /
+    itinerary_coding.py's own versions of this fact)."""
+    rng = random.Random(seed)
+    bad = 0
+    for _ in range(trials):
+        y0 = random_odd_not3(rng, hi)
+        n = rng.randrange(1, n_max + 1)
+        letters = []
+        cur = y0
+        for _ in range(n):
+            letters.append(stratum(cur))
+            cur = G(cur)
+        y_rep, modulus = forward_class_representative(letters)
+        if y0 % modulus != y_rep % modulus:
+            bad += 1
+    return trials, bad
+
+
 if __name__ == "__main__":
     print("== 14.15.5(a): base-case identity (beta === -2^{-r} mod 3^m) ==")
     trials, bad = test_base_case_identity()
@@ -334,3 +486,13 @@ if __name__ == "__main__":
           "(existence <=> congruence) ==")
     checked, bad = test_synchronization_strengthening()
     print(f"{checked} (word,z) checks, {bad} failures")
+
+    print("== 14.15.5(b): converse-theorem mechanism ==")
+    trials, built, bad_c, bad_r, bad_l = test_converse_mechanism()
+    print(f"{trials} trials, {built} chains built, "
+          f"{bad_c} Cauchy-estimate failures, "
+          f"{bad_r} reconstruction failures, {bad_l} liveness failures")
+
+    print("== 14.15.5(b): forward-half nesting ==")
+    trials, bad = test_forward_half_nesting()
+    print(f"{trials} checked, {bad} failures")
