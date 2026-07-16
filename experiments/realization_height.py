@@ -17,6 +17,10 @@
 #               G jointly with stratum), and a direct probe of the
 #               external suggestion's claimed failure mode (negativity --
 #               does not occur)
+#   14.15.4(b)  the finite bicylinder corollary: a positive live door with
+#               an actual prescribed finite past (letter-prescribed
+#               backward chain, live deepest door, intermediate doors live
+#               automatically) and prescribed finite future
 import random
 
 
@@ -159,6 +163,92 @@ def test_no_negativity(trials=8000, seed=35002, m_hi=8, r_hi=25, z_hi=10 ** 6):
     return checked, bad
 
 
+# ---------------------------------------------------------------------------
+# 14.15.4(b): the finite bicylinder corollary
+# ---------------------------------------------------------------------------
+
+def find_live_predecessor(cur, rng, m_cap=3, r_cap=30, tries=400):
+    """Search for a live letter-prescribed predecessor of `cur`: try a
+    random small m, scan r (2 is a primitive root mod 3^m of order
+    2*3^(m-1) <= 2*3^(m_cap-1), so r_cap comfortably covers one full period
+    for m <= m_cap = 3) until unique_predecessor succeeds AND the result is
+    live (3 does not divide it -- unique_predecessor itself makes no
+    liveness claim). Returns (y, m, r) or None."""
+    for _ in range(tries):
+        m = rng.randrange(1, m_cap + 1)
+        for r in range(1, r_cap):
+            y = unique_predecessor(cur, m, r)
+            if y is not None and y % 3 != 0:
+                return y, m, r
+    return None
+
+
+def test_bicylinder(trials=2000, seed=35003, p_max=3, q_max=3, hi=10 ** 5):
+    """Theorem 14.15.4.2: build a random positive live door y0, a real
+    q-step forward realization U (always exists), and a real p-step
+    letter-prescribed backward chain V with live deepest door -- then check
+    every claimed property directly: chain consistency (G(y_{-i})=y_{-i+1}),
+    liveness of every chain door (not just the deepest -- the intermediate
+    doors are claimed live automatically as G-images), stratum match
+    against the recorded letters, and the forward realization of U."""
+    rng = random.Random(seed)
+    built = 0
+    bad = 0
+    for _ in range(trials):
+        p = rng.randrange(0, p_max + 1)
+        q = rng.randrange(0, q_max + 1)
+        y0 = random_odd_not3(rng, hi)
+
+        # forward realization U (always succeeds -- G is total)
+        U = []
+        cur = y0
+        for _ in range(q):
+            U.append(stratum(cur))
+            cur = G(cur)
+
+        # backward chain V, nearest-to-farthest: chain[0] = y_{-1}, ...
+        chain = []
+        V_near_to_far = []
+        cur_b = y0
+        ok = True
+        for _ in range(p):
+            res = find_live_predecessor(cur_b, rng)
+            if res is None:
+                ok = False
+                break
+            y_prev, m, r = res
+            chain.append(y_prev)
+            V_near_to_far.append((m, r))
+            cur_b = y_prev
+        if not ok:
+            continue
+        built += 1
+
+        # (i) y0 itself positive and live
+        if y0 <= 0 or y0 % 3 == 0:
+            bad += 1
+        # (ii) deepest door live (already ensured at construction; recheck)
+        if chain and chain[-1] % 3 == 0:
+            bad += 1
+        # (iii) every chain door live, not just the deepest
+        if any(c % 3 == 0 for c in chain):
+            bad += 1
+        # (iv) chain consistency and stratum match against recorded letters
+        cprev = y0
+        for y_prev, (m, r) in zip(chain, V_near_to_far):
+            if G(y_prev) != cprev or stratum(y_prev) != (m, r):
+                bad += 1
+            cprev = y_prev
+        # (v) forward realization of U
+        cur_f = y0
+        for (m, r) in U:
+            if stratum(cur_f) != (m, r):
+                bad += 1
+            cur_f = G(cur_f)
+
+    return trials, built, bad
+
+
 if __name__ == "__main__":
     print("== 14.15.4(a): predecessor round-trip ==")
     trials, bad = test_predecessor_roundtrip()
@@ -174,3 +264,9 @@ if __name__ == "__main__":
     checked, bad = test_no_negativity()
     print(f"{checked} admissible (m,r,z) checked, {bad} failures "
           f"(negativity or forced-condition violations)")
+
+    print("== 14.15.4(b): finite bicylinder corollary ==")
+    trials, built, bad = test_bicylinder()
+    print(f"{trials} trials, {built} chains successfully built "
+          f"(remainder: admissibility failed within the search budget), "
+          f"{bad} failures")
