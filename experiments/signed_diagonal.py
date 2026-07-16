@@ -404,3 +404,161 @@ if __name__ == "__main__":
     print("== item 1: round-trip sanity, both signs ==")
     trials, bad = test_round_trip_signed()
     print(f"{trials} checked, {bad} failures")
+
+
+# ---------------------------------------------------------------------------
+# Item 2: the signed admissibility-class lemma, the two-sector bicylinder.
+# ---------------------------------------------------------------------------
+
+def test_admissibility_class_signed(trials=150, seed=55011, n_max=3,
+                                     m_hi=3, r_hi=4, z_bound_cap=3000):
+    """14.15.5.1 relaxed from 'among positive odd integers' to 'among
+    nonzero odd integers z != -1' (item 2(i)): for random words, direct
+    brute-force scan over BOTH signs (existence of the depth-n
+    letter-prescribed chain from z, vs. the predicted congruence
+    z === B_n (mod 3^(M_n))) -- the synchronization-sharpened equivalence
+    (14.15.5.2) checked directly, sign by sign, on the same footing."""
+    rng = random.Random(seed)
+    bad = 0
+    checked_words = 0
+    checked_z = 0
+    for _ in range(trials):
+        n = rng.randrange(1, n_max + 1)
+        letters_shallow_first = [(rng.randrange(1, m_hi), rng.randrange(1, r_hi))
+                                  for _ in range(n)]
+        M_n = sum(m for m, r in letters_shallow_first)
+        mod = 3 ** M_n
+        A_n, B_n = compose_append(list(reversed(letters_shallow_first)))
+        predicted = frac_mod(B_n, mod)
+        z_bound = min(4 * mod, z_bound_cap)
+        checked_words += 1
+        for mag in range(1, z_bound, 2):
+            for z in (mag, -mag):
+                if z == -1:
+                    continue
+                cur = z
+                ok = True
+                for (m, r) in letters_shallow_first:
+                    y = unique_predecessor(cur, m, r)
+                    if y is None:
+                        ok = False
+                        break
+                    cur = y
+                checked_z += 1
+                expected = (z % mod == predicted)
+                if ok != expected:
+                    bad += 1
+    return checked_words, checked_z, bad
+
+
+def verify_chain_realizes_word(y, word):
+    """Direct check that y's forward orbit realizes `word` exactly (every
+    stratum matches, every door live, never hits -1)."""
+    cur = y
+    for (m, r) in word:
+        if cur == -1 or cur % 3 == 0:
+            return False
+        if stratum(cur) != (m, r):
+            return False
+        cur = G(cur)
+    return True
+
+
+def find_live_chain_representative(word, sign, tries=20000):
+    """The signed analogue of 14.15.4.2's own construction: the followers
+    of `word` (as a single concatenated itinerary, deepest letter first)
+    form one residue class mod 2^(S+1) (Theorem 14.15.1.5, sign-agnostic
+    -- a purely 2-adic residue statement). Walk that class outward in the
+    requested sign's direction (nearest zero first) for the first member
+    whose deepest door is live and whose ENTIRE forward chain of length
+    len(word) realizes `word` exactly, without ever landing on -1 along
+    the way (the one extra condition the signed setting adds beyond
+    14.15.4.2's own positive-only construction). Returns that y, or None."""
+    y_rep, modulus = forward_class_representative(word)
+    r0 = y_rep % modulus
+    for k in range(tries):
+        y = (r0 + k * modulus) if sign > 0 else (r0 - modulus - k * modulus)
+        if y == 0 or y == -1:
+            continue
+        if y % 3 == 0:
+            continue
+        if verify_chain_realizes_word(y, word):
+            return y
+    return None
+
+
+def test_minus1_never_in_cylinder_class(trials=3000, seed=55013, m_hi=10, r_hi=10):
+    """Strengthens the bicylinder construction: -1 never lies in ANY
+    single-stratum residue class (Lemma 14.15.1.3(i)'s congruence,
+    extended over Z): -1 trivially satisfies the FIRST half of the
+    congruence (y+1=0 is divisible by every power of 2) but fails the
+    SECOND (q=(y+1)/2^m=0 is even, while the class's own q-residue
+    3^{-m}(1+2^r) mod 2^{r+1} is always odd, r>=1). Consequently no
+    candidate drawn from a composed cylinder class mod 2^(S+1) can ever
+    equal -1, so find_live_chain_representative's per-step '-1' guard is
+    never actually load-bearing -- checked directly here rather than
+    argued only in prose."""
+    rng = random.Random(seed)
+    bad = 0
+    for _ in range(trials):
+        m = rng.randrange(1, m_hi)
+        r = rng.randrange(1, r_hi)
+        mod = 1 << (m + r + 1)
+        rep = single_letter_residue(m, r)
+        if (-1) % mod == rep:
+            bad += 1
+    return trials, bad
+
+
+def test_two_sector_bicylinder(trials=400, seed=55012, p_max=3, q_max=3,
+                                m_hi=3, r_hi=3, tries=20000):
+    """The finite bicylinder corollary (14.15.4.2), per sector (item
+    2(ii)): for a random two-sided window V (past, length p) + U (future,
+    length q), find a live integer segment realizing the SAME concatenated
+    word V+U, once with a positive deepest door and once with a negative
+    one -- both from the same word, demonstrating the residue class mod
+    2^(S+1) meets each sign in a live, fully-realizing member."""
+    rng = random.Random(seed)
+    built_pos = built_neg = 0
+    bad_pos = bad_neg = 0
+    attempted = 0
+    for _ in range(trials):
+        p = rng.randrange(0, p_max + 1)
+        q = rng.randrange(0, q_max + 1)
+        if p + q == 0:
+            continue
+        V = [(rng.randrange(1, m_hi + 1), rng.randrange(1, r_hi + 1)) for _ in range(p)]
+        U = [(rng.randrange(1, m_hi + 1), rng.randrange(1, r_hi + 1)) for _ in range(q)]
+        word = V + U
+        attempted += 1
+
+        y_pos = find_live_chain_representative(word, +1, tries)
+        if y_pos is not None:
+            built_pos += 1
+            if not verify_chain_realizes_word(y_pos, word):
+                bad_pos += 1
+
+        y_neg = find_live_chain_representative(word, -1, tries)
+        if y_neg is not None:
+            built_neg += 1
+            if not verify_chain_realizes_word(y_neg, word):
+                bad_neg += 1
+
+    return attempted, built_pos, built_neg, bad_pos, bad_neg
+
+
+if __name__ == "__main__":
+    print("== item 2: signed admissibility-class lemma (both signs, "
+          "existence <=> congruence) ==")
+    words, zs, bad = test_admissibility_class_signed()
+    print(f"{words} words, {zs} (word,z) checks (both signs), {bad} failures")
+
+    print("== item 2: two-sector finite bicylinder corollary ==")
+    attempted, bp, bn, bad_p, bad_n = test_two_sector_bicylinder()
+    print(f"{attempted} windows attempted, {bp} positive segments built "
+          f"({bad_p} verification failures), {bn} negative segments built "
+          f"({bad_n} verification failures)")
+
+    print("== item 2: -1 never lies in any single-stratum cylinder class ==")
+    trials, bad = test_minus1_never_in_cylinder_class()
+    print(f"{trials} (m,r) pairs checked, {bad} times -1 matched the class")
