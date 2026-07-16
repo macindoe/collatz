@@ -134,5 +134,128 @@ See `briefs/paper1-v2-findings.md`: paper 2 (`collatz-mirror-v1.tex`) carries th
 - [x] A built v2 PDF (`paper/collatz-reduced-v2.pdf`, 10 pages) with the one pre-existing, non-blocking build obstruction recorded.
 - [x] This self-contained review bundle.
 - [x] Fidelity checks recorded (three for three, all pass).
-- [ ] Ledger sweep (item 7) — see the commit immediately following this one.
+- [x] Ledger sweep (item 7) — done in the commit immediately following this bundle.
 - [x] Clean per-item commits on `paper1-v2`, no merge to `main`.
+
+## Revision round (2026-07-16)
+
+The pushed bundle above was read by an external reviewer (ChatGPT, 2026-07-16). The main session verified every checkable claim in that review against the ledger (`cycles.md` 12.8.6, `briefs/staircase-allp-findings.md`, `publication.md`) before delegating this round; the resulting brief (`briefs/paper1-v2-revision-brief.md`) corrected four of the review's recommendations against the ledger, and **where the brief and the external review differed, the brief won.**
+
+### External verdicts adopted (register improvements, applied as suggested)
+
+- **Per-period phrasing.** "a general, non-per-period construction" (self-contradictory against the wiki's own "general per-period construction recipe") replaced by "a single period-parametrized construction procedure... applied separately at each period."
+- **`p = 22` softening.** "unexplained combinatorial obstruction" (internal delegation vocabulary, and a phrase that reads as inviting more compute) replaced by "a persistent unresolved case," carrying the neighbour-contrast fact (see pushback below).
+- **Diophantine wording.** The gap statement was sharpened to name the actual missing object: "no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs — the bound that would certify no period is skipped."
+- **Evidence calibration.** "supported by a substantially larger verified range, not proved" replaced by "supported by finite-range evidence consistent with the assessed `γ = O(log p)` behaviour, not a proof" — a more precise statement of what finite-range verification licenses.
+- **"dense" removed.** "dense verified record" (internal informalism) replaced by "substantially extended verified range."
+- **Declaration sentence.** "No mathematical claim changes strength" (not literally true — v2 adds new computational claims) replaced, everywhere it appeared, by "No theorem or universal claim is strengthened; v2 adds a finite computational evidence record."
+- **Citation placement.** The note's opening clause now reads "Prompted by correspondence with Eric Merle, whose related formal work is cited in \cite{merle}, on this theorem's sharpness hedge" — separating the (undocumented) correspondence from the (documented, citable) preprint.
+- **Version-note restructure.** The long footnote crowding `\date` is removed; `\date` is now a plain one-line date/DOI field, and an unnumbered "Version note" paragraph immediately after the abstract carries the version history.
+- **Pinned URL.** The note's repository pointer now reads `https://github.com/macindoe/collatz/blob/b566e4d/cycles.md` (§12.8.6) — commit `b566e4d` is the `paper1-v2` branch point and contains the full 12.8.6 record, instead of the mutable root URL. **The author may re-pin this to a `paper1-v2` release tag at Zenodo upload time**, once one exists.
+
+### Pushbacks applied (where the brief overrode the external review)
+
+- **The `p = 22` neighbour-contrast requirement.** The external review's softening language, taken alone, would have read as ordinary budget-limitedness. The ledger (`briefs/staircase-allp-findings.md` §3, lines ~41–57) records that `p = 22` is **not resolved even with the move budget enlarged to 60 and the time limit removed**, across several `n` candidates and both crash depths — while `p = 24, 25` fail only the *default* budget and **are** resolved by a modest enlargement (8 moves each). This contrast is exactly what distinguishes `p = 22` from an ordinary budget artifact, so the brief required the note to carry it explicitly: "a persistent unresolved case at `p = 22`, which the present procedure fails to resolve under budgets that resolve all neighbouring periods, including with the search budget greatly enlarged." Softening without this contrast would have been a *loss* of information relative to the pre-revision note, not a register fix.
+- **"never skips a period" was ledger-faithful, upgraded not retracted.** The phrase is `cycles.md` 12.8.6's own status language (12.8.6.1: "this is not the same as a proof that no period is ever skipped"), so it was not an error to begin with. The revision keeps its substance but states it in the more informative closed-form-bound language above, per the brief — an upgrade in precision, not a correction of a mistake.
+- **`\ref{thm:staircase}` kept over a hardcoded number.** The external review's suggested replacement text hardcoded "Theorem 4.6." The theorem number is not stable under any future section reflow; `Theorem~\ref{thm:staircase}` was kept throughout, as in the pre-revision note.
+- **Build-error localization corrected.** The external review's reading of the build obstruction is not reproduced here in detail because the localization was already correct in the prior bundle (the error occurs during `\maketitle`'s processing of `\date`, confirmed independent of the added footnote content by a diagnostic swap); this round's rebuild (below) reproduces the identical error signature after removing that footnote entirely, which is a stronger confirmation of the same conclusion, not a new one.
+
+### Full unified diff of this revision round
+
+Commits `cbb8628` (note rewrite, pinned URL) and `18fb898` (version-note restructure), applied on top of the previously reviewed tip (`4de619d`). This is the entire content diff of the revision round; the PDF rebuild (`77ee6b1`) is a binary artifact of these two commits and is not separately diffed.
+
+```diff
+diff --git a/paper/collatz-reduced-v2.tex b/paper/collatz-reduced-v2.tex
+index 10c14b8..7a3dfb4 100644
+--- a/paper/collatz-reduced-v2.tex
++++ b/paper/collatz-reduced-v2.tex
+@@ -23,7 +23,7 @@
+ 
+ \title{Reduced coordinates for the Collatz map:\\ exact per-step laws, anchor dynamics,\\ and the limits of counting arguments for cycles}
+ \author{Ben Macindoe\thanks{\texttt{macindoebenjamin@gmail.com}. Developed through extensive AI-assisted research (Claude, Anthropic); the division of labor and the verification protocol are stated in Appendix~\ref{app:method}.}}
+-\date{v2, July 2026 \;\cdot\; DOI: \href{https://doi.org/10.5281/zenodo.21273548}{10.5281/zenodo.21273548}\footnote{Version history: v1, July 2026 (original publication). v2, July 2026: restored the subtitle of the \texttt{merle} citation; added a note evidencing the sharpness hedge of Theorem~\ref{thm:staircase} (Section~\ref{sec:cycles}), prompted by correspondence with Eric Merle. No mathematical claim changes strength. The v2-specific Zenodo DOI is assigned at upload.}}
++\date{v2, July 2026 \;\cdot\; DOI: \href{https://doi.org/10.5281/zenodo.21273548}{10.5281/zenodo.21273548}}
+ 
+ \begin{document}
+ \maketitle
+@@ -32,6 +32,9 @@
+ We study the Collatz dynamics in a reduced coordinate system that compresses each deterministic valuation run into a single block, producing a self-map $F$ on states $(\w,d)$ --- an odd core prime to $3$ and a depth. The reduction is faithful: the Collatz conjecture is equivalent to every $F$-orbit reaching $(1,1)$, with nontrivial cycles in bijection. In these coordinates the local arithmetic admits exact laws. A single $2$-adic quantity, the \emph{anchor} $M(\w) = -2\log\w/\log 9 \in \Z_2$, governs the step: the exit valuation obeys the global law $s = 2 + \vt{d - M(\w)}$ whenever $3^d\w \equiv 1 \pmod 8$ and is constant on the remaining residue classes; the depth evolution closes exactly in terms of the anchor displacement together with a stated $3$-adic absorption law; and the anchor increment along one step obeys an exact law modulo any power of $2$, computable from graded residues of the state. A finite window of digits consequently decides each step in an error-free trichotomy, while a digit-budget accounting indicates that no bounded window can decide infinite horizons --- localizing the difficulty of the problem in the digit supply of the anchors. On the cycle side, a one-line elimination identity yields short rederivations of the classical exclusions for cycles of one, two, and three blocks. Our main new theorem is a sharp dichotomy for counting arguments: a trim uniform in the number of blocks $p$ exists, giving effective finiteness at every period, but its constant necessarily degrades like $(\LL)^{-p}$ --- an explicit family of near-counterexamples (\emph{staircases}: geometric climbs closed by a single crash, precisely divergent-orbit profiles bent into loops) shows counting arguments cannot do substantially better, so uniform cycle exclusion requires arithmetic (divisibility) input, not sharper counting. Finally we state the equidistribution hypothesis implicit in the classical heuristics as a precise conjecture about an exactly computable product law, prove its consequences conditionally, and report a calibration campaign whose four apparent anomalies all dissolved under controls --- one of them via an exact routing lemma that a biased estimator had been reflecting.
+ \end{abstract}
+ 
++\subsection*{Version note}
++v1, July 2026 (original publication). v2, July 2026: restored the subtitle of the \texttt{merle} citation; added a note evidencing the sharpness hedge of Theorem~\ref{thm:staircase} (Section~\ref{sec:cycles}), prompted by correspondence with Eric Merle. No theorem or universal claim is strengthened; v2 adds a finite computational evidence record. The v2-specific Zenodo DOI is assigned at upload.
++
+ \subsection*{Author's note}
+ 
+ \emph{Dear reader --- I'm no mathematician, and I learned much of this paper's terminology during the process of formalizing it ($p$-adic valuations were completely new to me as a formal concept). It all began when I got hooked on a strange recursive pattern in the prime factors of a Collatz chain, and that idea pushed me into conversation with AI. We cleaned my idea up into the states $(\w,d)$, with the primary goal of factoring as much deterministic behaviour as possible out of the question, in the hope of focusing attention where it matters. That simplification is what enables the paper's main contributions: exact laws for every single step; a uniform trim that caps what size-counting can achieve against cycles; and an exact hypothesis pointing the remaining question toward more fundamental ``fair-coin'' mathematics. Because this work is AI-assisted and because I am not formally trained in the relevant mathematics, Appendix~\ref{app:method} describes the verification protocol used throughout the project. The complete research record is public at \url{https://github.com/macindoe/collatz}. --- Ben}
+@@ -214,9 +217,9 @@ The staircase profile --- geometric depth growth with shallow exits --- is exact
+ \end{remark}
+ 
+ \subsection*{Note added in v2 (July 2026)}
+-Prompted by correspondence with Eric Merle on this theorem's sharpness hedge \cite{merle}, we attempted a general, non-per-period construction toward the assessed claim of Theorem~\ref{thm:staircase}. The recipe, in one sentence: semiconvergents of $\LL$ select the exponent $n$; a rounded geometric profile builds the climb; a bounded correction closes the last bits. Exact big-integer verification by this recipe produced a passing size-condition witness ($q \le R_r$ at every rotation) at every period
++Prompted by correspondence with Eric Merle, whose related formal work is cited in \cite{merle}, on this theorem's sharpness hedge, we attempted a single period-parametrized construction procedure toward the assessed claim of Theorem~\ref{thm:staircase}: semiconvergents of $\LL$ select the exponent $n$, a rounded geometric profile builds the climb, and a bounded correction closes the last bits, applied separately at each period. Exact big-integer verification by this recipe produced a passing size-condition witness ($q \le R_r$ at every rotation) at every period
+ \[ p \in \{2,\dots,21\} \cup \{23\}, \qquad \gamma/\log_2 p \in [1.828,\ 3.643] \]
+-over that range, extending the two isolated instances above to a dense verified record. Two gaps remain open, and are recorded rather than closed: an unexplained combinatorial obstruction at $p = 22$, where the correction algorithm finds no passing configuration within the tested budgets; and the absence of a closed-form guarantee that the underlying Diophantine (semiconvergent) step never skips a period. The hedge sentence above is therefore unchanged: the claim remains assessed, supported by a substantially larger verified range, not proved, for all $p$. The construction, the verified instance record, and the obstruction's diagnosis are recorded at \texttt{cycles.md} \S12.8.6 of the project's public repository (\url{https://github.com/macindoe/collatz}).
++over that range, extending the two isolated instances above to a substantially extended verified range. Two gaps remain open, and are recorded rather than closed: a persistent unresolved case at $p = 22$, which the present procedure fails to resolve under budgets that resolve all neighbouring periods, including with the search budget greatly enlarged; and no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs --- the bound that would certify no period is skipped. The hedge sentence above is therefore unchanged: the claim remains assessed, supported by finite-range evidence consistent with the assessed $\gamma = O(\log p)$ behaviour, not a proof, for all $p$. The construction, the verified instance record, and the diagnosis of both gaps are recorded at \texttt{cycles.md} \S12.8.6 of the project's public repository (\url{https://github.com/macindoe/collatz/blob/b566e4d/cycles.md}).
+ 
+ \section{The equidistribution hypothesis, made exact}\label{sec:aeh}
+```
+
+### Fidelity checks, re-run for this revision round
+
+**(a) The `thm:staircase` theorem environment, including its hedge sentence, is byte-identical to v1 — unaffected by this revision round (the round only touches the `\date` field, the abstract-adjacent Version note, and the Note-added-in-v2 paragraph, none of which is inside the theorem environment).**
+
+```
+$ diff <(sed -n '/\\begin{theorem}\[sharpness: the staircase\]/,/\\end{theorem}/p' sources/paper/collatz-reduced-v1.tex) \
+       <(sed -n '/\\begin{theorem}\[sharpness: the staircase\]/,/\\end{theorem}/p' paper/collatz-reduced-v2.tex)
+
+(no output — identical)
+```
+
+**PASS.**
+
+**(b) All numbers in the rewritten note appear verbatim in `cycles.md` §12.8.6.**
+
+```text
+$ grep -n "2, ..., 21\|{2, 3, ..., 21}\|p = 22\|1.828\|3.643" cycles.md
+
+cycles.md:8:   ...verified instances for `p ∈ {2,...,21} ∪ {23}`, with a combinatorial
+               obstruction precisely located at `p = 22`...
+cycles.md:258: p  ∈  {2, 3, ..., 21} ∪ {23},   with   γ / log_2 p  ∈  [1.828, 3.643]
+cycles.md:263: **Obstruction (`p = 22`).** At `p = 22`, the bounded correction of
+               `12.8.6.3` does not find a passing configuration within the tested
+               budgets...
+cycles.md:265: ...with the obstruction precisely located at `p = 22`...
+```
+
+The set `{2,...,21} ∪ {23}`, the value `22`, and the interval endpoints `1.828` and `3.643` all still appear verbatim in `cycles.md` §12.8.6 (unchanged by this round — `cycles.md` was not touched). **PASS.**
+
+**(c) Three new register greps, run against the rewritten note in `paper/collatz-reduced-v2.tex` (lines 216–219).**
+
+```text
+$ sed -n '216,219p' paper/collatz-reduced-v2.tex > /tmp/note.txt
+
+$ grep -c "per-period\|period-parametrized" /tmp/note.txt
+1
+
+$ grep -c "non-per-period" /tmp/note.txt
+0
+
+$ grep -c "dense" /tmp/note.txt
+0
+
+$ grep -c "combinatorial obstruction" /tmp/note.txt
+0
+```
+
+The note contains "per-period" (via "period-parametrized"), and contains none of "non-per-period", "dense", or "combinatorial obstruction". **PASS, all three.**
+
+### Build (revision round)
+
+Rebuilt with `pdflatex` (MiKTeX-pdfTeX 4.23, MiKTeX 25.12 — a newer MiKTeX release than the prior round's 1.40.28 build), two passes, in a temp directory outside the repo mount, copied into `paper/collatz-reduced-v2.pdf`. Output: **11 pages** (grew from the prior round's 10, from the relocated version-history prose now living in its own paragraph rather than a footnote). The Version note (page 1), the rewritten Note added in v2 (page 8), and the corrected Merle bibitem (page 11) were rendered to PNG and visually inspected; all display correctly and contain every language fix listed above.
+
+`pdflatex` again exits with status 1, reproducing the identical error signature at the identical location (`Missing $ inserted` / `Extra }, or forgotten $` / `Command \end{center} invalid in math mode`, during `\maketitle`'s processing of `\date`, line 30) as both the prior round and the pristine archived v1. This round removes the footnote from `\date` entirely (rather than merely moving it, as the prior round's diagnostic swap did) — the error persists identically, which is a strictly stronger confirmation that the obstruction is pdfTeX-version drift independent of the `\date` field's content, not a new data point requiring re-diagnosis.
+
+### Re-pin note
+
+The repository pointer in the note is pinned to commit `b566e4d` (the `paper1-v2` branch point on the public remote), per the brief. **The author may re-pin this to a `paper1-v2` release tag at Zenodo upload time**, once the release exists, in place of the raw commit hash.
