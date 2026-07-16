@@ -109,3 +109,42 @@ In order of how promising the (untested) leads look, given what failed:
 
 None of these were built out in this session; they are recorded as the
 concrete next steps rather than left implicit.
+
+## Update (2026-07-17): item 3 ("Why p = 22 resists") superseded
+
+Item 3 above is **superseded**, not deleted: `p = 22`'s resistance was a
+candidate-generation gap, not a structural property of the construction
+recipe. A second exchange with Eric Merle (correspondence 2026-07-16/17)
+named two candidates outside this session's own Diophantine chain
+(`n = 25217`, `n = 31202` — simple arithmetic on the continued fraction's
+best convergent at this scale, `15601`) at which the unmodified recipe of
+`12.8.6.2`–`12.8.6.3` resolves `p = 22` in `13` and `8` correction moves
+respectively — well inside the budgets this session's own supplementary
+exploration (`60` moves, no wall-clock cap) already used without finding
+a passer, because none of the candidates *tried* there were the ones that
+work. The "no structural reason for `p = 22` specifically was found"
+conclusion of item 3 stands as a *negative* result about the candidates
+actually tried; it does not extend to "no candidate resolves `p = 22`",
+which is now known to be false.
+
+Full diagnosis, independent re-verification, and the resolved obstruction
+paragraph: `briefs/merle-pincer-check-findings.md`, and `cycles.md`
+12.8.6 (Obstruction (`p = 22`) — resolved (2026-07-17)). Standalone
+verifier: `experiments/p22_passer.py`.
+
+**Item 1 is also superseded, more than item 3 alone.** Item 1's title
+claim — "the Diophantine choice of `n` was never the binding constraint
+**at any period tested**" — was established there by the `p = 15`
+exhaustive scan and then stated as a general conclusion across the
+periods this session tried. `briefs/merle-pincer-check-findings.md` item
+5 found the opposite at `p = 22`: candidate availability was *exactly*
+the binding constraint there. Item 1's `p = 15` content is untouched and
+still correct as a statement about `p = 15`; its generalization to "any
+period tested" is refuted at `p = 22`, and `cycles.md` 12.8.6.1's status
+paragraph now scopes the claim to `p = 15` explicitly.
+
+Item 4 above (the Diophantine lemma's coverage gap) is **not**
+superseded — it is exactly the gap that bit at `p = 22`, and it remains
+open (now the sole remaining gap of the floor-grade result, per
+`cycles.md` 12.8.6.1's status paragraph). Items 2 and 5 above are
+unaffected by this update.
