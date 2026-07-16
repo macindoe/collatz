@@ -21,6 +21,12 @@
 #               an actual prescribed finite past (letter-prescribed
 #               backward chain, live deepest door, intermediate doors live
 #               automatically) and prescribed finite future
+#   14.15.4(c)  the positive realization height: R_{p,q}/H_{p,q} sanity on
+#               the two families the brief permits -- the trivial
+#               all-(1,1) word has H = 1 at every window tried, and
+#               fixed-origin nested-window monotonicity over random words.
+#               No growth study of H is performed (out of scope per the
+#               brief's stop line).
 import random
 
 
@@ -249,6 +255,115 @@ def test_bicylinder(trials=2000, seed=35003, p_max=3, q_max=3, hi=10 ** 5):
     return trials, built, bad
 
 
+# ---------------------------------------------------------------------------
+# 14.15.4(c): the positive realization height -- sanity families only
+# ---------------------------------------------------------------------------
+
+def in_R(y0, W_future, W_past_near_to_far, p, q):
+    """Direct membership test for R_{p,q}(W) (Definition 14.15.4.3): y0 a
+    positive live door, forward q-step realization of W_future[:q], and a
+    letter-prescribed backward chain to depth p (using
+    W_past_near_to_far[:p], nearest first) with live deepest door (p=0:
+    vacuous, y0 itself already checked live)."""
+    if y0 <= 0 or y0 % 2 == 0 or y0 % 3 == 0:
+        return False
+    cur = y0
+    for j in range(q):
+        if stratum(cur) != W_future[j]:
+            return False
+        cur = G(cur)
+    cur = y0
+    deepest_live = True
+    for i in range(p):
+        m, r = W_past_near_to_far[i]
+        y_prev = unique_predecessor(cur, m, r)
+        if y_prev is None:
+            return False
+        deepest_live = (y_prev % 3 != 0)
+        cur = y_prev
+    return deepest_live
+
+
+def height(W_future, W_past_near_to_far, p, q, bound):
+    """Brute-force H_{p,q}(W): the minimum positive odd y0 < bound with
+    y0 in R_{p,q}(W), or None if none found below the bound."""
+    for y0 in range(1, bound, 2):
+        if in_R(y0, W_future, W_past_near_to_far, p, q):
+            return y0
+    return None
+
+
+def test_trivial_word_height(p_max=4):
+    """Item 3's named check (C): the all-(1,1) word has H_{p,q} = 1 at
+    every window p=q<=p_max tried. y0=1 is the smallest positive odd
+    integer, so confirming 1 in R_{n,n} directly (stratum(1)=G(1)=1, the
+    trivial fixed point) proves H_{n,n}=1 exactly, with no search needed."""
+    W_future = [(1, 1)] * p_max
+    W_past = [(1, 1)] * p_max
+    results = []
+    bad = 0
+    for n in range(0, p_max + 1):
+        member = in_R(1, W_future, W_past, n, n)
+        results.append(member)
+        if not member:
+            bad += 1
+    return results, bad
+
+
+def test_monotonicity(trials=20, seed=35004, letter_cap=2, levels=(1, 2),
+                       bound=2 ** 17):
+    """Fixed-origin nested-window monotonicity (the brief's correction:
+    windows grow around one fixed pivot, never re-centred). Build a random
+    word from a real backward/forward construction (so realizability at
+    the deepest level tried is not begged -- the word is the actual
+    itinerary of a real integer), compute H at increasing (n,n) for n in
+    `levels` using the SAME underlying word and pivot, confirm
+    nondecreasing, and report how many strictly grew (matching the
+    pre-check's "10 of 15 strictly grew" finding)."""
+    rng = random.Random(seed)
+    n_max = max(levels)
+    checked = 0
+    bad = 0
+    grew = 0
+    for _ in range(trials):
+        y0 = random_odd_not3(rng, 10 ** 4)
+
+        W_future = []
+        cur = y0
+        for _ in range(n_max):
+            W_future.append(stratum(cur))
+            cur = G(cur)
+
+        W_past = []
+        cur_b = y0
+        ok = True
+        for _ in range(n_max):
+            res = find_live_predecessor(cur_b, rng, m_cap=letter_cap, r_cap=20)
+            if res is None:
+                ok = False
+                break
+            y_prev, m, r = res
+            W_past.append((m, r))
+            cur_b = y_prev
+        if not ok:
+            continue
+        checked += 1
+
+        hs = [height(W_future, W_past, n, n, bound) for n in levels]
+        if any(h is None for h in hs):
+            # search bound too small for this trial's word -- a search
+            # limitation, not a mathematical failure; recorded, not
+            # counted as a violation, and not silently dropped
+            bad += 1
+            continue
+        if any(hs[i] > hs[i + 1] for i in range(len(hs) - 1)):
+            bad += 1
+        elif hs[-1] > hs[0]:
+            grew += 1
+
+    return trials, checked, bad, grew
+
+
 if __name__ == "__main__":
     print("== 14.15.4(a): predecessor round-trip ==")
     trials, bad = test_predecessor_roundtrip()
@@ -270,3 +385,12 @@ if __name__ == "__main__":
     print(f"{trials} trials, {built} chains successfully built "
           f"(remainder: admissibility failed within the search budget), "
           f"{bad} failures")
+
+    print("== 14.15.4(c): trivial all-(1,1) word, H_{p,q} = 1 ==")
+    results, bad = test_trivial_word_height()
+    print(f"membership of y0=1 at windows n=0..4: {results}, {bad} failures")
+
+    print("== 14.15.4(c): fixed-origin nested-window monotonicity ==")
+    trials, checked, bad, grew = test_monotonicity()
+    print(f"{trials} trials, {checked} words built, {bad} violations "
+          f"(incl. search-bound shortfalls), {grew} strictly grew")
