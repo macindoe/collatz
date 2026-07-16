@@ -259,3 +259,7 @@ Rebuilt with `pdflatex` (MiKTeX-pdfTeX 4.23, MiKTeX 25.12 — a newer MiKTeX rel
 ### Re-pin note
 
 The repository pointer in the note is pinned to commit `b566e4d` (the `paper1-v2` branch point on the public remote), per the brief. **The author may re-pin this to a `paper1-v2` release tag at Zenodo upload time**, once the release exists, in place of the raw commit hash.
+
+### Reviewer wording fixes (main session, 2026-07-16, disclosed)
+
+Three small wording touches applied at review, none changing content: (1) the correspondence clause reordered so \cite{merle} no longer splits it ("Prompted by correspondence with Eric Merle on this theorem's sharpness hedge (his related formal work is cited in [merle]), ..."); (2) "substantially extended verified range" -> "nearly consecutive verified range" (removing the "extending...extended" redundancy); (3) the doubled "assessed" in the closing sentence reduced to one. PDF rebuilt after the fixes (11 pages; the pre-existing five-line toolchain error signature unchanged); all fidelity checks re-run on the final text (hedge byte-identity, cycles.md numbers, the three revision greps) — all pass.
