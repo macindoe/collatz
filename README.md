@@ -2,7 +2,7 @@
 
 **Papers:** (1) *Reduced coordinates for the Collatz map* — published preprint, DOI [10.5281/zenodo.21273548](https://doi.org/10.5281/zenodo.21273548) (July 2026). (2) *The 3-adic mirror of the reduced Collatz dynamics* — published preprint, DOI [10.5281/zenodo.21303918](https://doi.org/10.5281/zenodo.21303918) (July 2026), a companion continuing (1). Sources and PDFs in `paper/`. This repository is both papers' complete research record.
 
-This repository is a live research program on the Collatz conjecture, kept as a wiki rather than a paper. Every page carries its current status at the top; history lives in git; nothing empirical is ever passed off as proved. If you are an agent, read `AGENTS.md` for the maintenance rules. If you are a human — probably Ben — this page is the map.
+This repository is a live research program on the Collatz conjecture, kept as a wiki rather than a paper. Every page carries its current status at the top; history lives in git; nothing empirical is ever passed off as proved. If you are an agent, read `AGENTS.md` for the maintenance rules. If you are a human — probably Ben — this page is the map. If you are an external reader arriving from the papers or from correspondence, `TOUR.md` is your trailhead: paper-to-wiki mapping, how to run the verification, and what the status words mean.
 
 ## The idea, in plain language
 
