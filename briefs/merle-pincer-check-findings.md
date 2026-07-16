@@ -296,3 +296,72 @@ largest-ratio gap, `(16266, 31867)`, is the qualitatively closer match
 gives a materially different, larger gap, `(15601, 47468)`, ratio
 `3.04`. The difference is recorded precisely per the brief's instruction
 to not harmonize.
+
+## Item 5: record and reconciliation
+
+**Whether `staircase-allp-findings.md` item 1's sentence needs the
+scoped correction the brief anticipates: yes.** That sentence reads "The
+Diophantine choice of `n` was never the binding constraint at any period
+tested," established there by an *exhaustive* scan of essentially every
+integer `n` in a window at `p = 15` finding no passer regardless of
+Diophantine quality — a strong, general-purpose test, but run only at
+`p = 15`, then generalized in prose to "any period tested." This session
+did not repeat that exhaustive all-integer scan at `p = 22` (out of
+scope; item 1 only reconstructs what the actual/supplementary *chain-
+based* runs tried). What this session *does* establish, precisely: at
+`p = 22`, the *availability* of a good in-scale (or near-scale) `n` is
+genuinely constrained — the committed script's own candidate chain has a
+real, large hole there (`(16266, 31867)`, ratio `1.96`), unlike (as far
+as recorded) `p = 15`, where the exhaustive scan gave no indication of a
+comparable Diophantine desert. The two claims are compatible, not
+contradictory, but the general sentence is stated more broadly than the
+`p=15` evidence supports once `p=22`'s specific hole is on record.
+
+**Proposed erratum line for `cycles.md` 12.8.6** (drafted here, NOT
+applied — main-session decision, per the brief):
+
+> At `p = 22` specifically, the Diophantine *availability* of a good
+> in-scale `n` is also constrained, not only the combinatorial
+> correction step: the candidate-generation machinery of `12.8.6.1`
+> leaves a large gap at this scale (`n` in roughly `(16266, 31867)`
+> under the committed script's own chain, or `(15601, 47468)` under the
+> lemma's strict sign-filtered grid — both confirmed independently,
+> `briefs/merle-pincer-check-findings.md`), and every candidate actually
+> supplied near this scale by either chain has a pre-correction margin
+> far beyond the correction algorithm's empirical recovery range. The
+> `p=15` finding that "the Diophantine choice of `n` was never the
+> binding constraint" — established there by an exhaustive integer scan,
+> not repeated at `p=22` — should be read as applying to the *choice
+> among available* `n`, not as a claim that a good `n` is always
+> available; at `p=22` it demonstrably is not, within either of our own
+> candidate generators. (Eric Merle, correspondence 2026-07-16, first
+> raised this as the "Diophantine pincer" hypothesis; independently
+> confirmed at floor grade with a corrected interval.)
+
+**What to re-check with special care (for the reviewer).** (1) The
+"exact match" claims in item 2 (his `(9,-7.86)` and `(6,-4.80)`, our
+p=7 distance profile) are the load-bearing numbers for the reply letter
+— re-run `experiments/merle_pincer_check.py` end to end and confirm
+those five decimal figures independently before quoting them back to
+him. (2) The p=23 calibration disagreement is unresolved and should not
+be smoothed into agreement; if the reviewer has access to Merle's
+original (pre-mangling) email text, a byte-exact number would settle it
+cheaply. (3) Item 1's "shared 75s deadline" table is sensitive to
+machine speed — the specific candidates that get skipped by "deadline
+exhausted" versus actually attempted-and-failed could change on a faster
+or slower machine; the *feasibility* and *pre-correction* columns are
+exact and machine-independent, the *resolved* column is not. (4) The
+claim that `n=25217 = 15601 + 9616` and `n=31202 = 2*15601` "explain"
+Merle's candidate choice is an *observation* about their arithmetic
+form, not a claim about his actual method — flagged as such in item 2,
+worth treating as a hypothesis to ask him about rather than a settled
+fact.
+
+## Compliance note
+
+Per the brief's stopping-rule compliance paragraph: this session was
+diagnostic reporting and independent re-verification only. No cycle
+search was run, no divisibility-based exclusion was attempted, no
+equidistribution work was touched, and no attempt was made to *close*
+p=22 (no new construction variants, no search beyond reproducing/
+reconstructing the recorded budgets). The cycle front remains parked.
