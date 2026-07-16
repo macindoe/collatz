@@ -238,10 +238,10 @@ This is a genuine `n_0(p)`, not merely the `O(p·1.585^p)` shape — the ratio `
 
 This subsection attempts to upgrade `12.8.3`'s sharpness assessment (`γ = O(log p)` at *every* period, verified there only at `p ∈ {6, 7}`) from assessed to proved — the same hedge recorded in the published paper's Theorem `thm:staircase`. The attempt packages an external suggestion (Eric Merle, correspondence 2026-07-16), pre-checked and delegated per `briefs/staircase-allp-brief.md`; stopping-rule compliance is recorded there (this is a negative structural result about size arguments, not a cycle search or a divisibility-based exclusion attempt). It reaches the **floor grade**: a general per-period construction recipe, a verified instance record substantially larger than `12.8.3`'s two points, and a precisely located combinatorial obstruction beyond it. The primary theorem and both fallback gradations of the brief remain open; `12.8.5`'s strategic conclusion is unaffected.
 
-**Lemma 12.8.6.1 (Diophantine input).** Let `L = log_2 3` and let `p_k/q_k` be its continued-fraction convergents. For an index `k` with `p_(k-1) - q_(k-1)L > 0` (the sign giving `q = 2^K - 3^n > 0` for `K = ⌈nL⌉`), the semiconvergents `n_j = q_(k-1) + j·q_k` (`j = 1, ..., a_(k+1)`, `a_(k+1)` the next partial quotient) inherit that sign for every `j` in the run, and
+**Lemma 12.8.6.1 (Diophantine input).** Let `L = log_2 3` and let `h_k/q_k` be its continued-fraction convergents (`h_k` the numerator, to avoid clashing with the period `p`). For an index `k` with `h_(k-1) - q_(k-1)L > 0` (the sign giving `q = 2^K - 3^n > 0` for `K = ⌈nL⌉`), the semiconvergents `n_j = q_(k-1) + j·q_k` (`j = 1, ..., a_(k+1)`, `a_(k+1)` the next partial quotient) inherit that sign for every `j` in the run, and
 
 ```text
-0  <  K_j - n_j L  <=  p_(k-1) - q_(k-1)L        for every j = 1, ..., a_(k+1),
+0  <  K_j - n_j L  <=  h_(k-1) - q_(k-1)L        for every j = 1, ..., a_(k+1),
 ```
 
 so `γ = K_j - log_2(2^(K_j) - 3^(n_j))` is bounded above by a quantity fixed within the run (not growing with `j`), while `n_j` ranges up to `q_(k+1)` in steps of `q_k`. This is the mechanism the main-session pre-check flagged: `n = 41` and `n = 306` are full convergent denominators of `L`, and `n = 94 = 53 + 41`, `n = 971 = 665 + 306` are the first semiconvergent denominators following the next convergent (`53` and `665` respectively) — both re-derived independently here via an exact continued-fraction expansion of `L`, matching the pre-check's throwaway computation.
