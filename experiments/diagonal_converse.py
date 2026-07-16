@@ -25,6 +25,13 @@
 #               the word alone (via unique-predecessor + uniqueness)
 #               reproduces the actual chain, and liveness is confirmed
 #               derived, not assumed.
+#   14.15.5(c)  the negative-diagonal reconciliation: the ((2,1))^inf
+#               word's y* = -5 computed exactly, identified with the
+#               classical T-cycle {-5,-7}, and its positive realization
+#               height H_{n,n} computed exactly (via an efficient CRT
+#               construction, cross-checked against brute force) for
+#               n = 1..8, confirming clean escape (no growth *study*
+#               beyond this one prescribed instance is attempted).
 
 import random
 from fractions import Fraction
@@ -78,6 +85,15 @@ def G(y):
 def stratum(y):
     _, m, r = stratum_and_G(y)
     return m, r
+
+
+def T(x):
+    """The classical accelerated odd Collatz map, for the -5/-7 cross-
+    check (spine.md 9.8) -- extended to negative x exactly as usual."""
+    v = 3 * x + 1
+    while v % 2 == 0:
+        v //= 2
+    return v
 
 
 def unique_predecessor(z, m, r):
@@ -467,6 +483,131 @@ def test_forward_half_nesting(trials=2000, seed=45006, n_max=10, hi=10 ** 6):
     return trials, bad
 
 
+# ---------------------------------------------------------------------------
+# 14.15.5(c): the negative-diagonal reconciliation -- the (2,1)^inf word
+# ---------------------------------------------------------------------------
+
+def test_negative_fixed_point():
+    """The pre-check's exact computation, reproduced with fresh code:
+    y* = beta/(1-alpha) for the single letter (2,1) is exactly -5, and
+    stratum(-5) = (2,1), G(-5) = -5. Also cross-checks against the
+    classical T-cycle {-5,-7} directly."""
+    alpha, beta = letter_affine(2, 1)
+    y_star = beta / (1 - alpha)
+    results = {
+        "y_star": y_star,
+        "stratum_-5": stratum(-5),
+        "G_-5": G(-5),
+        "T_-5": T(-5),
+        "T_T_-5": T(T(-5)),
+    }
+    ok = (y_star == Fraction(-5) and stratum(-5) == (2, 1) and G(-5) == -5
+          and T(-5) == -7 and T(T(-5)) == -5)
+    return results, ok
+
+
+def height_2_1_word(n, max_progression_steps=200000):
+    """H_{n,n} for the bi-infinite word W = (...,(2,1),(2,1),(2,1),...)
+    (the -5 instance, item 3). Combines the forward class (mod
+    2^(S_n+1), via forward_class_representative) and the backward
+    admissibility class (item 1, mod 3^(M_n)) by CRT, then scans the
+    resulting arithmetic progression of INCREASING positive candidates
+    for the first one whose depth-n backward chain also has a LIVE
+    deepest door (Definition 14.15.4.3's extra condition -- not implied
+    by the two residue classes alone). Since the progression is scanned
+    in increasing order and both residue conditions are individually
+    necessary and sufficient for R_{n,n}-membership modulo the liveness
+    condition, the first hit is exactly H_{n,n}, not merely a witness
+    (cross-checked against brute force for n=1,2,3 below). Returns
+    (H, progression_steps_used) or (None, max_progression_steps) if the
+    (never observed) shortfall occurs -- handled honestly, not hidden."""
+    letters = [(2, 1)] * n
+    y_fwd, mod_fwd = forward_class_representative(letters)
+    M_n = 2 * n
+    mod_bwd = 3 ** M_n
+    A_n, B_n = compose_append(list(reversed(letters)))  # symmetric word
+    y_bwd = frac_mod(B_n, mod_bwd)
+
+    combined_mod = mod_fwd * mod_bwd
+    inv_fwd = pow(mod_fwd, -1, mod_bwd)
+    inv_bwd = pow(mod_bwd, -1, mod_fwd)
+    z0 = (y_fwd * mod_bwd * inv_bwd + y_bwd * mod_fwd * inv_fwd) % combined_mod
+    if z0 == 0:
+        z0 = combined_mod
+
+    for k in range(max_progression_steps):
+        z = z0 + k * combined_mod
+        cur = z
+        ok = True
+        deepest_live = True
+        for (m, r) in letters:
+            y = unique_predecessor(cur, m, r)
+            if y is None or y <= 0:
+                ok = False
+                break
+            deepest_live = (y % 3 != 0)
+            cur = y
+        if ok and deepest_live:
+            return z, k + 1
+    return None, max_progression_steps
+
+
+def brute_height_2_1_word(n, bound):
+    """Independent brute-force computation of H_{n,n} for the same word,
+    by direct scan (used only to cross-check height_2_1_word at small
+    n, where the scan bound is tractable)."""
+    letters = [(2, 1)] * n
+    for z in range(1, bound, 2):
+        c = z
+        good = True
+        for (m, r) in letters:
+            if stratum(c) != (m, r):
+                good = False
+                break
+            c = G(c)
+        if not good:
+            continue
+        cur = z
+        ok = True
+        deepest_live = True
+        for (m, r) in letters:
+            y = unique_predecessor(cur, m, r)
+            if y is None or y <= 0:
+                ok = False
+                break
+            deepest_live = (y % 3 != 0)
+            cur = y
+        if ok and deepest_live:
+            return z
+    return None
+
+
+def test_height_escape(n_max=8, cross_check_n=(1, 2, 3), cross_check_bound=1_600_000):
+    """Item 3's named check: H_{n,n} for the (2,1)^inf word (the -5
+    instance), n = 1..n_max, computed exactly via the efficient
+    CRT+progression method, cross-checked against brute force at
+    n = 1,2,3 (the largest values still tractable to scan directly)."""
+    heights = {}
+    for n in range(1, n_max + 1):
+        h, steps = height_2_1_word(n)
+        heights[n] = (h, steps)
+
+    cross_check_bad = 0
+    for n in cross_check_n:
+        brute = brute_height_2_1_word(n, cross_check_bound)
+        fast_h, _ = heights[n]
+        if brute != fast_h:
+            cross_check_bad += 1
+
+    monotone_growth = all(heights[n][0] is not None for n in range(1, n_max + 1))
+    strictly_increasing = all(
+        heights[n][0] > heights[n - 1][0]
+        for n in range(2, n_max + 1)
+        if heights[n][0] is not None and heights[n - 1][0] is not None
+    )
+    return heights, cross_check_bad, monotone_growth, strictly_increasing
+
+
 if __name__ == "__main__":
     print("== 14.15.5(a): base-case identity (beta === -2^{-r} mod 3^m) ==")
     trials, bad = test_base_case_identity()
@@ -496,3 +637,15 @@ if __name__ == "__main__":
     print("== 14.15.5(b): forward-half nesting ==")
     trials, bad = test_forward_half_nesting()
     print(f"{trials} checked, {bad} failures")
+
+    print("== 14.15.5(c): the -5 instance (exact fixed point + T-cycle) ==")
+    results, ok = test_negative_fixed_point()
+    print(results, "OK" if ok else "MISMATCH")
+
+    print("== 14.15.5(c): positive realization height escape, "
+          "(2,1)^inf word, n=1..8 ==")
+    heights, cross_bad, monotone, strict = test_height_escape()
+    for n, (h, steps) in heights.items():
+        print(f"  n={n}: H_(n,n) = {h}  (progression steps: {steps})")
+    print(f"cross-check (brute force, n=1,2,3): {cross_bad} mismatches; "
+          f"all defined: {monotone}; strictly increasing throughout: {strict}")
