@@ -255,7 +255,7 @@ This subsection attempts to upgrade `12.8.3`'s sharpness assessment (`γ = O(log
 **Proposition 12.8.6.4 (verified instance record, 2026-07-16).** By the recipe of `12.8.6.1`–`12.8.6.3`, exact big-integer verification (`experiments/staircase_allp.py`, fresh code, no import from `uniform_trim.py`) produces a configuration satisfying the size-passer condition (all `p` rotations, `q <= R_r`) and the scale condition (`n ~ 1.585^p` by construction) for every period
 
 ```text
-p  ∈  {2, 3, ..., 21} ∪ {23},        with     γ / log_2 p  ∈  [1.83, 3.64]
+p  ∈  {2, 3, ..., 21} ∪ {23},        with     γ / log_2 p  ∈  [1.828, 3.643]
 ```
 
 over that range — consistent with, but not a proof of, the assessed `γ = O(log p)` shape (`12.8.3`, `thm:staircase`). The recipe's own output at `p = 7` (`n = 29`, `γ = 5.339`) is a *different* valid witness from `12.8.3`'s recorded instance (`n = 94`, `γ = 6.744`) — the staircase family is not unique at a given period, as `12.8.3`'s own `84` size-passers at `p = 6` already show. The published `p = 7` instance is separately reproduced and re-verified as a direct cross-check, independent of the general recipe: `m = (4,7,9,15,23,35,1)`, `s = (1,1,1,1,1,1,S-6)`, `γ = 6.744`, matching `12.8.3` to the stated precision, all seven rotations pass. Every constructed instance (recipe output and the cross-check) was checked against the full divisibility system `q | R_r`: none passes, matching `12.8.3`'s own finding for its instances; no halt condition was triggered.
