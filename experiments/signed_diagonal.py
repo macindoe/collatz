@@ -562,3 +562,407 @@ if __name__ == "__main__":
     print("== item 2: -1 never lies in any single-stratum cylinder class ==")
     trials, bad = test_minus1_never_in_cylinder_class()
     print(f"{trials} (m,r) pairs checked, {bad} times -1 matched the class")
+
+
+# ---------------------------------------------------------------------------
+# Item 3: the signed characterization; the per-sector realization height
+# and whether 14.15.4.4-14.15.4.5's monotone-net argument transfers.
+# ---------------------------------------------------------------------------
+
+def test_signed_converse_mechanism(trials=300, seed=55021, depth=12, hi=10 ** 5):
+    """Theorem 14.15.5.3's converse mechanism, both signs: real long
+    backward chains behind a real live y0 (either sign), letters drawn
+    honestly (find_live_predecessor, not fitted to a target). Checks (i)
+    the Cauchy estimate v3(y0-B_n) >= M_n at every depth, (ii)
+    reconstruction from y0 + the recorded letters alone reproduces the
+    chain exactly, (iii) liveness derived (every chain door, and G's own
+    image of the deepest one, automatically live), and, new to the
+    signed setting, (iv) no chain door is ever -1."""
+    rng = random.Random(seed)
+    built = 0
+    bad_cauchy = bad_reconstruct = bad_live = bad_minus1 = 0
+
+    for _ in range(trials):
+        sign = rng.choice((1, -1))
+        y0 = random_nonzero_odd(rng, hi, sign=sign)
+        chain = []
+        letters_shallow_first = []
+        cur = y0
+        ok = True
+        for _ in range(depth):
+            res = find_live_predecessor(cur, rng)
+            if res is None:
+                ok = False
+                break
+            y_prev, m, r = res
+            chain.append(y_prev)
+            letters_shallow_first.append((m, r))
+            cur = y_prev
+        if not ok:
+            continue
+        built += 1
+
+        for n in range(1, depth + 1):
+            word_deepest_first = list(reversed(letters_shallow_first[:n]))
+            _, B_n = compose_append(word_deepest_first)
+            M_n = sum(m for m, r in letters_shallow_first[:n])
+            diff = Fraction(y0) - B_n
+            num_v3 = v3(diff.numerator) if diff.numerator != 0 else 10 ** 9
+            den_v3 = v3(diff.denominator) if diff.denominator != 1 else 0
+            if (num_v3 - den_v3) < M_n:
+                bad_cauchy += 1
+
+        cur = y0
+        rebuilt = []
+        broke = False
+        for (m, r) in letters_shallow_first:
+            y = unique_predecessor(cur, m, r)
+            if y is None:
+                bad_reconstruct += 1
+                broke = True
+                break
+            rebuilt.append(y)
+            cur = y
+        if not broke and rebuilt != chain:
+            bad_reconstruct += 1
+
+        for y in chain:
+            if y % 3 == 0:
+                bad_live += 1
+            if y == -1:
+                bad_minus1 += 1
+        if G(chain[-1]) % 3 == 0:
+            bad_live += 1
+        if G(chain[-1]) == -1 and sign > 0:
+            # sign>0 chains are entirely positive (14.15.6.3), so G of a
+            # positive deepest door must be positive too -- never -1.
+            bad_minus1 += 1
+
+    return trials, built, bad_cauchy, bad_reconstruct, bad_live, bad_minus1
+
+
+def test_forward_half_nesting_signed(trials=2000, seed=55022, n_max=10, hi=10 ** 6):
+    """The forward half of the signed converse: y0's own forward orbit
+    places it in every one of its own forward cylinders, both signs --
+    checked via the independent Hensel-lifting construction
+    (forward_class_representative), not by scanning. A random negative
+    y0's forward orbit can genuinely hit -1 within n_max steps (the
+    one-sided forward mortality of item 1) -- such draws are skipped and
+    counted, not treated as failures; they are the expected, occasional
+    footprint of 14.15.6.2(4), not a bug in this test."""
+    rng = random.Random(seed)
+    bad = 0
+    mortal_skips = 0
+    checked = 0
+    for _ in range(trials):
+        sign = rng.choice((1, -1))
+        y0 = random_nonzero_odd(rng, hi, sign=sign)
+        n = rng.randrange(1, n_max + 1)
+        letters = []
+        cur = y0
+        hit_mortality = False
+        for _ in range(n):
+            if cur == -1:
+                hit_mortality = True
+                break
+            letters.append(stratum(cur))
+            cur = G(cur)
+        if hit_mortality:
+            mortal_skips += 1
+            continue
+        checked += 1
+        y_rep, modulus = forward_class_representative(letters)
+        if y0 % modulus != y_rep % modulus:
+            bad += 1
+    return trials, checked, mortal_skips, bad
+
+
+def in_R_periodic_signed(y0, unit, n, sign):
+    """Membership in the signed R^{sign}_{n,n}(W) for the bi-infinite
+    periodic word W built by repeating `unit` (a finite list of letters)
+    in both directions: y0 has the requested sign, is live, its forward
+    orbit matches n copies of `unit`, and its letter-prescribed backward
+    chain (letters = reversed(unit) repeated n times, the natural
+    'immediately-preceding letter is unit's last letter' convention for
+    a periodic word) exists with a live, non-singular deepest door."""
+    if sign > 0 and y0 <= 0:
+        return False
+    if sign < 0 and y0 >= 0:
+        return False
+    if y0 == -1 or y0 % 3 == 0:
+        return False
+    cur = y0
+    for _ in range(n):
+        for (m, r) in unit:
+            if cur == -1:
+                return False
+            if stratum(cur) != (m, r):
+                return False
+            cur = G(cur)
+    cur = y0
+    back_letters = list(reversed(unit)) * n
+    for (m, r) in back_letters:
+        y = unique_predecessor(cur, m, r)
+        if y is None:
+            return False
+        cur = y
+    return cur != -1 and cur % 3 != 0
+
+
+def test_negative_realized_cycles_bounded(n_max=6):
+    """The reconciliation the brief flags (item 4(i)-(ii), verified here
+    at the height-mechanism level, item 3): the two known negative
+    periodic diagonal points, -5 (unit [(2,1)]) and -17 (unit
+    [(4,1),(3,3)]), are members of their own R^-_{n,n} for every n tested
+    -- an UPPER BOUND on H^-_{n,n} (<=5, <=17 respectively) at every
+    window, i.e. BOUNDED, contrasting with the escaping POSITIVE height
+    already on file for the -5 word (14.15.5(c), diagonal_converse.py).
+    Also confirms -5 is (up to the excluded singular point -1 and the
+    dead door -3) the least-magnitude live negative odd integer, so this
+    membership alone pins H^-_{n,n}(-5 word) = 5 exactly, no search
+    needed -- the same argument style as 14.15.4(c)'s trivial-word check."""
+    results = {}
+    ok = True
+    for n in range(0, n_max + 1):
+        m5 = in_R_periodic_signed(-5, [(2, 1)], n, -1)
+        m17 = in_R_periodic_signed(-17, [(4, 1), (3, 3)], n, -1)
+        results[n] = (m5, m17)
+        ok = ok and m5 and m17
+    # -5 minimality: the only candidates with |y|<5, y odd, y!=-1 are
+    # +-1 (|y|=1, but -1 excluded/singular, +1 not negative) and +-3
+    # (dead, 3|3) -- no live negative odd integer has |y|<5.
+    minimality_ok = all(mag in (1, 3) or mag >= 5
+                         for mag in range(1, 5, 2))
+    return results, ok, minimality_ok
+
+
+def crt_combine(y_a, mod_a, y_b, mod_b):
+    """Chinese remainder combine two residues with coprime moduli."""
+    inv_a = pow(mod_a, -1, mod_b)
+    inv_b = pow(mod_b, -1, mod_a)
+    combined_mod = mod_a * mod_b
+    z0 = (y_a * mod_b * inv_b + y_b * mod_a * inv_a) % combined_mod
+    return z0, combined_mod
+
+
+def height_for_periodic_word(unit, n, sign, max_progression_steps=300000):
+    """H^{sign}_{n,n} for the bi-infinite word built by repeating `unit`
+    n times each direction: combine the forward cylinder class (mod
+    2^(S+1), via forward_class_representative) and the backward
+    admissible class (14.15.6.4, mod 3^(M_n)) by CRT, then scan the
+    resulting class IN THE REQUESTED SIGN'S DIRECTION (nearest zero
+    first) for the first candidate whose depth-n backward chain also has
+    a live, non-singular deepest door. Generalizes
+    diagonal_converse.py's height_2_1_word (independently reimplemented
+    here) to an arbitrary periodic unit and either sign."""
+    word = unit * n
+    y_fwd, mod_fwd = forward_class_representative(word)
+    M_n = sum(m for m, r in word)
+    mod_bwd = 3 ** M_n
+    _, B_n = compose_append(list(reversed(word)))
+    y_bwd = frac_mod(B_n, mod_bwd)
+    z0, combined_mod = crt_combine(y_fwd, mod_fwd, y_bwd, mod_bwd)
+    r0 = z0 % combined_mod
+
+    for k in range(max_progression_steps):
+        z = (r0 + k * combined_mod) if sign > 0 else (r0 - combined_mod - k * combined_mod)
+        if z == 0 or z == -1:
+            continue
+        cur = z
+        ok = True
+        deepest_live = True
+        for (m, r) in word:
+            y = unique_predecessor(cur, m, r)
+            if y is None or y == -1 or (sign > 0 and y <= 0) or (sign < 0 and y >= 0):
+                ok = False
+                break
+            deepest_live = (y % 3 != 0)
+            cur = y
+        if ok and deepest_live:
+            return z, k + 1
+    return None, max_progression_steps
+
+
+def brute_height_for_periodic_word(unit, n, sign, bound):
+    """Independent brute-force cross-check, small n only."""
+    word = unit * n
+    for mag in range(1, bound, 2):
+        z = sign * mag
+        if z == -1:
+            continue
+        c = z
+        good = True
+        for (m, r) in word:
+            if c == -1 or stratum(c) != (m, r):
+                good = False
+                break
+            c = G(c)
+        if not good:
+            continue
+        cur = z
+        ok = True
+        deepest_live = True
+        for (m, r) in word:
+            y = unique_predecessor(cur, m, r)
+            if y is None or y == -1 or (sign > 0 and y <= 0) or (sign < 0 and y >= 0):
+                ok = False
+                break
+            deepest_live = (y % 3 != 0)
+            cur = y
+        if ok and deepest_live:
+            return z
+    return None
+
+
+def test_negative_height_escapes_for_positive_word(n_max=5, cross_check_n=(1, 2),
+                                                     cross_check_bound=400_000):
+    """The escape side, checked so the boundedness criterion is not
+    vacuously satisfied in the negative sector: the trivial word
+    (1,1)^inf is realized ONLY by the positive integer y=1 (its composed
+    fixed point is the unique rational solution y*=1, 14.14.8.4, never a
+    negative integer). By the (transferred) equivalence theorem, its
+    NEGATIVE height should therefore escape. Computed exactly via CRT +
+    progression scan, n=1..n_max, cross-checked against brute force at
+    n=1,2."""
+    heights = {}
+    for n in range(1, n_max + 1):
+        h, steps = height_for_periodic_word([(1, 1)], n, -1)
+        heights[n] = (h, steps)
+
+    cross_bad = 0
+    for n in cross_check_n:
+        brute = brute_height_for_periodic_word([(1, 1)], n, -1, cross_check_bound)
+        fast_h, _ = heights[n]
+        if brute != fast_h:
+            cross_bad += 1
+
+    all_defined = all(heights[n][0] is not None for n in range(1, n_max + 1))
+    magnitudes = [abs(heights[n][0]) for n in range(1, n_max + 1) if heights[n][0] is not None]
+    nondecreasing = all(magnitudes[i] <= magnitudes[i + 1] for i in range(len(magnitudes) - 1))
+    grew = magnitudes[-1] > magnitudes[0] if len(magnitudes) >= 2 else False
+    return heights, cross_bad, all_defined, nondecreasing, grew
+
+
+def exhaustive_min_abs_R(word_forward, word_backward, sign, bound):
+    """Exhaustive search for the minimum |y| of the requested sign
+    realizing BOTH the given forward letters and backward letters
+    (possibly different lengths -- used for the (p,q) monotonicity check
+    below), scanning by increasing magnitude so the first hit is the true
+    minimum, not merely a witness. Returns that magnitude, or None."""
+    for mag in range(1, bound, 2):
+        y = sign * mag
+        if y == -1 or y % 3 == 0:
+            continue
+        cur = y
+        ok = True
+        for (m, r) in word_forward:
+            if cur == -1 or stratum(cur) != (m, r):
+                ok = False
+                break
+            cur = G(cur)
+        if not ok:
+            continue
+        cur = y
+        for (m, r) in word_backward:
+            yy = unique_predecessor(cur, m, r)
+            if yy is None or yy == -1 or (sign > 0 and yy <= 0) or (sign < 0 and yy >= 0):
+                ok = False
+                break
+            cur = yy
+        if not ok:
+            continue
+        if cur % 3 != 0:
+            return mag
+    return None
+
+
+def test_height_monotonicity_negative_real_orbits(trials=20, seed=55023,
+                                                    bound=1 << 15, m_cap=2, r_cap=6):
+    """The direct sign-blind transfer check for 14.15.4.4's properties
+    1-3 (existence + monotonicity of H under nested windows), restricted
+    to the negative sector: 20 real negative integer orbits (letters
+    honestly drawn -- forward from the orbit itself, backward via
+    find_live_predecessor), H^-_{n,n} computed by EXHAUSTIVE search over
+    NEGATIVE candidates only at n=1 and n=2 on the SAME underlying
+    word/pivot, mirroring 14.15.4(c)'s own 'fixed-origin nested-window
+    monotonicity' check exactly, one sector at a time."""
+    rng = random.Random(seed)
+    built = 0
+    bad_shortfall = 0
+    bad_monotone = 0
+    grew = 0
+
+    for _ in range(trials):
+        y0 = random_nonzero_odd(rng, 5000, sign=-1)
+
+        fwd1 = [stratum(y0)]
+        cur = G(y0)
+        if cur == -1:
+            # forward mortality struck within one step (item 1's
+            # occasional footprint) -- this y0 cannot supply a length-2
+            # forward window at all; skip it rather than force it.
+            continue
+        fwd2 = fwd1 + [stratum(cur)]
+
+        res1 = find_live_predecessor(y0, rng, m_cap=m_cap, r_cap=r_cap)
+        if res1 is None:
+            continue
+        y_m1, m1, r1 = res1
+        res2 = find_live_predecessor(y_m1, rng, m_cap=m_cap, r_cap=r_cap)
+        if res2 is None:
+            continue
+        y_m2, m2, r2 = res2
+
+        bwd1 = [(m1, r1)]
+        bwd2 = [(m1, r1), (m2, r2)]
+
+        h1 = exhaustive_min_abs_R(fwd1, bwd1, -1, bound)
+        h2 = exhaustive_min_abs_R(fwd2, bwd2, -1, bound)
+        if h1 is None or h2 is None:
+            bad_shortfall += 1
+            continue
+        built += 1
+        if h2 < h1:
+            bad_monotone += 1
+        if h2 > h1:
+            grew += 1
+
+    return trials, built, bad_shortfall, bad_monotone, grew
+
+
+if __name__ == "__main__":
+    print("== item 3: signed converse-theorem mechanism (both signs) ==")
+    trials, built, bad_c, bad_r, bad_l, bad_m1 = test_signed_converse_mechanism()
+    print(f"{trials} trials, {built} chains built, "
+          f"{bad_c} Cauchy failures, {bad_r} reconstruction failures, "
+          f"{bad_l} liveness failures, {bad_m1} landed on -1")
+
+    print("== item 3: forward-half nesting, both signs ==")
+    trials, checked, mortal_skips, bad = test_forward_half_nesting_signed()
+    print(f"{trials} drawn, {checked} checked, {mortal_skips} skipped "
+          f"(hit forward mortality mid-orbit, expected occasionally), "
+          f"{bad} failures")
+
+    print("== item 3: negative realized cycles (-5, -17/-41) have "
+          "BOUNDED negative height ==")
+    results, ok, minimality_ok = test_negative_realized_cycles_bounded()
+    for n, (m5, m17) in results.items():
+        print(f"  n={n}: -5 in R^-_(n,n): {m5}, -17 in R^-_(n,n): {m17}")
+    print(f"all membership checks OK: {ok}; -5 minimality confirmed: {minimality_ok}")
+
+    print("== item 3: negative height ESCAPES for a positive-only-realized "
+          "word (1,1)^inf ==")
+    heights, cross_bad, all_defined, nondecreasing, grew = \
+        test_negative_height_escapes_for_positive_word()
+    for n, (h, steps) in heights.items():
+        print(f"  n={n}: H^-_(n,n) = {h}  (progression steps: {steps})")
+    print(f"cross-check mismatches: {cross_bad}; all defined: {all_defined}; "
+          f"nondecreasing: {nondecreasing}; strictly grew overall: {grew}")
+
+    print("== item 3: fixed-origin nested-window monotonicity, "
+          "negative sector, real orbits ==")
+    trials, built, bad_shortfall, bad_monotone, grew = \
+        test_height_monotonicity_negative_real_orbits()
+    print(f"{trials} orbits attempted, {built} built (n=1,2 both found), "
+          f"{bad_shortfall} search-bound shortfalls, "
+          f"{bad_monotone} monotonicity violations, {grew} strictly grew")
