@@ -453,6 +453,111 @@ def item2_full():
     return "\n".join(out)
 
 
+def item2b_literal_n_rows():
+    """Item 2b: the findings file's most load-bearing rows, computed by
+    the committed script itself (reviewer fix, 2026-07-17: these were
+    previously computed only in ad-hoc shell sessions; AGENTS.md requires
+    the record to stay runnable and reproduce what it claims).
+
+    (a) Merle's two literal p=22 n-values, base construction 12.8.6.2
+        (fresh code), no correction -- expected to reproduce his
+        (9, -7.86) and (6, -4.80) exactly at cd=1.
+    (b) The p=23 near-miss transcription probe n=39488 quoted in the
+        findings' calibration discussion.
+    (c) The K - n*L local-approximation-quality figures quoted in the
+        findings (display-only decimals, no pass/fail role)."""
+    out = []
+    out.append(item2_calibration_row(22, 25217,
+                "Merle's literal p=22 IN-SCALE value (his numbers: 9 failing, worst -7.86)"))
+    out.append(item2_calibration_row(22, 31202,
+                "Merle's literal p=22 OFF-SCALE value (his numbers: 6 failing, worst -4.80)"))
+    out.append(item2_calibration_row(23, 39488,
+                "p=23 single-glyph transcription probe (8/6 swap of 39468); "
+                "no Merle numbers attach to this n -- it is our probe"))
+    out.append("")
+    out.append("Local approximation quality K - n*L (display-only, exact "
+                "Decimal at 600 digits, quoted in the findings' item 2):")
+    for n in (15601, 16266, 25217, 31202, 31867, 47468):
+        Kd = decimal.Decimal(int((3 ** n).bit_length()))
+        frac = Kd - n * L
+        out.append(f"  n={n:>6}: K - nL = {float(frac):.6g}")
+    return "\n".join(out)
+
+
+def item2c_correction_runs(deadline_s=240.0):
+    """Item 2c: the three correction-algorithm runs quoted in the
+    findings (reviewer fix, 2026-07-17 -- same reason as item 2b). Uses
+    Section 1's instrumented copy of algorithm 12.8.6.3 (the brief's
+    labeled exception; this is a question about what OUR algorithm does
+    with these inputs). Budgets stated in the output: max_moves=40, one
+    wall-clock deadline of deadline_s seconds PER RUN (the findings'
+    original ad-hoc runs used 40 s per run; the committed default here
+    is deliberately larger, 240 s, so the non-resolution claim is tested
+    at a stronger budget than the one first reported). The resolved /
+    not-resolved outcome at a given wall-clock budget is machine-speed
+    dependent; the move cap is not."""
+    out = []
+    out.append(f"Correction runs (algorithm 12.8.6.3 via Section 1's "
+                f"instrumented copy): max_moves=40, deadline={deadline_s:.0f}s "
+                f"per run, crash_depth=1, base construction 12.8.6.2.")
+    p = 22
+    cases = [
+        (31202, "Merle's off-scale point (his pre-correction margin -4.80, "
+                "at his stated recovery boundary)"),
+        (25217, "Merle's in-scale point"),
+        (16266, "our own top-6's best feasible entry"),
+    ]
+    for n, label in cases:
+        T3 = 3 ** n
+        K = T3.bit_length()
+        q = (1 << K) - T3
+        res = committed_base_construct(p, n, K, 1)
+        if res is None:
+            out.append(f"  n={n}: base construction infeasible")
+            continue
+        ms0, ss0 = res
+        t0 = time.time()
+        fixed = committed_bounded_correction(list(ms0), list(ss0), q,
+                                              max_moves=40,
+                                              deadline=t0 + deadline_s)
+        dt = time.time() - t0
+        if fixed is None:
+            out.append(f"  n={n} ({label}): NOT resolved "
+                        f"[max_moves=40, {deadline_s:.0f}s deadline; "
+                        f"elapsed {dt:.1f}s]")
+        else:
+            ms, ss, moves = fixed
+            # Independent re-verification of the algorithm's claim, with
+            # the FRESH rotation-sum code (Section 2), exact integers:
+            Rs_f = R_all_fresh(ms, ss)
+            size_ok = min(Rs_f) >= q
+            assert size_ok, "correction claimed success but fresh code disagrees"
+            assert sum(ms) == n and sum(ss) == K - n   # budget conservation
+            gamma = K - math.log2(q)
+            # Bounded divisibility observation (staircase-allp-brief
+            # convention): if a configuration ever passed size AND all
+            # divisibility conditions it would reconstruct a genuine
+            # cycle candidate -- halt for main-session review.
+            div_all = all(R % q == 0 for R in Rs_f)
+            if div_all:
+                out.append(f"!!! HALT: n={n} passes size AND divisibility.")
+                print("\n".join(out))
+                import sys
+                sys.exit(1)
+            out.append(f"  n={n} ({label}): RESOLVED in {moves} moves "
+                        f"[elapsed {dt:.1f}s]")
+            out.append(f"    fresh-code re-verification: all {p} rotations "
+                        f"pass q <= R_r (exact): {size_ok}; "
+                        f"n/L^22 = {n / LF**p:.3f}; gamma = {gamma:.3f}; "
+                        f"gamma/log2(p) = {gamma / math.log2(p):.3f}; "
+                        f"divisibility q | R_r: none pass "
+                        f"(expected, matching 12.8.3): {not div_all}")
+            out.append(f"    ms = {ms}")
+            out.append(f"    ss = [1]*{p-1} + [{ss[-1]}]  "
+                        f"(S = {K - n}, crash exit = S - {p-1})")
+    return "\n".join(out)
+
+
 # ---------------------------------------------------------------------
 # Item 3: independent re-run of Merle's ledger seed #3 on the p=7 instance.
 # ---------------------------------------------------------------------
@@ -617,6 +722,16 @@ if __name__ == "__main__":
     print("=" * 70)
     print("ITEM 2: pincer hypothesis test + calibration cross-check")
     print(item2_full())
+
+    print()
+    print("=" * 70)
+    print("ITEM 2b: Merle's literal n-values, reproduced by this script")
+    print(item2b_literal_n_rows())
+
+    print()
+    print("=" * 70)
+    print("ITEM 2c: correction-algorithm runs on those n (budgets in output)")
+    print(item2c_correction_runs())
 
     print()
     print("=" * 70)
