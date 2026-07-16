@@ -220,3 +220,31 @@ own machinery rather than an error in his numbers. The p=23 calibration
 row is a real, unresolved disagreement, most plausibly a residual
 transcription issue in the brief's own reconstruction of a mangled
 numeral, not chased further here per scope.
+
+## Item 3: independent re-run of ledger seed #3 (p = 7)
+
+Fresh code, `m = (4,7,9,15,23,35,1)`, `n = 94`, `K = 149`,
+`gamma = 6.7438` (matches 12.8.6.4's cross-check `6.7438`/12.8.3's
+`6.74`). Structural local solvability, true for every configuration (not
+just p=7): `q = 2^K - 3^n` is odd (`even - odd`); `3 ∤ q` (`q ≡ (-1)^K
+mod 3`, both verified directly for this instance: `q` odd = True, `3 |
+q` = False). `Z`-solvability: `q | R_r` is False for all 7 rotations,
+matching 12.8.3's own record ("All fail the divisibility conditions").
+
+Distance-to-integrality profile `min(R_r mod q, q - R_r mod q)/q`, all
+seven rotations:
+
+```text
+rotation  distance/q
+0         0.1703
+1         0.4110
+2         0.4695
+3         0.3390
+4         0.4206
+5         0.0538
+6         0.4784
+```
+
+Range found: `[0.0538, 0.4784]`. Merle's reported range: `[0.05, 0.48]`.
+Matches to two decimal places at both ends — an exact independent
+confirmation of ledger seed #3 on the p=7 instance.
