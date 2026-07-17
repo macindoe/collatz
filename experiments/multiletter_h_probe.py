@@ -742,6 +742,101 @@ def analyze(grid, results):
 
 
 # ----------------------------------------------------------------------------
+# Item 4: M4 — rotation dependence
+# ----------------------------------------------------------------------------
+
+M4_WORDS = [((1, 1), (1, 2)),          # q = 23
+            ((1, 1), (2, 1)),          # q = 5
+            ((1, 1), (2, 2)),          # q = 37
+            ((1, 1), (1, 1), (2, 2)),  # q = 175
+            ((1, 1), (1, 2), (1, 2))]  # q = 229
+M4_NMAX = 6
+
+
+def m4_rotations():
+    """Item 4: for words spanning 5 distinct q, all p rotations: each
+    rotation's own fixed point (computed exactly from its own A, B — and
+    separately checked against the G-affine image of the previous rotation's
+    fixed point, compute-don't-assume), its own height rows n = 1..6 both
+    sectors with the full direct-simulation battery, and per-rotation M1-M3
+    row checks against its own (a_i, q_i)."""
+    print("\n" + "=" * 74)
+    print(f"Item 4: M4 rotation dependence ({len(M4_WORDS)} words, all "
+          f"rotations, n = 1..{M4_NMAX}, both sectors)")
+    print("=" * 74)
+    m4_ok_all = True
+    same_q_all = True
+    reports = []
+    for P in M4_WORDS:
+        p = len(P)
+        rots = rotations(P)
+        ystars = [fixed_point(R) for R in rots]
+        # G-affine orbit identity: y*_{i+1} = alpha_i y*_i + beta_i with
+        # (alpha_i, beta_i) the affine constants of rotation i's first letter
+        orbit_ok = True
+        for i, R in enumerate(rots):
+            alpha, beta = letter_affine(*R[0])
+            if alpha * ystars[i] + beta != ystars[(i + 1) % p]:
+                orbit_ok = False
+        qs = [y.denominator for y in ystars]
+        same_q = len(set(qs)) == 1
+        same_q_all &= same_q
+        S, M = word_sums(P)
+        print(f"\nword {word_str(P)}^inf: rotations' fixed points "
+              f"{[str(y) for y in ystars]}")
+        print(f"  G-affine orbit identity (y*_(i+1) = alpha_i y*_i + "
+              f"beta_i): {'OK' if orbit_ok else 'FAIL'}; denominators "
+              f"{qs} {'(all equal)' if same_q else '(NOT equal)'}")
+        rot_rows = []
+        for i, R in enumerate(rots):
+            a, q = ystars[i].numerator, ystars[i].denominator
+            g = (2**S * 3**M) % q
+            ordg = mult_order(g, q)
+            rot_ok = True
+            for sigma in (+1, -1):
+                seq = []
+                for n in range(1, M4_NMAX + 1):
+                    row = height_scan(R, n, sigma)
+                    dd = deepest_door_formula(R, n, row["y0"])
+                    assert (dd.denominator == 1
+                            and int(dd) == row["deepest"]), (
+                        f"M4 deepest-door mismatch {word_str(R)} n={n}")
+                    # per-rotation M1: j-law with this rotation's (a, q)
+                    j_alg = (-a * modinv(2, q)
+                             * pow(modinv(g, q), n, q)) % q
+                    if row["j"] != j_alg:
+                        rot_ok = False
+                    # per-rotation M2 core: v_n >= 1/q
+                    v = (Fraction(row["H"], row["Q"])
+                         - sigma * Fraction(a, q * row["Q"]))
+                    if v < Fraction(1, q):
+                        rot_ok = False
+                    # per-rotation M3: k-rule and k <= 2
+                    t_n = (a + 2 * row["j"]) * modinv(q, 3) % 3
+                    k_pred = ((1 if t_n == 0 else 0) if sigma > 0
+                              else (2 if t_n == 2 else 1))
+                    if row["k"] != k_pred or row["k"] > 2:
+                        rot_ok = False
+                    seq.append((n, row["H"], row["k"], row["j"], v))
+                jseq = [s[3] for s in seq]
+                kseq = [s[2] for s in seq]
+                vseq = [s[4] for s in seq]
+                print(f"  rot {i} {word_str(R):>24} y*={str(ystars[i]):>9} "
+                      f"ord={ordg:>3} sec {'+' if sigma > 0 else '-'}: "
+                      f"j={jseq} k={kseq}")
+                print(f"        v_n = "
+                      f"{['%s/%s' % (v.numerator, v.denominator) for v in vseq]}")
+            m4_ok_all &= rot_ok and orbit_ok
+            rot_rows.append((i, R, a, q, ordg, rot_ok))
+        reports.append((P, ystars, qs, same_q, orbit_ok, rot_rows))
+    print(f"\nM4 verdict inputs: every rotation obeys M1-M3 with its own "
+          f"(a,q): {'YES' if m4_ok_all else 'NO'}; rotated fixed points "
+          f"share one denominator q per word: "
+          f"{'YES (all words)' if same_q_all else 'NO'}")
+    return reports, m4_ok_all, same_q_all
+
+
+# ----------------------------------------------------------------------------
 # main (extended per queue item)
 # ----------------------------------------------------------------------------
 
@@ -761,6 +856,8 @@ def main():
     consist_ok = consistency_vs_single_letter(results)
 
     summary, m1_ok, m2_ok, m3_ok = analyze(grid, results)
+
+    reports, m4_ok, same_q = m4_rotations()
 
     print(f"\ntotal time: {time.time() - t0:.1f} s")
     print(f"non-deepest-door candidate failures (should be 0): {surprises}")
