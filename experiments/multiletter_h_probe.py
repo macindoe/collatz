@@ -742,6 +742,60 @@ def analyze(grid, results):
 
 
 # ----------------------------------------------------------------------------
+# Item 3 addendum: cross-word escape-spectrum coincidences (findings §5)
+# ----------------------------------------------------------------------------
+
+
+def subgroup(g, q):
+    """The cyclic subgroup <g> of (Z/q)^x, as a set."""
+    seen, y = set(), 1
+    while y not in seen:
+        seen.add(y)
+        y = y * g % q
+    return seen
+
+
+def cross_word_spectra(grid, results):
+    """Observed coincidence, checked exactly over the full tables: words
+    sharing (q, g_P) with numerators in the same coset of <g_P> have equal
+    v_n value sets per sector; numerators in opposite cosets (-a in the
+    other's coset) swap the sectors. Raw data check, no interpretation."""
+    info = {P: (a, q, g) for (P, p, a, q, S, M, g, o) in grid}
+
+    def vset(P, sigma):
+        a, q, _ = info[P]
+        return {Fraction(row["H"], row["Q"])
+                - sigma * Fraction(a, q * row["Q"])
+                for row in results[P][sigma]}
+
+    print("\nCross-word escape-spectrum checks (exact, full tables):")
+    ok = True
+    P1, P2 = ((1, 2), (2, 2)), ((1, 1), (1, 1), (1, 2))
+    a1, q, g = info[P1]
+    a2 = info[P2][0]
+    H = subgroup(g, q)
+    same_coset = (a2 * modinv(a1, q)) % q in H
+    eq_p = vset(P1, +1) == vset(P2, +1)
+    eq_m = vset(P1, -1) == vset(P2, -1)
+    ok &= same_coset and eq_p and eq_m
+    print(f"  {word_str(P1)} vs {word_str(P2)} (q={q}, same g): "
+          f"a2/a1 in <g_P>: {same_coset}; v-sets equal: +:{eq_p} -:{eq_m}")
+    P3, P4 = ((2, 1), (2, 2)), ((1, 1), (1, 1), (2, 1))
+    a3, q2, g2 = info[P3]
+    a4 = info[P4][0]
+    H2 = subgroup(g2, q2)
+    opp_coset = ((-a4 * modinv(a3, q2)) % q2 in H2
+                 and (a4 * modinv(a3, q2)) % q2 not in H2)
+    swap1 = vset(P3, +1) == vset(P4, -1)
+    swap2 = vset(P3, -1) == vset(P4, +1)
+    ok &= opp_coset and swap1 and swap2
+    print(f"  {word_str(P3)} vs {word_str(P4)} (q={q2}, same g): "
+          f"-a2/a1 in <g_P> (and a2/a1 not): {opp_coset}; sector-swapped "
+          f"v-sets equal: {swap1} and {swap2}")
+    return ok
+
+
+# ----------------------------------------------------------------------------
 # Item 4: M4 — rotation dependence
 # ----------------------------------------------------------------------------
 
@@ -856,6 +910,8 @@ def main():
     consist_ok = consistency_vs_single_letter(results)
 
     summary, m1_ok, m2_ok, m3_ok = analyze(grid, results)
+    spectra_ok = cross_word_spectra(grid, results)
+    print(f"  cross-word spectrum coincidences all hold: {spectra_ok}")
 
     reports, m4_ok, same_q = m4_rotations()
 
