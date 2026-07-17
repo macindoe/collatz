@@ -2,7 +2,7 @@
 
 Self-contained for an external reviewer with no access to the repository. Everything a reviewer needs to evaluate the v2 changes — what changed, why, the exact diff, and the fidelity checks — is below; no other file needs to be opened.
 
-**Branch:** `paper1-v2-p22`, off `main`. **Not merged** — this branch awaits review by the project's main session before the author sees it, per standing convention (Zenodo upload/publication is the author's act alone; this branch prepares files only).
+**State:** the final v2 as carried on `main` (the review rounds' branches live in git history). Zenodo upload/publication is the author's act alone; this repository prepares files only.
 
 ## Background, in one paragraph
 
@@ -15,7 +15,7 @@ Paper 1 (*Reduced coordinates for the Collatz map*, Zenodo DOI [10.5281/zenodo.2
 3. **Version history relocated and restated.** The long `\date`-footnote is gone; `\date` is now a plain one-line date/DOI field, and an unnumbered "Version note" paragraph immediately after the abstract carries the version history. The repository pointer in the added note is pinned to a commit, not a mutable root URL.
 4. **The `p = 22` resolution reached the note (pre-upload factual update).** The displayed range is now the full **contiguous** `p ∈ {2,...,23}` (interval unchanged, `[1.828, 3.643]`). The note's gap language is reduced from two gaps to **one**: `p = 22` is no longer reported as an unresolved case; instead the note reports, in two sentences, that the recipe's own candidate chain initially left `p = 22` unresolved, that correspondence with Eric Merle identified the cause as a coverage gap in that chain (not a failure of the correction step), and that two candidates outside the chain (`n = 25217`, `n = 31202`) close it under the same recorded recipe (`13` and `8` correction moves). The sole remaining gap — no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs — is now reported as demonstrated to bite in practice, not only in principle. The repository pointer is re-pinned from commit `b566e4d` to commit `72ec88e` (the public `main` commit containing the updated §12.8.6 record).
 
-No mathematical claim in the paper changes strength anywhere in this diff. This item adds no new mathematics; it is a factual update to what the note reports about an already-recorded wiki result.
+No theorem or universal claim is strengthened; v2 adds and updates a finite computational evidence record.
 
 ## Full unified diff (v2 tex against the archived v1)
 
@@ -23,7 +23,7 @@ The complete content diff between `sources/paper/collatz-reduced-v1.tex` (archiv
 
 ```diff
 diff --git a/sources/paper/collatz-reduced-v1.tex b/paper/collatz-reduced-v2.tex
-index 3d09b91..f1111a9 100644
+index 3d09b91..56d9c91 100644
 --- a/sources/paper/collatz-reduced-v1.tex
 +++ b/paper/collatz-reduced-v2.tex
 @@ -23,7 +23,7 @@
@@ -52,7 +52,7 @@ index 3d09b91..f1111a9 100644
 +\subsection*{Note added in v2 (July 2026)}
 +Prompted by correspondence with Eric Merle concerning this theorem's sharpness hedge (his related formal work is cited in \cite{merle}), we attempted a single period-parametrized construction procedure toward the assessed claim of Theorem~\ref{thm:staircase}: semiconvergents of $\LL$ select the exponent $n$, a rounded geometric profile builds the climb, and a bounded correction closes the last bits, applied separately at each period. Exact big-integer verification by this recipe produced a passing size-condition witness ($q \le R_r$ at every rotation) at every period
 +\[ p \in \{2,\dots,23\}, \qquad \gamma/\log_2 p \in [1.828,\ 3.643] \]
-+--- now a contiguous range, extending the two isolated instances above. Initially the recipe's own candidate chain left $p = 22$ unresolved; correspondence with Eric Merle identified the cause as a gap in that chain's coverage at the required scale, not a failure of the correction step, and at candidates outside the chain ($n = 25217$, $n = 31202$) the same recipe resolves it ($13$ and $8$ correction moves), closing the range above. The remaining gap is the one already named: no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs --- the bound that would certify no period is skipped --- and the $p = 22$ episode is a demonstration that this gap bites in practice, not only in principle. The hedge sentence above is therefore unchanged: finite-range evidence supports the assessed $\gamma = O(\log p)$ behaviour, but does not prove it for all $p$. The construction, the verified instance record, and the diagnosis of the remaining gap are recorded at \texttt{cycles.md} \S12.8.6 of the project's public repository (\url{https://github.com/macindoe/collatz/blob/72ec88e/cycles.md}).
++--- now a contiguous range, extending the two isolated instances above. Initially the recipe's own candidate chain left $p = 22$ unresolved; correspondence with Eric Merle identified the cause as a gap in that chain's coverage at the required scale, not a failure of the correction step, and at candidates outside the chain ($n = 25217$, $n = 31202$) the same profile-and-correction procedure resolves it ($13$ and $8$ correction moves), closing the range above. The remaining gap is the one already named: no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs --- the bound that would certify no period is skipped --- and the $p = 22$ episode is a demonstration that this gap bites in practice, not only in principle. The hedge sentence above is therefore unchanged: finite-range evidence supports the assessed $\gamma = O(\log p)$ behaviour, but does not prove it for all $p$. The construction, the verified instance record, and the diagnosis of the remaining gap are recorded at \texttt{cycles.md} \S12.8.6 of the project's public repository (\url{https://github.com/macindoe/collatz/blob/72ec88e/cycles.md}).
 +
  \section{The equidistribution hypothesis, made exact}\label{sec:aeh}
 
@@ -81,7 +81,7 @@ index 3d09b91..f1111a9 100644
 >
 > *p* ∈ {2, …, 23}, γ/log₂ *p* ∈ [1.828, 3.643]
 >
-> — now a contiguous range, extending the two isolated instances above. Initially the recipe's own candidate chain left *p* = 22 unresolved; correspondence with Eric Merle identified the cause as a gap in that chain's coverage at the required scale, not a failure of the correction step, and at candidates outside the chain (*n* = 25217, *n* = 31202) the same recipe resolves it (13 and 8 correction moves), closing the range above. The remaining gap is the one already named: no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs — the bound that would certify no period is skipped — and the *p* = 22 episode is a demonstration that this gap bites in practice, not only in principle. The hedge sentence above is therefore unchanged: finite-range evidence supports the assessed γ = O(log *p*) behaviour, but does not prove it for all *p*. The construction, the verified instance record, and the diagnosis of the remaining gap are recorded at `cycles.md` §12.8.6 of the project's public repository (https://github.com/macindoe/collatz/blob/72ec88e/cycles.md).
+> — now a contiguous range, extending the two isolated instances above. Initially the recipe's own candidate chain left *p* = 22 unresolved; correspondence with Eric Merle identified the cause as a gap in that chain's coverage at the required scale, not a failure of the correction step, and at candidates outside the chain (*n* = 25217, *n* = 31202) the same profile-and-correction procedure resolves it (13 and 8 correction moves), closing the range above. The remaining gap is the one already named: no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs — the bound that would certify no period is skipped — and the *p* = 22 episode is a demonstration that this gap bites in practice, not only in principle. The hedge sentence above is therefore unchanged: finite-range evidence supports the assessed γ = O(log *p*) behaviour, but does not prove it for all *p*. The construction, the verified instance record, and the diagnosis of the remaining gap are recorded at `cycles.md` §12.8.6 of the project's public repository (https://github.com/macindoe/collatz/blob/72ec88e/cycles.md).
 
 ## Build
 
@@ -132,7 +132,7 @@ Matches found, all inside §12.8.6:
 
 Every number the note writes — `2`, `23`, `1.828`, `3.643`, `22`, `25217`, `31202`, `13`, `8` — appears verbatim in `cycles.md` §12.8.6. **PASS.**
 
-**(c) Register greps against the current note (`paper/collatz-reduced-v2.tex`, the "Note added in v2" paragraph), extended by two.**
+**(c) Register greps against the current note (`paper/collatz-reduced-v2.tex`, the "Note added in v2" paragraph), extended by two, plus one more this round.**
 
 ```
 $ grep -c "period-parametrized" <note text>
@@ -149,9 +149,12 @@ $ grep -c "combinatorial obstruction" <note text>
 
 $ grep -c "persistent unresolved case" <note text>
 0
+
+$ grep -c "the same recipe resolves" <note text>
+0
 ```
 
-The note contains "period-parametrized", and contains none of "non-per-period", "dense", "combinatorial obstruction", or "persistent unresolved case" (the last two newly re-checked this round, since the previous round's `p = 22` language — now replaced — used "persistent unresolved case"). **PASS, all five.**
+The note contains "period-parametrized", and contains none of "non-per-period", "dense", "combinatorial obstruction", "persistent unresolved case" (the last two re-checked since the earlier round's `p = 22` language — now replaced — used "persistent unresolved case"), or "the same recipe resolves" (newly re-checked this round: the phrase was self-contradictory against the note's own three-stage definition of "the recipe" and is replaced by "the same profile-and-correction procedure resolves it"). **PASS, all six.**
 
 ## Register check
 
