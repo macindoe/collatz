@@ -453,6 +453,17 @@ def item2_full():
     return "\n".join(out)
 
 
+def item2d_corrected_p23():
+    """Correction (2026-07-17): the p=23 'disagreement' above was caused by
+    retrieval-side glyph corruption in the pipeline that pulled Merle's email
+    into the session -- the author's own mail client shows the line cleanly as
+    n = 47468 (a member of our own candidate chain; see item 4's grid). The
+    39468/39488 probes above are kept as the record of the dissolved
+    disagreement. At the true value his row reproduces exactly."""
+    return item2_calibration_row(23, 47468,
+                "CORRECTED p=23 row, true n read by the author (his numbers: 4 failing, worst -3.77)")
+
+
 def item2b_literal_n_rows():
     """Item 2b: the findings file's most load-bearing rows, computed by
     the committed script itself (reviewer fix, 2026-07-17: these were
@@ -722,6 +733,9 @@ if __name__ == "__main__":
     print("=" * 70)
     print("ITEM 2: pincer hypothesis test + calibration cross-check")
     print(item2_full())
+    print()
+    print("-- item 2d: corrected p=23 row (2026-07-17; see item2d_corrected_p23 docstring) --")
+    print(item2d_corrected_p23())
 
     print()
     print("=" * 70)

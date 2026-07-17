@@ -243,6 +243,27 @@ transmitted cleanly, the most likely explanation is that the true
 n differs from both values tried here by more than a one-digit
 transcription error — but that is a guess, not a finding.
 
+**Correction (2026-07-17): the disagreement is resolved — retrieval-side
+glyph corruption, and the true row matches exactly.** The author read the
+email directly in his own mail client: the line is clean there, and the
+true value is `n = 47468` — a member of our own candidate chain (the
+grid point immediately above the hole; item 4's table). The mangling
+occurred in the automated retrieval pipeline that pulled the email into
+this project's session, not in transmission and not in Merle's text.
+At the true value, the committed fresh code (`item2_calibration_row(23,
+47468, ...)`, re-run 2026-07-17 by the main session) gives:
+
+```text
+p=23, n=47468: cd=1: fail=4/23, worst_bits=-4, worst_log2=-3.77
+                      (Merle: 4, -3.77 -- EXACT MATCH)
+               cd=2: fail=4/23, worst_bits=-4, worst_log2=-4.18
+```
+
+All four of Merle's measurement rows therefore reproduce exactly in our
+stack. The paragraph above is kept as the record of the (dissolved)
+disagreement and of the guess that caused it — the guess was ours, not
+his. The script's `item2d_corrected_p23()` prints the corrected row.
+
 **Verdict.** The pincer hypothesis is **confirmed in its first jaw,
 refuted in its second, and dissolved as an explanation of a genuine
 wall.** Confirmed independently: (i) a genuine, large Diophantine hole
