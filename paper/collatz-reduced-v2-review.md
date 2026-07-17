@@ -2,19 +2,20 @@
 
 Self-contained for an external reviewer with no access to the repository. Everything a reviewer needs to evaluate the v2 changes — what changed, why, the exact diff, and the fidelity checks — is below; no other file needs to be opened.
 
-**Branch:** `paper1-v2`, off `main`. **Not merged** — this branch awaits review by the project's main session before the author sees it, per standing convention (Zenodo upload/publication is the author's act alone; this branch prepares files only).
+**Branch:** `paper1-v2-p22`, off `main`. **Not merged** — this branch awaits review by the project's main session before the author sees it, per standing convention (Zenodo upload/publication is the author's act alone; this branch prepares files only).
 
 ## Background, in one paragraph
 
-Paper 1 (*Reduced coordinates for the Collatz map*, Zenodo DOI [10.5281/zenodo.21273548](https://doi.org/10.5281/zenodo.21273548)) is published. Eric Merle — author of a related Lean 4 formalization of conditional Collatz cycle-exclusion (Zenodo DOI [10.5281/zenodo.19790406](https://doi.org/10.5281/zenodo.19790406)) — sent a referee-grade reading by correspondence (2026-07-15/16, author's mailbox, not in the repository) that found two issues: a citation of his preprint dropped its subtitle, and the paper's staircase-sharpness hedge (Theorem `thm:staircase`) was flagged as possibly reachable by a general construction. The author's reply committed, publicly, to two things for a v2: restoring the subtitle, and evidencing the hedge better without closing it ("the hedge stays in any v2 — better evidenced, not closed"). A delegated research session (`briefs/staircase-allp-brief.md`) then attempted the general construction and reached a documented **floor grade** — extended verified evidence plus two open gaps, not a proof — recorded in the project wiki at `cycles.md` §12.8.6. This v2 packages both commitments.
+Paper 1 (*Reduced coordinates for the Collatz map*, Zenodo DOI [10.5281/zenodo.21273548](https://doi.org/10.5281/zenodo.21273548)) is published. Eric Merle — author of a related Lean 4 formalization of conditional Collatz cycle-exclusion (Zenodo DOI [10.5281/zenodo.19790406](https://doi.org/10.5281/zenodo.19790406)) — sent a referee-grade reading by correspondence (2026-07-15/16, author's mailbox, not in the repository) that found two issues: a citation of his preprint dropped its subtitle, and the paper's staircase-sharpness hedge (Theorem `thm:staircase`) was flagged as possibly reachable by a general construction. The author's reply committed, publicly, to two things for a v2: restoring the subtitle, and evidencing the hedge better without closing it ("the hedge stays in any v2 — better evidenced, not closed"). A delegated research session then attempted the general construction and reached a documented **floor grade** — a verified instance record with an initial obstruction at `p = 22`. A second exchange with the same correspondent resolved that obstruction (2026-07-17): the failure was a candidate-generation gap in the Diophantine chain, not a combinatorial wall, and two of his named candidates close the range under the recipe's own recorded algorithm. This v2 packages the citation fix, the hedge-evidence note, and — as a pre-upload factual update — the resolved, contiguous record. All of it is recorded in the project wiki at `cycles.md` §12.8.6.
 
-## Changelog (flat, three items)
+## Changelog (flat, four items)
 
 1. **Subtitle restored.** The `merle` bibliography entry now carries the preprint's full title, including the subtitle v1 dropped: "...a conditional formal proof in Lean 4, **with documented structural obstructions**". The DOI was already correct and is untouched.
-2. **Hedge-evidence note added, register-calibrated.** A short, clearly-marked "Note added in v2 (July 2026)" follows Remark `rem:staircase` (the staircase-divergence link), reporting the floor-grade construction attempt: the recipe in one sentence, the verified range `p ∈ {2,...,21} ∪ {23}` with `γ/log₂(p) ∈ [1.828, 3.643]`, and the two open gaps (a persistent unresolved case at `p = 22`, carrying the neighbour-contrast that distinguishes it from an ordinary budget artifact; no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs). **The theorem's hedge sentence itself is untouched, verbatim** — the note reports evidence, it does not upgrade the claim.
-3. **Version history relocated and restated.** The long `\date`-footnote is gone; `\date` is now a plain one-line date/DOI field, and an unnumbered "Version note" paragraph immediately after the abstract carries the version history, including a corrected declaration ("No theorem or universal claim is strengthened; v2 adds a finite computational evidence record" — v2 does add new computational claims, so the note does not claim otherwise). The repository pointer in the added note is pinned to a commit (`b566e4d`, the `paper1-v2` branch point), not a mutable root URL; the author may re-pin it to a `paper1-v2` release tag at Zenodo upload time.
+2. **Hedge-evidence note added, register-calibrated.** A short, clearly-marked "Note added in v2 (July 2026)" follows Remark `rem:staircase` (the staircase-divergence link), reporting the floor-grade construction attempt: the recipe in one sentence, the verified range and interval, and the remaining gap. **The theorem's hedge sentence itself is untouched, verbatim** — the note reports evidence, it does not upgrade the claim.
+3. **Version history relocated and restated.** The long `\date`-footnote is gone; `\date` is now a plain one-line date/DOI field, and an unnumbered "Version note" paragraph immediately after the abstract carries the version history. The repository pointer in the added note is pinned to a commit, not a mutable root URL.
+4. **The `p = 22` resolution reached the note (pre-upload factual update).** The displayed range is now the full **contiguous** `p ∈ {2,...,23}` (interval unchanged, `[1.828, 3.643]`). The note's gap language is reduced from two gaps to **one**: `p = 22` is no longer reported as an unresolved case; instead the note reports, in two sentences, that the recipe's own candidate chain initially left `p = 22` unresolved, that correspondence with Eric Merle identified the cause as a coverage gap in that chain (not a failure of the correction step), and that two candidates outside the chain (`n = 25217`, `n = 31202`) close it under the same recorded recipe (`13` and `8` correction moves). The sole remaining gap — no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs — is now reported as demonstrated to bite in practice, not only in principle. The repository pointer is re-pinned from commit `b566e4d` to commit `72ec88e` (the public `main` commit containing the updated §12.8.6 record).
 
-No mathematical claim in the paper changes strength anywhere in this diff.
+No mathematical claim in the paper changes strength anywhere in this diff. This item adds no new mathematics; it is a factual update to what the note reports about an already-recorded wiki result.
 
 ## Full unified diff (v2 tex against the archived v1)
 
@@ -22,7 +23,7 @@ The complete content diff between `sources/paper/collatz-reduced-v1.tex` (archiv
 
 ```diff
 diff --git a/sources/paper/collatz-reduced-v1.tex b/paper/collatz-reduced-v2.tex
-index 3d09b91..ee0e6c2 100644
+index 3d09b91..f1111a9 100644
 --- a/sources/paper/collatz-reduced-v1.tex
 +++ b/paper/collatz-reduced-v2.tex
 @@ -23,7 +23,7 @@
@@ -50,8 +51,8 @@ index 3d09b91..ee0e6c2 100644
 
 +\subsection*{Note added in v2 (July 2026)}
 +Prompted by correspondence with Eric Merle concerning this theorem's sharpness hedge (his related formal work is cited in \cite{merle}), we attempted a single period-parametrized construction procedure toward the assessed claim of Theorem~\ref{thm:staircase}: semiconvergents of $\LL$ select the exponent $n$, a rounded geometric profile builds the climb, and a bounded correction closes the last bits, applied separately at each period. Exact big-integer verification by this recipe produced a passing size-condition witness ($q \le R_r$ at every rotation) at every period
-+\[ p \in \{2,\dots,21\} \cup \{23\}, \qquad \gamma/\log_2 p \in [1.828,\ 3.643] \]
-+over that range, extending the two isolated instances above to a nearly consecutive verified range. Two gaps remain open, and are recorded rather than closed: a persistent unresolved case at $p = 22$, which the present procedure fails to resolve under budgets that resolve all neighbouring periods, including with the search budget greatly enlarged; and no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs --- the bound that would certify no period is skipped. The hedge sentence above is therefore unchanged: finite-range evidence supports the assessed $\gamma = O(\log p)$ behaviour, but does not prove it for all $p$. The construction, the verified instance record, and the diagnosis of both gaps are recorded at \texttt{cycles.md} \S12.8.6 of the project's public repository (\url{https://github.com/macindoe/collatz/blob/b566e4d/cycles.md}).
++\[ p \in \{2,\dots,23\}, \qquad \gamma/\log_2 p \in [1.828,\ 3.643] \]
++--- now a contiguous range, extending the two isolated instances above. Initially the recipe's own candidate chain left $p = 22$ unresolved; correspondence with Eric Merle identified the cause as a gap in that chain's coverage at the required scale, not a failure of the correction step, and at candidates outside the chain ($n = 25217$, $n = 31202$) the same recipe resolves it ($13$ and $8$ correction moves), closing the range above. The remaining gap is the one already named: no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs --- the bound that would certify no period is skipped --- and the $p = 22$ episode is a demonstration that this gap bites in practice, not only in principle. The hedge sentence above is therefore unchanged: finite-range evidence supports the assessed $\gamma = O(\log p)$ behaviour, but does not prove it for all $p$. The construction, the verified instance record, and the diagnosis of the remaining gap are recorded at \texttt{cycles.md} \S12.8.6 of the project's public repository (\url{https://github.com/macindoe/collatz/blob/72ec88e/cycles.md}).
 +
  \section{The equidistribution hypothesis, made exact}\label{sec:aeh}
 
@@ -70,7 +71,7 @@ index 3d09b91..ee0e6c2 100644
 
 > **Version note**
 >
-> v1, July 2026 (original publication). v2, July 2026: restored the subtitle of the `merle` citation; added a note evidencing the sharpness hedge of Theorem 4.6 (`thm:staircase`) (Section 5), prompted by correspondence with Eric Merle. No theorem or universal claim is strengthened; v2 adds a finite computational evidence record. The v2-specific Zenodo DOI is assigned at upload.
+> v1, July 2026 (original publication). v2, July 2026: restored the subtitle of the `merle` citation; added a note evidencing the sharpness hedge of Theorem 4.6 (`thm:staircase`) (Section 4), prompted by correspondence with Eric Merle. No theorem or universal claim is strengthened; v2 adds a finite computational evidence record. The v2-specific Zenodo DOI is assigned at upload.
 
 ## The added note, quoted in full
 
@@ -78,15 +79,15 @@ index 3d09b91..ee0e6c2 100644
 >
 > Prompted by correspondence with Eric Merle concerning this theorem's sharpness hedge (his related formal work is cited in [merle]), we attempted a single period-parametrized construction procedure toward the assessed claim of Theorem 4.6 (`thm:staircase`): semiconvergents of log₂3 select the exponent *n*, a rounded geometric profile builds the climb, and a bounded correction closes the last bits, applied separately at each period. Exact big-integer verification by this recipe produced a passing size-condition witness (*q* ≤ *R_r* at every rotation) at every period
 >
-> *p* ∈ {2, …, 21} ∪ {23}, γ/log₂ *p* ∈ [1.828, 3.643]
+> *p* ∈ {2, …, 23}, γ/log₂ *p* ∈ [1.828, 3.643]
 >
-> over that range, extending the two isolated instances above to a nearly consecutive verified range. Two gaps remain open, and are recorded rather than closed: a persistent unresolved case at *p* = 22, which the present procedure fails to resolve under budgets that resolve all neighbouring periods, including with the search budget greatly enlarged; and no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs — the bound that would certify no period is skipped. The hedge sentence above is therefore unchanged: finite-range evidence supports the assessed γ = O(log *p*) behaviour, but does not prove it for all *p*. The construction, the verified instance record, and the diagnosis of both gaps are recorded at `cycles.md` §12.8.6 of the project's public repository (https://github.com/macindoe/collatz/blob/b566e4d/cycles.md).
+> — now a contiguous range, extending the two isolated instances above. Initially the recipe's own candidate chain left *p* = 22 unresolved; correspondence with Eric Merle identified the cause as a gap in that chain's coverage at the required scale, not a failure of the correction step, and at candidates outside the chain (*n* = 25217, *n* = 31202) the same recipe resolves it (13 and 8 correction moves), closing the range above. The remaining gap is the one already named: no proved closed-form bound on the multiplicative gap between consecutive correctly-signed semiconvergent runs — the bound that would certify no period is skipped — and the *p* = 22 episode is a demonstration that this gap bites in practice, not only in principle. The hedge sentence above is therefore unchanged: finite-range evidence supports the assessed γ = O(log *p*) behaviour, but does not prove it for all *p*. The construction, the verified instance record, and the diagnosis of the remaining gap are recorded at `cycles.md` §12.8.6 of the project's public repository (https://github.com/macindoe/collatz/blob/72ec88e/cycles.md).
 
 ## Build
 
-Built with `pdflatex` (MiKTeX-pdfTeX 4.23, MiKTeX 25.12), two passes, in a temp directory outside the repository mount (a documented Windows quirk: the mount can lock LaTeX aux files) and copied into `paper/collatz-reduced-v2.pdf`. **Output: 11 pages.** The Version note (page 1), the Note added in v2 (page 8), and the corrected Merle bibliography entry (page 11) were rendered to PNG and visually inspected; all display correctly.
+Built with `pdflatex` (MiKTeX-pdfTeX 4.23, MiKTeX 25.12), two passes, in a temp directory outside the repository mount (a documented Windows quirk: the mount can lock LaTeX aux files) and copied into `paper/collatz-reduced-v2.pdf`. **Output: 11 pages.** The Version note (page 1), the Note added in v2 (page 8), and the corrected Merle bibliography entry (page 11) were extracted with `pdftotext` and checked against the source; all render correctly, including the contiguous range, the two-sentence `p = 22` resolution, and the `blob/72ec88e` repository pointer.
 
-**Build obstruction (recorded, not blocking).** `pdflatex` exits with status 1, reproducing the same five-line error signature at the same location every time this document has been built, on both v2 and the pristine, unedited archived v1 source (`sources/paper/collatz-reduced-v1.tex`) — confirmed by a side-by-side rebuild of the archived v1 file, which reproduces the identical signature at the identical relative location:
+**Build obstruction (recorded, not blocking).** `pdflatex` exits with status 1, reproducing the same five-line error signature at the same location every time this document has been built, on both v2 and the pristine, unedited archived v1 source (`sources/paper/collatz-reduced-v1.tex`):
 
 ```
 ! Missing $ inserted.
@@ -96,9 +97,7 @@ Built with `pdflatex` (MiKTeX-pdfTeX 4.23, MiKTeX 25.12), two passes, in a temp 
 ! Missing } inserted.
 ```
 
-These occur during `\maketitle`'s processing of the `\date` field and are auto-recovered by TeX's own error recovery ("Proceed, with fingers crossed"); the resulting PDF is complete and correct. This is diagnosed as a pdfTeX toolchain-version artifact present on pristine v1, independent of any v2 content — not a defect introduced by these edits.
-
-**`latexdiff` obstruction (recorded, not blocking).** The `latexdiff` binary is present (MiKTeX-bundled) but non-functional in this environment: it fails at startup with `Can't locate Algorithm/Diff.pm in @INC (you may need to install the Algorithm::Diff module)`. Installing a new Perl module was judged out of scope for an editorial task. No marked-up diff PDF (`paper/collatz-reduced-v2-diff.pdf`) was produced; the unified diff above is the deliverable in its place.
+These occur during `\maketitle`'s processing of the `\date` field and are auto-recovered by TeX's own error recovery ("Proceed, with fingers crossed"); the resulting PDF is complete and correct. This is diagnosed as a pdfTeX toolchain-version artifact present on pristine v1, independent of any v2 content — not a defect introduced by these or any prior edits.
 
 ## Fidelity-check transcript (re-run fresh against the current head)
 
@@ -118,20 +117,22 @@ $ diff <(sed -n '/\\begin{theorem}\[sharpness: the staircase\]/,/\\end{theorem}/
 **(b) Every number in the added note appears verbatim in `cycles.md` §12.8.6.**
 
 ```
-$ grep -n "2, ..., 21\|{2, 3, ..., 21}\|p = 22\|1.828\|3.643" cycles.md
-
-cycles.md:8:   ...verified instances for `p ∈ {2,...,21} ∪ {23}`, with a combinatorial
-               obstruction precisely located at `p = 22`...
-cycles.md:258: p  ∈  {2, 3, ..., 21} ∪ {23},   with   γ / log_2 p  ∈  [1.828, 3.643]
-cycles.md:263: **Obstruction (`p = 22`).** At `p = 22`, the bounded correction of
-               `12.8.6.3` does not find a passing configuration within the tested
-               budgets...
-cycles.md:265: ...with the obstruction precisely located at `p = 22`...
+$ sed -n '237,273p' cycles.md > /tmp/128section.txt
+$ grep -n "2, ..., 23\|p = 22\|1.828\|3.643\|25217\|31202" /tmp/128section.txt
 ```
 
-The set `{2,...,21} ∪ {23}`, the value `22`, and the interval endpoints `1.828` and `3.643` all appear verbatim in `cycles.md` §12.8.6 (Proposition 12.8.6.4 and the paragraph immediately following it). **PASS.**
+Matches found, all inside §12.8.6:
 
-**(c) Three register greps against the current note (`paper/collatz-reduced-v2.tex`, the "Note added in v2" paragraph).**
+- `p ∈ {2, 3, ..., 23}` — Proposition 12.8.6.4's display (`γ / log_2 p ∈ [1.828, 3.643]` on the same line) and the section's opening paragraph ("a verified instance record covering every period `p ∈ {2,...,23}`").
+- `p = 22` — the section header ("Obstruction (`p = 22`) — resolved (2026-07-17)"), the Extension paragraph, and the Resolution paragraph.
+- `1.828`, `3.643` — Proposition 12.8.6.4's display and the Extension paragraph ("both inside `[1.828, 3.643]`").
+- `25217` — the Extension paragraph ("`n = 25217` (`γ = 11.186`, `γ/log_2 22 = 2.508`, `13` correction moves)") and the Resolution paragraph.
+- `31202` — the Extension paragraph ("`n = 31202` (`γ = 14.746`, `γ/log_2 22 = 3.307`, `8` correction moves)") and the Resolution paragraph.
+- `13`, `8` — both correction-move counts, in the Extension and Resolution paragraphs, and again in the Credit paragraph ("both resolve, in `13` and `8` moves").
+
+Every number the note writes — `2`, `23`, `1.828`, `3.643`, `22`, `25217`, `31202`, `13`, `8` — appears verbatim in `cycles.md` §12.8.6. **PASS.**
+
+**(c) Register greps against the current note (`paper/collatz-reduced-v2.tex`, the "Note added in v2" paragraph), extended by two.**
 
 ```
 $ grep -c "period-parametrized" <note text>
@@ -145,17 +146,20 @@ $ grep -c "dense" <note text>
 
 $ grep -c "combinatorial obstruction" <note text>
 0
+
+$ grep -c "persistent unresolved case" <note text>
+0
 ```
 
-The note contains "period-parametrized", and contains none of "non-per-period", "dense", or "combinatorial obstruction". **PASS, all three.**
+The note contains "period-parametrized", and contains none of "non-per-period", "dense", "combinatorial obstruction", or "persistent unresolved case" (the last two newly re-checked this round, since the previous round's `p = 22` language — now replaced — used "persistent unresolved case"). **PASS, all five.**
 
 ## Register check
 
-The added note avoids "settles" / "establishes" / "confirms sharpness" and every other upgrade-implying word; it reports an attempt's floor-grade outcome ("assessed... does not prove"), states the two open gaps without softening them, and states plainly that the hedge is unchanged. This matches `AGENTS.md`'s register norm and `publication.md`'s ledger entry for the sharpness-hedge status.
+The added note avoids "settles" / "establishes" / "confirms sharpness" and every other upgrade-implying word; it reports the recipe's floor-grade outcome and the `p = 22` resolution both as evidence, not closure; the sole remaining gap is stated without softening; and the hedge conclusion stays "assessed... does not prove". This matches `AGENTS.md`'s register norm and `publication.md`'s ledger entry for the sharpness-hedge status.
 
 ## Revision note
 
-The note's wording was revised after two external review passes (register calibration only; the evidence record is unchanged throughout). History of what changed and why lives in the git log, not here.
+The note's wording was revised after two external review passes (register calibration; evidence record unchanged), and, in this round, updated with a pre-upload factual update after the `p = 22` resolution (the previously-recorded obstruction is now recorded, in the paper, as resolved). History of what changed and why lives in the git log, not here.
 
 ## Off-brief findings
 
@@ -166,7 +170,7 @@ See `briefs/paper1-v2-findings.md`.
 - [x] v1 archived byte-identical under `sources/paper/`.
 - [x] `paper/collatz-reduced-v2.tex` differs from v1 in exactly the edits shown in the diff above.
 - [x] A built v2 PDF (`paper/collatz-reduced-v2.pdf`, 11 pages) with the one pre-existing, non-blocking build obstruction recorded.
-- [x] This self-contained review bundle.
-- [x] Fidelity checks recorded, re-run fresh, all pass.
+- [x] This self-contained review bundle, regenerated as a current-state artifact.
+- [x] Fidelity checks recorded, re-run fresh, all pass, including the two extended register greps.
 - [x] Ledger sweep done.
-- [x] Clean per-item commits on `paper1-v2`, no merge to `main`.
+- [x] Clean per-item commits on `paper1-v2-p22`, no merge to `main`.
