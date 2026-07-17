@@ -301,6 +301,306 @@ def print_item1():
 
 
 # ----------------------------------------------------------------------------
+# Item 2: exact height tables — class scan with direct-simulation verification
+# ----------------------------------------------------------------------------
+
+
+def class_data(P, n):
+    """(Q_n, rho_n, j_n) for W = P^inf at the whole-period window (np, np).
+
+    Q_n = 2^(n S_P + 1) * 3^(n M_P): forward cylinder modulus 2^(S+1) over
+    the signed domain (14.15.1.5 / 14.15.6.5), backward admissibility modulus
+    3^M (14.15.5.1 / 14.15.6.4) — the brief's candidate progression.
+
+    rho_n = a * q^{-1} mod Q_n (the CRT lift of y* = a/q; q coprime to 6);
+    j_n = (q*rho_n - a)/Q_n, so that rho_n/Q_n = j_n/q + a/(q Q_n) exactly.
+    """
+    S, M = word_sums(P)
+    ystar = fixed_point(P)
+    a, q = ystar.numerator, ystar.denominator
+    assert q > 1 and gcd(q, 6) == 1
+    Q = 2 ** (n * S + 1) * 3 ** (n * M)
+    rho = (a % Q) * modinv(q, Q) % Q
+    j, rem = divmod(q * rho - a, Q)
+    assert rem == 0
+    assert 0 <= j < q
+    return Q, rho, j
+
+
+def member_direct(y0: int, P, n: int, sigma: int):
+    """Direct test: y0 in R^sigma_{np,np}(P^inf)?  (Definition 14.15.6.8,
+    whole-period window.) No class reasoning anywhere.
+
+    Forward: stratum(G^j(y0)) = P_{j mod p} for j = 0..np-1, by iterating G.
+    Backward: the letter-prescribed chain to depth np — the letter at depth i
+    is W_{-i} = P_{(-i) mod p} — via 14.15.6.3's formula with integrality
+    checked at every step (intermediate liveness not required, 14.15.5.1's
+    remark); deepest door y_{-np} must be live.
+
+    Returns (ok, reason, deepest): reason names the first failed condition
+    ('sign', 'singular', 'y0_dead', 'forward', 'backward', 'deepest_dead').
+    """
+    p = len(P)
+    if y0 == 0 or y0 % 2 == 0 or (sigma > 0) != (y0 > 0):
+        return False, "sign", None
+    if y0 == -1:
+        return False, "singular", None
+    if y0 % 3 == 0:
+        return False, "y0_dead", None
+    y = y0
+    for j in range(n * p):
+        if y == -1:  # singular point mid-orbit (14.15.6.2(4))
+            return False, "forward", None
+        mm, rr, gy = stratum_and_G(y)
+        if (mm, rr) != P[j % p]:
+            return False, "forward", None
+        y = gy
+    z = y0
+    for i in range(1, n * p + 1):
+        m, r = P[(-i) % p]
+        z = unique_predecessor(z, m, r)
+        if z is None:
+            return False, "backward", None
+    if z % 3 == 0:
+        return False, "deepest_dead", z
+    return True, "ok", z
+
+
+def height_scan(P, n, sigma, k_cap: int = 60):
+    """H^sigma_{np,np} by scanning the CRT progression rho_n + k*Q_n in
+    increasing |y0| within the sector, testing every candidate by direct
+    simulation (member_direct). Minimality over the full sector rests on the
+    word-general class iffs (merged 14.15.1.5/14.15.6.5 forward,
+    14.15.6.4 backward) and is cross-checked by brute force at n = 1, 2.
+
+    k convention: sigma=+1: y0 = rho + k*Q, k = 0,1,2,...
+                  sigma=-1: y0 = rho - k*Q, k = 1,2,3,...
+    """
+    Q, rho, j = class_data(P, n)
+    failures = []
+    ks = range(0, k_cap) if sigma > 0 else range(1, k_cap + 1)
+    for k in ks:
+        y0 = rho + k * Q if sigma > 0 else rho - k * Q
+        ok, reason, deepest = member_direct(y0, P, n, sigma)
+        if ok:
+            return {"H": abs(y0), "y0": y0, "k": k, "Q": Q, "rho": rho,
+                    "j": j, "failures": failures, "deepest": deepest,
+                    "deepest_mod3": deepest % 3}
+        failures.append((k, reason))
+    raise RuntimeError(f"SHORTFALL: no viable candidate within k_cap={k_cap} "
+                       f"for {word_str(P)} n={n} sigma={sigma:+d}")
+
+
+def deepest_door_formula(P, n, y0) -> Fraction:
+    """Deepest door via the composed-affine relation, derived not assumed:
+    y0 = A_P^n y_{-np} + B_{np} on the chain (14.14.8.2) and
+    A_P^n y* + B_{np} = y*, so y_{-np} = y* + (y0 - y*)/A_P^n.
+    Exact Fraction arithmetic; caller compares against the simulated chain."""
+    A, _ = composed_constants(P)
+    ystar = fixed_point(P)
+    return ystar + (Fraction(y0) - ystar) / A**n
+
+
+def n_max_for(ordg: int) -> int:
+    """Rows per word: at least 12 (brief floor 10), extended to ordg + 12
+    when the algebraic period is longer (cheap: exact big-int arithmetic),
+    capped at 130."""
+    return max(12, min(ordg + 12, 130))
+
+
+def compute_tables(grid, verbose=True):
+    """Item 2: exact height tables, both sectors, n = 1..n_max(word).
+    Per row: height_scan + deepest-door formula cross-check + loud flag on
+    any pre-viable failure that is not deepest_dead."""
+    results = {}
+    surprises = 0
+    for (P, p, a, q, S, M, g, ordg) in grid:
+        nmax = n_max_for(ordg)
+        results[P] = {}
+        for sigma in (+1, -1):
+            rows = []
+            for n in range(1, nmax + 1):
+                row = height_scan(P, n, sigma)
+                dd = deepest_door_formula(P, n, row["y0"])
+                assert dd.denominator == 1 and int(dd) == row["deepest"], (
+                    f"deepest-door formula mismatch at {word_str(P)} "
+                    f"n={n} sigma={sigma:+d}")
+                for (k, reason) in row["failures"]:
+                    if reason != "deepest_dead":
+                        surprises += 1
+                        print(f"*** SURPRISE: candidate k={k} failed with "
+                              f"'{reason}' at {word_str(P)} n={n} "
+                              f"sigma={sigma:+d} ***")
+                rows.append(row)
+            results[P][sigma] = rows
+            if verbose:
+                print(f"\nword {word_str(P)}^inf  y* = {a}/{q}  "
+                      f"sector {'+' if sigma > 0 else '-'}  (n = 1..{nmax})")
+                print(f"{'n':>4} {'H':>44} {'k':>2} {'j_n':>5} {'H/Q_n':>10} "
+                      f"{'nfail':>5}")
+                for n, row in enumerate(rows, 1):
+                    hs = (str(row["H"]) if row["H"] < 10**40
+                          else f"~10^{len(str(row['H'])) - 1} "
+                               f"({str(row['H'])[:12]}...)")
+                    print(f"{n:>4} {hs:>44} {row['k']:>2} {row['j']:>5} "
+                          f"{float(Fraction(row['H'], row['Q'])):>10.6f} "
+                          f"{len(row['failures']):>5}")
+    return results, surprises
+
+
+# ----------------------------------------------------------------------------
+# Brute-force cross-checks (n = 1 always; n = 2 full scan where feasible,
+# else forward-class-progression fallback)
+# ----------------------------------------------------------------------------
+
+FULL_SCAN_CAP = 25_000_000  # max |y| for a full odd scan (feasibility bound)
+
+
+def brute_force_height(P, n, sigma, limit):
+    """Scan ALL odd integers of sign sigma in increasing |y|, no class
+    construction, returning the first member of R^sigma_{np,np} found (or
+    None if |y| exceeds limit first). A cheap direct prefilter (v2(y+1) =
+    m_0, part of the direct membership definition's first letter) is applied
+    before the full test."""
+    m0 = P[0][0]
+    mask = (1 << (m0 + 1)) - 1
+    bit = 1 << m0
+    for ay in range(1, limit + 1, 2):
+        y = ay * sigma
+        if y == -1:
+            continue
+        if (y + 1) & mask != bit:  # Python & reduces negatives correctly
+            continue
+        ok, _, _ = member_direct(y, P, n, sigma)
+        if ok:
+            return abs(y)
+    return None
+
+
+def single_letter_rep(m, r):
+    """The single residue mod 2^(m+r+1) of stratum (m,r), from 14.15.1.3(i):
+    y = 2^m q - 1 with q ≡ 3^{-m}(1+2^r) (mod 2^{r+1})."""
+    qres = ((1 + 2**r) * modinv(3**m, 2 ** (r + 1))) % 2 ** (r + 1)
+    return 2**m * qres - 1
+
+
+def forward_rep(P, nletters):
+    """Constructive representative of the forward cylinder class of the first
+    nletters letters of P^inf — 14.15.1.4's induction implemented directly
+    (level-shift lemma for the lifting step), then VERIFIED by direct forward
+    simulation before use. Returns (rep, mod) with mod = 2^(S+1)."""
+    letters = [P[j % len(P)] for j in range(nletters)]
+    m0, r0 = letters[0]
+    rep = single_letter_rep(m0, r0)
+    mod = 2 ** (m0 + r0 + 1)
+    Mi = m0
+    for i in range(1, nletters):
+        m, r = letters[i]
+        # z = G^i(rep), computed by direct iteration
+        z = rep
+        for jj in range(i):
+            _, _, z = stratum_and_G(z)
+        w = single_letter_rep(m, r)
+        # level shift (14.15.1.4): G^i(rep + mod*t) = z + 2*3^Mi*t;
+        # need z + 2*3^Mi*t ≡ w (mod 2^(m+r+1)); (w-z) even, 3^Mi a unit.
+        t = (((w - z) // 2) * modinv(3**Mi, 2 ** (m + r))) % 2 ** (m + r)
+        rep += mod * t
+        mod <<= (m + r)
+        Mi += m
+    # verify by direct simulation: rep follows all nletters letters
+    z = rep
+    for (m, r) in letters:
+        mm, rr, z = stratum_and_G(z)
+        assert (mm, rr) == (m, r), "forward_rep failed direct verification"
+    return rep, mod
+
+
+def forward_class_height(P, n, sigma, limit):
+    """Fallback minimality check where a full odd scan is infeasible (the
+    deviation 14.15.7.6's verification records for its own n = 2 check):
+    scan only the forward cylinder class (rep mod 2^(S+1), constructed above
+    and verified by direct simulation; completeness of the class is the
+    merged cylinder theorem 14.15.1.5/14.15.6.5 — every forward follower
+    lies in it), testing every member by full direct simulation. No CRT or
+    3-adic class reasoning. Returns (H or None, members_tested)."""
+    rep, mod = forward_rep(P, n * len(P))
+    count = 0
+    if sigma > 0:
+        y = rep if rep > 0 else rep + mod
+        while y <= limit:
+            count += 1
+            ok, _, _ = member_direct(y, P, n, sigma)
+            if ok:
+                return y, count
+            y += mod
+    else:
+        y = rep - mod
+        while -y <= limit:
+            count += 1
+            ok, _, _ = member_direct(y, P, n, sigma)
+            if ok:
+                return -y, count
+            y -= mod
+    return None, count
+
+
+def run_brute_checks(grid, results):
+    """n = 1: full odd scan for every word/sector. n = 2: full odd scan where
+    H <= FULL_SCAN_CAP, else the forward-class-progression fallback (recorded
+    per word/sector). The scan limit is the class-scan H itself: any smaller
+    member would be found first and reported as a mismatch."""
+    print("\n" + "=" * 74)
+    print("Brute-force cross-checks")
+    print("=" * 74)
+    n_checked = n_failed = n_fallback = 0
+    for (P, p, a, q, S, M, g, ordg) in grid:
+        for sigma in (+1, -1):
+            for n in (1, 2):
+                H_class = results[P][sigma][n - 1]["H"]
+                if H_class <= FULL_SCAN_CAP:
+                    H_brute = brute_force_height(P, n, sigma, limit=H_class)
+                    method = "full odd scan"
+                else:
+                    H_brute, cnt = forward_class_height(P, n, sigma,
+                                                        limit=H_class)
+                    method = (f"forward-class fallback "
+                              f"({cnt} members tested)")
+                    n_fallback += 1
+                n_checked += 1
+                status = "OK" if H_brute == H_class else "MISMATCH"
+                if H_brute != H_class:
+                    n_failed += 1
+                print(f"  {word_str(P):>24} sigma={sigma:+d} n={n}: "
+                      f"class H={H_class}  brute H={H_brute}  "
+                      f"[{method}]  {status}")
+    print(f"\nbrute-force cross-checks: {n_checked} run "
+          f"({n_fallback} via fallback), {n_failed} mismatches")
+    return n_failed == 0
+
+
+def consistency_vs_single_letter(results):
+    """The two constant-pair period-2 words coincide with single-letter words
+    at doubled windows: ((1,2),(1,2)) at n whole periods is the single-letter
+    word (1,2) at window (2n,2n), so its n=1 heights must equal the published
+    single-letter rows at n=2 — H+ = 461, H- = 691 for (1,2), and H+ = 23699,
+    H- = 17773 for (2,2) (briefs/h-nonintegral-probe-findings.md §2, merged).
+    """
+    expect = {((1, 2), (1, 2)): (461, 691),
+              ((2, 2), (2, 2)): (23699, 17773)}
+    print("\nConsistency vs the merged single-letter probe "
+          "(briefs/h-nonintegral-probe-findings.md §2):")
+    ok = True
+    for P, (hp, hm) in expect.items():
+        got = (results[P][+1][0]["H"], results[P][-1][0]["H"])
+        match = got == (hp, hm)
+        ok &= match
+        print(f"  {word_str(P)} n=1 -> H+={got[0]}, H-={got[1]} "
+              f"(published single-letter n=2: {hp}, {hm}) "
+              f"{'OK' if match else 'MISMATCH'}")
+    return ok
+
+
+# ----------------------------------------------------------------------------
 # main (extended per queue item)
 # ----------------------------------------------------------------------------
 
@@ -310,8 +610,20 @@ def main():
     print("multiletter_h_probe.py — run date 2026-07-17 (deterministic, "
           "no RNG)")
     grid = print_item1()
+
+    print("\n" + "=" * 74)
+    print("Item 2: exact height tables H^sigma_(np,np), whole-period windows "
+          "(every H verified by direct simulation)")
+    print("=" * 74)
+    results, surprises = compute_tables(grid)
+    brute_ok = run_brute_checks(grid, results)
+    consist_ok = consistency_vs_single_letter(results)
+
     print(f"\ntotal time: {time.time() - t0:.1f} s")
-    return 0
+    print(f"non-deepest-door candidate failures (should be 0): {surprises}")
+    print(f"brute-force cross-checks all matched: {brute_ok}")
+    print(f"single-letter consistency: {consist_ok}")
+    return 0 if (brute_ok and consist_ok and surprises == 0) else 1
 
 
 if __name__ == "__main__":
