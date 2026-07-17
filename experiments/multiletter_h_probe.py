@@ -601,6 +601,147 @@ def consistency_vs_single_letter(results):
 
 
 # ----------------------------------------------------------------------------
+# Item 3: M1-M3 analysis
+# ----------------------------------------------------------------------------
+
+
+def detect_period(seq):
+    """Smallest p >= 1 with seq[i] == seq[i+p] for all valid i (exact
+    comparison), or None if no period < len(seq) fits the observed range."""
+    L = len(seq)
+    for p in range(1, L):
+        if all(seq[i] == seq[i + p] for i in range(L - p)):
+            return p
+    return None
+
+
+def analyze(grid, results):
+    """Item 3: M1-M3 checks, per word and sector, every row exact.
+
+    M1: j_n in {1..q-1}; j_n = -a * 2^{-1} * g_P^{-n} mod q; purely periodic
+        with period ord_q(g_P); v_n := H/Q_n - sigma*a/(q Q_n) purely
+        periodic from n = 1.
+    M2: v_n >= 1/q at every row; sharp constant j_min/q over the visited
+        coset orbit (checked as: min v_n == j_min/q, + sector).
+    M3: t_n := (a + 2 j_n) q^{-1} mod 3; k+ = [t_n = 0], k- = 1 + [t_n = 2];
+        k <= 2; deepest-door factor Q_n/A_P^n == 2^(2 n S_P + 1) == 2 mod 3
+        checked exactly, not assumed.
+    """
+    print("\n" + "=" * 74)
+    print("Item 3: M1-M3 analysis (all rows exact)")
+    print("=" * 74)
+    summary = []
+    m1_ok_all = m2_ok_all = m3_ok_all = True
+    sharp_fail = []
+    k_global = {+1: {}, -1: {}}
+    for (P, p, a, q, S, M, g, ordg) in grid:
+        nmax = n_max_for(ordg)
+        A, _ = composed_constants(P)
+        # M3 factor check (word-level, all n): Q_n/A_P^n == 2^(2nS+1) == 2 mod 3
+        factor_ok = all(
+            Fraction(results[P][+1][n - 1]["Q"]) / A**n == 2 ** (2 * n * S + 1)
+            and pow(2, 2 * n * S + 1, 3) == 2
+            for n in range(1, nmax + 1))
+        # M1 j-law (sector-independent: j_n comes from class_data)
+        jn_seq = [results[P][+1][n - 1]["j"] for n in range(1, nmax + 1)]
+        jn_range_ok = all(1 <= j <= q - 1 for j in jn_seq)
+        jn_alg = [(-a * modinv(2, q) * pow(modinv(g, q), n, q)) % q
+                  for n in range(1, nmax + 1)]
+        jn_law_ok = jn_seq == jn_alg
+        pj = detect_period(jn_seq)
+        for sigma in (+1, -1):
+            rows = results[P][sigma]
+            v_seq = [Fraction(row["H"], row["Q"])
+                     - sigma * Fraction(a, q * row["Q"]) for row in rows]
+            # exact identity v_n = j_n/q + k (+) or k - j_n/q (-)
+            for n, row in enumerate(rows, 1):
+                expect = (Fraction(row["j"], q) + row["k"] if sigma > 0
+                          else row["k"] - Fraction(row["j"], q))
+                assert v_seq[n - 1] == expect, (
+                    f"limit-value identity failed {word_str(P)} "
+                    f"sigma={sigma:+d} n={n}")
+            pv = detect_period(v_seq)
+            k_seq = [row["k"] for row in rows]
+            # M3: deepest-door mod-3 identity and the k-rule, every row
+            t_ok = kform_ok = True
+            for row in rows:
+                t_n = (a + 2 * row["j"]) * modinv(q, 3) % 3
+                if row["deepest_mod3"] != (t_n + 2 * sigma * row["k"]) % 3:
+                    t_ok = False
+                k_pred = ((1 if t_n == 0 else 0) if sigma > 0
+                          else (2 if t_n == 2 else 1))
+                if row["k"] != k_pred:
+                    kform_ok = False
+            k_max = max(k_seq)
+            # M2: v_n >= 1/q; sharp constant j_min/q over visited orbit (+)
+            vmin = min(v_seq)
+            m2_ok = vmin >= Fraction(1, q)
+            j_min = min(jn_seq)
+            sharp_ok = None
+            if sigma > 0:
+                sharp_ok = (vmin == Fraction(j_min, q))
+                if not sharp_ok:
+                    sharp_fail.append((P, vmin, Fraction(j_min, q)))
+            m1_ok = (jn_range_ok and jn_law_ok and pj == ordg
+                     and pv == ordg)
+            m3_ok = t_ok and kform_ok and (k_max <= 2) and factor_ok
+            m1_ok_all &= m1_ok
+            m2_ok_all &= m2_ok
+            m3_ok_all &= m3_ok
+            kdist = {}
+            for k in k_seq:
+                kdist[k] = kdist.get(k, 0) + 1
+                k_global[sigma][k] = k_global[sigma].get(k, 0) + 1
+            vset = sorted(set(v_seq))
+            summary.append({
+                "word": P, "p": p, "sigma": sigma, "a": a, "q": q,
+                "ordg": ordg, "nmax": nmax, "pj": pj, "pv": pv,
+                "vset": vset, "vmin": vmin, "j_min": j_min,
+                "kdist": dict(sorted(kdist.items())),
+                "jn_law_ok": jn_law_ok, "jn_range_ok": jn_range_ok,
+                "t_ok": t_ok, "kform_ok": kform_ok, "factor_ok": factor_ok,
+                "m1_ok": m1_ok, "m2_ok": m2_ok, "m3_ok": m3_ok,
+                "sharp_ok": sharp_ok,
+            })
+    # print summary
+    print(f"\n{'word':>24} {'y*':>10} {'sec':>3} {'ord':>4} {'nmax':>4} "
+          f"{'per(j)':>6} {'per(v)':>6} {'k-dist':>16} {'min v':>10} "
+          f"{'1/q':>10} {'jmin/q':>10} {'M1':>3} {'M2':>3} {'M3':>3}")
+    for s in summary:
+        vals = ("{" + ", ".join(
+            f"{v.numerator}/{v.denominator}" for v in s["vset"][:8])
+            + (", ...}" if len(s["vset"]) > 8 else "}"))
+        ystr = str(s["a"]) + "/" + str(s["q"])
+        print(f"{word_str(s['word']):>24} {ystr:>10} "
+              f"{'+' if s['sigma'] > 0 else '-':>3} {s['ordg']:>4} "
+              f"{s['nmax']:>4} {s['pj']:>6} {s['pv']:>6} "
+              f"{str(s['kdist']):>16} {float(s['vmin']):>10.6f} "
+              f"{1 / s['q']:>10.6f} {s['j_min'] / s['q']:>10.6f} "
+              f"{'ok' if s['m1_ok'] else 'FAIL':>3} "
+              f"{'ok' if s['m2_ok'] else 'FAIL':>3} "
+              f"{'ok' if s['m3_ok'] else 'FAIL':>3}")
+        print(f"{'':>24}   value set of v_n: {vals}")
+    print("\nVerdicts (whole-period windows, all rows exact):")
+    print(f"  M1 (j-law, pure periodicity of j_n and v_n, period = "
+          f"ord_q(g_P)): {'CONFIRMED' if m1_ok_all else 'REFUTED/SHORTFALL'}")
+    print(f"  M2 (v_n >= 1/q at every row): "
+          f"{'CONFIRMED' if m2_ok_all else 'REFUTED'}")
+    n_sharp = sum(1 for s in summary if s["sharp_ok"] is True)
+    n_sharp_tot = sum(1 for s in summary if s["sharp_ok"] is not None)
+    print(f"  M2 sharp constant (min v_n == j_min/q, + sector): "
+          f"{n_sharp}/{n_sharp_tot} words"
+          + ("" if not sharp_fail else
+             "  FAILURES: " + "; ".join(
+                 f"{word_str(P)}: min v={vm} vs j_min/q={jq}"
+                 for (P, vm, jq) in sharp_fail)))
+    print(f"  M3 (t_n rule, k+ = [t=0], k- = 1+[t=2], k <= 2, factor "
+          f"2^(2nS+1) = 2 mod 3): {'CONFIRMED' if m3_ok_all else 'REFUTED'}")
+    print(f"  k distributions: + {dict(sorted(k_global[+1].items()))}, "
+          f"- {dict(sorted(k_global[-1].items()))}")
+    return summary, m1_ok_all, m2_ok_all, m3_ok_all
+
+
+# ----------------------------------------------------------------------------
 # main (extended per queue item)
 # ----------------------------------------------------------------------------
 
@@ -618,6 +759,8 @@ def main():
     results, surprises = compute_tables(grid)
     brute_ok = run_brute_checks(grid, results)
     consist_ok = consistency_vs_single_letter(results)
+
+    summary, m1_ok, m2_ok, m3_ok = analyze(grid, results)
 
     print(f"\ntotal time: {time.time() - t0:.1f} s")
     print(f"non-deepest-door candidate failures (should be 0): {surprises}")
