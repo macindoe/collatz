@@ -27,6 +27,7 @@ th{color:var(--text-muted);font-weight:500;font-size:12px;}
 .bits{font-family:ui-monospace,monospace;font-size:13px;letter-spacing:1px;white-space:nowrap;}
 .bits .win{background:var(--bg-accent);border-radius:3px;padding:1px 2px;}
 .bits .run{color:var(--text-accent);font-weight:700;}
+.bits .runr{color:var(--text-ok);font-weight:700;background:var(--bg-ok);border-radius:3px;padding:1px 2px;}
 .numbox{font-family:ui-monospace,monospace;font-size:14px;word-break:break-all;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:8px 10px;line-height:1.5;}
 .badge{font-size:10px;border-radius:5px;padding:1px 5px;}
 .scroll{overflow-x:auto;}
@@ -54,7 +55,7 @@ th{color:var(--text-muted);font-weight:500;font-size:12px;}
 <div id="wordLane" class="scroll" style="white-space:nowrap;padding:6px 0 10px;"></div>
 <div class="scroll"><table id="readTable"></table></div>
 <div id="moreRead" style="margin-top:10px;"></div>
-<p style="font-size:13px;"><strong>How the shaded window sizes itself:</strong> nobody chooses the width in advance — the number announces it as you read. Scan the door's bits from the right: the unbroken run of 1s ends at the first 0, and the run's length <em>is</em> <span class="mono">m</span> (that's <span class="mono">m+1</span> bits read). The next <span class="mono">r</span> bits then decide how many clean halvings the exit performs before hitting an odd number — each bit either confirms one more halving or calls a stop, and the stop fixes <span class="mono">r</span>. Total: the letter <span class="mono">(m,r)</span> is a function of the door's last <span class="mono">m+r+1</span> bits alone (shaded; the trailing 1-run in bold is <span class="mono">m</span>) — a self-delimiting code, like a prefix-free codeword: big letters need wide windows, small letters narrow ones, and the reading itself tells you when a letter is complete. The step then shifts those bits away — the next door's low bits are fresh digits pulled down from higher up, and nothing regenerates the supply. That consumption is the digit budget (stage4.md 11.8.7.7): a number of a given size can only ever pay for boundedly many letters of its own itinerary. A <span style="color:var(--text-warn);">dead door</span> (3&nbsp;|&nbsp;y) reads forward like any other but no predecessor can reach it.</p>
+<p style="font-size:13px;"><strong>Two runs, two numbers — both visible above.</strong> <span class="run">m</span> is the blue run: the trailing 1s of the door <span class="mono">y</span> itself (its length is read straight off the bits, nobody chooses it). The block then runs its course and exits at the even number <span class="mono">A = 3<sup>m</sup>&middot;q &minus; 1</span> (where <span class="mono">q</span> is what's left of <span class="mono">y+1</span> after the entry) — and <span class="runr">r</span> is the green run: <span class="mono">A</span>'s trailing 0s, the clean halvings before the next odd door. So <span class="mono">r</span> is a visible run too, just in the <em>derived</em> number, not in <span class="mono">y</span> — but <span class="mono">A</span>'s low bits are computed from <span class="mono">y</span>'s bits sitting just above the blue run, which is why the whole letter <span class="mono">(m,r)</span> is pinned by <span class="mono">y</span>'s last <span class="mono">m+r+1</span> bits alone (the shaded window). The step then shifts that window away — the next door's low bits are fresh digits pulled down from higher up, and nothing regenerates the supply. That consumption is the digit budget (stage4.md 11.8.7.7): a number of a given size can only ever pay for boundedly many letters of its own itinerary. <strong>Chip colours are semantic:</strong> hue = <span class="mono">m</span> (entry depth), deeper tint = larger <span class="mono">r</span> (more exit halvings) — so same-coloured chips are the same letter, and a glance at the word shows its mix of entry depths. A <span style="color:var(--text-warn);">dead door</span> (3&nbsp;|&nbsp;y) reads forward like any other but no predecessor can reach it.</p>
 </div>
 
 <!-- ============ COMPOSE MODE ============ -->
@@ -103,7 +104,7 @@ function mod(a,m){return((a%m)+m)%m;}
 // stratum and G (reverse.md 14.15.1.1): m=v2(y+1), q=(y+1)/2^m, r=v2(3^m q - 1), G=(3^m q - 1)/2^r
 function step(y){const m=v2(y+1n);const q=(y+1n)>>m;const val=pw(3n,m)*q-1n;const r=v2(val);
   const a=v3(q);const w=q/pw(3n,a);const d=m+a; // reduced state (w, d), s = r
-  return{m,r,q,g:val>>r,w,d};}
+  return{m,r,q,val,g:val>>r,w,d};}
 function pred(z,m,r){const num=(1n<<r)*z+1n;const den=pw(3n,m);
   if(mod(num,den)!==0n)return null;return(1n<<m)*(num/den)-1n;}
 
@@ -145,15 +146,22 @@ function witness(past,future){
 }
 
 // ---------- shared rendering ----------
-function hue(m,r){return(m*67+r*139)%360;}
-function chip(m,r,extra){return'<span class="chip" style="background:hsla('+hue(m,r)+',55%,50%,0.16);border-color:hsla('+hue(m,r)+',45%,45%,0.55);" '+(extra||'')+'>('+m+','+r+')</span>';}
+// chip colour is semantic: hue encodes m (entry depth), tint depth encodes r (exit halvings)
+const MHUES=[210,25,130,275,50,340,95,180];
+function chip(m,r,extra){const h=MHUES[(m-1)%8];const a=Math.min(0.55,0.13+0.11*(r-1));
+  return'<span class="chip" style="background:hsla('+h+',60%,50%,'+a.toFixed(2)+');border-color:hsla('+h+',50%,45%,0.7);" '+(extra||'')+'>('+m+','+r+')</span>';}
 function fmt(n){const s=n.toString();return s.length>12?s.slice(0,5)+'&hellip;'+s.slice(-4)+'<span style="color:var(--text-muted);font-size:10px;"> ['+s.length+'d]</span>':s;}
 function bits(y,m,r){const w=Number(m+r+1n);const s=y.toString(2).padStart(w,'0');const show=Math.max(w,Math.min(s.length,22));
   const tail=s.slice(-show);const pre=s.length>show?'&hellip;':'';
   const head=tail.slice(0,tail.length-w),win=tail.slice(tail.length-w);
   const runStart=win.length-Number(m);
-  const tip='these '+w+' low bits determine the letter: the trailing 1-run gives m='+m+', the next bits fix r='+r;
+  const tip='these '+w+' low bits determine the letter: the trailing 1-run gives m='+m+', and they pin the exit value’s low bits, fixing r='+r;
   return'<span class="bits">'+pre+head+'<span class="win" title="'+tip+'">'+win.slice(0,runStart)+'<span class="run">'+win.slice(runStart)+'</span></span></span>';}
+function bitsA(A,r){const w=Number(r);const s=A.toString(2);const show=Math.min(s.length,Math.max(w+8,14));
+  const tail=s.slice(-show);const pre=s.length>show?'&hellip;':'';
+  const head=tail.slice(0,tail.length-w);
+  const tip='the exit value A = 3^m·q − 1: its run of trailing 0s is r='+r+' — the clean halvings before the next odd door';
+  return'<span class="bits" title="'+tip+'">'+pre+head+'<span class="runr">'+tail.slice(tail.length-w)+'</span></span>';}
 
 // ---------- read mode ----------
 let readLimit=14;
@@ -168,10 +176,10 @@ function renderRead(){
     +rows.map((row,i)=>chip(Number(row.s.m),Number(row.s.r),'data-i="'+i+'" onclick="selRow('+i+')"')).join('')
     +(cur===1n&&rows[rows.length-1].y===1n?'<span style="font-size:12px;color:var(--text-muted);"> &nbsp;(1,1)<sup>&infin;</sup> — the trivial fixed point</span>':'<span style="color:var(--text-muted);">&hellip;</span>');
   document.getElementById('readTable').innerHTML=
-    '<tr><th>t</th><th>door y</th><th>low bits read (m+r+1)</th><th>letter</th><th>state (&omega;, d)</th><th></th></tr>'
+    '<tr><th>t</th><th>door y</th><th>y in bits &mdash; the <span class="run">1-run</span> is m</th><th>exit A = 3<sup>m</sup>&middot;q&minus;1 &mdash; its <span class="runr">0-run</span> is r</th><th>letter</th><th>state (&omega;, d)</th><th></th></tr>'
     +rows.map((row,i)=>{const dead=row.y%3n===0n;
       return'<tr id="row'+i+'"><td>'+row.t+'</td><td class="mono">'+fmt(row.y)+(dead?' <span class="badge" style="background:var(--bg-warn);color:var(--text-warn);">dead</span>':'')+'</td>'
-      +'<td>'+bits(row.y,row.s.m,row.s.r)+'</td><td>'+chip(Number(row.s.m),Number(row.s.r))+'</td>'
+      +'<td>'+bits(row.y,row.s.m,row.s.r)+'</td><td>'+bitsA(row.s.val,row.s.r)+'</td><td>'+chip(Number(row.s.m),Number(row.s.r))+'</td>'
       +'<td class="mono">(<span style="color:var(--text-ok);">'+fmt(row.s.w)+'</span>, '+row.s.d.toString()+')</td>'
       +'<td style="color:var(--text-muted);font-size:11px;">'+(row.y===1n?'':'&rarr; consumed, next door: '+fmt(row.s.g))+'</td></tr>';}).join('');
   document.getElementById('moreRead').innerHTML=(cur!==1n)?'<button id="moreBtn">read 14 more letters&hellip;</button>':'';
