@@ -334,6 +334,146 @@ def run_brute_checks(words, results):
 
 
 # ----------------------------------------------------------------------------
+# Item 3: pattern analysis against P1-P3
+# ----------------------------------------------------------------------------
+
+
+def mult_order(g: int, q: int) -> int:
+    """Multiplicative order of g mod q (gcd(g,q)=1), by direct search."""
+    x, k = g % q, 1
+    while x != 1:
+        x = x * g % q
+        k += 1
+        assert k <= q, "order search overran modulus"
+    return k
+
+
+def detect_period(seq):
+    """Smallest p >= 1 with seq[i] == seq[i+p] for all valid i, plus the
+    smallest start index i0 from which that period already holds (i0 == 0
+    means purely periodic over the observed range). Exact comparison."""
+    L = len(seq)
+    for p in range(1, L):
+        if all(seq[i] == seq[i + p] for i in range(L - p)):
+            return p, 0
+    return None, None
+
+
+def analyze(words, results):
+    """Item 3: periodicity of j_n and of H/Q_n (against the algebraic period
+    ord_q(2^(m+r)*3^m mod q)), first-viable-k distribution, the deepest-door
+    mod-3 law (derived empirically, checked exactly), P1/P2/P3 verdicts.
+    Returns the summary structure printed at the end."""
+    print("\n" + "=" * 72)
+    print("Pattern analysis (P1-P3)")
+    print("=" * 72)
+    summary = []
+    p2_ok_all = True
+    p1_ok_all = True
+    k_global = {}
+    for (m, r) in words:
+        ystar = fixed_point(m, r)
+        a, q = ystar.numerator, ystar.denominator
+        g = (2 ** (m + r) * 3**m) % q
+        P_alg = mult_order(g, q)
+        # j_n is q*rho_n ≡ a (mod Q_n) bookkeeping; algebraically
+        # j_n ≡ -a * 2^{-1} * g^{-n} (mod q) — verify, don't assume:
+        jn_seq = [results[(m, r)][+1][n - 1]["j"] for n in range(1, N_MAX + 1)]
+        jn_alg = [(-a * modinv(2, q) * pow(modinv(g, q), n, q)) % q
+                  for n in range(1, N_MAX + 1)]
+        jn_law_ok = jn_seq == jn_alg
+        pj, _ = detect_period(jn_seq)
+        for sigma in (+1, -1):
+            rows = results[(m, r)][sigma]
+            # exact "limit value" v_n := H/Q_n - sigma*a/(q*Q_n)
+            #   sigma=+1: H = rho + kQ           => v_n = j_n/q + k
+            #   sigma=-1: H = kQ - rho           => v_n = k - j_n/q
+            v_seq = [Fraction(row["H"], row["Q"])
+                     - sigma * Fraction(a, q * row["Q"]) for row in rows]
+            # identity check (exact):
+            for n, row in enumerate(rows, 1):
+                expect = (Fraction(row["j"], q) + row["k"] if sigma > 0
+                          else row["k"] - Fraction(row["j"], q))
+                assert v_seq[n - 1] == expect, (
+                    f"limit-value identity failed ({m},{r}) sigma={sigma}")
+            pv, _ = detect_period(v_seq)
+            k_seq = [row["k"] for row in rows]
+            pk, _ = detect_period(k_seq)
+            # deepest-door mod-3 law, checked (not assumed):
+            # y_{-n}(rho) ≡ (a + 2 j_n) * q^{-1} (mod 3), and along the
+            # progression the deepest door moves by sigma*k*2^(2(m+r)n+1),
+            # i.e. by 2*sigma*k mod 3.
+            t_ok = all(
+                row["deepest_mod3"]
+                == ((a + 2 * row["j"]) * modinv(q, 3)
+                    + 2 * sigma * row["k"]) % 3
+                for row in rows)
+            # closed-form first-viable-k rule, checked row by row:
+            # with t_n := (a + 2 j_n) q^{-1} mod 3 (the deepest door of the
+            # k=0 lift mod 3), the dead candidate is the unique k mod 3 with
+            # t_n + 2*sigma*k ≡ 0, so
+            #   sigma=+1:  k = 1 if t_n == 0 else 0
+            #   sigma=-1:  k = 2 if t_n == 2 else 1
+            kform_ok = True
+            for row in rows:
+                t_n = (a + 2 * row["j"]) * modinv(q, 3) % 3
+                k_pred = ((1 if t_n == 0 else 0) if sigma > 0
+                          else (2 if t_n == 2 else 1))
+                if row["k"] != k_pred:
+                    kform_ok = False
+            vmin, vmax = min(v_seq), max(v_seq)
+            hq_min = min(Fraction(row["H"], row["Q"]) for row in rows)
+            p2_ok = vmin >= Fraction(1, q)
+            p1_ok = pv is not None and pv <= P_alg
+            p1_ok_all &= p1_ok
+            p2_ok_all &= p2_ok
+            kdist = {}
+            for k in k_seq:
+                kdist[k] = kdist.get(k, 0) + 1
+            k_global.setdefault(sigma, {})
+            for k, c in kdist.items():
+                k_global[sigma][k] = k_global[sigma].get(k, 0) + c
+            vset = sorted(set(v_seq))
+            summary.append({
+                "word": (m, r), "sigma": sigma, "a": a, "q": q,
+                "P_alg": P_alg, "pj": pj, "pv": pv, "pk": pk,
+                "vset": vset, "vmin": vmin, "hq_min": hq_min,
+                "kdist": dict(sorted(kdist.items())),
+                "jn_law_ok": jn_law_ok, "t_ok": t_ok,
+                "kform_ok": kform_ok, "p2_ok": p2_ok,
+            })
+    # print summary table
+    print(f"\n{'word':>6} {'y*':>8} {'sec':>3} {'P_alg':>5} {'per(j)':>6} "
+          f"{'per(H/Q)':>8} {'k-dist':>14} {'min H/Q':>10} {'1/q':>9} "
+          f"{'mod3law':>7} {'k-form':>6} {'j-law':>5}")
+    for s in summary:
+        m, r = s["word"]
+        vals = ", ".join(f"{v.numerator}/{v.denominator}" for v in s["vset"])
+        print(f"  ({m},{r}) {s['a']:>4}/{s['q']:<3} "
+              f"{'+' if s['sigma'] > 0 else '-':>2} {s['P_alg']:>5} "
+              f"{s['pj']:>6} {s['pv']:>8} {str(s['kdist']):>14} "
+              f"{float(s['hq_min']):>10.6f} {float(Fraction(1, s['q'])):>9.6f} "
+              f"{'OK' if s['t_ok'] else 'FAIL':>7} "
+              f"{'OK' if s['kform_ok'] else 'FAIL':>6} "
+              f"{'OK' if s['jn_law_ok'] else 'FAIL':>5}")
+        print(f"        value set of v_n = H/Q_n -+ a/(qQ_n): {{{vals}}}")
+    # verdicts
+    print("\nVerdicts over the tested range (n = 1..%d):" % N_MAX)
+    print(f"  P1 (H/Q_n eventually periodic, period <= ord_q(2^(m+r)3^m)): "
+          f"{'CONFIRMED' if p1_ok_all else 'REFUTED'}")
+    print(f"  P2 (H >= (1/q - o(1)) Q_n; exactly v_n >= 1/q): "
+          f"{'CONFIRMED' if p2_ok_all else 'REFUTED'}")
+    kmax = {s: max(d) for s, d in k_global.items()}
+    p3_ok = kmax.get(+1, 0) <= 3 and kmax.get(-1, 0) <= 3
+    print(f"  P3 (first-viable k bounded <= 3): "
+          f"{'CONFIRMED' if p3_ok else 'REFUTED'} "
+          f"(observed max k: +sector {kmax.get(+1)}, -sector {kmax.get(-1)}; "
+          f"distributions: + {dict(sorted(k_global[+1].items()))}, "
+          f"- {dict(sorted(k_global[-1].items()))})")
+    return summary
+
+
+# ----------------------------------------------------------------------------
 # main
 # ----------------------------------------------------------------------------
 
@@ -362,6 +502,8 @@ def main():
     results = compute_tables(words)
 
     brute_ok = run_brute_checks(words, results)
+
+    summary = analyze(words, results)
 
     print(f"\ntotal time: {time.time() - t0:.1f} s")
     print("brute-force cross-checks all matched:", brute_ok)
