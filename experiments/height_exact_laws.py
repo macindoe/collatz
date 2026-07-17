@@ -420,6 +420,132 @@ def test_instance2_law():
 
 
 # ----------------------------------------------------------------------------
+# Theorem 14.15.7.5 / Corollary 14.15.7.6: the period-7 cycle's word
+# ((4,1),(3,3)), whole-period diagonal windows
+# ----------------------------------------------------------------------------
+
+P7 = [(4, 1), (3, 3)]  # the G-period-2 word of the classical period-7 cycle
+
+
+def test_period7_fixed_point_facts():
+    """Hypotheses and mechanism of 14.15.7.5 on the instance P7."""
+    ystar_frac = fixed_point(P7)
+    check(ystar_frac == -17, "P7: y* = -17 exactly")
+    ystar = -17
+    # (H1) the actual orbit realizes the word (and is the classical cycle)
+    m, r, g = stratum_and_G(-17)
+    check((m, r, g) == (4, 1, -41), "P7: stratum(-17)=(4,1), G(-17)=-41")
+    m, r, g = stratum_and_G(-41)
+    check((m, r, g) == (3, 3, -17), "P7: stratum(-41)=(3,3), G(-41)=-17")
+    # liveness-automatic mechanism (any p): N = 2^S * B_P is a unit mod 3,
+    # and so is the denominator 2^S - 3^M
+    S, M = SM(P7)
+    A, B = composed_constants(P7)
+    N = B * 2 ** S
+    check(N.denominator == 1 and int(N) % 3 != 0, "P7: N = 2^S B_P unit mod 3")
+    check((2 ** S - 3 ** M) % 3 != 0, "P7: denominator unit mod 3")
+    check(Fraction(int(N), 2 ** S - 3 ** M) == -17, "P7: y* = N/(2^S-3^M)")
+    # (H2) 2|y*| < Q_1, with the stated modulus 2^(S+1) 3^M = 2*(2^11*3^7)
+    check((S, M) == (11, 7), "P7: S_P = 11, M_P = 7")
+    Q1 = Q(P7, 1)
+    check(Q1 == 2 * (2 ** 11 * 3 ** 7) == 8957952, "P7: Q_1 = 2*(2^11*3^7)")
+    check(2 * 17 < Q1, "P7: 2|y*| < Q_1")
+    # class iff at n = 1, exhaustive over one full modulus width, both signs
+    total = 0
+    L = 2  # one whole period of letters
+    for y in range(-Q1 + 1, Q1, 2):
+        if y == -1 or y == 0:
+            continue
+        direct = (follows_forward(y, P7, L)
+                  and backward_chain(y, P7, L) is not None)
+        predicted = (y - ystar) % Q1 == 0
+        check(direct == predicted, f"P7 class iff at y={y}")
+        total += 1
+    # deepest-door formula and mod-3 law at whole-period depths
+    dd = 0
+    for n in range(1, 5):
+        Qn = Q(P7, n)
+        for kappa in range(-5, 6):
+            y0 = ystar + kappa * Qn
+            chain = backward_chain(y0, P7, 2 * n)
+            check(chain is not None, f"P7 chain exists, n={n}, kappa={kappa}")
+            check(chain[-1] == ystar + kappa * 2 ** (2 * S * n + 1),
+                  f"P7 deepest-door formula, n={n}, kappa={kappa}")
+            check((chain[-1] % 3 != 0) == ((ystar + 2 * kappa) % 3 != 0),
+                  f"P7 mod-3 law, n={n}, kappa={kappa}")
+            dd += 1
+    print(f"test_period7_fixed_point_facts: y* = -17 exact, orbit realizes the "
+          f"word, liveness mechanism exact, class iff exhaustive over "
+          f"{total} odd y in one modulus width (both signs), deepest-door "
+          f"formula on {dd} chains, 0 failures")
+
+
+def test_period7_law():
+    """Corollary 14.15.7.6: positive-sector H at n whole periods
+    = 4*(2^11*3^7)^n - 17 (the brief's prediction, verified not assumed)."""
+    ystar, k0 = check_instance(
+        P7, +1, lambda n: 4 * (2 ** 11 * 3 ** 7) ** n - 17,
+        n_member=6, n_brute=(), table=None,
+        dead_k_residue=1, name="((4,1),(3,3))^inf +")
+    check((ystar, k0) == (-17, 2), "P7: y* = -17, k0 = 2")
+    # capped (negative) sector: y* member at n = 1..6, brute force at n = 1, 2
+    for n in range(1, 7):
+        ok, why = membership(-17, P7, n, -1)
+        check(ok, f"P7: -17 in R^-_{{2n,2n}}, n={n}: {why}")
+    for n in (1, 2):
+        check(brute_force_H(P7, n, -1, 19) == 17,
+              f"P7: capped-sector brute force n={n}")
+    print("test_period7_law: H = 4*(2^11*3^7)^n - 17 verified by direct "
+          "simulation n=1..6 whole periods (k=1 dies at the deepest door "
+          "every time), k=1..9 pattern (dead iff k=1 mod 3) at n=1,2,3, "
+          "capped sector H^- = 17, 0 failures")
+
+
+def test_period7_brute_force():
+    """Minimality cross-checks for the P7 positive-sector law.
+
+    n = 1: full dumb scan (no class reasoning of any kind) up to the formula
+    value 17,915,887.
+
+    n = 2: the formula value is ~8.0e13 — a literal dumb scan is infeasible.
+    Deviation, recorded honestly: the scan is restricted to the forward
+    cylinder class (whose representative is itself found by dumb scan, and
+    which by the already-merged Theorem 14.15.1.5 provably contains every
+    forward follower), then every member below the formula value is checked
+    by direct simulation. This uses the merged cylinder theorem but nothing
+    from 14.15.7's own CRT/fixed-point reasoning."""
+    H1 = 4 * (2 ** 11 * 3 ** 7) - 17
+    got = brute_force_H(P7, 1, +1, H1 + 2)
+    check(got == H1, f"P7 n=1 dumb-scan minimality (got {got}, want {H1})")
+
+    H2 = 4 * (2 ** 11 * 3 ** 7) ** 2 - 17
+    # forward class rep at 2 whole periods (4 letters), by dumb scan
+    S, M = SM(P7)
+    mod2 = 2 ** (2 * S + 1)  # 2^23
+    rep = None
+    y = 1
+    while rep is None:
+        if follows_forward(y, P7, 4):
+            rep = y
+        y += 2
+    check(rep == (-17) % mod2, "P7 n=2: forward class rep == -17 mod 2^23")
+    # walk the forward class; cheap pre-filters, then full direct simulation
+    first = None
+    t27 = 27  # past letter -1 is (3,3): depth-1 chain needs 27 | 8*y0 + 1
+    y0 = rep
+    while y0 <= H2:
+        if y0 % 3 != 0 and (8 * y0 + 1) % t27 == 0:
+            if membership(y0, P7, 2, +1)[0]:
+                first = y0
+                break
+        y0 += mod2
+    check(first == H2, f"P7 n=2 forward-class-scan minimality (got {first})")
+    print(f"test_period7_brute_force: n=1 full dumb scan to {H1:,} and n=2 "
+          f"forward-class-progression scan to {H2:,} both find exactly the "
+          f"formula value, 0 failures")
+
+
+# ----------------------------------------------------------------------------
 # main
 # ----------------------------------------------------------------------------
 
@@ -436,7 +562,13 @@ TESTS_ITEM2 = [
     test_instance2_law,
 ]
 
+TESTS_ITEM3 = [
+    test_period7_fixed_point_facts,
+    test_period7_law,
+    test_period7_brute_force,
+]
+
 if __name__ == "__main__":
-    for t in TESTS_ITEM1 + TESTS_ITEM2:
+    for t in TESTS_ITEM1 + TESTS_ITEM2 + TESTS_ITEM3:
         t()
     print(f"ALL PASS ({CHECKS} checks)")
