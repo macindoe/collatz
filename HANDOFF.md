@@ -40,5 +40,6 @@ One full case study exists: `briefs/mirror-queue-brief.md` → Sonnet session �
 ## Known infrastructure quirks
 
 - The sandbox mount of the repo can serve stale reads mid-session (files appear truncated). The Windows-side files are authoritative; verify via PowerShell (`git status`, line counts) before "repairing" anything.
+- The Gmail retrieval pipeline can silently garble numerals in correspondence (observed 2026-07-17: several two-digit groups rendered as single glyphs in a Merle email that displayed cleanly in the author's own client; a reconstructed guess then produced a spurious "disagreement," dissolved once the author read the true value — `briefs/merle-pincer-check-findings.md`, Correction). Before verifying or disputing any number quoted from email, have the author confirm the digits from his own client.
 - LaTeX builds: the mount locks aux files; build in a sandbox temp dir and copy artifacts in.
 - `\wp` and `\dp` are TeX primitives; the papers use `\wnext`, `\dnext`.
