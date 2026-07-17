@@ -346,12 +346,178 @@ def check_class_theorem():
 
 
 # --------------------------------------------------------------------------
+# CHECK 4 - Theorem 14.15.9.6 (unified identities) + Corollary 14.15.9.7
+# (integer case folded in): closed forms against direct simulation, reproducing
+# both probes' published brute-force tables (28 + 52 entries) at n = 1, 2, plus
+# extrapolation rows beyond both probes' ranges, plus the three integer words'
+# 14.15.7 laws.
+# --------------------------------------------------------------------------
+
+# published brute-force tables: word -> (H+_1, H+_2, H-_1, H-_2)
+# (briefs/h-nonintegral-probe-findings.md section 2; briefs/multiletter-h-probe-findings.md section 2)
+PUBLISHED = {
+    ((1, 2),): (29, 461, 67, 691),
+    ((1, 3),): (37, 709, 155, 8507),
+    ((2, 2),): (371, 23699, 205, 17773),
+    ((2, 3),): (451, 93763, 125, 238013),
+    ((3, 1),): (1255, 305383, 473, 67865),
+    ((3, 2),): (695, 895799, 1033, 2090185),
+    ((3, 3),): (4951, 1936855, 1961, 4035113),
+    ((1, 1), (1, 2)): (977, 64913, 175, 266863),
+    ((1, 1), (2, 1)): (2425, 895801, 1031, 597191),
+    ((1, 1), (2, 2)): (281, 4842137, 6631, 7101799),
+    ((1, 2), (1, 2)): (461, 265421, 691, 398131),
+    ((1, 2), (2, 1)): (1309, 4680733, 5603, 7263203),
+    ((1, 2), (2, 2)): (6365, 4257245, 7459, 43518499),
+    ((2, 1), (2, 2)): (21179, 192119483, 20293, 237862213),
+    ((2, 2), (2, 2)): (23699, 1105667219, 17773, 614259565),
+    ((1, 1), (1, 1), (1, 2)): (1985, 38315201, 4927, 9460543),
+    ((1, 1), (1, 1), (2, 1)): (22945, 100634017, 18527, 329347679),
+    ((1, 1), (1, 1), (2, 2)): (25121, 226047521, 16351, 633915871),
+    ((1, 1), (1, 2), (1, 2)): (785, 38804753, 13039, 152298223),
+    ((1, 1), (1, 2), (2, 2)): (90065, 6488633297, 75823, 391073839),
+}
+
+# published table ranges (probe n_max per word); extrapolation row = n_max + 1
+PROBE_NMAX = {
+    ((1, 2),): 25, ((1, 3),): 25, ((2, 2),): 25, ((2, 3),): 25,
+    ((3, 1),): 25, ((3, 2),): 25, ((3, 3),): 25,
+    ((1, 1), (1, 2)): 23, ((1, 1), (2, 1)): 14, ((1, 1), (2, 2)): 15,
+    ((1, 2), (1, 2)): 13, ((1, 2), (2, 1)): 15, ((1, 2), (2, 2)): 62,
+    ((2, 1), (2, 2)): 35, ((2, 2), (2, 2)): 15,
+    ((1, 1), (1, 1), (1, 2)): 62, ((1, 1), (1, 1), (2, 1)): 35,
+    ((1, 1), (1, 1), (2, 2)): 27, ((1, 1), (1, 2), (1, 2)): 31,
+    ((1, 1), (1, 2), (2, 2)): 55,
+}
+
+
+def word_constants(word):
+    S, M = word_sums(word)
+    ystar = fixed_point(word)
+    a, q = ystar.numerator, ystar.denominator
+    gP = (2 ** S * 3 ** M) % q if q > 1 else 0
+    return S, M, a, q, gP
+
+
+def theorem_row(word, n):
+    """The closed-form quantities of Theorem 14.15.9.6 at window (np, np)."""
+    S, M, a, q, gP = word_constants(word)
+    Qn = 2 ** (n * S + 1) * 3 ** (n * M)
+    rho = (a * pow(q, -1, Qn)) % Qn
+    num = q * rho - a
+    assert num % Qn == 0
+    j = num // Qn
+    t = ((a + 2 * j) * pow(q, -1, 3)) % 3
+    Hp = rho + (1 if t == 0 else 0) * Qn
+    Hm = (1 + (1 if t == 2 else 0)) * Qn - rho
+    return Qn, rho, j, t, Hp, Hm
+
+
+def simulated_row(word, n, sector):
+    """Direct-simulation first-viable scan on the class progression: returns
+    (H, first_viable_k, dead_pattern, deepest_doors). Every candidate is decided
+    by full simulation (forward strata by iterated G, backward chain by the
+    unique-predecessor formula, liveness, sign)."""
+    p = len(word)
+    S, M, a, q, gP = word_constants(word)
+    Qn = 2 ** (n * S + 1) * 3 ** (n * M)
+    rho = (a * pow(q, -1, Qn)) % Qn
+    ks = range(0, 7) if sector == +1 else range(1, 8)
+    first = None
+    pattern = {}
+    doors = {}
+    for k in ks:
+        kappa = sector * k
+        y0 = rho + kappa * Qn
+        ok(y0 % 2 == 1 and y0 != 0 and y0 != -1, f"cand parity {word} n={n} k={k}")
+        ok((y0 > 0) == (sector > 0), f"cand sign {word} n={n} k={k}")
+        ok(y0 % 3 != 0, f"cand liveness {word} n={n} k={k}")
+        ok(follows_prefix(y0, word, n * p), f"cand forward {word} n={n} k={k}")
+        ch = backward_chain(y0, word, n * p)
+        ok(ch is not None, f"cand backward {word} n={n} k={k}")
+        doors[k] = ch[-1]
+        alive = ch[-1] % 3 != 0
+        pattern[k] = alive
+        if alive and first is None:
+            first = k
+    H = abs(rho + sector * first * Qn)
+    return H, first, pattern, doors
+
+
+def check_identities():
+    rows = 0
+    for word in ALL_GRID:
+        p = len(word)
+        S, M, a, q, gP = word_constants(word)
+        nmax = PROBE_NMAX.get(word)
+        ns = [1, 2, nmax + 1] if nmax else [1, 2, 3, 7]  # integer words: extra rows
+        for n in ns:
+            Qn, rho, j, t, Hp, Hm = theorem_row(word, n)
+            # Identity 1: range and closed form of j_n
+            if q > 1:
+                ok(1 <= j <= q - 1, f"j range {word} n={n}")
+                ok(j == (-a * pow(2 * gP ** n, -1, q)) % q, f"j closed form {word} n={n}")
+            else:
+                ok(j == (1 if a < 0 else 0), f"j degenerate {word} n={n}")
+            for sector in (+1, -1):
+                H, first, pattern, doors = simulated_row(word, n, sector)
+                # Identity 2: deepest-door formula and mod-3 value
+                for k, door in doors.items():
+                    kappa = sector * k
+                    formula = (a + (j + kappa * q) * 2 ** (2 * n * S + 1))
+                    ok(formula % q == 0, f"door integrality {word} n={n} k={k}")
+                    ok(door == formula // q, f"door formula {word} n={n} {sector} k={k}")
+                    ok(door % 3 == (t + 2 * kappa) % 3, f"door mod 3 {word} n={n} k={k}")
+                    # Identity 3: death law
+                    ok((door % 3 == 0) == (kappa % 3 == t % 3),
+                       f"death law {word} n={n} {sector} k={k}")
+                # Identity 3: first-viable rule
+                want = (1 if t == 0 else 0) if sector == +1 else 1 + (1 if t == 2 else 0)
+                ok(first == want, f"first-viable {word} n={n} {sector}")
+                # Identity 4: closed forms
+                ok(H == (Hp if sector == +1 else Hm), f"closed form {word} n={n} {sector}")
+                # P1's exact normalized value
+                vn = Fraction(H, Qn) - sector * Fraction(a, q * Qn)
+                want_v = Fraction(j, q) + first if sector == +1 else first - Fraction(j, q)
+                ok(vn == want_v, f"v_n form {word} n={n} {sector}")
+                rows += 1
+            # published tables at n = 1, 2
+            if word in PUBLISHED and n in (1, 2):
+                hp1, hp2, hm1, hm2 = PUBLISHED[word]
+                ok(Hp == (hp1 if n == 1 else hp2), f"published H+ {word} n={n}")
+                ok(Hm == (hm1 if n == 1 else hm2), f"published H- {word} n={n}")
+        # Corollary 14.15.9.7: integer-case fold-in (14.15.7's laws verbatim)
+        if q == 1:
+            for n in (1, 2, 3, 7):
+                Qn, rho, j, t, Hp, Hm = theorem_row(word, n)
+                if a > 0:
+                    ok(Hp == a, f"capped sector {word} n={n}")
+                    k0 = 1 if (-a) % 3 == 2 else 2
+                    ok(Hm == k0 * Qn - a, f"escaping sector vs 14.15.7 {word} n={n}")
+                else:
+                    ok(Hm == -a, f"capped sector {word} n={n}")
+                    k0 = 1 if a % 3 == 2 else 2
+                    ok(Hp == k0 * Qn + a, f"escaping sector vs 14.15.7 {word} n={n}")
+    # the three integer words' published laws, explicitly
+    for word, law in [(((1, 1),), lambda n, Q: (1, Q - 1)),
+                      (((2, 1),), lambda n, Q: (2 * Q - 5, 5)),
+                      (((4, 1), (3, 3)), lambda n, Q: (2 * Q - 17, 17))]:
+        for n in (1, 2, 3):
+            Qn, rho, j, t, Hp, Hm = theorem_row(word, n)
+            ok((Hp, Hm) == law(n, Qn), f"14.15.7 law {word} n={n}")
+    print(f"check 4 (Theorem .6 identities + Cor .7 fold-in): {rows} word/sector/n rows "
+          f"fully simulated (candidates decided by direct simulation only), all four "
+          f"identities exact, 80/80 published brute-force entries reproduced, "
+          f"extrapolation row beyond each probe's range per word, integer-case laws "
+          f"matching 14.15.7 verbatim - OK")
+
 
 def main():
     t0 = time.time()
     check_fixed_point_arithmetic()
     check_adelic_anchor()
     check_class_theorem()
+    check_identities()
     print(f"ALL CHECKS PASSED: {CHECKS['count']} exact checks, {time.time()-t0:.1f}s")
 
 
