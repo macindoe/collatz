@@ -271,8 +271,75 @@ def compute_instance_grid():
     return rows
 
 
+def compute_tables(words, n_max=N_MAX, verbose=True):
+    """Item 2: exact height tables for each word, each sector, n = 1..n_max.
+    Returns results[(m,r)][sigma] = list of per-n row dicts."""
+    results = {}
+    for (m, r) in words:
+        results[(m, r)] = {}
+        for sigma in (+1, -1):
+            rows = []
+            for n in range(1, n_max + 1):
+                row = height_scan(m, r, n, sigma)
+                # derive-and-check: deepest door from the exact affine formula
+                dd = deepest_door_formula(m, r, n, row["y0"])
+                assert dd.denominator == 1 and int(dd) == row["deepest"], (
+                    f"deepest-door formula mismatch at (m,r)=({m},{r}) "
+                    f"n={n} sigma={sigma:+d}")
+                # every pre-viable failure should be deepest_dead only;
+                # anything else violates the class setup — flag loudly
+                for (k, reason) in row["failures"]:
+                    if reason != "deepest_dead":
+                        print(f"*** SURPRISE: candidate k={k} failed with "
+                              f"'{reason}' at (m,r)=({m},{r}) n={n} "
+                              f"sigma={sigma:+d} ***")
+                rows.append(row)
+            results[(m, r)][sigma] = rows
+            if verbose:
+                ystar = fixed_point(m, r)
+                a, q = ystar.numerator, ystar.denominator
+                print(f"\nword ((m,r))=(({m},{r}))^inf   y* = {a}/{q}   "
+                      f"sector {'+' if sigma > 0 else '-'}")
+                print(f"{'n':>3} {'H':>42} {'k':>2} {'j_n':>4} "
+                      f"{'rho_n/Q_n':>10} {'H/Q_n':>10} {'nfail':>5}")
+                for n, row in enumerate(rows, 1):
+                    print(f"{n:>3} {row['H']:>42} {row['k']:>2} "
+                          f"{row['j']:>4} "
+                          f"{float(Fraction(row['rho'], row['Q'])):>10.6f} "
+                          f"{float(Fraction(row['H'], row['Q'])):>10.6f} "
+                          f"{len(row['failures']):>5}")
+    return results
+
+
+def run_brute_checks(words, results):
+    """Brute-force cross-checks at n = 1, 2 for every word/sector."""
+    print("\n" + "=" * 72)
+    print("Brute-force cross-checks (n = 1, 2; full odd scan, no class "
+          "construction)")
+    print("=" * 72)
+    n_checked = n_failed = 0
+    for (m, r) in words:
+        for sigma in (+1, -1):
+            for n in BRUTE_N:
+                H_class = results[(m, r)][sigma][n - 1]["H"]
+                H_brute = brute_force_height(m, r, n, sigma, limit=H_class)
+                n_checked += 1
+                status = "OK" if H_brute == H_class else "MISMATCH"
+                if H_brute != H_class:
+                    n_failed += 1
+                print(f"  (m,r)=({m},{r}) sigma={sigma:+d} n={n}: "
+                      f"class H={H_class}  brute H={H_brute}  {status}")
+    print(f"\nbrute-force cross-checks: {n_checked} run, {n_failed} mismatches")
+    return n_failed == 0
+
+
+# ----------------------------------------------------------------------------
+# main
+# ----------------------------------------------------------------------------
+
 
 def main():
+    t0 = time.time()
     print("h_nonintegral_probe.py — run date 2026-07-17 (deterministic, "
           "no RNG)")
     print("=" * 72)
@@ -287,7 +354,18 @@ def main():
         if not integral:
             words.append((m, r))
     assert len(words) == 7, "expected exactly seven non-integral words"
-    return 0
+
+    print("\n" + "=" * 72)
+    print(f"Item 2: exact height tables H^sigma_(n,n), n = 1..{N_MAX} "
+          f"(every H verified by direct simulation)")
+    print("=" * 72)
+    results = compute_tables(words)
+
+    brute_ok = run_brute_checks(words, results)
+
+    print(f"\ntotal time: {time.time() - t0:.1f} s")
+    print("brute-force cross-checks all matched:", brute_ok)
+    return 0 if brute_ok else 1
 
 
 if __name__ == "__main__":
