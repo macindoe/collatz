@@ -326,6 +326,100 @@ def test_escaping_sector_closed_form():
 
 
 # ----------------------------------------------------------------------------
+# Corollaries 14.15.7.3 / 14.15.7.4: the two published instances, as laws
+# ----------------------------------------------------------------------------
+
+# Published tables, transcribed from the merged wiki (not recomputed here):
+PUBLISHED_TABLE_221 = [283, 20731, 1492987, 107495419, 7739670523,
+                       557256278011, 40122452017147, 2888816545234939]  # 14.15.5(c), n=1..8
+PUBLISHED_TABLE_11 = [23, 287, 3455, 41471, 497663]                     # 14.15.6(c), n=1..5
+
+
+def brute_force_H(period, n, sector, bound):
+    """Dumb scan of sector members in increasing |y|; first full member's |y|.
+    Independent of all class/CRT reasoning: every candidate is checked by
+    direct simulation only."""
+    a = 1
+    while a <= bound:
+        y = sector * a
+        if y != -1 and membership(y, period, n, sector)[0]:
+            return a
+        a += 2
+    return None
+
+
+def check_instance(period, sector, H_formula, n_member, n_brute, table=None,
+                   dead_k_residue=None, name=""):
+    """Common per-instance battery:
+       - direct-simulation membership of the closed-form value, n = 1..n_member,
+         plus failure of every smaller k (deepest door dead, all else passing);
+       - published-table comparison (when given);
+       - brute-force minimality at n in n_brute;
+       - k = 1..9 dead/live pattern against the mod-3 law at n = 1, 2, 3."""
+    ystar = int(fixed_point(period))
+    k0 = k0_of(ystar, sector)
+    for n in range(1, n_member + 1):
+        Qn = Q(period, n)
+        H = H_formula(n)
+        check(H == k0 * Qn + sector * ystar, f"{name}: closed form vs k0 at n={n}")
+        y0 = ystar + sector * k0 * Qn
+        check(abs(y0) == H, f"{name}: |y0| == H at n={n}")
+        ok, why = membership(y0, period, n, sector)
+        check(ok, f"{name}: membership of H-value at n={n}: {why}")
+        # every smaller k fails, and fails exactly at the deepest door
+        for k in range(1, k0):
+            yk = ystar + sector * k * Qn
+            ok2, why2 = membership(yk, period, n, sector)
+            check(not ok2 and why2 == "deepest door dead",
+                  f"{name}: k={k} must die at deepest door, n={n} (got {why2})")
+    if table is not None:
+        for i, val in enumerate(table):
+            check(H_formula(i + 1) == val,
+                  f"{name}: published table row n={i+1}")
+    for n in n_brute:
+        H = H_formula(n)
+        got = brute_force_H(period, n, sector, H + 2)
+        check(got == H, f"{name}: brute force at n={n} (got {got}, want {H})")
+    # k = 1..9 dead/live pattern
+    for n in (1, 2, 3):
+        Qn = Q(period, n)
+        for k in range(1, 10):
+            y0 = ystar + sector * k * Qn
+            ok, why = membership(y0, period, n, sector)
+            predicted_live = (ystar + 2 * sector * k) % 3 != 0
+            check(ok == predicted_live,
+                  f"{name}: k-pattern k={k}, n={n} (got {why})")
+            if dead_k_residue is not None:
+                check((not predicted_live) == (k % 3 == dead_k_residue),
+                      f"{name}: dead residue form, k={k}")
+    return ystar, k0
+
+
+def test_instance1_law():
+    """H_{n,n}(((2,1))^inf) = 4*72^n - 5, positive sector (Corollary 14.15.7.3)."""
+    ystar, k0 = check_instance(
+        [(2, 1)], +1, lambda n: 4 * 72 ** n - 5,
+        n_member=12, n_brute=(1, 2), table=PUBLISHED_TABLE_221,
+        dead_k_residue=1, name="((2,1))^inf +")
+    check((ystar, k0) == (-5, 2), "instance 1: y* = -5, k0 = 2")
+    print("test_instance1_law: H = 4*72^n - 5 verified by direct simulation "
+          "n=1..12, published table n=1..8 matched, brute force n=1,2, "
+          "k=1..9 pattern (dead iff k=1 mod 3) at n=1,2,3, 0 failures")
+
+
+def test_instance2_law():
+    """H^-_{n,n}((1,1)^inf) = 2*12^n - 1, negative sector (Corollary 14.15.7.4)."""
+    ystar, k0 = check_instance(
+        [(1, 1)], -1, lambda n: 2 * 12 ** n - 1,
+        n_member=10, n_brute=(1, 2), table=PUBLISHED_TABLE_11,
+        dead_k_residue=2, name="(1,1)^inf -")
+    check((ystar, k0) == (1, 1), "instance 2: y* = 1, k0 = 1")
+    print("test_instance2_law: H^- = 2*12^n - 1 verified by direct simulation "
+          "n=1..10, published table n=1..5 matched, brute force n=1,2, "
+          "k=1..9 pattern (dead iff k=2 mod 3) at n=1,2,3, 0 failures")
+
+
+# ----------------------------------------------------------------------------
 # main
 # ----------------------------------------------------------------------------
 
@@ -337,7 +431,12 @@ TESTS_ITEM1 = [
     test_escaping_sector_closed_form,
 ]
 
+TESTS_ITEM2 = [
+    test_instance1_law,
+    test_instance2_law,
+]
+
 if __name__ == "__main__":
-    for t in TESTS_ITEM1:
+    for t in TESTS_ITEM1 + TESTS_ITEM2:
         t()
     print(f"ALL PASS ({CHECKS} checks)")

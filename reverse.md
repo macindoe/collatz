@@ -903,3 +903,25 @@ H^{σ'}_{n,n}(W) = |y^* + σ'k₀Q_n| = k₀Q_n + σ'y^*        for every n ≥ 
 **One sentence on sectors, reconciled against `14.15.4.5`/`14.15.6.10`.** The sector containing `y^*` is capped (`H^σ_{n,n} ≡ |y^*|`, bounded — consistent with the per-sector equivalence theorem `14.15.6.10`, since `y^*` itself integrally realizes `W` in sector `σ`; for `((2,1))^∞` this is the realized case `14.15.6`(c) already records as `H^-_{n,n} ≤ 5`, now sharpened to equality), and the opposite sector escapes (`H^{−σ}_{n,n} = k₀Q_n − |y^*| → ∞` — consistent again, since `W`'s unique diagonal point `y^*` (`14.15.3.6`/`14.15.6.7`) has sign `σ`, so no door of sign `−σ` realizes `W`).
 
 **Verified** — `experiments/height_exact_laws.py`, fresh code (imports nothing from `realization_height.py`, `diagonal_converse.py`, `signed_diagonal.py`, `itinerary_coding.py`, `block_map.py`, or `door_seam.py`; exact integer/`Fraction` arithmetic at every pass/fail decision), functions `test_single_letter_fixed_point_facts`, `test_class_equals_fixed_point_class`, `test_deepest_door_law`, `test_capped_sector`, `test_escaping_sector_closed_form`. Lemma `14.15.7.1`: `564` letters (all `m,r ≤ 8` plus `500` random up to `30`, seed `65001`), exact `Fraction` identities for `y^*`, `y^*+1`, the liveness units, and `2|y^*| < Q_1`, `0` failures; the `2` integral instances in the scan (`(1,1)`, `(2,1)` — the two already on file, no new family sought per the stop line) additionally checked for `stratum(y^*)=(m,r)`, `G(y^*)=y^*`, liveness, and the identity `3^m q^*−1 = 2^r y^*`, `0` failures. Theorem `14.15.7.2`(1): exhaustive two-directional scan (does {follows forward `n` letters ∧ backward chain exists to depth `n`} equal `{y ≡ y^* mod Q_n}`?), both words, `n = 1,2`, all odd `y` with `|y| ≤ 4Q_n+50`, both signs: `43,492` checks, `0` discrepancies either direction. Clause (3): `190` `(word, n, κ)` chains (`n ≤ 5`, `κ = −9..9`), deepest door equal to `y^* + κ·2^{2(m+r)n+1}` exactly and liveness matching the mod-3 law exactly, `0` failures. Clause (4): `y^*` a verified member of its own sector's `R^σ_{n,n}` for `n = 1..6` with brute-force sector minimum `= |y^*|` at `n = 1,2` (both words); escaping-sector class walk finds first surviving index `= k₀` at `n = 1..4` (both words), `0` failures. Total `47,314` checks, `0` failures (2026-07-17).
+
+### (b) The two published instances, as corollaries
+
+**Corollary 14.15.7.3 (the `((2,1))^∞` law).** `y^* = −5` (`14.15.5`(c)), `Q_n = 2^{3n+1}·3^{2n} = 2·72^n`. Positive sector: `σ'y^* = −5 ≡ 1 (mod 3)`, so `k₀ = 2` and
+
+```text
+H_{n,n}(((2,1))^∞) = 2·(2·72^n) − 5 = 4·72^n − 5        for every n ≥ 1.
+```
+
+Negative sector: capped, `H^-_{n,n} = 5` exactly (sharpening `14.15.6`(c)'s recorded `≤ 5` to equality). One line from `14.15.7.2`; the published table (`14.15.5`(c), `n = 1..8`) is reproduced exactly — checking rows: `n=1`: `4·72−5 = 283`, `n=8`: `4·72^8−5 = 2,888,816,545,234,939`.
+
+**Corollary 14.15.7.4 (the `(1,1)^∞` law).** `y^* = 1`, `Q_n = 2^{2n+1}·3^n = 2·12^n`. Negative sector: `σ'y^* = −1 ≡ 2 (mod 3)`, so `k₀ = 1` and
+
+```text
+H^-_{n,n}((1,1)^∞) = 2·12^n − 1        for every n ≥ 1.
+```
+
+Positive sector: capped, `H_{n,n} = 1` (the trivial fixed point — `14.15.4`(c)'s own verification already recorded `H_{n,n} = 1` directly). One line from `14.15.7.2`; the published table (`14.15.6`(c), `n = 1..5`) is reproduced exactly — checking rows: `n=1`: `23`, `n=5`: `497,663`.
+
+**Stated plainly.** These two corollaries upgrade the two published tables from single named instances to exact laws valid at every `n`: what was recorded as computed data (`14.15.5`(c)'s eight rows, `14.15.6`(c)'s five) is now the value of a closed form, with the tables' own numbers reproduced exactly and the mechanism — CRT class centered at the word's own fixed point, one `n`-independent mod-3 liveness condition — identified rather than conjectured.
+
+**Verified** — `experiments/height_exact_laws.py`, functions `test_instance1_law`, `test_instance2_law`. Instance `((2,1))^∞`, positive sector: closed-form value confirmed a member of `R^+_{n,n}` by direct simulation (forward stratum match, backward chain via the predecessor formula, `y_0` and deepest-door liveness) for `n = 1..12`, with the `k = 1` candidate failing at exactly the deepest door for every `n`; all `8` published rows matched; brute-force minimality (dumb scan of all positive odd integers, no class reasoning) at `n = 1, 2`; `k = 1..9` dead/live pattern at `n = 1,2,3` matching the mod-3 law exactly (dead iff `k ≡ 1 (mod 3)`). Instance `(1,1)^∞`, negative sector: same battery with `n = 1..10` membership, all `5` published rows matched, brute force at `n = 1, 2`, `k = 1..9` pattern at `n = 1,2,3` (dead iff `k ≡ 2 (mod 3)`). `0` failures (2026-07-17).
