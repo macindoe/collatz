@@ -31,6 +31,8 @@ th{color:var(--text-muted);font-weight:500;font-size:12px;}
 .bits .cq{text-decoration:underline dotted;text-underline-offset:2px;}
 .cm{color:var(--text-accent);font-weight:700;}
 .cr{color:var(--text-ok);font-weight:700;}
+.qb{color:#8a63d2;}
+@media (prefers-color-scheme: dark){.qb{color:#b39ae8;}}
 .numbox{font-family:ui-monospace,monospace;font-size:14px;word-break:break-all;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:8px 10px;line-height:1.5;}
 .badge{font-size:10px;border-radius:5px;padding:1px 5px;}
 .scroll{overflow-x:auto;}
@@ -55,10 +57,15 @@ th{color:var(--text-muted);font-weight:500;font-size:12px;}
 <button id="rndRead">random</button>
 <span id="deadNote" style="font-size:12px;"></span>
 </div>
+<div style="font-size:13px;color:var(--text-secondary);display:flex;gap:22px;flex-wrap:wrap;margin:4px 0 6px;">
+<span><span class="bits"><span class="run">11</span></span> &mdash; m</span>
+<span><span class="bits qb">99</span> &mdash; q</span>
+<span><span class="bits"><span class="runr">00</span></span> &mdash; r</span>
+</div>
 <div id="wordLane" class="scroll" style="white-space:nowrap;padding:6px 0 10px;"></div>
 <div class="scroll"><table id="readTable"></table></div>
 <div id="moreRead" style="margin-top:10px;"></div>
-<p style="font-size:13px;"><strong>Two runs, two numbers — both visible above.</strong> <span class="run">m</span> is the blue run: the trailing 1s of the door <span class="mono">y</span> itself (its length is read straight off the bits, nobody chooses it). The block then runs its course and exits at the even number <span class="mono">A = 3<sup>m</sup>&middot;q &minus; 1</span> (where <span class="mono">q</span> is what's left of <span class="mono">y+1</span> after the entry) — and <span class="runr">r</span> is the green run: <span class="mono">A</span>'s trailing 0s, the clean halvings before the next odd door. So <span class="mono">r</span> is a visible run too, just in the <em>derived</em> number, not in <span class="mono">y</span>. <strong>And <span class="mono">q</span> — the middle column — is the bridge between the two numbers:</strong> it is what remains of <span class="mono">y+1</span> after the entry, and you can read it straight off <span class="mono">y</span>'s bits — delete the blue run and flip the 0 that ended it to a 1 (the dotted bit); that's <span class="mono">q</span>, always odd. It is the payload the block carries into the tripling: <span class="mono">A&nbsp;=&nbsp;3<sup>m</sup>&middot;q&nbsp;&minus;&nbsp;1</span>. Since <span class="mono">A</span>'s low bits come from <span class="mono">q</span>'s, which come from <span class="mono">y</span>'s bits just above the blue run, the whole letter <span class="mono">(<span class="cm">m</span>,<span class="cr">r</span>)</span> is pinned by <span class="mono">y</span>'s last <span class="mono">m+r+1</span> bits alone (the shaded window). The step then shifts that window away — the next door's low bits are fresh digits pulled down from higher up, and nothing regenerates the supply. That consumption is the digit budget (stage4.md 11.8.7.7): a number of a given size can only ever pay for boundedly many letters of its own itinerary. In every letter chip, <span class="cm">m</span> is blue like the 1-run it counts and <span class="cr">r</span> is green like the 0-run it counts. A <span style="color:var(--text-warn);">dead door</span> (3&nbsp;|&nbsp;y) reads forward like any other but no predecessor can reach it.</p>
+<p style="font-size:13px;"><strong>Two runs, two numbers — both visible above.</strong> <span class="run">m</span> is the blue run: the trailing 1s of the door <span class="mono">y</span> itself (its length is read straight off the bits, nobody chooses it). The block then runs its course and exits at the even number <span class="mono">A = 3<sup>m</sup>&middot;q &minus; 1</span> (where <span class="mono">q</span> is what's left of <span class="mono">y+1</span> after the entry) — and <span class="runr">r</span> is the green run: <span class="mono">A</span>'s trailing 0s, the clean halvings before the next odd door. So <span class="mono">r</span> is a visible run too, just in the <em>derived</em> number, not in <span class="mono">y</span>. <strong>And <span class="mono">q</span> — the middle column — is the bridge between the two numbers:</strong> it is what remains of <span class="mono">y+1</span> after the entry, and you can read it straight off <span class="mono">y</span>'s bits — delete the blue run and flip the 0 that ended it to a 1 (the dotted bit); that's <span class="mono">q</span>, always odd. It is the payload the block carries into the tripling: <span class="mono">A&nbsp;=&nbsp;3<sup>m</sup>&middot;q&nbsp;&minus;&nbsp;1</span>. Since <span class="mono">A</span>'s low bits come from <span class="mono">q</span>'s, which come from <span class="mono">y</span>'s bits just above the blue run, the whole letter <span class="mono">(<span class="cm">m</span>,<span class="cr">r</span>)</span> is pinned by <span class="mono">y</span>'s last <span class="mono">m+r+1</span> bits alone (the shaded window). The step then shifts that window away — the next door's low bits are fresh digits pulled down from higher up, and nothing regenerates the supply. That consumption is the digit budget (stage4.md 11.8.7.7): a number of a given size can only ever pay for boundedly many letters of its own itinerary. <strong>What exactly happens to the window's m+r+1 bits:</strong> they are fully spent buying the letter, in two stages. The <span class="run">blue run</span> plus its boundary 0 become, in <span class="mono">y+1</span>, the factor <span class="mono">2<sup>m</sup></span> — divided out at entry, gone. The remaining <span class="qb">r+1 purple window bits</span> (the low bits of <span class="mono">q</span>) pass through the tripling and come out as <span class="mono">A</span>'s low bits: the <span class="runr">r green zeros</span> — divided out at exit, gone — plus one guaranteed 1 above them, which says only "the next door is odd," true of every door, so zero information. Nothing of the window reaches the next door; its bits descend from <span class="mono">y</span>'s higher purple bits, shifted down and scrambled by the tripling's carries. In every letter chip, <span class="cm">m</span> is blue like the 1-run it counts and <span class="cr">r</span> is green like the 0-run it counts; in the state column, <span class="mono">d</span> is shown <span class="cm">blue</span> when it equals <span class="cm">m</span> (the usual case — the block had no pre-converted 3-rises), and plain when <span class="mono">d &gt; m</span>. A <span style="color:var(--text-warn);">dead door</span> (3&nbsp;|&nbsp;y) reads forward like any other but no predecessor can reach it.</p>
 </div>
 
 <!-- ============ COMPOSE MODE ============ -->
@@ -159,10 +166,10 @@ function bits(y,m,r){const w=Number(m+r+1n);const s=y.toString(2).padStart(w,'0'
   const head=tail.slice(0,tail.length-w),win=tail.slice(tail.length-w);
   const runStart=win.length-Number(m);
   const tip='these '+w+' low bits determine the letter: the trailing 1-run gives m='+m+', and they pin the exit value’s low bits, fixing r='+r;
-  return'<span class="bits">'+pre+head+'<span class="win" title="'+tip+'">'+win.slice(0,runStart)+'<span class="run">'+win.slice(runStart)+'</span></span></span>';}
+  return'<span class="bits"><span class="qb">'+pre+head+'</span><span class="win" title="'+tip+'"><span class="qb">'+win.slice(0,runStart)+'</span><span class="run">'+win.slice(runStart)+'</span></span></span>';}
 function bitsQ(q){const s=q.toString(2);const show=Math.min(s.length,14);const tail=s.slice(-show);const pre=s.length>show?'&hellip;':'';
   const tip='q = (y+1)/2^m: delete the blue run from y and flip the 0 that ended it to a 1 — these are q’s bits (the dotted 1 is that flipped bit; q is always odd)';
-  return'<span class="bits" title="'+tip+'">'+pre+tail.slice(0,-1)+'<span class="cq">'+tail.slice(-1)+'</span></span>';}
+  return'<span class="bits qb" title="'+tip+'">'+pre+tail.slice(0,-1)+'<span class="cq">'+tail.slice(-1)+'</span></span> <span class="qb mono" style="font-weight:600;">= '+fmt(q)+'</span>';}
 function bitsA(A,r){const w=Number(r);const s=A.toString(2);const show=Math.min(s.length,Math.max(w+8,14));
   const tail=s.slice(-show);const pre=s.length>show?'&hellip;':'';
   const head=tail.slice(0,tail.length-w);
@@ -186,7 +193,7 @@ function renderRead(){
     +rows.map((row,i)=>{const dead=row.y%3n===0n;
       return'<tr id="row'+i+'"><td>'+row.t+'</td><td class="mono">'+fmt(row.y)+(dead?' <span class="badge" style="background:var(--bg-warn);color:var(--text-warn);">dead</span>':'')+'</td>'
       +'<td>'+bits(row.y,row.s.m,row.s.r)+'</td><td>'+bitsQ(row.s.q)+'</td><td>'+bitsA(row.s.val,row.s.r)+'</td><td>'+chip(Number(row.s.m),Number(row.s.r))+'</td>'
-      +'<td class="mono">('+fmt(row.s.w)+', '+row.s.d.toString()+')</td>'
+      +'<td class="mono">('+fmt(row.s.w)+', '+(row.s.d===row.s.m?'<span class="cm">'+row.s.d.toString()+'</span>':row.s.d.toString())+')</td>'
       +'<td style="color:var(--text-muted);font-size:11px;">'+(row.y===1n?'':'&rarr; '+fmt(row.s.g))+'</td></tr>';}).join('');
   document.getElementById('moreRead').innerHTML=(cur!==1n)?'<button id="moreBtn">read 14 more letters&hellip;</button>':'';
   const mb=document.getElementById('moreBtn');if(mb)mb.addEventListener('click',()=>{readLimit+=14;renderRead();});
