@@ -54,12 +54,13 @@ th{color:var(--text-muted);font-weight:500;font-size:12px;}
 <div id="wordLane" class="scroll" style="white-space:nowrap;padding:6px 0 10px;"></div>
 <div class="scroll"><table id="readTable"></table></div>
 <div id="moreRead" style="margin-top:10px;"></div>
-<p style="font-size:13px;">Each letter <span class="mono">(m,r)</span> is a function of the door's last <span class="mono">m+r+1</span> bits alone (shaded; the trailing 1-run in bold is <span class="mono">m</span>). The step then shifts those bits away — the next door's low bits are fresh digits pulled down from higher up, and nothing regenerates the supply. That consumption is the digit budget (stage4.md 11.8.7.7): a number of a given size can only ever pay for boundedly many letters of its own itinerary. A <span style="color:var(--text-warn);">dead door</span> (3&nbsp;|&nbsp;y) reads forward like any other but no predecessor can reach it.</p>
+<p style="font-size:13px;"><strong>How the shaded window sizes itself:</strong> nobody chooses the width in advance — the number announces it as you read. Scan the door's bits from the right: the unbroken run of 1s ends at the first 0, and the run's length <em>is</em> <span class="mono">m</span> (that's <span class="mono">m+1</span> bits read). The next <span class="mono">r</span> bits then decide how many clean halvings the exit performs before hitting an odd number — each bit either confirms one more halving or calls a stop, and the stop fixes <span class="mono">r</span>. Total: the letter <span class="mono">(m,r)</span> is a function of the door's last <span class="mono">m+r+1</span> bits alone (shaded; the trailing 1-run in bold is <span class="mono">m</span>) — a self-delimiting code, like a prefix-free codeword: big letters need wide windows, small letters narrow ones, and the reading itself tells you when a letter is complete. The step then shifts those bits away — the next door's low bits are fresh digits pulled down from higher up, and nothing regenerates the supply. That consumption is the digit budget (stage4.md 11.8.7.7): a number of a given size can only ever pay for boundedly many letters of its own itinerary. A <span style="color:var(--text-warn);">dead door</span> (3&nbsp;|&nbsp;y) reads forward like any other but no predecessor can reach it.</p>
 </div>
 
 <!-- ============ COMPOSE MODE ============ -->
 <div id="composePane" style="display:none;">
 <p style="font-size:13px;margin-top:0;">Prescribe letters — a future the orbit must perform, and optionally a past it must have arrived through. The smallest positive live integer realizing the window is computed exactly (cylinder class mod 2<sup>S+1</sup>, §14.15.1.5, &times; admissibility class mod 3<sup>M</sup>, §14.15.5.1, by CRT, then scanned for a live deepest door) and re-verified by direct simulation. Every window succeeds — that is the freedom. Watch what each letter does to the witness — that is the price.</p>
+<p style="font-size:13px;margin-top:0;"><strong>What "window" means here:</strong> just how many letters you have prescribed — p past + q future, counted around the pivot <span style="color:var(--text-accent);">&#9670;</span>. There is no separate size knob: each letter you add IS one unit of window, and it grows the class modulus by a fixed factor — a future letter <span class="mono">(m,r)</span> multiplies Q by 2<sup>m+r</sup> (it pins that many more bits of the witness), a past letter by 3<sup>m</sup> (it pins that many more ternary digits). The witness tracks Q because the smallest number in a residue class mod Q is typically about Q — that is the whole price mechanism.</p>
 <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px;">
 <div>
 <div style="font-size:12px;color:var(--text-muted);margin-bottom:3px;">letter picker</div>
@@ -151,7 +152,8 @@ function bits(y,m,r){const w=Number(m+r+1n);const s=y.toString(2).padStart(w,'0'
   const tail=s.slice(-show);const pre=s.length>show?'&hellip;':'';
   const head=tail.slice(0,tail.length-w),win=tail.slice(tail.length-w);
   const runStart=win.length-Number(m);
-  return'<span class="bits">'+pre+head+'<span class="win">'+win.slice(0,runStart)+'<span class="run">'+win.slice(runStart)+'</span></span></span>';}
+  const tip='these '+w+' low bits determine the letter: the trailing 1-run gives m='+m+', the next bits fix r='+r;
+  return'<span class="bits">'+pre+head+'<span class="win" title="'+tip+'">'+win.slice(0,runStart)+'<span class="run">'+win.slice(runStart)+'</span></span></span>';}
 
 // ---------- read mode ----------
 let readLimit=14;
