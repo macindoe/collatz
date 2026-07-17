@@ -1,7 +1,7 @@
 ---
 status: open / calibrated
-scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record)
-updated: 2026-07-16
+scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record); 11.9 added post-monolith (per-letter window height laws, reverse.md 14.15.9)
+updated: 2026-07-18
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -183,4 +183,12 @@ Nothing substantive remains open from this stress test. What's left is the ordin
 **Chase log (2026-07-12), gap 1 (spike-height exponent) — first pass.** A companion result, Bugeaud–Laurent's actual theorem, *was* recovered readably: Tomohiro Yamada's arXiv note (math/0607072, plain-text extractable, no OCR needed) restates it as **Theorem 1.1** — a general bound on `v_p(η)` for a two-term `p`-adic-log linear form, governed by combinatorial parameters `K, L, R, S` chosen to optimize a trade-off (condition `(3)`, conclusion `v_p(η) ≤ KL − 1`) — and its worked corollary for Fermat quotients, **Theorem 1.2**, has the shape `v_p(x^(p−1) − 1) ≤ (28/3)(p−1)·[log(y/log p)/log(x/y)] + 4` — nothing like a clean `(log n)^k` monomial. This raised a real worry that "pin the exponent to 1 or 2" was the wrong question and a fresh from-scratch derivation would be needed.
 
 **Resolved (2026-07-12), same session.** The user supplied the actual Bugeaud–Laurent (1996, *J. Number Theory* 61) text. It turns out our own case is the *simplest* one they treat, not the general one: our linear form is `Λ = 9^n - ω^(-1)` (since `v_2(9^n·ω-1) = v_2(Λ)`, `ω` odd), with `α_1=9, α_2=ω^(-1)` both rational, so `D=1`; and for `p=2` the residue field is `F_2`, so *every* unit is automatically principal (`g=1`) — exactly Dong Ping Ping's special case, which the paper's **Corollaire 2** handles with a fully explicit, unconditional bound (no asymptotic threshold, unlike their Théorème 2): `v_2(9^n·ω-1) ≤ 208·log9·logω·(max{log b'+log(log2)+0.4, 10log2, 10})^2` with `b'=n/logω+1/log9`. This confirms the exponent is exactly `2` — the wiki's existing choice, not the `log n` hedge — because the `log n` variants in the literature are for a *different* (large-coefficient, asymptotic) regime, not this one. Numerically sanity-checked (not merely trusted): the bound is a large constant (`~73,555` for `ω=5`) until `n` reaches the tens of thousands, then grows slowly as `(log n)^2` — `~131,500` at `n=10^6`, matching the qualitative picture the wiki already asserted. Full derivation now in stage1-synthesis.md 11.8.3.11. Lesson, same as gap 2: the blocker was access to the primary source, not the search strategy, and the actual paper resolved something a secondary source (Yamada's note, solving a different corollary) could not.
+
+## 11.9. Per-letter (period-cutting) window height laws
+
+reverse.md `14.15.9`'s whole-period height laws hold only for windows aligned to a full period (`(np, np)` in letters). A window that cuts a period partway anchors its partial past at a *rotated* fixed point rather than at the word's own `y^*`, and no height law at such windows is established.
+
+**What is already known.** The *class* characterization appears to extend past whole-period boundaries with no new machinery: the forward follower class equals the `2`-adic class of `y^*` at every prefix length `L` (the contraction induction along rotations never uses `p | L`), and the backward admissibility class at every depth `ℓ` equals `{qz ≡ a (mod 3^{M_ℓ})}`, because the depth-`ℓ` deepest-first prefix map carries the rotated fixed point `y^*_{(p−ℓ) mod p}` to `y^*`. What rotates mid-window is only the deepest-door analysis: the deepest door of a depth-`ℓ` chain sits near the rotated fixed point `y^*_{(p−ℓ) mod p}`, so a per-letter mod-3 door law would run through that rotation's own numerator `a_{(p−ℓ) mod p}` and residue `ε_{(p−ℓ) mod p}` (reverse.md `14.15.9.2`) rather than through `a` and `ε`.
+
+**Open question.** Do per-letter window height laws follow from the existing whole-period apparatus (reverse.md `14.15.9.5`–`14.15.9.12`) plus the rotation lemma's `p`-tuple of numerators, applied at the rotation matching each cut depth? Closure would look like an exact law for `H^σ_{p,q}(W)` at arbitrary `(p,q)`, not just `(np,np)`, reducing to `14.15.9`'s results when `p = q = np`.
 

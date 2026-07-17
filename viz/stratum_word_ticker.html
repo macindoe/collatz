@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stratum word ticker — the itinerary alphabet of the reduced map</title>
+<style>
+:root{--surface-1:#f4f4f2;--surface-2:#fff;--text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;--border:#d9dce3;--border-strong:#b8bdc9;--bg-accent:#e8f0fb;--text-accent:#2f5fb3;--bg-warn:#fbeee8;--text-warn:#b3502f;--bg-ok:#e8f5ec;--text-ok:#2c8a57;}
+@media (prefers-color-scheme: dark){:root{--surface-1:#22252c;--surface-2:#1a1c22;--text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;--border:#3a3e48;--border-strong:#565c6a;--bg-accent:#243350;--text-accent:#8fb0e8;--bg-warn:#402a20;--text-warn:#e09873;--bg-ok:#1f3a29;--text-ok:#7fd0a0;}
+body{background:#14161b;}}
+body{font-family:system-ui,sans-serif;max-width:980px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);}
+h1{font-size:20px;font-weight:500;}
+h2{font-size:15px;font-weight:600;margin:22px 0 6px;}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+input,button,select{font:inherit;padding:6px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2);color:var(--text-primary);}
+button{cursor:pointer;}
+button.primary{background:var(--bg-accent);color:var(--text-accent);border-color:var(--text-accent);}
+sup{font-size:9px;}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:7px;padding:3px 8px;font-family:ui-monospace,monospace;font-size:13px;cursor:pointer;border:1px solid var(--border);margin:2px;}
+.chip.sel{outline:2px solid var(--text-accent);}
+.tabbtn{border:none;background:none;font-size:14px;padding:8px 2px;margin-right:18px;color:var(--text-muted);border-bottom:2px solid transparent;border-radius:0;}
+.tabbtn.on{color:var(--text-primary);border-bottom-color:var(--text-accent);}
+table{border-collapse:collapse;font-size:13px;}
+td,th{padding:5px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:middle;}
+th{color:var(--text-muted);font-weight:500;font-size:12px;}
+.mono{font-family:ui-monospace,monospace;}
+.bits{font-family:ui-monospace,monospace;font-size:13px;letter-spacing:1px;white-space:nowrap;}
+.bits .win{background:var(--bg-accent);border-radius:3px;padding:1px 2px;}
+.bits .run{color:var(--text-accent);font-weight:700;}
+.bits .runr{color:var(--text-ok);font-weight:700;background:var(--bg-ok);border-radius:3px;padding:1px 2px;}
+.bits .cq{text-decoration:underline dotted;text-underline-offset:2px;}
+.cm{color:var(--text-accent);font-weight:700;}
+.cr{color:var(--text-ok);font-weight:700;}
+.qb{color:#8a63d2;}
+@media (prefers-color-scheme: dark){.qb{color:#b39ae8;}}
+.crb{color:var(--text-ok);font-weight:700;}
+.numbox{font-family:ui-monospace,monospace;font-size:14px;word-break:break-all;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:8px 10px;line-height:1.5;}
+.badge{font-size:10px;border-radius:5px;padding:1px 5px;}
+.scroll{overflow-x:auto;}
+</style>
+</head>
+<body>
+<h1>Stratum word ticker</h1>
+<p>Every step of the reduced map has a <em>shape</em>, whatever the actual numbers: the letter <span class="mono">(m,&nbsp;r)</span> — how the step entered its block (<span class="mono">m</span>, the run of trailing 1-bits of the door <span class="mono">y</span>) and how it exited (<span class="mono">r</span>, the halvings at the exit). The <strong>stratum word</strong> is the orbit's itinerary written in that fixed alphabet: the sequence of reduced states with all size information thrown away, shapes only. Companion to <em>The 3-adic mirror of the reduced Collatz dynamics</em>, DOI 10.5281/zenodo.21303918 (reverse.md §14.14–14.15).</p>
+<p>Two proved facts sit in deliberate tension here. <strong>The word is free:</strong> any finite letter sequence — any past, any future — is realized by an actual positive integer; the dynamics impose no grammar at any finite length (the full-shift theorem, §14.15.2, and the bicylinder corollary, §14.15.4). <strong>But each letter has a price:</strong> every prescribed letter multiplies the smallest integer realizing the window by a fixed factor (2<sup>m+r</sup>&middot;3<sup>m</sup>), and a running orbit consumes the very bits that encoded each letter, never to recover them. Freedom at every finite length, escape to infinity at unbounded length — the gap between the two is exactly the program's open object (bridge.md §16).</p>
+
+<div style="border-bottom:1px solid var(--border);margin:16px 0 14px;">
+<button class="tabbtn on" id="tabRead">Read: number &rarr; word</button>
+<button class="tabbtn" id="tabCompose">Compose: word &rarr; smallest witness</button>
+</div>
+
+<!-- ============ READ MODE ============ -->
+<div id="readPane">
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
+<label style="font-size:13px;color:var(--text-secondary);">start (odd)
+<input id="y0" type="number" value="27" min="1" step="2" style="width:110px;margin-left:6px;"></label>
+<button id="goRead" class="primary">read word</button>
+<button id="rndRead">random</button>
+<span id="deadNote" style="font-size:12px;"></span>
+</div>
+<div style="font-size:13px;color:var(--text-secondary);display:flex;gap:22px;flex-wrap:wrap;margin:4px 0 6px;">
+<span><span class="bits"><span class="run">11</span></span> &mdash; m</span>
+<span><span class="bits qb">99</span> &mdash; q</span>
+<span><span class="bits"><span class="runr">00</span></span> &mdash; r</span>
+</div>
+<div id="wordLane" class="scroll" style="white-space:nowrap;padding:6px 0 10px;"></div>
+<div class="scroll"><table id="readTable"></table></div>
+<div id="moreRead" style="margin-top:10px;"></div>
+<p style="font-size:13px;"><strong>Two runs, two numbers — both visible above.</strong> <span class="run">m</span> is the blue run: the trailing 1s of the door <span class="mono">y</span> itself (its length is read straight off the bits, nobody chooses it). The block then runs its course and exits at the even number <span class="mono">A = 3<sup>m</sup>&middot;q &minus; 1</span> (where <span class="mono">q</span> is what's left of <span class="mono">y+1</span> after the entry) — and <span class="runr">r</span> is the green run: <span class="mono">A</span>'s trailing 0s, the clean halvings before the next odd door. So <span class="mono">r</span> is a visible run too, just in the <em>derived</em> number, not in <span class="mono">y</span>. <strong>And <span class="mono">q</span> — the middle column — is the bridge between the two numbers:</strong> it is what remains of <span class="mono">y+1</span> after the entry, and you can read it straight off <span class="mono">y</span>'s bits — delete the blue run and flip the 0 that ended it to a 1 (the dotted bit); that's <span class="mono">q</span>, always odd. It is the payload the block carries into the tripling: <span class="mono">A&nbsp;=&nbsp;3<sup>m</sup>&middot;q&nbsp;&minus;&nbsp;1</span>. Since <span class="mono">A</span>'s low bits come from <span class="mono">q</span>'s, which come from <span class="mono">y</span>'s bits just above the blue run, the whole letter <span class="mono">(<span class="cm">m</span>,<span class="cr">r</span>)</span> is pinned by <span class="mono">y</span>'s last <span class="mono">m+r+1</span> bits alone (the shaded window). The step then shifts that window away — the next door's low bits are fresh digits pulled down from higher up, and nothing regenerates the supply. That consumption is the digit budget (stage4.md 11.8.7.7): a number of a given size can only ever pay for boundedly many letters of its own itinerary. <strong>What exactly happens to the window's m+r+1 bits:</strong> they are fully spent buying the letter, in two stages. The <span class="run">blue run</span> plus its boundary 0 become, in <span class="mono">y+1</span>, the factor <span class="mono">2<sup>m</sup></span> — divided out at entry, gone. The window's remaining bits pass through the tripling and come out as <span class="mono">A</span>'s low bits: the <span class="runr">r green zeros</span> — divided out at exit, gone — plus one guaranteed 1 above them, which says only "the next door is odd," true of every door, so zero information. Nothing of the window reaches the next door; its bits descend from <span class="mono">y</span>'s higher purple bits, shifted down and scrambled by the tripling's carries — and you can read that directly in the exit column: drop <span class="mono">A</span>'s green zeros and the bits that remain <em>are</em> the next door. <strong>The window's anatomy, decomposed (the author's observation):</strong> the blue run never enters the tripling — it is stripped at entry, functioning purely as the unary spelling of <span class="cm">m</span> (its <em>length</em> is the information; its bits are all forced to 1). The 0 that ends it is forced too (a run ends by definition at a 0 — it flips into <span class="mono">q</span>'s dotted low 1). So the window's only free payload is the <span class="crb">r green bits</span> of <span class="mono">y</span> just above the boundary — exactly the bits that, pushed through the tripling, become <span class="mono">A</span>'s <span class="runr">r green zeros</span>. Consumed: <span class="mono">m+r+1</span> bits; payload: <span class="mono">r</span> bits; the other <span class="mono">m+1</span> are the self-delimiting address that locates and prices them. In every letter chip, <span class="cm">m</span> is blue like the 1-run it counts and <span class="cr">r</span> is green like the 0-run it counts; in the state column, <span class="mono">d</span> is shown <span class="cm">blue</span> when it equals <span class="cm">m</span> (the usual case — the block had no pre-converted 3-rises), and plain when <span class="mono">d &gt; m</span>. A <span style="color:var(--text-warn);">dead door</span> (3&nbsp;|&nbsp;y) reads forward like any other but no predecessor can reach it.</p>
+</div>
+
+<!-- ============ COMPOSE MODE ============ -->
+<div id="composePane" style="display:none;">
+<p style="font-size:13px;margin-top:0;">Prescribe letters — a future the orbit must perform, and optionally a past it must have arrived through. The smallest positive live integer realizing the window is computed exactly (cylinder class mod 2<sup>S+1</sup>, §14.15.1.5, &times; admissibility class mod 3<sup>M</sup>, §14.15.5.1, by CRT, then scanned for a live deepest door) and re-verified by direct simulation. Every window succeeds — that is the freedom. Watch what each letter does to the witness — that is the price.</p>
+<p style="font-size:13px;margin-top:0;"><strong>What "window" means here:</strong> just how many letters you have prescribed — p past + q future, counted around the pivot <span style="color:var(--text-accent);">&#9670;</span>. There is no separate size knob: each letter you add IS one unit of window, and it grows the class modulus by a fixed factor — a future letter <span class="mono">(m,r)</span> multiplies Q by 2<sup>m+r</sup> (it pins that many more bits of the witness), a past letter by 3<sup>m</sup> (it pins that many more ternary digits). The witness tracks Q because the smallest number in a residue class mod Q is typically about Q — that is the whole price mechanism.</p>
+<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px;">
+<div>
+<div style="font-size:12px;color:var(--text-muted);margin-bottom:3px;">letter picker</div>
+<label style="font-size:13px;">m <select id="pickM"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+<label style="font-size:13px;margin-left:6px;">r <select id="pickR"><option selected>1</option><option>2</option><option>3</option><option>4</option></select></label>
+<button id="addPast" style="margin-left:10px;">&#8592; add to past</button>
+<button id="addFuture">add to future &#8594;</button>
+</div>
+<div>
+<button id="undoBtn">remove last added</button>
+<button id="clearBtn">clear</button>
+</div>
+<div>
+<button id="escapeBtn" class="primary">escape demo: +1 window of (2,1) each side</button>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:12px;">
+<span style="font-size:12px;color:var(--text-muted);">past&nbsp;(deep&rarr;near)</span>
+<span id="pastLane"></span>
+<span style="font-size:16px;color:var(--text-accent);font-weight:700;padding:0 6px;">&#9670;</span>
+<span id="futureLane"></span>
+<span style="font-size:12px;color:var(--text-muted);">&nbsp;future</span>
+</div>
+<div id="witnessOut"></div>
+<h2>history — the price of each letter</h2>
+<div class="scroll"><table id="histTable"></table></div>
+<p style="font-size:13px;">On the escape demo the ratios settle to exactly 72 = 2<sup>3</sup>&middot;3<sup>2</sup>: the witnesses are 4&middot;72<sup>n</sup>&nbsp;&minus;&nbsp;5, marching in lockstep with the modulus toward the phantom limit &minus;5 — the word <span class="mono">((2,1))<sup>&infin;</sup></span> is the classical negative cycle {&minus;5,&minus;7} in door coordinates, so its two digit-limits agree perfectly at an integer that fails only the sign condition. Every finite window is realized; no positive integer realizes them all; the witnesses escape at the modulus rate forever (§14.15.5(c)).</p>
+</div>
+
+<script>
+'use strict';
+// ---------- exact BigInt arithmetic ----------
+function v2(x){let v=0n,y=x<0n?-x:x;while((y&1n)===0n){y>>=1n;v++;}return v;}
+function v3(x){let v=0n,y=x<0n?-x:x;while(y%3n===0n){y/=3n;v++;}return v;}
+function pw(b,e){let r=1n;for(let i=0n;i<e;i++)r*=b;return r;}
+function egcd(a,b){if(b===0n)return[a,1n,0n];const[g,x,y]=egcd(b,a%b);return[g,y,x-(a/b)*y];}
+function inv(a,m){let[g,x]=egcd(((a%m)+m)%m,m);if(g!==1n)throw'noninv';return((x%m)+m)%m;}
+function mod(a,m){return((a%m)+m)%m;}
+
+// stratum and G (reverse.md 14.15.1.1): m=v2(y+1), q=(y+1)/2^m, r=v2(3^m q - 1), G=(3^m q - 1)/2^r
+function step(y){const m=v2(y+1n);const q=(y+1n)>>m;const val=pw(3n,m)*q-1n;const r=v2(val);
+  const a=v3(q);const w=q/pw(3n,a);const d=m+a; // reduced state (w, d), s = r
+  return{m,r,q,val,g:val>>r,w,d};}
+function pred(z,m,r){const num=(1n<<r)*z+1n;const den=pw(3n,m);
+  if(mod(num,den)!==0n)return null;return(1n<<m)*(num/den)-1n;}
+
+// forward cylinder class of a future word (followers form one class mod 2^{S+1}, 14.15.1.5).
+// Built back-to-front: y follows (m,r)+tail  <=>  3^m y + 3^m - 2^m ≡ 2^{m+r}·rep' (mod 2^{m+r}·mod')
+function fwdClass(word){let rep=1n,m2=2n;
+  for(let i=word.length-1;i>=0;i--){const[m,r]=word[i];const sh=pw(2n,BigInt(m)+BigInt(r));
+    const nm=sh*m2;const p3=pw(3n,BigInt(m));
+    rep=mod(inv(p3,nm)*mod(sh*rep-p3+pw(2n,BigInt(m)),nm),nm);m2=nm;}
+  return{rep,m2};}
+// backward admissibility class of a past word, nearest-first (one class mod 3^M, 14.15.5.1):
+// compose per-letter affine maps deepest-first (14.14.8.2); B = P/2^E, class = B mod 3^M
+function bwdClass(past){let P=0n,E=0n,A3=0n,A2=0n,M=0n; // B=P/2^E, A=3^A3/2^A2
+  const deepFirst=[...past].reverse();
+  for(const[m,r]of deepFirst){const bm=BigInt(m),br=BigInt(r);const p3=pw(3n,bm);
+    P=p3*P+(p3-pw(2n,bm))*pw(2n,E);E+=bm+br;A3+=bm;A2+=bm+br;M+=bm;}
+  const m3=pw(3n,M);return{b3:mod(P*inv(pw(2n,E),m3),m3),m3,M};}
+
+// smallest positive live door realizing (past, future); deepest chain door must be live.
+function witness(past,future){
+  const f=fwdClass(future);let rep,Q;
+  if(past.length){const b=bwdClass(past);
+    // CRT: y ≡ f.rep (mod f.m2), y ≡ b.b3 (mod b.m3)
+    const t=mod((b.b3-f.rep)*inv(f.m2%b.m3,b.m3),b.m3);
+    rep=f.rep+f.m2*t;Q=f.m2*b.m3;}
+  else{rep=f.rep;Q=f.m2;}
+  if(rep===0n)rep=Q;
+  for(let k=0n;k<60n;k++){const y=rep+k*Q;if(y<=0n)continue;
+    if(y%3n===0n)continue;                       // y itself live
+    let z=y,ok=true;
+    for(const[m,r]of past){z=pred(z,BigInt(m),BigInt(r));if(z===null){ok=false;break;}}
+    if(!ok||z%3n===0n)continue;                  // chain exists, deepest door live
+    // independent re-verification by direct simulation (house norm):
+    let c=y,good=true;
+    for(const[m,r]of future){const s=step(c);if(s.m!==BigInt(m)||s.r!==BigInt(r)){good=false;break;}c=s.g;}
+    if(!good)return{err:'verification failed'}; // should never happen; surfaced if it does
+    return{y,k,Q,verified:true};}
+  return{err:'no candidate within scan cap'};
+}
+
+// ---------- shared rendering ----------
+// chips are neutral; the numerals carry the meaning — m blue like the 1-run it counts,
+// r green like the 0-run it counts
+function chip(m,r,extra){return'<span class="chip" style="background:var(--surface-1);" '+(extra||'')
+  +'>(<span class="cm">'+m+'</span>,<span class="cr">'+r+'</span>)</span>';}
+function fmt(n){const s=n.toString();return s.length>12?s.slice(0,5)+'&hellip;'+s.slice(-4)+'<span style="color:var(--text-muted);font-size:10px;"> ['+s.length+'d]</span>':s;}
+function bits(y,m,r){const w=Number(m+r+1n);const s=y.toString(2).padStart(w,'0');const show=Math.max(w,Math.min(s.length,22));
+  const tail=s.slice(-show);const pre=s.length>show?'&hellip;':'';
+  const head=tail.slice(0,tail.length-w),win=tail.slice(tail.length-w);
+  const rN=Number(r);
+  const rbits=win.slice(0,rN),bound=win.slice(rN,rN+1),run=win.slice(rN+1);
+  const tip='the consumed window ('+w+' bits): the blue run spells m='+m+' in unary; the 0 ending it is forced; the '+r+' green bits are the only free payload — pushed through the tripling they become A’s '+r+' green zeros';
+  return'<span class="bits"><span class="qb">'+pre+head+'</span><span class="win" title="'+tip+'"><span class="crb">'+rbits+'</span><span class="qb cq">'+bound+'</span><span class="run">'+run+'</span></span></span>';}
+function bitsQ(q){const s=q.toString(2);const show=Math.min(s.length,14);const tail=s.slice(-show);const pre=s.length>show?'&hellip;':'';
+  const tip='q = (y+1)/2^m: delete the blue run from y and flip the 0 that ended it to a 1 — these are q’s bits (the dotted 1 is that flipped bit; q is always odd)';
+  return'<span class="bits qb" title="'+tip+'">'+pre+tail.slice(0,-1)+'<span class="cq">'+tail.slice(-1)+'</span></span> <span class="qb mono" style="font-weight:600;">= '+fmt(q)+'</span>';}
+function bitsA(A,r){const w=Number(r);const s=A.toString(2);const show=Math.min(s.length,Math.max(w+8,14));
+  const tail=s.slice(-show);const pre=s.length>show?'&hellip;':'';
+  const head=tail.slice(0,tail.length-w);
+  const tip='the exit value A = 3^m·q − 1: its run of trailing 0s is r='+r+' — the clean halvings before the next odd door';
+  return'<span class="bits" title="'+tip+'">'+pre+head+'<span class="runr">'+tail.slice(tail.length-w)+'</span></span>';}
+
+// ---------- read mode ----------
+let readLimit=14;
+function renderRead(){
+  const raw=document.getElementById('y0').value;let y;
+  try{y=BigInt(raw);}catch(e){return;}
+  if(y<1n||y%2n===0n)return;
+  document.getElementById('deadNote').innerHTML=(y%3n===0n)?'<span class="badge" style="background:var(--bg-warn);color:var(--text-warn);">dead door: 3 | y — unreachable backward, reads fine forward</span>':'';
+  const rows=[];let cur=y;
+  for(let t=0;t<readLimit;t++){const s=step(cur);rows.push({t,y:cur,s});if(cur===1n)break;cur=s.g;}
+  document.getElementById('wordLane').innerHTML='<span style="font-size:12px;color:var(--text-muted);margin-right:6px;">word:</span>'
+    +rows.map((row,i)=>chip(Number(row.s.m),Number(row.s.r),'data-i="'+i+'" onclick="selRow('+i+')"')).join('')
+    +(cur===1n&&rows[rows.length-1].y===1n?'<span style="font-size:12px;color:var(--text-muted);"> &nbsp;(1,1)<sup>&infin;</sup> — the trivial fixed point</span>':'<span style="color:var(--text-muted);">&hellip;</span>');
+  document.getElementById('readTable').innerHTML=
+    '<tr><th>t</th><th>door y</th><th>y in bits &mdash; the <span class="run">1-run</span> is <span class="cm">m</span></th><th>q = (y+1)/2<sup>m</sup></th><th>exit A = 3<sup>m</sup>&middot;q&minus;1 &mdash; drop the <span class="runr">0-run</span> (= <span class="cr">r</span>), read the rest: the next door</th><th>letter</th><th>state (&omega;, d)</th></tr>'
+    +rows.map((row,i)=>{const dead=row.y%3n===0n;
+      return'<tr id="row'+i+'"><td>'+row.t+'</td><td class="mono">'+fmt(row.y)+(dead?' <span class="badge" style="background:var(--bg-warn);color:var(--text-warn);">dead</span>':'')+'</td>'
+      +'<td>'+bits(row.y,row.s.m,row.s.r)+'</td><td>'+bitsQ(row.s.q)+'</td><td>'+bitsA(row.s.val,row.s.r)
+      +(row.y===1n?'':' <span style="color:var(--text-muted);">&rarr;</span> <span class="mono">'+fmt(row.s.g)+'</span>')+'</td><td>'+chip(Number(row.s.m),Number(row.s.r))+'</td>'
+      +'<td class="mono">('+fmt(row.s.w)+', '+(row.s.d===row.s.m?'<span class="cm">'+row.s.d.toString()+'</span>':row.s.d.toString())+')</td>'
+      +'</tr>';}).join('');
+  document.getElementById('moreRead').innerHTML=(cur!==1n)?'<button id="moreBtn">read 14 more letters&hellip;</button>':'';
+  const mb=document.getElementById('moreBtn');if(mb)mb.addEventListener('click',()=>{readLimit+=14;renderRead();});
+}
+window.selRow=function(i){document.querySelectorAll('#wordLane .chip').forEach((c,j)=>c.classList.toggle('sel',i===j));
+  const r=document.getElementById('row'+i);if(r){r.scrollIntoView({block:'nearest'});r.style.background='var(--bg-accent)';setTimeout(()=>r.style.background='',900);}};
+document.getElementById('goRead').addEventListener('click',()=>{readLimit=14;renderRead();});
+document.getElementById('y0').addEventListener('keydown',e=>{if(e.key==='Enter'){readLimit=14;renderRead();}});
+document.getElementById('rndRead').addEventListener('click',()=>{let x=1+2*Math.floor(Math.random()*100000);
+  document.getElementById('y0').value=x;readLimit=14;renderRead();});
+
+// ---------- compose mode ----------
+let past=[],future=[],hist=[],lastAdd=null;
+function renderCompose(){
+  document.getElementById('pastLane').innerHTML=past.length?past.map(([m,r])=>chip(m,r)).join(''):'<span style="font-size:12px;color:var(--text-muted);">(none)</span>';
+  document.getElementById('futureLane').innerHTML=future.length?future.map(([m,r])=>chip(m,r)).join(''):'<span style="font-size:12px;color:var(--text-muted);">(none)</span>';
+  let out;
+  if(!past.length&&!future.length){out='<p style="font-size:13px;">Empty window — every positive live door qualifies; the smallest is 1. Add letters.</p>';}
+  else{const w=witness(past,future);
+    if(w.err){out='<p style="color:var(--text-warn);">'+w.err+'</p>';}
+    else{const S=future.reduce((a,[m,r])=>a+m+r,0),M=past.reduce((a,[m])=>a+m,0);
+      const digs=w.y.toString().length;
+      out='<div style="display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;margin-bottom:6px;">'
+        +'<span style="font-size:13px;color:var(--text-secondary);">smallest positive live witness ('+digs+' digits):</span>'
+        +'<span class="badge" style="background:var(--bg-ok);color:var(--text-ok);">verified by direct simulation</span>'
+        +'<span style="font-size:12px;color:var(--text-muted);">window class: one residue mod 2<sup>'+(S+1)+'</sup>&middot;3<sup>'+M+'</sup>; candidate #'+(w.k+1n).toString()+' of the class</span></div>'
+        +'<div class="numbox">'+w.y.toString()+'</div>';
+      if(hist.length===0||hist[hist.length-1].key!==key()){hist.push({key:key(),label:lbl(),H:w.y,Q:w.Q});}
+    }}
+  document.getElementById('witnessOut').innerHTML=out;
+  document.getElementById('histTable').innerHTML=hist.length<1?'':'<tr><th>window</th><th>witness H</th><th>&times; previous</th><th>modulus Q</th><th>H / Q</th></tr>'
+    +hist.map((h,i)=>{const prev=i>0?hist[i-1].H:null;
+      const ratio=prev?(Number(h.H*1000n/prev)/1000).toFixed(2):'—';
+      const hq=(Number(h.H*1000n/h.Q)/1000).toFixed(3);
+      return'<tr><td style="font-size:12px;">'+h.label+'</td><td class="mono">'+fmt(h.H)+'</td><td class="mono">'+ratio+'</td><td class="mono">'+fmt(h.Q)+'</td><td class="mono">'+hq+'</td></tr>';}).join('');
+}
+function key(){return JSON.stringify([past,future]);}
+function lbl(){return(past.length?past.length+' past':'')+(past.length&&future.length?' + ':'')+(future.length?future.length+' future':'');}
+function picked(){return[parseInt(document.getElementById('pickM').value),parseInt(document.getElementById('pickR').value)];}
+document.getElementById('addPast').addEventListener('click',()=>{past.push(picked());lastAdd='p';renderCompose();});
+document.getElementById('addFuture').addEventListener('click',()=>{future.push(picked());lastAdd='f';renderCompose();});
+document.getElementById('undoBtn').addEventListener('click',()=>{
+  if(lastAdd==='e'){past.pop();future.pop();}else if(lastAdd==='p')past.pop();else if(lastAdd==='f')future.pop();
+  hist.pop();lastAdd=null;renderCompose();});
+document.getElementById('clearBtn').addEventListener('click',()=>{past=[];future=[];hist=[];lastAdd=null;renderCompose();});
+document.getElementById('escapeBtn').addEventListener('click',()=>{past.push([2,1]);future.push([2,1]);lastAdd='e';renderCompose();});
+
+// ---------- tabs ----------
+function tab(read){document.getElementById('readPane').style.display=read?'':'none';
+  document.getElementById('composePane').style.display=read?'none':'';
+  document.getElementById('tabRead').classList.toggle('on',read);
+  document.getElementById('tabCompose').classList.toggle('on',!read);}
+document.getElementById('tabRead').addEventListener('click',()=>tab(true));
+document.getElementById('tabCompose').addEventListener('click',()=>tab(false));
+
+renderRead();renderCompose();
+</script>
+</body>
+</html>
