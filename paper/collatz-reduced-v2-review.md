@@ -2,7 +2,7 @@
 
 Self-contained for an external reviewer with no access to the repository. Everything a reviewer needs to evaluate the v2 changes — what changed, why, the exact diff, and the fidelity checks — is below; no other file needs to be opened.
 
-**Branch:** `paper1-v2-p22`, off `main`. **Not merged** — this branch awaits review by the project's main session before the author sees it, per standing convention (Zenodo upload/publication is the author's act alone; this branch prepares files only).
+**State:** the final v2 as carried on `main` (the review rounds' branches live in git history). Zenodo upload/publication is the author's act alone; this repository prepares files only.
 
 ## Background, in one paragraph
 
