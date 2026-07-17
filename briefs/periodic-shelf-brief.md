@@ -31,7 +31,7 @@ Fix a period `P = ((m_0,r_0),…,(m_{p−1},r_{p−1}))`, `W = P^∞`, `S_P, M_P
 
 - **Floor (expected):** queue items 1–2.
 - **Primary:** items 3–4.
-- **Stop:** after item 4, stop. Explicitly forbidden: per-letter/period-cutting windows; any aperiodic word; any new empirical grid beyond what verification requires on the two probes' 20 words; any cycle-exclusion or equidistribution attempt. If any step resists proof, record precisely where and stop that item — the probes' data makes a genuine obstruction here a significant finding, not a failure. Off-brief findings to `briefs/periodic-shelf-findings.md`; log them and stop anyway.
+- **Stop:** after item 4, stop. Explicitly forbidden: per-letter/period-cutting windows; any aperiodic word; any new empirical grid beyond what verification requires on the two probes' 20 words; any cycle-exclusion or equidistribution attempt. If any step resists proof, record precisely where and stop that item — the probes' data makes a genuine obstruction here a significant finding, not a failure. Off-brief findings: log precisely and stop anyway (recorded post-review as open-problems.md 11.9).
 
 ## Rules (non-negotiable, from AGENTS.md)
 

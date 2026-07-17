@@ -1,6 +1,6 @@
 # Findings: empirical probe — height growth on periodic words with non-integral fixed point
 
-Branch `h-nonintegral-probe`, 2026-07-17, per `briefs/h-nonintegral-probe-brief.md` (author-authorized bounded exception, 2026-07-17, to the standing stop lines 14.15.4(d)/14.15.6(e); the exception covers exactly the brief's scope). Script: `experiments/h_nonintegral_probe.py` — deterministic (no RNG), exact `int`/`Fraction` arithmetic for every pass/fail and minimality decision, runs end-to-end in under a second; the full per-row tables (`n = 1..25`, all 14 word/sector pairs) are its output. This document is findings-grade: no wiki page is edited, and nothing below is a theorem — closed forms are stated as **verified empirical identities over the tested range** only.
+Empirical probe of height growth on periodic words with non-integral fixed point, per `briefs/h-nonintegral-probe-brief.md`. Script: `experiments/h_nonintegral_probe.py` — deterministic (no RNG), exact `int`/`Fraction` arithmetic for every pass/fail and minimality decision, runs end-to-end in under a second; the full per-row tables (`n = 1..25`, all 14 word/sector pairs) are its output. This document is findings-grade: no wiki page is edited, and nothing below is a theorem — closed forms are stated as **verified empirical identities over the tested range** only.
 
 ## 1. Instance grid (brief item 1)
 
