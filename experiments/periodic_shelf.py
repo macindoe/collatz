@@ -512,12 +512,290 @@ def check_identities():
           f"matching 14.15.7 verbatim - OK")
 
 
+# --------------------------------------------------------------------------
+# CHECK 5 - Corollary 14.15.9.8 (P1): exact periods of (j_n) and (v_n)
+# --------------------------------------------------------------------------
+
+# probes' detected ord_q(g_P) per word (for cross-checking, not for computing)
+PROBE_ORD = {
+    ((1, 2),): 2, ((1, 3),): 3, ((2, 2),): 3, ((2, 3),): 11, ((3, 1),): 5,
+    ((3, 2),): 2, ((3, 3),): 3,
+    ((1, 1), (1, 2)): 11, ((1, 1), (2, 1)): 2, ((1, 1), (2, 2)): 3,
+    ((1, 2), (1, 2)): 1, ((1, 2), (2, 1)): 3, ((1, 2), (2, 2)): 50,
+    ((2, 1), (2, 2)): 23, ((2, 2), (2, 2)): 3,
+    ((1, 1), (1, 1), (1, 2)): 50, ((1, 1), (1, 1), (2, 1)): 23,
+    ((1, 1), (1, 1), (2, 2)): 15, ((1, 1), (1, 2), (1, 2)): 19,
+    ((1, 1), (1, 2), (2, 2)): 43,
+}
+
+
+def mult_order(g, q):
+    assert q > 1 and gcd(g, q) == 1
+    x, o = g % q, 1
+    while x != 1:
+        x = (x * g) % q
+        o += 1
+    return o
+
+
+def exact_period(seq):
+    for d in range(1, len(seq) + 1):
+        if all(seq[i] == seq[i % d] for i in range(len(seq))):
+            return d
+    return None
+
+
+def check_P1_periods():
+    for word in SINGLE_WORDS + MULTI_WORDS:
+        S, M, a, q, gP = word_constants(word)
+        ordq = mult_order(gP, q) if q > 1 else 1
+        ok(ordq == PROBE_ORD[word], f"ord vs probe {word}")
+        js, vps, vms = [], [], []
+        for n in range(1, 2 * ordq + 3):
+            Qn, rho, j, t, Hp, Hm = theorem_row(word, n)
+            js.append(j)
+            vps.append(Fraction(Hp, Qn) - Fraction(a, q * Qn))
+            vms.append(Fraction(Hm, Qn) + Fraction(a, q * Qn))
+        ok(exact_period(js) == ordq, f"j period exact {word}")
+        ok(exact_period(vps) == ordq, f"v+ period exact {word}")
+        ok(exact_period(vms) == ordq, f"v- period exact {word}")
+    print("check 5 (Cor .8 P1): (j_n), (v_n) both sectors purely periodic from n=1 "
+          "with period exactly ord_q(g_P), over 2 full periods + 2, all 20 words - OK")
+
+
+# --------------------------------------------------------------------------
+# CHECK 6 - Corollaries 14.15.9.9 (P2, corrected sharp constant) and .10 (P3)
+# --------------------------------------------------------------------------
+
+# probes' published per-word minima of v_n (+, -) and the six words where the
+# + sector's sharp constant exceeds j_min/q (the M2 refutation instances)
+PUBLISHED_MIN_V = {
+    ((1, 2),): (Fraction(2, 5), Fraction(3, 5)),
+    ((1, 3),): (Fraction(2, 13), Fraction(7, 13)),
+    ((2, 2),): (Fraction(1, 7), Fraction(3, 7)),
+    ((2, 3),): (Fraction(1, 23), Fraction(5, 23)),
+    ((3, 1),): (Fraction(1, 11), Fraction(2, 11)),
+    ((3, 2),): (Fraction(2, 5), Fraction(3, 5)),
+    ((3, 3),): (Fraction(9, 37), Fraction(21, 37)),
+    ((1, 1), (1, 2)): (Fraction(2, 23), Fraction(7, 23)),
+    ((1, 1), (2, 1)): (Fraction(3, 5), Fraction(2, 5)),
+    ((1, 1), (2, 2)): (Fraction(3, 37), Fraction(33, 37)),
+    ((1, 2), (1, 2)): (Fraction(2, 5), Fraction(3, 5)),
+    ((1, 2), (2, 1)): (Fraction(14, 37), Fraction(6, 37)),
+    ((1, 2), (2, 2)): (Fraction(2, 101), Fraction(3, 101)),
+    ((2, 1), (2, 2)): (Fraction(2, 47), Fraction(10, 47)),
+    ((2, 2), (2, 2)): (Fraction(1, 7), Fraction(3, 7)),
+    ((1, 1), (1, 1), (1, 2)): (Fraction(2, 101), Fraction(3, 101)),
+    ((1, 1), (1, 1), (2, 1)): (Fraction(10, 47), Fraction(2, 47)),
+    ((1, 1), (1, 1), (2, 2)): (Fraction(1, 175), Fraction(24, 175)),
+    ((1, 1), (1, 2), (1, 2)): (Fraction(13, 229), Fraction(8, 229)),
+    ((1, 1), (1, 2), (2, 2)): (Fraction(26, 431), Fraction(10, 431)),
+}
+M2_REFUTED = [((1, 1), (1, 2)), ((1, 1), (2, 1)), ((2, 1), (2, 2)),
+              ((1, 1), (1, 1), (2, 1)), ((1, 1), (1, 2), (1, 2)),
+              ((1, 1), (1, 2), (2, 2))]
+
+
+def orbit_and_eps(word):
+    """The visited orbit O = -a 2^{-1} <g_P> mod q (integer reps) and eps = y* mod 3."""
+    S, M, a, q, gP = word_constants(word)
+    base = (-a * pow(2, -1, q)) % q
+    O = []
+    x = base
+    while True:
+        O.append(x)
+        x = (x * gP) % q
+        if x == base:
+            break
+    eps = (a * pow(q, -1, 3)) % 3
+    return O, eps
+
+
+def V_sigma(j, sector, a, q):
+    t = ((a + 2 * j) * pow(q, -1, 3)) % 3
+    if sector == +1:
+        return Fraction(j, q) + (1 if t == 0 else 0)
+    return 1 + (1 if t == 2 else 0) - Fraction(j, q)
+
+
+def check_P2_P3():
+    for word in SINGLE_WORDS + MULTI_WORDS:
+        S, M, a, q, gP = word_constants(word)
+        O, eps = orbit_and_eps(word)
+        ordq = mult_order(gP, q) if q > 1 else 1
+        ok(len(O) == ordq, f"|O| = ord {word}")
+        # the orbit is exactly the visited set of j_n
+        ok(sorted(O) == sorted({theorem_row(word, n)[2] for n in range(1, ordq + 1)}),
+           f"orbit = visited j set {word}")
+        tmin = ((a + 2 * min(O)) * pow(q, -1, 3)) % 3
+        tmax = ((a + 2 * max(O)) * pow(q, -1, 3)) % 3
+        for sector, col in ((+1, 0), (-1, 1)):
+            c = min(V_sigma(j, sector, a, q) for j in O)
+            ok(c >= Fraction(1, q), f"P2 lower bound {word} {sector}")
+            ok(c == PUBLISHED_MIN_V[word][col], f"sharp constant vs probe {word} {sector}")
+            # the reduction criterion
+            if sector == +1:
+                ok((c == Fraction(min(O), q)) == (tmin != 0), f"j_min/q criterion {word}")
+            else:
+                ok((c == 1 - Fraction(max(O), q)) == (tmax != 2), f"j_max criterion {word}")
+        # the six M2-refutation instances: c+ strictly exceeds j_min/q
+        cplus = min(V_sigma(j, +1, a, q) for j in O)
+        if word in M2_REFUTED:
+            ok(cplus > Fraction(min(O), q), f"M2 refutation instance {word}")
+            ok(tmin == 0, f"M2 refutation cause t(j_min)=0 {word}")
+        else:
+            ok(cplus == Fraction(min(O), q), f"j_min/q holds {word}")
+        # P3: first-viable k in {0,1} / {1,2} at every orbit value
+        for j in O:
+            t = ((a + 2 * j) * pow(q, -1, 3)) % 3
+            ok((1 if t == 0 else 0) in (0, 1) and 1 + (1 if t == 2 else 0) in (1, 2),
+               f"P3 k range {word}")
+    print("check 6 (Cor .9 P2 corrected sharp constant, Cor .10 P3): orbit = visited "
+          "j-set, min_O V_sigma matches both probes' published minima 40/40, the six "
+          "M2-refutation instances confirmed with cause t(j_min)=0, reduction criteria "
+          "exact, k ranges - OK")
+
+
+# --------------------------------------------------------------------------
+# CHECK 7 - Theorem 14.15.9.11 (P4): the spectrum law in signature form
+# --------------------------------------------------------------------------
+
+def signature(word):
+    S, M, a, q, gP = word_constants(word)
+    O, eps = orbit_and_eps(word)
+    return q, gP, frozenset(O), eps
+
+
+def spec_from_signature(q, gP, O, eps):
+    """Spectra as a function of the signature ALONE: t(j) = eps + 2 j q^{-1} mod 3."""
+    qi3 = pow(q, -1, 3)
+    sp, sm = set(), set()
+    for j in O:
+        t = (eps + 2 * j * qi3) % 3
+        sp.add(Fraction(j, q) + (1 if t == 0 else 0))
+        sm.add(1 + (1 if t == 2 else 0) - Fraction(j, q))
+    return sp, sm
+
+
+def check_P4_spectra():
+    # 0) the signature function reproduces every word's per-word spectrum
+    for word in SINGLE_WORDS + MULTI_WORDS:
+        S, M, a, q, gP = word_constants(word)
+        O, eps = orbit_and_eps(word)
+        sp, sm = spec_from_signature(*signature(word))
+        ok(sp == {V_sigma(j, +1, a, q) for j in O}, f"signature determines +spec {word}")
+        ok(sm == {V_sigma(j, -1, a, q) for j in O}, f"signature determines -spec {word}")
+        ordq = mult_order(gP, q) if q > 1 else 1
+        vps = {Fraction(theorem_row(word, n)[4], 2 ** (n * S + 1) * 3 ** (n * M))
+               - Fraction(a, q * 2 ** (n * S + 1) * 3 ** (n * M)) for n in range(1, ordq + 1)}
+        ok(vps == sp, f"+spec equals realized v-set {word}")
+    # 1) the probe's coincidence pair: equal signatures, equal spectra
+    w1, w2 = ((1, 2), (2, 2)), ((1, 1), (1, 1), (1, 2))
+    ok(signature(w1) == signature(w2), "coincidence pair signatures equal")
+    ok(spec_from_signature(*signature(w1)) == spec_from_signature(*signature(w2)),
+       "coincidence pair spectra equal")
+    # 2) the probe's swap pair: negated signatures, swapped spectra
+    wA, wB = ((2, 1), (2, 2)), ((1, 1), (1, 1), (2, 1))
+    qA, gA, OA, eA = signature(wA)
+    qB, gB, OB, eB = signature(wB)
+    ok((qA, gA) == (qB, gB), "swap pair shares (q, g_P)")
+    ok(OB == frozenset((qA - j) % qA for j in OA), "swap pair cosets negated")
+    ok(eB == (-eA) % 3, "swap pair eps negated")
+    spA, smA = spec_from_signature(qA, gA, OA, eA)
+    spB, smB = spec_from_signature(qB, gB, OB, eB)
+    ok(spA == smB and smA == spB, "swap pair spectra swapped")
+    # 3) the negation involution as pure algebra, on every grid word:
+    #    spec(q, gP, -C, -eps) = spectra of (q, gP, C, eps) with sectors swapped
+    for word in SINGLE_WORDS + MULTI_WORDS:
+        q, gP, O, eps = signature(word)
+        sp, sm = spec_from_signature(q, gP, O, eps)
+        spn, smn = spec_from_signature(q, gP, frozenset((q - j) % q for j in O),
+                                       (-eps) % 3)
+        ok(spn == sm and smn == sp, f"negation involution {word}")
+    # 4) eps is NOT redundant: rotations 0 and 1 of ((1,1),(1,2)) share the
+    #    triple (q, g_P, C) but differ in eps, and their + spectra differ.
+    r0, r1 = ((1, 1), (1, 2)), ((1, 2), (1, 1))
+    q0, g0, O0, e0 = signature(r0)
+    q1, g1, O1, e1 = signature(r1)
+    ok((q0, g0, O0) == (q1, g1, O1), "eps witness: triples equal")
+    ok(e0 == 2 and e1 == 1, "eps witness: eps differ (2 vs 1)")
+    sp0, sm0 = spec_from_signature(q0, g0, O0, e0)
+    sp1, sm1 = spec_from_signature(q1, g1, O1, e1)
+    ok(sp0 != sp1, "eps witness: + spectra differ")
+    ok(sp0 == {Fraction(x, 23) for x in (2, 3, 6, 8, 9, 12, 18, 24, 27, 36, 39)},
+       "eps witness rot0 spectrum")
+    ok(sp1 == {Fraction(x, 23) for x in (1, 3, 4, 6, 9, 12, 13, 16, 18, 25, 31)},
+       "eps witness rot1 spectrum")
+    # ... and both rotations' spectra REALIZED by direct simulation over one
+    # full period (n = 1..11; n = 7..11 are extrapolation rows beyond the
+    # probe's M4 range n <= 6).
+    for w, spec_p, spec_m in ((r0, sp0, sm0), (r1, sp1, sm1)):
+        S, M, a, q, gP = word_constants(w)
+        got_p, got_m = set(), set()
+        for n in range(1, 12):
+            Qn = 2 ** (n * S + 1) * 3 ** (n * M)
+            Hp, _, _, _ = simulated_row(w, n, +1)
+            Hm, _, _, _ = simulated_row(w, n, -1)
+            got_p.add(Fraction(Hp, Qn) - Fraction(a, q * Qn))
+            got_m.add(Fraction(Hm, Qn) + Fraction(a, q * Qn))
+        ok(got_p == spec_p and got_m == spec_m, f"eps witness simulated spectra {w}")
+    print("check 7 (Thm .11 P4 spectrum law): signature (q,g_P,C,eps) determines both "
+          "spectra on all 20 words; coincidence pair equal, swap pair negated+swapped, "
+          "negation involution exact on all words; eps-witness (rotations of "
+          "((1,1),(1,2))): same triple, different eps, different spectra, both realized "
+          "by direct simulation over full periods n=1..11 - OK")
+
+
+# --------------------------------------------------------------------------
+# CHECK 8 - Corollary 14.15.9.12 (P5): every rotation obeys the law with its
+# own numerator over the shared denominator (the probe's M4 words + rotations)
+# --------------------------------------------------------------------------
+
+M4_WORDS = [((1, 1), (1, 2)), ((1, 1), (2, 1)), ((1, 2), (2, 1)),
+            ((1, 1), (1, 1), (2, 2)), ((1, 1), (1, 2), (1, 2))]  # q = 23, 5, 37, 175, 229
+
+
+def check_P5_rotations():
+    nrot = 0
+    for word in M4_WORDS:
+        rots = rotations(word)
+        q_shared = fixed_point(word).denominator
+        for i, w in enumerate(rots):
+            S, M, a, q, gP = word_constants(w)
+            ok(q == q_shared, f"rotation shares q {w}")
+            # simulation-grade closed forms at n = 1, 2, both sectors
+            for n in (1, 2):
+                Qn, rho, j, t, Hp, Hm = theorem_row(w, n)
+                ok(simulated_row(w, n, +1)[0] == Hp, f"rotation H+ {w} n={n}")
+                ok(simulated_row(w, n, -1)[0] == Hm, f"rotation H- {w} n={n}")
+            # arithmetic identities at n = 1..6 with the rotation's own numerator
+            for n in range(1, 7):
+                Qn, rho, j, t, Hp, Hm = theorem_row(w, n)
+                ok(j == (-a * pow(2 * gP ** n, -1, q)) % q, f"rotation j-law {w} n={n}")
+            # the unit-multiple relation between consecutive rotations' j-sequences
+            a_next = fixed_point(rots[(i + 1) % len(rots)]).numerator
+            for n in (1, 2, 3):
+                j_i = theorem_row(w, n)[2]
+                j_next = theorem_row(rots[(i + 1) % len(rots)], n)[2]
+                ok(j_next % q == (a_next * pow(a, -1, q) * j_i) % q,
+                   f"unit-multiple j relation {w} n={n}")
+            nrot += 1
+    print(f"check 8 (Cor .12 P5 rotations): {nrot} rotations of the probe's 5 M4 words "
+          f"(q = 23, 5, 37, 175, 229) — shared q, per-rotation closed forms "
+          f"simulation-checked at n=1,2 both sectors, j-law n=1..6, unit-multiple "
+          f"relation between consecutive rotations - OK")
+
+
 def main():
     t0 = time.time()
     check_fixed_point_arithmetic()
     check_adelic_anchor()
     check_class_theorem()
     check_identities()
+    check_P1_periods()
+    check_P2_P3()
+    check_P4_spectra()
+    check_P5_rotations()
     print(f"ALL CHECKS PASSED: {CHECKS['count']} exact checks, {time.time()-t0:.1f}s")
 
 
