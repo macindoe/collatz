@@ -1,5 +1,5 @@
 ---
-status: ACTIVE — forward/backward duality complete (14.1–14.12; density bound c* = 0.3304, 14.6); door/exit seam relocates the core-extraction deficit onto the forward digit budget (14.14); itinerary language is a full shift completing the signed two-sided diagonal characterization (14.15, 14.15.6); exact height laws close the integer-fixed-point periodic instances (14.15.7) — Bridge status unchanged throughout
+status: ACTIVE — forward/backward duality complete (14.1–14.12; density bound c* = 0.3304, 14.6); door/exit seam relocates the core-extraction deficit onto the forward digit budget (14.14); itinerary language is a full shift completing the signed two-sided diagonal characterization (14.15, 14.15.6); exact height laws close the integer-fixed-point periodic instances (14.15.7) and the non-integral mechanism the rest of the single-letter shelf (14.15.8) — Bridge status unchanged throughout
 scope: new section 14 (post-monolith)
 updated: 2026-07-17
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
