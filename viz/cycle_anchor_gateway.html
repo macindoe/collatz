@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cycle anchor gateway — the known loops, their tower near-misses, and the spent stock</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#ffffff;--surface-1:#f4f4f2;--surface-2:#fff;
+  --text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;
+  --border:#d9dce3;--border-strong:#b8bdc9;
+  --grid:#ececea;--baseline:#c9ccd4;
+  --bg-accent:#e8f0fb;--text-accent:#2f5fb3;
+  --bg-ok:#e8f5ec;--text-ok:#2c8a57;--bg-warn:#fbeee8;--text-warn:#b3502f;
+  /* the colour-matching system (validated per the dataviz skill) */
+  --h-p1:#2a78d6;   /* house +1  (north) */
+  --h-m1:#d49a35;   /* house −1  (south) */
+  --h-m5:#ca502b;   /* house −5  (south) */
+  --h-m17:#8e2937;  /* house −17 (south) */
+  --north:#2a78d6;  /* sector hue, positive world */
+  --south:#e34948;  /* sector hue, negative world */
+  --q:#4a3aa7;      /* the one reserved accent for q */
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#14161b;--surface-1:#22252c;--surface-2:#1a1c22;
+    --text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;
+    --border:#3a3e48;--border-strong:#565c6a;
+    --grid:#23262d;--baseline:#3a3e48;
+    --bg-accent:#243350;--text-accent:#8fb0e8;
+    --bg-ok:#1f3a29;--text-ok:#7fd0a0;--bg-warn:#402a20;--text-warn:#e09873;
+    --h-p1:#3987e5;--h-m1:#c4871c;--h-m5:#b94927;--h-m17:#b7364a;
+    --north:#3987e5;--south:#e66767;--q:#c9b3f2;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#14161b;--surface-1:#22252c;--surface-2:#1a1c22;
+  --text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;
+  --border:#3a3e48;--border-strong:#565c6a;
+  --grid:#23262d;--baseline:#3a3e48;
+  --bg-accent:#243350;--text-accent:#8fb0e8;
+  --bg-ok:#1f3a29;--text-ok:#7fd0a0;--bg-warn:#402a20;--text-warn:#e09873;
+  --h-p1:#3987e5;--h-m1:#c4871c;--h-m5:#b94927;--h-m17:#b7364a;
+  --north:#3987e5;--south:#e66767;--q:#c9b3f2;
+}
+html,body{background:var(--page);}
+body{font-family:system-ui,sans-serif;max-width:980px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);}
+h1{font-size:20px;font-weight:500;margin-bottom:2px;}
+h2{font-size:16px;font-weight:600;margin:34px 0 6px;}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+input,button,select{font:inherit;padding:6px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2);color:var(--text-primary);}
+button{cursor:pointer;}
+button.primary{background:var(--bg-accent);color:var(--text-accent);border-color:var(--text-accent);}
+button.on{background:var(--bg-accent);color:var(--text-accent);border-color:var(--text-accent);}
+sup{font-size:9px;}
+sub{font-size:9px;}
+.mono{font-family:ui-monospace,monospace;}
+.qq{color:var(--q);font-weight:600;}
+table{border-collapse:collapse;font-size:13px;}
+td,th{padding:5px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:middle;}
+th{color:var(--text-muted);font-weight:500;font-size:12px;}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}
+.scroll{overflow-x:auto;}
+.card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;}
+.chartcard{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px;}
+svg{display:block;width:100%;height:auto;}
+svg text{font-family:system-ui,sans-serif;}
+.badge{font-size:10px;border-radius:5px;padding:1px 6px;white-space:nowrap;}
+.badge.ok{background:var(--bg-ok);color:var(--text-ok);}
+.badge.warn{background:var(--bg-warn);color:var(--text-warn);}
+.badge.neutral{background:var(--surface-1);color:var(--text-secondary);border:1px solid var(--border);}
+.vok{color:var(--text-ok);font-weight:700;}
+.vbad{color:var(--text-warn);font-weight:700;}
+.swatch{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:-1px;}
+.housechip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:8px;
+  padding:3px 9px;font-size:13px;cursor:default;background:var(--surface-2);}
+.wordchip{display:inline-flex;align-items:center;border-radius:6px;padding:2px 7px;margin:1px;
+  font-family:ui-monospace,monospace;font-size:13px;background:var(--surface-1);border:1px solid var(--border);}
+#tip{position:absolute;display:none;z-index:10;background:var(--surface-2);border:1px solid var(--border-strong);
+  border-radius:8px;padding:8px 10px;font-size:12px;color:var(--text-secondary);pointer-events:none;
+  box-shadow:0 2px 10px rgba(0,0,0,0.18);max-width:300px;line-height:1.5;}
+#tip .v{color:var(--text-primary);font-weight:600;}
+/* house cross-highlighting: hover any house-tagged element anywhere */
+[data-house]{transition:opacity .12s ease;}
+html[data-hl] [data-house]{opacity:.22;}
+html[data-hl="p1"]  [data-house="p1"],
+html[data-hl="m1"]  [data-house="m1"],
+html[data-hl="m5"]  [data-house="m5"],
+html[data-hl="m17"] [data-house="m17"]{opacity:1;}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 10px;font-size:13px;color:var(--text-secondary);}
+.controls label{display:inline-flex;align-items:center;gap:6px;}
+footer{margin:40px 0 20px;border-top:1px solid var(--border);padding-top:14px;font-size:13px;color:var(--text-secondary);line-height:1.7;}
+a{color:var(--text-accent);}
+#themeBtn{position:absolute;top:0;right:0;font-size:12px;padding:4px 9px;}
+.titlewrap{position:relative;}
+</style>
+</head>
+<body>
+<div id="tip"></div>
+<div class="titlewrap">
+<h1>Cycle anchor gateway</h1>
+<button id="themeBtn" title="cycle colour theme">theme: auto</button>
+</div>
+<p style="margin-top:4px;">Take any odd number <span class="mono">x</span> — negative numbers allowed — multiply by 3, add 1, then divide by 2 until the result is odd again. Call that one step (the map <span class="mono">T</span>). A <em>loop</em> is a number that returns to itself after <span class="mono">k</span> steps. Exactly four loops are known. This page is about the arithmetic that anchors each of them to a near-miss between the powers of 2 and the powers of 3 — and about why the easy supply of loops was spent by the fourteenth century. Everything marked <span class="badge ok">live</span> is computed in this page in exact integer arithmetic as you interact; the stated result numbers are transcribed from the project's verification record. Companion to <em>Reduced coordinates for the Collatz map</em> (<a href="https://doi.org/10.5281/zenodo.21421120">DOI 10.5281/zenodo.21421120</a>) and <em>The 3-adic mirror of the reduced Collatz dynamics</em> (<a href="https://doi.org/10.5281/zenodo.21303918">DOI 10.5281/zenodo.21303918</a>).</p>
+
+<div class="card" style="margin:14px 0 6px;">
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--text-secondary);">
+<span style="font-size:12px;color:var(--text-muted);">the colour system — hover a loop:</span>
+<span class="housechip" data-house="p1" tabindex="0"><span class="swatch" style="background:var(--h-p1);"></span>+1</span>
+<span class="housechip" data-house="m1" tabindex="0"><span class="swatch" style="background:var(--h-m1);"></span>&minus;1</span>
+<span class="housechip" data-house="m5" tabindex="0"><span class="swatch" style="background:var(--h-m5);"></span>&minus;5</span>
+<span class="housechip" data-house="m17" tabindex="0"><span class="swatch" style="background:var(--h-m17);"></span>&minus;17</span>
+<span style="border-left:1px solid var(--border);padding-left:10px;">positive world <span class="swatch" style="background:var(--north);"></span> blue &middot; negative world <span class="swatch" style="background:var(--south);"></span> warm</span>
+<span style="border-left:1px solid var(--border);padding-left:10px;"><span class="swatch" style="background:var(--q);"></span> one reserved colour for <span class="qq">q</span>, wherever it appears</span>
+</div>
+<p style="font-size:12.5px;margin:8px 0 0;color:var(--text-muted);">One colour per loop, everywhere: the same colour marks a loop's orbit, its anchor on the ladder, and its rows in the exhaustive map. Hovering a loop anywhere highlights it everywhere.</p>
+</div>
+
+<!-- ================= PANEL 1 ================= -->
+<h2 id="p1h">1 &middot; The two towers and the near-miss ladder</h2>
+<p>Powers of 2 and powers of 3 never collide — every power of 3 is odd, and the only odd power of 2 is 1 — but they have near-misses. For each <span class="mono">k</span>, the value <span class="mono">3<sup>k</sup></span> lands strictly between two consecutive powers of 2. The bar drawn between them is that gap, and <span class="mono">3<sup>k</sup></span> splits it into a lower part <span class="qq">q&#8331;</span> <span class="mono">= 3<sup>k</sup> &minus; 2<sup>&lfloor;k&middot;log&#8322;3&rfloor;</sup></span> and an upper part <span class="qq">q&#8330;</span> <span class="mono">= 2<sup>&lceil;k&middot;log&#8322;3&rceil;</sup> &minus; 3<sup>k</sup></span>. The two parts fill the gap exactly, and their sum is exactly the lower power of 2 — the envelope identity <span class="mono"><span class="qq">q&#8330; + q&#8331;</span> = 2<sup>&lfloor;k&middot;log&#8322;3&rfloor;</sup></span>, checked live below at every <span class="mono">k</span> shown. This violet bar is <span class="qq">q</span>'s first costume; the same object returns twice more, in panels 3 and 4.</p>
+<div id="p1" class="chartcard"></div>
+<p id="p1note" style="font-size:12.5px;"></p>
+<p>Three times in all of history the gap part is exactly 1: <span class="mono">2&ndash;3</span> (at <span class="mono">k = 1</span>, from below), <span class="mono">4&ndash;3</span> (at <span class="mono">k = 1</span>, from above), and <span class="mono">9&ndash;8</span> (at <span class="mono">k = 2</span>, from below). Those three are drawn in the colours of the loops they anchor — panel 6 explains why a gap part of 1 hands out a loop for free. At <span class="mono">k = 7</span> the lower part is <span class="mono">139</span>: not 1, but the anchor of the &minus;17 loop, the one lottery win. And <span class="mono">k = 1</span> is the unique exact tie: <span class="qq">q&#8330;</span> <span class="mono">=</span> <span class="qq">q&#8331;</span> <span class="mono">= 1</span> — the only <span class="mono">k</span> at which neither side is nearer.</p>
+
+<!-- ================= PANEL 2 ================= -->
+<h2 id="p2h">2 &middot; The four houses: the loops themselves</h2>
+<p>Here are the four known loops, drawn by actually running the map in this page. Each is labelled with its anchor data <span class="mono">(k, m, <span class="qq">q</span>)</span>: <span class="mono">k</span> steps, <span class="mono">m</span> halvings in total across the loop, and <span class="qq">q</span> <span class="mono">= 2<sup>m</sup> &minus; 3<sup>k</sup></span> — the same gap number as on the ladder above, now attached to a loop. The arrows say what each step does: &times;3+1, then the number of halvings written on the arrow.</p>
+<div id="p2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;"></div>
+<div id="p2check" style="margin:10px 0 6px;font-size:13px;"></div>
+<div class="scroll"><table id="p2table"></table></div>
+<p>The moral is worth stating flatly: loops are real. Any argument of the form &ldquo;the map tends to shrink, so loops cannot exist&rdquo; — any parity or average-speed argument — proves too much, because it would forbid these four. What actually decides whether a candidate loop exists is a divisibility fact about <span class="qq">q</span>, which the next panel shows.</p>
+
+<!-- ================= PANEL 3 ================= -->
+<h2 id="p3h">3 &middot; One condition, not k</h2>
+<p>A candidate loop is described by its step pattern: the word <span class="mono">(s&#8321;, &hellip;, s&#8342;)</span> listing how many halvings follow each &times;3+1. The word fixes <span class="mono">m = s&#8321;+&hellip;+s&#8342;</span> and so <span class="qq">q</span> <span class="mono">= 2<sup>m</sup> &minus; 3<sup>k</sup></span>, and for each <em>rotation</em> <span class="mono">r</span> — the same pattern read from a different starting point — an integer <span class="mono">R<sub>r</sub></span>. A genuine loop must satisfy <span class="mono">x<sub>r</sub> &middot; <span class="qq">q</span> = R<sub>r</sub></span> at every rotation, so <span class="qq">q</span> must divide every <span class="mono">R<sub>r</sub></span>: apparently <span class="mono">k</span> separate conditions. They are one condition. The exact identity <span class="mono">2<sup>s&#7523;</sup>&middot;R<sub>r+1</sub> = 3&middot;R<sub>r</sub> + <span class="qq">q</span></span> (the transport recurrence — Remark 12.6.1.1 in the project record, ledger entry L-A1) carries divisibility by <span class="qq">q</span> from each rotation to the next. Watch the verdict column: it agrees at every rotation — all &#10003; or all &#10007; — whatever word you try.</p>
+<div class="controls" id="p3controls"></div>
+<div id="p3out"></div>
+
+<!-- ================= PANEL 4 ================= -->
+<h2 id="p4h">4 &middot; Repeated words never buy a new loop</h2>
+<p>What about taking a loop's word and repeating it — going round twice, three times, five times? The repeated word passes the divisibility test whenever its base does, but it never buys anything new. That is a proved exact law (ledger entry L-A2): for <span class="mono">P = B<sup>j</sup></span> with <span class="mono">j &ge; 2</span>, <span class="mono">gcd(<span class="qq">q</span><sub>P</sub>, R&#8320;) = |<span class="qq">q</span><sub>P</sub>| / q<sub>red</sub>(B)</span>, and this is forced to be greater than 1 — so a repeated word is divisible exactly when its base is, and then it merely retraces the base's loop <span class="mono">j</span> times. Below, the repeated word wears its <em>base's</em> colour: it belongs to that house, not to a new one. In the exhaustive <span class="mono">k &le; 10</span> map of panel 6, 384 repeated words occur, and every one obeys this law.</p>
+<div class="controls" id="p4controls"></div>
+<div id="p4out"></div>
+<p>The default demo is the map's one false alarm: the +1 word <span class="mono">(2)</span> repeated five times gives <span class="qq">q</span><sub>P</sub> <span class="mono">= 781</span> and <span class="mono">gcd = 781</span> — it passes divisibility, and what it reconstructs is the number 1 walking its one-step loop five times, not a new loop.</p>
+
+<!-- ================= PANEL 5 ================= -->
+<h2 id="p5h">5 &middot; The Benford walk: which side wins?</h2>
+<p>Back to the ladder. At each <span class="mono">k</span> the near-miss has two sides: is <span class="mono">3<sup>k</sup></span> closer, in plain distance, to the power of 2 below it (<span class="qq">q&#8331;</span> smaller) or above it (<span class="qq">q&#8330;</span> smaller)? The negative world's loops anchor from below, the positive world's from above — so this is a question about which <em>sign</em> of the map gets the better near-misses. Plotting the fractional part <span class="mono">{k&middot;log&#8322;3}</span> for each <span class="mono">k</span> gives the walk below: the points never repeat and fill the interval evenly, and the lower side wins exactly when the point falls below the threshold <span class="mono">log&#8322;(3/2) = 0.5849625007&hellip;</span> — about 58.5% of the time. That is a Benford-type law: &ldquo;the negative side wins&rdquo; is the same event as &ldquo;the second binary digit of <span class="mono">3<sup>k</sup></span> is 0&rdquo;. Every dot's side below is decided by exact integer comparison, not by the plotted position.</p>
+<div class="controls" id="p5controls"></div>
+<div id="p5" class="chartcard"></div>
+<div id="p5run" class="chartcard" style="margin-top:8px;"></div>
+<p id="p5stat" style="font-size:13px;"></p>
+<p>In the verification record the count is exact to <span class="mono">k = 10<sup>5</sup></span> (58,496/99,999 = 0.5849658) and measured at <span class="mono">k = 10<sup>7</sup></span> as 0.5849626, against the constant 0.5849625007. The toggle asks the other natural question — which side is closer <em>in ratio</em> — and there the split is 50/50. Both answers are right — to different questions. Divisibility lives on <span class="qq">q</span> as an integer, so the additive one is the cycle-relevant one. <span class="mono">k = 1</span> is the unique exact tie (<span class="qq">q&#8330;</span> <span class="mono">=</span> <span class="qq">q&#8331;</span> <span class="mono">= 1</span>), so the law reads &ldquo;for <span class="mono">k &ge; 2</span>&rdquo;.</p>
+
+<!-- ================= PANEL 6 ================= -->
+<h2 id="p6h">6 &middot; The spent stock</h2>
+<p>When a gap part is exactly 1 — <span class="mono">|<span class="qq">q</span>| = 1</span> — the divisibility condition of panel 3 is free: 1 divides everything, so <em>every</em> step pattern with that <span class="mono">(k, m)</span> closes into a genuine loop. That free stock is exactly three tickets, all dealt by <span class="mono">k = 2</span>: one north, two south. And there is never another: <span class="mono">|2<sup>a</sup> &minus; 3<sup>b</sup>| = 1</span> has no further solutions — by a remainder-mod-8 argument plus a two-line factoring, arithmetic available in the fourteenth century.</p>
+<div id="p6tickets" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0;"></div>
+<div id="p6wall"></div>
+<div class="scroll" style="margin-top:10px;"><table id="p6strip"></table></div>
+<p id="p6totals" style="font-size:13px;"></p>
+<p>What remains is exactly the open question, and it needs the two ingredients coupled — the two-towers geometry of panels 1 and 5, and the divisibility arithmetic of panels 3 and 4. No finite piece of arithmetic alone settles it, and this page claims nothing beyond what is shown.</p>
+
+<footer>
+<div style="margin-bottom:6px;"><strong style="font-weight:600;color:var(--text-primary);">Sibling gateway:</strong> Eric Merle's cycle-side visualizer — <a href="#" title="TODO: link when his sibling gateway exists">placeholder, link to follow</a> <span class="badge neutral">TODO</span> — the two pages will cross-link.</div>
+<div>The spent-stock framing is due to Eric Merle (correspondence, round 5); verification is joint. Every stated result number on this page is transcribed from the project's round-5 verification record (211,047 exact checks, 0 failures, 2026-07-19); everything marked <span class="badge ok">live</span> is recomputed in this page in exact integer arithmetic (BigInt) — floating point is used only to place marks on screen. Companion pages: <a href="block_family_decomposer.html">block family decomposer</a> &middot; <a href="stratum_word_ticker.html">stratum word ticker</a>. Papers: <a href="https://doi.org/10.5281/zenodo.21421120">DOI 10.5281/zenodo.21421120</a> &middot; <a href="https://doi.org/10.5281/zenodo.21303918">DOI 10.5281/zenodo.21303918</a>.</div>
+</footer>
+
+<script>
+'use strict';
+/* ============ MATH-BEGIN (pure BigInt arithmetic — extractable for node tests) ============ */
+const P2=e=>1n<<BigInt(e), P3=e=>3n**BigInt(e);
+function v2(x){let v=0,y=x<0n?-x:x;while((y&1n)===0n){y>>=1n;v++;}return v;}
+function absB(x){return x<0n?-x:x;}
+function gcdB(a,b){a=absB(a);b=absB(b);while(b){[a,b]=[b,a%b];}return a;}
+function bitLen(x){return x.toString(2).length;} // x > 0
+// one step of T on odd x (sign-blind); returns next odd value and the halving count s
+function Tstep(x){const t=3n*x+1n;const s=v2(t);return {next:t>>BigInt(s),s};}
+// follow the orbit from an odd seed until it returns; null if no return within cap
+function orbitFromSeed(x0,cap){
+  let x=BigInt(x0);const xs=[],word=[];
+  for(let i=0;i<(cap||64);i++){
+    xs.push(x);const {next,s}=Tstep(x);word.push(s);
+    if(next===xs[0])return {xs,word};
+    x=next;
+  }
+  return null;
+}
+// R_0 of an s-word (k odd steps): R = sum_i 3^(k-1-i) * 2^(S_i), S_i = s_0+...+s_(i-1)
+function R0(word){
+  const k=word.length;let R=0n,S=0n;
+  for(let i=0;i<k;i++){R+=P3(k-1-i)*(1n<<S);S+=BigInt(word[i]);}
+  return R;
+}
+function rotate(word,r){return word.slice(r).concat(word.slice(0,r));}
+function wordData(word){
+  const k=word.length,m=word.reduce((a,b)=>a+b,0);
+  const q=P2(m)-P3(k);
+  const Rs=[];for(let r=0;r<k;r++)Rs.push(R0(rotate(word,r)));
+  return {k,m,q,Rs};
+}
+// transport recurrence 2^(s_r) R_(r+1) = 3 R_r + q — exact, every profile
+function seamsOK(word,q,Rs){
+  const k=word.length;
+  for(let r=0;r<k;r++){
+    if(P2(word[r])*Rs[(r+1)%k]!==3n*Rs[r]+q)return false;
+  }
+  return true;
+}
+// ladder data at one k: p3 = 3^k passed in to allow incremental powers
+function ladderAt(k,p3){
+  const fl=bitLen(p3)-1;               // floor(k log2 3), read off the bit length
+  const qm=p3-P2(fl), qp=P2(fl+1)-p3;  // q- (lower), q+ (upper)
+  return {k,fl,qm,qp,envelope:qp+qm===P2(fl)};
+}
+// absolute-side verdict: negative side wins iff 2*3^k < 3*2^floor  (exact); tie possible (k=1)
+function sideAbs(p3,fl){const a=2n*p3,b=3n*P2(fl);return a<b?-1:(a>b?1:0);}
+// ratio verdict: lower tower nearer iff frac(kL) < 1/2 iff 3^(2k) < 2^(2 floor + 1)  (exact)
+function sideRatio(p3,fl){return (p3*p3 < P2(2*fl+1)) ? -1 : 1;}
+/* ============ MATH-END ============ */
+
+// ---------- shared display helpers ----------
+function fmt(n){const s=n.toString();return s.length>12?s.slice(0,5)+'…'+s.slice(-4)+' ['+s.length+'d]':s;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+const HOUSES={
+  p1:{label:'+1',css:'var(--h-p1)',seed:1n,sector:'north'},
+  m1:{label:'−1',css:'var(--h-m1)',seed:-1n,sector:'south'},
+  m5:{label:'−5',css:'var(--h-m5)',seed:-5n,sector:'south'},
+  m17:{label:'−17',css:'var(--h-m17)',seed:-17n,sector:'south'},
+};
+
+// ---------- tooltip ----------
+const tip=document.getElementById('tip');
+function showTip(html,ev){
+  tip.innerHTML=html;tip.style.display='block';
+  const pad=14,vw=document.documentElement.clientWidth;
+  let x=ev.pageX+pad,y=ev.pageY+pad;
+  const w=tip.offsetWidth;
+  if(ev.clientX+pad+w>vw-8)x=ev.pageX-w-pad;
+  tip.style.left=x+'px';tip.style.top=y+'px';
+}
+function hideTip(){tip.style.display='none';}
+
+// ---------- house cross-highlighting ----------
+function wireHouseHover(root){
+  (root||document).addEventListener('pointerover',e=>{
+    const el=e.target.closest('[data-house]');
+    if(el)document.documentElement.dataset.hl=el.dataset.house;
+  });
+  (root||document).addEventListener('pointerout',e=>{
+    const el=e.target.closest('[data-house]');
+    if(el)delete document.documentElement.dataset.hl;
+  });
+  (root||document).addEventListener('focusin',e=>{
+    const el=e.target.closest('[data-house]');
+    if(el)document.documentElement.dataset.hl=el.dataset.house;
+  });
+  (root||document).addEventListener('focusout',e=>{
+    const el=e.target.closest('[data-house]');
+    if(el)delete document.documentElement.dataset.hl;
+  });
+}
+wireHouseHover(document);
+
+// ---------- theme toggle ----------
+(function(){
+  const btn=document.getElementById('themeBtn');
+  const states=['auto','light','dark'];let i=0;
+  btn.addEventListener('click',()=>{
+    i=(i+1)%3;const s=states[i];
+    if(s==='auto')delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme=s;
+    btn.textContent='theme: '+s;
+  });
+})();
+
+/* panel renderers are appended below */
+</script>
+</body>
+</html>
