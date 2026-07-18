@@ -1,0 +1,34 @@
+# Brief: round-5 reply paragraphs and HANDOFF record (for a delegated session)
+
+**Context required before starting (in order):** `HANDOFF.md` item 1 (through the round-5 record), `briefs/merle-round5-check-brief.md` Appendix A (his letter — the text you are answering), `briefs/merle-round5-check-findings.md` (the summary section: every verdict and number the reply may state), `briefs/merle-round4-reply-brief.md` (the letter-voice conventions), `cycles.md` Remark 12.6.1.2 (as applied), `viz/cycle_anchor_gateway.html` (skim the six panel captions enough to describe the page in two accurate lines).
+
+## Standing conventions
+
+- The personal opening and closing are the author's own — do NOT draft them. He is answering the Ulysses paragraph himself. Draft only the business paragraphs; he folds them into his letter.
+- Register: the established letter voice — flat, complete sentences, warm only at the edges, no excitement inflation. Every number quoted exactly from the findings file.
+- Sending stays with the author.
+
+## Author decisions this reply carries (recorded 2026-07-19)
+
+(1) L-A2 agreed and already seeded; (2) each-side-builds-one gateway plan accepted, ours built; (3) the note bricks are in, credited to him — spent-stock packaging and the Benford fraction his, Gersonides-not-Mihailescu posture adopted, his self-catch visible; (4) the stale header gets one friendly line; (5) L-A3 created (our candidate).
+
+## Deliverable
+
+**Item 1 — the business paragraphs**, returned verbatim in your final report (NOT committed). Cover, in this order:
+
+1. **His flag (a), answered with the goods.** Yes — folklore, with citable homes, and one upgrade he'll want: he doesn't need Mihailescu at all. The 2-vs-3 case is elementary (mod 8 plus a two-line factoring) and was settled by Gersonides in 1342/43 — *De numeris harmonicis*, written for the composer Philippe de Vitry — so the lock is literally 14th-century; citing Catalan invites exactly the referee reaction he fears, citing a medieval rabbi is both correct and the better story. Then the reference list for the anchor correspondence, compact: Steiner 1977; Crandall 1978; Eliahou 1993; Halbeisen–Hungerbühler 1997; Simons 2005; Simons–de Weger 2005; surveyed in Lagarias 1985 and his annotated bibliographies (all verified live this round — cite as in the findings item 4). The verdict sentence: the ingredients are folklore-with-references; the packaging — the spent stock joined to the finite-place × archimedean coupling — appears to be his, and it is now credited to him in our permanent record (Remark 12.6.1.2) and in the note when it comes.
+2. **His flag (b), answered.** The fraction is right, it is exactly the base-2 Benford second-digit law of `3^k`, and we searched (arXiv, OEIS, the Lagarias bibliographies, the Benford–Collatz papers — Kontorovich–Miller 2005 and Lagarias–Soundararajan 2006 are about iterates, not near-misses) and found no prior statement in the cycle context: a genuine small brick, his, with the neighbors cited. The adjudication of his self-catch, stated exactly: his machine's 50/50 first draft was the *correct answer to the ratio question* — in multiplicative distance the split is 50/50; in absolute distance it is `log₂(3/2)`; both answers are right, to different questions, and the additive one is the cycle-relevant one because divisibility lives on `q` as an integer. One refinement from our verification to carry into any write-up: `k = 1` is an exact tie (`q₊ = q₋ = 1`, the only tie at any `k`), so the law reads "for `k ≥ 2`".
+3. **The verification bar.** His whole letter checked out at every claim we could reach: the anchor table exact, the ticket split exact, the envelope proved in one line and exact to `k = 3000`, the Benford count exact to `10⁵` and measured at `10⁷` (closest threshold call `k = 190,538`, and `k − 1` there is the largest continued-fraction denominator of `log₂ 3` below `10⁷` — the expected mechanism, on the nose), and his `k ≤ 10` map replicated fresh: 250,952 profiles both sectors, 37 divisible, all 37 the known houses — cycles exactly `{+1}` and `{−1, −5, −17}`. His false survivor confirmed as `B⁵` of the trivial word, and the repeated-word law verified on all 384 repeated words in the sweep. `a67970f` read via the API (not run): REQ-MATH-010/011 do what the letter says, self-catch disclosed in-code.
+4. **L-A2 and L-A3, shipped.** L-A2 agreed — footnote undersold it, entry it is — and already seeded in the shared LEDGER.md as a draft for co-editing, alongside L-A3 (our candidate: the anchored loops, the spent stock, the side-asymmetry — his artifacts and our key both attached). Commit `ff379c4`, his to edit.
+5. **The gateway exchange.** Each-side-builds-one, accepted — and ours is built: `viz/cycle_anchor_gateway.html`, the third gateway, cycle-side (describe in two accurate lines from the panel captions: the two-towers ladder with the envelope live, the four loops drawn from live iteration, one-condition-not-k, the repeated-word sweep, the Benford walk with the both-answers-right toggle, the spent stock closing on Gersonides 1343). One colour system carries the objects across panels; a cross-link slot is waiting for his sibling page, and we'd take his link the day it exists. [The page reaches the public repo with this letter's send.]
+6. **The friendly line (decision 4).** One sentence, light: his REQ-MATH-011 act-C header comment still says ~50/50 while the code below prints the corrected 58.5% — the artifact's one line that hasn't caught up with its own machine's catch.
+7. **Close of the business section**: the venue convergence noted (three independent readers now), and one flat sentence on what the round adds up to: the note's front door is now elementary — a reader meets Gersonides before Baker — and the two probes meeting in the middle is exactly the architecture "one obstruction, three faces" wanted. Return the warmth of his sign-off briefly, without inflating it; leave the actual last word to the author's own closing.
+
+**Item 2 — HANDOFF item 1 update** (on branch `merle-round5-reply`, one commit, do NOT merge): append to the round-5 record — apply branch merged by the author; viz built, reviewed, merged (one merge-time caption precision fix); reply business paragraphs drafted (this brief) and awaiting the author's personal opening/closing and send; **the repo push to origin must precede the send** so the viz link resolves for him (main is ahead of origin; the author authorizes the push at send time).
+
+## Rules
+
+- No mathematical claims beyond the findings file; quote its numbers exactly.
+- Touch nothing but HANDOFF.md on the branch; the paragraphs live only in your report.
+- If the letter needs a fact not in the named context files, leave a clearly marked [BRACKET] rather than inventing it.
+- No scope expansion; stop after the two items.
