@@ -104,7 +104,7 @@ a{color:var(--text-accent);}
 <h1>Cycle anchor gateway</h1>
 <button id="themeBtn" title="cycle colour theme">theme: auto</button>
 </div>
-<p style="margin-top:4px;">Take any odd number <span class="mono">x</span> — negative numbers allowed — multiply by 3, add 1, then divide by 2 until the result is odd again. Call that one step (the map <span class="mono">T</span>). A <em>loop</em> is a number that returns to itself after <span class="mono">k</span> steps. Exactly four loops are known. This page is about the arithmetic that anchors each of them to a near-miss between the powers of 2 and the powers of 3 — and about why the easy supply of loops was spent by the fourteenth century. Everything marked <span class="badge ok">live</span> is computed in this page in exact integer arithmetic as you interact; the stated result numbers are transcribed from the project's verification record. Companion to <em>Reduced coordinates for the Collatz map</em> (<a href="https://doi.org/10.5281/zenodo.21421120">DOI 10.5281/zenodo.21421120</a>) and <em>The 3-adic mirror of the reduced Collatz dynamics</em> (<a href="https://doi.org/10.5281/zenodo.21303918">DOI 10.5281/zenodo.21303918</a>).</p>
+<p style="margin-top:4px;">Take any odd number <span class="mono">x</span> — negative numbers allowed — multiply by 3, add 1, then divide by 2 until the result is odd again. Call that one step (the map <span class="mono">T</span>). A <em>loop</em> is a number that returns to itself after <span class="mono">k</span> steps. Exactly four loops are known. This page is about the arithmetic that anchors each of them to a near-miss between the powers of 2 and the powers of 3 — and about why the easy supply of loops is a finite stock, already known to be spent in the fourteenth century. Everything marked <span class="badge ok">live</span> is computed in this page in exact integer arithmetic as you interact; the stated result numbers are transcribed from the project's verification record. Companion to <em>Reduced coordinates for the Collatz map</em> (<a href="https://doi.org/10.5281/zenodo.21421120">DOI 10.5281/zenodo.21421120</a>) and <em>The 3-adic mirror of the reduced Collatz dynamics</em> (<a href="https://doi.org/10.5281/zenodo.21303918">DOI 10.5281/zenodo.21303918</a>).</p>
 
 <div class="card" style="margin:14px 0 6px;">
 <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--text-secondary);">
@@ -225,7 +225,6 @@ function sideRatio(p3,fl){return (p3*p3 < P2(2*fl+1)) ? -1 : 1;}
 
 // ---------- shared display helpers ----------
 function fmt(n){const s=n.toString();return s.length>12?s.slice(0,5)+'…'+s.slice(-4)+' ['+s.length+'d]':s;}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 const HOUSES={
   p1:{label:'+1',css:'var(--h-p1)',seed:1n,sector:'north'},
   m1:{label:'−1',css:'var(--h-m1)',seed:-1n,sector:'south'},
@@ -287,6 +286,7 @@ const P1={kmax:24};
   const host=document.getElementById('p1');
   const ctr=document.createElement('div');ctr.className='controls';
   ctr.innerHTML='<label>show k = 1 &hellip; <input id="p1k" type="range" min="8" max="'+KCAP+'" value="'+P1.kmax+'" style="width:180px;padding:0;"> <span id="p1kv" class="mono">'+P1.kmax+'</span></label>'
+    +'<span><span class="swatch" style="background:var(--q);"></span> solid: <span class="qq">q&#8331;</span> (below 3<sup>k</sup>) &nbsp; <span class="swatch" style="background:var(--q);opacity:.35;"></span> pale: <span class="qq">q&#8330;</span> (above)</span>'
     +'<span style="color:var(--text-muted);">hover a bar for the exact numbers</span>';
   host.appendChild(ctr);
   const wrap=document.createElement('div');host.appendChild(wrap);
@@ -322,17 +322,20 @@ const P1={kmax:24};
       const upFill=lk.up?'var(--h-'+lk.up+')':'var(--q)';
       const downFill=lk.down&&!lk.special?'var(--h-'+lk.down+')':(lk.down==='m17'?'var(--h-m17)':'var(--q)');
       const upO=lk.up?'1':'0.35';
+      // lock segments carry a soft same-colour glow ring
+      const glow=f=>' stroke="'+f+'" stroke-opacity="0.35" stroke-width="4"';
       // q+ (upper part of the gap)
-      s+='<rect x="'+x+'" y="'+yTop+'" width="'+bw+'" height="'+Math.max(1,ySplit-yTop-gap)+'" rx="2" fill="'+upFill+'" opacity="'+upO+'"'+(lk.up?' data-house="'+lk.up+'"':'')+'/>';
+      s+='<rect x="'+x+'" y="'+yTop+'" width="'+bw+'" height="'+Math.max(1,ySplit-yTop-gap)+'" rx="2" fill="'+upFill+'" opacity="'+upO+'"'+(lk.up?' data-house="'+lk.up+'"'+glow(upFill):'')+'/>';
       // q- (lower part)
-      s+='<rect x="'+x+'" y="'+(ySplit+gap)+'" width="'+bw+'" height="'+Math.max(1,yBot-ySplit-gap)+'" rx="2" fill="'+downFill+'"'+(lk.down?' data-house="'+lk.down+'"':'')+'/>';
+      s+='<rect x="'+x+'" y="'+(ySplit+gap)+'" width="'+bw+'" height="'+Math.max(1,yBot-ySplit-gap)+'" rx="2" fill="'+downFill+'"'+(lk.down?' data-house="'+lk.down+'"'+glow(downFill):'')+'/>';
       // 3^k marker
       s+='<circle cx="'+X(k)+'" cy="'+ySplit+'" r="3" fill="var(--text-primary)" stroke="var(--surface-2)" stroke-width="1.5"/>';
     }
-    // annotations
-    if(K>=1){s+='<text x="'+(X(1)+bw/2+4)+'" y="'+(Y(1*L2_3)-8)+'" font-size="10" fill="var(--text-secondary)">k=1: 2&ndash;3 and 4&ndash;3 &mdash; exact tie, q&#8330;=q&#8331;=1</text>';}
-    if(K>=2){s+='<text x="'+(X(2)+bw/2+4)+'" y="'+(Y(2*L2_3)+12)+'" font-size="10" fill="var(--text-secondary)">k=2: 9&ndash;8 (&minus;5)</text>';}
-    if(K>=7){s+='<text x="'+(X(7)+bw/2+4)+'" y="'+(Y(7*L2_3)+13)+'" font-size="10" fill="var(--text-secondary)">k=7: q&#8331;=139 (&minus;17)</text>';}
+    // annotations (short forms when the window is wide, to avoid clutter)
+    const wide=K>36;
+    s+='<text x="'+(X(1)+bw/2+4)+'" y="'+(Y(1*L2_3)-8)+'" font-size="10" fill="var(--text-secondary)">'+(wide?'tie':'k=1: 2&ndash;3 and 4&ndash;3 &mdash; exact tie, q&#8330;=q&#8331;=1')+'</text>';
+    s+='<text x="'+(X(2)+bw/2+4)+'" y="'+(Y(2*L2_3)+12)+'" font-size="10" fill="var(--text-secondary)">'+(wide?'&minus;5':'k=2: 9&ndash;8 (&minus;5)')+'</text>';
+    if(K>=7)s+='<text x="'+(X(7)+bw/2+4)+'" y="'+(Y(7*L2_3)+13)+'" font-size="10" fill="var(--text-secondary)">'+(wide?'139':'k=7: q&#8331;=139 (&minus;17)')+'</text>';
     // hover hit rects (full column). They sit above the bars, so they also carry the
     // lock segments' house cross-highlight: segRanges maps k -> [y0, y1, house] spans.
     const segRanges={};
@@ -397,7 +400,7 @@ const P1={kmax:24};
     liveChecks+=wd.k;
     // card
     const n=orb.xs.length,Wc=210,Hc=n===1?120:(n===2?120:190);
-    const cx=Wc/2,cy=n<=2?62:92,rad=n===1?0:(n===2?52:64);
+    const cx=Wc/2,cy=n<=2?62:92,rad=n===1?0:(n===2?38:64);
     let svg='<svg viewBox="0 0 '+Wc+' '+Hc+'" aria-label="the '+h.label+' loop">';
     svg+='<defs><marker id="arr'+id+'" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="'+h.css+'"/></marker></defs>';
     const pos=[];
@@ -594,10 +597,14 @@ const P1={kmax:24};
       s+='<line x1="'+mL+'" y1="'+Y(g)+'" x2="'+(W-mR)+'" y2="'+Y(g)+'" stroke="var(--grid)"/>'
         +'<text x="'+(mL-6)+'" y="'+(Y(g)+3.5)+'" text-anchor="end" font-size="10" fill="var(--text-muted)">'+g+'</text>';
     // threshold
+    const belowLbl=mode==='abs'?'below: negative side wins':'below: lower tower nearer';
+    const aboveLbl=mode==='abs'?'above: positive side wins':'above: upper tower nearer';
     s+='<line x1="'+mL+'" y1="'+Y(th)+'" x2="'+(W-mR)+'" y2="'+Y(th)+'" stroke="var(--text-muted)" stroke-width="1.5"/>'
       +'<text x="'+(W-mR+6)+'" y="'+(Y(th)+3.5)+'" font-size="10.5" fill="var(--text-secondary)">'+(mode==='abs'?TH_ABS_LABEL:'1/2')+'</text>'
-      +'<text x="'+(W-mR+6)+'" y="'+(Y(th)+16)+'" font-size="10" fill="var(--south)">below: negative side wins</text>'
-      +'<text x="'+(W-mR+6)+'" y="'+(Y(th)-8)+'" font-size="10" fill="var(--north)">above: positive side wins</text>';
+      +'<rect x="'+(W-mR+6)+'" y="'+(Y(th)+9)+'" width="7" height="7" rx="2" fill="var(--south)"/>'
+      +'<text x="'+(W-mR+16)+'" y="'+(Y(th)+16)+'" font-size="10" fill="var(--text-secondary)">'+belowLbl+'</text>'
+      +'<rect x="'+(W-mR+6)+'" y="'+(Y(th)-15)+'" width="7" height="7" rx="2" fill="var(--north)"/>'
+      +'<text x="'+(W-mR+16)+'" y="'+(Y(th)-8)+'" font-size="10" fill="var(--text-secondary)">'+aboveLbl+'</text>';
     let dots='';
     for(let k=1;k<=kmax;k++){
       const d=D[k],v=mode==='abs'?d.abs:d.ratio;
@@ -632,8 +639,8 @@ const P1={kmax:24};
         +'<div><span class="qq">q&#8330;</span> = <span class="mono">'+fmt(d.qp)+'</span> &middot; <span class="qq">q&#8331;</span> = <span class="mono">'+fmt(d.qm)+'</span></div>'
         +'<div style="margin-top:3px;">'+(mode==='abs'
           ?(v===0?'<span class="v">exact tie</span> — q&#8330; = q&#8331; = 1'
-            :(v<0?'<span class="v" style="color:var(--south);">negative side wins</span>':'<span class="v" style="color:var(--north);">positive side wins</span>')+' (exact comparison)')
-          :((v<0?'lower':'upper')+' tower nearer in ratio (exact comparison)'))+'</div>'
+            :'<span class="swatch" style="background:var(--'+(v<0?'south':'north')+');width:8px;height:8px;"></span> <span class="v">'+(v<0?'negative':'positive')+' side wins</span> (exact comparison)')
+          :'<span class="swatch" style="background:var(--'+(v<0?'south':'north')+');width:8px;height:8px;"></span> '+(v<0?'lower':'upper')+' tower nearer in ratio (exact comparison)')+'</div>'
         +(mode==='abs'?'<div>3<sup>'+k+'</sup> in binary starts <span class="mono">'+bits.slice(0,2)+'&hellip;</span> — second digit '+bits[1]+(v<0?' (0 &hArr; negative wins)':' (1 &hArr; positive wins)')+'</div>':''),ev);
     });
     svg.addEventListener('pointerleave',()=>{cross.setAttribute('visibility','hidden');hideTip();});
@@ -660,7 +667,7 @@ const P1={kmax:24};
     const last=pts[pts.length-1];
     s2+='<circle cx="'+X(last[0])+'" cy="'+Y2(last[1])+'" r="4" fill="var(--text-primary)" stroke="var(--surface-2)" stroke-width="2"/>';
     s2+='<text x="'+(W-mR+6)+'" y="'+(Y2(last[1])+3.5)+'" font-size="11" fill="var(--text-secondary)">running fraction '+last[1].toFixed(4)+'</text>';
-    s2+='<text x="'+mL+'" y="'+(H2-6)+'" font-size="10" fill="var(--text-muted)">running fraction of k&rsquo;s decided for the lower side (target line: '+(mode==='abs'?'0.5849625007':'0.5')+')</text>';
+    s2+='<text x="'+mL+'" y="'+(H2-6)+'" font-size="10" fill="var(--text-muted)">running fraction of k&rsquo;s '+(mode==='abs'?'where the negative side wins':'where the lower tower is nearer in ratio')+' (target line: '+(mode==='abs'?'0.5849625007':'0.5')+')</text>';
     s2+='</svg>';
     runHost.innerHTML=s2;
     document.getElementById('p5stat').innerHTML='<span class="badge ok">live</span> exact count, k = '+lo+'&hellip;'+kmax+': '
