@@ -1,0 +1,30 @@
+# Brief: round-4 reply paragraphs and HANDOFF record (for a delegated session)
+
+**Context required before starting (in order):** `HANDOFF.md` item 1, `briefs/merle-round3-apply-brief.md` Appendix A (the round-3 letter, for voice continuity), `briefs/prime-local-probe-findings.md` (summary + the closed symmetry section — source of the technical paragraph), `viz/block_family_decomposer.html` and `viz/stratum_word_ticker.html` (skim their explainer text enough to describe each in one accurate line), `publication.md` (the two papers' DOIs).
+
+## Provenance
+
+Eric Merle's fourth reply (2026-07-19, pasted verbatim by the author) is personal in register: he thanks the author plainly for restarting his engagement with the problem ("two coins back in the jukebox"), reports the kernel key turned on L-A1, discloses that his JAR submission (the Lean paper our published paper cites) appears not to have gone through — his read, via a contact: a scope mismatch, "a conditional formalization of a number-theory result may simply not be what an automated-reasoning venue is looking for" — and asks permission (though the CC BY license already grants it) to cite our work and host the paper-1 preprint on his site collatz-lab.org, with attribution and a Zenodo link back, offering to link rather than mirror if preferred.
+
+**Verified by the main session (2026-07-19, GitHub API):** his ledger edits are real — commit `0064e67` links `OneObstruction/TransportRecurrence.lean` (repo `ericmerle3789/one-obstruction-three-faces-lean`, Lean 4/Mathlib v4.27.0, axiom profile kernel-3, 0 `sorry`, no user axioms, no `native_decide`, trivial-cycle canary proved in-kernel) to L-A1 with an honest scope header (the kernel certifies recurrence ⟹ collapse over the unreduced modulus; the recurrence itself rests on the two numerical keys), and fills in his PROTOCOL.md working-conditions line (AI-assisted, Claude, his "A.R.E.S." protocol, disclosed symmetrically to ours); commit `3079c2c` links his verification scripts to L1–L4. L-A1 carries both keys plus the kernel.
+
+## Author decisions, recorded (2026-07-19)
+
+1. **Hosting: yes, plainly.** Mirroring the PDF is fine; linking is fine; his choice once the yes is given. Two notes to include, offered not imposed: point the page at the Zenodo DOI so a mirror cannot drift stale — and note v2 is current since 2026-07-18 (DOI 10.5281/zenodo.21421120), which he may not have seen; and the mirror paper (DOI 10.5281/zenodo.21303918, linked by a Continues relation, same license) is his to host too if he wants the pair.
+2. **JAR: it changes nothing, and say so.** The author already knew; our published citation describes the mathematics ("a Lean 4 formalization proves cycle exclusion conditionally on Baker-type and verification hypotheses"), not a venue — nothing to correct anywhere in our record. Affirm his constructive reading: the scope signal is a real datum for the joint note's venue choice (a number-theory-shaped venue with the formalization as supporting artifact, not an automated-reasoning venue with the mathematics as motivation).
+3. **The personal opening paragraph is the author's own** — do NOT draft it. Draft only the business paragraphs below; the author folds them into his letter.
+4. **The visualization gateway offer (author's proposal, this session):** offer `viz/block_family_decomposer.html` and `viz/stratum_word_ticker.html` (public repo, self-contained single-file HTML, trivially mirrorable) as recommended gateways for collatz-lab.org readers before the paper — the author's framing to carry: machine-written mathematics is necessarily dense, which is good for proof and corrosive for engagement; the visualizers are the intuition layer. Mention that a third gateway aimed at the cycle side — the natural on-ramp to *his* paper's subject — is planned on our side.
+5. **Acknowledge the kernel key** in one flat sentence (verified, honest scope noted and appreciated) — not a celebration.
+
+## Deliverable
+
+**Item 1 — the business paragraphs**, returned verbatim in your final report (NOT committed): the reply's body minus the personal opening. Cover, in this order, in the established letter voice (flat, complete sentences, warm only at the edges): the kernel-key acknowledgment; the JAR paragraph (decision 2's content — plain, no consolation); the hosting yes (decision 1, with both notes); the visualization-gateway offer (decision 4, one line per viz saying accurately what each shows); and one short technical paragraph — the bar of music — reporting since-his-letter results with the pointer to `briefs/prime-local-probe-findings.md`: the repeated-word gcd law (`gcd(q_P, R_0) = |q_P|/q_red(base)`, forced `> 1` for every `k ≥ 2`, the seam identity's first corollary — a natural L-A2 candidate or L-A1 footnote, his call) and the prime-local verdict (`R_0 mod ℓ` structureless at every prime tested, both sectors — which *strengthens* his uniform-distance reading: no local leak under his u-statistic, so whatever excludes positive cycles must couple the archimedean place to the finite ones). End with a closing line that returns his sign-off's warmth briefly without inflating it.
+
+**Item 2 — HANDOFF item 1 update** (on branch `merle-round4-reply`, one commit, do NOT merge): append the round-4 state to the collaboration item — fourth reply received 2026-07-19 (personal register); kernel key on L-A1 verified via API (`0064e67`, `3079c2c`, artifact and scope as above); his PROTOCOL.md side filled in (AI-assisted, disclosed); JAR submission not through (scope mismatch, his read) — no record change needed on our side, feeds the joint note's venue choice; author's decisions: hosting yes (mirror or link, DOI-pinned, both papers offered), viz gateways offered, cycle-side gateway viz planned; reply drafted awaiting the author's send.
+
+## Rules
+
+- Register flat; the letter voice of the round-3 reply.
+- No mathematical claims beyond what the findings file states; quote its numbers exactly.
+- Touch nothing but HANDOFF.md on the branch; the paragraphs live only in your report.
+- No scope expansion; stop after the two items.
