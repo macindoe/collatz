@@ -1,7 +1,7 @@
 ---
 status: hypothesis FORMALIZED and calibrated — bulk uniformity confirmed UNQUALIFIED at all tested depths; the 13.5 anomaly RESOLVED as a protocol artifact (with an exact routing lemma); proof effort remains parked per stopping rules
 scope: new section 13 (post-monolith)
-updated: 2026-07-08
+updated: 2026-07-18
 source: new material; builds on 11.8.4.4 (ledger), 11.8.7.6–7 (window/digit budget), 12.8.4 (staircase)
 ---
 
@@ -38,6 +38,7 @@ Eight experiment rounds, `experiments/aeh_calibration.py`. Statistics use per-or
 * **Bulk uniformity confirmed** (cut `ω > 2^24`, ~1,600 orbits/cell): digit conditionals flat — `P(bits 3–4 | class (1,2)) = 0.2533` vs `0.25` (`0.8σ`); `(7,1)` cell `0.5017` vs `0.5` (`0.4σ`); consecutive-pair cell `(s, s') = (4,3)` at `0.1277` vs independent prediction `0.128` (`-0.1σ`). The `s`-marginals, `d`-law, and class-transition structure all match the exact chain.
 * **Bottom regime quantified**: the same cells at `ω <= 2^24` show deviations up to `z = 41` — finite structure, not measure. Methodological caution recorded: three successive apparent "discoveries" during calibration (an `s = 3` marginal excess, orbit pair correlations, digit biases) each dissolved under better controls (larger starts, per-orbit statistics, bulk/bottom separation). The controls are now standard for this page.
 * **The exact chains work**: the `(class, d)`-chain reproduces the orbit `d`-law to `~1%` and the naive `2^-k` ledger emerges from pure counting — the ledger is a *theorem about* `π_k`, and the empirical question is only whether orbits follow `π_k`.
+* **External replication (measured grade, 2026-07-18):** an independent implementation by Eric Merle (3,000 orbits, cuts 2^20 and 2^30) reproduces the class skeleton's two exact values and the `2^{−j}` ledger, and measures the 8-class transfer-matrix spectrum at `|λ₂| ≤ 0.06` (our re-run: `0.028/0.036` at the two cuts — `experiments/merle_aeh_key_check.py`); his flagged drift artifact (`−0.33/−0.36` vs `−0.415`) is confirmed to be survivorship bias from the cut protocol: under this page's fixed-horizon standing rule the drift is `−0.4166 ± 0.0037` per odd step (`log₂3 − 2 = −0.4150`) and `−0.8367 ± 0.0060` per block (`2(log₂3 − 2) = −0.8301`). Spectral numbers are measurements, not theorems; the generic-face scope of 13.3.3 is unchanged.
 
 ## 13.5. The `(1 mod 8, d = 1)` anomaly: resolved (protocol artifact), with an exact lemma as consolation
 
