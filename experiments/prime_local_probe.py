@@ -958,11 +958,13 @@ def item2_measurement2(instance_records):
             n_p_divides += 1
     print(f"Instance record: p | gcd(q,R_0) at {n_p_divides}/"
           f"{len(instance_records)} periods "
-          f"(the p=7 seed, gcd=7, is the one case where this holds in "
-          f"the recorded 12.8.3 instance -- but that seed is NOT the "
-          f"same profile as this session's regenerated p=7 row, which "
-          f"uses whichever candidate n the committed recipe lands on "
-          f"today; both are printed above and in the findings file).")
+          f"(the p=7 seed's gcd=7 at the recorded 12.8.3 instance "
+          f"n=94 is verified fact -- round-3 findings and this "
+          f"script's own measurement-3 baseline (A) both confirm it; "
+          f"what does not carry over is only that the regeneration "
+          f"recipe, run today, lands on a DIFFERENT candidate n for "
+          f"p=7 whose gcd is 1 -- the recorded value is not in doubt, "
+          f"the recipe's output n just isn't pinned across runs).")
 
     print("-" * 72)
     print("Symmetry hypothesis: does rotational symmetry (word = "
@@ -1051,18 +1053,120 @@ def item2_measurement2(instance_records):
           f"X=2^K_base, Y=3^n_base, X-Y=q_base) -- verified exactly on "
           f"every symmetric row above. But gcd(q_base, R_0_base) = 1 in "
           f"every base tested, and q_base itself does NOT divide the "
-          f"repeated word's R_0 either -- so this factorization does "
-          f"NOT directly explain the elevated gcd(q,R_0)>1 rate; the "
-          f"actual prime(s) found in gcd(q,R_0) are not simply q_base's "
-          f"factors. NO further one-line cause was found for why the "
-          f"elevated rate holds (a caveat: the tested bases all use "
-          f"small entries (m,s <= 3), the same regime where item 1's "
-          f"exhaustive scan showed finite-box effects, so part of this "
-          f"elevation may be a small-entries artifact rather than a "
-          f"symmetry effect per se -- flagged, not resolved, per the "
-          f"stopping rules (no proof development beyond one-line "
-          f"causes)).")
+          f"repeated word's R_0 either -- so this factorization alone "
+          f"does NOT explain the elevated gcd(q,R_0)>1 rate. THE "
+          f"COMPLETE CAUSE (main-session review, reviewer-supplied; "
+          f"verified fresh below in item2_symmetry_cause) closes this: "
+          f"see the next section.")
     return sym_rows
+
+
+def item2_symmetry_cause(sym_rows):
+    """The complete elementary cause of the 30/30 symmetry effect --
+    supplied by main-session review of the first-pass findings,
+    verified here with this script's own fresh implementation.
+
+    Two steps:
+    (1) For P = B^k the composed affine map is F_P = F_B^k, so F_B's
+        unique fixed point is also F_P's unique fixed point
+        (uniqueness: A_P != 1, reverse.md 14.15.9.2's setup):
+        y*(P) = y*(B).
+    (2) P and B share the same first letter m_0. The seam identity
+        (round-3 findings item 2; N_0 + q = 2^{m_0} R_0) gives
+        y* + 1 = 2^{m_0} R_0(B)/q_B = 2^{m_0} R_0(P)/q_P, hence
+        R_0(P)*q_B == R_0(B)*q_P exactly. Writing q_red :=
+        |q_B|/gcd(q_B, R_0(B)) (a base-word invariant, the reduced
+        denominator of (y*+1)/2^{m_0}), it follows that
+        gcd(q_P, R_0(P)) = |q_P|/q_red exactly. Since |q_P| =
+        |X^k - Y^k| > |X - Y| = |q_B| >= q_red for k >= 2
+        (X = 2^{K_B}, Y = 3^{n_B}, same sign at both scales), the gcd
+        is FORCED > 1 at every repeated word with k >= 2 -- 30/30 with
+        no exception possible; the effect is a sign-blind structural
+        law, not a statistical elevation, and the small-entries
+        confound flagged in the first pass is dissolved.
+
+    This also resolves the cofactor puzzle: the gcd is exactly the
+    COFACTOR of the base word's reduced denominator inside q_P, which
+    is why q_base's own primes are precisely the ones NOT appearing.
+    """
+    print("-" * 72)
+    print("item2_symmetry_cause: the complete elementary cause "
+          "(reviewer-supplied, verified fresh here)")
+    print("-" * 72)
+    n_rows = 0
+    # (a) the 30 recorded symmetric rows.
+    for r in sym_rows:
+        base, k = r["base"], r["k"]
+        msB = [m for m, s in base]
+        ssB = [s for m, s in base]
+        KB, nB, qB = profile_Knq(msB, ssB)
+        R0B = R_rot(msB, ssB, 0)
+        q_red = abs(qB) // gcd(abs(qB), R0B)
+        msP, ssP = msB * k, ssB * k
+        KP, nP, qP = profile_Knq(msP, ssP)
+        R0P = R_rot(msP, ssP, 0)
+        tag = f"sym base={base} k={k}"
+        check(R0P * qB == R0B * qP, f"{tag}: proportionality "
+              f"R_0(P)*q_B == R_0(B)*q_P")
+        check(abs(qP) % q_red == 0, f"{tag}: q_red | |q_P|")
+        check(gcd(abs(qP), R0P) == abs(qP) // q_red,
+              f"{tag}: gcd(q_P,R_0(P)) == |q_P|/q_red")
+        check(gcd(abs(qP), R0P) > 1, f"{tag}: gcd forced > 1 (k >= 2)")
+        n_rows += 1
+    print(f"(a) all {n_rows} recorded symmetric rows: proportionality, "
+          f"the exact gcd law gcd = |q_P|/q_red, and forced gcd > 1 -- "
+          f"all pass.")
+    # (b) fresh random bases and k, wider entries than the recorded grid
+    # (dissolves the small-entries caveat directly).
+    rng = random.Random(SEED + 2)
+    n_rand = 0
+    for _ in range(60):
+        p0 = rng.randint(1, 4)
+        msB = [rng.randint(1, 8) for _ in range(p0)]
+        ssB = [rng.randint(1, 8) for _ in range(p0)]
+        k = rng.randint(2, 5)
+        KB, nB, qB = profile_Knq(msB, ssB)
+        R0B = R_rot(msB, ssB, 0)
+        q_red = abs(qB) // gcd(abs(qB), R0B)
+        msP, ssP = msB * k, ssB * k
+        KP, nP, qP = profile_Knq(msP, ssP)
+        R0P = R_rot(msP, ssP, 0)
+        tag = f"rand base m={msB} s={ssB} k={k}"
+        check(R0P * qB == R0B * qP, f"{tag}: proportionality")
+        check(abs(qP) % q_red == 0, f"{tag}: q_red | |q_P|")
+        check(gcd(abs(qP), R0P) == abs(qP) // q_red,
+              f"{tag}: gcd == |q_P|/q_red")
+        check(gcd(abs(qP), R0P) > 1, f"{tag}: gcd forced > 1")
+        n_rand += 1
+    print(f"(b) {n_rand} fresh random (base, k) pairs (p0 in 1..4, "
+          f"entries in 1..8, k in 2..5, seed {SEED+2}): all pass -- "
+          f"including entries beyond the recorded grid's m,s <= 3, so "
+          f"the first-pass small-entries caveat is dissolved: the law "
+          f"is exact, not statistical.")
+    # (c) the reviewer's two named examples, pinned explicitly.
+    for msB, ssB, k, want_qred, want_qP, want_gcd in (
+            ([1], [2], 2, 5, 55, 11),
+            ([2], [2], 2, 7, 175, 25)):
+        KB, nB, qB = profile_Knq(msB, ssB)
+        R0B = R_rot(msB, ssB, 0)
+        q_red = abs(qB) // gcd(abs(qB), R0B)
+        msP, ssP = msB * k, ssB * k
+        KP, nP, qP = profile_Knq(msP, ssP)
+        R0P = R_rot(msP, ssP, 0)
+        g = gcd(abs(qP), R0P)
+        check(q_red == want_qred and qP == want_qP and g == want_gcd,
+              f"named example m={msB},s={ssB},k={k}: "
+              f"(q_red,q_P,gcd)=({want_qred},{want_qP},{want_gcd})")
+        print(f"(c) named example base m={msB},s={ssB}, k={k}: "
+              f"q_red={q_red}, q_P={qP}, gcd={g} "
+              f"(predicted {want_gcd}) -- the gcd is the cofactor "
+              f"|q_P|/q_red, which is why q_base's primes are exactly "
+              f"the ones NOT appearing.")
+    print("CLOSED: the symmetry effect has a complete two-step "
+          "elementary cause (fixed-point invariance under repetition + "
+          "the seam identity), sign-blind in q, hence never "
+          "obstruction-shaped. Credit: cause supplied by main-session "
+          "review; verified here independently.")
 
 
 # =======================================================================
@@ -1220,7 +1324,9 @@ if __name__ == "__main__":
     print(f"[{time.time()-t0:.1f}s elapsed]\n")
     instance_records = item2_measurement1()
     print(f"[{time.time()-t0:.1f}s elapsed]\n")
-    item2_measurement2(instance_records)
+    sym_rows = item2_measurement2(instance_records)
+    print(f"[{time.time()-t0:.1f}s elapsed]\n")
+    item2_symmetry_cause(sym_rows)
     print(f"[{time.time()-t0:.1f}s elapsed]\n")
     item2_measurement3()
     print(f"[{time.time()-t0:.1f}s elapsed]\n")

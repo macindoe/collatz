@@ -13,7 +13,9 @@ regenerate the 12.8.6.4 instance record's profiles, per the brief's
 explicit carve-outs). Exact integer arithmetic at every residue and
 pass/fail; floats only in labeled statistics columns (`chi2`, `z`,
 Fisher-approximation `p`-values). Seed `20260718` throughout, dated
-2026-07-18. Full run: **15,489,463 exact checks, 0 failures, 283.8 s**.
+2026-07-18. Full run: **15,489,825 exact checks, 0 failures, 288.0 s**
+(first-pass run before the review-closure addition: 15,489,463 checks,
+283.6–283.8 s across two runs, also 0 failures).
 
 ## Item 1 verdict, flat: **(ii) local structurelessness**
 
@@ -170,17 +172,24 @@ which cover both signs explicitly.
 
 **The `ℓ = p` hypothesis: REFUTED.** In the instance record, `p |
 gcd(q,R_0)` at exactly 1/23 periods (`p=5`, where `gcd=5=p`
-coincidentally). The originally-flagged `p=7, gcd=7` seed
-(12.8.3's specific `n=94` instance) is **not** reproduced by this
-session's fresh regeneration of `p=7` (which lands on a different
-candidate `n` via the same recipe and gets `gcd=1`) — confirming the
-brief's own suspicion that the `p=7` seed was a one-off, not a law.
+coincidentally). To be unmistakable about the `p=7` seed: **the
+recorded 12.8.3 instance's (`n=94`) `gcd(q,R_r) = 7` is verified
+fact** — established in the round-3 findings and re-confirmed in this
+session's own baseline (A) reduction-witness table. What fails to
+carry over is only the *regeneration*: the committed recipe, run
+today, lands on a **different** candidate `n` for `p=7` (whose gcd is
+1), because the recipe's output `n` is not pinned across runs. No
+doubt is cast on the recorded value; the point is that even the very
+period that seeded the hypothesis does not systematically produce
+`gcd = p`, confirming the brief's own suspicion that the `p=7` seed
+was a one-off, not a law.
 
-**Symmetry, tested explicitly — a real but unexplained effect.**
-30 symmetric words (`word = base^k`, 6 bases × `k=2..6`, `p = p0·k`):
-**30/30 (100%) have `gcd(q,R_0) > 1`**, vs a matched generic baseline
-of 51/400 (12.8%, seeded random, `p∈2..6`, entries `1..10`) — a
-striking, clearly-elevated rate. But:
+**Symmetry, tested explicitly — CLOSED with complete elementary cause
+(main-session review).** 30 symmetric words (`word = base^k`, 6 bases ×
+`k=2..6`, `p = p0·k`): **30/30 (100%) have `gcd(q,R_0) > 1`**, vs a
+matched generic baseline of 51/400 (12.8%, seeded random, `p∈2..6`,
+entries `1..10`). First-pass observations (kept as the record of how
+this looked before closure, per house norms):
 
 - **`p | gcd`: 1/30.** **`p0 | gcd`: 15/30 — entirely a tautological
   artifact**: exactly the 15 rows with `p0=1` (three of the six bases
@@ -196,16 +205,51 @@ striking, clearly-elevated rate. But:
   `q` at `k=1`) **always divides `q`** (difference-of-`k`-th-powers,
   verified exactly on all 30 rows). But `gcd(q_base, R_{0,base}) = 1`
   in every base tested, and `q_base` does **not** divide the repeated
-  word's `R_0` either — so this factorization does **not** directly
-  explain the elevated `gcd(q,R_0)>1` rate; the prime(s) actually found
-  are not `q_base`'s factors. **No further one-line cause was found.**
-  Flagged, not developed (stopping-rule compliant), with an explicit
-  caveat: the tested bases use small entries (`m,s ≤ 3`), the same
-  regime where item 1 found finite-box artifacts, so part of the
-  elevation may be a small-entries confound rather than a pure
-  symmetry effect — this was not disentangled and is left open.
+  word's `R_0` either — so this factorization alone does not explain
+  the elevated `gcd(q,R_0)>1` rate. (First pass ended here, verdict
+  "unexplained, with a small-entries caveat".)
 - The brief's own counterexample re-confirmed directly: `m=(1,1),
   s=(2,2)`, `p=2`: `q=55`, `gcd=11`, `p=2 ∤ 11`.
+
+**The complete cause (closure by main-session review — reviewer-supplied
+cause, delegate-verified with fresh code, `item2_symmetry_cause()`).**
+Two steps:
+
+1. For `P = B^k` the composed affine map is `F_P = F_B^k`, so `F_B`'s
+   unique fixed point is also `F_P`'s unique fixed point (uniqueness:
+   `A_P ≠ 1`, the setup clause of reverse.md `14.15.9.2`): `y*(P) =
+   y*(B)` — the arithmetic shadow of the obvious dynamical fact that
+   traversing a cycle `k` times adds no new cycles.
+2. `P` and `B` share the same first letter `m_0`, so the seam identity
+   (`N_0 + q = 2^{m_0} R_0`, round-3 findings item 2) applied at both
+   scales gives `y* + 1 = 2^{m_0} R_0(B)/q_B = 2^{m_0} R_0(P)/q_P`,
+   hence the exact proportionality `R_0(P)·q_B = R_0(B)·q_P`. With
+   `q_red := |q_B|/gcd(q_B, R_0(B))` (a base-word invariant, the
+   reduced denominator of `(y*+1)/2^{m_0}`), it follows that
+   **`gcd(q_P, R_0(P)) = |q_P|/q_red` exactly**. Since `|q_P| = |X^k −
+   Y^k| > |X − Y| = |q_B| ≥ q_red` for `k ≥ 2` (same sign at both
+   scales), the gcd is **forced `> 1` at every repeated word with `k ≥
+   2`** — the 30/30 with no exception possible. The law is exact, not
+   statistical: the small-entries confound flagged in the first pass is
+   dissolved. It is also **sign-blind in `q`** — the cause never
+   discriminates sectors, so the effect was never obstruction-shaped.
+
+This resolves the cofactor puzzle exactly: the gcd is the **cofactor**
+of the base word's reduced denominator inside `q_P`, which is why
+`q_base`'s own primes are precisely the ones that do *not* appear.
+Verified fresh in `item2_symmetry_cause()` (this script's own
+implementation, not the reviewer's): (i) the proportionality, (ii) the
+exact gcd law, (iii) forced `>1`, on all 30 recorded symmetric rows
+**and** 60 fresh random `(base, k)` pairs (`p0∈1..4`, entries `1..8` —
+beyond the recorded grid's `m,s ≤ 3` — `k∈2..5`, seed `20260720`), plus
+the reviewer's two named examples pinned explicitly: base `(m=1,s=2)`,
+`k=2`: `q_red=5`, `q_P=55`, gcd `= 11` ✓; base `(m=2,s=2)`, `k=2`:
+`q_red=7`, `q_P=175`, gcd `= 25` ✓ (not 7 — matching the first-pass
+observation that `q_base` does not divide `R_0(P)`). 362 exact checks,
+0 failures. Note the `q_red = 1` face: integer-fixed-point bases (e.g.
+`(m=2,s=1)`, `y*=−5`) give `gcd = |q_P|` — full divisibility at every
+repeat — which is exactly the recorded `((2,1),)` column and the known
+integer-cycle branch, folded in rather than exceptional.
 
 **Baseline scans, both sectors.**
 
@@ -242,20 +286,25 @@ tracking `1/ℓ` — with `ℓ=5` and `ℓ=7` consistently elevated above their
 naive baseline across every scan in this session (instance record,
 symmetric words, and both baselines), an effect traced to the same
 finite composition-counting mechanism as item 1's ghost-hunt, not a new
-`ℓ`-specific law. Nothing beats the naive-baseline picture by a
-*clean, reproducible, elementary-caused* margin except the symmetry
-effect (100% vs 12.8%), which is real, large, and **unexplained** —
-recorded as an open pattern per the stopping rules, not developed
-further. Neither period `p`, base period `p0`, nor repeat count `k`
-predicts which prime(s) show up. Sector does not predict the
-nontrivial-gcd rate at the sample sizes run here.
+`ℓ`-specific law. The one clean departure from the baseline picture is
+the symmetry effect (100% vs 12.8%), now **closed with its complete
+elementary cause** (above): for repeated words the gcd is not a random
+event at all but the exact deterministic quantity `|q_P|/q_red`, forced
+`> 1` for `k ≥ 2` — an identity about repetition, sign-blind, not an
+obstruction candidate. Neither period `p`, base period `p0`, nor repeat
+count `k` predicts which prime(s) show up (the primes are `q_P/q_B`'s
+cofactor primes, which have no simple relation to `p`). Sector does not
+predict the nontrivial-gcd rate at the sample sizes run here.
 
 ## No candidate law emerged
 
-Both probes came back structureless or only partially/unexplainedly
-patterned — no wiki-page proposal line is warranted. Nothing here
-reopens the cycle front; the parking rationale (README, cycles.md
-12.8.5) is unaffected.
+Both probes came back structureless or elementary-caused: every
+pattern found in either item now has its identified elementary cause
+(the pushforward mechanism for item 1's deviations; the repeated-word
+gcd identity for item 2's symmetry effect — the latter a structural
+fact about repetition, sign-blind, closed at review). No wiki-page
+proposal line is warranted. Nothing here reopens the cycle front; the
+parking rationale (README, cycles.md 12.8.5) is unaffected.
 
 ## What surprised us / left open
 
@@ -267,17 +316,20 @@ reopens the cycle front; the parking rationale (README, cycles.md
   convergence, weighted-prediction) to nail down rather than wave at.
   This is exactly the "ghost-identity lesson" the brief pointed at, now
   with a second, quantitatively verified instance.
-- The symmetry effect (item 2) is the one place this session found a
-  large, clean, reproducible statistical regularity (100% vs 12.8%)
-  that it could **not** fully explain — the difference-of-powers
-  factorization is real and exact but demonstrably insufficient (it
-  doesn't even divide `R_0`), so whatever forces `gcd(q,R_0)>1` at
-  essentially every symmetric word remains open. This is flagged as
-  the session's one genuine loose end, left exactly where the stopping
-  rules require (a finding, not a proof attempt) — a natural
-  next-session target if the author wants it picked up (with larger
-  entries, to separate the symmetry effect from the small-entries
-  confound).
+- The symmetry effect (item 2) was, at first pass, the one large,
+  clean, reproducible regularity (100% vs 12.8%) this session could
+  **not** fully explain, and was flagged as the session's one genuine
+  loose end. **It is now closed by main-session review**: the reviewer
+  supplied the complete two-step elementary cause (fixed-point
+  invariance under repetition + the seam identity, giving `gcd =
+  |q_P|/q_red` exactly, forced `>1` for `k ≥ 2`), and this session
+  verified it independently with fresh code (`item2_symmetry_cause()`:
+  30 recorded rows + 60 random pairs + 2 named examples, 362 exact
+  checks, 0 failures). The small-entries-confound caveat is dissolved
+  — the law is exact, not statistical — and the cause is sign-blind,
+  so the effect was never obstruction-shaped. The first-pass
+  observation and partial cause are kept above as the record of how it
+  looked before closure. No loose end remains open from this session.
 - The `p0 | gcd` tautology (my own first-pass statistic, inflated by
   the `p0=1` cases) is a small in-session instance of exactly the
   pattern this brief warns about — caught and corrected before being
@@ -285,8 +337,9 @@ reopens the cycle front; the parking rationale (README, cycles.md
 
 ## Runtime and scope
 
-Total script runtime 283.8 s (well under the ~10-minute per-scan
-sanity rule; no scan individually approached it except the exhaustive
-box at `entries=13`, which was explicitly cut). `experiments/
-prime_local_probe.py` runs clean end-to-end from a fresh checkout
-(`python experiments/prime_local_probe.py`).
+Total script runtime 288.0 s including the review-closure section
+(283.6–283.8 s for the first-pass runs; well under the ~10-minute
+per-scan sanity rule — no scan individually approached it except the
+exhaustive box at `entries=13`, which was explicitly cut).
+`experiments/prime_local_probe.py` runs clean end-to-end from a fresh
+checkout (`python experiments/prime_local_probe.py`).
