@@ -1,0 +1,2849 @@
+{
+ "header": {
+  "what": "Test vectors for the transport recurrence 2^{sigma_r} R_{r+1} = 3^{m_r} R_r + (2^{s_r}-1) q (cycles.md Remark 12.6.1.1), the seam identity N_r + q = 2^{m_r} R_r, and the divisibility/gcd corollaries (= reverse.md Lemma 14.15.9.2 in integer form). For cross-stack consumers, in the first instance the Lean artifact of the integer-form recurrence (E. Merle).",
+  "warranty": "Every row (every R_r, N_r, and (n, K, q)) was computed by two independent implementations -- experiments/make_transport_vectors.py (this file's generator, fresh prefix-sum code) and experiments/merle_round3_check.py (the round-3 verification script) -- which agree exactly on every emitted row. All boolean blocks are true.",
+  "conventions": "n = sum(m_t); K = sum(s_t) + n; q = 2^K - 3^n signed and UNREDUCED; sigma_t = s_t + m_{(t+1) mod p}; R_r per 12.6.1 in rotation order starting at r; N_r per 14.15.9.1 on the rotated word with letters (m_i, r_i) = (m_i, s_i); reduced denominator = |q|/gcd(q, R_r); all big integers are decimal strings.",
+  "generator": "experiments/make_transport_vectors.py",
+  "cross_validated_against": "experiments/merle_round3_check.py",
+  "seed": 20260718,
+  "date": "2026-07-18",
+  "reference": "cycles.md Remark 12.6.1.1; reverse.md Lemma 14.15.9.2; briefs/merle-round3-check-findings.md",
+  "counts": {
+   "profiles": 60,
+   "full_vector_profiles": 58,
+   "summary_only_profiles": 2,
+   "profiles_with_nontrivial_reduction": 6,
+   "rows_cross_validated": 762
+  }
+ },
+ "profiles": [
+  {
+   "id": "p7-staircase-n94",
+   "kind": "named-recorded",
+   "p": 7,
+   "m": [
+    4,
+    7,
+    9,
+    15,
+    23,
+    35,
+    1
+   ],
+   "s": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    49
+   ],
+   "n": 94,
+   "K": 149,
+   "note": "recorded p = 7 staircase seed (12.8.3, n = 94): a live reduction witness, gcd(q, R_r) = 7 shared across all seven rotations",
+   "q": "6658797337875234031939788887132653648015943",
+   "R": [
+    "54404502558440083412806074191085941060689897",
+    "17239935564732507775270436712363647967046475",
+    "36826560427156122791551157108228936286697907",
+    "11060544550858334963075765459444538659434859",
+    "9459658371711990620807208089302232504772491",
+    "12959387236872402259798763731286756945108375",
+    "162094541749245699731982074136922702075664187841993214065517"
+   ],
+   "N": [
+    "863813243597166100572957398170242403323022409",
+    "2200052954947885761202676110295414286133932857",
+    "18848540141366059635242252650526082725141312441",
+    "362425265045188044836034742786191510138713443769",
+    "79353359235412840342394280295796534874740908166585",
+    "445281154861875386908462252104920635729998048757616057",
+    "324189083498491392805166810398611372211539488551332780115091"
+   ],
+   "gcd_q_R": "7",
+   "reduced_denominator": "951256762553604861705684126733236235430849",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "constant-pair",
+   "kind": "named-reduction-witness",
+   "p": 2,
+   "m": [
+    1,
+    1
+   ],
+   "s": [
+    2,
+    2
+   ],
+   "n": 2,
+   "K": 6,
+   "note": "the multi-letter probe's constant pair ((1,2),(1,2)): unreduced q = 55, gcd = 11, reduced denominator 5 (14.15.9's q = 5; the unreduced and reduced moduli differ exactly here)",
+   "q": "55",
+   "R": [
+    "33",
+    "33"
+   ],
+   "N": [
+    "11",
+    "11"
+   ],
+   "gcd_q_R": "11",
+   "reduced_denominator": "5",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "minus17-word",
+   "kind": "named-integer-cycle",
+   "p": 2,
+   "m": [
+    4,
+    3
+   ],
+   "s": [
+    1,
+    3
+   ],
+   "n": 7,
+   "K": 11,
+   "note": "the classical negative cycle -17, word ((4,1),(3,3)): q = 2^11 - 3^7 = -139, gcd = 139, reduced denominator 1 -- the integer-cycle (full-divisibility) branch, q < 0",
+   "q": "-139",
+   "R": [
+    "139",
+    "695"
+   ],
+   "N": [
+    "2363",
+    "5699"
+   ],
+   "gcd_q_R": "139",
+   "reduced_denominator": "1",
+   "q_divides_all_R": true,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "trivial-p1",
+   "kind": "named-trivial-cycle",
+   "p": 1,
+   "m": [
+    1
+   ],
+   "s": [
+    1
+   ],
+   "n": 1,
+   "K": 2,
+   "note": "trivial cycle as a fake period-1 profile: R_r = q = 4^1 - 3^1 at every rotation (12.6.1 sanity identity)",
+   "q": "1",
+   "R": [
+    "1"
+   ],
+   "N": [
+    "1"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "1",
+   "q_divides_all_R": true,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "trivial-p2",
+   "kind": "named-trivial-cycle",
+   "p": 2,
+   "m": [
+    1,
+    1
+   ],
+   "s": [
+    1,
+    1
+   ],
+   "n": 2,
+   "K": 4,
+   "note": "trivial cycle as a fake period-2 profile: R_r = q = 4^2 - 3^2 at every rotation (12.6.1 sanity identity)",
+   "q": "7",
+   "R": [
+    "7",
+    "7"
+   ],
+   "N": [
+    "7",
+    "7"
+   ],
+   "gcd_q_R": "7",
+   "reduced_denominator": "1",
+   "q_divides_all_R": true,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "trivial-p3",
+   "kind": "named-trivial-cycle",
+   "p": 3,
+   "m": [
+    1,
+    1,
+    1
+   ],
+   "s": [
+    1,
+    1,
+    1
+   ],
+   "n": 3,
+   "K": 6,
+   "note": "trivial cycle as a fake period-3 profile: R_r = q = 4^3 - 3^3 at every rotation (12.6.1 sanity identity)",
+   "q": "37",
+   "R": [
+    "37",
+    "37",
+    "37"
+   ],
+   "N": [
+    "37",
+    "37",
+    "37"
+   ],
+   "gcd_q_R": "37",
+   "reduced_denominator": "1",
+   "q_divides_all_R": true,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "trivial-p4",
+   "kind": "named-trivial-cycle",
+   "p": 4,
+   "m": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "s": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "n": 4,
+   "K": 8,
+   "note": "trivial cycle as a fake period-4 profile: R_r = q = 4^4 - 3^4 at every rotation (12.6.1 sanity identity)",
+   "q": "175",
+   "R": [
+    "175",
+    "175",
+    "175",
+    "175"
+   ],
+   "N": [
+    "175",
+    "175",
+    "175",
+    "175"
+   ],
+   "gcd_q_R": "175",
+   "reduced_denominator": "1",
+   "q_divides_all_R": true,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "trivial-p5",
+   "kind": "named-trivial-cycle",
+   "p": 5,
+   "m": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "s": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "n": 5,
+   "K": 10,
+   "note": "trivial cycle as a fake period-5 profile: R_r = q = 4^5 - 3^5 at every rotation (12.6.1 sanity identity)",
+   "q": "781",
+   "R": [
+    "781",
+    "781",
+    "781",
+    "781",
+    "781"
+   ],
+   "N": [
+    "781",
+    "781",
+    "781",
+    "781",
+    "781"
+   ],
+   "gcd_q_R": "781",
+   "reduced_denominator": "1",
+   "q_divides_all_R": true,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-00",
+   "kind": "pseudo-random",
+   "p": 6,
+   "m": [
+    1,
+    7,
+    5,
+    6,
+    2,
+    6
+   ],
+   "s": [
+    1,
+    3,
+    8,
+    3,
+    9,
+    1
+   ],
+   "n": 27,
+   "K": 52,
+   "q": "4495974029885509",
+   "R": [
+    "14059425110457577",
+    "182321286567415",
+    "1680501843484903",
+    "94899617040261",
+    "3145426219735901",
+    "70976305091831"
+   ],
+   "N": [
+    "23622876191029645",
+    "18841150650743611",
+    "49280084961631387",
+    "1577601460691195",
+    "8085730849058095",
+    "46509495991675"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "4495974029885509",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-01",
+   "kind": "pseudo-random",
+   "p": 10,
+   "m": [
+    8,
+    2,
+    7,
+    2,
+    8,
+    7,
+    8,
+    4,
+    4,
+    3
+   ],
+   "s": [
+    3,
+    1,
+    4,
+    9,
+    8,
+    4,
+    7,
+    6,
+    4,
+    9
+   ],
+   "n": 53,
+   "K": 108,
+   "q": "324518534275181059103136123779533",
+   "R": [
+    "1275906990971869210173928157861",
+    "332589234615396915677284234693211",
+    "12960240803959973828901149359447",
+    "518934760193565291411778992278181",
+    "1300807066775204535098331986861",
+    "2785852704018654999575191275927",
+    "2675888153763797453764156537389",
+    "28696462905172006640744589239165",
+    "22235430815093104747458874537581",
+    "52100374298048885711650083548727"
+   ],
+   "N": [
+    "2113655413617458701389484632883",
+    "1005838404186406603606000814993311",
+    "1334392288631695590996210994229683",
+    "1751220506499080106543979845333191",
+    "8488074819271301882036864856883",
+    "32070611839206780842488359539123",
+    "360508833088351089060487949792051",
+    "134624872207571047148777304047107",
+    "31248358766308616856205868821763",
+    "92284460109210026590064544610283"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "324518534275181059103136123779533",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-02",
+   "kind": "pseudo-random",
+   "p": 6,
+   "m": [
+    7,
+    9,
+    9,
+    2,
+    2,
+    4
+   ],
+   "s": [
+    3,
+    5,
+    9,
+    2,
+    2,
+    4
+   ],
+   "n": 33,
+   "K": 58,
+   "q": "282671315585156221",
+   "R": [
+    "3205188671983455",
+    "2194445028008767",
+    "3171146989101343",
+    "101007191626219025",
+    "109817416961964993",
+    "28693292178330525"
+   ],
+   "N": [
+    "127592834428726019",
+    "840884538755332483",
+    "1340955942834731395",
+    "121357450919719879",
+    "156598352262703751",
+    "176421359268132179"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "282671315585156221",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-03",
+   "kind": "pseudo-random",
+   "p": 9,
+   "m": [
+    2,
+    7,
+    4,
+    9,
+    4,
+    8,
+    3,
+    7,
+    5
+   ],
+   "s": [
+    1,
+    5,
+    1,
+    7,
+    6,
+    9,
+    1,
+    4,
+    5
+   ],
+   "n": 49,
+   "K": 88,
+   "q": "309245710492114451195190973",
+   "R": [
+    "136894522892173016147562731",
+    "6020689127037779673918967",
+    "44441140910326508074046291",
+    "3817361449441954692571231",
+    "55864907539972914802572653",
+    "1465303788558411653094813",
+    "40927347709522027201342201",
+    "5524547260348473381372775",
+    "32657950226101226665996335"
+   ],
+   "N": [
+    "238332381076577613395059951",
+    "461402497768721347066436803",
+    "401812544073109677989549683",
+    "1645243351622166351401279299",
+    "584592810147452185645971475",
+    "65872059378838931997081155",
+    "18173071184061766415546635",
+    "397896338832490141620524227",
+    "735808696743124802116691747"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "309245710492114451195190973",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-04",
+   "kind": "pseudo-random",
+   "p": 5,
+   "m": [
+    2,
+    8,
+    3,
+    1,
+    4
+   ],
+   "s": [
+    4,
+    9,
+    6,
+    1,
+    6
+   ],
+   "n": 18,
+   "K": 44,
+   "q": "17591798623927",
+   "R": [
+    "4774493850831",
+    "74913921879",
+    "2314677572821",
+    "9146715685731",
+    "1407248302535"
+   ],
+   "N": [
+    "1506176779397",
+    "1586165377097",
+    "925621958641",
+    "701632747535",
+    "4924174216633"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "17591798623927",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-05",
+   "kind": "pseudo-random",
+   "p": 6,
+   "m": [
+    4,
+    1,
+    3,
+    2,
+    9,
+    4
+   ],
+   "s": [
+    4,
+    5,
+    1,
+    2,
+    7,
+    8
+   ],
+   "n": 23,
+   "K": 50,
+   "q": "1125805763663797",
+   "R": [
+    "72307321988277",
+    "710749360500231",
+    "144657135762025",
+    "628943553654809",
+    "4413041637639",
+    "112226186786597"
+   ],
+   "N": [
+    "31111388148635",
+    "295692957336665",
+    "31451322432403",
+    "1389968450955439",
+    "1133671554807371",
+    "669813224921755"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "1125805763663797",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-06",
+   "kind": "pseudo-random",
+   "p": 8,
+   "m": [
+    8,
+    6,
+    2,
+    8,
+    5,
+    5,
+    1,
+    8
+   ],
+   "s": [
+    9,
+    9,
+    7,
+    1,
+    5,
+    7,
+    9,
+    3
+   ],
+   "n": 43,
+   "K": 93,
+   "q": "9903519986026074804655916165",
+   "R": [
+    "157991491050959416946138725",
+    "186074245777730375969323405",
+    "2537278729507465658818754845",
+    "39080277917202108493672795",
+    "4161081615637329822369423815",
+    "1287257765787772915800882215",
+    "6134963575436485620042639575",
+    "38750485256848401504816445"
+   ],
+   "N": [
+    "30542301723019535933555597435",
+    "2005231743748669257380781755",
+    "245594932003787830619103215",
+    "101031160777664969724319355",
+    "123251091714368479511165645915",
+    "31288728519182658500972314715",
+    "2366407164846896435429362985",
+    "16604239727115980577093755"
+   ],
+   "gcd_q_R": "5",
+   "reduced_denominator": "1980703997205214960931183233",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-07",
+   "kind": "pseudo-random",
+   "p": 9,
+   "m": [
+    7,
+    8,
+    3,
+    3,
+    8,
+    3,
+    8,
+    1,
+    1
+   ],
+   "s": [
+    3,
+    7,
+    5,
+    7,
+    6,
+    2,
+    4,
+    9,
+    6
+   ],
+   "n": 42,
+   "K": 91,
+   "q": "2475879969151771418285889239",
+   "R": [
+    "19498385060587183651573053",
+    "29284242144319614538081783",
+    "494697918741363243268225109",
+    "351988761131725474746502517",
+    "9885878071070299009413559",
+    "431331414220417638970260513",
+    "18626550870514248542045607",
+    "4979593743710017373707798941",
+    "1250110786589536373891809373"
+   ],
+   "N": [
+    "19913318603388089115461545",
+    "5020886019794049903463047209",
+    "1481703380779134527859911633",
+    "340030119902032379686130897",
+    "54904817042225128123981865",
+    "974771344611569693476194865",
+    "2292517053699876208477786153",
+    "7483307518268263329129708643",
+    "24341604027301329497729507"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "2475879969151771418285889239",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-08",
+   "kind": "pseudo-random",
+   "p": 1,
+   "m": [
+    4
+   ],
+   "s": [
+    4
+   ],
+   "n": 4,
+   "K": 8,
+   "q": "175",
+   "R": [
+    "15"
+   ],
+   "N": [
+    "65"
+   ],
+   "gcd_q_R": "5",
+   "reduced_denominator": "35",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-09",
+   "kind": "pseudo-random",
+   "p": 10,
+   "m": [
+    2,
+    4,
+    6,
+    4,
+    2,
+    2,
+    3,
+    4,
+    1,
+    9
+   ],
+   "s": [
+    3,
+    2,
+    4,
+    7,
+    1,
+    2,
+    7,
+    2,
+    4,
+    9
+   ],
+   "n": 37,
+   "K": 78,
+   "q": "302231004619751402679181",
+   "R": [
+    "81826185936015258674621",
+    "22281661763768727709577",
+    "10591826627830160752005",
+    "47870729222595539954685",
+    "82540755183083333743331",
+    "130637225158437675796145",
+    "65075876258912290318839",
+    "19599797971532744130305",
+    "311784581194175810324031",
+    "667580421493993953999"
+   ],
+   "N": [
+    "25073739124309632019303",
+    "54275583600548240674051",
+    "375645899561378885449139",
+    "463700662941777236595779",
+    "27932016112581932294143",
+    "220317896013999300505399",
+    "218376005451546919871531",
+    "11365762924772503405699",
+    "321338157768600217968881",
+    "39570171185173501768307"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "302231004619751402679181",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-10",
+   "kind": "pseudo-random",
+   "p": 10,
+   "m": [
+    9,
+    8,
+    8,
+    6,
+    7,
+    7,
+    5,
+    4,
+    7,
+    9
+   ],
+   "s": [
+    4,
+    2,
+    9,
+    3,
+    8,
+    8,
+    8,
+    3,
+    2,
+    5
+   ],
+   "n": 70,
+   "K": 122,
+   "q": "5314408827634670250013912669135292455",
+   "R": [
+    "100710519563632681001236692868382749",
+    "503418283443726102025769168888038827",
+    "3241084554841006802872180913165848263",
+    "731824300391637027935836436316200711",
+    "557324977323189536245431787850056021",
+    "78553588148579602951730561848680789",
+    "186397820840794007007932430345772029",
+    "341911357790809047230584792774297407",
+    "63374689232908422437280036033852673",
+    "75460777263317739560729090240938317"
+   ],
+   "N": [
+    "46249377188945262422619274079476675033",
+    "123560671733959211868582994566202647257",
+    "824403237211663071285264401101321862873",
+    "41522346397430099537879619255101553049",
+    "66023188269733590389401356175671878233",
+    "4740450455383518927807599247495848537",
+    "650321439270737974239925101929412473",
+    "156172897018274505675444015253466057",
+    "2797551394177607821957931943197849689",
+    "33321509131184012405079381534225125849"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "5314408827634670250013912669135292455",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-11",
+   "kind": "pseudo-random",
+   "p": 2,
+   "m": [
+    3,
+    6
+   ],
+   "s": [
+    5,
+    4
+   ],
+   "n": 9,
+   "K": 18,
+   "q": "242461",
+   "R": [
+    "53319",
+    "4373"
+   ],
+   "N": [
+    "184091",
+    "37411"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "242461",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-12",
+   "kind": "pseudo-random",
+   "p": 1,
+   "m": [
+    5
+   ],
+   "s": [
+    9
+   ],
+   "n": 5,
+   "K": 14,
+   "q": "16141",
+   "R": [
+    "511"
+   ],
+   "N": [
+    "211"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "16141",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-13",
+   "kind": "pseudo-random",
+   "p": 3,
+   "m": [
+    8,
+    4,
+    6
+   ],
+   "s": [
+    9,
+    6,
+    8
+   ],
+   "n": 18,
+   "K": 41,
+   "q": "2198635835063",
+   "R": [
+    "8962788183",
+    "144324678343",
+    "36670985487"
+   ],
+   "N": [
+    "95837939785",
+    "110559018425",
+    "148307236105"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "2198635835063",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-14",
+   "kind": "pseudo-random",
+   "p": 5,
+   "m": [
+    5,
+    7,
+    7,
+    8,
+    3
+   ],
+   "s": [
+    8,
+    4,
+    8,
+    6,
+    9
+   ],
+   "n": 30,
+   "K": 65,
+   "q": "36893282256287008583",
+   "R": [
+    "1161588739575117917",
+    "295716950655210597",
+    "586002053187134133",
+    "163106894922995751",
+    "6629728749484095045"
+   ],
+   "N": [
+    "277557410116764761",
+    "958487427579947833",
+    "38114980551666160441",
+    "4862082843999903673",
+    "16144547739585751777"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "36893282256287008583",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-15",
+   "kind": "pseudo-random",
+   "p": 3,
+   "m": [
+    6,
+    7,
+    2
+   ],
+   "s": [
+    1,
+    5,
+    1
+   ],
+   "n": 15,
+   "K": 22,
+   "q": "-10154603",
+   "R": [
+    "123875",
+    "313087",
+    "2890067"
+   ],
+   "N": [
+    "18082603",
+    "50229739",
+    "21714871"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "10154603",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-16",
+   "kind": "pseudo-random",
+   "p": 2,
+   "m": [
+    6,
+    9
+   ],
+   "s": [
+    5,
+    9
+   ],
+   "n": 15,
+   "K": 29,
+   "q": "522522005",
+   "R": [
+    "8982397",
+    "1388327"
+   ],
+   "N": [
+    "52351403",
+    "188301419"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "522522005",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-17",
+   "kind": "pseudo-random",
+   "p": 3,
+   "m": [
+    3,
+    1,
+    2
+   ],
+   "s": [
+    8,
+    9,
+    5
+   ],
+   "n": 6,
+   "K": 28,
+   "q": "268434727",
+   "R": [
+    "34867429",
+    "135531789",
+    "67176143"
+   ],
+   "N": [
+    "10504705",
+    "2628851",
+    "269845"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "268434727",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-18",
+   "kind": "pseudo-random",
+   "p": 5,
+   "m": [
+    1,
+    1,
+    4,
+    7,
+    6
+   ],
+   "s": [
+    4,
+    6,
+    7,
+    3,
+    2
+   ],
+   "n": 19,
+   "K": 41,
+   "q": "2197860994085",
+   "R": [
+    "10465276420839",
+    "2011367005431",
+    "141112640277",
+    "17734281623",
+    "105800587633"
+   ],
+   "N": [
+    "18732691847593",
+    "1824873016777",
+    "59941250347",
+    "72127053659",
+    "4573376614427"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "2197860994085",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-19",
+   "kind": "pseudo-random",
+   "p": 8,
+   "m": [
+    9,
+    9,
+    4,
+    5,
+    7,
+    6,
+    9,
+    9
+   ],
+   "s": [
+    3,
+    8,
+    5,
+    5,
+    6,
+    1,
+    2,
+    4
+   ],
+   "n": 58,
+   "K": 92,
+   "q": "241631459895276264674893207",
+   "R": [
+    "1811631628915930891779201237",
+    "8706063665080941083189146045",
+    "41851334751479848336890639495",
+    "3317820986451778593254944813",
+    "198662371817513613858855781",
+    "109789401645093915572225553",
+    "78396587167156973356276681",
+    "753810995893963152033993453"
+   ],
+   "N": [
+    "927313762545061340326276140137",
+    "4457262965061546558328167881833",
+    "669379724563782297125575338713",
+    "105928640106561638719483340809",
+    "25187152132746466309258646761",
+    "6784890245390734331947542185",
+    "39897421169689094093738767465",
+    "385709598437813857576729754729"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "241631459895276264674893207",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-20",
+   "kind": "pseudo-random",
+   "p": 7,
+   "m": [
+    3,
+    7,
+    2,
+    1,
+    7,
+    9,
+    1
+   ],
+   "s": [
+    1,
+    5,
+    8,
+    3,
+    3,
+    5,
+    5
+   ],
+   "n": 30,
+   "K": 60,
+   "q": "1152715613474752327",
+   "R": [
+    "171695867524910779",
+    "22611343893153685",
+    "665509321187847119",
+    "585804815091313413",
+    "9596116933200397",
+    "7093680914851693",
+    "2739986022886612429"
+   ],
+   "N": [
+    "220851326724533905",
+    "1741536404848919353",
+    "1509321671276636149",
+    "18894016707874499",
+    "75587353974898489",
+    "2479249014929314489",
+    "4327256432298472531"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "1152715613474752327",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-21",
+   "kind": "pseudo-random",
+   "p": 4,
+   "m": [
+    8,
+    9,
+    8,
+    3
+   ],
+   "s": [
+    1,
+    6,
+    7,
+    8
+   ],
+   "n": 28,
+   "K": 50,
+   "q": "1103023114387663",
+   "R": [
+    "4453310607249",
+    "29610541023973",
+    "39814131785967",
+    "391898881030237"
+   ],
+   "N": [
+    "37024401068081",
+    "14057573889886513",
+    "9089394622819889",
+    "2032167933854233"
+   ],
+   "gcd_q_R": "7",
+   "reduced_denominator": "157574730626809",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-22",
+   "kind": "pseudo-random",
+   "p": 5,
+   "m": [
+    9,
+    9,
+    9,
+    7,
+    2
+   ],
+   "s": [
+    9,
+    8,
+    9,
+    9,
+    5
+   ],
+   "n": 36,
+   "K": 76,
+   "q": "75557713631279026420015",
+   "R": [
+    "153693679078834697797",
+    "158825471309250968389",
+    "170847921201752766021",
+    "640453968789637484653",
+    "19536457273108652187287"
+   ],
+   "N": [
+    "3133450057084338852049",
+    "5760927679057469395153",
+    "11916422024018389782737",
+    "6420394373794571615569",
+    "2588115461155582329133"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "75557713631279026420015",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-23",
+   "kind": "pseudo-random",
+   "p": 2,
+   "m": [
+    2,
+    4
+   ],
+   "s": [
+    5,
+    2
+   ],
+   "n": 6,
+   "K": 13,
+   "q": "7463",
+   "R": [
+    "4047",
+    "523"
+   ],
+   "N": [
+    "8725",
+    "905"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "7463",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-24",
+   "kind": "pseudo-random",
+   "p": 7,
+   "m": [
+    3,
+    2,
+    3,
+    4,
+    8,
+    3,
+    8
+   ],
+   "s": [
+    2,
+    4,
+    9,
+    3,
+    2,
+    1,
+    9
+   ],
+   "n": 31,
+   "K": 61,
+   "q": "2305225335817410005",
+   "R": [
+    "548840228296134659",
+    "1358397635715491613",
+    "365655927802348239",
+    "145000348712568349",
+    "13614065232636673",
+    "3007423687461920049",
+    "163097001752518069"
+   ],
+   "N": [
+    "2085496490551667267",
+    "3128365207044556447",
+    "620022086601375907",
+    "14780243583683579",
+    "1179975363737578283",
+    "21754164163877950387",
+    "39447607112827215659"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "2305225335817410005",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-25",
+   "kind": "pseudo-random",
+   "p": 7,
+   "m": [
+    9,
+    2,
+    1,
+    4,
+    1,
+    5,
+    8
+   ],
+   "s": [
+    5,
+    8,
+    5,
+    1,
+    5,
+    5,
+    5
+   ],
+   "n": 30,
+   "K": 64,
+   "q": "18446538182577456967",
+   "R": [
+    "70476161988728365",
+    "15304882656906574799",
+    "9456271836854317773",
+    "1172288084317312733",
+    "28350468253069947085",
+    "641498133221788093",
+    "88833829349706503"
+   ],
+   "N": [
+    "17637256755651465913",
+    "42772992445048842229",
+    "466005491131178579",
+    "310071166499546761",
+    "38254398323562437203",
+    "2081402080519762009",
+    "4294922130947407801"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "18446538182577456967",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-26",
+   "kind": "pseudo-random",
+   "p": 4,
+   "m": [
+    8,
+    7,
+    5,
+    6
+   ],
+   "s": [
+    1,
+    6,
+    5,
+    2
+   ],
+   "n": 26,
+   "K": 40,
+   "q": "-1442354200553",
+   "R": [
+    "18314057289",
+    "463735061221",
+    "450839972781",
+    "31660709555"
+   ],
+   "N": [
+    "6130752866537",
+    "60800442036841",
+    "15869233329545",
+    "3468639612073"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "1442354200553",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-27",
+   "kind": "pseudo-random",
+   "p": 1,
+   "m": [
+    3
+   ],
+   "s": [
+    8
+   ],
+   "n": 3,
+   "K": 11,
+   "q": "2021",
+   "R": [
+    "255"
+   ],
+   "N": [
+    "19"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "2021",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-28",
+   "kind": "pseudo-random",
+   "p": 8,
+   "m": [
+    4,
+    6,
+    9,
+    5,
+    6,
+    2,
+    9,
+    6
+   ],
+   "s": [
+    2,
+    1,
+    3,
+    2,
+    1,
+    4,
+    2,
+    1
+   ],
+   "n": 47,
+   "K": 63,
+   "q": "-26579590986920648511979",
+   "R": [
+    "1195526870616548894065",
+    "66792592028041073763",
+    "21593953712423138927",
+    "933502554738984780923",
+    "574618546253169360267",
+    "49039666153954976890333",
+    "5207901682346809611",
+    "88938890050274640771"
+   ],
+   "N": [
+    "45708020916785430817019",
+    "30854316876715277232811",
+    "37635695287681295642603",
+    "56451672738568161501515",
+    "63355177947123487569067",
+    "222738255602740556073311",
+    "29246036648282215032811",
+    "32271679950138225521323"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "26579590986920648511979",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-29",
+   "kind": "pseudo-random",
+   "p": 9,
+   "m": [
+    2,
+    9,
+    5,
+    9,
+    5,
+    6,
+    2,
+    4,
+    4
+   ],
+   "s": [
+    5,
+    3,
+    3,
+    1,
+    4,
+    6,
+    1,
+    1,
+    6
+   ],
+   "n": 46,
+   "K": 76,
+   "q": "66694925606261822323207",
+   "R": [
+    "68621505124135046814639",
+    "163887709955525629477",
+    "14424477633978295786165",
+    "969729625073378572339",
+    "299279423998837066588621",
+    "71997386636534506363167",
+    "221437012387609960723089",
+    "64363376159210983400969",
+    "165004012328198483681303"
+   ],
+   "N": [
+    "207791094890278364935349",
+    "17215581890967299969017",
+    "394888358681043642834073",
+    "429806642431308006714361",
+    "9510246642356524308512665",
+    "4541137819131946584919481",
+    "819053123944178020569149",
+    "963119092941113912092297",
+    "2573369271644913916577641"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "66694925606261822323207",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-30",
+   "kind": "pseudo-random",
+   "p": 3,
+   "m": [
+    7,
+    7,
+    8
+   ],
+   "s": [
+    7,
+    5,
+    6
+   ],
+   "n": 22,
+   "K": 40,
+   "q": "1068130568167",
+   "R": [
+    "13610386197",
+    "10096343797",
+    "6737396423"
+   ],
+   "N": [
+    "673998865049",
+    "224201437849",
+    "656642916121"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "1068130568167",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-31",
+   "kind": "pseudo-random",
+   "p": 6,
+   "m": [
+    4,
+    3,
+    9,
+    9,
+    2,
+    1
+   ],
+   "s": [
+    8,
+    9,
+    6,
+    6,
+    5,
+    7
+   ],
+   "n": 28,
+   "K": 69,
+   "q": "590295787481913196751",
+   "R": [
+    "37083010775626715167",
+    "74965405117535951709",
+    "1158390858998989541",
+    "1830726376008228837",
+    "286026647930978514039",
+    "326147019426845558213"
+   ],
+   "N": [
+    "3032384928114245921",
+    "9427453458374416921",
+    "2800332325569448241",
+    "347036117034299967793",
+    "553810804242000859405",
+    "61998251371777919675"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "590295787481913196751",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-32",
+   "kind": "pseudo-random",
+   "p": 8,
+   "m": [
+    2,
+    4,
+    7,
+    3,
+    1,
+    9,
+    3,
+    9
+   ],
+   "s": [
+    7,
+    2,
+    6,
+    4,
+    1,
+    2,
+    2,
+    7
+   ],
+   "n": 38,
+   "K": 69,
+   "q": "588944958641032659623",
+   "R": [
+    "726550565020613065135",
+    "39714338297166340507",
+    "9733781792956194453",
+    "114045533546055185205",
+    "372293868292468121715",
+    "1665846253435973657",
+    "1079865208821980233425",
+    "15099216559627228653"
+   ],
+   "N": [
+    "2317257301441419600917",
+    "46484454113628788489",
+    "656979110857360230361",
+    "323419309727408822017",
+    "155642777943903583807",
+    "263968323118185852761",
+    "8049976711934809207777",
+    "7141853919888108410713"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "588944958641032659623",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-33",
+   "kind": "pseudo-random",
+   "p": 10,
+   "m": [
+    6,
+    1,
+    2,
+    2,
+    2,
+    8,
+    8,
+    3,
+    8,
+    1
+   ],
+   "s": [
+    3,
+    5,
+    7,
+    9,
+    7,
+    1,
+    1,
+    3,
+    4,
+    7
+   ],
+   "n": 41,
+   "K": 88,
+   "q": "309484973348348691553994653",
+   "R": [
+    "11544993070373024956810925",
+    "661418422608773502149570431",
+    "90455386262696327692363637",
+    "78356816585165138235524597",
+    "77564469106578450990337397",
+    "1220784663000472713814403",
+    "16248150678309472982207603",
+    "6682100098358550057988629871",
+    "89151903061093404495395981",
+    "18423997205751845539612592223"
+   ],
+   "N": [
+    "429394583155524905681904547",
+    "1013351871869198312745146209",
+    "52336571702436619215459895",
+    "3942292992311861388103735",
+    "772903077965112407354935",
+    "3035900379772323182492515",
+    "3850041600298876391891151715",
+    "53147315813520051772355044315",
+    "22513402210291562859267376483",
+    "36538509438155342387671189793"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "309484973348348691553994653",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-34",
+   "kind": "pseudo-random",
+   "p": 10,
+   "m": [
+    1,
+    7,
+    6,
+    4,
+    2,
+    9,
+    8,
+    7,
+    1,
+    3
+   ],
+   "s": [
+    4,
+    5,
+    7,
+    8,
+    6,
+    8,
+    4,
+    5,
+    9,
+    6
+   ],
+   "n": 48,
+   "K": 110,
+   "q": "1298074214553940464055751572441663",
+   "R": [
+    "673301515817991998570614502524101",
+    "10493661018439005349877010299901",
+    "30854461571532353069291660288855",
+    "91478675651365978673141635766927",
+    "330487009217788537701895628388423",
+    "2586458087153880190271893607157",
+    "5827608936167978547963536572911",
+    "28176784886966413190441912617917",
+    "1591608268733870313019136900641813",
+    "163108092881656540056529898491117"
+   ],
+   "N": [
+    "48528817082043533085477432606539",
+    "45114395806252220728505745945665",
+    "676611326024130132378914686045057",
+    "165584595867915194714514599829169",
+    "23873822317213686751830941112029",
+    "26192326068846193363457954422721",
+    "193793673105062044222913790223553",
+    "2308554250977760424320813242651713",
+    "1885142322913800161982522228841963",
+    "6790528499311856396487615487273"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "1298074214553940464055751572441663",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-35",
+   "kind": "pseudo-random",
+   "p": 2,
+   "m": [
+    4,
+    3
+   ],
+   "s": [
+    2,
+    7
+   ],
+   "n": 7,
+   "K": 16,
+   "q": "63349",
+   "R": [
+    "4145",
+    "16431"
+   ],
+   "N": [
+    "2971",
+    "68099"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "63349",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-36",
+   "kind": "pseudo-random",
+   "p": 8,
+   "m": [
+    3,
+    7,
+    2,
+    6,
+    5,
+    5,
+    3,
+    3
+   ],
+   "s": [
+    1,
+    2,
+    3,
+    1,
+    5,
+    5,
+    9,
+    6
+   ],
+   "n": 34,
+   "K": 66,
+   "q": "73770299113138539895",
+   "R": [
+    "9570363290240220459",
+    "1297539484178220673",
+    "191189359327324014471",
+    "4369328765113058417",
+    "50922046388758720717",
+    "14317320844702796749",
+    "22523391553789352917",
+    "9351746684269068949"
+   ],
+   "N": [
+    "2792607208783223777",
+    "92314754861673706249",
+    "690987138196157517989",
+    "205866741854097198793",
+    "1555735185327140523049",
+    "384383967917350956073",
+    "106416833317176283441",
+    "1043674361014011697"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "73770299113138539895",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-37",
+   "kind": "pseudo-random",
+   "p": 3,
+   "m": [
+    9,
+    1,
+    9
+   ],
+   "s": [
+    7,
+    1,
+    6
+   ],
+   "n": 19,
+   "K": 33,
+   "q": "7427673125",
+   "R": [
+    "29053143",
+    "5918623049",
+    "24593303"
+   ],
+   "N": [
+    "7447536091",
+    "4409572973",
+    "5164098011"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "7427673125",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-38",
+   "kind": "pseudo-random",
+   "p": 6,
+   "m": [
+    8,
+    3,
+    1,
+    2,
+    4,
+    9
+   ],
+   "s": [
+    9,
+    4,
+    1,
+    3,
+    8,
+    6
+   ],
+   "n": 27,
+   "K": 58,
+   "q": "288222750554226757",
+   "R": [
+    "1798790471479845",
+    "38838791459128207",
+    "167874644615933217",
+    "98980835550253301",
+    "22721771670561461",
+    "574777716801783"
+   ],
+   "N": [
+    "172267610144613563",
+    "22487581118798899",
+    "47526538677639677",
+    "107700591646786447",
+    "75325596174756619",
+    "6063440448286139"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "288222750554226757",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-39",
+   "kind": "pseudo-random",
+   "p": 5,
+   "m": [
+    3,
+    8,
+    1,
+    8,
+    2
+   ],
+   "s": [
+    2,
+    8,
+    5,
+    6,
+    3
+   ],
+   "n": 22,
+   "K": 46,
+   "q": "70337363118055",
+   "R": [
+    "11141290405777",
+    "499830986631",
+    "41436364645293",
+    "281343670727",
+    "24520116015927"
+   ],
+   "N": [
+    "18792960128161",
+    "57619369459481",
+    "12535366172531",
+    "1686616588057",
+    "27743100945653"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "70337363118055",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-40",
+   "kind": "pseudo-random",
+   "p": 9,
+   "m": [
+    6,
+    5,
+    9,
+    7,
+    7,
+    8,
+    4,
+    2,
+    5
+   ],
+   "s": [
+    9,
+    7,
+    8,
+    6,
+    1,
+    1,
+    4,
+    8,
+    8
+   ],
+   "n": 53,
+   "K": 105,
+   "q": "40564799824057673167874605775309",
+   "R": [
+    "657990946112051258066043503637",
+    "1294451178577219015863895829183",
+    "83408832001489085589218164367",
+    "365776367047729990523089770567",
+    "409611243121218127301037291513",
+    "1828876149472972104639146801395",
+    "376244413016132114115791149053997",
+    "485691710182305724076518783750053",
+    "1796295086276301046691490908991"
+   ],
+   "N": [
+    "1546620727113607348352178457459",
+    "857637890413335339770060758547",
+    "2140522160704738653805094380595",
+    "6254575158051765619080884857267",
+    "11865439295458247126658167538355",
+    "427627494441023185619746975381811",
+    "5979345808434056152684783779088643",
+    "1902202040905165223138200529224903",
+    "16916642936783960326253103312403"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "40564799824057673167874605775309",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-41",
+   "kind": "pseudo-random",
+   "p": 1,
+   "m": [
+    6
+   ],
+   "s": [
+    7
+   ],
+   "n": 6,
+   "K": 13,
+   "q": "7463",
+   "R": [
+    "127"
+   ],
+   "N": [
+    "665"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "7463",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-42",
+   "kind": "pseudo-random",
+   "p": 4,
+   "m": [
+    9,
+    7,
+    1,
+    3
+   ],
+   "s": [
+    9,
+    7,
+    1,
+    9
+   ],
+   "n": 20,
+   "K": 46,
+   "q": "70365257393263",
+   "R": [
+    "138388193797",
+    "590218221229",
+    "39949980229579",
+    "11888449880125"
+   ],
+   "N": [
+    "489497830801",
+    "5182674924049",
+    "9534703065895",
+    "24742341647737"
+   ],
+   "gcd_q_R": "49",
+   "reduced_denominator": "1436025661087",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-43",
+   "kind": "pseudo-random",
+   "p": 8,
+   "m": [
+    3,
+    7,
+    5,
+    7,
+    6,
+    7,
+    7,
+    9
+   ],
+   "s": [
+    6,
+    2,
+    7,
+    7,
+    7,
+    6,
+    1,
+    3
+   ],
+   "n": 51,
+   "K": 90,
+   "q": "1235786345322304717132813477",
+   "R": [
+    "8618850455371412309558057599",
+    "37910583746378580265800147",
+    "676701606947631790567995015",
+    "19615683370618116710442511",
+    "24395064134213198281445933",
+    "10664603735948127479433679",
+    "12350833511453094723741297",
+    "27585018784052952029252959"
+   ],
+   "N": [
+    "67715017297648993759331647315",
+    "3616768374214153556889605339",
+    "20418665077001912581043027003",
+    "1275021126116814221803827931",
+    "325497759267339972879726235",
+    "129282932879055600234697435",
+    "345120344143691407506072539",
+    "12887743272112806721844701531"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "1235786345322304717132813477",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-44",
+   "kind": "pseudo-random",
+   "p": 7,
+   "m": [
+    2,
+    5,
+    9,
+    5,
+    7,
+    8,
+    5
+   ],
+   "s": [
+    6,
+    6,
+    8,
+    8,
+    2,
+    6,
+    3
+   ],
+   "n": 41,
+   "K": 80,
+   "q": "1208889346618252003919773",
+   "R": [
+    "1138726951288193393869493",
+    "42191685253195125386607",
+    "2637103526412240347775",
+    "43966417492434861787695",
+    "9733600550485715710875",
+    "24330129339616226827581",
+    "115131839567466767804055"
+   ],
+   "N": [
+    "3346018458534521571558199",
+    "141244581483992008451651",
+    "141307658904815054141027",
+    "198036013139663573286467",
+    "37011523843919607072227",
+    "5019623764323502063940963",
+    "2475329519540684565809987"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "1208889346618252003919773",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-45",
+   "kind": "pseudo-random",
+   "p": 5,
+   "m": [
+    5,
+    4,
+    3,
+    3,
+    1
+   ],
+   "s": [
+    2,
+    7,
+    1,
+    7,
+    9
+   ],
+   "n": 16,
+   "K": 42,
+   "q": "4398003464383",
+   "R": [
+    "137593641265",
+    "728582269071",
+    "603087503683",
+    "1292585378989",
+    "2318149395349"
+   ],
+   "N": [
+    "4993056097",
+    "7259312840753",
+    "426696565081",
+    "5942679567529",
+    "238295326315"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "4398003464383",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-46",
+   "kind": "pseudo-random",
+   "p": 6,
+   "m": [
+    1,
+    8,
+    2,
+    7,
+    3,
+    4
+   ],
+   "s": [
+    5,
+    2,
+    2,
+    5,
+    6,
+    1
+   ],
+   "n": 25,
+   "K": 46,
+   "q": "69521455568221",
+   "R": [
+    "121504809927487",
+    "307578070361",
+    "139161505396449",
+    "2853550615767",
+    "32796407497255",
+    "5141947952367"
+   ],
+   "N": [
+    "173488164286753",
+    "9218530444195",
+    "487124566017575",
+    "295733023249955",
+    "192849804409819",
+    "12749711669651"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "69521455568221",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-47",
+   "kind": "pseudo-random",
+   "p": 6,
+   "m": [
+    5,
+    8,
+    3,
+    7,
+    5,
+    5
+   ],
+   "s": [
+    4,
+    7,
+    8,
+    9,
+    6,
+    8
+   ],
+   "n": 33,
+   "K": 75,
+   "q": "37778926303896595154045",
+   "R": [
+    "1214740104879181685727",
+    "210416440440451678941",
+    "6033658111645186572359",
+    "298966521499879510551",
+    "1218192817615441687823",
+    "1306686138586932531663"
+   ],
+   "N": [
+    "1092757052237218789219",
+    "16087682448859034654851",
+    "10490338589264897424827",
+    "488788448087982196483",
+    "1203243859797538856291",
+    "4035030130885245859171"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "37778926303896595154045",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-48",
+   "kind": "pseudo-random",
+   "p": 2,
+   "m": [
+    8,
+    7
+   ],
+   "s": [
+    9,
+    6
+   ],
+   "n": 15,
+   "K": 30,
+   "q": "1059392917",
+   "R": [
+    "5246325",
+    "8785567"
+   ],
+   "N": [
+    "283666283",
+    "65159659"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "1059392917",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "random-49",
+   "kind": "pseudo-random",
+   "p": 6,
+   "m": [
+    6,
+    1,
+    9,
+    7,
+    1,
+    2
+   ],
+   "s": [
+    9,
+    3,
+    7,
+    7,
+    5,
+    2
+   ],
+   "n": 26,
+   "K": 59,
+   "q": "576458210437595159",
+   "R": [
+    "11940825291225711",
+    "296166999190346357",
+    "1202077263338429",
+    "5912517059317925",
+    "336487763805870653",
+    "147497404804555171"
+   ],
+   "N": [
+    "187754608200850345",
+    "15875787943097555",
+    "39005348391680489",
+    "180343973155099241",
+    "96517317174146147",
+    "13531408780625525"
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator": "576458210437595159",
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "p22-n25217",
+   "kind": "named-recorded",
+   "p": 22,
+   "m": [
+    1,
+    1,
+    3,
+    3,
+    6,
+    10,
+    14,
+    24,
+    37,
+    59,
+    95,
+    149,
+    235,
+    372,
+    588,
+    932,
+    1475,
+    2338,
+    3704,
+    5869,
+    9301,
+    1
+   ],
+   "s": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    14730
+   ],
+   "n": 25217,
+   "K": 39968,
+   "note": "recorded 12.8.6.4 extension instance (n = 25217, corrected passer): R_r embedded as bit lengths only",
+   "summary_only": true,
+   "q_bit_length": 39957,
+   "R_bit_lengths_min_max": [
+    39957,
+    54699
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator_bit_length": 39957,
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  },
+  {
+   "id": "p22-n31202",
+   "kind": "named-recorded",
+   "p": 22,
+   "m": [
+    1,
+    2,
+    3,
+    4,
+    8,
+    11,
+    18,
+    29,
+    46,
+    73,
+    115,
+    182,
+    290,
+    460,
+    728,
+    1152,
+    1826,
+    2893,
+    4584,
+    7264,
+    11512,
+    1
+   ],
+   "s": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    18231
+   ],
+   "n": 31202,
+   "K": 49454,
+   "note": "recorded 12.8.6.4 extension instance (n = 31202): R_r embedded as bit lengths only",
+   "summary_only": true,
+   "q_bit_length": 49440,
+   "R_bit_lengths_min_max": [
+    49440,
+    67685
+   ],
+   "gcd_q_R": "1",
+   "reduced_denominator_bit_length": 49440,
+   "q_divides_all_R": false,
+   "checks": {
+    "recurrence_all_rotations": true,
+    "seam_identity_all_rotations": true,
+    "gcd_rotation_invariant": true,
+    "divisibility_all_or_nothing": true
+   }
+  }
+ ]
+}
