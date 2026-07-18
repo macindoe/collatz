@@ -278,7 +278,472 @@ wireHouseHover(document);
   });
 })();
 
-/* panel renderers are appended below */
+// ======================= PANEL 1: the near-miss ladder =======================
+const L2_3=Math.log2(3);
+const KCAP=60;
+const LAD=(()=>{const out=[null];let p3=1n;for(let k=1;k<=KCAP;k++){p3*=3n;const d=ladderAt(k,p3);d.p3=p3;out.push(d);}return out;})();
+const P1={kmax:24};
+(function initP1(){
+  const host=document.getElementById('p1');
+  const ctr=document.createElement('div');ctr.className='controls';
+  ctr.innerHTML='<label>show k = 1 &hellip; <input id="p1k" type="range" min="8" max="'+KCAP+'" value="'+P1.kmax+'" style="width:180px;padding:0;"> <span id="p1kv" class="mono">'+P1.kmax+'</span></label>'
+    +'<span style="color:var(--text-muted);">hover a bar for the exact numbers</span>';
+  host.appendChild(ctr);
+  const wrap=document.createElement('div');host.appendChild(wrap);
+  // live envelope check over the full cap, once
+  let env=true;for(let k=1;k<=KCAP;k++)env=env&&LAD[k].envelope;
+  document.getElementById('p1note').innerHTML='<span class="badge ok">live</span> envelope identity <span class="mono"><span class="qq">q&#8330; + q&#8331;</span> = 2<sup>&lfloor;k&middot;log&#8322;3&rfloor;</sup></span> checked in exact integers at every k = 1&hellip;'+KCAP+': '
+    +(env?'<span class="vok">holds at all '+KCAP+' &#10003;</span>':'<span class="vbad">FAILED &#10007;</span>');
+  function render(){
+    const K=P1.kmax,W=940,H=440,mL=52,mR=14,mT=12,mB=30;
+    const pw=W-mL-mR,ph=H-mT-mB;
+    const maxY=Math.ceil(K*L2_3)+0.6;
+    const X=k=>mL+pw*(k-0.5)/K, Y=v=>mT+ph*(1-v/maxY);
+    const bw=Math.min(18,pw/K*0.55);
+    let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="near-miss ladder: for each k the gap between the powers of 2 flanking 3 to the k, split into q-plus and q-minus">';
+    // gridlines at powers of 2
+    const step=Math.max(1,Math.ceil(maxY/12));
+    for(let j=0;j<=maxY;j+=step){
+      s+='<line x1="'+mL+'" y1="'+Y(j)+'" x2="'+(W-mR)+'" y2="'+Y(j)+'" stroke="var(--grid)" stroke-width="1"/>';
+      s+='<text x="'+(mL-6)+'" y="'+(Y(j)+3.5)+'" text-anchor="end" font-size="10" fill="var(--text-muted)">2<tspan dy="-4" font-size="7.5">'+j+'</tspan></text>';
+    }
+    // baseline + x labels
+    s+='<line x1="'+mL+'" y1="'+Y(0)+'" x2="'+(W-mR)+'" y2="'+Y(0)+'" stroke="var(--baseline)" stroke-width="1"/>';
+    const kstep=K>30?10:5;
+    for(let k=kstep;k<=K;k+=kstep)s+='<text x="'+X(k)+'" y="'+(H-10)+'" text-anchor="middle" font-size="10" fill="var(--text-muted)">'+k+'</text>';
+    s+='<text x="'+(mL+pw/2)+'" y="'+(H-0.5)+'" text-anchor="middle" font-size="10" fill="var(--text-muted)">k (number of steps; 3<tspan dy="-4" font-size="7.5">k</tspan><tspan dy="4"> marked as a dot)</tspan></text>';
+    // bars
+    const locks={1:{up:'p1',down:'m1'},2:{down:'m5'},7:{down:'m17',special:true}};
+    for(let k=1;k<=K;k++){
+      const d=LAD[k],kl=k*L2_3,x=X(k)-bw/2;
+      const yTop=Y(d.fl+1),ySplit=Y(kl),yBot=Y(d.fl);
+      const lk=locks[k]||{};
+      const gap=1; // px surface gap at the split
+      const upFill=lk.up?'var(--h-'+lk.up+')':'var(--q)';
+      const downFill=lk.down&&!lk.special?'var(--h-'+lk.down+')':(lk.down==='m17'?'var(--h-m17)':'var(--q)');
+      const upO=lk.up?'1':'0.35';
+      // q+ (upper part of the gap)
+      s+='<rect x="'+x+'" y="'+yTop+'" width="'+bw+'" height="'+Math.max(1,ySplit-yTop-gap)+'" rx="2" fill="'+upFill+'" opacity="'+upO+'"'+(lk.up?' data-house="'+lk.up+'"':'')+'/>';
+      // q- (lower part)
+      s+='<rect x="'+x+'" y="'+(ySplit+gap)+'" width="'+bw+'" height="'+Math.max(1,yBot-ySplit-gap)+'" rx="2" fill="'+downFill+'"'+(lk.down?' data-house="'+lk.down+'"':'')+'/>';
+      // 3^k marker
+      s+='<circle cx="'+X(k)+'" cy="'+ySplit+'" r="3" fill="var(--text-primary)" stroke="var(--surface-2)" stroke-width="1.5"/>';
+    }
+    // annotations
+    if(K>=1){s+='<text x="'+(X(1)+bw/2+4)+'" y="'+(Y(1*L2_3)-8)+'" font-size="10" fill="var(--text-secondary)">k=1: 2&ndash;3 and 4&ndash;3 &mdash; exact tie, q&#8330;=q&#8331;=1</text>';}
+    if(K>=2){s+='<text x="'+(X(2)+bw/2+4)+'" y="'+(Y(2*L2_3)+12)+'" font-size="10" fill="var(--text-secondary)">k=2: 9&ndash;8 (&minus;5)</text>';}
+    if(K>=7){s+='<text x="'+(X(7)+bw/2+4)+'" y="'+(Y(7*L2_3)+13)+'" font-size="10" fill="var(--text-secondary)">k=7: q&#8331;=139 (&minus;17)</text>';}
+    // hover hit rects (full column). They sit above the bars, so they also carry the
+    // lock segments' house cross-highlight: segRanges maps k -> [y0, y1, house] spans.
+    const segRanges={};
+    for(const [k,lk] of Object.entries(locks)){
+      const kk=+k;if(kk>K)continue;const d=LAD[kk],kl=kk*L2_3;
+      const spans=[];
+      if(lk.up)spans.push([Y(d.fl+1),Y(kl),lk.up]);
+      if(lk.down)spans.push([Y(kl),Y(d.fl),lk.down]);
+      segRanges[kk]=spans;
+    }
+    for(let k=1;k<=K;k++){
+      s+='<rect class="hit" data-k="'+k+'" x="'+(X(k)-pw/K/2)+'" y="'+mT+'" width="'+(pw/K)+'" height="'+ph+'" fill="transparent"/>';
+    }
+    s+='</svg>';
+    wrap.innerHTML=s;
+    const svgEl=wrap.querySelector('svg');
+    wrap.querySelectorAll('.hit').forEach(r=>{
+      r.addEventListener('pointermove',ev=>{
+        const k=+r.dataset.k,d=LAD[k];
+        // house cross-highlight when hovering a lock segment
+        const spans=segRanges[k];
+        let hl=null;
+        if(spans){
+          const box=svgEl.getBoundingClientRect();
+          const yv=(ev.clientY-box.top)*H/box.height;
+          for(const [y0,y1,house] of spans)if(yv>=y0-2&&yv<=y1+2)hl=house;
+        }
+        if(hl)document.documentElement.dataset.hl=hl;else delete document.documentElement.dataset.hl;
+        showTip('<div class="v">k = '+k+'</div>'
+          +'<div>2<sup>'+(d.fl+1)+'</sup> = <span class="mono">'+fmt(P2(d.fl+1))+'</span></div>'
+          +'<div>3<sup>'+k+'</sup> = <span class="mono">'+fmt(d.p3)+'</span></div>'
+          +'<div>2<sup>'+d.fl+'</sup> = <span class="mono">'+fmt(P2(d.fl))+'</span></div>'
+          +'<div style="margin-top:4px;"><span class="qq">q&#8330;</span> = <span class="mono v">'+fmt(d.qp)+'</span> &middot; <span class="qq">q&#8331;</span> = <span class="mono v">'+fmt(d.qm)+'</span></div>'
+          +'<div><span class="qq">q&#8330;+q&#8331;</span> = 2<sup>'+d.fl+'</sup> '+(d.envelope?'<span class="vok">&#10003; exact</span>':'<span class="vbad">&#10007;</span>')+'</div>'
+          +(k===1?'<div style="margin-top:3px;">the unique exact tie</div>':''),ev);
+      });
+      r.addEventListener('pointerleave',()=>{hideTip();delete document.documentElement.dataset.hl;});
+    });
+  }
+  document.getElementById('p1k').addEventListener('input',e=>{
+    P1.kmax=+e.target.value;document.getElementById('p1kv').textContent=P1.kmax;render();
+    if(window.p5marker)window.p5marker(P1.kmax);
+  });
+  render();
+})();
+
+// ======================= PANEL 2: the four houses as orbits =======================
+(function initP2(){
+  const host=document.getElementById('p2');
+  let liveChecks=0,allOK=true;
+  const computed={};
+  for(const [id,h] of Object.entries(HOUSES)){
+    const orb=orbitFromSeed(h.seed);
+    const wd=wordData(orb.word);
+    computed[id]={orb,wd};
+    // cycle equation at every rotation + seams (live)
+    for(let r=0;r<wd.k;r++){
+      if(orb.xs[r]*wd.q!==wd.Rs[r])allOK=false;
+      liveChecks++;
+    }
+    if(!seamsOK(orb.word,wd.q,wd.Rs))allOK=false;
+    liveChecks+=wd.k;
+    // card
+    const n=orb.xs.length,Wc=210,Hc=n===1?120:(n===2?120:190);
+    const cx=Wc/2,cy=n<=2?62:92,rad=n===1?0:(n===2?52:64);
+    let svg='<svg viewBox="0 0 '+Wc+' '+Hc+'" aria-label="the '+h.label+' loop">';
+    svg+='<defs><marker id="arr'+id+'" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="'+h.css+'"/></marker></defs>';
+    const pos=[];
+    for(let i=0;i<n;i++){
+      const a=-Math.PI/2+2*Math.PI*i/n;
+      pos.push(n===1?[cx,cy]:[cx+rad*Math.cos(a),cy+rad*Math.sin(a)]);
+    }
+    if(n===1){
+      svg+='<path d="M '+(cx-12)+' '+(cy-14)+' C '+(cx-46)+' '+(cy-58)+', '+(cx+46)+' '+(cy-58)+', '+(cx+12)+' '+(cy-14)+'" fill="none" stroke="'+h.css+'" stroke-width="2" marker-end="url(#arr'+id+')"/>';
+      svg+='<text x="'+cx+'" y="'+(cy-48)+'" text-anchor="middle" font-size="10" fill="var(--text-secondary)">&times;3+1, &divide;2<tspan dy="-3" font-size="7.5">'+orb.word[0]+'</tspan></text>';
+    }else{
+      for(let i=0;i<n;i++){
+        const [x1,y1]=pos[i],[x2,y2]=pos[(i+1)%n];
+        const mxx=(x1+x2)/2,myy=(y1+y2)/2;
+        const dx=x2-x1,dy=y2-y1,dl=Math.hypot(dx,dy);
+        // control point offset along the outward normal (flips with direction, so
+        // the two arcs of a 2-node loop separate instead of overlapping)
+        const off=n===2?26:16,nx=dy/dl,ny=-dx/dl;
+        const px=mxx+off*nx,py=myy+off*ny;
+        const sx=x1+dx/dl*20,sy=y1+dy/dl*20,ex=x2-dx/dl*20,ey=y2-dy/dl*20;
+        svg+='<path d="M '+sx+' '+sy+' Q '+px+' '+py+' '+ex+' '+ey+'" fill="none" stroke="'+h.css+'" stroke-width="2" marker-end="url(#arr'+id+')"/>';
+        const lx=mxx+off*1.55*nx,ly=myy+off*1.55*ny;
+        svg+='<text x="'+lx+'" y="'+(ly+3)+'" text-anchor="middle" font-size="9.5" fill="var(--text-secondary)">&divide;2<tspan dy="-3" font-size="7">'+orb.word[i]+'</tspan></text>';
+      }
+    }
+    for(let i=0;i<n;i++){
+      const [x,y]=pos[i];
+      svg+='<circle cx="'+x+'" cy="'+y+'" r="15" fill="var(--surface-2)" stroke="'+h.css+'" stroke-width="2.5"/>';
+      svg+='<text x="'+x+'" y="'+(y+3.5)+'" text-anchor="middle" font-size="10.5" fill="var(--text-primary)">'+orb.xs[i].toString().replace('-','&minus;')+'</text>';
+    }
+    svg+='</svg>';
+    const card=document.createElement('div');
+    card.className='card';card.dataset.house=id;card.tabIndex=0;
+    card.innerHTML='<div style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:2px;">'
+      +'<span class="swatch" style="background:'+h.css+';"></span><strong style="font-weight:600;">'+h.label+'</strong>'
+      +'<span style="color:var(--text-muted);font-size:12px;">'+(h.sector==='north'?'positive world':'negative world')+'</span></div>'
+      +svg
+      +'<div class="mono" style="font-size:12px;color:var(--text-secondary);text-align:center;">(k, m, <span class="qq">q</span>) = ('+wd.k+', '+wd.m+', <span class="qq">'+(wd.q>0n?'+':'&minus;')+absB(wd.q).toString()+'</span>)</div>';
+    host.appendChild(card);
+  }
+  document.getElementById('p2check').innerHTML='<span class="badge ok">live</span> '
+    +(allOK?'cycle equation <span class="mono">x<sub>r</sub>&middot;<span class="qq">q</span> = R<sub>r</sub></span> holds at every rotation of all four loops, and the transport recurrence at every seam — '+liveChecks+' exact checks, all <span class="vok">&#10003;</span>'
+           :'<span class="vbad">a live check failed — this page is broken; do not trust it</span>');
+  // anchor table (transcribed from the verification record); qNum/elsNum are the
+  // same transcribed values in machine form, for the live re-check comparison
+  const rows=[
+    ['p1','+1','{1}','1','2','+1','4&ndash;3',1n,'1'],
+    ['m1','&minus;1','{&minus;1}','1','1','&minus;1','2&ndash;3',-1n,'-1'],
+    ['m5','&minus;5','{&minus;5, &minus;7}','2','3','&minus;1','8-vs-9',-1n,'-5,-7'],
+    ['m17','&minus;17','{&minus;17, &minus;25, &minus;37, &minus;55, &minus;41, &minus;61, &minus;91}','7','11','&minus;139','2<sup>11</sup> vs 3<sup>7</sup>',-139n,'-17,-25,-37,-55,-41,-61,-91'],
+  ];
+  document.getElementById('p2table').innerHTML=
+    '<tr><th>loop</th><th>elements</th><th class="num">k</th><th class="num">m</th><th class="num">q = 2<sup>m</sup> &minus; 3<sup>k</sup></th><th>near-miss</th><th>live re-check</th></tr>'
+    +rows.map(([id,lb,el,k,m,q,nm,qNum,elsNum])=>{
+      const c=computed[id];
+      const match=(c.wd.k===+k)&&(c.wd.m===+m)&&(c.wd.q===qNum)&&(c.orb.xs.join(',')===elsNum);
+      return '<tr data-house="'+id+'"><td><span class="swatch" style="background:var(--h-'+id+');"></span> '+lb+'</td>'
+        +'<td class="mono">'+el+'</td><td class="num mono">'+k+'</td><td class="num mono">'+m+'</td>'
+        +'<td class="num mono qq">'+q+'</td><td class="mono">'+nm+'</td>'
+        +'<td>'+(match?'<span class="badge ok">&#10003; live</span>':'<span class="badge warn">&#10007; mismatch</span>')+'</td></tr>';
+    }).join('');
+})();
+
+// ======================= PANEL 3: one condition, not k =======================
+(function initP3(){
+  const ctr=document.getElementById('p3controls'),out=document.getElementById('p3out');
+  const KNOWN={};  // word-string of each rotation -> house id
+  for(const [id,h] of Object.entries(HOUSES)){
+    const orb=orbitFromSeed(h.seed);
+    for(let r=0;r<orb.word.length;r++)KNOWN[rotate(orb.word,r).join(',')]=id;
+  }
+  ctr.innerHTML='<button id="p3m17" class="primary">the &minus;17 word (1,1,1,2,1,1,4)</button>'
+    +'<button id="p3p1">the +1 word (2)</button>'
+    +'<button id="p3rnd">random k = 5 word</button>'
+    +'<label>custom s-word <input id="p3in" type="text" value="" placeholder="e.g. 1,2,1,3" style="width:130px;"></label>'
+    +'<button id="p3go">test</button>';
+  function render(word){
+    const wd=wordData(word);
+    const g=gcdB(wd.q,wd.Rs[0]);
+    const divAll=wd.Rs.every(R=>R%wd.q===0n);
+    const divNone=wd.Rs.every(R=>R%wd.q!==0n);
+    const seams=seamsOK(word,wd.q,wd.Rs);
+    const houseId=KNOWN[word.join(',')]||null;
+    const qStr=(wd.q>0n?'+':'&minus;')+fmt(absB(wd.q));
+    let html='<div class="card" style="margin-bottom:8px;">'
+      +'<div style="font-size:13px;color:var(--text-secondary);">word '
+      +word.map(s=>'<span class="wordchip"'+(houseId?' style="border-color:var(--h-'+houseId+');"':'')+'>'+s+'</span>').join('')
+      +' &nbsp; k = <span class="mono">'+wd.k+'</span>, m = <span class="mono">'+wd.m+'</span>, <span class="qq">q</span> = 2<sup>'+wd.m+'</sup> &minus; 3<sup>'+wd.k+'</sup> = <span class="mono qq">'+qStr+'</span>'
+      +(houseId?' &nbsp; <span class="housechip" data-house="'+houseId+'"><span class="swatch" style="background:var(--h-'+houseId+');"></span>'+HOUSES[houseId].label+'&rsquo;s word</span>':'')
+      +'</div></div>';
+    html+='<div class="scroll"><table>'
+      +'<tr><th class="num">rotation r</th><th>word from r</th><th class="num">R<sub>r</sub></th><th class="num">gcd(|q|, R<sub>r</sub>)</th><th>q | R<sub>r</sub> ?</th><th class="num">x<sub>r</sub> = R<sub>r</sub>/q</th></tr>'
+      +wd.Rs.map((R,r)=>{
+        const div=R%wd.q===0n;
+        return '<tr'+(houseId&&div?' data-house="'+houseId+'"':'')+'><td class="num mono">'+r+'</td>'
+          +'<td class="mono">('+rotate(word,r).join(',')+')</td>'
+          +'<td class="num mono">'+fmt(R)+'</td>'
+          +'<td class="num mono">'+fmt(gcdB(wd.q,R))+'</td>'
+          +'<td>'+(div?'<span class="vok">&#10003;</span>':'<span class="vbad">&#10007;</span>')+'</td>'
+          +'<td class="num mono">'+(div?(R/wd.q).toString().replace('-','&minus;'):'<span style="color:var(--text-muted);">&mdash;</span>')+'</td></tr>';
+      }).join('')+'</table></div>';
+    html+='<div style="margin-top:8px;font-size:13px;">'
+      +'<span class="badge ok">live</span> transport recurrence <span class="mono">2<sup>s&#7523;</sup>&middot;R<sub>r+1</sub> = 3&middot;R<sub>r</sub> + <span class="qq">q</span></span> at all '+wd.k+' seams: '
+      +(seams?'<span class="vok">&#10003; exact</span>':'<span class="vbad">&#10007;</span>')
+      +' &nbsp;&middot;&nbsp; gcd is the same at every rotation: <span class="mono">'+fmt(g)+'</span>'
+      +' &nbsp;&middot;&nbsp; verdicts: '
+      +(divAll?'<span class="vok">divisible at all '+wd.k+' rotations</span>'
+        :divNone?'<span class="vbad">divisible at none</span>'
+        :'<span class="vbad">MIXED — this should be impossible</span>')
+      +' — one condition, not '+wd.k+'.</div>';
+    out.innerHTML=html;
+  }
+  document.getElementById('p3m17').addEventListener('click',()=>render([1,1,1,2,1,1,4]));
+  document.getElementById('p3p1').addEventListener('click',()=>render([2]));
+  document.getElementById('p3rnd').addEventListener('click',()=>{
+    render(Array.from({length:5},()=>1+Math.floor(Math.random()*4)));
+  });
+  document.getElementById('p3go').addEventListener('click',()=>{
+    const raw=document.getElementById('p3in').value.trim();
+    const parts=raw.split(/[\s,]+/).filter(Boolean).map(Number);
+    if(!parts.length||parts.length>12||parts.some(x=>!Number.isInteger(x)||x<1||x>30)){
+      out.innerHTML='<p style="color:var(--text-warn);">please enter 1&ndash;12 comma-separated integers, each between 1 and 30</p>';return;
+    }
+    render(parts);
+  });
+  document.getElementById('p3in').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('p3go').click();});
+  render([1,1,1,2,1,1,4]);
+})();
+
+// ======================= PANEL 4: repeated words =======================
+(function initP4(){
+  const ctr=document.getElementById('p4controls'),out=document.getElementById('p4out');
+  const bases={p1:[2],m1:[1],m5:[1,2],m17:[1,1,1,2,1,1,4]};
+  let baseId='p1',j=5;
+  ctr.innerHTML='<span style="color:var(--text-muted);">base word B:</span> '
+    +Object.entries(bases).map(([id,w])=>'<button class="p4b" data-b="'+id+'"><span class="swatch" style="background:var(--h-'+id+');"></span> '+HOUSES[id].label+' &nbsp;('+w.join(',')+')</button>').join('')
+    +'<label style="margin-left:8px;">repeat j = <input id="p4j" type="range" min="2" max="6" value="5" style="width:110px;padding:0;"> <span id="p4jv" class="mono">5</span></label>';
+  function render(){
+    const B=bases[baseId],P=[];for(let t=0;t<j;t++)P.push(...B);
+    const wB=wordData(B),wP=wordData(P);
+    const gB=gcdB(wB.q,wB.Rs[0]);
+    const qred=absB(wB.q)/gB;
+    const gP=gcdB(wP.q,wP.Rs[0]);
+    const lawOK=gP===absB(wP.q)/qred;
+    const geomOK=wP.Rs[0]*wB.q===wB.Rs[0]*wP.q;
+    const forced=gP>1n;
+    const baseDiv=wB.Rs[0]%wB.q===0n;
+    const y=baseDiv&&wP.Rs[0]%wP.q===0n?wP.Rs[0]/wP.q:null;
+    out.innerHTML='<div class="card" data-house="'+baseId+'">'
+      +'<div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;">P = B<sup>'+j+'</sup> = '
+      +P.map(s=>'<span class="wordchip" style="border-color:var(--h-'+baseId+');">'+s+'</span>').join('')
+      +' &nbsp; k = <span class="mono">'+wP.k+'</span>, m = <span class="mono">'+wP.m+'</span></div>'
+      +'<div class="scroll"><table>'
+      +'<tr><th></th><th class="num">q</th><th class="num">R&#8320;</th><th class="num">gcd(|q|, R&#8320;)</th></tr>'
+      +'<tr><td>base B</td><td class="num mono qq">'+fmt(wB.q)+'</td><td class="num mono">'+fmt(wB.Rs[0])+'</td><td class="num mono">'+fmt(gB)+'</td></tr>'
+      +'<tr><td>repeated P</td><td class="num mono qq">'+fmt(wP.q)+'</td><td class="num mono">'+fmt(wP.Rs[0])+'</td><td class="num mono">'+fmt(gP)+'</td></tr>'
+      +'</table></div>'
+      +'<div style="font-size:13px;margin-top:8px;line-height:1.7;">'
+      +'<span class="badge ok">live</span> the law <span class="mono">gcd(<span class="qq">q</span><sub>P</sub>, R&#8320;) = |<span class="qq">q</span><sub>P</sub>| / q<sub>red</sub>(B)</span>: '
+      +'<span class="mono">'+fmt(gP)+' = '+fmt(absB(wP.q))+' / '+fmt(qred)+'</span> '
+      +(lawOK?'<span class="vok">&#10003; exact</span>':'<span class="vbad">&#10007;</span>')
+      +' &nbsp;&middot;&nbsp; forced &gt; 1 for j &ge; 2: '+(forced?'<span class="vok">&#10003;</span>':'<span class="vbad">&#10007;</span>')
+      +' &nbsp;&middot;&nbsp; geometric identity <span class="mono">R&#8320;(P)&middot;<span class="qq">q</span><sub>B</sub> = R&#8320;(B)&middot;<span class="qq">q</span><sub>P</sub></span>: '+(geomOK?'<span class="vok">&#10003;</span>':'<span class="vbad">&#10007;</span>')
+      +'<br>'+(baseDiv
+        ?'base divisible &rArr; P divisible; it reconstructs <span class="mono">y = '+(y===null?'?':y.toString().replace('-','&minus;'))+'</span> — <span data-house="'+baseId+'" style="display:inline-flex;align-items:center;gap:5px;"><span class="swatch" style="background:var(--h-'+baseId+');"></span>the '+HOUSES[baseId].label+' loop traversed '+j+' times</span>, not a new loop.'
+        :'the base is not divisible, so P is not divisible either — a repeated word is divisible exactly when its base is.')
+      +'</div></div>';
+  }
+  ctr.querySelectorAll('.p4b').forEach(b=>b.addEventListener('click',()=>{baseId=b.dataset.b;render();}));
+  document.getElementById('p4j').addEventListener('input',e=>{j=+e.target.value;document.getElementById('p4jv').textContent=j;render();});
+  render();
+})();
+
+// ======================= PANEL 5: the Benford walk =======================
+(function initP5(){
+  const KW=2000;
+  const D=[null];
+  {let p3=1n;for(let k=1;k<=KW;k++){p3*=3n;const fl=bitLen(p3)-1;
+    D.push({fl,frac:k*L2_3-fl,abs:sideAbs(p3,fl),ratio:sideRatio(p3,fl),
+      qp:P2(fl+1)-p3,qm:p3-P2(fl)});}}
+  const TH_ABS=0.5849625007,TH_ABS_LABEL='log&#8322;(3/2) = 0.5849625007';
+  let kmax=KW,mode='abs',marker=null;
+  const ctr=document.getElementById('p5controls');
+  ctr.innerHTML='<button id="p5abs" class="on">absolute distance (the cycle question)</button>'
+    +'<button id="p5ratio">ratio distance</button>'
+    +'<label style="margin-left:10px;">k &le; <input id="p5k" type="range" min="100" max="'+KW+'" step="50" value="'+KW+'" style="width:160px;padding:0;"> <span id="p5kv" class="mono">'+KW+'</span></label>';
+  const host=document.getElementById('p5'),runHost=document.getElementById('p5run');
+  function render(){
+    const W=940,H=300,mL=46,mR=118,mT=10,mB=26,pw=W-mL-mR,ph=H-mT-mB;
+    const X=k=>mL+pw*(k-1)/(kmax-1),Y=f=>mT+ph*(1-f);
+    const th=mode==='abs'?TH_ABS:0.5;
+    let s='<svg id="p5svg" viewBox="0 0 '+W+' '+H+'" aria-label="the Benford walk: fractional part of k times log2 of 3, coloured by which side wins">';
+    for(const g of [0,0.25,0.5,0.75,1])
+      s+='<line x1="'+mL+'" y1="'+Y(g)+'" x2="'+(W-mR)+'" y2="'+Y(g)+'" stroke="var(--grid)"/>'
+        +'<text x="'+(mL-6)+'" y="'+(Y(g)+3.5)+'" text-anchor="end" font-size="10" fill="var(--text-muted)">'+g+'</text>';
+    // threshold
+    s+='<line x1="'+mL+'" y1="'+Y(th)+'" x2="'+(W-mR)+'" y2="'+Y(th)+'" stroke="var(--text-muted)" stroke-width="1.5"/>'
+      +'<text x="'+(W-mR+6)+'" y="'+(Y(th)+3.5)+'" font-size="10.5" fill="var(--text-secondary)">'+(mode==='abs'?TH_ABS_LABEL:'1/2')+'</text>'
+      +'<text x="'+(W-mR+6)+'" y="'+(Y(th)+16)+'" font-size="10" fill="var(--south)">below: negative side wins</text>'
+      +'<text x="'+(W-mR+6)+'" y="'+(Y(th)-8)+'" font-size="10" fill="var(--north)">above: positive side wins</text>';
+    let dots='';
+    for(let k=1;k<=kmax;k++){
+      const d=D[k],v=mode==='abs'?d.abs:d.ratio;
+      if(mode==='abs'&&v===0){ // the k=1 tie
+        dots+='<path d="M '+(X(k)-4)+' '+Y(d.frac)+' l 4 -4 l 4 4 l -4 4 z" fill="var(--text-primary)"/>'
+          +'<text x="'+(X(k)+7)+'" y="'+(Y(d.frac)-6)+'" font-size="10" fill="var(--text-secondary)">k=1: exact tie</text>';
+      }else{
+        dots+='<circle cx="'+X(k)+'" cy="'+Y(d.frac)+'" r="'+(kmax>600?1.7:2.4)+'" fill="'+(v<0?'var(--south)':'var(--north)')+'"/>';
+      }
+    }
+    s+=dots;
+    if(marker&&marker<=kmax)
+      s+='<line x1="'+X(marker)+'" y1="'+mT+'" x2="'+X(marker)+'" y2="'+(H-mB)+'" stroke="var(--text-accent)" stroke-width="1" opacity="0.6"/>';
+    s+='<line id="p5cross" x1="0" y1="'+mT+'" x2="0" y2="'+(H-mB)+'" stroke="var(--baseline)" stroke-width="1" visibility="hidden"/>';
+    const kstep=kmax>1000?500:(kmax>400?200:50);
+    for(let k=kstep;k<=kmax;k+=kstep)s+='<text x="'+X(k)+'" y="'+(H-14)+'" text-anchor="middle" font-size="10" fill="var(--text-muted)">'+k+'</text>';
+    s+='<text x="'+(mL+pw/2)+'" y="'+(H-2)+'" text-anchor="middle" font-size="10" fill="var(--text-muted)">k &nbsp;&middot;&nbsp; vertical: {k&middot;log&#8322;3} (plot position uses floats; every dot&rsquo;s colour is an exact integer verdict)</text>';
+    s+='</svg>';
+    host.innerHTML=s;
+    // nearest-k hover
+    const svg=host.querySelector('#p5svg'),cross=host.querySelector('#p5cross');
+    svg.addEventListener('pointermove',ev=>{
+      const r=svg.getBoundingClientRect();
+      const px=(ev.clientX-r.left)*W/r.width;
+      let k=Math.round((px-mL)/pw*(kmax-1))+1;
+      k=Math.max(1,Math.min(kmax,k));
+      const d=D[k],v=mode==='abs'?d.abs:d.ratio;
+      cross.setAttribute('x1',X(k));cross.setAttribute('x2',X(k));cross.setAttribute('visibility','visible');
+      const bits=(3n**BigInt(k)).toString(2);
+      showTip('<div class="v">k = '+k+'</div>'
+        +'<div>{k&middot;log&#8322;3} &asymp; '+d.frac.toFixed(6)+' <span style="color:var(--text-muted);">(float, plot only)</span></div>'
+        +'<div><span class="qq">q&#8330;</span> = <span class="mono">'+fmt(d.qp)+'</span> &middot; <span class="qq">q&#8331;</span> = <span class="mono">'+fmt(d.qm)+'</span></div>'
+        +'<div style="margin-top:3px;">'+(mode==='abs'
+          ?(v===0?'<span class="v">exact tie</span> — q&#8330; = q&#8331; = 1'
+            :(v<0?'<span class="v" style="color:var(--south);">negative side wins</span>':'<span class="v" style="color:var(--north);">positive side wins</span>')+' (exact comparison)')
+          :((v<0?'lower':'upper')+' tower nearer in ratio (exact comparison)'))+'</div>'
+        +(mode==='abs'?'<div>3<sup>'+k+'</sup> in binary starts <span class="mono">'+bits.slice(0,2)+'&hellip;</span> — second digit '+bits[1]+(v<0?' (0 &hArr; negative wins)':' (1 &hArr; positive wins)')+'</div>':''),ev);
+    });
+    svg.addEventListener('pointerleave',()=>{cross.setAttribute('visibility','hidden');hideTip();});
+    // running fraction chart + stat
+    const lo=mode==='abs'?2:1;
+    let wins=0,total=0;const pts=[];
+    for(let k=lo;k<=kmax;k++){
+      const d=D[k];if((mode==='abs'?d.abs:d.ratio)<0)wins++;
+      total++;pts.push([k,wins/total]);
+    }
+    const H2=120,ph2=H2-mT-mB,Y2=f=>{const a=0.30,b=0.75;return mT+ph2*(1-(Math.min(b,Math.max(a,f))-a)/(b-a));};
+    let s2='<svg viewBox="0 0 '+W+' '+H2+'" aria-label="running fraction of ks where the lower side wins">';
+    for(const g of [0.4,0.5,0.6,0.7])
+      s2+='<line x1="'+mL+'" y1="'+Y2(g)+'" x2="'+(W-mR)+'" y2="'+Y2(g)+'" stroke="var(--grid)"/>'
+        +'<text x="'+(mL-6)+'" y="'+(Y2(g)+3.5)+'" text-anchor="end" font-size="10" fill="var(--text-muted)">'+g.toFixed(1)+'</text>';
+    s2+='<line x1="'+mL+'" y1="'+Y2(th)+'" x2="'+(W-mR)+'" y2="'+Y2(th)+'" stroke="var(--text-muted)" stroke-width="1.5"/>';
+    let path='',started=false;
+    for(let i=0;i<pts.length;i++){
+      const [k,f]=pts[i];
+      if(k<10&&kmax>60)continue; // skip the wild first few points; the count line below still includes them
+      path+=(started?'L':'M')+X(k).toFixed(1)+' '+Y2(f).toFixed(2)+' ';started=true;
+    }
+    s2+='<path d="'+path+'" fill="none" stroke="var(--text-primary)" stroke-width="2" stroke-linejoin="round"/>';
+    const last=pts[pts.length-1];
+    s2+='<circle cx="'+X(last[0])+'" cy="'+Y2(last[1])+'" r="4" fill="var(--text-primary)" stroke="var(--surface-2)" stroke-width="2"/>';
+    s2+='<text x="'+(W-mR+6)+'" y="'+(Y2(last[1])+3.5)+'" font-size="11" fill="var(--text-secondary)">running fraction '+last[1].toFixed(4)+'</text>';
+    s2+='<text x="'+mL+'" y="'+(H2-6)+'" font-size="10" fill="var(--text-muted)">running fraction of k&rsquo;s decided for the lower side (target line: '+(mode==='abs'?'0.5849625007':'0.5')+')</text>';
+    s2+='</svg>';
+    runHost.innerHTML=s2;
+    document.getElementById('p5stat').innerHTML='<span class="badge ok">live</span> exact count, k = '+lo+'&hellip;'+kmax+': '
+      +(mode==='abs'
+        ?'the negative side wins <span class="mono v">'+wins+' / '+total+' = '+(wins/total).toFixed(4)+'</span> — threshold <span class="mono">log&#8322;(3/2) = 0.5849625007</span>. Every decision is the exact integer comparison <span class="mono">2&middot;3<sup>k</sup></span> vs <span class="mono">3&middot;2<sup>&lfloor;k&middot;log&#8322;3&rfloor;</sup></span>.'
+        :'the lower tower is nearer in ratio for <span class="mono v">'+wins+' / '+total+' = '+(wins/total).toFixed(4)+'</span> — threshold <span class="mono">1/2</span>. Every decision is the exact integer comparison <span class="mono">3<sup>2k</sup></span> vs <span class="mono">2<sup>2&lfloor;k&middot;log&#8322;3&rfloor;+1</sup></span>.');
+  }
+  document.getElementById('p5abs').addEventListener('click',()=>{mode='abs';
+    document.getElementById('p5abs').classList.add('on');document.getElementById('p5ratio').classList.remove('on');render();});
+  document.getElementById('p5ratio').addEventListener('click',()=>{mode='ratio';
+    document.getElementById('p5ratio').classList.add('on');document.getElementById('p5abs').classList.remove('on');render();});
+  document.getElementById('p5k').addEventListener('input',e=>{kmax=+e.target.value;document.getElementById('p5kv').textContent=kmax;render();});
+  window.p5marker=k=>{marker=k;render();};
+  render();
+})();
+
+// ======================= PANEL 6: the spent stock =======================
+(function initP6(){
+  // tickets (the three |q| = 1 locks) — data transcribed from the verification record
+  const tickets=[
+    {id:'p1',near:'4 &ndash; 3',sector:'north',kmq:'(1, 2, +1)'},
+    {id:'m1',near:'2 &ndash; 3',sector:'south',kmq:'(1, 1, &minus;1)'},
+    {id:'m5',near:'9 &ndash; 8',sector:'south',kmq:'(2, 3, &minus;1)'},
+  ];
+  const th=document.getElementById('p6tickets');
+  th.innerHTML=tickets.map(t=>'<div class="card" data-house="'+t.id+'" tabindex="0" style="border-top:3px solid var(--h-'+t.id+');">'
+    +'<div style="display:flex;justify-content:space-between;align-items:baseline;">'
+    +'<span class="mono" style="font-size:20px;">'+t.near+'</span>'
+    +'<span style="font-size:11px;color:var(--text-muted);"><span class="swatch" style="background:var(--'+t.sector+');width:8px;height:8px;"></span> '+t.sector+'</span></div>'
+    +'<div style="font-size:12.5px;color:var(--text-secondary);margin-top:4px;">|<span class="qq">q</span>| = 1 &mdash; divisibility free &mdash; hands out the '
+    +'<span style="white-space:nowrap;"><span class="swatch" style="background:var(--h-'+t.id+');"></span> '+HOUSES[t.id].label+'</span> loop</div>'
+    +'<div class="mono" style="font-size:12px;color:var(--text-secondary);margin-top:3px;">(k, m, <span class="qq">q</span>) = '+t.kmq+'</div>'
+    +'</div>').join('')
+    +'<div class="card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;">'
+    +'<span class="badge neutral" style="font-size:11px;">sealed: Gersonides, 1343</span>'
+    +'<span style="font-size:11.5px;color:var(--text-muted);text-align:center;"><em>De numeris harmonicis</em> (1342/43): |2<sup>a</sup> &minus; 3<sup>b</sup>| = 1 has exactly these three solutions — never another ticket.</span>'
+    +'</div>';
+  // the wall + the one win (live re-check of the transcribed numbers)
+  const w17=[1,1,1,2,1,1,4],wd17=wordData(w17);
+  const g17=gcdB(wd17.q,wd17.Rs[0]);
+  const liveOK=(wd17.q=== -139n)&&(wd17.Rs[0]===2363n)&&(g17===139n)&&(17n*139n===2363n);
+  document.getElementById('p6wall').innerHTML='<div class="card" data-house="m17" tabindex="0" style="border-top:3px solid var(--h-m17);">'
+    +'<div style="font-size:13.5px;color:var(--text-secondary);line-height:1.7;">After the three free tickets comes the wall: every later loop must pass <span class="mono"><span class="qq">q</span> | R&#8320;</span> nontrivially. One candidate is known to have passed — <span style="white-space:nowrap;"><span class="swatch" style="background:var(--h-m17);"></span> <strong style="font-weight:600;color:var(--text-primary);">&minus;17</strong></span>, the lottery win: '
+    +'<span class="mono"><span class="qq">q</span> = &minus;139</span>, <span class="mono">R&#8320; = 2363 = 17&middot;139</span>, <span class="mono">gcd(<span class="qq">q</span>, R&#8320;) = 139</span> — 139 prime, and the word (1,1,1,2,1,1,4) a genuine 7-step pattern, not a repeat of anything shorter. '
+    +(liveOK?'<span class="badge ok">&#10003; live — recomputed exactly in this page</span>':'<span class="badge warn">&#10007; live re-check failed</span>')
+    +'</div></div>';
+  // the k <= 10 strip — every number transcribed from the verification record's table
+  const strip={
+    1:{pos:{range:'[2, 2]',n:'1',div:[['p1',1]]},neg:{range:'[1, 1]',n:'1',div:[['m1',1]]}},
+    2:{pos:{range:'[4, 4]',n:'3',div:[['p1',1]]},neg:{range:'[2, 3]',n:'3',div:[['m1',1],['m5',2]]}},
+    3:{pos:{range:'[5, 6]',n:'16',div:[['p1',1]]},neg:{range:'[3, 4]',n:'4',div:[['m1',1]]}},
+    4:{pos:{range:'[7, 8]',n:'55',div:[['p1',1]]},neg:{range:'[4, 6]',n:'15',div:[['m1',1],['m5',2]]}},
+    5:{pos:{range:'[8, 10]',n:'231',div:[['p1',1]]},neg:{range:'[5, 7]',n:'21',div:[['m1',1]]}},
+    6:{pos:{range:'[10, 12]',n:'840',div:[['p1',1]]},neg:{range:'[6, 9]',n:'84',div:[['m1',1],['m5',2]]}},
+    7:{pos:{range:'[12, 14]',n:'3,102',div:[['p1',1]]},neg:{range:'[7, 11]',n:'330',div:[['m1',1],['m17',7]]}},
+    8:{pos:{range:'[13, 16]',n:'12,375',div:[['p1',1]]},neg:{range:'[8, 12]',n:'495',div:[['m1',1],['m5',2]]}},
+    9:{pos:{range:'[15, 18]',n:'46,618',div:[['p1',1]]},neg:{range:'[9, 14]',n:'2,002',div:[['m1',1]]}},
+    10:{pos:{range:'[16, 20]',n:'181,753',div:[['p1',1]]},neg:{range:'[10, 15]',n:'3,003',div:[['m1',1],['m5',2]]}},
+  };
+  function cell(k,sec){
+    const c=strip[k][sec];
+    const dots=c.div.map(([h,n])=>'<span data-house="'+h+'" style="display:inline-flex;align-items:center;gap:2px;margin-right:5px;">'
+      +'<span class="swatch" style="background:var(--h-'+h+');border-radius:50%;"></span>'
+      +(n>1?'<span style="font-size:10px;color:var(--text-muted);">&times;'+n+'</span>':'')+'</span>').join('');
+    return '<td class="stripcell" data-k="'+k+'" data-sec="'+sec+'"><div class="mono" style="font-size:11px;color:var(--text-muted);">'+c.n+'</div><div style="margin-top:2px;white-space:nowrap;">'+dots+'</div></td>';
+  }
+  const tbl=document.getElementById('p6strip');
+  tbl.innerHTML='<tr><th>k =</th>'+Object.keys(strip).map(k=>'<th class="num">'+k+'</th>').join('')+'</tr>'
+    +'<tr><td style="color:var(--text-muted);">positive<br><span style="font-size:10px;">profiles &middot; divisible</span></td>'+Object.keys(strip).map(k=>cell(k,'pos')).join('')+'</tr>'
+    +'<tr><td style="color:var(--text-muted);">negative<br><span style="font-size:10px;">profiles &middot; divisible</span></td>'+Object.keys(strip).map(k=>cell(k,'neg')).join('')+'</tr>';
+  tbl.querySelectorAll('.stripcell').forEach(td=>{
+    td.addEventListener('pointermove',ev=>{
+      const k=td.dataset.k,sec=td.dataset.sec,c=strip[k][sec];
+      const houses=c.div.map(([h,n])=>HOUSES[h].label+(n>1?' (&times;'+n+')':'')).join(', ');
+      showTip('<div class="v">k = '+k+', '+(sec==='pos'?'positive':'negative')+' sector</div>'
+        +'<div>m-range '+c.range+' &middot; '+c.n+' profiles</div>'
+        +'<div>divisible: '+c.div.reduce((a,[,n])=>a+n,0)+' — all reconstruct known loops: '+houses+'</div>'
+        +'<div style="color:var(--text-muted);margin-top:3px;">transcribed from the verification record</div>',ev);
+    });
+    td.addEventListener('pointerleave',hideTip);
+  });
+  document.getElementById('p6totals').innerHTML='Total, exhaustively over both sectors for k &le; 10: <span class="mono v" style="color:var(--text-primary);font-weight:600;">250,952</span> profiles (244,994 positive, 5,958 negative) &mdash; <span class="mono">37</span> pass divisibility &mdash; all <span class="mono">37</span> reconstruct the four known loops, and nothing else. Each of the 384 repeated words occurring in this sweep obeys panel 4&rsquo;s law. (Counts transcribed from the verification record; the divisible dots above are house-coloured — hover them.)';
+})();
 </script>
 </body>
 </html>
