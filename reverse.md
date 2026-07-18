@@ -1,7 +1,7 @@
 ---
 status: ACTIVE — forward/backward duality complete (14.1–14.12; density bound c* = 0.3304, 14.6); door/exit seam relocates the core-extraction deficit onto the forward digit budget (14.14); itinerary language is a full shift completing the signed two-sided diagonal characterization (14.15, 14.15.6); exact height laws close the integer-fixed-point periodic instances (14.15.7), the non-integral mechanism the rest of the single-letter shelf (14.15.8), and the whole periodic shelf is closed by theorem at whole-period windows (14.15.9) — Bridge status unchanged throughout
 scope: new section 14 (post-monolith)
-updated: 2026-07-17
+updated: 2026-07-18
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
 ---
 
@@ -1069,6 +1069,8 @@ Then `v_n = j_n/q + k⁺_n` (positive sector) and `v_n = k⁻_n − j_n/q` (nega
 3. **(The mod-3 residues.)** `ε_i := y^*_i mod 3 = a_i·q^{−1} mod 3 ∈ {1,2}` (well defined by Lemma `14.15.9.1` applied to `P^{(i)}`), and `ε_{i+1} = −(−1)^{r_i} mod 3` — `1` if `r_i` is odd, `2` if `r_i` is even: each rotation's residue is pinned by the *preceding* letter's `r`-parity alone.
 
 **Proof.** (1) Since `g_{i+p} = g_i`, both `F_{i+1}∘g_i` and `g_i∘F_i` equal `g_i∘g_{i+p−1}∘…∘g_{i+1}∘g_i` read with different bracketing: `F_{i+1}∘g_i = g_i∘F_i`. Hence `F_{i+1}(g_i(y^*_i)) = g_i(F_i(y^*_i)) = g_i(y^*_i)`, and uniqueness of `F_{i+1}`'s fixed point gives `y^*_{i+1} = g_i(y^*_i)`. (2) Both directions, as elementary denominator bookkeeping. Forward: writing `y^*_i = a_i/q_i` reduced, `g_i(y^*_i) = (3^{m_i}a_i + (3^{m_i}−2^{m_i})q_i)/(2^{m_i+r_i}q_i)`, so the reduced denominator `q_{i+1}` divides `2^{m_i+r_i}q_i`; being odd (Lemma `14.15.9.1` for `P^{(i+1)}`), no factor of `2` can survive reduction into it, so `q_{i+1} | q_i`. Backward: `g_i^{−1}(v) = (2^{m_i+r_i}v − (3^{m_i}−2^{m_i}))/3^{m_i}` likewise gives `q_i | 3^{m_i}q_{i+1}`, and `q_i` is coprime to `3`, so `q_i | q_{i+1}`. Hence `q_{i+1} = q_i` for every `i`. (3) Mod `3` (in `Z₃`, where every `y^*_i` lives): `v₃(α_i) = m_i ≥ 1`, so `y^*_{i+1} = α_i y^*_i + β_i ≡ β_i = (3^{m_i}−2^{m_i})·2^{−(m_i+r_i)} ≡ −2^{−r_i} ≡ −(−1)^{r_i} (mod 3)` (`2 ≡ −1`). ∎
+
+*(Integer form.)* In integer form this lemma is the transport recurrence on `12.6.1`'s rotation numerators `R_r` (cycles.md): via the seam identity `N_r + q = 2^{m_r} R_r` — `N_r` the rotated numerator of Lemma `14.15.9.1`, `R_r` and `q = 2^{S_P}−3^{M_P}` (unreduced) as in `12.6.1` — clause (1)'s orbit equation is the recurrence cleared of denominators, and clause (2) is the divisibility collapse; statement and provenance at Remark `12.6.1.1` (cycles.md).
 
 **Theorem 14.15.9.3 (adelic anchor).** For every rotation `i`, the two adelic limits of `W^{(i)}` (`14.15.3.1`, `14.15.3.3`) are the rotated fixed point:
 
