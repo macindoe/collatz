@@ -369,3 +369,71 @@ first draft was the right answer to the ratio question) belongs in it
 under the protocol's visibility rule. One refinement from item 2 to
 carry into any write-up: `k = 1` is an exact tie (the only one), so the
 law reads "for `k >= 2`".
+
+## Item 5: his artifacts — commit `a67970f` FOUND and read (GitHub API, read-only)
+
+**Located:** `ericmerle3789/one-obstruction-three-faces-lean`, commit
+`a67970f2971097b06b567bbd2566b01ce3a1a95b`, dated 2026-07-18T11:36:02Z,
+message "Add sign-question scripts (REQ-MATH-010, 011)" (trailer:
+Co-Authored-By: Claude Opus 4.8 — consistent with his disclosed A.R.E.S.
+protocol). Files: `experiments/README.md` (his script index, updated),
+`experiments/test_REQ-MATH-010_kangourous_cycles_reels.py`,
+`experiments/test_REQ-MATH-011_pourquoi_le_signe.py`. Both scripts were
+read via the API; **neither was run** (per the brief). French-language,
+canary-checked per his README convention (exit 0 iff the exit criterion
+passes).
+
+**REQ-MATH-010 ("kangourous, cycles réels")** — four acts: (A) `2^a =
+3^b` never (parity; a <= 300, b <= 190 swept), irrationality of
+`log2 3` as corollary; (B) the four real cycles detected by iteration
+and anchored: `x_0(2^K − 3^k) = R` exactly, his Steiner-form `R`
+matching our `R_0`; (C) the 256/243 near-miss (`q = +13`): exhaustive
+composition sweep at `k = 5`, `K ∈ {8..12}` — 771 profiles, one
+rotation per profile via L-A1 — no cycle. Note: his `K` range is a
+*superset* of the proven positive-sector bound (`m <= 2k = 10`); the
+extra `K = 11, 12` rows are outside the cycle bounds (item 3's
+derivation) and harmless. Our (5,8) slice — 35 profiles, 0 divisible —
+sits inside his 771 and agrees. (D) the "proof canary" moral: any
+simple speed/parity argument forbidding loops would forbid the four
+real ones — proves too much.
+
+**REQ-MATH-011 ("pourquoi le signe")** — five acts: (A) the mirror
+conjugation `T_{3x+1}(−m) = −T_{3x−1}(m)` verified on 10^4 odds (the
+negative world of `3x+1` is the positive world of `3x−1`); (B) the
+envelope `q+ + q− = 2^{floor(kL)}` exact for `k = 1..50` (ours:
+`1..3000`); (C) the side-asymmetry measured at `k <= 5000` with the
+**self-catch disclosed in the code**: a comment block marked
+"CORRECTION ARES (le premier jet de ce script annonçait '~50/50' — la
+mesure a dit non)" states the corrected law `q− < q+ ⟺ {kL} <
+log2(3/2) = 0.58496` and prints measured vs theory; (D) the three
+Catalan free-locks `(1,1), (2,1), (3,2)` with the north/south ticket
+split, Mihailescu 2002 cited for "never another"; (E) the exhaustive
+`k <= 10` map, both sectors, bounds derived (`kL < K <= 2k` positive,
+`k <= K < kL` negative — same derivation route as ours), divisibility
+on one rotation via L-A1, candidates filtered by parity/nonzero then
+checked against the real T-map with a **primitivity requirement**
+(`len(seen) == k`) — expected map `{+1}` and `{−1, −5, −17}`, exit
+criterion PASS.
+
+Two flat observations for the reply:
+
+1. **The stale header.** REQ-MATH-011's act-C *header comment* (line
+   "C. EQUIDISTRIBUTION: le meilleur frôlement tombe ~50/50 de chaque
+   côté" and act-B's "AUCUNE asymétrie structurelle") still carries the
+   first draft's 50/50 reading, while the code below it computes and
+   prints the corrected 58.5% with the ARES correction note. Cosmetic —
+   the computation and the printed conclusion are right — but the
+   header contradicts the output; worth one friendly line so his
+   artifact matches his letter.
+2. **His "false survivor" mechanism, confirmed in code.** His
+   enumeration filters `n_0` even/zero *silently* and rejects
+   non-primitive loops via `real_cycle_check` — so the `k = 5` all-ones
+   (element) word survives divisibility and dies at the primitivity
+   check, exactly as his letter describes. The repeated-word law (his
+   L-A2 candidate) replaces that a-posteriori rejection with an a-priori
+   sweep: `B^j` is divisible iff its base is, and never new (item 3(b)).
+   His account is accurate; the law genuinely upgrades his filter.
+
+His anchor table, envelope identity, ticket mapping, Benford fraction,
+and `k <= 10` map — every claim his letter puts weight on — are
+independently confirmed by items 1–3 with fresh code at larger ranges.
