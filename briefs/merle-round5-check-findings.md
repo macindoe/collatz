@@ -23,6 +23,65 @@ labelling; under the block dictionary it is `cycles.md` 12.6.1's `(n, K)`,
 and the transport recurrence / gcd rotation-invariance (Remark 12.6.1.1
 = reverse.md 14.15.9.2, his L-A1) applies verbatim.
 
+## Summary for the reply (verdicts, liftable; register flat)
+
+1. **The anchor table is exact.** All four cycles, from fresh orbits:
+   `+1:(1,2,+1)`, `−1:(1,1,−1)`, `−5:(2,3,−1)` on 8-vs-9,
+   `−17:(7,11,−139)`; cycle equation at every rotation. His −17 numbers:
+   `gcd(q, R_0) = 139`, prime, rotation-invariant, word primitive — the
+   lottery-win reading is arithmetically accurate.
+2. **The lock is real and free, and it is 14th-century.**
+   `|2^a − 3^b| = 1` has exactly the three solutions 2-3, 4-3, 9-8
+   (exhaustive to `a <= 200, b <= 130`; elementary mod-8 + factoring
+   proof written out). At `|q| = 1` every composition at the anchor
+   `(k, m)` yields a genuine integer cycle — verified exhaustively at
+   all three anchors. **Cite Gersonides 1342/43, not Mihailescu**: the
+   2-vs-3 case is elementary and ancient; Catalan is overkill and
+   invites the referee reaction he fears. His ticket split (one north,
+   two south) is exact.
+3. **The envelope and the Benford fraction are right, with one
+   refinement.** `q+ + q− = 2^{floor(kL)}` proved (one line) and exact
+   to `k = 3000`. The side-asymmetry is confirmed: negative side wins
+   iff `frac(kL) < log2(3/2)`; exact to `k = 10^5` (58,496/99,999 =
+   0.5849658), high-precision to `k = 10^7` (0.5849626 vs 0.5849625007),
+   every decision guarded; closest call `k = 190,538` at `9.3·10^{−8}`.
+   It is the base-2 Benford second-digit law of `3^k` — "exact Benford"
+   is exactly right — and his machine's 50/50 first draft was the
+   correct answer to the *ratio* question; the additive one is the
+   cycle-relevant one (divisibility lives on `q` as an integer). The
+   refinement: **`k = 1` is an exact tie** (`q+ = q− = 1`; the only tie
+   at any `k`), so the law reads "for `k >= 2`".
+4. **His `k <= 10` map replicates exactly.** 250,952 profiles
+   (244,994 +, 5,958 −), bounds re-derived, zero silent skips, one
+   divisibility test per profile via L-A1: 37 divisible, all 37 genuine
+   cycles, all realizing known houses — **cycles exactly `{+1}` and
+   `{−1, −5, −17}`**. His false survivor is the `B^5` trivial word
+   (`q_P = 781`, `gcd = 781 = |q_P|`, `q_red(base) = 1`), flagged a
+   priori by the repeated-word law, which was verified on all 384
+   repeated words in the sweep. His 256/243 sweep is the `(5,8)`,
+   `q = 13` slice — 35 profiles, none divisible — subsumed.
+5. **Folklore verdicts.** (a) The Catalan-lock reading: folklore with
+   citable homes (Steiner 1977 through Simons–de Weger 2005; Lagarias
+   surveys; Gersonides for the lock itself — all verified live, item 4);
+   his instinct not to re-announce is right; the *packaging* (spent
+   finite stock ⇒ every future candidate needs the finite-place ×
+   archimedean coupling) appears to be his. (b) The Benford fraction:
+   no prior statement found in the Collatz/cycle context (searched:
+   arXiv, OEIS, the Lagarias bibliographies, the Benford-Collatz
+   papers); nearest neighbors are Kontorovich–Miller 2005 /
+   Lagarias–Soundararajan 2006 (Benford for *iterates*) and the
+   Sturmian gap density (same constant, different event). Honest grade:
+   "not found stated", a legitimate small brick with neighbors cited.
+6. **His commit is real and does what the letter says.** `a67970f` in
+   `one-obstruction-three-faces-lean`, 2026-07-18: REQ-MATH-010/011 as
+   described (item 5), self-catch disclosed in-code. One cosmetic flag:
+   the act-C header comment still says ~50/50 while the code below
+   prints the corrected 58.5% — worth one friendly line.
+7. **Stopping rules.** The spent-stock claim excludes nothing (a
+   sufficient mechanism exhausted, not an obstruction); the `k <= 10`
+   map was replicated once, bounded, and is closed; the cycle front
+   stays parked.
+
 ## Item 1: the anchored loops and the `|q| = 1` lock — VERIFIED
 
 **(a) The anchor table, from fresh forward iteration.** All four known
@@ -437,3 +496,117 @@ Two flat observations for the reply:
 His anchor table, envelope identity, ticket mapping, Benford fraction,
 and `k <= 10` map — every claim his letter puts weight on — are
 independently confirmed by items 1–3 with fresh code at larger ranges.
+
+## Item 6: proposal lines (drafted, NOT applied) and the author-decision list
+
+No wiki page is touched by this session. The following are candidates
+only; application is the author's decision, per the round-3 pattern
+(decisions first, then apply, then the reply).
+
+**(i) Candidate `cycles.md` remark (suggest: Remark 12.6.1.2, under the
+transport recurrence), record-only, front stays parked:**
+
+> **Remark 12.6.1.2 (the near-miss anchors of the known cycles; the
+> `|q| = 1` stock; the side-asymmetry).** In the odd-step frame
+> (`k` odd steps, `m` halvings, `q = 2^m − 3^k`), the four known cycles
+> of `3x+1` on the nonzero odd integers are each anchored to a
+> near-miss of the two towers: `+1: (k,m,q) = (1,2,+1)` (4-3),
+> `−1: (1,1,−1)` (2-3), `−5: (2,3,−1)` (8-vs-9), `−17: (7,11,−139)`.
+> At `|q| = 1` divisibility is free: every composition of `m` into `k`
+> parts yields an integer cycle (verified exhaustively at the three
+> anchors), and `|2^a − 3^b| = 1` has exactly the solutions
+> `(a,b) ∈ {(1,1),(2,1),(3,2)}` — elementary (mod 8 plus a two-line
+> factoring), and ancient: Gersonides, *De numeris harmonicis*,
+> 1342/43 (Mihailescu 2004 settles the general Catalan case but is not
+> needed here). So the `|q| = 1` mechanism is a finite stock, spent;
+> every further cycle must satisfy `q | R_0` nontrivially — exactly
+> this front's parked condition; `−17` (`gcd(q, R_0) = 139`, prime,
+> word primitive) is the one known nontrivial instance. Two exact side
+> facts (verified to the stated ranges, `experiments/
+> merle_round5_check.py`, 2026-07-19): the envelope `q_+ + q_− =
+> 2^{⌊kL⌋}` (`L = log₂3`; `k = 1..3000`), and the side-asymmetry — the
+> negative side holds the nearer tower in absolute distance iff
+> `{kL} < log₂(3/2)`, density `log₂(3/2) ≈ 0.585` (Weyl; the base-2
+> Benford second-digit law of `3^k`), exact to `k = 10^5`, measured to
+> `k = 10^7` at `0.5849626`; `k = 1` is an exact tie (`q_+ = q_− = 1`),
+> the only one. In ratio distance the split is 50/50 — both answers are
+> right, to different questions; the additive one is the cycle-relevant
+> one since divisibility lives on `q` as an integer. Exhaustive
+> replication for `k ≤ 10`, both sectors (250,952 profiles, one
+> rotation per profile via Remark 12.6.1.1): cycles exactly `{+1}` and
+> `{−1, −5, −17}`. Joint with Eric Merle (correspondence 2026-07-19,
+> his commit `a67970f`, scripts REQ-MATH-010/011; [credit phrasing per
+> the author]). Excludes nothing: the spent stock is a sufficient
+> mechanism exhausted, not an obstruction; the front stays parked.
+
+**(ii) Candidate ledger lines (shared repo — NOT touched here; for the
+author to place in LEDGER.md if adopted):**
+
+> **L-A2 (the repeated-word gcd law; his proposal, round 5).** For
+> every profile `P = B^j` (`j ≥ 2`): `gcd(q_P, R_0(P)) =
+> |q_P|/q_red(B)`, `q_red(B) = |q_B|/gcd(q_B, R_0(B))` — forced `> 1`,
+> sign-blind; a repeated word is divisible iff its base is, and then
+> realizes the base's cycle traversed `j` times, never a new one.
+> Closed with complete elementary cause (fixed-point invariance under
+> repetition + the seam identity), `briefs/prime-local-probe-findings.md`
+> (2026-07-18); re-verified on all 384 repeated words of the `k ≤ 10`
+> map (round-5 check). Did real work in his `k = 5` sweep (swept the
+> one false survivor a priori). Keys: [his scripts; our
+> `experiments/prime_local_probe.py` + `merle_round5_check.py`].
+
+And, our suggestion rather than his (decision 5 below):
+
+> **L-A3 (candidate: the anchored loops, the spent `|q| = 1` stock,
+> and the Benford side-asymmetry).** The four known cycles anchored to
+> tower near-misses; the `|q| = 1` lock free and its stock exactly
+> three (Gersonides 1342/43; Mihailescu not needed); `−17` the single
+> nontrivial-divisibility instance; the envelope `q_+ + q_− = 2^{⌊kL⌋}`;
+> the side-asymmetry `log₂(3/2)` (absolute) vs 50/50 (ratio), with the
+> `k = 1` exact tie; the exhaustive `k ≤ 10` map = `{+1}` ∪
+> `{−1, −5, −17}`. Keys: his `a67970f` (REQ-MATH-010/011) + our
+> `experiments/merle_round5_check.py` (211,047 checks, 0 failures).
+> Framing clause (the note's brick): the finite-pure mechanism is a
+> spent finite stock, so every remaining candidate needs the
+> finite-place × archimedean coupling — consistent with, and joined
+> to, the prime-local structureless verdict.
+
+**(iii) The author-decision list (nothing decided here):**
+
+1. **L-A2 elevation** — his proposal: ledger entry, not a footnote.
+   The law is verified and closed; elevation is a placement/credit
+   call. (If yes: the L-A2 draft above; both sides hold keys.)
+2. **The gateway-viz plan change** — his proposal: each side builds its
+   own cycle-side gateway viz and cross-links ("let's each build one
+   and cross-link"), vs our recorded round-4 plan (we build the
+   cycle-side gateway). Accept, decline, or accept-with-scope; nothing
+   was computed on this.
+3. **Whether the Benford brick and the spent-stock framing enter the
+   note**, and under what credit language. The evidence supports:
+   ingredients folklore-with-references (both flags adjudicated, item
+   4); the packaging his; the fraction "not found stated" in the
+   cycle context; his self-catch included under the protocol's
+   visibility rule (his (b) flag; the 50/50 draft was the right answer
+   to the ratio question). The `k = 1` tie and the Gersonides-not-
+   Mihailescu citation posture should ride along if the brick enters.
+4. **Whether to mention the stale ~50/50 header** in his REQ-MATH-011
+   (cosmetic; one friendly line; item 5).
+5. **L-A3 (or equivalent) creation** for the anchored-loops/Benford
+   material — suggested here, not his proposal; his artifacts + our
+   key would both attach.
+
+## Compliance
+
+Verification, replication, and literature adjudication only. No cycle
+search beyond the brief's bounded `k <= 10` replication (run once,
+exact, closed); no larger `k`, no Baker/linear-forms development, no
+new statistics campaigns beyond item 2's mandated measurement, no Lean
+work, no edits to any wiki page or to the shared repo's PROTOCOL.md /
+LEDGER.md (proposal lines live in this file only). GitHub API use was
+read-only. Off-brief observations, logged and stopped: (i) the `k = 1`
+exact tie (recorded in item 2; a refinement, not an anomaly); (ii) the
+closest-call structure `k − 1 = 190,537` = the largest CF denominator
+of `L` below `10^7` (measurement-support note, item 2); (iii) his
+stale header comment (item 5). The script runs clean end-to-end from a
+fresh checkout (`python experiments/merle_round5_check.py all`,
+211,047 checks, 0 failures, ~3.5 min). The cycle front stays parked;
+nothing here reopens it.
