@@ -246,12 +246,174 @@ def section1():
 
 
 # --------------------------------------------------------------------------
+# Section 2: the envelope identity and the Benford side-asymmetry
+# --------------------------------------------------------------------------
+#
+# L = log2 3.  q+ = 2^ceil(kL) - 3^k > 0,  q- = 3^k - 2^floor(kL) > 0.
+# (a) Envelope: kL is never an integer (2^m = 3^k is impossible), so
+#     ceil(kL) = floor(kL) + 1 and
+#         q+ + q- = 2^{floor(kL)+1} - 3^k + 3^k - 2^{floor(kL)} = 2^{floor(kL)}.
+#     One line; verified exactly below for k = 1..3000.
+# (b) Two distance notions, pinned:
+#     ABSOLUTE: the negative side (the lower tower) wins iff q- < q+
+#       iff 2*3^k < 2^{floor} + 2^{ceil} = 3*2^{floor(kL)}
+#       iff 3^k / 2^{floor(kL)} < 3/2  iff  2^{frac(kL)} < 3/2
+#       iff frac(kL) < log2(3/2).  Density log2(3/2) = 0.5849625...
+#       by Weyl equidistribution (L irrational).
+#     RATIO (multiplicative): the lower tower is nearer iff
+#       3^k/2^{floor} < 2^{ceil}/3^k  iff  2^{frac} < 2^{1-frac}
+#       iff frac(kL) < 1/2.  Density 1/2 -- the machine's 50/50 first
+#       draft is the correct answer to THIS question.
+#     Second-binary-digit reading: 3^k's leading bit is at floor(kL);
+#     its second bit is 0 iff 3^k < 1.5 * 2^{floor(kL)} iff the same
+#     event as "negative side wins" -- base-2 Benford second-digit law,
+#     P = log2(3/2).  Checked as an exact per-k equivalence below.
+
+K_ENVELOPE = 3000
+K_EXACT = 100_000          # exact integer comparisons up to here
+K_HP = 10_000_000          # high-precision fractional parts up to here
+HP_BITS = 200              # working precision (bits) for the guard
+
+
+def section2():
+    print("=" * 72)
+    print("Section 2: envelope identity + Benford side-asymmetry")
+    print("=" * 72)
+
+    from decimal import Decimal, getcontext, ROUND_FLOOR
+    getcontext().prec = 150   # ~498 bits; display/guard only, labeled
+
+    # High-precision integer approximation of L (guard apparatus).
+    # A = floor(L * 2^HP_BITS); decimal error ~1e-148 * 2^200 ~ 1e-88 ulp,
+    # so A is the exact floor with enormous margin.  Consistency with the
+    # exact big-integer world is checked at every k of the exact passes.
+    L_dec = Decimal(3).ln() / Decimal(2).ln()
+    A = int((L_dec * (1 << HP_BITS)).to_integral_value(rounding=ROUND_FLOOR))
+    T_int = A - (1 << HP_BITS)          # floor(frac(L) * 2^HP_BITS)
+    mask = (1 << HP_BITS) - 1
+
+    # (a) envelope identity, exact, k = 1..3000 ---------------------------
+    t = 1
+    for k in range(1, K_ENVELOPE + 1):
+        t *= 3
+        fl = t.bit_length() - 1                  # floor(kL), exact
+        qp = (1 << (fl + 1)) - t
+        qn = t - (1 << fl)
+        chk(qp > 0 and qn > 0, f"envelope k={k}: positivity")
+        chk(qp + qn == 1 << fl, f"envelope k={k}: q+ + q- = 2^floor(kL)")
+        chk((k * A) >> HP_BITS == fl, f"A-consistency k={k}")
+    print(f"\n(a) q+ + q- = 2^floor(kL) exact for k = 1..{K_ENVELOPE}; "
+          f"q+, q- > 0 throughout;")
+    print(f"    floor(k*A/2^{HP_BITS}) == floor(kL) for all these k "
+          f"(guard consistency).")
+
+    # (b) exact integer pass, k = 1..K_EXACT ------------------------------
+    # Tie analysis, exact: 2*3^k = 3*2^e  iff  3^{k-1} = 2^{e-1}  iff k = 1
+    # (e = 1).  So k = 1 is an exact tie -- q+ = q- = 1: the near-misses
+    # 4-3 and 2-3 are both at distance 1 from 3^1 -- and no tie exists for
+    # any k >= 2.  Win counts below are over k >= 2; the tie is reported.
+    t = 1
+    neg_wins_exact = 0
+    exact_counts = {}
+    for k in range(1, K_EXACT + 1):
+        t *= 3
+        fl = t.bit_length() - 1
+        lhs = 2 * t                      # 2 * 3^k
+        rhs = 3 << fl                    # 3 * 2^floor(kL)
+        if k == 1:
+            chk(lhs == rhs, "k=1 is an exact tie (q+ = q- = 1)")
+            continue
+        chk(lhs != rhs, f"k={k}: no tie for k >= 2")
+        neg = lhs < rhs
+        # second binary digit of 3^k: bit fl-1 (below the leading bit fl)
+        d2 = (t >> (fl - 1)) & 1
+        chk((d2 == 0) == neg, f"k={k}: second-digit equivalence")
+        neg_wins_exact += neg
+        if k in (10**4, 10**5):
+            exact_counts[k] = neg_wins_exact
+    print(f"\n(b) exact integer comparisons (2*3^k vs 3*2^floor(kL)), "
+          f"2 <= k <= {K_EXACT}:")
+    print(f"    k = 1 is an EXACT TIE: q+ = q- = 1 (4-3 and 2-3 both at "
+          f"distance 1); no other tie exists.")
+    for kk, c in exact_counts.items():
+        print(f"    2 <= k <= {kk:>7,}: negative side wins {c:>7,} "
+              f"of {kk - 1:,} ({c / (kk - 1):.7f})")
+    print(f"    second-binary-digit-of-3^k = 0 coincides with "
+          f"'negative side wins' at every k >= 2 (exact).")
+
+    # (b') high-precision pass to K_HP with margin guard ------------------
+    s = 0
+    neg_wins_hp = 0
+    ratio_wins_hp = 0
+    half = 1 << (HP_BITS - 1)
+    min_margin, argmin_k = None, None
+    decades = {}
+    next_decade = 10
+    for k in range(1, K_HP + 1):
+        s = (s + A) & mask               # frac(kL) * 2^B, error < (k+1) ulp
+        diff = s - T_int
+        if k == 1:
+            # the exact tie: frac(1*L) IS the threshold log2(3/2)
+            chk(diff == 0, "hp pass sees the k=1 tie exactly (0 ulp)")
+        else:
+            if diff < 0:
+                neg_wins_hp += 1
+                m_ = -diff
+            else:
+                m_ = diff
+            if min_margin is None or m_ < min_margin:
+                min_margin, argmin_k = m_, k
+        if s < half:
+            ratio_wins_hp += 1
+        if k == next_decade:
+            decades[k] = (neg_wins_hp, ratio_wins_hp)
+            next_decade *= 10
+    decades[K_HP] = (neg_wins_hp, ratio_wins_hp)
+
+    # guard: every decision safe iff |integer margin| > k+1 ulp error bound
+    chk(min_margin > K_HP + 1,
+        f"threshold guard: min margin {min_margin} ulp > {K_HP + 1}")
+    # cross-check hp vs exact at 10^5
+    chk(decades[10**5][0] == exact_counts[10**5],
+        "hp count at 1e5 == exact count")
+
+    log2_3_2 = float(Decimal(3).ln() / Decimal(2).ln() - 1)
+    print(f"\n(b') high-precision pass to k = {K_HP:,} "
+          f"({HP_BITS}-bit fractional parts; labeled measurement; "
+          f"absolute column over k >= 2, tie at k = 1 excluded):")
+    print(f"    {'k':>12}  {'absolute: frac < log2(3/2)':>28}  "
+          f"{'ratio: frac < 1/2':>18}")
+    for kk in sorted(decades):
+        a_, r_ = decades[kk]
+        print(f"    {kk:>12,}  {a_ / (kk - 1):>28.7f}  {r_ / kk:>18.7f}")
+    print(f"    log2(3/2) = {log2_3_2:.10f}; ratio-side limit = 0.5")
+
+    # closest call, exactly confirmed ------------------------------------
+    marg_real = Decimal(min_margin) / Decimal(1 << HP_BITS)
+    tstar = pow(3, argmin_k)
+    fl = tstar.bit_length() - 1
+    lhs, rhs = 2 * tstar, 3 << fl
+    chk(lhs != rhs, "closest call (k >= 2): no tie")
+    neg_exact = lhs < rhs
+    s_hp = (argmin_k * A) & mask
+    chk((s_hp - T_int < 0) == neg_exact,
+        "closest call: hp side == exact side")
+    print(f"\n    closest call in the guard: k = {argmin_k:,}, "
+          f"|frac(kL) - log2(3/2)| = {marg_real:.3E}")
+    print(f"    ({min_margin} ulp at 2^-{HP_BITS}; safety bound {K_HP + 1} "
+          f"ulp; side exactly confirmed by big-integer comparison: "
+          f"negative wins = {neg_exact})")
+
+    print("\nSection 2 done.")
+
 
 def main():
     args = sys.argv[1:] or ["all"]
     run = args[0]
     if run in ("1", "all"):
         section1()
+    if run in ("2", "all"):
+        section2()
     print(f"\nTOTAL: {CHECKS} checks, {FAILS} failures")
     return 1 if FAILS else 0
 
