@@ -407,6 +407,210 @@ def section2():
     print("\nSection 2 done.")
 
 
+# --------------------------------------------------------------------------
+# Section 3: the exhaustive k <= 10 map, both sectors
+# --------------------------------------------------------------------------
+#
+# m-bounds, derived fresh from the per-step bounds (do not trust the brief's
+# sketch -- re-derived here): around a k-cycle,
+#     prod_i (3 x_i + 1)/x_i = prod_i 2^{s_i} = 2^m        (exact identity).
+# POSITIVE sector (all x_i >= 1 odd):  (3x+1)/x = 3 + 1/x in (3, 4], so
+#     3^k < 2^m <= 4^k,  i.e.  k log2 3 < m <= 2k   (m = 2k iff all x_i = 1).
+# NEGATIVE sector (all x_i <= -1 odd): 3 + 1/x in [2, 3), so
+#     2^k <= 2^m < 3^k,  i.e.  k <= m < k log2 3    (m = k iff all x_i = -1).
+# Since kL is never an integer, the integer ranges are
+#     positive: ceil(kL) <= m <= 2k,   negative: k <= m <= floor(kL),
+# and the sign of q = 2^m - 3^k matches the sector automatically
+# (x_0 = R_0/q with R_0 > 0).
+#
+# Divisibility is tested ONCE per profile, at rotation 0, citing
+# rotation-invariance of gcd(q, R_r) (transport recurrence, cycles.md
+# Remark 12.6.1.1 = reverse.md 14.15.9.2 -- his "one rotation per profile
+# via L-A1").  For divisible profiles all k rotation elements are computed
+# exactly and checked (integral, odd, nonzero, one sign, forward closure
+# with v2 match) -- integrality at every rotation doubles as an instance
+# check of the invariance itself.
+#
+# Repeated-word law (prime-local findings, closed in review): for a profile
+# P = B^j (j >= 2, base B primitive), with X = 2^{m_B}, Y = 3^{k_B}:
+#     q_P = X^j - Y^j = (X - Y) * c,  c = sum_{i<j} X^i Y^{j-1-i} > 1,
+#     R_0(P) = c * R_0(B)   (geometric identity, verified exactly),
+# hence gcd(q_P, R_0(P)) = c * gcd(q_B, R_0(B)) = |q_P| / q_red(B),
+# q_red(B) = |q_B| / gcd(q_B, R_0(B)).  Since c > 1 the gcd is forced > 1;
+# and q_P | R_0(P) iff q_red(B) = 1 iff B itself is divisible -- so every
+# repeated word is decided a priori, before any enumeration: it is
+# divisible iff its base is, and then it realizes the base's cycle
+# traversed j times, never a new cycle.
+
+KNOWN_CYCLES = {
+    frozenset({1}): "+1",
+    frozenset({-1}): "-1",
+    frozenset({-5, -7}): "-5",
+    frozenset({-17, -25, -37, -55, -41, -61, -91}): "-17",
+}
+
+
+def primitive_period(word):
+    k = len(word)
+    for d in range(1, k + 1):
+        if k % d == 0 and all(word[i] == word[i % d] for i in range(k)):
+            return d
+    return k
+
+
+def section3():
+    import math
+    print("=" * 72)
+    print("Section 3: exhaustive k <= 10 map, both sectors")
+    print("=" * 72)
+
+    grand_total = 0
+    grand_div = 0
+    cycles_found = []          # (k, sector, m, word, elements, label)
+    div_noncycles = []         # divisible profiles failing reconstruction
+    repeated_total = 0
+    repeated_checked = 0
+    slice_5_8 = None
+    per_cell = []
+
+    for k in range(1, 11):
+        p3 = 3 ** k
+        fl = p3.bit_length() - 1            # floor(kL), exact
+        for sector, mlo, mhi in (("+", fl + 1, 2 * k), ("-", k, fl)):
+            total = 0
+            div_count = 0
+            cyc_here = 0
+            for m in range(mlo, mhi + 1):
+                q = (1 << m) - p3
+                chk((q > 0) == (sector == "+"), f"k={k} m={m}: q sign")
+                m_count = 0
+                m_div = 0
+                for s in compositions(m, k):
+                    total += 1
+                    m_count += 1
+                    r0 = R0(k, s)
+                    # repeated-word law, applied to every non-primitive word
+                    d = primitive_period(s)
+                    if d < k:
+                        repeated_total += 1
+                        j = k // d
+                        base = s[:d]
+                        mB, kB = sum(base), d
+                        qB = (1 << mB) - 3 ** kB
+                        r0B = R0(kB, base)
+                        c = abs(q) // abs(qB)
+                        chk(q == qB * c, f"k={k} {s}: q_B | q_P")
+                        chk(r0 * qB == r0B * q,
+                            f"k={k} {s}: geometric identity R0(P)q_B=R0(B)q_P")
+                        g = math.gcd(abs(q), r0)
+                        q_red = abs(qB) // math.gcd(abs(qB), r0B)
+                        chk(g == abs(q) // q_red,
+                            f"k={k} {s}: gcd = |q_P|/q_red(base)")
+                        chk(g > 1, f"k={k} {s}: repeated-word gcd > 1")
+                        repeated_checked += 4
+                    # THE divisibility test: once per profile (rotation 0)
+                    if r0 % q == 0:
+                        div_count += 1
+                        m_div += 1
+                        # full reconstruction, all rotations
+                        elems = []
+                        ok = True
+                        for w in rotations(s):
+                            num = R0(k, w)
+                            if num % q != 0:
+                                ok = False   # would refute rotation-invariance
+                                break
+                            elems.append(num // q)
+                        chk(ok, f"k={k} {s}: rotation-invariance instance")
+                        if ok:
+                            ok = (all(e % 2 != 0 for e in elems)
+                                  and all(e != 0 for e in elems)
+                                  and len({e > 0 for e in elems}) == 1)
+                            for i in range(k):
+                                y = 3 * elems[i] + 1
+                                if v2(y) != s[i] or (y >> s[i]) != elems[(i + 1) % k]:
+                                    ok = False
+                        if ok:
+                            eset = frozenset(elems)
+                            label = KNOWN_CYCLES.get(eset)
+                            chk(label is not None,
+                                f"k={k} {s}: cycle is a KNOWN one (else NEW)")
+                            cycles_found.append((k, sector, m, s, sorted(set(elems)), label))
+                            cyc_here += 1
+                        else:
+                            div_noncycles.append((k, sector, m, s))
+                if k == 5 and m == 8:
+                    slice_5_8 = (q, m_count, m_div)
+            # composition-count cross-check: zero silent skips
+            expect = sum(comb(mm - 1, k - 1) for mm in range(mlo, mhi + 1))
+            chk(total == expect, f"k={k} {sector}: enumeration complete "
+                                 f"({total} vs {expect})")
+            grand_total += total
+            grand_div += div_count
+            per_cell.append((k, sector, mlo, mhi, total, div_count, cyc_here))
+
+    print("\nper-(k, sector) counts  [m-range | profiles | divisible | cycles]:")
+    for k, sector, mlo, mhi, total, dv, cy in per_cell:
+        print(f"    k={k:>2} {sector}:  m in [{mlo:>2},{mhi:>2}]  "
+              f"{total:>7,} profiles  {dv:>3} divisible  {cy:>3} cycle-realizing")
+    print(f"\n    grand total: {grand_total:,} profiles "
+          f"({sum(t for _, s_, _, _, t, _, _ in per_cell if s_ == '+'):,} positive, "
+          f"{sum(t for _, s_, _, _, t, _, _ in per_cell if s_ == '-'):,} negative); "
+          f"{grand_div} divisible; {len(cycles_found)} cycle-realizing; "
+          f"{len(div_noncycles)} divisible non-cycles")
+
+    # (a) verdict: cycles exactly {+1} and {-1, -5, -17}
+    labels = {c[5] for c in cycles_found}
+    chk(labels == {"+1", "-1", "-5", "-17"},
+        f"cycle set is exactly the four known: {labels}")
+    chk(len(div_noncycles) == 0,
+        f"no divisible profile fails reconstruction: {div_noncycles}")
+    pos_labels = {c[5] for c in cycles_found if c[1] == "+"}
+    neg_labels = {c[5] for c in cycles_found if c[1] == "-"}
+    chk(pos_labels == {"+1"}, f"positive cycles = {{+1}}: {pos_labels}")
+    chk(neg_labels == {"-1", "-5", "-17"},
+        f"negative cycles = {{-1,-5,-17}}: {neg_labels}")
+    print("\n(a) cycle-realizing profiles, complete list:")
+    for k, sector, m, s, elems, label in cycles_found:
+        d = primitive_period(s)
+        tag = f"= base^{k // d} of {s[:d]}" if d < k else "primitive"
+        print(f"    k={k:>2} {sector} m={m:>2}  {s}  -> {label} "
+              f"(elements {elems}; {tag})")
+
+    # (b) the k=5 all-2s word (his 'false survivor': element 1 five times)
+    s5 = (2, 2, 2, 2, 2)
+    q5 = (1 << 10) - 3 ** 5
+    r05 = R0(5, s5)
+    chk(q5 == 781, "k=5 B^5 word: q_P = 2^10 - 3^5 = 781")
+    chk(primitive_period(s5) == 1 and s5[0] == 2,
+        "k=5 all-2s word is B^5 of the trivial-cycle word (2,)")
+    qB, r0B = (1 << 2) - 3, R0(1, (2,))          # base: q=1, R0=1
+    q_red = abs(qB) // math.gcd(abs(qB), r0B)
+    chk(q_red == 1, "q_red(base) = 1")
+    g5 = math.gcd(q5, r05)
+    chk(g5 == 781 and g5 == abs(q5), "gcd(q_P, R_0) = 781 = |q_P|")
+    chk(r05 % q5 == 0 and r05 // q5 == 1,
+        "it IS divisible and realizes y = 1 (trivial cycle traversed 5x)")
+    print(f"\n(b) k=5 all-2s word (element 1 repeated 5 times): q_P = 781 = "
+          f"{'*'.join(f'{p}^{e}' if e > 1 else str(p) for p, e in sorted(factorize(781).items()))}, "
+          f"q_red(base) = 1, gcd(q_P, R_0) = {g5} = |q_P|;")
+    print("    divisible survivor realizing the trivial cycle at y = 1 -- "
+          "not a new cycle; flagged a priori by the repeated-word law.")
+    print(f"    repeated words in the k <= 10 enumeration: {repeated_total} "
+          f"(all non-primitive profiles), law verified on every one "
+          f"({repeated_checked} checks): gcd = |q_P|/q_red(base) > 1 always.")
+
+    # (c) the 256/243 slice
+    q58, n58, d58 = slice_5_8
+    chk(q58 == 13, f"(k,m)=(5,8): q = {q58}")
+    chk(n58 == comb(7, 4) == 35, f"(k,m)=(5,8): {n58} profiles")
+    chk(d58 == 0, f"(k,m)=(5,8): no divisible profile")
+    print(f"\n(c) his 256/243 sweep = the (k,m) = (5,8), q = 13 slice: "
+          f"{n58} profiles, 0 divisible, no cycle -- subsumed by (a).")
+
+    print("\nSection 3 done.")
+
+
 def main():
     args = sys.argv[1:] or ["all"]
     run = args[0]
@@ -414,6 +618,8 @@ def main():
         section1()
     if run in ("2", "all"):
         section2()
+    if run in ("3", "all"):
+        section3()
     print(f"\nTOTAL: {CHECKS} checks, {FAILS} failures")
     return 1 if FAILS else 0
 
