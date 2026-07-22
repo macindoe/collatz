@@ -1,7 +1,7 @@
 ---
 status: periods 1, 2, 3 CLOSED; uniform trim question RESOLVED (12.8: exists, exponentially weak, sharp at verified instances); all-p sharpness ASSESSED not proved, evidence extended to floor grade (12.8.6); cycle front PARKED per stopping rules
 scope: new section 12 (post-monolith; first page with no monolith source)
-updated: 2026-07-19
+updated: 2026-07-22
 source: new material; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md)
 ---
 
@@ -171,7 +171,7 @@ where, reading indices in rotation order starting at `r`: `M_t = Σ_(j>t) m_j` a
 
 ## 12.8. The Uniform Trim: Resolution of the Question
 
-This section resolves the uniform-in-`p` trim question posed in `12.7.3` and in the program strategy (README): a uniform trim **exists** (Theorem `12.8.1`), its constant degrades **exponentially** in `p`, and that degradation is **intrinsic** — a explicit family of configurations shows size-counting arguments cannot do better (Remark `12.8.3`). The strategic consequence is recorded in `12.8.5`.
+This section resolves the uniform-in-`p` trim question posed in `12.7.3` and in the program strategy (README): a uniform trim **exists** (Theorem `12.8.1`), its constant degrades **exponentially** in `p`, and that degradation is assessed as **intrinsic** — an explicit family of configurations shows counting arguments cannot do substantially better (Remark `12.8.3`; sharp at the verified instances, the all-`p` claim assessed, not proved, `12.8.6`). The strategic consequence is recorded in `12.8.5`.
 
 Throughout, `γ = K - log_2 q` and `γ' = γ + log_2 p`. For an arc `A` of consecutive blocks define the weight `w(A) = (log_2 3 - 1)·m(A) - s(A)` — its `m`-mass at exchange rate `0.585`, minus its `s`-mass.
 
@@ -232,7 +232,7 @@ p = 100:  n_0 ~ 2.05 * 10^23
 
 This is a genuine `n_0(p)`, not merely the `O(p·1.585^p)` shape — the ratio `n_0(p) / (p·1.585^p)` is `~39` at `p=10`, falling to `~20` by `p=100` (still decreasing; the extra factor over `1.585^p` alone comes from Rhin's own `13.3·log n` cost, and `log(n_0(p)) ~ p·log(1.585)`, so the self-reference in `(iii)`'s `log n` term is consistent, not circular — no closed-form limiting constant is claimed here, only the checked table above). At `p = 91` the crossover target, `n_0(91) ~ 3*10^21` — far beyond any feasible search, consistent with `12.8.5`'s withdrawal of the crossover plan; this corollary's contribution is that the withdrawal is now backed by a checked number, not just a shape.
 
-**Remark 12.8.3 (sharpness: the staircase family).** The exponential loss is not an artifact. Consider blocks growing geometrically at ratio `≈ log_2 3` with shallow exits (`s = 1`), closed by one block of tiny depth and enormous exit valuation — a long climb and a single crash. Such configurations satisfy *every* rotation's exact size condition `q <= R_r` with `γ` far below any polynomial-in-`p` trim: at `p = 7`, `n = 94`, the staircase `m = (4, 7, 9, 15, 23, 35, 1)` passes all seven size tests with `γ = 6.74`, where the period-3 constant `0.1157n - 2 = 8.9` would forbid it; `84` further staircase size-passers exist at `p = 6` alone. All fail the divisibility conditions `q | R_r` — none is a cycle — and all respect Theorem `12.8.1` (worst ratio `0.23`). Code: `experiments/uniform_trim.py`. The instance record is substantially extended, and the construction generalized to an explicit per-period recipe with a documented combinatorial obstruction, at `12.8.6`; this Remark's own recorded instances are unchanged.
+**Remark 12.8.3 (sharpness: the staircase family).** The exponential loss is not an artifact. Consider blocks growing geometrically at ratio `≈ log_2 3` with shallow exits (`s = 1`), closed by one block of tiny depth and enormous exit valuation — a long climb and a single crash. Such configurations satisfy *every* rotation's exact size condition `q <= R_r` with `γ` far below any polynomial-in-`p` trim: at `p = 7`, `n = 94`, the staircase `m = (4, 7, 9, 15, 23, 35, 1)` passes all seven size tests with `γ = 6.74`, where the period-3 constant `0.1157n - 2 = 8.9` would forbid it; `84` further staircase size-passers exist at `p = 6` alone. All fail the divisibility conditions `q | R_r` — none is a cycle — and all respect Theorem `12.8.1` (worst ratio `0.23`). Code: `experiments/uniform_trim.py`. The instance record is substantially extended, and the construction generalized to an explicit per-period recipe covering the full contiguous range `p ∈ {2,...,23}`, at `12.8.6`; this Remark's own recorded instances are unchanged.
 
 **Remark 12.8.4 (what the staircase means).** The staircase is a divergent-orbit profile bent into a loop: geometric depth growth with shallow exits is exactly the growth regime of the size ledger (`11.8.4.4` — `log x` grows when `s < 0.585m`). Size analysis cannot forbid it as a cycle for the same reason drift analysis cannot forbid divergence: both are rare-event arithmetic questions, not counting questions. What *must* kill the staircase is the `p`-fold divisibility system — equivalently, in anchor coordinates, the rigidity of closed anchor walks (`11.8.5.6`, `9.8.4` anchor form). The two halves of the conjecture's residual difficulty (statistics for orbits, rigidity for cycles) meet in this one configuration, which is strong evidence they are the same problem.
 
