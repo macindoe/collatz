@@ -19,7 +19,7 @@ This document lets any capable model (or a future session of any model) continue
 - **Cycles** — PARKED → cycles.md §12 (periods 1–3 closed; uniform trim resolved; staircase sharpness at floor grade, contiguous `p ∈ {2,...,23}`; the divisibility system one rotation-invariant condition, 12.6.1.1). Reopens only with a divisibility-aware (anchor-rigidity) idea, per the stopping rules.
 - **Statistics / AEH** — formalized, calibrated clean; proof effort parked → aeh.md §13; the single-sequence structural axis is at its endpoint → anchor-digit-search.md §17.7.
 - **Reverse / mirror** — ACTIVE → reverse.md §14.1–14.14 (duality 14.1–14.12; door/exit seam 14.14; KL–LP closed on a structural obstruction, 14.13/14.6.5); the itinerary language → itinerary.md §14.15 (whole-period height laws 14.15.9).
-- **Ladder** — closed as local law → ladder.md §15.
+- **Ladder** — closed as local law → ladder.md §15; at the valuation level identified as the third face of stage3's target-shift mechanism (15.5).
 - **Papers** — both published → publication.md (paper 1 DOI 10.5281/zenodo.21273548, v2 DOI 10.5281/zenodo.21421120; mirror paper DOI 10.5281/zenodo.21303918).
 
 ## Open work items, in priority order

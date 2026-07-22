@@ -1,11 +1,11 @@
 ---
 status: CLOSED as a local law (15.1–15.2, verified, zero failures); the author's divergence question answered exactly (15.3)
 scope: new section 15 (post-monolith)
-updated: 2026-07-22
+updated: 2026-07-23
 source: the author's question "where do (ω,d) and (ω,d+1) diverge?"; builds on §3 anchor machinery
 ---
 
-> **Current state.** The vertical structure of the state space, solved. Adjacent depths at a fixed core obey `A(ω,d+1) = 3·A(ω,d) + 2`, which forces an exact dichotomy (15.1): off-spike (`s = 1`), the deeper state's exit is *one Collatz step ahead* of the shallower one's — same integer orbit, offset by one step, divergence never; at a spike (`s ≥ 2`), the exits split by the explicit kick `e ↦ 3·2^(s−1)e + 1` — divergence immediate and total. Since `s = 1` occupies alternating depths, every column of the anchor field is a perfect braid of single Collatz steps and affine kicks (15.2). The spikes — the anchor's digit matches — are exactly the divergence points of the depth ladder (15.3). A hoped-for stronger form (columns encoding long orbit stretches) is false and recorded as such.
+> **Current state.** The vertical structure of the state space, solved. Adjacent depths at a fixed core obey `A(ω,d+1) = 3·A(ω,d) + 2`, which forces an exact dichotomy (15.1): off-spike (`s = 1`), the deeper state's exit is *one Collatz step ahead* of the shallower one's — same integer orbit, offset by one step, divergence never; at a spike (`s ≥ 2`), the exits split by the explicit kick `e ↦ 3·2^(s−1)e + 1` — divergence immediate and total. Since `s = 1` occupies alternating depths, every column of the anchor field is a perfect braid of single Collatz steps and affine kicks (15.2). The spikes — the anchor's digit matches — are exactly the divergence points of the depth ladder (15.3). A hoped-for stronger form (columns encoding long orbit stretches) is false and recorded as such. At the valuation level the ladder is now identified as the third face of stage3's target-shift mechanism (15.5): depth steps slide the valuation target along `c = 3^(−k)`, even steps are anchor-coordinate translations, and the alternation follows ultrametrically — the integer-level kick is not recovered by that frame.
 
 # 15. The Depth Ladder
 
@@ -53,7 +53,7 @@ So the spikes of the anchor field — the depths where `d` matches the 2-adic di
 
 ## 15.4. Standing
 
-This closes the vertical question as a local law. Open connections worth recording, not yet pursued: the ladder gives a second exact mechanism relating *different states with the same anchor*, which is raw material for the fiber-to-orbit bridge (stage4.md, `11.8.5.6`) — the bridge asks how anchors vary along orbits, and the ladder shows how orbits vary along an anchor; whether the two exact laws compose into anything is unexamined. The mirror front has its dual ladder: reverse.md `14.10` relates predecessors at adjacent branches `s` and `s+2` at a fixed door (step size `2` forced by the parity constraint), with an exact dichotomy gated by the `3`-adic anchor's first digit — the mirror of `15.1`'s tear-line.
+This closes the vertical question as a local law. Open connections worth recording, not yet pursued: the ladder gives a second exact mechanism relating *different states with the same anchor* (at the valuation level identified in `15.5` as the target-shift lemma read in the depth variable), which is raw material for the fiber-to-orbit bridge (stage4.md, `11.8.5.6`) — the bridge asks how anchors vary along orbits, and the ladder shows how orbits vary along an anchor; whether the two exact laws compose into anything is unexamined. The mirror front has its dual ladder: reverse.md `14.10` relates predecessors at adjacent branches `s` and `s+2` at a fixed door (step size `2` forced by the parity constraint), with an exact dichotomy gated by the `3`-adic anchor's first digit — the mirror of `15.1`'s tear-line.
 
 ## 15.5. The ladder as a face of the target-shift lemma
 

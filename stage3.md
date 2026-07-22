@@ -1,7 +1,7 @@
 ---
 status: closed at the valuation level, per reduced step, all residue classes
 scope: monolith 11.8.6
-updated: 2026-07-22
+updated: 2026-07-23
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -606,7 +606,7 @@ First, `m_+` is a digit-matching depth. On the lifting branch it counts how far 
 
 Second, the apparent self-reference — `δ_s` depends on `s`, which depends on `ε` — is stratified, not circular. On the dyadic shell `v_2(ε) = j`, the value `s = 3 + j` is constant, and `δ_(3+j)` is a single fixed reference constant for the entire shell. One computes `s` first, then `δ_s`, then `m_+`; one shift closes the problem, with no regress.
 
-Third, the shift constant explains the boundary shell. `v_2(δ_s) = s - 3` is exactly the boundary-shell scale of `11.8.3.3`: the scale at which all off-spike excess was shown to concentrate is the scale at which the shifted target sits. Both phenomena — the boundary-shell localization and the forced carry `m_+ >= 1` — are instances of the same mechanism in the additive coordinate: adding two `2`-adic quantities of equal valuation. This retrospectively unifies the boundary-shell analysis of `11.8.3.3`–`11.8.3.4` with the entry-depth law as two faces of the target-shift lemma.
+Third, the shift constant explains the boundary shell. `v_2(δ_s) = s - 3` is exactly the boundary-shell scale of `11.8.3.3`: the scale at which all off-spike excess was shown to concentrate is the scale at which the shifted target sits. Both phenomena — the boundary-shell localization and the forced carry `m_+ >= 1` — are instances of the same mechanism in the additive coordinate: adding two `2`-adic quantities of equal valuation. This retrospectively unifies the boundary-shell analysis of `11.8.3.3`–`11.8.3.4` with the entry-depth law as two faces of the target-shift lemma, and the depth ladder is a third face — climbing the ladder slides the valuation target along `c = 3^(-k)` (ladder.md `15.5`).
 
 **Numerical verification.** The laws were checked against direct computation of `v_2(x_exit + 1)` over all valid states with `ω < 3000`, `1 <= d < 64` — `62,937` states covering all six residue-parity classes — with zero discrepancies (entry depths up to `m_+ = 17` occurred). The forced-carry bound of Corollary `11.8.6.3.4` held without exception, and `v_2(δ_s) = s - 3` was confirmed for `3 <= s <= 29`. Two worked cases: `(ω, d) = (1, 4)` has `A = 80`, `s = 4`, `x_exit = 5`, `m_+ = 1`; anchor side `ε = 2`, `δ_4 ≡ 2 (mod 8)`, `v_2(ε + δ_4) = 2`, and `3 - 4 + 2 = 1` ✓. `(ω, d) = (17, 2)` has `A = 152`, `s = 3`, `x_exit = 19`, `m_+ = 2`; anchor side `N(17) ≡ 6 (mod 8)`, `ε ≡ 3 (mod 8)`, `δ_3 ≡ 1 (mod 8)`, `v_2(ε + δ_3) = 2`, and `3 - 3 + 2 = 2` ✓.
 
