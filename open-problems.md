@@ -1,6 +1,6 @@
 ---
 status: open / calibrated
-scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record); 11.9 added post-monolith (per-letter window height laws, itinerary.md 14.15.9)
+scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record); 11.10 added post-monolith (per-letter window height laws, itinerary.md 14.15.9; recorded as 11.9 in pre-2026-07-23 briefs)
 updated: 2026-07-23
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
@@ -182,7 +182,7 @@ Nothing substantive remains open from this stress test. What's left is the ordin
 
 The chase itself is discharged; the citations are pinned inline at their use sites (stage1-synthesis.md 11.8.3.11; cycles.md 12.5.3, 12.7.5, 12.8.2), and the derivations live there. One methodological guard retained: Rhin's `μ(γ) < 8.616` irrationality measure for fixed `γ ∈ Q log 2 + Q log 3` is the wrong tool for the two-integer-variable linear form the cycle corollaries need — the right statement is the Proposition on p. 160 of the same 1987 paper, applied as in Simons–de Weger (2005) Lemma 12 (pinned at cycles.md 12.5.3); recorded so the mistake isn't repeated.
 
-## 11.9. Per-letter (period-cutting) window height laws
+## 11.10. Per-letter (period-cutting) window height laws
 
 itinerary.md `14.15.9`'s whole-period height laws hold only for windows aligned to a full period (`(np, np)` in letters). A window that cuts a period partway anchors its partial past at a *rotated* fixed point rather than at the word's own `y^*`, and no height law at such windows is established.
 
