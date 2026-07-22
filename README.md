@@ -53,7 +53,7 @@ This section exists because open-ended research programs die of drift. These rul
 | `cycles.md` | §12: cycles in reduced coordinates; periods 1–3 closed; the uniform trim lemma is the open objective |
 | `archive/` | Discovery paths and refuted claims, kept with the evidence that killed them |
 | `experiments/` | Runnable verification code for every computational claim in the wiki |
-| `viz/` | Interactive visualizations — `block_family_decomposer.html`: any orbit unpacked into representative families, entries, and cascades (start here); `anchor_field_explorer.html`: the exit-valuation field over (ω, d) with click-to-trace orbits; `stratum_word_ticker.html`: the itinerary alphabet — read any orbit's stratum word letter by letter, or compose a word and watch its smallest witness grow at the modulus rate |
+| `viz/` | Interactive visualizations — `block_family_decomposer.html`: any orbit unpacked into representative families, entries, and cascades (start here); `anchor_field_explorer.html`: the exit-valuation field over (ω, d) with click-to-trace orbits; `stratum_word_ticker.html`: the itinerary alphabet — read any orbit's stratum word letter by letter, or compose a word and watch its smallest witness grow at the modulus rate; `cycle_anchor_gateway.html`: the cycle-side gateway — the near-miss ladder, the anchored loops, the `k ≤ 10` verification strip (cycles.md 12.6.1.2); `anchor_digit_visualizer.html`, `anchor_single_deep_visualizer.html`, `anchor_lenses_visualizer.html`: the single-sequence digit-structure search's companion views (anchors.md §17.7) |
 | `sources/` | Immutable history: drafts v000–v078, PDFs, data. Never edited |
 | `AGENTS.md` | Maintenance schema: layers, workflows, verification records |
 

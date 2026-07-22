@@ -81,7 +81,7 @@ Questions here include:
 * To what extent does repeated `3`-gain influence long-term movement through the reduced state space?
 * Do repeated `3`-gain patterns explain any of the visible clustering, locking, or average-drift effects seen empirically?
 
-The local trigger is now explicit; the unresolved issue is the global arithmetic and dynamical significance of that trigger. The first question also has a predicted answer: under the equidistribution heuristic the `3`-gain rate is exactly `1/3`, matched empirically to three decimal places (`11.8.4.4`); what remains open is its rigorous derivation along orbits.
+The local trigger is now explicit; the unresolved issue is the global arithmetic and dynamical significance of that trigger. The first question also has a predicted answer: under the equidistribution heuristic the `3`-gain rate is exactly `1/3`, matched empirically to three decimal places (`11.8.4.4`); under AEH it is a conditional theorem (aeh.md `13.3.2`), and what remains open is its unconditional derivation along orbits.
 
 ## 11.4. Canonical Normal Forms for Reduced States
 
@@ -104,6 +104,8 @@ Open questions include:
 
 The issue is no longer whether the reduced state is well-defined; it is whether the present coordinates are the most informative ones.
 
+**Calibration note.** One such normal form now exists: the door coordinate (reverse.md `14.14`) — the live door `y` of a reduced edge, a single integer determining the edge, with its own total presentation `G` of the reduced dynamics (semiconjugate to `F`). The question is thereby reframed — which coordinate is most informative for which purpose — rather than open as posed.
+
 ## 11.5. Reduced Predecessor Structure and Inversion
 
 The strengthened fixed-exit analysis now sharply separates two notions that were easier to conflate in earlier drafts:
@@ -121,6 +123,8 @@ Questions include:
 * Is there a clean reduced analogue of the predecessor-tree viewpoint from classical Collatz analysis?
 
 The present note now identifies one canonical representative inside the fixed-exit family of a state’s own exit value. A natural next step is to understand the full upstream geometry of these families.
+
+**Calibration note.** Closed on the mirror front: reverse.md `14.1` gives the complete predecessor characterization (which states reach a given exit, with the exact branching law), and the unique-predecessor lemma (reverse.md `14.15.4`) pins the letter-prescribed backward predecessor as unique. The classical predecessor-tree viewpoint translates through the same apparatus (reverse.md `14.4`–`14.6`, the density program).
 
 ## 11.6. Finite-State Shadows and Residue Control
 
@@ -153,6 +157,8 @@ In particular:
 This comparison matters for two reasons. First, it may show that some parts of the reduced formalism are already latent in classical formulations. Second, it may clarify which features of the present framework are genuinely new and therefore deserve further study.
 
 One concrete point of contact is now established (`11.8.3.11`): the valuation `s` on the lifting branch is a linear form in two `2`-adic logarithms, and the effective theory that bounds it — `p`-adic Baker theory together with lattice-reduction methods — is the same machinery underlying the known lower bounds on nontrivial Collatz cycle lengths (Steiner; Simons–de Weger). The reduced formalism and the classical cycle analyses therefore terminate on common arithmetic ground, which calibrates both the novelty and the expected difficulty of the remaining questions.
+
+A second contact point is established on the mirror front: reverse.md `14.15.1` identifies the itinerary coding of the door/exit seam as the classical Terras/Everett/Lagarias parity-vector coding, read in door coordinates.
 
 ## 11.8. Citation and constant debt: discharged
 

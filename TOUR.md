@@ -25,6 +25,10 @@ The wiki pages (`spine.md`, `stage1.md`–`stage4.md`, `cycles.md`, `aeh.md`, `r
 - The closed anchor walk (`Σ ΔM_t = 0`) and its rigidity — the divisibility structure the size arguments cannot reach — live at `stage4.md` (the increment law) and `bridge.md` §16 (why the deficit is two-sided); the cycle-side statement of what remains is `cycles.md` 12.8.4–12.8.5.
 - AEH calibration and its four dissolved anomalies: `aeh.md` §13. None was staircase-shaped; the bulk hypothesis conditions on a size cut and cannot see individual tails by construction.
 
+## Visualizations
+
+Interactive, self-contained single-file HTML lives in `viz/` (the README's repository map lists each one); `viz/cycle_anchor_gateway.html` is the cycle-side gateway.
+
 ## How to check a claim
 
 Find the claim's verification line in its wiki section (what was checked, the range, the date, the script name), then run the script: `python experiments/<name>.py`. Scripts are self-contained, use exact big-integer arithmetic wherever a pass/fail decision is made, and print what they verify. If a script's output and its wiki section ever disagree, the section is wrong — that is a bug worth reporting.

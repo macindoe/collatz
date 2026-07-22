@@ -230,7 +230,7 @@ So the anchor increment is not a new unknown. It is a deterministic function of 
 control of C   ⟺   law for the anchor increment ΔM.
 ```
 
-(With the valuation components of `C` now formal per step — `v_2(C)` by the entry-depth law of `11.8.6.3`, `v_3(C)` by the absorption law of `11.8.6.2` — the unresolved content of both sides of this equivalence is precisely the odd core `ω_+ = C / (2^(v_2 C)·3^(v_3 C))`. The bridge is therefore the terminal open problem of the program at the valuation level.)
+(With the valuation components of `C` now formal per step — `v_2(C)` by the entry-depth law of `11.8.6.3`, `v_3(C)` by the absorption law of `11.8.6.2` — the unresolved content of both sides of this equivalence is precisely the odd core `ω_+ = C / (2^(v_2 C)·3^(v_3 C))`. The bridge is therefore the terminal open problem of the program at the valuation level; it is consolidated as its own page, bridge.md §16, and its reverse-side mirror — the `3`-adic precision loss — is reverse.md 14.13.)
 
 **Question 11.8.5.6.3 (anchor increment law; resolved to low order and at bounded depth, stage4.md).** Does `ΔM` admit a usable description in terms of the current state's data — the residue class of `ω`, the valuation `s`, the anchor displacement `d - M(ω)`, or finitely many digits of `M(ω)`?
 

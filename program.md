@@ -27,12 +27,7 @@ and the derived quantity
 C = A + 2^s.
 ```
 
-Indeed, the reduced map may be written explicitly in terms of these quantities, with
-
-```text
-ω_+ = C / (2^(v_2(C)) 3^(v_3(C))),
-d_+ = v_2(C) - s + v_3(C).
-```
+Indeed, the reduced map may be written explicitly in terms of these quantities; the explicit formula is owned by spine.md §5.6.
 
 Accordingly, the central issue is no longer whether the reduced state is well-defined, but whether the arithmetic of `A` can be classified more sharply. When this program was first formulated, the main bottleneck was control of
 

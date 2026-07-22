@@ -1,7 +1,7 @@
 ---
 status: proved
 scope: monolith sections 1-9
-updated: 2026-07-06
+updated: 2026-07-22
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -1478,5 +1478,5 @@ The Collatz conjecture is the assertion that case `1` always occurs.
 
 **Remark (numerical confirmation of the bookkeeping).** The fiber statement was checked by exhaustive search over odd `x < 3·10^6` (only `x = 1` projects to `(1,1)`); the orbit-projection lemma was checked along `300` random orbits, whose block exits track the `F`-orbit exactly and reach `x = 1` precisely when the reduced orbit reaches `(1,1)`; and no interior odd value of any block `(u, m)` with `u < 400`, `m <= 11` equals `1`.
 
-**Remark (anchor form).** In the coordinates of `11.8.5.6`, Theorem `9.8.3` says the conjecture is the statement that orbits drive `(d - M(ω), M(ω))` to `(1, 0)`, and Theorem `9.8.4` says a nontrivial cycle is a periodic anchor-increment sequence — a finite closed walk in `Z_2` whose increments `ΔM_t`, each a deterministic function of `C_t`, sum to `0`. Cycle exclusion is thus an exact-rigidity statement about such closed walks, which is precisely the regime where the effective tools of `11.8.3.11` operate.
+**Remark (anchor form).** In the coordinates of `11.8.5.6`, Theorem `9.8.3` says the conjecture is the statement that orbits drive `(d - M(ω), M(ω))` to `(1, 0)`, and Theorem `9.8.4` says a nontrivial cycle is a periodic anchor-increment sequence — a finite closed walk in `Z_2` whose increments `ΔM_t`, each a deterministic function of `C_t`, sum to `0`. Cycle exclusion is thus an exact-rigidity statement about such closed walks, which is precisely the regime where the effective tools of `11.8.3.11` operate. The cycle frame built on this correspondence is cycles.md §12. The rigidity reading of the closed anchor walk is charted at bridge.md 16.4.4.
 

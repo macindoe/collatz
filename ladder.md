@@ -1,7 +1,7 @@
 ---
 status: CLOSED as a local law (15.1–15.2, verified, zero failures); the author's divergence question answered exactly (15.3)
 scope: new section 15 (post-monolith)
-updated: 2026-07-10
+updated: 2026-07-22
 source: the author's question "where do (ω,d) and (ω,d+1) diverge?"; builds on §3 anchor machinery
 ---
 
@@ -53,4 +53,4 @@ So the spikes of the anchor field — the depths where `d` matches the 2-adic di
 
 ## 15.4. Standing
 
-This closes the vertical question as a local law. Open connections worth recording, not yet pursued: the ladder gives a second exact mechanism relating *different states with the same anchor*, which is raw material for the fiber-to-orbit bridge (stage4.md, `11.8.5.6`) — the bridge asks how anchors vary along orbits, and the ladder shows how orbits vary along an anchor; whether the two exact laws compose into anything is unexamined. The mirror front (reverse.md §14) presumably has a dual ladder in `s` at fixed exit; also unexamined.
+This closes the vertical question as a local law. Open connections worth recording, not yet pursued: the ladder gives a second exact mechanism relating *different states with the same anchor*, which is raw material for the fiber-to-orbit bridge (stage4.md, `11.8.5.6`) — the bridge asks how anchors vary along orbits, and the ladder shows how orbits vary along an anchor; whether the two exact laws compose into anything is unexamined. The mirror front has its dual ladder: reverse.md `14.10` relates predecessors at adjacent branches `s` and `s+2` at a fixed door (step size `2` forced by the parity constraint), with an exact dichotomy gated by the `3`-adic anchor's first digit — the mirror of `15.1`'s tear-line.

@@ -38,6 +38,8 @@ Pointers only, in dependency order:
 - Backward valuation law `d = 1 + v₃(s - M₃(y))` (reverse.md 14.2.4) — the exact mirror.
 - Steering laws (reverse.md 14.12) and the one-identity synthesis (14.12.3): the anchor is *placeable* backward to bounded modulus — literally the forward law read from the other end.
 - Ladder law (ladder.md 15.1–15.3): at fixed anchor, adjacent depths are one Collatz step apart except at anchor digit-matches ("spikes"), where an affine kick tears them apart. Spikes = anchor digit matches, made fully explicit.
+- Door/exit seam (reverse.md 14.14): `ΔM` as one fixed operation's mismatch across the live door, with the door-anchor extension `J(n) = M(n) + v₃(n)` (closed form, reverse.md 14.14.2.3).
+- Whole-period realization-height laws along fixed periodic words (reverse.md 14.15.9) — the anchor's height bookkeeping over a full period, both sectors, one unified law.
 
 ## 17.4. Effective bounds
 
@@ -49,6 +51,7 @@ Pointers only, in dependency order:
 - spine.md 9.8.4 (anchor-form remark): a nontrivial cycle is a finite closed walk in `Z₂` with `Σ ΔM_t = 0`.
 - cycles.md §12.3: the stratum-sequence congruence system is this walk's finite-precision shadow.
 - cycles.md 12.8.2's explicit `n_0(p)` (pinned 2026-07-12) is downstream of the anchor via `Λ = K log2 - n log3`, not itself a digit-structure argument — the rigidity *target* is anchor-walk closure, the tool used to bound it is classical Baker theory, not digit statistics.
+- cycles.md 12.6.1.2: the near-miss anchors of the four known cycles — the spent `|q| = 1` stock and the side-asymmetry.
 
 ## 17.6. Statistics: AEH (the existing, cross-sectional layer)
 
@@ -56,6 +59,7 @@ Pointers only, in dependency order:
 - aeh.md §13: the real depth — bulk-form hypothesis (13.2.1), conditional theorems on what it buys and doesn't (13.3), an 8-round calibration campaign (13.4), one anomaly chased down and dissolved with a routing lemma (13.5).
 - Every test in aeh.md is **cross-sectional**: it asks "averaged over many orbits/states, does this statistic match the coin-flip prediction?" None of it looks at one anchor's own bit string as a standalone object.
 - Bulk-vs-bottom split (aeh.md 13.1): small numbers are known-structured; the hypothesis only claims to hold in the bulk.
+- External replication (aeh.md 13.4, measured grade): an independent implementation reproduces the class skeleton's exact values and the ledger.
 
 ## 17.7. The open question this page exists for: single-sequence structure
 
