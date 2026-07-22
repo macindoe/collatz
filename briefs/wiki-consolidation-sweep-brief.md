@@ -1,0 +1,82 @@
+# Brief: wiki consolidation sweep (all pages EXCEPT reverse.md)
+
+Date: 2026-07-22. Branch: create `wiki-consolidation-sweep` from `main`. A parallel delegation owns `reverse.md` on its own branch — **do not edit reverse.md** under any circumstances; if a fix seems to require it, record the need in your final report instead.
+
+## Ground rules (non-negotiable)
+
+- Read `AGENTS.md` first and comply: every fact lives in exactly one page (others point); no change-logs, dated append-entries, branch-by-branch narration, or "was X, now Y" prose in pages; verification records are a single current line, overwritten not appended; `status:` front matter is a short state phrase, not a diary.
+- Math statements are edited conservatively. Never "improve" a proof or strengthen/weaken a claim while doing organizational work — the ONE sanctioned claim-strength change is item B1 below, and it goes in its own commit.
+- Separate commits for content vs structure, roughly one commit per lettered group below, in order (A, B, C, D). Clear commit messages.
+- Update each touched page's front-matter `updated:` to 2026-07-22. Do not add new dated narrative anywhere.
+- Line numbers below are from the audit (2026-07-22, pre-edit); locate by quoted text, not line number, since your own edits will shift lines.
+- When trimming, when in doubt keep. Record obstructions in your report; don't force an edit that feels wrong.
+- Do not push to any remote. Do not merge to main. Leave the branch for main-session review.
+
+## A. Correctness / mismatch fixes (commit 1)
+
+1. `stage4.md` — two hard mismatches against cycles.md (whose front matter reads "periods 1,2,3 CLOSED … front PARKED"):
+   - The Current-state line "The cycle front is open at cycles.md (§12): periods 1 and 2 closed … period `p >= 3` is the live target" → correct to: periods 1–3 closed, uniform trim resolved, front parked (pointer to cycles.md §12).
+   - In 11.8.7.5: "Periods 1, 2, 3 fully closed … Crossover target: `p > 91`" → the crossover plan is withdrawn (cycles.md 12.8: "The crossover plan is therefore withdrawn and the cycle front is parked"). State the current fact, no narrative.
+2. `stage4.md` — retire "live front" framing (front matter status, Current-state, and the §11.8.7 intro): the forward theory is closed per step and the terminal open object is consolidated as the Bridge (`bridge.md` §16). Stage 4's own results are unchanged; only the framing/status language moves. Keep the existing 11.8.7.7 → bridge.md pointer.
+3. `program.md` — same consolidation: the "Stage 4 … the terminal open problem / live front" prose (intro and §11.9 Closing Perspective region) gains a pointer to `bridge.md` §16 as the page that now owns the terminal object. Do not rewrite §11.9's content wholesale; add the pointer and drop only the "live front" designation.
+4. `index.md` — follow-on: the stage4 row's status ("live front") must match stage4's new front matter; refresh `updated:`; the one-paragraph Current status section should not contradict any of this pass's edits (sweep it at the end and fix only contradictions you created or that the audits flagged).
+5. **§11.9 collision.** `open-problems.md` carries a new post-monolith section "## 11.9. Per-letter (period-cutting) window height laws" while `program.md` owns the monolith's "## 11.9. Closing Perspective". Monolith numbers are immovable (AGENTS.md), so the open-problems section must be renumbered to the first free §11.x (check: is 11.10 free? grep the repo). BEFORE renumbering, grep the whole repo (including briefs/, LEDGER-related files, paper/) for references to the new section under the number 11.9. If any reference lives in `reverse.md` or in correspondence artifacts you must not edit, DO NOT renumber — instead disambiguate the `index.md` resolver line ("§11.9 (monolith) → program.md · §11.9 (post-monolith, open-problems)") and report. Otherwise renumber, update open-problems front matter and the index resolver + Pages-table row, and grep again to confirm no dangling references.
+
+## B. Referee trickle-down (commits 2a, 2b — the paper hardened claims the wiki still overstates)
+
+Background: the published papers went through pre-publication referee passes (commits `df72ded`, `2b15adc`, `132851c`, `0771aef`). Two fixes never propagated back.
+
+1. **Digit budget softening (its own commit, 2a — this is the one sanctioned claim-strength edit).** Paper 1's second referee pass (`2b15adc`, see `git show`) demoted the digit budget's inferential leap: the digit-*consumption* facts stay theorems, but the conclusion "bounded-window determinism cannot decide unbounded horizons" is now explicitly "the organizing heuristic, not a formalized theorem", and "organizing negative result" became "organizing negative observation". Adopt exactly that split — harden nothing, soften only the leap — in:
+   - `stage4.md` §11.8.7.7: "…bounded-window determinism along an infinite orbit is impossible in principle, because…" → restate with the paper's hedge (the consumption identity is proved; the impossibility-of-decision reading is the organizing heuristic).
+   - `README.md`: "The program's most important result is negative, and we treat it as load-bearing… no bounded amount of digit information can decide an orbit's behavior forever" → keep it load-bearing as the organizing observation, but mirror the paper's register (heuristic, not theorem).
+   - `anchors.md` §17 (the "no bounded window decides infinite horizons" line): same hedge, minimally.
+   - `publication.md` (the "Window trichotomy + digit budget … likely new as theorems" verdict): requalify — trichotomy as theorem, budget-conclusion as organizing heuristic, matching the published text.
+   Quote the paper's published wording in the commit message so the provenance is auditable.
+2. Commit 2b, smaller items:
+   - `cycles.md` §12.8 intro: "size-counting arguments cannot do better" → the published form "counting arguments cannot do substantially better", with the assessed-not-proved register consistent with the §12.8.6 framing already in place.
+   - `cycles.md` Remark 12.8.3: the phrase "documented combinatorial obstruction" for the p=22 episode is both a register slip (scrubbed from §12.8.6 per `briefs/paper1-v2-findings.md`) and superseded (p=22 resolved). Restate the remark's current content without it.
+   - `publication.md`: add a short flat record (2–3 sentences, no journal) that both papers passed external referee cycles pre-publication, with the four commit hashes as the audit trail, and cite `paper/collatz-reduced-v2-review.md` by path where the v2 review cycle is discussed.
+   - Do NOT touch reverse.md's "unreachable values" line — the parallel delegation has it.
+
+## C. Convention trims (commit 3; no math changes, deletion of narrative only)
+
+1. `HANDOFF.md` — the primary target (21 KB, 62% is the round-by-round Merle paragraph). Condense item 1 to ~2 KB of current state ONLY:
+   - Standing conventions, stated once: sending/acks stay with the author; the author pastes Merle's replies verbatim (Gmail retrieval garbles numerals); two-key/three-repo protocol; claims verified before prose.
+   - Repo/ledger facts: `github.com/macindoe/one-obstruction-three-faces` (private; PROTOCOL.md, LEDGER.md); his handle `ericmerle3789`; his Lean repo `ericmerle3789/one-obstruction-three-faces-lean` (Lean 4 / Mathlib v4.27.0, kernel-verified L-A1 artifact); ledger entries L1–L4, L-A1, L-A2, L-A3 — one line each.
+   - Standing decisions (current state, not derivation): L-A1 = independent simultaneous discovery, both names; hosting on collatz-lab.org approved, DOI-pinned to v2 (10.5281/zenodo.21421120), mirror-paper pair offered; venue = number-theory-shaped, formalization as supporting artifact; Gersonides-1343-not-Mihailescu citation posture; each side builds its own cycle-side gateway viz and cross-links; his credit-deflection preference on file (note credit language is the author's call at drafting time).
+   - Pending: nothing owed our side after round 6; waiting on Merle for (a) his LEDGER.md edits — verify at next touch — and (b) his sibling gateway page link → then fill the footer cross-link slot in `viz/cycle_anchor_gateway.html`, push.
+   - Pointers: cycles.md 12.6.1.1/12.6.1.2, aeh.md §13.4 replication line, reverse.md 14.15.9(a), `experiments/transport_recurrence_vectors.json`, and the `briefs/merle-*` files as the round-by-round record.
+   Everything else in that paragraph (per-round check counts, commit hashes for completed rounds, the JAR saga, dated decisions already applied) is recoverable from briefs/ + git — cut it. Also collapse "State of the fronts" to a compact one-line-per-front dashboard (front → status word → owning page) with HANDOFF-only facts (e.g. the prime-local-probe sentence) relocated to a pointer at the owning page if not already there (cycles.md gets `briefs/prime-local-probe-findings.md` in D). Keep onboarding order, register norm, author's-role paragraph, delegation pattern, and infrastructure quirks. Target ≈ 6–8 KB.
+2. `anchors.md` — strip the branch-by-branch session journaling throughout §17.7 (branch names, "delegated Sonnet session / main session", merge status, "pending verification" clauses, the delegation-narrative paragraphs). Keep each sub-experiment's statistical findings and ONE current verification line each (what was checked, range, date). Collapse the §17.10 "Standing" ~4 KB recap line to a short current-state paragraph (a few sentences, no per-branch retelling).
+3. `cycles.md` — remove change-log narration, preserving all math and all credit facts:
+   - 12.5.4 method-note parenthetical (off-by-one caught and corrected) — cut.
+   - 12.7.2 "Two constant errors … corrected before this record; enlarged from 62 to 76" — state only the current run (76 values), cut the correction story.
+   - Remarks 12.6.1.1 / 12.6.1.2 — **preserve verbatim in substance**: the math identities, the credit attributions (independent simultaneous discovery, both names, timestamps-in-public-log for 12.6.1.1; packaging his / verification joint, the k=1 tie and Gersonides posture arising in this repository's verification for 12.6.1.2), and the briefs pointers. Trim only merge/branch narration ("merged 2026-07-17", branch names). These lines are correspondence-sensitive; when in doubt, keep.
+   - 12.8.6 — the dated dispute-resolution journal ("Extension (2026-07-17)…", "Obstruction (p=22) — resolved …", the two-sided refutation narrative): restate as the current answer — recipe verified for the contiguous range p ∈ {2,…,23}, sole open gap the Diophantine coverage bound (12.8.6.1), with credit to Merle's pincer hypothesis in one flat sentence and the pointer to `briefs/merle-pincer-check-findings.md`. Collapse "verified instance record, 2026-07-16; extended 2026-07-17" to one current line.
+4. `open-problems.md` §11.8 — the three dated "Chase log (2026-07-12)" entries: collapse to "discharged; citations pinned inline at their use sites" plus the existing pointer list. 
+5. `bridge.md` — flatten the two "was X, now Y" spots: 16.4.4's "Was softer than it looked; fully re-hardened (2026-07-12)" heading + unpinned-then-pinned narrative, and 16.5's "Stress-tested (2026-07-12) … one soft spot turned up" duplicate. State the current fact once: the cycle-side constants (Rhin; Bugeaud–Laurent; n₀(p)) are pinned and verified, with the single current verification line.
+6. `stage2.md` — fold the dated "Resolution note (2026-07-07)" into Question 11.8.5.6.3's own statement (question stated as resolved-to-low-order, pointing at stage4 11.8.7.3.1); no dated addendum.
+7. `stage3.md` — delete the two change-log sentences: "That was too pessimistic." (and its earlier-draft framing) and "The earlier draft language … is hereby retired." Keep only the positive current statements.
+8. `publication.md` — `status:` front matter becomes a short state phrase (move nothing into the body; just drop the dated clauses); the "v2 status (2026-07-16)…merged…pending review…Uploaded" journal in the staircase verdict becomes the current fact (v2 published, DOI 10.5281/zenodo.21421120, `thm:staircase` hedge unchanged); the pre-submission checklist drops strikethrough-DONE items, keeping only still-open ones.
+9. `README.md` — drop the "(July 2026)" event stamps and opened/now-has framing from the strategy bullets (state standing strategy in present tense; content unchanged); refresh the viz table (see D5).
+10. `stage1.md` — the ledger's restated cycles-status block (11.8.4.5, the "periods 1-3 fully closed … front PARKED" lines) becomes a one-line pointer to cycles.md §12. Optional, low-priority: the "Closing note: two former entries…" shrinks to the pointer.
+
+## D. Cross-reference additions (commit 4; pointer-only, no new mathematical claims)
+
+1. `open-problems.md` calibration notes (the AGENTS.md closure sweep):
+   - §11.5 (predecessor classification): calibration note → closed by reverse.md 14.1 (complete predecessor characterization) and 14.15.4 (unique-predecessor lemma).
+   - §11.4 (normal forms): calibration note → the door coordinate (reverse.md 14.14) is exactly such a normal form; question reframed, not open as posed.
+   - §11.7 (classical contact): add the second contact point → reverse.md 14.15.1 identifies the itinerary coding as the classical Terras/Everett/Lagarias coding in door coordinates.
+   - §11.3 (3-gain rate): add pointer → aeh.md 13.3.2 (conditional 1/3-rate theorem under AEH).
+2. `spine.md` §9.8.4/9.8.5 (closed-anchor-walk cycle criterion): add outbound pointers → cycles.md §12 (the cycle frame built on it) and bridge.md 16.4.4 (anchor-walk rigidity). One sentence each, no restatement.
+3. `stage2.md` 11.8.5.6: add pointers → bridge.md §16 (consolidation) and reverse.md 14.13 (3-adic mirror). `stage1.md` 11.8.4.2 (anchor digit density): add pointer → anchors.md §17 (the hub) and aeh.md §13. `program.md`: replace the restated reduced-map formula (the `ω_+ = C/(2^v₂(C)·3^v₃(C))` block) with a pointer to spine.md §5.6, which owns it.
+4. `bridge.md`: 16.4.5 extends its reverse-arc enumeration through 14.15.7–14.15.9 (exact height laws; height growth no further obstruction once q is known — pointer, not restatement); 16.4.6 gains the seam identity pointer (cycles.md Remark 12.6.1.1 ↔ reverse.md 14.15.9.2); 16.4.3 gains a one-line pointer to anchors.md §17.7's clean endpoints. Also record, as a pointer to reverse.md 14.15.4.5/14.15.5.4/14.15.9, the H_{p,q}-boundedness equivalent name of the Bridge object (reverse.md states the equivalence; bridge.md just lists it among the equivalent forms).
+5. Navigation: `cycles.md` gains its owned artifacts — `viz/cycle_anchor_gateway.html` (the cycle-side gateway; place near §12's intro or 12.6.1.2) and `briefs/prime-local-probe-findings.md` (at Remark 12.6.1.1, the ℓ-adic structureless verdict). `README.md` viz table lists all current viz files incl. the gateway. `TOUR.md` gains a one-line viz pointer.
+6. `anchors.md` hub refresh: 17.5 → cycles.md 12.6.1.2 (near-miss anchors of the known cycles); 17.6 → aeh.md 13.4 external-replication line; 17.3 → reverse.md 14.14 (door/exit seam ΔM identity) and 14.15.9 (whole-period height laws); note the door-anchor extension J(n) = M(n) + v₃(n) (reverse.md 14.14.2) in the hub's pointer list.
+7. `aeh.md`: §13.2 gains a pointer → reverse.md 14.15.2 (AEH restated as equidistribution of stratum words against the cylinder measure — the symbolic form); 13.3.3 gains a pointer → bridge.md 16.4.6 (the one-configuration-both-halves synthesis).
+8. `cycles.md` 12.6.1.2: add the census cross-pointer → reverse.md 14.15.6(d)(iv) (the same four cycles as G-periodic diagonal points with door-words), and note the parked condition's other frame via the existing seam-identity lemma (q = 1 in the fixed-point frame ⟺ q | R₀ nontrivially in the numerator frame; pointer prose only, citing 12.6.1.1 ↔ 14.15.9.2). The reverse-side halves of these pointers belong to the parallel delegation — do not add them here.
+9. `ladder.md` §15.4: the speculation "the mirror front presumably has a dual ladder in s at fixed exit; also unexamined" is stale — reverse.md 14.10 records the dual ladder. Update the sentence to point at 14.10 (state only what 14.10 actually contains; read it first).
+
+## Final report
+
+Return: per-commit summary; any item skipped or softened with reason; the §11.9 decision and grep evidence; any needed reverse.md edits you could not make (for the main session to reconcile); resulting byte size of HANDOFF.md and anchors.md.
