@@ -21,8 +21,8 @@ Checks, in order:
      (checked to fail for 3 <= n <= 100000, with the gap monotone at the
      boundary); the odd minus-case forces 3^n = 3; the plus-case forces
      3^n <= 3. Hence n <= 2 and the enumeration is the stock.
-  E. The shifted-target reading at the lone nontrivial-divisibility instance
-     q = -17 (c = -q = 17 == 1 mod 8): v2(9^j - 17) = 3 + v2(j + N(17)) for
+  E. The shifted-target reading at the target c = 17 (q = -17; c == 1 mod 8,
+     so the anchor lemma applies): v2(9^j - 17) = 3 + v2(j + N(17)) for
      1 <= j <= 2000, with N(17) computed mod 2^64 by an independent
      digit-by-digit discrete log, calibrated against the published values
      N(17) = 38, N(25) = 245, N(33) = 236 (mod 2^8) (stage1-synthesis.md,

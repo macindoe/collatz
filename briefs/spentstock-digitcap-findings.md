@@ -1,0 +1,5 @@
+# Off-brief findings: spentstock-digitcap session (2026-07-23)
+
+One off-brief observation, logged per the brief's stop criteria and not pursued.
+
+**Half the residues mod 8 are elementarily capped.** The mod-8 constants that cap the `±1` plus-cases in Remark `12.6.1.3`(b) generalize: for fixed `q`, a near-miss `2^K = 3^n + q` with `K >= 3` requires `3^n + q ≡ 0 (mod 8)`, i.e. `q ≡ -3^n ∈ {5, 7} (mod 8)`. So for every fixed `q ≡ 1` or `3 (mod 8)` the capacity `v_2(3^n + q)` is bounded by `2` outright, and the near-miss family is finite *elementarily* (enumeration of `2^K <= 4`), with no Baker input — e.g. `q = -5` (capacity record `2` at `n <= 4000` in the texture check, check G) has the single solution `2^2 = 3^2 - 5`. Only `q ≡ 5, 7 (mod 8)` reach the Baker regime (consistent with the two recorded nontrivial anchors: `-139 ≡ 5`, `-17 ≡ 7 (mod 8)`). This is a finer partition of the "general points" side of `12.6.1.3`'s boundary — the rational-anchor/Baker split has an intermediate mod-8-capped class — but it excludes nothing (divisibility is untouched), and per the brief's stop criteria no census or strengthening was attempted.
