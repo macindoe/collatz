@@ -48,7 +48,7 @@ This section exists because open-ended research programs die of drift. These rul
 | `index.md` | Wiki index: page table, section-number resolver, current status paragraph |
 | `spine.md` | The formal core (§1–9): definitions, the reduced map, all foundational theorems, the equivalence with the conjecture |
 | `program.md` | The Route A research program: guardrails, stage architecture, strategic summary |
-| `stage1.md`–`stage4.md` | The four stages: valuation law → 3-gain → depth evolution → the anchor increment (live front) |
+| `stage1.md`–`stage4.md` | The four stages: valuation law → 3-gain → depth evolution → the anchor increment (open residue owned by bridge.md §16) |
 | `open-problems.md` | The open-questions layer, each entry calibrated against what's now proved |
 | `cycles.md` | §12: cycles in reduced coordinates; periods 1–3 closed; the uniform trim lemma is the open objective |
 | `archive/` | Discovery paths and refuted claims, kept with the evidence that killed them |

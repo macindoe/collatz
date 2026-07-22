@@ -1,5 +1,5 @@
 ---
-status: periods 1, 2, 3 CLOSED; uniform trim question RESOLVED (12.8: exists, exponentially weak, sharp at verified instances); all-p sharpness ASSESSED not proved, evidence extended to floor grade (12.8.6); cycle front PARKED per stopping rules
+status: periods 1–3 CLOSED; uniform trim RESOLVED (12.8); all-p sharpness ASSESSED not proved, floor grade (12.8.6); front PARKED per stopping rules
 scope: new section 12 (post-monolith; first page with no monolith source)
 updated: 2026-07-22
 source: new material; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md)
@@ -153,7 +153,7 @@ where, reading indices in rotation order starting at `r`: `M_t = Σ_(j>t) m_j` a
 
 **Remark 12.7.2 (verification record).** Search and audits in `experiments/period3_cycles.py` (2026-07-07). The run treats `76` values of `n`. The pruning constants were slack-padded, and audited: `4,798` random cells sampled from the skipped region and from just outside the box boundary all fail the exact size test `min_r R_r >= q`.
 
-**Remark 12.7.3 (scaling picture and honest scope).** Growth across periods is mild: candidate `n` values `19 → 76`, exact evaluations `11 → 886` from `p = 2` to `p = 3`, against a raw space growing by a factor `~n·S`. The engine — ceiling lemma, box, budget filter, divisibility — is `p`-generic, and running `p = 4, 5` is now an engineering exercise. By the translation of `12.4`, all `p <= 68` remain subsumed by Simons–de Weger, so the schema's claim is efficiency and self-containedness, not yet new exclusions. The crossover target is `p > 91` — beyond the current `m`-cycle record — where the per-`n` collapse observed here, if it persists, would produce genuinely new results with modest computation. (Current record: C. Hercher, *There are no Collatz-m-Cycles with m ≤ 91*, arXiv:2201.00406, 2022/23.)
+**Remark 12.7.3 (scaling picture and honest scope).** Growth across periods is mild: candidate `n` values `19 → 76`, exact evaluations `11 → 886` from `p = 2` to `p = 3`, against a raw space growing by a factor `~n·S`. The engine — ceiling lemma, box, budget filter, divisibility — is `p`-generic, and running `p = 4, 5` is now an engineering exercise. By the translation of `12.4`, all `p <= 68` remain subsumed by Simons–de Weger, so the schema's claim is efficiency and self-containedness, not yet new exclusions. The crossover target was `p > 91` — beyond the current `m`-cycle record — where the per-`n` collapse observed here, if it persisted, would produce genuinely new results with modest computation; `12.8` resolves this question and withdraws the plan (`12.8.5`). (Current record: C. Hercher, *There are no Collatz-m-Cycles with m ≤ 91*, arXiv:2201.00406, 2022/23.)
 
 **Lemma 12.7.4 (period-3 trim).** Any nontrivial period-`3` cycle satisfies, with `γ = K - log_2 q`,
 
