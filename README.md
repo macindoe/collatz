@@ -14,7 +14,7 @@ The bet has partially paid off. The per-step behavior of `F` — which used to l
 
 In these coordinates, as of July 2026:
 
-The exit valuation `s` obeys an exact global law (stage1.md, stage2.md). The 3-gain trigger is a theorem (stage2.md). The depth evolution is closed on every residue class (stage3.md). The anchor increment obeys an exact low-order law, and a finite "window" of digits decides the next step in an error-free trichotomy — it either answers exactly or correctly announces a rare deep event (stage4.md). Cycles of the reduced map with 1, 2, or 3 blocks do not exist, proved in-house, matching the classical results of Steiner and Simons–de Weger with far less apparatus; a uniform-in-`p` trim exists and is provably the best a counting argument can give (cycles.md).
+The exit valuation `s` obeys an exact global law (stage1.md, stage2.md). The 3-gain trigger is a theorem (stage2.md). The depth evolution is closed on every residue class (stage3.md). The anchor increment obeys an exact low-order law, and a finite "window" of digits decides the next step in an error-free trichotomy — it either answers exactly or correctly announces a rare deep event (stage4.md). Cycles of the reduced map with 1, 2, or 3 blocks do not exist, proved in-house, matching the classical results of Steiner and Simons–de Weger with far less apparatus; a uniform-in-`p` trim exists, and an explicit family shows counting arguments cannot do substantially better — sharp at the verified instances, assessed at every period (cycles.md).
 
 ## Where the difficulty actually lives
 
