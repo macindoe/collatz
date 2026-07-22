@@ -1,7 +1,7 @@
 ---
 status: open / calibrated
-scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record); 11.9 added post-monolith (per-letter window height laws, reverse.md 14.15.9)
-updated: 2026-07-22
+scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record); 11.10 added post-monolith (per-letter window height laws, itinerary.md 14.15.9; recorded as 11.9 in pre-2026-07-23 briefs)
+updated: 2026-07-23
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -124,7 +124,7 @@ Questions include:
 
 The present note now identifies one canonical representative inside the fixed-exit family of a state’s own exit value. A natural next step is to understand the full upstream geometry of these families.
 
-**Calibration note.** Closed on the mirror front: reverse.md `14.1` gives the complete predecessor characterization (which states reach a given exit, with the exact branching law), and the unique-predecessor lemma (reverse.md `14.15.4`) pins the letter-prescribed backward predecessor as unique. The classical predecessor-tree viewpoint translates through the same apparatus (reverse.md `14.4`–`14.6`, the density program).
+**Calibration note.** Closed on the mirror front: reverse.md `14.1` gives the complete predecessor characterization (which states reach a given exit, with the exact branching law), and the unique-predecessor lemma (itinerary.md `14.15.4`) pins the letter-prescribed backward predecessor as unique. The classical predecessor-tree viewpoint translates through the same apparatus (reverse.md `14.4`–`14.6`, the density program).
 
 ## 11.6. Finite-State Shadows and Residue Control
 
@@ -141,7 +141,7 @@ The first question is answered, and the answer calibrates the others. Off the li
 
 The strongest possible outcome would be a finite residue mechanism that controls large regions of the reduced state space. Even a weaker coarse-state model would already be significant.
 
-**Calibration (2026-07-16, reverse.md 14.15.2).** For the door/exit seam's own stratum word — the sequence `(m_i,r_i)` that stage4.md `11.8.7.3.1`'s finite-state remark leaves unresolved "at unbounded depth" — the question above is now answered sharply and negatively at every *finite* depth, not merely left open at the infinite one: the itinerary language is proved to be the **full shift** on `{(m,r):m,r≥1}` (reverse.md `14.15.1`–`14.15.2`), meaning every finite word is realized and no finite collection of forbidden transitions exists to find. So no finite-state approximation of any kind — bounded residue system, coarse-direction predictor, or otherwise — can organize the stratum word beyond what is already known (`11.8.1.3.1`'s bounded system off the lifting branch); the search is closed by proof, not left for further testing.
+**Calibration (2026-07-16, itinerary.md 14.15.2).** For the door/exit seam's own stratum word — the sequence `(m_i,r_i)` that stage4.md `11.8.7.3.1`'s finite-state remark leaves unresolved "at unbounded depth" — the question above is now answered sharply and negatively at every *finite* depth, not merely left open at the infinite one: the itinerary language is proved to be the **full shift** on `{(m,r):m,r≥1}` (itinerary.md `14.15.1`–`14.15.2`), meaning every finite word is realized and no finite collection of forbidden transitions exists to find. So no finite-state approximation of any kind — bounded residue system, coarse-direction predictor, or otherwise — can organize the stratum word beyond what is already known (`11.8.1.3.1`'s bounded system off the lifting branch); the search is closed by proof, not left for further testing.
 
 ## 11.7. Relationship to Classical Collatz Formulations
 
@@ -158,7 +158,7 @@ This comparison matters for two reasons. First, it may show that some parts of t
 
 One concrete point of contact is now established (`11.8.3.11`): the valuation `s` on the lifting branch is a linear form in two `2`-adic logarithms, and the effective theory that bounds it — `p`-adic Baker theory together with lattice-reduction methods — is the same machinery underlying the known lower bounds on nontrivial Collatz cycle lengths (Steiner; Simons–de Weger). The reduced formalism and the classical cycle analyses therefore terminate on common arithmetic ground, which calibrates both the novelty and the expected difficulty of the remaining questions.
 
-A second contact point is established on the mirror front: reverse.md `14.15.1` identifies the itinerary coding of the door/exit seam as the classical Terras/Everett/Lagarias parity-vector coding, read in door coordinates.
+A second contact point is established on the mirror front: itinerary.md `14.15.1` identifies the itinerary coding of the door/exit seam as the classical Terras/Everett/Lagarias parity-vector coding, read in door coordinates.
 
 ## 11.8. Citation and constant debt: discharged
 
@@ -182,11 +182,11 @@ Nothing substantive remains open from this stress test. What's left is the ordin
 
 The chase itself is discharged; the citations are pinned inline at their use sites (stage1-synthesis.md 11.8.3.11; cycles.md 12.5.3, 12.7.5, 12.8.2), and the derivations live there. One methodological guard retained: Rhin's `μ(γ) < 8.616` irrationality measure for fixed `γ ∈ Q log 2 + Q log 3` is the wrong tool for the two-integer-variable linear form the cycle corollaries need — the right statement is the Proposition on p. 160 of the same 1987 paper, applied as in Simons–de Weger (2005) Lemma 12 (pinned at cycles.md 12.5.3); recorded so the mistake isn't repeated.
 
-## 11.9. Per-letter (period-cutting) window height laws
+## 11.10. Per-letter (period-cutting) window height laws
 
-reverse.md `14.15.9`'s whole-period height laws hold only for windows aligned to a full period (`(np, np)` in letters). A window that cuts a period partway anchors its partial past at a *rotated* fixed point rather than at the word's own `y^*`, and no height law at such windows is established.
+itinerary.md `14.15.9`'s whole-period height laws hold only for windows aligned to a full period (`(np, np)` in letters). A window that cuts a period partway anchors its partial past at a *rotated* fixed point rather than at the word's own `y^*`, and no height law at such windows is established.
 
-**What is already known.** The *class* characterization appears to extend past whole-period boundaries with no new machinery: the forward follower class equals the `2`-adic class of `y^*` at every prefix length `L` (the contraction induction along rotations never uses `p | L`), and the backward admissibility class at every depth `ℓ` equals `{qz ≡ a (mod 3^{M_ℓ})}`, because the depth-`ℓ` deepest-first prefix map carries the rotated fixed point `y^*_{(p−ℓ) mod p}` to `y^*`. What rotates mid-window is only the deepest-door analysis: the deepest door of a depth-`ℓ` chain sits near the rotated fixed point `y^*_{(p−ℓ) mod p}`, so a per-letter mod-3 door law would run through that rotation's own numerator `a_{(p−ℓ) mod p}` and residue `ε_{(p−ℓ) mod p}` (reverse.md `14.15.9.2`) rather than through `a` and `ε`.
+**What is already known.** The *class* characterization appears to extend past whole-period boundaries with no new machinery: the forward follower class equals the `2`-adic class of `y^*` at every prefix length `L` (the contraction induction along rotations never uses `p | L`), and the backward admissibility class at every depth `ℓ` equals `{qz ≡ a (mod 3^{M_ℓ})}`, because the depth-`ℓ` deepest-first prefix map carries the rotated fixed point `y^*_{(p−ℓ) mod p}` to `y^*`. What rotates mid-window is only the deepest-door analysis: the deepest door of a depth-`ℓ` chain sits near the rotated fixed point `y^*_{(p−ℓ) mod p}`, so a per-letter mod-3 door law would run through that rotation's own numerator `a_{(p−ℓ) mod p}` and residue `ε_{(p−ℓ) mod p}` (itinerary.md `14.15.9.2`) rather than through `a` and `ε`.
 
-**Open question.** Do per-letter window height laws follow from the existing whole-period apparatus (reverse.md `14.15.9.5`–`14.15.9.12`) plus the rotation lemma's `p`-tuple of numerators, applied at the rotation matching each cut depth? Closure would look like an exact law for `H^σ_{p,q}(W)` at arbitrary `(p,q)`, not just `(np,np)`, reducing to `14.15.9`'s results when `p = q = np`.
+**Open question.** Do per-letter window height laws follow from the existing whole-period apparatus (itinerary.md `14.15.9.5`–`14.15.9.12`) plus the rotation lemma's `p`-tuple of numerators, applied at the rotation matching each cut depth? Closure would look like an exact law for `H^σ_{p,q}(W)` at arbitrary `(p,q)`, not just `(np,np)`, reducing to `14.15.9`'s results when `p = q = np`.
 
