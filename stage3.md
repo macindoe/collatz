@@ -1,7 +1,7 @@
 ---
 status: closed at the valuation level, per reduced step, all residue classes
 scope: monolith 11.8.6
-updated: 2026-07-06
+updated: 2026-07-22
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -511,7 +511,7 @@ The preceding subsection controls the `3`-adic absorption term `a_+ = v_3(C)` by
 m_+ = v_2(C) - s = v_2(x_exit + 1).
 ```
 
-An earlier draft asserted that the identity `C = 3^dω + (2^s - 1)` "does not by itself give an equally transparent law" for this term. That was too pessimistic. Since `C = A + 2^s = 2^s(x_exit + 1)`,
+Since `C = A + 2^s = 2^s(x_exit + 1)`,
 
 ```text
 s + m_+ = v_2(C) = v_2(3^dω - (1 - 2^s)),
@@ -604,7 +604,7 @@ with `m_+` given exactly by Theorems `11.8.6.3.3` and `11.8.6.3.5` on all six re
 
 First, `m_+` is a digit-matching depth. On the lifting branch it counts how far the binary expansion of the anchor displacement `ε` agrees with that of `-δ_s` beyond the single forced leading match of Corollary `11.8.6.3.4`; generic mismatch gives `m_+ = 1`, and large `m_+` requires the anchor error to coincidentally track the digits of the shift constant. Off the lifting branch the same reading applies with the orbit anchor `M(ω)` in the depth variable.
 
-Second, the apparent self-reference — `δ_s` depends on `s`, which depends on `ε` — is stratified, not circular. On the dyadic shell `v_2(ε) = j`, the value `s = 3 + j` is constant, and `δ_(3+j)` is a single fixed reference constant for the entire shell. One computes `s` first, then `δ_s`, then `m_+`; one shift closes the problem, with no regress. The earlier draft language ("no transparent law") suggested otherwise and is hereby retired.
+Second, the apparent self-reference — `δ_s` depends on `s`, which depends on `ε` — is stratified, not circular. On the dyadic shell `v_2(ε) = j`, the value `s = 3 + j` is constant, and `δ_(3+j)` is a single fixed reference constant for the entire shell. One computes `s` first, then `δ_s`, then `m_+`; one shift closes the problem, with no regress.
 
 Third, the shift constant explains the boundary shell. `v_2(δ_s) = s - 3` is exactly the boundary-shell scale of `11.8.3.3`: the scale at which all off-spike excess was shown to concentrate is the scale at which the shifted target sits. Both phenomena — the boundary-shell localization and the forced carry `m_+ >= 1` — are instances of the same mechanism in the additive coordinate: adding two `2`-adic quantities of equal valuation. This retrospectively unifies the boundary-shell analysis of `11.8.3.3`–`11.8.3.4` with the entry-depth law as two faces of the target-shift lemma.
 

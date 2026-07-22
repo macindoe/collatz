@@ -1,7 +1,7 @@
 ---
 status: closed — entry map, tower map, and Stage 1 reduction summary; the synthesis proper (11.8.3) is split to stage1-synthesis.md
 scope: monolith 11.8.1-11.8.2, 11.8.4 (11.8.3 → stage1-synthesis.md)
-updated: 2026-07-12
+updated: 2026-07-22
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -627,10 +627,8 @@ open:
     the unbounded-depth residue of the bridge (11.8.7.7) — split:
         typical orbits: anchor equidistribution (11.8.5.6.3 sub-q. 3),
             now the precise missing statistical hypothesis
-        cycles: rigidity of closed anchor walks — front PARKED (§12,
-            cycles.md): periods 1-3 fully closed; uniform trim
-            resolved (12.8: exists, exponentially weak, sharp);
-            residual content = anchor-walk rigidity, same as Stage 4
+        cycles: rigidity of closed anchor walks — cycles.md §12
+            (status and ledger live there)
         (bounded-depth content fully formal: 11.8.7.3, 11.8.7.6)
 ```
 
