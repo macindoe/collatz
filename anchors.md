@@ -1,7 +1,7 @@
 ---
 status: REFERENCE — consolidates the anchor concept across the wiki (pointers only, no proofs restated); owns the single-sequence digit-structure search (17.7-17.9), executed with a clean pass on both statistical axes — breadth (17.7.1) and a 32×-deeper single-anchor probe (17.7.2) — plus a structural automaticity/algebraicity screen (17.7.3, M(ω) not 2-automatic), three operation lenses (17.7.4), and PractRand to 1 GB on the anchor-family stream (17.7.5) — all clean; no intra-sequence structure found beyond what is already proved or known
 scope: new section 17 (post-monolith); cross-cutting reference — owned by no single stage/reverse/cycles/aeh page
-updated: 2026-07-12
+updated: 2026-07-22
 source: consolidation of stage1-synthesis.md 11.8.3.6/11.8.3.11, stage1.md 11.8.4.2, stage2.md 11.8.5.6, stage4.md 11.8.7, reverse.md 14.2/14.12–14.13, ladder.md §15, cycles.md 12.3/9.8.4, aeh.md §13, bridge.md §16, archive/appendix-a.md A.4.6–A.6; the author's request to centralize anchor exploration in one place (2026-07-12)
 ---
 
@@ -34,7 +34,7 @@ Pointers only, in dependency order:
 - Increment identity `ΔM = N((ω_+/ω)²)` (stage2.md 11.8.5.6) — the fiber-to-orbit bridge is exactly "does `ΔM` have a usable law."
 - Low-order law for `ΔM mod 2^k`, digit-determinacy lemmas (stage4.md 11.8.7.2.1–3, 11.8.7.3.1) — proved, `σ`-graded modulus, verified.
 - One-step propagation trichotomy (stage4.md 11.8.7.6.1) — decide / decide / report-deep, error-free.
-- The digit budget (stage4.md 11.8.7.7) — no bounded window decides infinite horizons; the anchor is spent, not regenerated.
+- The digit budget (stage4.md 11.8.7.7) — the anchor is provably spent per step, not regenerated; that no bounded window decides infinite horizons is the organizing heuristic, not a formalized theorem.
 - Backward valuation law `d = 1 + v₃(s - M₃(y))` (reverse.md 14.2.4) — the exact mirror.
 - Steering laws (reverse.md 14.12) and the one-identity synthesis (14.12.3): the anchor is *placeable* backward to bounded modulus — literally the forward law read from the other end.
 - Ladder law (ladder.md 15.1–15.3): at fixed anchor, adjacent depths are one Collatz step apart except at anchor digit-matches ("spikes"), where an affine kick tears them apart. Spikes = anchor digit matches, made fully explicit.

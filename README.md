@@ -18,7 +18,7 @@ The exit valuation `s` obeys an exact global law (stage1.md, stage2.md). The 3-g
 
 ## Where the difficulty actually lives
 
-The program's most important result is negative, and we treat it as load-bearing (stage4.md §11.8.7.7): no bounded amount of digit information can decide an orbit's behavior forever, because each step *consumes* digits of the initial state and nothing regenerates them. So the remaining difficulty splits cleanly in two, and only two, places:
+The program's most important negative statement is an organizing observation, and we treat it as load-bearing (stage4.md §11.8.7.7): each step provably *consumes* digits of the initial state and nothing regenerates them, which strongly suggests — as the organizing heuristic, not a formalized theorem — that no bounded amount of digit information can decide an orbit's behavior forever. So the remaining difficulty splits cleanly in two, and only two, places:
 
 1. **Typical orbits** need a *statistical* fact: that the anchors of successive states equidistribute — the "fair-coin" behavior of 2-adic logarithm digits, empirically solid, theoretically untouched by anyone. This is a question about classical p-adic analysis, older and broader than Collatz.
 2. **Cycles** need a *rigidity* fact: a closed orbit is a finite closed walk in anchor coordinates, and finite objects can be attacked with effective tools (Baker-type bounds) that genuinely beat unbounded depth.
