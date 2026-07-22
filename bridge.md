@@ -1,7 +1,7 @@
 ---
 status: OPEN — the program's terminal open object, consolidated; states the object and its observed mechanisms, no proof effort on this page
 scope: new section 16 (post-monolith); cross-cutting — owned by neither stage4.md nor reverse.md §14
-updated: 2026-07-22
+updated: 2026-07-23
 source: consolidation of 11.8.5.6 (forward bridge), 11.8.7.7 (digit budget), 14.13 (reverse precision loss); the author's framing — "the bridge between the M(ω)'s is itself the question"
 ---
 
@@ -69,7 +69,7 @@ The core-extraction deficit (16.2): the forward digit budget (stage4.md 11.8.7.7
 - **The exact missing hypothesis.** Anchor equidistribution in its precise bulk form `π_k` (aeh.md 13.2); the conditional theorems fix what it buys — the frequency ledger, the `1/3` `3`-gain rate, the classical drift, all almost-everywhere — and what it cannot — individual staircase tails (aeh.md 13.3, esp. 13.3.3).
 - **The empirical texture.** Fair-coin anchor digits, density `0.497` (stage1.md 11.8.4.2); the frequency and size ledgers, empirically sharp to three decimals (stage1.md 11.8.4.4).
 - **The regime split.** The open object lives in the *bulk* (while `x` is large), where uniformity stands unqualified; the wild statistics are confined to the fixed *bottom* drainage basin of small integers (aeh.md 13.1).
-- **The single-sequence endpoints.** The anchor's own bit string was searched for internal structure — statistical batteries, an automaticity/algebraicity screen, operation lenses, PractRand — and came back clean at every endpoint (anchors.md §17.7): calibration for this escape, not progress on it.
+- **The single-sequence endpoints.** The anchor's own bit string was searched for internal structure — statistical batteries, an automaticity/algebraicity screen, operation lenses, PractRand — and came back clean at every endpoint (anchor-digit-search.md §17.7): calibration for this escape, not progress on it.
 
 ### 16.4.4. The cycle escape — rigidity, where finite data can beat depth
 

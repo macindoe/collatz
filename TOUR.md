@@ -12,7 +12,7 @@ The wiki pages (`spine.md`, `stage1.md`–`stage4.md`, `cycles.md`, `aeh.md`, `r
 |---|---|
 | Paper 1, the reduced system and per-step laws (§2–3) | `spine.md` §9 (the reduced map, faithfulness), `stage1.md`–`stage4.md` (the four per-step laws), `stage1-synthesis.md` (the anchor) |
 | Paper 1, cycles: periods 1–3, uniform trim, staircase (§4) | `cycles.md` §12 — the trim is 12.8.1, the staircase family 12.8.3, and the post-publication attempt to prove the family at every period is **12.8.6** (floor grade; see below) |
-| Paper 1, AEH (§5) | `aeh.md` §13 (the hypothesis, the calibration campaign, the routing lemma); `anchors.md` §17.7 (the single-sequence statistical battery) |
+| Paper 1, AEH (§5) | `aeh.md` §13 (the hypothesis, the calibration campaign, the routing lemma); `anchor-digit-search.md` §17.7 (the single-sequence statistical battery) |
 | Paper 1, Appendix A (methodology) | `AGENTS.md`, `HANDOFF.md` (the internal working conventions those paragraphs describe) |
 | Paper 2, the 3-adic mirror | `reverse.md` §14 (canonical proofs; the door/exit seam is 14.14, the itinerary language 14.15) |
 | Both papers' "where the difficulty lives" | `bridge.md` §16 (the terminal open object: the anchor increment at unbounded depth) |
