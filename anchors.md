@@ -39,7 +39,7 @@ Pointers only, in dependency order:
 - Steering laws (reverse.md 14.12) and the one-identity synthesis (14.12.3): the anchor is *placeable* backward to bounded modulus — literally the forward law read from the other end.
 - Ladder law (ladder.md 15.1–15.3): at fixed anchor, adjacent depths are one Collatz step apart except at anchor digit-matches ("spikes"), where an affine kick tears them apart. Spikes = anchor digit matches, made fully explicit.
 - Door/exit seam (reverse.md 14.14): `ΔM` as one fixed operation's mismatch across the live door, with the door-anchor extension `J(n) = M(n) + v₃(n)` (closed form, reverse.md 14.14.2.3).
-- Whole-period realization-height laws along fixed periodic words (reverse.md 14.15.9) — the anchor's height bookkeeping over a full period, both sectors, one unified law.
+- Whole-period realization-height laws along fixed periodic words (itinerary.md 14.15.9) — the anchor's height bookkeeping over a full period, both sectors, one unified law.
 
 ## 17.4. Effective bounds
 

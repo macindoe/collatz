@@ -18,7 +18,7 @@ This document lets any capable model (or a future session of any model) continue
 - **Forward per-step theory** — closed per step → spine.md §9, stage1.md–stage4.md; terminal open object consolidated as the Bridge → bridge.md §16.
 - **Cycles** — PARKED → cycles.md §12 (periods 1–3 closed; uniform trim resolved; staircase sharpness at floor grade, contiguous `p ∈ {2,...,23}`; the divisibility system one rotation-invariant condition, 12.6.1.1). Reopens only with a divisibility-aware (anchor-rigidity) idea, per the stopping rules.
 - **Statistics / AEH** — formalized, calibrated clean; proof effort parked → aeh.md §13; the single-sequence structural axis is at its endpoint → anchor-digit-search.md §17.7.
-- **Reverse / mirror** — ACTIVE → reverse.md §14 (duality 14.1–14.12; door/exit seam 14.14; itinerary language 14.15; whole-period height laws 14.15.9; KL–LP closed on a structural obstruction, 14.13/14.6.5).
+- **Reverse / mirror** — ACTIVE → reverse.md §14.1–14.14 (duality 14.1–14.12; door/exit seam 14.14; KL–LP closed on a structural obstruction, 14.13/14.6.5); the itinerary language → itinerary.md §14.15 (whole-period height laws 14.15.9).
 - **Ladder** — closed as local law → ladder.md §15.
 - **Papers** — both published → publication.md (paper 1 DOI 10.5281/zenodo.21273548, v2 DOI 10.5281/zenodo.21421120; mirror paper DOI 10.5281/zenodo.21303918).
 
@@ -34,11 +34,11 @@ This document lets any capable model (or a future session of any model) continue
 
    **Pending.** Nothing owed our side after round 6. Waiting on Merle: (a) his LEDGER.md edits — verify at next touch; (b) his sibling gateway page link — then fill the footer cross-link slot in `viz/cycle_anchor_gateway.html` and push.
 
-   **Pointers.** cycles.md 12.6.1.1/12.6.1.2; aeh.md §13.4 (external-replication line); reverse.md 14.15.9(a); `experiments/transport_recurrence_vectors.json`; the `briefs/merle-*` files are the round-by-round record.
+   **Pointers.** cycles.md 12.6.1.1/12.6.1.2; aeh.md §13.4 (external-replication line); itinerary.md 14.15.9(a); `experiments/transport_recurrence_vectors.json`; the `briefs/merle-*` files are the round-by-round record.
 
 2. **KL–LP residual** (low priority; CLOSED front, see State of the fronts). One well-defined sub-question survives in 14.13: whether a *size-threshold-coupled* version of the `(j,r)` DAG (coupling precision-loss to the renewal induction's accumulated-offset variable, rather than crediting exhaustion for free) recovers real gains from residues. Reopens only with an idea for that coupling, not with more computation.
 
-3. **The wiki's own longer-horizon items.** The anchor-pinning framing thread (README's 2023 seed question) has run its course through the door/exit seam, block-map layer, and itinerary language: the Bridge's remaining content is exactly the stratum word at unbounded length, proved free at every finite level (full shift, reverse.md 14.15.2), with a symbolic name (the diagonal compatibility locus, 14.15.3(c)) — paused until a further step can engage the word at unbounded length directly, which is the Bridge itself. The equidistribution question (AEH, aeh.md §13) stays long-range per the stopping rules: proof effort waits on an idea. Community outreach (r/Collatz, ccchallenge) is de-prioritized, not a standing item; a substantive response would be verified against the wiki and answered with one reply, no questions.
+3. **The wiki's own longer-horizon items.** The anchor-pinning framing thread (README's 2023 seed question) has run its course through the door/exit seam, block-map layer, and itinerary language: the Bridge's remaining content is exactly the stratum word at unbounded length, proved free at every finite level (full shift, itinerary.md 14.15.2), with a symbolic name (the diagonal compatibility locus, 14.15.3(c)) — paused until a further step can engage the word at unbounded length directly, which is the Bridge itself. The equidistribution question (AEH, aeh.md §13) stays long-range per the stopping rules: proof effort waits on an idea. Community outreach (r/Collatz, ccchallenge) is de-prioritized, not a standing item; a substantive response would be verified against the wiki and answered with one reply, no questions.
 
 ## The delegation pattern (proven)
 
