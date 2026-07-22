@@ -1,7 +1,7 @@
 ---
 status: closed — entry map, tower map, and Stage 1 reduction summary; the synthesis proper (11.8.3) is split to stage1-synthesis.md
 scope: monolith 11.8.1-11.8.2, 11.8.4 (11.8.3 → stage1-synthesis.md)
-updated: 2026-07-12
+updated: 2026-07-22
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -502,7 +502,7 @@ That is the main formal output of Stage 1, and on the `s`-side it is complete.
 
 On the `s`-side: nothing. The global law of `11.8.4.1` is exact for every family on both lifting components, so the visible tower geometries recorded in `11.8.2` — dense and sparse refinement patterns, translated shells, centered halo templates — are fully accounted for. Each is a finite-window shadow of the one universal law translated by the family anchor. The observations that once seemed to demand separate mechanisms are preserved in Appendix `A.4`–`A.5` as discovery-path records, not as open phenomena.
 
-Exactly one empirical statement survives, and it faces outward rather than inward: the digit statistics of the anchors `N(ω)` are consistent with fair-coin behavior (digit density `0.497` across `2,499` families; Appendix `A.4.6`), as expected for `2`-adic logarithms of integers. Confirming or refining that expectation is a question about classical `p`-adic analysis, not about the Collatz reduction, and nothing in the later stages depends on resolving it. Nor is it entirely out of reach: `p`-adic Baker theory already supplies an unconditional effective floor — an integer of size `n` matches at most `O((log n)^2)` leading anchor digits (Corollary `11.8.3.11.2`). What lies beyond current theory is only the finer statistical behavior.
+Exactly one empirical statement survives, and it faces outward rather than inward: the digit statistics of the anchors `N(ω)` are consistent with fair-coin behavior (digit density `0.497` across `2,499` families; Appendix `A.4.6`), as expected for `2`-adic logarithms of integers. Confirming or refining that expectation is a question about classical `p`-adic analysis, not about the Collatz reduction, and nothing in the later stages depends on resolving it. Nor is it entirely out of reach: `p`-adic Baker theory already supplies an unconditional effective floor — an integer of size `n` matches at most `O((log n)^2)` leading anchor digits (Corollary `11.8.3.11.2`). What lies beyond current theory is only the finer statistical behavior. The anchor's consolidated reference is anchors.md §17; the equidistribution hypothesis this digit statistic feeds is formalized at aeh.md §13.
 
 #### 11.8.4.3. What remains genuinely open
 
@@ -627,10 +627,8 @@ open:
     the unbounded-depth residue of the bridge (11.8.7.7) — split:
         typical orbits: anchor equidistribution (11.8.5.6.3 sub-q. 3),
             now the precise missing statistical hypothesis
-        cycles: rigidity of closed anchor walks — front PARKED (§12,
-            cycles.md): periods 1-3 fully closed; uniform trim
-            resolved (12.8: exists, exponentially weak, sharp);
-            residual content = anchor-walk rigidity, same as Stage 4
+        cycles: rigidity of closed anchor walks — cycles.md §12
+            (status and ledger live there)
         (bounded-depth content fully formal: 11.8.7.3, 11.8.7.6)
 ```
 

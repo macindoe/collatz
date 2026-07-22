@@ -1,7 +1,7 @@
 ---
 status: hypothesis FORMALIZED and calibrated — bulk uniformity confirmed UNQUALIFIED at all tested depths; the 13.5 anomaly RESOLVED as a protocol artifact (with an exact routing lemma); proof effort remains parked per stopping rules
 scope: new section 13 (post-monolith)
-updated: 2026-07-18
+updated: 2026-07-22
 source: new material; builds on 11.8.4.4 (ledger), 11.8.7.6–7 (window/digit budget), 12.8.4 (staircase)
 ---
 
@@ -21,7 +21,7 @@ Fix a depth `k`. The **depth-`k` window state** of `(ω, d)` is `(ω mod 2^(k+2)
 
 **Hypothesis 13.2.1 (AEH, bulk form).** For every `k` and every `X`, along the `F`-orbit of almost every state (in natural density of starting values), the empirical distribution of depth-`k` window states over the visits with `x_exit > X` converges to `π_k` as the orbit length and `X` grow.
 
-Supporting exact facts (unconditional): under `π_k`, the marginal of `s` is exactly the ledger — `P(s = 1) = 1/2`, `P(s = 2) = 1/4`, `P(s = j) = 2^-j` — by the residue-class count (`11.8.1.3.1`) plus the geometric shell law on the lifting classes; `3`-gain has probability exactly `Σ_(j even) 2^-j = 1/3` (`9.3`); and `a_+ = 0` exactly when `s` is odd, so shallow blocks never absorb `3`s. The class process under `π_k` is an explicit finite Markov chain with computable entries (e.g., from class `(1 mod 8, d odd)` the next depth is exactly `1`; from `(5 mod 8, d odd)`, `P(d_+ even) = 2/3` exactly).
+Supporting exact facts (unconditional): under `π_k`, the marginal of `s` is exactly the ledger — `P(s = 1) = 1/2`, `P(s = 2) = 1/4`, `P(s = j) = 2^-j` — by the residue-class count (`11.8.1.3.1`) plus the geometric shell law on the lifting classes; `3`-gain has probability exactly `Σ_(j even) 2^-j = 1/3` (`9.3`); and `a_+ = 0` exactly when `s` is odd, so shallow blocks never absorb `3`s. The class process under `π_k` is an explicit finite Markov chain with computable entries (e.g., from class `(1 mod 8, d odd)` the next depth is exactly `1`; from `(5 mod 8, d odd)`, `P(d_+ even) = 2/3` exactly). A symbolic form of the hypothesis is recorded at reverse.md `14.15.2`: AEH is precisely the statement that actual orbits' stratum words equidistribute against the itinerary cylinder measure.
 
 ## 13.3. Conditional consequences (theorems modulo AEH)
 
@@ -29,7 +29,7 @@ Supporting exact facts (unconditional): under `π_k`, the marginal of `s` is exa
 
 **13.3.2 (3-gain and drift).** AEH implies the `3`-gain rate is exactly `1/3` (measured along orbits: `0.3352`, `1.1σ` from `1/3`) and the classical negative drift per block, hence contraction of `log x` at the classical rate along AEH-generic orbit segments.
 
-**13.3.3 (what AEH does not give).** Even in full, AEH yields almost-everywhere statements only. The exceptional tails — sustained deviations of exactly the staircase profile (`12.8.4`) — have AEH-probability zero yet are not excluded for any *individual* orbit. AEH is the precise form of the missing statistical half; it is not a route to full convergence. This matches the program's honest scope (`11.8.4.4`, README).
+**13.3.3 (what AEH does not give).** Even in full, AEH yields almost-everywhere statements only. The exceptional tails — sustained deviations of exactly the staircase profile (`12.8.4`) — have AEH-probability zero yet are not excluded for any *individual* orbit. AEH is the precise form of the missing statistical half; it is not a route to full convergence. This matches the program's honest scope (`11.8.4.4`, README). The staircase is simultaneously the cycle-sharpness family; the one-configuration-both-halves synthesis is charted at bridge.md `16.4.6`.
 
 ## 13.4. Calibration record (2026-07-08)
 

@@ -1,7 +1,7 @@
 ---
 status: open / calibrated
 scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record); 11.9 added post-monolith (per-letter window height laws, reverse.md 14.15.9)
-updated: 2026-07-18
+updated: 2026-07-22
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -81,7 +81,7 @@ Questions here include:
 * To what extent does repeated `3`-gain influence long-term movement through the reduced state space?
 * Do repeated `3`-gain patterns explain any of the visible clustering, locking, or average-drift effects seen empirically?
 
-The local trigger is now explicit; the unresolved issue is the global arithmetic and dynamical significance of that trigger. The first question also has a predicted answer: under the equidistribution heuristic the `3`-gain rate is exactly `1/3`, matched empirically to three decimal places (`11.8.4.4`); what remains open is its rigorous derivation along orbits.
+The local trigger is now explicit; the unresolved issue is the global arithmetic and dynamical significance of that trigger. The first question also has a predicted answer: under the equidistribution heuristic the `3`-gain rate is exactly `1/3`, matched empirically to three decimal places (`11.8.4.4`); under AEH it is a conditional theorem (aeh.md `13.3.2`), and what remains open is its unconditional derivation along orbits.
 
 ## 11.4. Canonical Normal Forms for Reduced States
 
@@ -104,6 +104,8 @@ Open questions include:
 
 The issue is no longer whether the reduced state is well-defined; it is whether the present coordinates are the most informative ones.
 
+**Calibration note.** One such normal form now exists: the door coordinate (reverse.md `14.14`) — the live door `y` of a reduced edge, a single integer determining the edge, with its own total presentation `G` of the reduced dynamics (semiconjugate to `F`). The question is thereby reframed — which coordinate is most informative for which purpose — rather than open as posed.
+
 ## 11.5. Reduced Predecessor Structure and Inversion
 
 The strengthened fixed-exit analysis now sharply separates two notions that were easier to conflate in earlier drafts:
@@ -121,6 +123,8 @@ Questions include:
 * Is there a clean reduced analogue of the predecessor-tree viewpoint from classical Collatz analysis?
 
 The present note now identifies one canonical representative inside the fixed-exit family of a state’s own exit value. A natural next step is to understand the full upstream geometry of these families.
+
+**Calibration note.** Closed on the mirror front: reverse.md `14.1` gives the complete predecessor characterization (which states reach a given exit, with the exact branching law), and the unique-predecessor lemma (reverse.md `14.15.4`) pins the letter-prescribed backward predecessor as unique. The classical predecessor-tree viewpoint translates through the same apparatus (reverse.md `14.4`–`14.6`, the density program).
 
 ## 11.6. Finite-State Shadows and Residue Control
 
@@ -154,6 +158,8 @@ This comparison matters for two reasons. First, it may show that some parts of t
 
 One concrete point of contact is now established (`11.8.3.11`): the valuation `s` on the lifting branch is a linear form in two `2`-adic logarithms, and the effective theory that bounds it — `p`-adic Baker theory together with lattice-reduction methods — is the same machinery underlying the known lower bounds on nontrivial Collatz cycle lengths (Steiner; Simons–de Weger). The reduced formalism and the classical cycle analyses therefore terminate on common arithmetic ground, which calibrates both the novelty and the expected difficulty of the remaining questions.
 
+A second contact point is established on the mirror front: reverse.md `14.15.1` identifies the itinerary coding of the door/exit seam as the classical Terras/Everett/Lagarias parity-vector coding, read in door coordinates.
+
 ## 11.8. Citation and constant debt: discharged
 
 Housekeeping, not a new mathematical question layer. No live `#TODO` marker remains in the wiki (`sources/` excluded, immutable per AGENTS.md): the debt indexed here after the bridge-perimeter stress test (bridge.md 16.4.4) is fully discharged, and every citation is now written in place at its use site rather than deferred. This section is retained as the record of what the debt was and how it closed.
@@ -166,23 +172,15 @@ Housekeeping, not a new mathematical question layer. No live `#TODO` marker rema
 * cycles.md 12.6.3 — Barina, verification frontier, `n < 2^71` (2025).
 * cycles.md 12.7.3 — Hercher, `m <= 91` (arXiv:2201.00406); confirms the wiki's own crossover threshold "`p > 91`" was already correctly calibrated.
 
-**Resolved 2026-07-12** (chase below) — all three items from the bridge-perimeter stress test (bridge.md 16.4.4) are now closed:
+**Resolved** — all three items from the bridge-perimeter stress test (bridge.md 16.4.4) are closed:
 
 * **The effective irrationality measure for `log 3 / log 2`** — cycles.md 12.5.3 and 12.7.5 now cite and use G. Rhin's explicit bound directly (via Simons–de Weger 2005, Lemma 12), with the numeric contradiction checked by computation.
 * **The spike-height exponent** — stage1-synthesis.md 11.8.3.11 now cites and uses Bugeaud–Laurent's Corollaire 2 (the `g=1` case, automatic for `p=2`) directly, giving `C(ω) = 208·log9·logω` and confirming the exponent is exactly `2`, with a numeric sanity check.
-* **cycles.md 12.8.2's explicit `n_0(p)`** — the `γ ↔ Λ` conversion sketched earlier is now a full proof: `Λ < exp(p - γ·log2)` unconditionally (via `q=2^(K-γ)`, `log(1+x)<x`, and the crude-but-unconditional `Λ<p` from Corollary 12.1.2), combined with Rhin's bound and Theorem 12.8.1 gives an explicit equation defining `n_0(p)`, solved numerically for a table of periods (`n_0(91) ~ 3*10^21`, etc.) and checked that the contradiction persists for all larger `n` (no reversal). See cycles.md 12.8.2 for the full derivation.
+* **cycles.md 12.8.2's explicit `n_0(p)`** — the `γ ↔ Λ` conversion is a full proof: `Λ < exp(p - γ·log2)` unconditionally (via `q=2^(K-γ)`, `log(1+x)<x`, and the crude-but-unconditional `Λ<p` from Corollary 12.1.2), combined with Rhin's bound and Theorem 12.8.1 gives an explicit equation defining `n_0(p)`, solved numerically for a table of periods (`n_0(91) ~ 3*10^21`, etc.) and checked that the contradiction persists for all larger `n` (no reversal). See cycles.md 12.8.2 for the full derivation.
 
 Nothing substantive remains open from this stress test. What's left is the ordinary residue of any pinned bound: whether a sharper published measure (post-1987 Rhin improvements, or a p-adic analogue) would improve the constants — not attempted, since the corollaries already close what they need to close.
 
-**Chase log (2026-07-12), gap 2 (`log 3 / log 2` measure).** First attempt at closing this properly, not just re-pinning a title.
-
-* **The right object, isolated.** What `12.5.3`/`12.7.4`/`12.8.2` actually need is an explicit *two-integer-variable* lower bound `|K·log 2 − n·log 3| > C·H(K,n)^(−κ)` (Baker/Feldman-style; sharpened for two terms by Laurent–Mignotte–Nesterenko 1995 and successors) — **not** a generic irrationality measure of one fixed real number. This distinction matters and was not obvious going in: a superficially on-topic classical result, G. Rhin's theorem that `μ(γ) < 8.616` for every nonzero `γ ∈ Q log 2 + Q log 3` (verified directly from primary text — Zudilin's survey arXiv:math/0404523, Theorem 3, extracted via `pdftotext`; original citation: G. Rhin, *Approximants de Padé et mesures effectives d'irrationalité*, Sém. Théorie des Nombres Paris 1985–86, Progress in Math. 71, 155–164, Birkhäuser 1987) — bounds how well a *fixed* `γ` is approximated by *independent* rationals `p/q`, which does not constrain `|γ|` itself as `K,n` grow. It is a real, correctly-cited fact about the same pair of numbers, but almost certainly the wrong tool for this application; recorded so the mistake isn't repeated.
-* **Independent confirmation of the right shape.** Terence Tao's 2011 blog post on the Collatz/Littlewood–Offord connection states Baker's actual bound in the needed form: `2^a − 3^k ≫ 2^a / a^C` — a polylog-in-the-exponent shape, matching this wiki's own framing (stage1-synthesis.md `11.8.3.11`: `C(ω)·(log d)^2`) rather than a clean small exponent. This is independent evidence the wiki's framing genre is correct, even though it doesn't supply `C`.
-* **Resolved (2026-07-12), same session.** The user supplied the actual Simons–de Weger (2005) text (the scanned-PDF blocker above was a sandbox limitation, not a real dead end). It settles the question directly: their **Lemma 12** applies "the Proposition on p. 160 of [Rhin]" — the *same* 1987 paper as the `μ<8.616` result above, but a different, fully explicit statement from it, applied with parameters `u_0=0, H=u_1=K+L, u_2=-K` — to get, unconditionally, `Λ = (K+L)log2 - K log3 > exp(-13.3(0.46057+log K))` (their `K`; our `n`). This is exactly the two-integer-variable bound the earlier bullet said was needed, from the exact source publication.md already suspected. Confirmed by direct substitution into cycles.md's own notation and numeric check — see cycles.md 12.5.3/12.7.5 for the pinned statement and the check. Lesson: the earlier "blocked" conclusion was really "blocked by tooling," and the fix was a human providing the primary text directly, not a different search strategy.
-
-**Chase log (2026-07-12), gap 1 (spike-height exponent) — first pass.** A companion result, Bugeaud–Laurent's actual theorem, *was* recovered readably: Tomohiro Yamada's arXiv note (math/0607072, plain-text extractable, no OCR needed) restates it as **Theorem 1.1** — a general bound on `v_p(η)` for a two-term `p`-adic-log linear form, governed by combinatorial parameters `K, L, R, S` chosen to optimize a trade-off (condition `(3)`, conclusion `v_p(η) ≤ KL − 1`) — and its worked corollary for Fermat quotients, **Theorem 1.2**, has the shape `v_p(x^(p−1) − 1) ≤ (28/3)(p−1)·[log(y/log p)/log(x/y)] + 4` — nothing like a clean `(log n)^k` monomial. This raised a real worry that "pin the exponent to 1 or 2" was the wrong question and a fresh from-scratch derivation would be needed.
-
-**Resolved (2026-07-12), same session.** The user supplied the actual Bugeaud–Laurent (1996, *J. Number Theory* 61) text. It turns out our own case is the *simplest* one they treat, not the general one: our linear form is `Λ = 9^n - ω^(-1)` (since `v_2(9^n·ω-1) = v_2(Λ)`, `ω` odd), with `α_1=9, α_2=ω^(-1)` both rational, so `D=1`; and for `p=2` the residue field is `F_2`, so *every* unit is automatically principal (`g=1`) — exactly Dong Ping Ping's special case, which the paper's **Corollaire 2** handles with a fully explicit, unconditional bound (no asymptotic threshold, unlike their Théorème 2): `v_2(9^n·ω-1) ≤ 208·log9·logω·(max{log b'+log(log2)+0.4, 10log2, 10})^2` with `b'=n/logω+1/log9`. This confirms the exponent is exactly `2` — the wiki's existing choice, not the `log n` hedge — because the `log n` variants in the literature are for a *different* (large-coefficient, asymptotic) regime, not this one. Numerically sanity-checked (not merely trusted): the bound is a large constant (`~73,555` for `ω=5`) until `n` reaches the tens of thousands, then grows slowly as `(log n)^2` — `~131,500` at `n=10^6`, matching the qualitative picture the wiki already asserted. Full derivation now in stage1-synthesis.md 11.8.3.11. Lesson, same as gap 2: the blocker was access to the primary source, not the search strategy, and the actual paper resolved something a secondary source (Yamada's note, solving a different corollary) could not.
+The chase itself is discharged; the citations are pinned inline at their use sites (stage1-synthesis.md 11.8.3.11; cycles.md 12.5.3, 12.7.5, 12.8.2), and the derivations live there. One methodological guard retained: Rhin's `μ(γ) < 8.616` irrationality measure for fixed `γ ∈ Q log 2 + Q log 3` is the wrong tool for the two-integer-variable linear form the cycle corollaries need — the right statement is the Proposition on p. 160 of the same 1987 paper, applied as in Simons–de Weger (2005) Lemma 12 (pinned at cycles.md 12.5.3); recorded so the mistake isn't repeated.
 
 ## 11.9. Per-letter (period-cutting) window height laws
 

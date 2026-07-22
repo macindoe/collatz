@@ -1,7 +1,7 @@
 ---
 status: closed (3-gain law proved on both lifting components); fiber-versus-orbit bridge OPEN
 scope: monolith 11.8.5
-updated: 2026-07-07
+updated: 2026-07-22
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -230,9 +230,9 @@ So the anchor increment is not a new unknown. It is a deterministic function of 
 control of C   ⟺   law for the anchor increment ΔM.
 ```
 
-(With the valuation components of `C` now formal per step — `v_2(C)` by the entry-depth law of `11.8.6.3`, `v_3(C)` by the absorption law of `11.8.6.2` — the unresolved content of both sides of this equivalence is precisely the odd core `ω_+ = C / (2^(v_2 C)·3^(v_3 C))`. The bridge is therefore the terminal open problem of the program at the valuation level.)
+(With the valuation components of `C` now formal per step — `v_2(C)` by the entry-depth law of `11.8.6.3`, `v_3(C)` by the absorption law of `11.8.6.2` — the unresolved content of both sides of this equivalence is precisely the odd core `ω_+ = C / (2^(v_2 C)·3^(v_3 C))`. The bridge is therefore the terminal open problem of the program at the valuation level; it is consolidated as its own page, bridge.md §16, and its reverse-side mirror — the `3`-adic precision loss — is reverse.md 14.13.)
 
-**Question 11.8.5.6.3 (anchor increment law).** Does `ΔM` admit a usable description in terms of the current state's data — the residue class of `ω`, the valuation `s`, the anchor displacement `d - M(ω)`, or finitely many digits of `M(ω)`?
+**Question 11.8.5.6.3 (anchor increment law; resolved to low order and at bounded depth, stage4.md).** Does `ΔM` admit a usable description in terms of the current state's data — the residue class of `ω`, the valuation `s`, the anchor displacement `d - M(ω)`, or finitely many digits of `M(ω)`?
 
 Three graded sub-questions, in increasing order of ambition:
 
@@ -242,7 +242,7 @@ Three graded sub-questions, in increasing order of ambition:
 
 A positive answer at any of the three levels would convert the Stage 1–2 statics into orbit-level statements. A negative structural answer — for instance, that `ΔM` is as hard as the digits of the logarithms themselves — would locate the difficulty of the full problem precisely at the fiber-to-orbit bridge.
 
-**Resolution note (2026-07-07).** Sub-question `1` is answered in the affirmative: `ΔM mod 2^k` obeys an exact law in the state's residues modulo `σ`-graded powers of `2`, with modulus fixed in advance per `(s, m_+)` stratum — Theorem `11.8.7.3.1` (stage4.md), verified independently (`11.8.7.4`). Sub-question `2` is answered in its bounded-depth form: one-step propagation (Theorem `11.8.7.6.1`) decides the next `3`-gain from the window in an error-free trichotomy, undecided only at rate `≈ 2^(-(k+1))`; the digit-budget accounting (`11.8.7.7`) shows this is the complete deterministic content — infinite-horizon window determinism is impossible in principle. The unbounded-depth residue of the bridge is therefore exactly sub-question `3` for typical orbits (anchor equidistribution, now the precise missing hypothesis) and rigidity for cycles.
+**Status.** Sub-question `1` is answered in the affirmative: `ΔM mod 2^k` obeys an exact law in the state's residues modulo `σ`-graded powers of `2`, with modulus fixed in advance per `(s, m_+)` stratum — Theorem `11.8.7.3.1` (stage4.md), verified independently (`11.8.7.4`). Sub-question `2` is answered in its bounded-depth form: one-step propagation (Theorem `11.8.7.6.1`) decides the next `3`-gain from the window in an error-free trichotomy, undecided only at rate `≈ 2^(-(k+1))`; the digit-budget accounting (`11.8.7.7`) marks this as the complete deterministic content, with the impossibility-of-infinite-horizon reading recorded there as the organizing heuristic. The unbounded-depth residue of the bridge is therefore exactly sub-question `3` for typical orbits (anchor equidistribution, now the precise missing hypothesis) and rigidity for cycles.
 
 **Remark (relation to the trivial cycle).** The fixed point of the reduced dynamics is `(ω, d) = (1, 1)` with `M(1) = 0`, and by the convergence translation (Theorem `9.8.3`) the conjecture is exactly the statement that every orbit drives the pair `(d - M(ω), M(ω))` to `(1, 0)`. The reformulation in anchor coordinates fixes the language in which the increment question above would have to be answered; nothing beyond the translation is claimed.
 
