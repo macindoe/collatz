@@ -44,14 +44,14 @@ Pointers only, in dependency order:
 ## 17.4. Effective bounds
 
 - stage1-synthesis.md 11.8.3.11: Bugeaud–Laurent (1996), Corollaire 2 — `C(ω) = 208·log9·logω`, exponent exactly `2`. Pinned and numerically checked 2026-07-12.
-- Corollary 11.8.3.11.2: the same bound read as a digit-match cap — an integer of size `n` matches at most `O((log n)²)` leading anchor digits. This is an unconditional ceiling on how long an agreement can last; it says nothing about how often agreements of a given length actually occur (that's §17.6/17.7's territory — §17.7 at `anchor-digit-search.md`).
+- Corollary 11.8.3.11.2: the same bound read as a digit-match cap — an integer of size `n` matches at most `O((log n)²)` leading anchor digits. This is an unconditional ceiling on how long an agreement can last; it says nothing about how often agreements of a given length actually occur (that's §17.6/17.7's territory — §17.7 at `anchor-digit-search.md`); the ceiling's rational-anchor instance is the spent `|q| = 1` stock (cycles.md 12.6.1.3).
 
 ## 17.5. Cycles: the anchor walk
 
 - spine.md 9.8.4 (anchor-form remark): a nontrivial cycle is a finite closed walk in `Z₂` with `Σ ΔM_t = 0`.
 - cycles.md §12.3: the stratum-sequence congruence system is this walk's finite-precision shadow.
 - cycles.md 12.8.2's explicit `n_0(p)` (pinned 2026-07-12) is downstream of the anchor via `Λ = K log2 - n log3`, not itself a digit-structure argument — the rigidity *target* is anchor-walk closure, the tool used to bound it is classical Baker theory, not digit statistics.
-- cycles.md 12.6.1.2: the near-miss anchors of the four known cycles — the spent `|q| = 1` stock and the side-asymmetry.
+- cycles.md 12.6.1.2: the near-miss anchors of the four known cycles — the spent `|q| = 1` stock and the side-asymmetry; the stock identified as the rational-anchor instance of the digit-match cap (cycles.md 12.6.1.3).
 
 ## 17.6. Statistics: AEH (the existing, cross-sectional layer)
 
