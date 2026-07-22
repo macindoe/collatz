@@ -1,11 +1,11 @@
 ---
-status: open — low-order law (11.8.7.3) and one-step propagation (11.8.7.6) PROVED; unbounded-depth residue split into statistics (orbits) and rigidity (cycles), 11.8.7.7
+status: per-step results PROVED — low-order law (11.8.7.3) and one-step propagation (11.8.7.6); the unbounded-depth residue is the terminal open object, consolidated as the Bridge (bridge.md §16)
 scope: monolith 11.8.7, plus new material 11.8.7.1–11.8.7.7
-updated: 2026-07-07
+updated: 2026-07-22
 source: 11.8.7 moved from program.md; 11.8.7.1+ new
 ---
 
-> **Current state.** Stage 4 — the odd core `ω_+`, equivalently the anchor increment law (`11.8.5.6`) — is the live front. Two results so far. (1) The anchor increment obeys an exact low-order law (Theorem `11.8.7.3.1`): `ΔM mod 2^k` from the state's residues modulo `σ`-graded powers of `2`, moduli fixed per `(s, m_+)` stratum. (2) One-step displacement propagation (Theorem `11.8.7.6.1`): the same window decides the next exit valuation and `3`-gain in an error-free trichotomy, undecided only at rate `≈ 2^(-(k+1))`, and undecided *means* deep cascade ahead. The digit-budget accounting (`11.8.7.7`) shows bounded windows cannot decide infinite horizons: the remaining content of the bridge is the equidistribution hypothesis for typical orbits, and rigidity for cycles. The cycle front is open at cycles.md (§12): periods 1 and 2 closed, reproducing Steiner and the Simons–de Weger 2-cycle case; period `p >= 3` is the live target.
+> **Current state.** Stage 4 — the odd core `ω_+`, equivalently the anchor increment law (`11.8.5.6`). Two results. (1) The anchor increment obeys an exact low-order law (Theorem `11.8.7.3.1`): `ΔM mod 2^k` from the state's residues modulo `σ`-graded powers of `2`, moduli fixed per `(s, m_+)` stratum. (2) One-step displacement propagation (Theorem `11.8.7.6.1`): the same window decides the next exit valuation and `3`-gain in an error-free trichotomy, undecided only at rate `≈ 2^(-(k+1))`, and undecided *means* deep cascade ahead. The digit-budget accounting (`11.8.7.7`) shows bounded windows cannot decide infinite horizons: the remaining content of the bridge is the equidistribution hypothesis for typical orbits, and rigidity for cycles — the terminal open object, consolidated at bridge.md (§16). The cycle front (cycles.md §12) is closed and parked: periods 1–3 classified, the uniform trim resolved, the crossover plan withdrawn.
 
 ### 11.8.7. Stage 4. Only Then Refine `ω_+`
 
@@ -24,7 +24,7 @@ Accordingly, the natural order of difficulty is:
 3. obtain laws for `d_+`,
 4. and only then seek a more transparent description of `ω_+`.
 
-Items `1`–`3` are now closed per reduced step (the exact global law of `11.8.4.1`, the `3`-gain law of `11.8.5`, and the entry-depth and absorption laws of `11.8.6.2`–`11.8.6.3`). Stage 4 is thus the live front, and by `11.8.5.6` it coincides with the anchor increment law — the fiber-to-orbit bridge.
+Items `1`–`3` are now closed per reduced step (the exact global law of `11.8.4.1`, the `3`-gain law of `11.8.5`, and the entry-depth and absorption laws of `11.8.6.2`–`11.8.6.3`). Stage 4, by `11.8.5.6`, coincides with the anchor increment law — the fiber-to-orbit bridge. Its bounded-depth content is proved below; the unbounded-depth residue is the program's terminal open object, consolidated as the Bridge (bridge.md §16).
 
 #### 11.8.7.1. Pilot experiment: is there a low-order law for `ΔM`?
 
@@ -93,7 +93,7 @@ Verification code: `experiments/anchor_increment.py`.
 Sub-question 1 of Question `11.8.5.6.3` is closed in the affirmative, with the refinement that the required modulus is `σ`-graded rather than uniform. What the theorem does **not** deliver is sub-question 2 (displacement propagation): the next `3`-gain decision needs `v_2(d_+ - M(ω_+))`, and when the next displacement is deep this requires `ΔM` to *unbounded* depth — precisely where the low-order law is silent. The residual hardness of Stage 4 is therefore now confined to unbounded-depth digit questions, the same regime as the anchor digit statistics (`11.8.4.2`). The natural next targets, in order:
 
 1. **Displacement propagation on the generic stratum**: bound `v_2(d_+ - M(ω_+))` from below-threshold data, accepting an exceptional set priced by the ledger. *(Achieved in one-step form: Theorem `11.8.7.6.1`. The iterated form is capped by the digit budget — see `11.8.7.7`.)*
-2. **The cycle benchmark**: a nontrivial cycle is a closed anchor walk with `Σ ΔM_t = 0` (`9.8.4`, anchor form); the low-order law makes every cycle candidate satisfy an explicit finite congruence system per stratum sequence. Test whether this reproduces or sharpens the known cycle-length constraints (`11.8.3.11`). *(Opened: cycles.md §12. Periods 1, 2, 3 fully closed (Theorems `12.2.3`, `12.5.3`, `12.7.5`) via the general-`p` elimination, ceiling lemma, and budget-trim lemmas (`12.6`, `12.7.4`). Crossover target: `p > 91`.)*
+2. **The cycle benchmark**: a nontrivial cycle is a closed anchor walk with `Σ ΔM_t = 0` (`9.8.4`, anchor form); the low-order law makes every cycle candidate satisfy an explicit finite congruence system per stratum sequence. Test whether this reproduces or sharpens the known cycle-length constraints (`11.8.3.11`). *(Done: cycles.md §12. Periods 1–3 fully closed (Theorems `12.2.3`, `12.5.3`, `12.7.5`) via the general-`p` elimination, ceiling lemma, and budget-trim lemmas (`12.6`, `12.7.4`); the uniform trim is resolved, the crossover plan withdrawn, and the front parked (`12.8`), its residual content identified as anchor-walk rigidity.)*
 
 #### 11.8.7.6. One-step displacement propagation
 

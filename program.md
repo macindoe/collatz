@@ -1,11 +1,11 @@
 ---
 status: program / status ledger
 scope: monolith 11.8 intro, guardrail, stage prospectus, 11.8.8, 11.9 (11.8.7 moved to stage4.md)
-updated: 2026-07-07
+updated: 2026-07-22
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
-> **Current state.** The Route A program: guardrail, stage architecture, and strategic summary. Stages 1-3 are closed per reduced step (see stage1.md-stage3.md); Stage 4 — the odd core ω_+, equivalently the anchor increment law — is the terminal open problem and now has its own page (stage4.md), where its first result is proved: the exact low-order law for the anchor increment (11.8.7.3.1). The compact status ledger lives at stage1.md 11.8.4.5.
+> **Current state.** The Route A program: guardrail, stage architecture, and strategic summary. Stages 1-3 are closed per reduced step (see stage1.md-stage3.md); Stage 4 — the odd core ω_+, equivalently the anchor increment law — has its own page (stage4.md), where the exact low-order law for the anchor increment is proved (11.8.7.3.1). The terminal open object — the anchor increment at unbounded depth — is owned by bridge.md (§16). The compact status ledger lives at stage1.md 11.8.4.5.
 
 ## 11.8. A Guarded Route A Program
 
@@ -89,7 +89,7 @@ This direction is natural because the reduced formalism has already isolated `s`
 
 ### 11.8.7. Stage 4. Only Then Refine `ω_+`
 
-Stage 4 is the live front and now has its own page: **stage4.md**, which owns section `11.8.7` and its results. In brief: the odd core `ω_+` coincides, by `11.8.5.6`, with the anchor increment law; its low-order truncations obey an exact `σ`-graded law (Theorem `11.8.7.3.1`, proved 2026-07-07), and the residual open content is displacement propagation at unbounded depth (`11.8.7.5`).
+Stage 4 now has its own page: **stage4.md**, which owns section `11.8.7` and its results. In brief: the odd core `ω_+` coincides, by `11.8.5.6`, with the anchor increment law; its low-order truncations obey an exact `σ`-graded law (Theorem `11.8.7.3.1`), and the residual open content is displacement propagation at unbounded depth (`11.8.7.5`), consolidated as the Bridge (bridge.md §16).
 
 ### 11.8.8. Strategic Summary
 
@@ -110,7 +110,7 @@ The framework developed in this note still does not resolve the Collatz conjectu
 The per-step arithmetic of the reduced transition is now largely formal: the valuation `s`, the `3`-gain trigger, and the depth evolution `d_+` all have exact laws (`11.8.4.1`, `11.8.5`, `11.8.6.3`). The strongest structural questions that remain are these:
 
 * how to classify the odd core `ω_+` — the last unclassified component of the reduced transition,
-* how the anchor moves under the reduced step — the fiber-versus-orbit bridge posed in `11.8.5.6`, which is the same question in logarithmic coordinates and the program's terminal open problem,
+* how the anchor moves under the reduced step — the fiber-versus-orbit bridge posed in `11.8.5.6`, which is the same question in logarithmic coordinates and the program's terminal open problem (consolidated as the Bridge, bridge.md §16),
 * and how to organize reduced states through canonical normal forms and predecessor structure.
 
 These questions remain open. They now form the natural continuation of the present program.
