@@ -17,7 +17,7 @@ Orbit statistics mix two different objects. The **bulk** — visits while `x` is
 
 ## 13.2. The hypothesis
 
-Fix a depth `k`. The **depth-`k` window state** of `(ω, d)` is `(ω mod 2^(k+2), min(d, D_k))` together with validity data; by `11.8.7.6.1` it decides the next step's `s` and `3`-gain in an error-free trichotomy with undecided rate `~2^-(k+1)`. Let `π_k` denote the **exact product law**: ω-residues Haar-uniform among valid ones, depth distributed by the stationary law of the exact window chain (computed at depth `12`: `P(d = 1, 2, 3, …) ≈ 0.333, 0.302, 0.173, 0.093, 0.048, …`, matching orbits to `~1%`).
+Fix a depth `k`. The **depth-`k` window state** of `(ω, d)` is `(ω mod 2^(k+2), min(d, D_k))` together with validity data; by `11.8.7.6.1` it decides the next step's `s` and `3`-gain in an error-free trichotomy with undecided rate `~2^-(k+1)`. Let `π_k` denote the **exact product law**: ω-residues Haar-uniform among valid ones, depth distributed by the stationary law of the exact window chain (computed at depth `12`: `P(d = 1, 2, 3, …) ≈ 0.333, 0.302, 0.173, 0.093, 0.048, …`, matching orbits to `~1%`; exact bulk depth marginal at `13.6.5`).
 
 **Hypothesis 13.2.1 (AEH, bulk form).** For every `k` and every `X`, along the `F`-orbit of almost every state (in natural density of starting values), the empirical distribution of depth-`k` window states over the visits with `x_exit > X` converges to `π_k` as the orbit length and `X` grow.
 
