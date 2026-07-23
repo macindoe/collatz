@@ -56,7 +56,7 @@ Pointers only, in dependency order:
 ## 17.6. Statistics: AEH (the existing, cross-sectional layer)
 
 - stage1.md 11.8.4.2: first empirical hint — digit density `0.497` across `2,499` families.
-- aeh.md §13: the real depth — bulk-form hypothesis (13.2.1), conditional theorems on what it buys and doesn't (13.3), an 8-round calibration campaign (13.4), one anomaly chased down and dissolved with a routing lemma (13.5).
+- aeh.md §13: the real depth — bulk-form hypothesis (13.2.1), conditional theorems on what it buys and doesn't (13.3), an 8-round calibration campaign (13.4), one anomaly chased down and dissolved with a routing lemma (13.5), and the named symbolic equivalence (13.6, the genericity form): AEH ⟺ bulk Bernoulli-genericity of the door letter word.
 - Every test in aeh.md is **cross-sectional**: it asks "averaged over many orbits/states, does this statistic match the coin-flip prediction?" None of it looks at one anchor's own bit string as a standalone object.
 - Bulk-vs-bottom split (aeh.md 13.1): small numbers are known-structured; the hypothesis only claims to hold in the bulk.
 - External replication (aeh.md 13.4, measured grade): an independent implementation reproduces the class skeleton's exact values and the ledger.

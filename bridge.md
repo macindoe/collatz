@@ -66,7 +66,7 @@ The core-extraction deficit (16.2): the forward digit budget (stage4.md 11.8.7.7
 
 ### 16.4.3. The forward escape — what closing the Bridge buys typical orbits
 
-- **The exact missing hypothesis.** Anchor equidistribution in its precise bulk form `π_k` (aeh.md 13.2); the conditional theorems fix what it buys — the frequency ledger, the `1/3` `3`-gain rate, the classical drift, all almost-everywhere — and what it cannot — individual staircase tails (aeh.md 13.3, esp. 13.3.3).
+- **The exact missing hypothesis.** Anchor equidistribution in its precise bulk form `π_k` (aeh.md 13.2); the conditional theorems fix what it buys — the frequency ledger, the `1/3` `3`-gain rate, the classical drift, all almost-everywhere — and what it cannot — individual staircase tails (aeh.md 13.3, esp. 13.3.3); its symbolic name is the genericity form (aeh.md 13.6): bulk Bernoulli-genericity of the integers' door letter words.
 - **The empirical texture.** Fair-coin anchor digits, density `0.497` (stage1.md 11.8.4.2); the frequency and size ledgers, empirically sharp to three decimals (stage1.md 11.8.4.4).
 - **The regime split.** The open object lives in the *bulk* (while `x` is large), where uniformity stands unqualified; the wild statistics are confined to the fixed *bottom* drainage basin of small integers (aeh.md 13.1).
 - **The single-sequence endpoints.** The anchor's own bit string was searched for internal structure — statistical batteries, an automaticity/algebraicity screen, operation lenses, PractRand — and came back clean at every endpoint (anchor-digit-search.md §17.7): calibration for this escape, not progress on it.
