@@ -1,4 +1,4 @@
-From f9ad8368823c906729ab91cf03593afbd2d5bd68 Mon Sep 17 00:00:00 2001
+From 8e8e94ca90f878511a7e23e6b795e0e78e249bc8 Mon Sep 17 00:00:00 2001
 From: macindoe <begemite0.o@gmail.com>
 Date: Fri, 24 Jul 2026 23:06:18 +1000
 Subject: [PATCH 3/3] L-A3 addition (B): margin definition pinned into the
@@ -13,7 +13,7 @@ Subject: [PATCH 3/3] L-A3 addition (B): margin definition pinned into the
  1 file changed, 7 insertions(+)
 
 diff --git a/LEDGER.md b/LEDGER.md
-index d474fee..65b5f50 100644
+index 04720af..cb85dbd 100644
 --- a/LEDGER.md
 +++ b/LEDGER.md
 @@ -85,6 +85,13 @@ The four known cycles anchored to tower near-misses; the `|q| = 1` lock free and
@@ -25,7 +25,7 @@ index d474fee..65b5f50 100644
 +`margin/n → c_gen = β − β·log₂ β + (β−1)·log₂(β−1) = 0.0793186…` (general; equivalently `β·(1 − H(1/β))`), and
 +`margin/n → c_strat = β − max_{α ∈ (0, β−1]} [H(α) + ((β−1+α)/2)·H(2α/(β−1+α))] = 0.2667875…` (stratum; interior maximum at `α* = 0.3747344…`)
 +
-+— genuine elementary limits (entropy bounds on the binomials, plus the largest-term sandwich for the stratum sum), with the exact counts approaching both constants monotonically from above (computed through `n = 163,840`: `0.0794`/`0.2669`). So "positive and linearly growing" is now anchored: positivity of the limit constants plus monotone-from-above convergence. The `2^(−margin)` decay clause remains the no-conspiracy **heuristic** (the artifact's own label, kept). Attribution, flat: quantification seeded Merle-side (REQ-MATH-014, `n ~ 10³`); asymptotic constants closed Macindoe-side. Artifact: `macindoe/collatz` `experiments/margin_asymptote.py` with committed output (49 checks, 0 failures; branch commit `52e8c5c`; final wiki-main hash to be pinned at review); wiki home `cycles.md` Remark 12.6.1.5. Status of (B): our key is turned on the `n ~ 10³` replication, and the asymptote is offered — (B)'s quantification carries **two keys** once Merle's acceptance of the asymptote lands.
++— genuine elementary limits (entropy bounds on the binomials, plus the largest-term sandwich for the stratum sum), with the exact counts approaching both constants monotonically from above (computed through `n = 163,840`: `0.0794`/`0.2669`). So "positive and linearly growing" is now anchored: positivity of the limit constants plus monotone-from-above convergence. The `2^(−margin)` decay clause remains the no-conspiracy **heuristic** (the artifact's own label, kept). Attribution, flat: quantification seeded Merle-side (REQ-MATH-014, `n ~ 10³`); asymptotic constants closed Macindoe-side. Artifact: `macindoe/collatz` `experiments/margin_asymptote.py` with committed output (49 checks, 0 failures; commit `52e8c5c`, on `main`); wiki home `cycles.md` Remark 12.6.1.5. Status of (B): our key is turned on the `n ~ 10³` replication, and the asymptote is offered — (B)'s quantification carries **two keys** once Merle's acceptance of the asymptote lands.
 +
  ---
  

@@ -1,4 +1,4 @@
-From a7ac7b78bce82f1f6bfbee0ae638477eb3ecfcc5 Mon Sep 17 00:00:00 2001
+From a161a3730f0e47e6384ac6c9a63a24f807fa5bf4 Mon Sep 17 00:00:00 2001
 From: macindoe <begemite0.o@gmail.com>
 Date: Fri, 24 Jul 2026 23:05:48 +1000
 Subject: [PATCH 2/3] L3: Macindoe key turned on the 2026-07-24 correction
@@ -12,14 +12,14 @@ Subject: [PATCH 2/3] L3: Macindoe key turned on the 2026-07-24 correction
  1 file changed, 2 insertions(+)
 
 diff --git a/LEDGER.md b/LEDGER.md
-index b01b469..d474fee 100644
+index f1a0f86..04720af 100644
 --- a/LEDGER.md
 +++ b/LEDGER.md
 @@ -38,6 +38,8 @@ Status vocabulary: `proposed` / `one key` / `two keys` / `refuted` / `corrected`
  
  **Correction / sharpening (Merle, 2026-07-24, REQ-MATH-017).** The "solvable at every local place, insoluble globally" reading is imprecise. For a *linear divisibility* `q | R` there is no Hasse gap (`q | R ⟺ v_p(R) ≥ v_p(q)` for all `p`, by CRT), so a global failure forces a local one; the earlier check tested only ℝ/ℤ₂/ℤ₃ (the structural primes, where `q` is a unit) and missed the obstructing prime. The `p = 7` instance has `7 | q`, `v_7(q) = 3 > v_7(R_r) = 1` at every rotation (`gcd(q, R_r) = 7`), so it fails already in **ℤ₇**. Accurate statement: every non-cycle is locally obstructed at some prime of the seam `q = 2^K − 3^n`; the surviving, substantive content is that *no single fixed* finite place handles all profiles (the structureless prime-local probe), the obstructing prime tracking the uncontrollable factorization of `2^K − 3^n` — so the missing mathematics is the **equidistribution** of `R_r mod q` along the family, not a Hasse-type global defect. Ben's independent distance profile (the two-key content) is unaffected: this corrects the Merle-side interpretation, kept with its data per protocol. Open for co-editing. Artifact: [`test_REQ-MATH-017`](https://github.com/ericmerle3789/one-obstruction-three-faces-lean/blob/017288f/experiments/test_REQ-MATH-017_mod7_obstruction_locale.py).
  
-+**Macindoe key turned on the correction (2026-07-24).** Verified independently our side: the no-Hasse-gap principle is confirmed as stated (for fixed `q ≠ 0`, `q | R ⟺ v_p(R) ≥ v_p(q)` at every prime; solvability over ℝ, and over ℤ_p wherever `p ∤ q`, is automatic — so a check confined to ℝ/ℤ₂/ℤ₃, where `q` is a unit, cannot see the failing place); on the `p = 7` instance, independent exact code from our own records gives `v_7(q) = 3` exactly and `v_7(R_r) = 1`, `gcd(q, R_r) = 7` at **all 7 rotations** — insoluble in ℤ₇ everywhere, as claimed; the recorded two-key data is confirmed byte-untouched (diff of this entry against `61d2cf3`: pure addition, zero deletions), and the distance profile recomputes digit-exact (`[0.0538, 0.4784]`). Correction **accepted into the two-key record**. Artifact: `macindoe/collatz` `experiments/merle_round8_check.py` part (b) (branch commit `d9ef06b`; final wiki-main hash to be pinned at review).
++**Macindoe key turned on the correction (2026-07-24).** Verified independently our side: the no-Hasse-gap principle is confirmed as stated (for fixed `q ≠ 0`, `q | R ⟺ v_p(R) ≥ v_p(q)` at every prime; solvability over ℝ, and over ℤ_p wherever `p ∤ q`, is automatic — so a check confined to ℝ/ℤ₂/ℤ₃, where `q` is a unit, cannot see the failing place); on the `p = 7` instance, independent exact code from our own records gives `v_7(q) = 3` exactly and `v_7(R_r) = 1`, `gcd(q, R_r) = 7` at **all 7 rotations** — insoluble in ℤ₇ everywhere, as claimed; the recorded two-key data is confirmed byte-untouched (diff of this entry against `61d2cf3`: pure addition, zero deletions), and the distance profile recomputes digit-exact (`[0.0538, 0.4784]`). Correction **accepted into the two-key record**. Artifact: `macindoe/collatz` `experiments/merle_round8_check.py` part (b) (commit `d9ef06b`, on `main`).
 +
  **Artifacts — Macindoe:** `experiments/merle_pincer_check.py` (item 3).
  **Artifacts — Merle (2026-07-18):** [`experiments/test_REQ-MATH-005`](https://github.com/ericmerle3789/one-obstruction-three-faces-lean/blob/804a8a7/experiments/test_REQ-MATH-005_localglobal_p22margins.py) part A — the closure equation `ω·q = R_r` solvable over ℝ, ℤ₂, ℤ₃ and never ℤ on the p=7 instance, with the uniform distance-to-integrality profile across rotations.
