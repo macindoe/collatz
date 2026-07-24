@@ -1,0 +1,138 @@
+=== Part 0: canaries (hand-computed / brute-force, before any sweep) ===
+  (a) brute-force enumeration vs closed formulas, n <= 12:
+  [PASS] 0a n= 4 (K=7, S=3): general brute 10 == formula 10 == C(K-2,n-1) 10
+  [PASS] 0a n= 4: stratum brute 4 == formula 4
+  [PASS] 0a n= 5 (K=8, S=3): general brute 15 == formula 15 == C(K-2,n-1) 15
+  [PASS] 0a n= 5: stratum brute 7 == formula 7
+  [PASS] 0a n= 6 (K=10, S=4): general brute 56 == formula 56 == C(K-2,n-1) 56
+  [PASS] 0a n= 6: stratum brute 20 == formula 20
+  [PASS] 0a n= 7 (K=12, S=5): general brute 210 == formula 210 == C(K-2,n-1) 210
+  [PASS] 0a n= 7: stratum brute 61 == formula 61
+  [PASS] 0a n= 8 (K=13, S=5): general brute 330 == formula 330 == C(K-2,n-1) 330
+  [PASS] 0a n= 8: stratum brute 99 == formula 99
+  [PASS] 0a n= 9 (K=15, S=6): general brute 1287 == formula 1287 == C(K-2,n-1) 1287
+  [PASS] 0a n= 9: stratum brute 304 == formula 304
+  [PASS] 0a n=10 (K=16, S=6): general brute 2002 == formula 2002 == C(K-2,n-1) 2002
+  [PASS] 0a n=10: stratum brute 489 == formula 489
+  [PASS] 0a n=11 (K=18, S=7): general brute 8008 == formula 8008 == C(K-2,n-1) 8008
+  [PASS] 0a n=11: stratum brute 1531 == formula 1531
+  [PASS] 0a n=12 (K=20, S=8): general brute 31824 == formula 31824 == C(K-2,n-1) 31824
+  [PASS] 0a n=12: stratum brute 4796 == formula 4796
+  (b) Vandermonde sum == C(K-2, n-1), exact:
+  [PASS] 0b (n,S)=(5,4): 35 == 35
+  [PASS] 0b (n,S)=(7,10): 5005 == 5005
+  [PASS] 0b (n,S)=(12,8): 31824 == 31824
+  [PASS] 0b (n,S)=(20,12): 54627300 == 54627300
+  [PASS] 0b (n,S)=(33,19): 18053528883775 == 18053528883775
+  [PASS] 0b (n,S)=(50,30): 2105556772509601296600 == 2105556772509601296600
+  (c) odd-composition closed form vs DP, S <= 30, every p:
+  [PASS] 0c oddcomp(S,p) == DP for all S <= 30, all p
+  [PASS] 0d entropy bounds at C(10,3)=120: 40.9 <= 120 <= 449.7
+
+=== Part 1: the two limit constants (closed / variational forms) ===
+  beta = log2 3 = 1.584962500721
+  c_gen (closed form)   = beta - beta log2 beta + (beta-1) log2(beta-1) = 0.0793186128
+  c_gen (entropy form)  = beta (1 - H(1/beta))                        = 0.0793186128
+  [PASS] 1a the two c_gen forms agree to 1e-12
+  [PASS] 1b c_gen positive, unambiguously: 0.0793186128 > 0.001
+  alpha* = 0.3747343562   g(alpha*) = 1.3181749994
+  bracketing: g(a*-0.0001) = 1.3181749359, g(a*) = 1.3181749994, g(a*+0.0001) = 1.3181749359
+  endpoint: g(beta-1) = H(beta-1) = 0.9790700350 < g(alpha*)  [interior max, not at the boundary]
+  [PASS] 1c interior maximum: g(a*) > g(a* +- eps) and > endpoint values
+  c_strat = beta - g(alpha*) = 0.2667875013
+  [PASS] 1d c_strat positive, unambiguously: 0.2667875013 > 0.01
+  [PASS] 1e c_gen matches the stated target 0.07932 to 5e-5
+  [PASS] 1f c_strat matches the stated target 0.26679 to 5e-5
+  [PASS] 1g alpha* matches the stated target 0.37473 to 5e-5
+
+=== Part 2: exact-count margins on the REQ-MATH-014 grid (exact integers; floats only in the final log2) ===
+        n        K    mSt/n   mGen/n
+       10       16   0.7066   0.5033
+       20       32   0.5131   0.3148
+       40       64   0.4023   0.2068
+       80      127   0.3412   0.1515
+      160      254   0.3070   0.1180
+      320      508   0.2884   0.0997
+      640     1015   0.2784   0.0904
+     1280     2029   0.2730   0.0854
+     2560     4058   0.2701   0.0825
+  [PASS] 2a digit-exact reproduction at n=1280: stratum 0.2730
+  [PASS] 2b digit-exact reproduction at n=1280: general 0.0854
+  [PASS] 2c n=2560 cross-anchor vs round-8 findings: 0.2701 / 0.0825
+
+=== Part 3: lgamma/log-sum-exp extension to n = 163,840 ===
+  [PASS] 3a lgamma vs exact on the full grid n <= 2560: max abs deviation 1.42e-15 < 1e-6
+        n     mSt/n    mGen/n   (limits: c_strat = 0.26679, c_gen = 0.07932)
+       10    0.7066    0.5033
+       20    0.5131    0.3148
+       40    0.4023    0.2068
+       80    0.3412    0.1515
+      160    0.3070    0.1180
+      320    0.2884    0.0997
+      640    0.2784    0.0904
+     1280    0.2730    0.0854
+     2560    0.2701    0.0825
+     5120    0.2685    0.0810
+    10240    0.2677    0.0802
+    20480    0.2673    0.0798
+    40960    0.2670    0.0796
+    81920    0.2669    0.0794
+   163840    0.2669    0.0794
+  n=163840: stratum 0.26686 (limit 0.26679, gap 0.00007), general 0.07939 (limit 0.07932, gap 0.00007)
+  [PASS] 3b margin/n strictly decreasing along the doubling grid 10 .. 163840, both families
+  [PASS] 3c margin/n stays strictly above its limit at every grid point, both families
+  Reading, stated exactly: the exact counts approach the limits monotonically from above on this grid; 'margin positive and growing linearly' cashes out to (i) positivity of the limit constants (part 1, unambiguous digits) plus (ii) this monotone-from-above convergence of the exact counts. The 2^(-margin) cycle-count reading remains the no-conspiracy HEURISTIC (REQ-MATH-014's own label), not a theorem.
+
+=== Part 4: the mod-7 mechanism table ===
+  (a) orbit data (exact):
+     p  ord_p(2)  ord_p(3)  |V| all s  0 in V?  |V| odd s  0 in V_odd?
+     5         4         4          4     True          2        False
+     7         3         6          3     True          3         True
+    11        10         5         10     True          5        False
+    13        12         3         12     True          6        False
+    31         5        30          5     True          5         True
+   127         7       126          7     True          7         True
+  [PASS] 4a |valueset(2^s - 1 mod p)| == ord_p(2) for every listed p
+  [PASS] 4b ord_7(2) = 3 and the orbit is {0, 1, 3}
+  [PASS] 4c odd-s restriction: orbit halves iff ord_p(2) even (5 -> {1,2}, zero EXCLUDED); full orbit kept iff ord odd (7 -> {0,1,3} with the zero atom KEPT; likewise 31, 127)
+  [PASS] 4d uniqueness: ord_p(2) = 3 => p | 7 (7 is the only prime with a 3-element 2-orbit)
+  [PASS] 4-canary trivial profile: R_0 = 4^p - 3^p mod every listed prime, p <= 7; and R_0([1],[1]) = 1
+  (b) exhaustive depth-resolved table, n = 15 (K = 24, S = 9); TV distance of R_0 mod p from uniform, general family, by block count:
+    depth  1 (N =       1): p=5: 0.8000 p=7: 0.8571 p=11: 0.9091 p=13: 0.9231 p=31: 0.9677 p=127: 0.9921
+    depth  2 (N =     112): p=5: 0.2250 p=7: 0.3393 p=11: 0.1437 p=13: 0.1813 p=31: 0.2304 p=127: 0.4646
+    depth  3 (N =    2548): p=5: 0.0465 p=7: 0.0561 p=11: 0.0207 p=13: 0.0471 p=31: 0.0468 p=127: 0.0974
+    depth  4 (N =   20384): p=5: 0.0437 p=7: 0.0191 p=11: 0.0065 p=13: 0.0109 p=31: 0.0156 p=127: 0.0277
+    depth  5 (N =   70070): p=5: 0.0328 p=7: 0.0075 p=11: 0.0036 p=13: 0.0030 p=31: 0.0075 p=127: 0.0151
+    depth  6 (N =  112112): p=5: 0.0086 p=7: 0.0107 p=11: 0.0020 p=13: 0.0037 p=31: 0.0043 p=127: 0.0105
+    depth  7 (N =   84084): p=5: 0.0051 p=7: 0.0057 p=11: 0.0017 p=13: 0.0049 p=31: 0.0058 p=127: 0.0118
+    depth  8 (N =   27456): p=5: 0.0098 p=7: 0.0168 p=11: 0.0030 p=13: 0.0024 p=31: 0.0066 p=127: 0.0163
+    depth  9 (N =    3003): p=5: 0.0224 p=7: 0.0120 p=11: 0.0083 p=13: 0.0117 p=31: 0.0254 p=127: 0.0571
+  [PASS] 4e small-depth bias is maximal at p = 7 among the well-posed comparisons {5, 7, 11, 13}, depths 2 and 3 (exhaustive)
+  [PASS] 4f the bias decays with depth for EVERY listed prime: TV at depths 6-7 < TV at depth 2 / 5
+  family aggregates (exhaustive; chi2/df is significance against a same-size random sample -- with exact counts any deviation is real, so compare TV, not chi2, across families):
+    n = 12: p=5: TVgen 0.0227/TVstr 0.0422 p=7: TVgen 0.0016/TVstr 0.0108 p=11: TVgen 0.0019/TVstr 0.0158
+    n = 15: p=5: TVgen 0.0120/TVstr 0.0226 p=7: TVgen 0.0008/TVstr 0.0064 p=11: TVgen 0.0004/TVstr 0.0035
+    recorded, flat: at these small n the family aggregate is dominated by its modal depths, and there the residual deviation is LARGER at p = 5 than at p = 7 (TV 0.01-0.03 vs 0.001-0.008) -- the 7-bias is a small-depth phenomenon, not a family-aggregate one; single-term distributions (below) are far from uniform at every prime, so what separates primes is mixing speed under summation, which the orbit coarseness controls.
+    single-term aggregates, n = 15: p=5: TV 0.178 p=7: TV 0.092 p=11: TV 0.137 p=13: TV 0.139 p=31: TV 0.180 p=127: TV 0.307
+  (c) sampled depth scan, n = 63, general family, N = 40,000 per depth (TV from uniform; sampling noise floor ~0.4*sqrt(p/N) ~ 0.004-0.02):
+    depth  2: p=5: 0.2211 p=7: 0.2600 p=11: 0.0997 p=13: 0.1792 p=31: 0.2373 p=127: 0.2376
+    depth  3: p=5: 0.0754 p=7: 0.0888 p=11: 0.0101 p=13: 0.0372 p=31: 0.0386 p=127: 0.0398
+    depth  4: p=5: 0.0230 p=7: 0.0312 p=11: 0.0070 p=13: 0.0052 p=31: 0.0111 p=127: 0.0246
+    depth  6: p=5: 0.0024 p=7: 0.0061 p=11: 0.0054 p=13: 0.0082 p=31: 0.0097 p=127: 0.0237
+    depth 10: p=5: 0.0061 p=7: 0.0064 p=11: 0.0048 p=13: 0.0082 p=31: 0.0104 p=127: 0.0226
+    depth 20: p=5: 0.0040 p=7: 0.0046 p=11: 0.0079 p=13: 0.0082 p=31: 0.0114 p=127: 0.0203
+    depth 30: p=5: 0.0062 p=7: 0.0049 p=11: 0.0052 p=13: 0.0092 p=31: 0.0125 p=127: 0.0258
+  [PASS] 4g n = 63, depth 2 (N = 40,000, all six well-posed): TV(mod 7) is the largest of the six primes, and TV(5) > TV(11)
+  [PASS] 4h n = 63, depths >= 10: every prime's TV within 2x its own sampling noise floor 0.4 sqrt(p/N)
+  REQ-MATH-017-window replication (stratum, n = 63, block count 5, N = 30,000 -- the ensemble where his solitary-7 verdict lives; sampled):
+    mod   5: chi2/df =   5.40  TV = 0.0128
+    mod   7: chi2/df =   7.73  TV = 0.0151  <-- the largest bias (see FINDING below)
+    mod  11: chi2/df =   0.68  TV = 0.0064
+    mod  13: chi2/df =   0.66  TV = 0.0063
+    mod  31: chi2/df =   1.27  TV = 0.0152
+    mod 127: chi2/df =   0.95  TV = 0.0251
+  [PASS] 4i his window: mod 7 is the LARGEST bias (max chi2/df of the six primes) and is above his chi2/df > 2 bar
+  FINDING, recorded flat (a refinement of the solitary-7 verdict, visible only above his sample size): at N = 30,000 in this window mod 5 ALSO crosses the chi2/df > 2 bar (5.40, TV 0.0128, vs 7's 7.73, TV 0.0151); his REQ-MATH-017 values (5: 1.91, 7: 3.43) and our round-8 N = 12,000 replication (5: 0.61, 7: 2.96) sit below that resolution. So 'solitary' is resolution-dependent at this window; what is structural and unique to 7 is the MAXIMAL collapse (the 3-element 2-orbit) and hence the largest, most robustly detectable bias, with 5 (4-element orbit) the next-coarsest and next-largest.
+  Scope, stated exactly: what the table supports -- (i) provable: the 2^s - 1 factor ranges over an orbit of exactly ord_p(2) values, and p = 7 is the UNIQUE prime with the minimum possible 3-element orbit (ord 1, 2 are impossible for p >= 5); on the odd-s stratum the orbit halves iff ord is even, so mod 5 the zero value drops out while mod 7 the zero atom persists at density 1/3; (ii) measured: every small-orbit prime is biased at small block count, magnitude ordered by orbit coarseness with 7 the extreme, and the bias decays with depth for every prime; in the moderate-depth tuned-stratum window REQ-MATH-017 tested, mod 7 is the largest bias and the only one his sample size resolves (the finding above records the finer structure). The bias is structural, not a lever (his letter's own conclusion). This explains a CLOSED door only; the open wall -- generic equidistribution of R_0 mod q along the family -- is untouched and stays parked.
+
+TOTAL: 49 checks, 0 failures.

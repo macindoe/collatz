@@ -1,0 +1,35 @@
+From f9ad8368823c906729ab91cf03593afbd2d5bd68 Mon Sep 17 00:00:00 2001
+From: macindoe <begemite0.o@gmail.com>
+Date: Fri, 24 Jul 2026 23:06:18 +1000
+Subject: [PATCH 3/3] L-A3 addition (B): margin definition pinned into the
+ entry (from REQ-MATH-014; vocabulary joined with cycles.md 12.6.1.3),
+ digit-exact replication recorded, asymptote offered (c_gen = 0.0793186,
+ c_strat = 0.2667875 at alpha* = 0.3747344; monotone from above to n =
+ 163,840; 2^(-margin) stays heuristic) -- our key turned on the replication,
+ two keys on (B) pending Merle's acceptance of the asymptote
+
+---
+ LEDGER.md | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/LEDGER.md b/LEDGER.md
+index d474fee..65b5f50 100644
+--- a/LEDGER.md
++++ b/LEDGER.md
+@@ -85,6 +85,13 @@ The four known cycles anchored to tower near-misses; the `|q| = 1` lock free and
+ 
+ **Additions accepted (Merle, 2026-07-24).** (A) The signed characterization (Macindoe, wiki Thm 14.15.6.7, §14.15.6): the negative cycles become ordinary periodic diagonal points, `−1` the sole exception — adopted as the unifying frame for both shores. (B) The spent stock as the rational-anchor instance of the digit-match ceiling (logarithmic capacity vs linear demand, `cycles.md` 12.6.1.3) — Merle-side quantification (REQ-MATH-014): the capacity–demand margin is `≈ 0.27·n` (odd-step stratum) / `≈ 0.08·n` (general), positive and linearly growing, so the no-conspiracy cycle-count decays like `2^(−margin)`. The `positive odd integer` precision (Ben, 2026-07-24) is folded into §4.
+ 
++**On (B): definition pinned, replication, and the asymptote (Macindoe, 2026-07-24).** Operational definition, from REQ-MATH-014 (the entry stated the values without it): on the tuned family `K = bitlength(3^n) = log₂ q + o(1)`, `S = K − n`, and `margin(n) = K − log₂(#profiles)` — general family: entries `≥ 1`, count `Σ_p C(n−1,p−1)·C(S−1,p−1) = C(K−2, n−1)`; odd-step stratum: all `s_t` odd, count `Σ_p C(n−1,p−1)·C((S+p)/2−1, p−1)`. (One vocabulary clause: this margin is the counting shadow of `cycles.md` 12.6.1.3's capacity/demand pair — REQ-MATH-014's "capacité" is `log₂ q`, its "demande" is `log₂ #profiles` — both vocabularies now joined under one pinned name.) Replicated digit-exact at the REQ-MATH-014 grid (`0.2730` stratum / `0.0854` general at `n = 1280`). Asymptote, closed this round and **offered**: with `β = log₂ 3` and `H` the binary entropy,
++
++`margin/n → c_gen = β − β·log₂ β + (β−1)·log₂(β−1) = 0.0793186…` (general; equivalently `β·(1 − H(1/β))`), and
++`margin/n → c_strat = β − max_{α ∈ (0, β−1]} [H(α) + ((β−1+α)/2)·H(2α/(β−1+α))] = 0.2667875…` (stratum; interior maximum at `α* = 0.3747344…`)
++
++— genuine elementary limits (entropy bounds on the binomials, plus the largest-term sandwich for the stratum sum), with the exact counts approaching both constants monotonically from above (computed through `n = 163,840`: `0.0794`/`0.2669`). So "positive and linearly growing" is now anchored: positivity of the limit constants plus monotone-from-above convergence. The `2^(−margin)` decay clause remains the no-conspiracy **heuristic** (the artifact's own label, kept). Attribution, flat: quantification seeded Merle-side (REQ-MATH-014, `n ~ 10³`); asymptotic constants closed Macindoe-side. Artifact: `macindoe/collatz` `experiments/margin_asymptote.py` with committed output (49 checks, 0 failures; branch commit `52e8c5c`; final wiki-main hash to be pinned at review); wiki home `cycles.md` Remark 12.6.1.5. Status of (B): our key is turned on the `n ~ 10³` replication, and the asymptote is offered — (B)'s quantification carries **two keys** once Merle's acceptance of the asymptote lands.
++
+ ---
+ 
+ ## L-A4 — Descent: no new cycle in structured families (Merle, correspondence 2026-07-24)
+-- 
+2.45.2.windows.1
+
