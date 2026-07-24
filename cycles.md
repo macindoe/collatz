@@ -174,6 +174,25 @@ Three consequences, flat. *(a) Descent.* Cancelling the common nonzero factor `G
 
 *Verified* (fresh independent code, `experiments/merle_round8_check.py`, 2026-07-24; imports nothing from any Merle repository; exact integer arithmetic at every pass/fail decision): identity, `q`-factorization, and biconditional checked at every draw over three grids — exhaustive bases of length `1..3` with entries in `{1,2,3}`, `k ∈ {2..5}` (3,276 pairs; the 24 divisible bases all inherit upward); 300 random bases of length `4..6`, entries `1..8`, `k ∈ {2,3,4}`; and the tuned mirror of his grid (`n ∈ {24,36,60}`, 720 draws) — 4,296 `(B,k)` pairs, `12,888` exact checks, `0` failures. Canaries: trivial-cycle inheritance `([1],[1]) → B^2` (`q = R = 7`), the `(-5)`-shore square (negative-`q` inheritance), and a non-cycle square.
 
+**Remark 12.6.1.5 (the capacity–demand margin: exact asymptotic constants).** `12.6.1.3`'s register sentence — logarithmic capacity against linear demand — has a quantified counting companion on the tuned cycle family, and its growth rate is now a pair of exact limits. Definition, pinned (Merle artifact REQ-MATH-014; the two vocabularies join here: his "capacité" is `log_2 q` and his "demande" is `log_2 #profiles`, the counting shadow of `12.6.1.3`'s valuation-side capacity/demand pair): on the tuned family `K = bitlength(3^n) = ⌊n·log_2 3⌋ + 1` (so `K = log_2 q + o(1)`), `S = K - n`, the **margin** is
+
+```text
+margin(n) = K - log_2 #profiles,
+```
+
+with two families counted exactly: *general* — all profiles `(m_t, s_t)_(t<p)`, entries `>= 1`, `Σm = n`, `Σs = S`, count `Σ_p C(n-1,p-1)·C(S-1,p-1) = C(K-2, n-1)` (Vandermonde); *odd-step stratum* — all `s_t` odd, count `Σ_p C(n-1,p-1)·C((S+p)/2-1, p-1)`. Then, with `β = log_2 3` and `H` the binary entropy — by the standard entropy bounds `2^(a·H(b/a))/(a+1) <= C(a,b) <= 2^(a·H(b/a))` applied to the closed form (general) and termwise with the largest-term sandwich (stratum) — the margins per step converge, genuinely and elementarily:
+
+```text
+margin/n → c_gen   = β - β·log_2 β + (β-1)·log_2(β-1)          = 0.0793186...   (general; = β·(1 - H(1/β)))
+margin/n → c_strat = β - max_(α∈(0,β-1]) [H(α) + ((β-1+α)/2)·H(2α/(β-1+α))] = 0.2667875...   (stratum; interior maximum at α* = 0.3747344...)
+```
+
+Both constants are positive with digits to spare, and the exact counts approach them monotonically from above along the computed doubling grid: from `0.5033`/`0.7066` (general/stratum) at `n = 10`, through `0.0854`/`0.2730` at `n = 1280` — Merle's grid endpoint, reproduced digit-exact — to `0.0794`/`0.2669` at `n = 163,840`. So "the margin is positive and grows linearly" (shared-ledger entry L-A3, addition (B)) cashes out exactly as: positivity of the limit constants plus monotone-from-above convergence of the exact counts. Attribution, flat: the quantification was seeded Merle-side (REQ-MATH-014, values at `n ~ 10^3`, replicated digit-exact our side); the asymptotic constants were closed our side this round.
+
+*Calibration.* This extends the exclusion by nothing: the margin is a counting statement about the tuned family, and the reading of `2^(-margin)` as an expected count of divisible profiles remains the no-conspiracy **heuristic** — his artifact's own label, kept. Nothing about `q | R_0` moves; the front stays parked (`12.8.5`).
+
+*Verified* (fresh independent code, `experiments/margin_asymptote.py`, 2026-07-24; imports nothing from `merle_round8_check.py` or any Merle repository; exact integer combinatorics for every count, floats only in logarithms): brute-force profile enumeration against both closed forms (`n <= 12`), Vandermonde and odd-composition identities exact, both limit constants from both forms, the interior maximum bracketed, exact-count margins digit-exact at his grid, and the lgamma extension to `n = 163,840` cross-checked against exact counts to `1.4e-15` at every `n <= 2560` — `49` checks, `0` failures.
+
 **Lemma 12.6.2 (ceiling forcing).** If a period-`p` cycle has `K > ⌈n·log_2 3⌉`, then some block exit satisfies `x_exit < p / ln 2 < 1.443·p`.
 
 **Proof.** `K` above the ceiling gives `2^K / 3^n >= 2`, so by the cycle product equation (`12.1.1`) `Π (1 + ε_t) >= 2`, so some `1 + ε_t >= 2^(1/p)`, hence `ε_t >= 2^(1/p) - 1 >= (ln 2)/p`. Then `3^(d_t) ω_t <= p(2^(s_t) - 1)/ln 2`, and `x_exit,t = (3^(d_t) ω_t - 1)/2^(s_t) < p/ln 2`. ∎
