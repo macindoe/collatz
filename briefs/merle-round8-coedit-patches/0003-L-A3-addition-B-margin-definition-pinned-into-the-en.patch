@@ -1,4 +1,4 @@
-From 8e8e94ca90f878511a7e23e6b795e0e78e249bc8 Mon Sep 17 00:00:00 2001
+From 740edb3c4af3720e298f1af048c9fc0b400cd426 Mon Sep 17 00:00:00 2001
 From: macindoe <begemite0.o@gmail.com>
 Date: Fri, 24 Jul 2026 23:06:18 +1000
 Subject: [PATCH 3/3] L-A3 addition (B): margin definition pinned into the
@@ -13,7 +13,7 @@ Subject: [PATCH 3/3] L-A3 addition (B): margin definition pinned into the
  1 file changed, 7 insertions(+)
 
 diff --git a/LEDGER.md b/LEDGER.md
-index 04720af..cb85dbd 100644
+index ac6a87e..c957c8e 100644
 --- a/LEDGER.md
 +++ b/LEDGER.md
 @@ -85,6 +85,13 @@ The four known cycles anchored to tower near-misses; the `|q| = 1` lock free and

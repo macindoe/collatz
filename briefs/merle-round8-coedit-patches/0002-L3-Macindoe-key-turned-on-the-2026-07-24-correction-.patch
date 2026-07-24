@@ -1,4 +1,4 @@
-From a161a3730f0e47e6384ac6c9a63a24f807fa5bf4 Mon Sep 17 00:00:00 2001
+From c40aa5841a42ca94fb3090214ee61ec919f5b12a Mon Sep 17 00:00:00 2001
 From: macindoe <begemite0.o@gmail.com>
 Date: Fri, 24 Jul 2026 23:05:48 +1000
 Subject: [PATCH 2/3] L3: Macindoe key turned on the 2026-07-24 correction
@@ -12,7 +12,7 @@ Subject: [PATCH 2/3] L3: Macindoe key turned on the 2026-07-24 correction
  1 file changed, 2 insertions(+)
 
 diff --git a/LEDGER.md b/LEDGER.md
-index f1a0f86..04720af 100644
+index dc898e7..ac6a87e 100644
 --- a/LEDGER.md
 +++ b/LEDGER.md
 @@ -38,6 +38,8 @@ Status vocabulary: `proposed` / `one key` / `two keys` / `refuted` / `corrected`

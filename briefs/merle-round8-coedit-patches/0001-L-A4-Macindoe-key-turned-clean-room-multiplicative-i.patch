@@ -1,4 +1,4 @@
-From c4268b3e3abc8e9f6766684142cddab13d07b1af Mon Sep 17 00:00:00 2001
+From cb765beff6045e6226800bbb8ac26e21ea117c08 Mon Sep 17 00:00:00 2001
 From: macindoe <begemite0.o@gmail.com>
 Date: Fri, 24 Jul 2026 23:05:25 +1000
 Subject: [PATCH 1/3] L-A4: Macindoe key turned (clean-room multiplicative
@@ -7,24 +7,26 @@ Subject: [PATCH 1/3] L-A4: Macindoe key turned (clean-room multiplicative
  widening, 'primitive' vocabulary
 
 ---
- LEDGER.md | 7 +++++++
- 1 file changed, 7 insertions(+)
+ LEDGER.md | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/LEDGER.md b/LEDGER.md
-index 04b3c35..f1a0f86 100644
+index f2871a0..dc898e7 100644
 --- a/LEDGER.md
 +++ b/LEDGER.md
-@@ -92,3 +92,10 @@ The four known cycles anchored to tower near-misses; the `|q| = 1` lock free and
- In the tuned regime, every periodic profile `P` (period `d | gcd(n, S)`, a repeated word in reduced coordinates) is a cycle iff its base is: `q_P | R_0(P) ⟺ q_B | R_0(B)` (fixed-point invariance under repetition, extending L-A2). Hence no structured family contains a *new* cycle — one there would descend to a strictly smaller cycle — and any hypothetical nontrivial cycle must be **aperiodic/generic**. Verified 3,600/3,600 exact over periodic draws (`n ∈ {24, 36, 60}`, `d = 2..6`, base lengths `1..3`); canaries = trivial-cycle inheritance (`([1],[1])` cycle → `B²` cycle, `q = 7`, `R = 7`) and non-cycle base → non-cycle power. Companion measurements closing the naive routes: the odd-step ("no 3-absorption") stratum carries no congruence/gcd rigidity the general family lacks (REQ-MATH-013); the finite-scale near-integer mass is a **size artifact** (94–98% from the degenerate `R_0/q < 1` region, no cycle possible there; REQ-MATH-016). So the residual gap is genuinely the generic-family equidistribution, not a structured escape hatch.
+@@ -93,6 +93,12 @@ In the tuned regime, every periodic profile `P` (period `d | gcd(n, S)`, a repea
  
  **Artifacts — Merle (2026-07-24), stack `017288f`:** [`REQ-MATH-016`](https://github.com/ericmerle3789/one-obstruction-three-faces-lean/blob/017288f/experiments/test_REQ-MATH-016_artefact_taille_et_descente.py) (descent + size-artifact), [`013`](https://github.com/ericmerle3789/one-obstruction-three-faces-lean/blob/017288f/experiments/test_REQ-MATH-013_rigidite_strate_sans3.py) (no congruence rigidity), [`014`](https://github.com/ericmerle3789/one-obstruction-three-faces-lean/blob/017288f/experiments/test_REQ-MATH-014_capacite_vs_demande.py) (capacity–demand), [`015`](https://github.com/ericmerle3789/one-obstruction-three-faces-lean/blob/017288f/experiments/test_REQ-MATH-015_equidistribution_et_structure.py) (Weyl/structure). Canary-checked, exact big-integer arithmetic.
-+
+ 
 +**Macindoe key turned (2026-07-24) — clean-room, with a strengthening.** Independent re-derivation from `cycles.md` 12.6.1's conventions only (no code or text reused from either Merle repository): the biconditional follows from a *multiplicative identity* — `R_0(B^k) = R_0(B) · (q_P/q_B)`, where `q_P/q_B = G_k = Σ_{c<k} 3^{(k−1−c)·n_B} · 2^{c·K_B}` is the geometric factor of `x^k − y^k` at `x = 2^{K_B}`, `y = 3^{n_B}` — proved by two bookkeeping identities (per copy `c`, the `3`-exponent of each term gains `(k−1−c)·n_B` and the `2`-exponent gains `c·K_B`), so numerator and seam gap scale by the *same* positive integer and `G_k` cancels from the divisibility. Verified exact at every draw over three grids — exhaustive bases of length `1..3`, entries `{1,2,3}`, `k = 2..5` (3,276 pairs; the 24 divisible bases all inherit upward); 300 random bases, lengths `4..6`, entries `1..8`, `k = 2..4`; and the tuned mirror of the REQ-MATH-016 grid (`n ∈ {24,36,60}`, 720 draws): **12,888/12,888 exact checks, 0 failures**. Canaries: trivial-cycle inheritance (`([1],[1]) → B²`, `q = R = 7`), a negative-`q` square (the `(−5)`-shore word), a non-cycle square. Wiki home: `cycles.md` Remark 12.6.1.4 (identity + proof + primitivity corollary). Artifact: `macindoe/collatz` `experiments/merle_round8_check.py` with committed output (commit `d9ef06b`, on `main`). Status: **two keys**.
 +
 +Two offers, inside the entry per the co-edit style — acceptance is Merle's call:
 +
 +- *(offer a — scope.)* The identity and the biconditional hold with **no tuning hypothesis**: every profile with entries `≥ 1`, both signs of `q`, exactly like L-A1/L-A2. "In the tuned regime" can drop, or stay as the application's stated scope, as preferred.
 +- *(offer b — vocabulary.)* "aperiodic/generic" → "**primitive** (not a proper power of a shorter word)/generic" — the finite-word-correct term for the descent's conclusion, mirroring the "positive odd integer" precision.
+ ---
+ 
+ ## L-A5 — The adelic content invariant and the separation lemma (Merle, correspondence 2026-07-24)
 -- 
 2.45.2.windows.1
 
