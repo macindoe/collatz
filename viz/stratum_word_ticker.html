@@ -219,15 +219,18 @@ function familyPanel(row){
   const G=A>>r;
   const cap=d>8n;const shown=cap?6n:d;
   let ok=true,mem='';
-  for(let a=0n;a<shown;a++){
+  const memHTML=function(a){
     const ya=pw(2n,d-a)*pw(3n,a)*w-1n;
     const s=step(ya); // in-page verification: every displayed member really merges at A with the same r
     if(s.val!==A||s.r!==r)ok=false;
-    mem+='<span class="mem'+(ya===y?' cur':'')+'"><span style="font-size:11px;color:var(--text-muted);">a='+a.toString()+'</span><span class="mono">'+fmt(ya)+'</span>'+chip((d-a).toString(),r.toString())
+    return'<span class="mem'+(ya===y?' cur':'')+'"><span style="font-size:11px;color:var(--text-muted);">a='+a.toString()+'</span><span class="mono">'+fmt(ya)+'</span>'+chip((d-a).toString(),r.toString())
       +(ya%3n===0n?'<span class="badge" style="background:var(--bg-warn);color:var(--text-warn);">dead</span>':'')
       +(ya===y?'<span style="font-size:11px;color:var(--text-accent);">this row</span>':'')+'</span>';
-  }
-  if(cap)mem+='<span style="font-size:12px;color:var(--text-muted);">&hellip; ('+d.toString()+' doors total)</span>';
+  };
+  for(let a=0n;a<shown;a++)mem+=memHTML(a);
+  if(cap){const aCur=d-row.s.m; // keep this row's own member visible even past the cap
+    if(aCur>=6n)mem+='<span style="font-size:12px;color:var(--text-muted);">&hellip;</span>'+memHTML(aCur);
+    mem+='<span style="font-size:12px;color:var(--text-muted);">&hellip; ('+d.toString()+' doors total)</span>';}
   const badge=ok?'<span class="badge" style="background:var(--bg-ok);color:var(--text-ok);">verified by direct simulation</span>'
     :'<span class="badge" style="background:var(--bg-warn);color:var(--text-warn);">verification failed — should never happen, please report</span>';
   let funnel=(d===1n?'the single door merges':'all '+d.toString()+' doors merge')+' at <span class="mono">A = 3<sup>'+d.toString()+'</sup>&middot;'+fmt(w)+' &minus; 1</span> = '+bitsA(A,r)+' <span class="mono">= '+fmt(A)+'</span> &mdash; dropping the <span class="cr">'+r.toString()+'</span> green zero'+(r===1n?'':'s')+' ends the family';
