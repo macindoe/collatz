@@ -1,0 +1,54 @@
+﻿=== CANARIES (hand-computed first) ===
+  C0  trivial word and its square: q,R = (1,1) and (7,7)  [hand]
+  C1  trivial-cycle inheritance: base cycle -> B^2 cycle, R_0(B^2) = R_0(B) * q_P/q_B = 1*7
+  C2  (-5)-shore word ([2],[1]): q=-1, R=1; square: q=-17, R=17 = 1 * 17  [hand]
+  C3  non-cycle base ([2,1],[3,1]): q=101, R=37; square: q=15655, R=5735 = 37*155  [hand]
+  C4  transport recurrence (12.6.1.1) holds on 200 random profiles, all rotations: True
+  C5  p=7 staircase seed: gamma=6.7438 (record 6.7438), size 7/7, divisibility 0/7
+
+=== (a) L-A4 clean-room: q_P | R_0(P) <=> q_B | R_0(B) ===
+  Identity verified at every draw: R_0(B^k) = R_0(B) * (q_P/q_B),
+  with q_P/q_B = sum_{c<k} 3^{(k-1-c) n_B} 2^{c K_B} in Z (exact).
+  Grid 1 (exhaustive): bases length 1..3, m_i,s_i in 1..3, k in 2..5: 3276 (base,k) pairs, 24 with a divisible base (all inherited)
+  Grid 2 (random): 300 draws, length 4..6, entries 1..8, k 2..4
+  Grid 3 (tuned regime, d | gcd(n,S)): n in {24,36,60}, d = 2..6, base lengths 1..3: 720 draws
+  TOTAL (base,k) pairs: 4296; checks 3 each (factorization, identity, biconditional) = 12888; failures so far: 0
+
+=== (b) L3 correction instance: the p=7 seed fails in Z_7 ===
+  q = 2^149 - 3^94; v_7(q) = 3 (claim: 3); 7^3 = 343 divides q: True; 7^4 divides q: False
+    rot 0: v_7(R_r) = 1, gcd(q, R_r) = 7, Z_7-solvable (v_7(R) >= v_7(q)): False
+    rot 1: v_7(R_r) = 1, gcd(q, R_r) = 7, Z_7-solvable (v_7(R) >= v_7(q)): False
+    rot 2: v_7(R_r) = 1, gcd(q, R_r) = 7, Z_7-solvable (v_7(R) >= v_7(q)): False
+    rot 3: v_7(R_r) = 1, gcd(q, R_r) = 7, Z_7-solvable (v_7(R) >= v_7(q)): False
+    rot 4: v_7(R_r) = 1, gcd(q, R_r) = 7, Z_7-solvable (v_7(R) >= v_7(q)): False
+    rot 5: v_7(R_r) = 1, gcd(q, R_r) = 7, Z_7-solvable (v_7(R) >= v_7(q)): False
+    rot 6: v_7(R_r) = 1, gcd(q, R_r) = 7, Z_7-solvable (v_7(R) >= v_7(q)): False
+  distance profile (recomputed): min 0.0538, max 0.4784 (record: 0.0538, 0.4784)
+
+=== (c) Margin replication (definition: Merle REQ-MATH-014; the ledger entry states no operational definition -- flagged) ===
+  margin(n) = K - log2(#profiles), K = bitlength(3^n) = log2 q + o(1), S = K - n;
+  stratum = all s_t odd; general = all s_t >= 1. Exact counts, deterministic (no sampling).
+  cross-check odd-composition count (closed form vs DP, S <= 24): True
+      n      K    log2 St      mSt    mSt/n   log2 Gen     mGen   mGen/n
+     10     16        8.9      7.1   0.7066       11.0      5.0   0.5033
+     20     32       21.7     10.3   0.5131       25.7      6.3   0.3148
+     40     64       47.9     16.1   0.4023       55.7      8.3   0.2068
+     80    127       99.7     27.3   0.3412      114.9     12.1   0.1515
+    160    254      204.9     49.1   0.3070      235.1     18.9   0.1180
+    320    508      415.7     92.3   0.2884      476.1     31.9   0.0997
+    640   1015      836.8    178.2   0.2784      957.1     57.9   0.0904
+   1280   2029     1679.6    349.4   0.2730     1919.7    109.3   0.0854
+   2560   4058     3366.6    691.4   0.2701     3846.8    211.2   0.0825
+  n=1280: margin/n = 0.2730 (his 0.2730) stratum, 0.0854 (his 109.3/1280 = 0.0854) general
+  n=2560 (our extension): 0.2701 stratum, 0.0825 general -- both still declining slowly; '~0.27 n' / '~0.08 n' are the n ~ 10^3 values, not limits.
+
+=== (d) Door-closure SPOT CHECKS (reduced scale; not key turns) ===
+  d1: fraction of the u < 0.01 mass with R_0/q < 1 (claim: 0.94-0.98)
+    n=40: p=6, N=12000, u<0.01 count 2486, of which R_0/q<1: 0.94
+    n=63: p=5, N=12000, u<0.01 count 4033, of which R_0/q<1: 0.97
+  d2: R_0 mod 5 vs mod 7 (claim: 5 equidistributes, 7 biased; ord_5(2)=4, ord_7(2)=3)
+    mod 5: chi2/df = 0.61 -> uniform
+    mod 7: chi2/df = 2.96 -> biased
+
+============================================================
+ALL CHECKS PASSED (0 failures)
