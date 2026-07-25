@@ -189,3 +189,155 @@ before any publication") was warranted. Consequences:
   with `c = 1` and no validity floor. A real measure statement carries `(c, q₀)`; both enter `C₀`
   (as `−log₂ c`, and via exact computation below the floor). With Rhin's Proposition the per-`n`
   form `ε_n > K₀^(−13.3)/ln 2` is constant-free, which is why the sensitivity table uses it.
+
+## 3. Replication (`experiments/merle_la7_check.py`, committed output alongside; 0 failures)
+
+Fresh code; exact integer arithmetic for every `q` and word count (incremental exact binomials,
+spot-checked against `math.comb` and against brute-force profile enumeration); `K₀ = bitlength(3^n)`
+exactly (no floating floor anywhere); `log₂` of exact integers at ≤ 2 ulp; every pass/fail carries a
+stated tolerance ≥ 10⁶ × the accumulated float error (robustness statements printed in the output;
+the tightest ε-decision has margin > 10⁷ × the error, since `min_{n ≤ 2000} ε_n = 1.349·10⁻³` at
+`n = 1636`). μ is a parameter throughout. His script was never run.
+
+### 3(a) The derivation, written out (and where it is short of theorem-grade)
+
+Best north cell at scale `n`: `K₀ = ⌊nβ⌋ + 1 = bitlength(3^n)`, `β = log₂3`, and
+`q = 2^(K₀) − 3^n = 3^n·(2^(ε_n) − 1)` with `ε_n = K₀ − nβ ∈ (0,1)`. Two lines, exact:
+
+1. `2^ε − 1 ≥ ε·ln 2` (convexity, equality at 0), so
+   `log₂ q ≥ n·β + log₂ ε_n + log₂ ln 2`. An irrationality measure `|β − K/n| ≥ c/n^μ` (any
+   integer `K`) gives `ε_n = n·|β − K₀/n| ≥ c/n^(μ−1)` — **this is where the exponent lands as
+   `(μ−1)`**: one power of `n` is spent converting the measure on the number into a floor on the
+   integer-gap `ε_n`.
+2. `log₂(#words) = log₂ C(K₀−2, n−1) = K₀ − margin(n) ≤ K₀ − c_gen·n` *provided*
+   `margin(n) ≥ c_gen·n` (see ingredient (ii) below). Subtracting: `R(n) = log₂#words − log₂ q
+   ≤ (K₀ − c_gen·n) − (nβ + log₂ ε_n + log₂ ln 2) = −c_gen·n + ε_n − log₂ ε_n − log₂ ln 2`, and
+   with `ε_n ≤ 1` and the measure floor,
+
+   `R(n) ≤ −c_gen·n + (μ−1)·log₂ n + C₀`, with `C₀ = 1 − log₂ c − log₂ ln 2` —
+
+   **this is where `c` enters `C₀`** (`c = 1` gives `C₀ = 1.53`; his exhibited `−5.77` is the
+   *empirical* max of `Δ(n) = R_best(n) + c_gen·n − (μ−1)log₂ n`, a fit on `n ≤ 2000`, not the
+   ingredient constant). In the linear-form frame (Rhin) the floor is `ε_n > K₀^(−ν)/ln 2` and the
+   log term is `ν·log₂ K₀ = ν·(log₂ n + log₂ β + o(1))` with `C₀ = 1 − 2·log₂ ln 2 = 2.06`.
+
+Grade of each ingredient, honestly:
+- (i) the measure for `log₂3`: **misattributed** as entered (§2); sourced versions in §2.2.
+- (ii) `margin(n) ≥ c_gen·n` for **all** `n`: the (B) asymptote (12.6.1.5) is a *limit* with
+  monotone-from-above convergence *observed* (grid to 163,840); the for-all-`n` inequality the bound
+  consumes is verified here exactly on `n ≤ 2000` (min `margin(n) − c_gen·n = 2.84` at `n = 2`) but
+  is not yet a proved statement. Elementary to prove (entropy bound plus a Stirling cushion), not
+  yet written anywhere. A third unlisted ingredient, flagged.
+- (iii) best-cell → total-mass: the entry's stated theorem bounds the **best north cell**; the
+  consequence sums a whole two-shore column. The repair is elementary and `O(1)`: within the cap the
+  north has ≤ 3–4 cells above tuned (each with `|q| ≥ 3^n`, no measure needed), the south column
+  decays geometrically away from its near-tuned cell (factor `(β−1)/β ≈ 0.37` per step at
+  essentially constant `|q|`), and the south near-cell needs the measure floor on the **other side**
+  (`ε'_n = nβ − ⌊nβ⌋`), which the measure provides but **his script never checks** (his slack
+  diagnostic is north-only). Measured on `n ≤ 2000`: `mass(n) ≤ 1.92·(2^(R_best_north) +
+  2^(R_best_south))`, so the repair costs `< 1.94` bits (the sensitivity table budgets 3).
+
+### 3(b) Replication results vs his committed numbers (μ = 5.125 as entered)
+
+| quantity | his | ours (exact-count path) | verdict |
+|---|---|---|---|
+| anchor canaries `(5,8)`, `(7,12)` | `13`, `1909` | `13`, `1909` exact | match |
+| word budgets `n ≤ 14` (S ≤ min(9,2n)) | `6.17` N / `3.41` S | `6.1726` / `3.4134` | match (2 dp) |
+| `C₀` = max Δ | `−5.774` at `n = 2` | `−5.774` at `n = 2` (tol 2·10⁻³) | match |
+| north ingredient slack `min ε_n·n^(μ−1)` | `1.45e+01` at `n = 2` | `14.483` at `n = 2` | match |
+| tail table (7 cuts, exact and bound) | e.g. `3.414e−14` / `5.020e−4` at 600 | all seven digit-consistent (rel ≤ 1.5·10⁻³) | match |
+| headline cut | `< 5.2·10⁻⁴` beyond 600 | min `N` for `< 5.2·10⁻⁴` = **600** exactly | match |
+| crossing "≈ 550" | `n ≈ 550` | per-`n` bound < 1 ticket at `n = 372`; cumulative tail < 1 at `N = 440` | **no reading reproduces 550** — flagged, not disputed |
+
+Additional facts his script does not print, recorded flat: south-side slack
+`min ε'_n·n^(μ−1) = 70.1` at `n = 3` (needed for the both-shore consequence; unchecked in
+REQ-MATH-029); the best north cell is the tuned `K₀` at 1876/1999 scales (123 exceptions, all
+`K₀ + 2`, at `ε_n` near 1 — covered by the (iii) repair); pointwise `mass(n) ≤ 2^(bound(n))` holds
+for all `n ≥ 3` but fails at `n = 2` by a factor 1.71 (the exhibited `C₀` is a best-*cell*
+constant, not a mass constant — absorbed by (iii)); his analytic continuation beyond `n = 2000`
+uses rate `c_gen` where the rigorous rate is `c_gen − (μ−1)/(2000·ln 2) = 0.0763` — immaterial at
+these values (`~2^(−119)` term), cosmetic flag. Unit reconciliation with L-A6: the `n ≤ 14` word
+budgets are `2.34×` (north) and `3.05×` (south) the L-A6 necklace budgets `2.64`/`1.12` — the
+word/necklace over-count ratio, consistent with "word units upper-bound necklace units."
+
+### 3(c) Sensitivity table (the consequence under the sourced values of §2)
+
+Bound form per row: `mass(n) ≤ 2^(−c_gen·n + T(n) + C₀ + 3)` (3 bits = the (iii) repair, measured
+1.94). "min N" = smallest `N` with provable tail `< 5.2·10⁻⁴` (the entry's headline number).
+
+| scenario | source status for `log₂3` | `T(n)` | crossing `n*` (bound < 1 ticket) | tail bound beyond 600 | min `N` |
+|---|---|---|---|---|---|
+| E: entry as committed (`μ = 5.125`, `C₀ = −5.77` empirical) | **none** (transplant + fitted constant) | `4.125·log₂n` | 372 | `5.02·10⁻⁴` | **600** |
+| T1: `μ = 5.125`, theorem-form `c = 1` | none (transplant) | `4.125·log₂n` | 528 | `0.63` (fails) | 746 |
+| T2: `μ = 5.1163051` (Wu–Wang 2014 — a measure of `ln 3`, not `log₂3`) | comparison only | `4.116·log₂n` | 527 | `0.60` (fails) | 744 |
+| A: `ν = 7.6155` (Wu 2003, asymptotic; `H₀` unpinned) | asymptotic grade | `7.6155·log₂K₀` | 1098 | `1.7·10¹¹` (vacuous) | 1315 |
+| **R: `ν = 13.3` (Rhin 1987 Prop. p. 160, fully explicit)** | **citable effective** | `13.3·log₂K₀` | 2016 | `2^(+94)` (vacuous) | **2233** |
+| G: Gouillon 2006 Cor. 2.3 (guaranteed two-log floor) | citable effective (weak) | `5.84·10⁷` const | `7.36·10⁸` | vacuous | `~7.36·10⁸` |
+
+**Plain statement:** the headline "`< 5.2·10⁻⁴` beyond `n = 600`" survives **only** under the
+transplanted, unsourced exponent with the fitted constant. Under the best citable effective
+ingredient (row R) the *same construction still closes the kiosk effectively* — the corrected
+headline is: **total ticket mass beyond `n ≈ 2233` provably `< 5.2·10⁻⁴`; below that, exact finite
+computation** (of which `n ≤ 2000` already exists, in his script and ours; the exact mass beyond
+600 is `3.4·10⁻¹⁴`, so the *computed* picture is unchanged — only the "provable for all `n`" label
+moves from 600 to ~2233). If Wu 2003's `H₀` can be pinned, row A brings that to ~1315. The
+structural claim "effectively finite at every scale" is TRUE under every sourced row, including the
+guaranteed floor G.
+
+## 4. Key recommendation and offered co-edit content
+
+**Recommendation: do not turn the key on the entry as written; turn-with-offer.** The algebra and
+the numerics are confirmed digit-exact; the self-grade "theorem-grade modulo two published
+ingredients" fails on exactly the ingredient he himself flagged: μ = 5.125 is not a published
+ingredient *for `log₂3`* (§2.3 verdict: misattributed/transplanted — it is Salikhov's `ln 3`
+measure). Adjudicated precisely, the entry is theorem-grade modulo:
+1. the effective measure for `log₂3` — sourced replacement: Rhin 1987 (Prop. p. 160, exponent
+   13.3; Simons–de Weger 2005 Lemma 12 is the printed Collatz-side precedent), giving
+   `(μ_eff − 1) = 13.3` on `log₂ K₀` and the corrected headline scale `n ≈ 2233`;
+2. the for-all-`n` margin inequality `margin(n) ≥ c_gen·n` (in-house, elementary, currently
+   verified-not-proved — 12.6.1.5 states a limit, not a pointwise inequality);
+3. the best-cell → both-shore-mass step (elementary `O(1)` repair, needs the south-side floor
+   `ε'_n`, currently unchecked in his artifact; our measurement: factor ≤ 1.92 on the range).
+
+Offered co-edit shape (drafting is a later session's job; content per this record): replace the
+ingredient line by the Rhin/Simons–de Weger citation with `μ_eff = 14.3`/`ν = 13.3`; restate the
+bound as `R(n) ≤ −c_gen·n + 13.3·log₂ K₀ + C₀` with explicit `C₀ ≈ 2.06 (+3` repair bits`)`;
+restate the consequence as "provably `< 5.2·10⁻⁴` beyond `n ≈ 2233`, exact computation below"
+(exact to 2000 exists; the 2000→2233 strip is a finite computation of the same kind); keep his
+honest-scope paragraph unchanged (it is correct, including "sharper measures only improve `C₀`" —
+which the sensitivity table now quantifies); optionally keep 5.125 in a remark as the aspirational
+value *if* a measure for `log₂3` of that strength is ever published. The `n ≈ 550` crossing
+sentence should be re-derived or dropped (no reading reproduces it; our two readings give 372/440).
+
+The fusion idea itself — counting constant × individual Diophantine floor, the first trans-scale
+piece — survives re-sourcing intact and is, in our judgment, the entry's real content. The finding
+is delivered as: the instrument is right, the ruler's label is wrong, and the sourced ruler moves
+the provable-below-one-ticket line from ~600 to ~2233 without changing anything computed.
+
+## Flags, collected
+
+1. μ = 5.125 **misattributed** (Salikhov 2007 proves it for `ln 3`, not `log₂3`); his own re-check
+   flag was warranted; sourced alternatives and consequences in §2/§3(c).
+2. Rhin's Proposition (Progress in Math. 71, p. 160): exact printed hypotheses (`H₀`, if any) not
+   directly readable this session (volume paywalled); two independent published applications apply
+   it unconditionally from `H` of a few hundred; for the corrected tail statement only `H ≥ 952`
+   matters. Confirm from the volume before publication.
+3. Wu 2003 (Math. Comp.) full text 403-blocked this session; its `H₀` explicitness unconfirmed —
+   row A is asymptotic-grade until read.
+4. The entry's "crosses below one ticket near `n ≈ 550`": not reproduced under either natural
+   reading (372 per-scale, 440 cumulative). Recorded, not disputed.
+5. His slack diagnostic is north-only; the both-shore consequence also needs the south floor
+   (`ε'_n`; our min slack 70.1 at `n = 3` — passes, but was unchecked).
+6. `C₀ = −5.77` is an empirical fit (max Δ on `n ≤ 2000`), not derivable from any ingredient
+   constant; the pointwise mass bound with it fails at `n = 2` (factor 1.71) — both absorbed once
+   the theorem-form constants are used.
+7. The margin for-all-`n` inequality is a third, unlisted ingredient (verified `n ≤ 2000` here,
+   `min = 2.84` at `n = 2`; provable-elementary, unproved).
+8. Cosmetic: his analytic continuation term uses rate `c_gen` instead of the rigorous
+   `c_gen − (μ−1)/(2000 ln 2)`; immaterial at these values.
+9. His `n ≤ 14` budget canary uses the REQ-022 domain `S ≤ min(9, 2n)` while the main sweep caps at
+   `S ≤ ⌊0.5849625·n⌋ + 3` — for `n = 13,14` the domains differ slightly; both replicated on their
+   own domains, no consequence.
+10. No pushes anywhere; clones read-only in the scratchpad; web used for item 2 only. Stopping
+    rules: no cycle search, no proof effort on the open condition; the cycles front stays PARKED —
+    this entry concerns the *model's* tail mass and the findings keep that framing.
