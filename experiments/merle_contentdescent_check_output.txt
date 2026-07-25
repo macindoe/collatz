@@ -1,0 +1,31 @@
+========================================================================
+CANARIES (hand-computed first, printed before any sweep)
+========================================================================
+C1 trivial word ((1,1)): R0 = 1 (hand: 1), W0 = 2 (hand: 2), q = 1 (hand: 1)
+C2 trivial square: R0 = 7 (hand: 7), W0 = 14 (hand: 14), q = 7 (hand: 7)
+C3 cocycle ((1,2)) ++ ((2,1)): LHS = 86 (hand: 86), RHS = 86 (hand: 86)
+C4 -17 word: q = -139 (hand: -139), R0 = 139 (hand: 139), W0 = 2224 (hand: 2224)
+C4 G_2 = 4235 (hand: 4235), q(B^2) = -588665 (hand: -588665)
+C5 geom(trivial, 1) = 1 (hand: 1); geom(trivial, 2) = 7 (hand: 7)
+C6 non-cycle base ((1,2)): q = 5 (hand: 5), W0 = 6 (hand: 6), q(B^2) = 55 (hand: 55), W0(B^2) = 66 (hand: 66)
+
+Canaries: 20 checks, 0 failures
+
+========================================================================
+SWEEP 1 -- cocycle W0(l1 ++ l2) = 3^msum(l2) W0(l1) + 2^mssum(l1) W0(l2)
+========================================================================
+exhaustive pairs: 441 checks
+random pairs: 300 checks (concatenated q > 0: 265, q < 0: 29)
+
+========================================================================
+SWEEP 2 -- power_mult / q_pow_factor / gcd_climb / cycle_iff on a grid,
+          geom checked recursive == closed == q-cofactor at every pair
+========================================================================
+grid: 540 (base, k) pairs, 3780 checks (16 divisible-base pairs, all inherited; 49 negative-q bases)
+
+========================================================================
+TOTAL: 4541 exact checks, 0 failures
+========================================================================
+All checks passed: the Lean statements of ContentDescent.lean, as read,
+are exactly the laws of cycles.md 12.6.1.4 (descent identity, q-cofactor,
+gcd law one level up) plus the cocycle, on the wiki's domain.

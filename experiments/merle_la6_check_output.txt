@@ -1,0 +1,264 @@
+==============================================================================
+PREDICTIONS (written before any sweep; derived from the recorded
+operational definitions, the four known cycles, and L-A4 descent)
+==============================================================================
+
+P-CENSUS (his domain, n in [2,14], S in [1, min(9, 2n)]):
+  |q| = 1 words: exactly 1 — ([2],[1]) at (n,K) = (2,3), realizing x = -5.
+    (the +1 freebie word ([1],[1]) sits at n = 1, below his n >= 2 start;
+     the -1 family is the s = 0 / all-sigma-1 climb, outside the alphabet)
+  |q| > 1 hits: exactly 18 WORDS = 16 necklaces:
+    north: trivial^j = (1,1)^j at (j, 2j), j = 2..9  (8 words = 8 necklaces; x = 1)
+    south: (-5)-word powers ([2],[1])^j at (2j, 3j), j = 2..7 (6 words = 6 necklaces; x = -5)
+    south: the -17 orbit at (7,11), q = -139: words (4,3|1,3) -> x = -17 and
+           (3,4|3,1) -> x = -41 (2 words = 1 necklace, PRIMITIVE)
+    south: its square at (14,22), q = -588665: (4,3,4,3|1,3,1,3) -> -17,
+           (3,4,3,4|3,1,3,1) -> -41 (2 words = 1 necklace)
+  primitive hits: 2 words = 1 necklace (the -17 orbit), all south; north 0.
+  frame agreement (q | B <=> q | R_0) at every word, both directions;
+  stronger probe gcd(|q|, B) = gcd(|q|, R_0) expected to hold everywhere.
+P-EXTENSION (ALL S >= 1, n <= 14 — census completion beyond his S <= 9 window):
+  additional hits exactly trivial^j at (j, 2j), j = 10..14; NOTHING else
+  (closure by the ghost lemma + the cycle product identity 2^K = prod(3 + 1/x_t):
+   south hits force K < n log2 3, i.e. S <= 8 for n <= 14, all inside his window;
+   north extension cells force x_min <= 1/(2^{K/n} - 3), a tiny enumerable bound).
+  So the complete all-S census at n <= 14 is 23 words, and the entry's
+  qualitative claim (freebies + -17 orbit + L-A4-forced powers, nothing else)
+  is expected to hold unconditionally.
+P-DESCENT: every non-primitive hit is base^k with its base a hit (L-A4);
+  identities R_0(B^k) = R_0(B)*G_k, q_{B^k} = q_B*G_k exact at every instance.
+P-BUDGETS (necklace units, his domain): south lambda = 1.12, north = 2.64 (2dp);
+  P(0) = e^-lambda: south 0.327, north 0.071 (~7%); necklace hits 8/8;
+  word-level replication (REQ-022): budgets 3.41 / 6.17, word hits 10 / 8.
+P-TAIL (n = 15..200, S <= int(0.5849625 n)+3): south += ~0.16, north += ~0.33;
+  tranche pattern per his OUT-023 (0.1043/0.2648, 0.0519/0.0583, 0.0034/0.0049,
+  0.0000/0.0001); dominant cells (17,27) north ~0.062 max, (24,38) south,
+  (53,84) south among the top; north residual for n >= 61: ~0.005;
+  effective decay rate approaching c_gen = 0.0793 bits/step from above.
+P-REALIZABILITY: all census hits realize exactly (orbit = word, return, odd);
+  his 18/18 reproduced, extension 23/23; the ghost identity
+  3*B(W) + q = 2^{sigma_0} * B(shift W) is EXACT for every word (both shores),
+  hence v_2(3x+1) is forced at every step — the load-bearing lemma is provable,
+  not merely empirical; fresh 2-adic draws expected 350/350.
+P-LOCK: among the four known cycles (+1, -1, -5, -17) exactly one has |q| > 1:
+  the -17 (q = -139) — "unique paid-lock" holds on the knowns; universality
+  beyond verified ranges is exactly the open condition, not checkable.
+
+==============================================================================
+CANARIES (hand-computed before coding; machine echo of the hand values)
+==============================================================================
+    [OK] C1 +1 word ([1],[1]): q = 2^2-3 = 1, B = beta_1 = 1, x = 1
+    [OK] C2 -1 family: sigma = (1)^n, B_sigma = 3^n-2^n = -q, x = -1 (s=0, outside alphabet)
+    [OK] C3 -5 word ([2],[1]): q = 2^3-3^2 = -1, B = beta_2 = 5, x = -5, R0 = 1
+    [OK] C4 -17 word (4,3|1,3): q = -139, B = 27*65+32*19 = 2363 = 17*139, x = -17, R0 = 27+112 = 139
+    [OK] C5 -17 rotation (3,4|3,1): B = 81*19+64*65 = 5699 = 41*139, x = -41, R0 = 567+128 = 695 = 5*139
+    [OK] C6 trivial^2 (1,1|1,1): q = 7, B = 3+4 = 7, x = 1, R0 = 7, non-primitive
+    [OK] C7 ghost identity by hand on -5: 3*5 + (-1) = 14 = 2^1*7; 3*7 + (-1) = 20 = 2^2*5
+    [OK] C8 -17 true orbit by hand: -17,-25,-37,-55,-41,-61,-91 -> -17, sigma 1,1,1,2,1,1,4
+    [OK] C9 beta 2/3/4 = 5/19/65
+    [OK] C10 cell (7,11): 84 words, 30 necklaces (1+9+15+5 by hand), Burnside agrees
+CANARIES: all PASS
+
+==============================================================================
+GHOST IDENTITY: 3*B(W) + q = 2^{sigma_0} * B(shift W), with B(W) odd
+(hence v_2(3x+1) = sigma_0 exactly for x = B/q, every word, both shores)
+==============================================================================
+    [OK] exhaustive sigma-words, all sigma in [1,4]^L, L <= 5: 1364/1364
+    [OK] random sigma-words (400 draws, lengths 6..40, half south-biased; 200 south / 200 north): 400/400
+    [OK] B_sigma(sigma(W)) == B_classical(W) on 300 random letter words: 300/300
+  Derivation (recorded in the findings): B(W) = sum_j 3^{n-1-j} 2^{S_j},
+  S_j = sigma_0+..+sigma_{j-1}.  The j = 0 term 3^{n-1} is the unique odd term,
+  so B(W) is odd.  In 3*B(W) + q the term 3^n cancels q's -3^n; factoring
+  2^{sigma_0} from the rest and reindexing gives exactly B(shift W), with q's
+  2^K supplying the shifted word's last term.  Hence for x = B/q (q odd):
+  3x + 1 = 2^{sigma_0} * (B(shift W)/q), an odd 2-adic unit times 2^{sigma_0} —
+  v_2 is FORCED at every step, the orbit follows the word and returns.  EXACT.
+
+==============================================================================
+CENSUS SWEEP (his domain): every word, exact B, R_0, gcds, necklaces
+==============================================================================
+  words swept: 816871, cells: 108
+  frame agreement (q|B <=> q|R0), both directions: 816870/816870
+    [OK] frame agreement biconditional on EVERY word
+  stronger probe gcd(|q|,B) == gcd(|q|,R0): 816870/816870
+    [OK] gcd equality on every word (observation, stronger than the entry's claim)
+
+  |q| = 1 words (freebie stock in-domain): 1
+    (n,K) = (2,3), q = -1, word (2,)|(1,), x = -5
+    [OK] freebie stock in-domain == 1 word (([2],[1]) at (2,3), x = -5)
+
+  C = 1 hits (|q| > 1): 18 words
+    n   K         q                           word     x  prim
+    2   4         7                  (1, 1)|(1, 1)     1 False
+    3   6        37            (1, 1, 1)|(1, 1, 1)     1 False
+    4   6       -17                  (2, 2)|(1, 1)    -5 False
+    4   8       175      (1, 1, 1, 1)|(1, 1, 1, 1)     1 False
+    5  10       781 (1, 1, 1, 1, 1)|(1, 1, 1, 1, 1)     1 False
+    6   9      -217            (2, 2, 2)|(1, 1, 1)    -5 False
+    6  12      3367 (1, 1, 1, 1, 1, 1)|(1, 1, 1, 1, 1, 1)     1 False
+    7  11      -139                  (3, 4)|(3, 1)   -41  True
+    7  11      -139                  (4, 3)|(1, 3)   -17  True
+    7  14     14197 (1, 1, 1, 1, 1, 1, 1)|(1, 1, 1, 1, 1, 1, 1)     1 False
+    8  12     -2465      (2, 2, 2, 2)|(1, 1, 1, 1)    -5 False
+    8  16     58975 (1, 1, 1, 1, 1, 1, 1, 1)|(1, 1, 1, 1, 1, 1, 1, 1)     1 False
+    9  18    242461 (1, 1, 1, 1, 1, 1, 1, 1, 1)|(1, 1, 1, 1, 1, 1, 1, 1, 1)     1 False
+   10  15    -26281 (2, 2, 2, 2, 2)|(1, 1, 1, 1, 1)    -5 False
+   12  18   -269297 (2, 2, 2, 2, 2, 2)|(1, 1, 1, 1, 1, 1)    -5 False
+   14  21  -2685817 (2, 2, 2, 2, 2, 2, 2)|(1, 1, 1, 1, 1, 1, 1)    -5 False
+   14  22   -588665      (3, 4, 3, 4)|(3, 1, 3, 1)   -41 False
+   14  22   -588665      (4, 3, 4, 3)|(1, 3, 1, 3)   -17 False
+    [OK] hit list == the predicted 18 words exactly (nothing missing, nothing extra)
+    [OK] primitive hits: exactly the 2 words of the -17 orbit (1 necklace, south)
+    [OK] realized x values: {1} north, {-5, -17, -41} south
+
+  interest cells (word-level, replicating REQ-022):  [floats are readouts]
+    (5,8): q = 13, words = 15, lambda_word = 1.154, hits = 0, P(0) = 0.315
+    (7,11): q = -139, words = 84, lambda_word = 0.604, hits = 2, P(0) = 0.546
+    (12,19): q = -7153, words = 12376, lambda_word = 1.730, hits = 0, P(0) = 0.177
+    [OK] (5,8): 15 words, lambda 1.154, 0 hits
+    [OK] (7,11): 84 words, 2 hits
+    [OK] (12,19): 12376 words, 0 hits, lambda 1.730
+
+  n = 1 (below his n >= 2 start): words ([1],[S]) have B = 1; |q| = 1 only
+  at S = 1 (the +1 freebie); |q| > 1 never divides B = 1 — no hits. EXACT.
+    [OK] n = 1 closure: B = 1 for all n = 1 words; only (1,1) has |q| = 1
+
+==============================================================================
+CENSUS EXTENSION to ALL S (n <= 14): exact closure beyond his window
+==============================================================================
+  South closure: a south hit realizes (ghost lemma) as a negative cycle;
+  the product identity 2^K = prod_t(3 + 1/x_t) with every |x_t| >= 3 forces
+  2^K < 3^n, i.e. S < n(log2 3 - 1) <= 8.19 for n <= 14 — every possible south
+  hit is inside the S <= 9 window already swept.  North extension cells
+  (S >= 10): a hit realizes as a POSITIVE cycle with n <= 14 odd steps and
+  x_min <= 1/(2^{K/n} - 3); for S > 2n, K/n > 2 gives x_min < 1: impossible.
+  For 10 <= S <= 2n the bound is tiny and enumerable:
+    candidate cycles found in extension cells: [(10, 10, 1), (11, 11, 1), (12, 12, 1), (13, 13, 1), (14, 14, 1)]
+    [OK] extension hits are exactly x = 1 at (j, 2j), j = 10..14 (trivial powers)
+    [OK] trivial^10 at (10,20) is a hit: B == q, x = 1
+    [OK] trivial^11 at (11,22) is a hit: B == q, x = 1
+    [OK] trivial^12 at (12,24) is a hit: B == q, x = 1
+    [OK] trivial^13 at (13,26) is a hit: B == q, x = 1
+    [OK] trivial^14 at (14,28) is a hit: B == q, x = 1
+  => complete all-S census at n <= 14: 23 words = 13 trivial powers (j=2..14)
+     + 6 (-5)-powers (j=2..7) + the -17 orbit (2) + its square (2).
+     The entry's qualitative census claim (freebies + -17 + L-A4-forced
+     powers, nothing else) holds UNCONDITIONALLY at n <= 14; the count 18
+     is the S <= 9 window count. [domain note, recorded]
+
+==============================================================================
+L-A4 DESCENT cross-check (12.6.1.4): power hits scale by G_k exactly
+==============================================================================
+    [OK] descent identities on all 16 non-primitive hits: 48/48
+
+==============================================================================
+NECKLACE BUDGETS (exact Fractions; float readouts) — his domain
+==============================================================================
+  SOUTH: lambda(necklaces) = 1.1175  [his 2dp: 1.12]   P(0) = e^-lambda = 0.3271
+         necklace hits = 8 (primitive 1);  primitive-only budget lambda_prim = 1.0502  (flat observation:
+         his P(0) uses the TOTAL budget incl. forced-power/freebie-cell mass;
+         with lambda_prim, P(0) = 0.3499)
+         word-level replication: budget = 3.41, word hits = 10
+  NORTH: lambda(necklaces) = 2.6447  [his 2dp: 2.64]   P(0) = e^-lambda = 0.0710
+         necklace hits = 8 (primitive 0);  primitive-only budget lambda_prim = 2.4282  (flat observation:
+         his P(0) uses the TOTAL budget incl. forced-power/freebie-cell mass;
+         with lambda_prim, P(0) = 0.0882)
+         word-level replication: budget = 6.17, word hits = 8
+    [OK] south lambda = 1.12 (2dp)
+    [OK] north lambda = 2.64 (2dp)
+    [OK] necklace hits 8 south / 8 north; primitive 1 south / 0 north
+    [OK] P(0) north = 0.071 (his ~7%)
+    [OK] P(0) south = 0.327
+    [OK] word budgets 3.41 south / 6.17 north (REQ-022 replication, 2dp)
+    [OK] word hits 10 south / 8 north (REQ-022 replication)
+  [Poisson P(0) = e^-lambda is a MODEL statement: uniform residue 1/|q|
+   per necklace trial, independence across cells — stated as model.]
+
+==============================================================================
+TAIL BUDGET n = 15..200 (exact Burnside necklace counts per cell;
+window S <= int(0.5849625 n)+3 as recorded from REQ-023; float readouts)
+==============================================================================
+       tranche  south(exact)  north(exact)  his south  his north
+  n=[ 15, 30]        0.1043        0.2648     0.1043     0.2648
+  n=[ 31, 60]        0.0519        0.0583     0.0519     0.0583
+  n=[ 61,120]        0.0034        0.0049     0.0034     0.0049
+  n=[121,200]        0.0000        0.0001        0.0     0.0001
+  TOTAL n=15..200: south = 0.1596, north = 0.3280   [entry: +0.16 / +0.33]
+    [OK] tail totals ~ his (south within 0.02, north within 0.02)
+  north residual n >= 61 (his 'beyond the verified range' cut, identified
+  from OUT-023's tranche structure — the committed script computes no
+  element-size criterion): 0.0050   [entry: ~5e-3]
+    [OK] north residual n >= 61 ~ 0.005
+
+  dominant cells (lambda > 0.02), exact necklace units:
+    n= 17 K= 27 NORTH lambda=0.062  K/n=1.5882
+    n= 24 K= 38 SOUTH lambda=0.034  K/n=1.5833
+    n= 53 K= 84 SOUTH lambda=0.028  K/n=1.5849
+    n= 15 K= 24 NORTH lambda=0.022  K/n=1.6000
+    n= 29 K= 46 NORTH lambda=0.022  K/n=1.5862
+    n= 19 K= 30 SOUTH lambda=0.021  K/n=1.5789
+    [OK] max cell is (17,27) north (K/n = 27/17)
+    [OK] (53,84) south present among dominant cells (the 84/53 convergent)
+    [OK] (24,38) south present among dominant cells (doubled 19/12 convergent)
+  [note, flat: 84/53 is a principal convergent of log2 3; 27/17 is a
+   semiconvergent (mediant of 8/5 and 19/12); the entry's 'convergent
+   anchors' covers both loosely. The top SOUTH cell by budget is (24,38),
+   with (53,84) second — the entry names 84/53 for the south.]
+
+  replication of HIS approximation (words/p) per tranche, vs his output:
+    n=[ 15, 30]:   0.1043 /   0.2648   his: 0.1043 / 0.2648
+    n=[ 31, 60]:   0.0519 /   0.0583   his: 0.0519 / 0.0583
+    n=[ 61,120]:   0.0034 /   0.0049   his: 0.0034 / 0.0049
+    n=[121,200]:   0.0000 /   0.0001   his: 0.0 / 0.0001
+    [OK] his approximation replicates his tranche numbers (each within 0.003)
+
+  effective decay rate (bits per unit n), from exact tranche sums
+  (midpoint spacing), vs c_gen = 0.0793 (asymptotic; local rate expected
+  steeper — the margin approaches c_gen from above):
+    [(15, 30)] -> [(31, 60)]: 0.0758 bits/n
+    [(31, 60)] -> [(61, 120)]: 0.0830 bits/n
+    [(61, 120)] -> [(121, 200)]: 0.0863 bits/n
+  geometric decay confirmed; rates bracket c_gen = 0.0793 as the
+  asymptotic floor (model-replication readout, not an exact decision).
+
+  window note (flat): beyond the near-tuned band the uniform-residue
+  budget is SIZE-DEGENERATE (a hit q | B with 0 < B < q is impossible;
+  cf. REQ-016's 94-98% size artifact). Illustration at n = 17, word-level:
+    K=27: #words/q = 0.4024   x_min bound 1/(2^(K/n)-3) =   146.77
+    K=29: #words/q = 0.0320   x_min bound 1/(2^(K/n)-3) =     3.81
+    K=31: #words/q = 0.0336   x_min bound 1/(2^(K/n)-3) =     1.85
+    K=34: #words/q = 0.0353   x_min bound 1/(2^(K/n)-3) =     1.00
+  the formal per-cell budget does NOT decay with K, but realizable size
+  collapses — the window (his S <= 0.585n + 3) is an implicit part of the
+  model's operational definition; the entry states the sums without it.
+
+==============================================================================
+REALIZABILITY: exact true-map orbit for every census hit (both domains)
+==============================================================================
+    [OK] all census hits realize exactly (orbit = word, return, odd)
+  realized: 23/23  (his 18 + the 5 extension powers)
+
+  fresh 2-adic ghost draws (350 random letter words, truncated orbit):
+    [OK] ghost follows the word: 350/350 (47 south / 303 north)
+
+==============================================================================
+PAID-LOCK UNIQUENESS on the known cycle list (cycles.md 12.6.1.2)
+==============================================================================
+   cycle    (n,K)      q   paid lock (|q|>1)?
+    [OK] known cycle +1: q = 1
+      +1    (1,2)      1                False
+    [OK] known cycle -5: q = -1
+      -5    (2,3)     -1                False
+    [OK] known cycle -17: q = -139
+     -17   (7,11)   -139                 True
+      -1      (1,1)     -1                False   (s = 0 word, outside alphabet)
+    [OK] -1 family: q = 2^1 - 3^1 = -1, not paid
+    [OK] exactly one paid-lock cycle among the four knowns: the -17
+  Verdict on the phrase: TRUE on the known list (the classical census,
+  Lagarias 1985; cycles.md 12.6.1.2). 'In existence' is grounded on that list;
+  its completeness on the south shore is exactly the open ×3-1 cycles question
+  beyond verified ranges — the entry's own falsifier sentence carries this.
+
+==============================================================================
+SUMMARY: 424 recorded checks/decisions (816870 frame-agreement words x2 counted once each), 0 failures
+ALL PASS
