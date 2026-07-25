@@ -1,0 +1,75 @@
+﻿=== CANARIES (hand-computed before any sweep) ===
+  anchor (n,K)=(5,8) -> q = 13: PASS  got 13 (exact integer)
+  anchor (n,K)=(7,12) -> q = 1909: PASS  got 1909 (exact integer)
+  word count = C(K-2, n-1) (brute enumeration, 7 small cells, exact): PASS
+  word budgets n<=14 (S <= min(9,2n)): north = 6.1726, south = 3.4134
+  north budget rounds to 6.17: PASS  tolerance: 2-dp rounding; float error < 1e-9
+  south budget rounds to 3.41: PASS  tolerance: 2-dp rounding; float error < 1e-9
+  unit ratio word/necklace (L-A6 quoted lambdas 2.64 north / 1.12 south as reference):
+    north 6.17/2.64 = 2.34x,  south 3.41/1.12 = 3.05x  (word units over-count each necklace by its orbit size; upper bound confirmed >= 1)
+
+=== MAIN SWEEP n <= 2000 (exact counts; mu enters only in bounds) ===
+  incremental exact binomials == math.comb (spot checks, n <= 40): PASS
+  min_n eps_n = 1.349e-03 at n = 1636 (empirical CF floor; >= 1e7 x float error, all eps decisions robust)
+  best north cell is the tuned K0 = bitlength(3^n) for 1876/1999 scales; exceptions [(106, 171, 169), (159, 255, 253), (171, 274, 272), (212, 339, 337), (224, 358, 356), (265, 423, 421), (277, 442, 440), (318, 507, 505), (330, 526, 524), (359, 572, 570)]
+  margin(n) - c_gen*n: min = 2.8414 at n = 2 (> 0 on the whole range: the for-all-n form of the (B) ingredient holds here, verified not proved)
+  cell-sum factor mass(n)/(2^R_best_N + 2^R_best_S): max = 1.915 at n = 1830
+    -> best-cell -> total-mass repair: mass(n) <= factor * (north best + south best), both shores
+       floor-bounded by the measure; repair cost = 1 + log2(factor) < 1.94 bits (CELL_BITS below covers it)
+
+  [mu = 5.125 as committed]
+  C0 (max Delta, exhibited) = -5.774 at n = 2
+  C0 = -5.774 at n = 2: PASS  tolerance 2e-3
+  ingredient slack, north: min eps_n * n^(mu-1) = 14.483 at n = 2
+  slack ~ 14.5 at n = 2: PASS  tolerance 0.1
+  ingredient slack, south: min eps'_n * n^(mu-1) = 70.147 at n = 3  <- NOT checked in REQ-MATH-029 (both-shore consequence needs the floor side too)
+  pointwise mass(n) <= 2^bound(n): holds for all n >= 3; below that the best-cell bound is not a mass bound (worst factor 1.71 at n = 2)
+
+=== TAIL TABLE (replication of the committed table, mu = 5.125, C0 = C0_emp) ===
+      N   exact mass n>N   his exact  bound n>N (his formula)   his bound
+     14       4.9539e+00   4.954e+00               1.5159e+06   1.516e+06  ok
+     30       2.0237e+00   2.024e+00               1.4810e+06   1.481e+06  ok
+     60       2.3702e-01   2.370e-01               1.1783e+06   1.178e+06  ok
+    120       6.4636e-03   6.464e-03               3.4308e+05   3.431e+05  ok
+    300       6.2938e-07   6.294e-07               4.8169e+02   4.817e+02  ok
+    600       3.4141e-14   3.414e-14               5.0203e-04   5.020e-04  ok
+   1200       3.9211e-29   3.921e-29               3.8633e-17   3.863e-17  ok
+  tail table replicates (rel. tol 1.5e-3 vs his 3-4 printed digits): PASS
+  note: his analytic continuation term uses rate c_gen, ignoring the still-growing
+        (mu-1)*log2(n) beyond n=2000; the rigorous rate is c_gen - (mu-1)/(NMAX*ln2)
+        = 0.076343; at these values the term is ~2^-119, immaterial (flagged, cosmetic).
+
+=== CROSSING SCALE (the entry says 'crosses below one ticket near n ~ 550') ===
+  per-n bound 2^b(n) < 1 (one ticket per scale) first at n = 372
+  cumulative provable tail < 1 ticket first at N = 440
+  neither reading lands at ~550; nearest committed fact: the tail bound crosses 5.2e-4 at N ~ 600.
+  provable tail < 5.2e-4 (the headline) first at N = 600 (his cut: 600)
+
+=== SENSITIVITY TABLE (mu as a parameter; the sourced values of item 2) ===
+  Scenarios (derivation form: R_best(n) <= -c_gen*n + [eps-floor term](n) + C0_cell;
+  mass repair adds log2(cell-sum factor) <= 3.0 bits, measured above, elementary to prove):
+   E  entry-as-committed     mu = 5.125, C0 = -5.774 empirical   (NO source for log2 3)
+   T1 transplant, thm-form   mu = 5.125, c = 1: C0_cell = 1 - log2(ln 2) = 1.53      (comparison only)
+   T2 Wu-Wang 2014 (ln 3!)   mu = 5.1163051, c = 1, same C0_cell                     (comparison only)
+   A  Wu 2003 asymptotic     nu = 7.6155 -> eps_n > K0^-nu / ln 2, H0 UNPINNED       (asymptotic grade)
+   R  Rhin 1987 explicit     nu = 13.3   -> eps_n > K0^-13.3 / ln 2, fully explicit  (the citable row)
+   G  Gouillon 2006 Cor 2.3  |Lambda| >= e^-4.0452e7 (h = 1000 floor) to n ~ 10^430  (guaranteed floor)
+
+  scenario                         per-n bound < 1 at n*  tail bound beyond 600  min N: tail < 5.2e-4
+  E  entry (mu=5.125, C0=-5.77)                      372     2^-11.0 (5.02e-04)                   600
+  T1 transplant thm-form c=1                         528      2^-0.7 (6.34e-01)                   746
+  T2 Wu-Wang 5.1163051 (ln3!)                        527      2^-0.7 (6.00e-01)                   744
+  A  Wu 2003 nu=7.6155 (H0?)                        1098     2^+37.3 (1.74e+11)                  1315
+  R  Rhin 1987 nu=13.3 explicit                     2016      2^+93.9 (vacuous)                  2233
+  G  Gouillon 2006 const floor                 735758414  2^+5.84e+07 (vacuous)          ~735,758,604
+
+  Reading: the committed headline ('provable tail < 5.2e-4 beyond n = 600') survives ONLY under
+  the unsourced transplanted exponent. Under the citable effective ingredient (Rhin 1987, nu = 13.3)
+  the same construction still closes the kiosk effectively, at a shifted scale (min N in the R row);
+  below that scale the mass must be computed exactly (n <= 2000 is already exact in this script and
+  in his; the remaining gap to the R-row N is a finite computation of the same kind). The Gouillon
+  row is the guaranteed floor if Rhin's Proposition were ever to fall: crossing at n ~ 7e8, still
+  effectively finite, headline scale astronomically weaker.
+
+=== SUMMARY ===
+  checks failed: 0
