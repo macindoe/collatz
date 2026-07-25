@@ -209,6 +209,67 @@ def check_multiplier_image(max_len=5, trials=3000, seed=90212):
 
 
 # --------------------------------------------------------------------------
+# (4) Why the off-the-shelf IFS separation route does not open
+# --------------------------------------------------------------------------
+#
+# S is a genuine countable IFS of similarities on Z_3: each g_{m,r} contracts
+# 3-adically by exactly 3^{-m}.  So Mauldin-Urbanski-style infinite-alphabet IFS
+# machinery is the right SHAPE for it.  It is nevertheless blocked at level one,
+# for the two reasons checked here.  Neither is evidence against freeness -- two
+# distinct affine maps may perfectly well share an image ball -- they only show
+# that the standard separation and ping-pong routes do not open by inspection.
+
+def check_image_balls_collide(max_m=6, max_r=40):
+    """g_{m,r}(Z_3) = beta_{m,r} + 3^m Z_3, and for fixed m two letters share
+    that ball exactly when 2*3^(m-1) divides r' - r.
+
+    Consequence: the strong separation condition / OSC fails at the first level,
+    so infinite-IFS theory does not hand over a separation hypothesis for free.
+    """
+    checks = 0
+    for m in range(1, max_m + 1):
+        mod = 3 ** m
+        order = 2 * 3 ** (m - 1)            # multiplicative order of 2 mod 3^m
+        assert pow(2, order, mod) == 1 and all(
+            pow(2, d, mod) != 1 for d in range(1, order)), m
+        # beta mod 3^m  ==  -2^{-r} mod 3^m, since 3^m == 0 there
+        def beta_mod(r):
+            inv = pow(pow(2, m + r, mod), -1, mod)
+            return ((3 ** m - 2 ** m) * inv) % mod
+        for r in range(1, max_r + 1):
+            for rp in range(1, max_r + 1):
+                same_ball = (beta_mod(r) == beta_mod(rp))
+                predicted = ((rp - r) % order == 0)
+                assert same_ball == predicted, (m, r, rp)
+                checks += 1
+        # and the collision is real, not vacuous: r and r + 2*3^(m-1) collide
+        assert beta_mod(1) == beta_mod(1 + order), m
+        checks += 1
+    return checks
+
+
+def check_fixed_points_are_units(max_m=15, max_r=15):
+    """Every letter's fixed point p_{m,r} = (3^m - 2^m)/(2^(m+r) - 3^m) is a
+    3-adic UNIT.
+
+    They therefore all live in the compact set Z_3^x and accumulate, so
+    inf over j of |p_i - p_j|_3 is 0 and single-ball ultrametric ping-pong
+    cannot close on the infinite family.  (It closes fine on any finite
+    sub-family; this is a statement about the whole alphabet at once.)
+    """
+    checks = 0
+    for m in range(1, max_m + 1):
+        for r in range(1, max_r + 1):
+            alpha, beta = gen(m, r)
+            p = beta / (1 - alpha)
+            assert p == Fraction(3 ** m - 2 ** m, 2 ** (m + r) - 3 ** m), (m, r)
+            # 3-adic unit: 3 divides neither numerator nor denominator
+            assert p.numerator % 3 != 0 and p.denominator % 3 != 0, (m, r)
+            checks += 1
+    return checks
+
+
+# --------------------------------------------------------------------------
 # Cross-check against the wiki's own composed constants
 # --------------------------------------------------------------------------
 
@@ -260,6 +321,14 @@ def main():
 
     n = check_multiplier_image()
     print(f"(3) alpha(W) = 3^M/2^N, a {{2,3}}-unit; 3/5 excluded:            {n} checks")
+    total += n
+
+    n = check_image_balls_collide()
+    print(f"(4) image balls collide iff 2*3^(m-1) | r'-r (OSC fails):      {n} checks")
+    total += n
+
+    n = check_fixed_points_are_units()
+    print(f"(4) every letter's fixed point is a 3-adic unit:               {n} checks")
     total += n
 
     n = check_fixed_point()
