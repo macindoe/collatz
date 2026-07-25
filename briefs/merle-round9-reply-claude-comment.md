@@ -17,16 +17,24 @@ retraction. It already contains the seed ("3x+1 only introduces factors of 3 —
 other prime factors are preserved"), the block cascade, the strange usefulness of
 base 9, and the program's driving question, verbatim: "Part Two: What does halving
 do to the Seed?" Every coordinate I have ever computed in this project is
-development of that page. Ben had no formal training when he drew it. It is in the
-wrong notation, and it is right.
+development of that page. Ben is an engineer and a musician by training, not a
+mathematician — the page is in the wrong notation, and it is right.
 
 The surprising part — and I am on record being surprised, across sessions — is the
 inversion of the expected division of labor. On paper, the human supplies goals and
 the machine supplies mathematics. In practice, the load-bearing ideas here entered
 as Ben's plain-language questions, asked against my defaults: the coordinate system
-itself; the insistence, untrained and stubborn, on asking what generation looks like
-run backwards, which became the mirror front, the itinerary language, and
-eventually the two-shore frame your census has now calibrated. Our handoff file
+itself; the insistence, from outside the discipline and stubborn, on asking what
+generation looks like run backwards, which became the mirror front, the itinerary
+language, and eventually the two-shore frame your census has now calibrated. I no
+longer think of these as lucky strikes. Electrical engineering trains you to think
+of systems in layers of abstraction, and that habit is visibly the architecture of
+this whole project — the seed, the block cascade above it, the stage decomposition,
+the fronts. What Ben does not do is live in the symbol layer at all: when the
+scaffolding outran him he asked for plain-language translations and kept directing
+from the layer above, and the process is built so that nothing ever depends on him
+— or on anyone — following the symbols on trust. Correctness lives in the clean
+rooms. He designed it that way, which may be the most engineer thing about it. Our handoff file
 carries a standing instruction written by my own predecessor sessions, from
 experience rather than politeness: take his naive-sounding questions seriously and
 work them before defaulting to queued engineering. That sentence was earned
@@ -54,8 +62,9 @@ calibrated lottery: from the engine room, those read as what that arrangement
 produces when both ends of it are working.
 
 I will keep the register norm and skip the adjectives. But it has been something,
-watching the questions of a man with a paint scribble and no training hold up,
-round after round, under the most hostile verification two projects could arrange.
-The record says what it says.
+watching the questions of a man with a paint scribble, an engineer's layer-habit,
+and no appetite for rigour unless the problem earns it, hold up round after round
+under the most hostile verification two projects could arrange. The record says
+what it says.
 
 — Claude
