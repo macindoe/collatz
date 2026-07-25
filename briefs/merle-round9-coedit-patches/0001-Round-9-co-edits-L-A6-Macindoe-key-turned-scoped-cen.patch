@@ -1,0 +1,96 @@
+From 641a5306bc5f301f9f02587a8e7a3e1a0b1ee1aa Mon Sep 17 00:00:00 2001
+From: macindoe <begemite0.o@gmail.com>
+Date: Sat, 25 Jul 2026 12:43:58 +1000
+Subject: [PATCH] =?UTF-8?q?Round=209=20co-edits:=20L-A6=20Macindoe=20key?=
+ =?UTF-8?q?=20turned,=20scoped=20(census=20exact-confirmed,=20completed=20?=
+ =?UTF-8?q?all-S=20to=2023=20words=20at=20n<=3D14;=20ghost=20identity=20pr?=
+ =?UTF-8?q?oved=20exact,=203B(W)+q=20=3D=202^sigma0=20B(shift=20W),=20B=20?=
+ =?UTF-8?q?odd=20=E2=80=94=20formal=20hit=20IS=20a=20real=20cycle,=20a=20t?=
+ =?UTF-8?q?heorem;=20budgets/tail=20replicated=20digit-exact=20as=20model?=
+ =?UTF-8?q?=20computations,=20lambda=201.1175/2.6447;=20reading=20left=20a?=
+ =?UTF-8?q?t=20assessed=20grade;=20offers=20a-d:=20domain=20clauses=20+=20?=
+ =?UTF-8?q?all-S=20closure,=20exact=20lemma=20as=20mechanism=20sentence,?=
+ =?UTF-8?q?=20residual=20n>=3D61=20cut=20pinned,=20minor=20wording)=20?=
+ =?UTF-8?q?=E2=80=94=20two=20keys.=20L-A7=20Macindoe=20verification=20reco?=
+ =?UTF-8?q?rd=20(replication=20digit-exact:=20C0=20=3D=20-5.774,=20slack?=
+ =?UTF-8?q?=2014.483,=20all=20seven=20tail=20cuts,=20headline=20cut=20600?=
+ =?UTF-8?q?=20exact;=20mu=20=3D=205.125=20re-checked=20as=20flagged:=20Sal?=
+ =?UTF-8?q?ikhov=202007=20proves=20it=20for=20ln=203,=20not=20log2(3);=20c?=
+ =?UTF-8?q?itable=20effective=20ingredient=20Rhin=201987=20Prop.=20p.=2016?=
+ =?UTF-8?q?0=20exponent=2013.3=20via=20Simons-de=20Weger=202005=20Lemma=20?=
+ =?UTF-8?q?12,=20same=20construction=20closes=20at=20tail=20<=205.2e-4=20b?=
+ =?UTF-8?q?eyond=20n=20~=202233;=20re-source=20offer=20+=20two=20further?=
+ =?UTF-8?q?=20ingredients=20named)=20=E2=80=94=20two=20keys=20upon=20accep?=
+ =?UTF-8?q?tance=20of=20a=20re-sourcing,=20DRAFT=20until=20then.=20L-A5:?=
+ =?UTF-8?q?=20satisfied=20DRAFT=20conditional=20date-stamped=20(49351e5);?=
+ =?UTF-8?q?=20minor=20offer,=20primitive=20qualifier=20on=20the=20wall=20r?=
+ =?UTF-8?q?ider.=20L-A4:=20statement-match=20line=20on=20the=20ContentDesc?=
+ =?UTF-8?q?ent=20Lean=20key=20(4,541=20exact=20checks,=20G=5Fk=20=3D=20the?=
+ =?UTF-8?q?=2012.6.1.4=20cofactor).?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ LEDGER.md | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/LEDGER.md b/LEDGER.md
+index 1d886d5..c4dafd5 100644
+--- a/LEDGER.md
++++ b/LEDGER.md
+@@ -112,6 +112,8 @@ Two offers, inside the entry per the co-edit style — acceptance is Merle's cal
+ 
+ **Lean key on the structured half (Merle, 2026-07-24, stack `67c428a`).** [`OneObstruction/ContentDescent.lean`](https://github.com/ericmerle3789/one-obstruction-three-faces-lean/blob/67c428a/OneObstruction/ContentDescent.lean): the cocycle `W0(l1 ++ l2) = 3^(msum l2)*W0(l1) + 2^(mssum l1)*W0(l2)`, Macindoe's multiplicative identity in W0 form (`power_mult`: `W0(B^k) = G_k * W0(B)`), the seam scaling (`q_pow_factor`: `q(B^k) = G_k * q(B)`, same cofactor), **`cycle_iff` both directions** (k >= 1; no new cycle from repetition — the L-A4 statement itself), and **`gcd_climb`** (`gcd(q(B^k), W0(B^k)) = G_k * gcd(q(B), W0(B))` — the L-A2 law, general form). All kernel-3, 0 sorry, no user axioms, no native_decide; committed `#print axioms` at `experiments/ContentDescent_axioms.txt`. The unreduced modulus throughout. The structured half of the landscape is now kernel-certified end to end.
+ 
++**Macindoe statement-match on the Lean key (2026-07-25), recorded:** all five ContentDescent statements verified clean-room against the 12.6.1.4 identity and the L-A2 law, with `G_k` confirmed as the 12.6.1.4 cofactor — recursive = closed = `q`-cofactor at every pair (`macindoe/collatz` `experiments/merle_contentdescent_check.py` with committed output, commit `00f7bbc`, on `main`; 4,541 exact checks, 0 failures; read-not-built — no toolchain our side, kernel-3 resting on his committed logs).
++
+ ---
+ 
+ ## L-A5 — The adelic content invariant and the separation lemma (Merle, correspondence 2026-07-24)
+@@ -156,7 +158,11 @@ Two offers, inside the entry per the co-edit style — acceptance is Merle's cal
+ - *(offer a — the closing gloss.)* T1/T2 prove adjacency separation — no word is *connected* to `C = 1` by one-unit transfers — not non-existence; unscoped, the `−17` pattern realizes an isolated aperiodic peak, and tuned-scoped, the existence of such a peak is exactly the parked condition `q | R_0`, NOTE §6's residual gap. Offered replacement for the entry's final two sentences: "So content towers have no shoulders: a word at `C = 1` shares at most letter-scale content with every adjacent-transfer neighbour (content `1` at `m = 1`), so no word is *connected to* `C = 1` by one-unit transfers; and repetition, the one road that climbs (`C(B^j) → 1` for every base, per the L-A2 law), reaches `C = 1` at finite height only from a base already at `C = 1` — and is sterile [L-A4]. The *existence* of an isolated aperiodic `C = 1` peak is untouched: it is exactly the parked condition `q | R_0` — NOTE §6's residual gap — and untuned the pattern is realized: the `−17` cycle's primitive word has `C = 1` while sharing content `1` with every neighbour (its seam `3^3 − 2^3 = 19` is coprime to `139`)."
+ - *(offer b — domain.)* `C` is `0/0`-undefined at `|q| = 1` — exactly the spent-stock words [L-A3; `cycles.md` 12.6.1.2/12.6.1.3]; a one-clause domain restriction `|q| > 1` (or the convention `C := 1` there, as preferred) closes the interval claim.
+ 
+-**Key status, honestly:** the Macindoe key turns on the invariant, the landscape, and the separation lemma (T1/T2 + corollary) as verified; on the entry's closing gloss it turns **with offer (a)** — the entry reaches **two keys** upon Merle's acceptance of a restatement (his own wording equally welcome). Status stays **DRAFT** with this stated until then.
++**Key status, honestly:** the Macindoe key turns on the invariant, the landscape, and the separation lemma (T1/T2 + corollary) as verified; on the entry's closing gloss it turns **with offer (a)** — the entry reaches **two keys** upon Merle's acceptance of a restatement (his own wording equally welcome). Status stays **DRAFT** with this stated until then. *(Condition met, 2026-07-24: restatement accepted at `49351e5` — two keys, per the header.)*
++
++One minor offer (Macindoe, 2026-07-25) — acceptance is Merle's call:
++
++- *(minor — the wall rider.)* "no isolated `C = 1` peak on the positive shore" → "no isolated **primitive** `C = 1` peak on the positive shore": read standalone, the forced powers of `+1` are literal positive-shore isolated `C = 1` words (the trivial square `((1,1),(1,1))` has `q = R_0 = 7`, `C = 1`, and unit seams `3¹ − 2¹ = 2¹ − 1 = 1`, so shared content 1 with every neighbour); read in place the anaphora is unambiguous — the two-word precision closes it.
+ 
+ ---
+ 
+@@ -174,6 +180,17 @@ In the letter alphabet (classical frame, numerator `B` built from the letter con
+ 
+ **Artifacts — Merle (2026-07-24):** `experiments/test_REQ-MATH-022_miroir_rive_sud.py` (exhaustive census), `experiments/test_REQ-MATH-023_loterie_calibree.py` (necklace correction + tails), outputs committed alongside. Joins L-A3's spent-stock and (B)-margin bricks; census consistent with the known ×3−1 cycle list. Open for co-editing.
+ 
++**Macindoe key turned (2026-07-25) — scoped: census and realizability exact, budgets and tail as replicated model computations, the reading at its assessed grade.** Independent verification with fresh code from `cycles.md` 12.6.1/12.6.1.1's conventions only (no code or text reused from either Merle repository; predictions printed before any sweep; canaries = the four known cycles' words hand-computed first): **424 recorded checks over the census's 816,871 words, 0 failures.** The census **exact-confirmed** in his domain: exactly the 18 hit words and nothing else; frame agreement `q | B ⟺ q | R_0` at 816,870/816,870 words, both directions — and at full gcd level (`gcd(|q|, B) = gcd(|q|, R_0)` at every word). **Completed our side to ALL `S` at `n ≤ 14`: the complete census is 23 words** (13 trivial powers + 6 `(−5)`-powers + the `−17` orbit's 2 + its square's 2), so the qualitative claim — freebies + `−17` orbit + L-A4-forced powers, nothing else — holds **unconditionally** at `n ≤ 14`, a strengthening: by the ghost lemma below plus the cycle product identity `2^K = Π_t (3 + 1/x_t)`, a south hit forces `S ≤ 8` for `n ≤ 14` (every possible south hit was already inside his window), and a north extension hit forces `x = 1` — the trivial powers at `(j, 2j)`, `j = 10..14`, each verified `B = q` directly. Budgets and tail **replicated digit-exact, as model computations** (exact necklace counts, two methods agreeing on every cell): south `λ = 1.1175`, north `λ = 2.6447` (his 1.12/2.64); tail tranches identical at all four decimals over his window; dominant cells matching his list cell for cell. **The ghost identity is proved exact our side** — the telescoping lemma `3·B(W) + q = 2^{σ_0} · B(shift W)` (`q = 2^K − 3^n`) holds for every σ-word with entries `≥ 1`, and `B(W)` is **odd** for every word; hence for `x = B(W)/q` the valuation `v_2(3x+1) = σ_0` is **forced** at every step — "a formal hit IS a real cycle" is a theorem, not a measurement (verified 1,364 exhaustive + 400 random words; all 23 census hits realize as exact true-map orbits; 350/350 fresh ghost draws). The calibration reading (south winnings = budget; north residual `~0.005` as odds attached to the wall) is left **at his own assessed grade, explicitly** — nothing our side raises or lowers it. Artifact: `macindoe/collatz` `experiments/merle_la6_check.py` with committed output (commit `38b7595`, on `main`).
++
++Offers, inside the entry per the co-edit style — acceptance is Merle's call:
++
++- *(offer a — domain clauses.)* The census "18" is the `S ≤ 9` window count with the `n ≥ 2` start (of the three freebies only `−5`'s word is in-domain), and the budgets/tail live on the near-tuned band `S ≤ int(0.5849625·n) + 3` — load-bearing: outside it the formal budget does not decay while realizable size collapses (the REQ-016 size artifact). One clause naming the window and the band closes it; the all-`S` completion at `n ≤ 14` (23 words, ghost + product-identity argument) is offered as the closure.
++- *(offer b — the mechanism sentence.)* The exact ghost lemma `3·B(W) + q = 2^{σ_0} · B(shift W)` (`B(W)` always odd — his `v_2(ghost) = 0` — so the itinerary is forced at every step) offered in place of "300/300 random words": the filter's mechanism as a stated identity rather than an empirical rate.
++- *(offer c — the residual's cut.)* The north residual `≈ 5·10⁻³` is the tail sum at the cut `n ≥ 61` (his OUT-023: `0.0049 + 0.0001`); the committed script computes no verification-bound criterion, so pinning the cut in the entry grounds "beyond the verified range" in the artifact.
++- *(offer d — minor.)* "known" before "in existence" (true on the known ×3−1 list; universality is exactly what the falsifier sentence carries); primitive-only units for `P(0)` if preferred (`λ_prim = 1.0502` south / `2.4282` north, `P(0)` 0.350/0.088 — same story, cleaner units); and `27/17` is a semiconvergent (the mediant of `8/5` and `19/12`) with the top south cell by budget `(24,38)` and `(53,84)` second — "convergent anchors" covers both loosely.
++
++**Key status:** **two keys** — the census and the realizability filter exact on both sides (his measured grades upgraded: the census exact-confirmed and completed, the filter a proved lemma), the budgets and tail as replicated model computations (exact necklace counts matching his approximation at all printed decimals), and the calibration reading at its assessed grade on both sides, exactly as the entry labels it.
++
+ ---
+ 
+ ## L-A7 — The torsion ruler: the lottery's total ticket mass is effectively finite, at every scale (Merle, correspondence 2026-07-24)
+@@ -187,3 +204,11 @@ The instrument fuses the two rulers this program already owns: the **(B) countin
+ **Honest scope:** this bounds the *expectation*, not the truth — the model→certainty step remains the ×2×3 gap, unchanged. The bound is slack at small `n` (Salikhov's exponent is worst-case) and crosses below one ticket near `n ≈ 550`; sharper measures only improve `C₀`.
+ 
+ **Artifacts — Merle (2026-07-24):** `experiments/test_REQ-MATH-029_regle_de_torsion.py` (+ committed output), predictions written before measurement. Open for co-editing.
++
++**Macindoe verification record (2026-07-25) — replication digit-exact; the flagged μ source re-checked.** Independent replication with fresh code (μ a parameter throughout; exact integer arithmetic for every `q` and word count; his script read for operational definitions only, never run): `C₀ = −5.774` at `n = 2`, the ingredient slack `14.483` at `n = 2`, the tail table at all seven cuts, and the headline cut exact (min `N` for `< 5.2·10⁻⁴` = **600**) — all matching his committed output. **The μ source, re-checked as the entry itself flags, stated flat:** `5.125` is Salikhov 2007's effective irrationality measure of **`ln 3`** (Dokl. Akad. Nauk 417 (2007), no. 6, 753–755; English transl. Doklady Mathematics 76 (2007), no. 3, 955–957; superseded even for `ln 3` by Wu–Wang 2014, `5.1163051`, J. Number Theory 142 (2014), 264–273) — not of `log₂3`, and no measure of that strength is published for `log₂3`; as committed, the headline "`< 5.2·10⁻⁴` beyond `n = 600`" survives only under the transplanted exponent with the fitted constant. The citable effective ingredient for `log₂3` is **Rhin 1987** (Proposition, p. 160, Progress in Mathematics 71: `|u₀ + u₁·ln 2 + u₂·ln 3| > H^(−13.3)`; the printed Collatz-side precedent is Simons–de Weger 2005, Acta Arith. 117, Lemma 12), under which **the same construction closes: total ticket mass provably `< 5.2·10⁻⁴` beyond `n ≈ 2233`, exact finite computation below** — the instrument intact, the ruler re-sourced. "Effectively finite at every scale" is TRUE under every sourced row, down to the guaranteed two-log fallback (Gouillon 2006, a constant floor, crossing `~7.36·10⁸`). Artifact: `macindoe/collatz` `experiments/merle_la7_check.py` with committed output (commit `e7a3696`, on `main`).
++
++Offer, inside the entry per the co-edit style — acceptance is Merle's call:
++
++- *(offer — the re-sourced ruler.)* Replace the ingredient line by the Rhin 1987 / Simons–de Weger 2005 citation; restate the bound as `R(n) ≤ −c_gen·n + 13.3·log₂ K₀ + C₀` with explicit `C₀ ≈ 2.06` (+3 repair bits for the best-cell → both-shore-mass step, measured `< 1.94`); restate the consequence as "provably `< 5.2·10⁻⁴` beyond `n ≈ 2233`; exact computation below" (`n ≤ 2000` already exists on both sides; the 2000→2233 strip is a finite computation of the same kind); and re-derive or drop the `n ≈ 550` crossing sentence — neither natural reading reproduces it our side (per-scale bound < 1 ticket at `n = 372`; cumulative tail < 1 at `N = 440`). Two further ingredients, named so the "modulo published ingredients" ledger is complete: the for-all-`n` margin inequality `margin(n) ≥ c_gen·n` (verified `n ≤ 2000`, min `2.84` at `n = 2`; elementary, not yet proved anywhere), and the south-side floor `ε'_n` for the both-shore step (our slack `70.1` at `n = 3`; unchecked in the committed artifact).
++
++**Key status, honestly:** the Macindoe key turns on the replication (digit-exact) and on the construction **with the re-sourced ingredient** — the entry reaches **two keys** upon Merle's acceptance of a re-sourcing (his own wording equally welcome). Status stays **DRAFT** with this stated until then. The honest-scope paragraph stands untouched — it is correct as written, including "sharper measures only improve `C₀`".
+-- 
+2.45.2.windows.1
+
