@@ -8,9 +8,9 @@ business paragraphs only, for the author to fold in, reorder, or cut. Every numb
 SHA, and citation below is verified at its named place in
 `briefs/merle-la5-closure-findings.md`, `briefs/merle-la6-check-findings.md`, and
 `briefs/merle-la7-mu-check-findings.md` (round-9 pointers back to
-`briefs/merle-la5-check-findings.md`). Placeholder convention: the bracketed
-`[PENDING: …]` field is filled by the author at send time; nothing bracketed is
-guessed here. Sending stays with the author.
+`briefs/merle-la5-check-findings.md`). The one formerly-bracketed `[PENDING]` field (the
+co-edit push SHA) was filled after the push landed on the author's go-ahead,
+2026-07-25: shared HEAD `641a530`. Sending stays with the author.
 
 ---
 
@@ -89,15 +89,16 @@ best-cell→both-shore step needs the south floor `ε′_n`, unchecked in your a
 our slack reads 70.1 at `n = 3`, so it passes, but it belongs in the record. Key
 status: ours turns with the re-sourcing — your own wording equally welcome.
 
-Where everything lives: wiki main stands at `69eebdd` as of drafting; the three
+Where everything lives: wiki main stands at `3aa26a1`; the three
 findings records are `briefs/merle-la5-closure-findings.md`,
 `briefs/merle-la6-check-findings.md`, and `briefs/merle-la7-mu-check-findings.md`,
 with the fresh verification code at `experiments/merle_contentdescent_check.py`,
 `experiments/merle_la6_check.py`, and `experiments/merle_la7_check.py` (the `−17`
 record began in `briefs/merle-la5-check-findings.md`). The round-9 co-edit — the
 L-A6 key turn with its offers, the L-A7 verification record with the re-source
-offer, and the L-A5 minor items — is prepared and pending push:
-[PENDING: shared-repo push — SHA to be filled at send time].
+offer, and the L-A5 minor items — is pushed: shared HEAD `641a530`, over your
+`81431c7`, `LEDGER.md` only, your prose untouched everywhere (wiki main stands at
+`3aa26a1`, so every artifact pin above resolves publicly).
 
 > **[OPTIONAL — the author's call, drop freely]**
 >
