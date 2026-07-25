@@ -31,19 +31,14 @@ Eric MERLE:
 - `fb5e8fc` (2026-07-24 18:46:29 +0200) — realizability-filter addendum,
   `LEDGER.md` +2 lines.
 
-Repo movement since our `e53630f`, recorded flat (all his, 2026-07-24, in
-order): `6b9f2b1` review polish (NOTE §6 equidistribution disambiguation; L-A5
-`#print axioms` citation); **`49351e5` — L-A5 → TWO KEYS: he accepted our
-offers (a) and (b)**, rewriting the closing gloss to the adjacency-separation
-form (the isolated `C = 1` peak named as NOTE §6's residual gap, the `−17`
-exhibit folded in, the `|q| > 1` domain clause added); `08dc3d5` —
-`ContentDescent.lean` kernel key on L-A4/L-A2 (cocycle, the multiplicative
-identity `power_mult`, `q_pow_factor`, `cycle_iff` both directions,
-`gcd_climb`; kernel-3, 0 sorry, committed axioms this time); then the two L-A6
-commits; then **`81431c7` — L-A7 seeded** (torsion ruler: `c_gen` × effective
-irrationality measure of `log₂ 3`, `μ = 5.125` Salikhov "to be re-checked";
-provable tail `< 5.2·10⁻⁴` beyond `n = 600`) — **out of this brief's scope,
-flagged for the main session as the next verification round's object.**
+Repo movement since `e53630f`, observed at clone and recorded flat (all his,
+2026-07-24, in order): `6b9f2b1` review polish; `49351e5` L-A5 → two keys
+(offers (a)+(b) accepted); `08dc3d5` ContentDescent.lean kernel block; the two
+L-A6 commits; `81431c7` L-A7 seed (torsion ruler; his µ-source flagged by
+himself for re-check). This cross-checks consistent with the round-9 part-1
+record (`briefs/merle-la5-closure-findings.md`, which verified `49351e5` and
+`08dc3d5` directly); the L-A7 seed is out of this brief's scope and already
+briefed separately (`briefs/merle-la7-mu-check-brief.md`).
 
 ### (ii) L-A6 entry text, verbatim (current state = seed + addendum)
 
@@ -236,9 +231,11 @@ readout:
   `B(W) = Σ_{j<n} 3^{n−1−j} 2^{σ_0+…+σ_{j−1}}` (equal to the letter-frame `B`
   via `β_m = Σ_{j<m} 3^{m−1−j}2^j`; cross-checked 300/300), the **telescoping
   identity**
-  ```
+
+  ```text
   3·B(W) + q = 2^{σ_0} · B(shift W),    q = 2^K − 3^n,
   ```
+
   holds for every σ-word with entries `≥ 1`: the `j = 0` term `3^n` cancels
   `q`'s `−3^n`, factoring `2^{σ_0}` from the remainder reindexes it to the
   shifted word, and `q`'s `2^K` supplies the shifted word's last term. `B(W)`
