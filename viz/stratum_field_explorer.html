@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stratum field explorer — the (m, r) letter alphabet</title>
+<style>
+:root{--surface-1:#f4f4f2;--surface-2:#fff;--text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;--border:#d9dce3;--border-strong:#b8bdc9;--text-accent:#2f5fb3;}
+@media (prefers-color-scheme: dark){:root{--surface-1:#22252c;--surface-2:#1a1c22;--text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;--border:#3a3e48;--border-strong:#565c6a;--text-accent:#8fb0e8;}
+body{background:#14161b;}}
+a{color:var(--text-accent);}
+.m{font-family:ui-monospace,monospace;}
+body{font-family:system-ui,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);}
+h1{font-size:20px;font-weight:500;}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+select,button{font:inherit;padding:6px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2);color:var(--text-primary);}
+</style>
+</head>
+<body>
+<h1>Stratum field explorer</h1>
+<p>Every step of the reduced map <span class="m">G</span> carries a letter <span class="m">(m, r)</span>; this is that alphabet as a plane, <span class="m">m</span> across, <span class="m">r</span> up. First, because it is the opposite of the <a href="anchor_field_explorer.html">anchor field</a>: this plane is an <strong>alphabet, not a state space</strong> — each cell is one residue class mod 2<sup>m+r+1</sup> holding infinitely many doors <span class="m">y</span> (Lemma 14.15.1.3(i)), and no map carries cell to cell, since which letter comes next depends on the <span class="m">y</span> you stand on, not on the cell. So every colour below except the letter law is a property of <em>one chosen representative</em> — the smallest live door (3&nmid;<span class="m">y</span>) on that stratum — named in the tooltip. Sources: itinerary.md 14.15.1&ndash;14.15.2, aeh.md 13.6, stage4.md 11.8.7.7; the <span class="m">(m, r)</span> alphabet postdates both published papers, so no DOI is cited. Companion: <a href="stratum_word_ticker.html">stratum word ticker</a>.</p>
+<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
+<label style="font-size:13px;color:var(--text-secondary);">color
+<select id="mode"><option value="law">letter law (empirical &divide; exact)</option><option value="price">witness price</option><option value="succ">successor structure</option><option value="q">q, by order of magnitude</option></select></label>
+<label id="subWrap" style="font-size:13px;color:var(--text-secondary);">sample
+<select id="sub"></select></label>
+<button id="clearBtn">clear word</button>
+<span style="font-size:13px;color:var(--text-muted);">hover to inspect &middot; click to trace</span>
+</div>
+<div id="wrap" style="position:relative;">
+<canvas id="cv" style="width:100%;max-width:514px;display:block;border:1px solid var(--border);border-radius:8px;"></canvas>
+<div id="tip" style="position:absolute;display:none;pointer-events:none;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5;max-width:250px;"></div>
+</div>
+<div style="display:flex;gap:14px;align-items:baseline;margin-top:8px;font-size:12px;color:var(--text-secondary);flex-wrap:wrap;">
+<span id="legend"></span><span style="margin-left:auto;">x: m &middot; y: r</span>
+</div>
+<div id="caption" style="margin-top:8px;font-size:12px;color:var(--text-muted);line-height:1.6;"></div>
+<div id="wordPanel" style="display:none;margin-top:10px;background:var(--surface-1);border-radius:8px;padding:10px 12px;">
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;" id="wordTitle"></div>
+<div id="wordList" style="font-family:ui-monospace,monospace;font-size:12px;line-height:1.8;overflow-x:auto;white-space:nowrap;"></div>
+</div>
+<script>
+const NM=12, NR=12, CELL=40, LM=26, TM=8, BM=22;
+const W=LM+NM*CELL+8, H=TM+NR*CELL+BM;
+const SEED=20260727, NBULK=4000, HBULK=25, BOT_HI=20001, BOT_CAP=500;
+const dark=matchMedia('(prefers-color-scheme: dark)').matches;
+
+/* ---- palette (dataviz skill: documented steps; the red diverging arm is
+   derived at the blue arm's own OKLCH lightnesses. Every ramp validated with
+   scripts/validate_palette.js against #ffffff and #14161b.) ---- */
+const DIV = dark ? ['#6da7ec','#3987e5','#256abf','#184f95','#383835','#95161e','#c0282e','#e74244','#f27b74']
+                 : ['#184f95','#2a78d6','#5598e7','#86b6ef','#f0efec','#f6938b','#ec635e','#d72f35','#95161e'];
+const SEQ = dark ? ['#184f95','#256abf','#3987e5','#6da7ec','#9ec5f4']
+                 : ['#86b6ef','#5598e7','#2a78d6','#1c5cab','#104281'];
+const CAT = dark ? ['#3987e5','#d95926','#199e70'] : ['#2a78d6','#eb6834','#1baf7a'];
+const NULLFILL = dark ? '#26272a' : '#eceae6', HATCH='#898781';
+const INK = dark ? '#9aa3b5' : '#6b7280';
+function lum(h){const c=[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255).map(v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4));
+  return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2];}
+const onFill=h=>lum(h)>0.179?'#000000':'#ffffff';   /* max-contrast ink; worst case 4.76:1, at #2a78d6 */
+
+/* ---- exact arithmetic: itinerary.md 14.15.1.1 ---- */
+const P3=[1n]; function pow3(n){while(P3.length<=n)P3.push(P3[P3.length-1]*3n);return P3[n];}
+function v2(x){let v=0;while((x&1n)===0n){x>>=1n;v++;}return v;}
+function strat(y){const m=v2(y+1n), q=(y+1n)>>BigInt(m), t=pow3(m)*q-1n, r=v2(t);
+  return {m:m, r:r, q:q, g:t>>BigInt(r)};}
+const G=y=>strat(y).g;
+function inv2(a,mod){let x=1n;for(let i=0;i<6;i++)x=(x*(2n-a*x))%mod;return ((x%mod)+mod)%mod;}
+/* class residue and smallest live witness of a letter (Lemma 14.15.1.3(i)) */
+const CELLS=[];
+for(let m=1;m<=NM;m++){CELLS[m]=[];for(let r=1;r<=NR;r++){
+  const mod=1n<<BigInt(r+1), q0=(inv2(pow3(m)%mod,mod)*(1n+(1n<<BigInt(r))))%mod;
+  const res=((q0===0n?mod:q0)<<BigInt(m))-1n;
+  let q=q0===0n?mod:q0, y;
+  for(;;){y=(q<<BigInt(m))-1n; if(y>0n&&y%3n!==0n)break; q+=mod;}
+  const nx=strat(G(y));
+  CELLS[m][r]={res:res, mod:1n<<BigInt(m+r+1), y:y, q:q, bits:y.toString(2).length,
+               lq:Math.log2(Number(q)), nm:nx.m, nr:nx.r};
+}}
+
+/* ---- mode 1 samples (lazy, cached) ---- */
+function mulberry32(a){return function(){a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
+  t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const samples={};
+function sample(kind){
+  if(samples[kind])return samples[kind];
+  const t0=performance.now(), cnt=new Map(); let n=0, starts=0;
+  if(kind==='bulk'){
+    const rnd=mulberry32(SEED), cut=1n<<48n;
+    for(let i=0;i<NBULK;i++){
+      let y=0n; for(let k=0;k<10;k++) y=(y<<16n)|BigInt(Math.floor(rnd()*65536)); y|=1n;
+      starts++;
+      for(let h=0;h<HBULK && y>cut;h++){const s=strat(y);const k=s.m+','+s.r;
+        cnt.set(k,(cnt.get(k)||0)+1); n++; y=s.g;}
+    }
+  }else{
+    for(let y0=3;y0<BOT_HI;y0+=2){let y=BigInt(y0); starts++;
+      for(let h=0;h<BOT_CAP && y!==1n;h++){const s=strat(y);const k=s.m+','+s.r;
+        cnt.set(k,(cnt.get(k)||0)+1); n++; y=s.g;}
+    }
+  }
+  let worst=0, wcell=null;
+  for(let m=1;m<=4;m++)for(let r=1;r<=4;r++){
+    const d=Math.abs((cnt.get(m+','+r)||0)/(n*Math.pow(2,-(m+r)))-1);
+    if(d>worst){worst=d;wcell=m+','+r;}
+  }
+  return samples[kind]={cnt:cnt, n:n, starts:starts, ms:Math.round(performance.now()-t0), worst:worst, wcell:wcell};
+}
+const EXPECT=(n,m,r)=>n*Math.pow(2,-(m+r));   /* aeh.md Lemma 13.6.1: exact mass 2^-(m+r) */
+const MINEXP=20;                              /* insufficient-sample guard */
+
+/* ---- canvas ---- */
+const cv=document.getElementById('cv'), tip=document.getElementById('tip'), dpr=window.devicePixelRatio||1;
+cv.width=W*dpr; cv.height=H*dpr; cv.style.aspectRatio=W+'/'+H;
+const ctx=cv.getContext('2d'); ctx.scale(dpr,dpr);
+const hc=document.createElement('canvas'); hc.width=hc.height=8;
+const hx=hc.getContext('2d'); hx.fillStyle=NULLFILL; hx.fillRect(0,0,8,8);
+hx.strokeStyle=HATCH; hx.globalAlpha=0.55; hx.lineWidth=1;
+hx.beginPath(); hx.moveTo(-2,6); hx.lineTo(6,-2); hx.moveTo(2,10); hx.lineTo(10,2); hx.stroke();
+const HATCHPAT=ctx.createPattern(hc,'repeat');
+
+let mode='law', sub='bulk', word=null;
+const X=m=>LM+(m-1)*CELL, Y=r=>TM+(NR-r)*CELL;
+
+function cellPaint(m,r){   /* -> {fill, label} ; fill may be HATCHPAT */
+  const c=CELLS[m][r];
+  if(mode==='law'){
+    const s=samples[sub]; if(!s) return {fill:HATCHPAT,label:''};
+    const e=EXPECT(s.n,m,r);
+    if(e<MINEXP) return {fill:HATCHPAT,label:''};
+    const obs=s.cnt.get(m+','+r)||0, ratio=obs/e, t=ratio>0?Math.log2(ratio):-9;
+    /* neutral unless the count is more than 2 standard errors off the exact mass:
+       at the guard's own floor the standard error is already ~22%, so a fixed
+       ratio band would paint sampling noise as structure (aeh.md 13.5). */
+    const i = Math.abs(obs-e)<2*Math.sqrt(e) ? 4
+            : t<0 ? (t<=-1?0:t<=-0.5?1:t<=-0.2?2:3)
+                  : (t>=1?8:t>=0.5?7:t>=0.2?6:5);
+    return {fill:DIV[i], label:ratio.toFixed(2)};
+  }
+  if(mode==='price'){const b=c.bits, i=b<=5?0:b<=10?1:b<=15?2:b<=20?3:4;
+    return {fill:SEQ[i], label:c.y.toString()};}
+  if(mode==='succ'){const v=sub==='nr'?c.nr:c.nm, i=v<=1?0:v===2?1:2;
+    return {fill:CAT[i], label:String(v)};}
+  const L=c.lq, i=L<2?0:L<4?1:L<6?2:L<9?3:4;
+  return {fill:SEQ[i], label:c.q.toString()};
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.font='10px system-ui,sans-serif'; ctx.fillStyle=INK;
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  for(let r=1;r<=NR;r++) ctx.fillText(r, LM-6, Y(r)+CELL/2);
+  ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+  for(let m=1;m<=NM;m++) ctx.fillText(m, X(m)+CELL/2, H-8);
+  ctx.textAlign='right'; ctx.fillText('r', LM-6, TM-1); ctx.textAlign='left'; ctx.fillText('m', W-14, H-8);
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  for(let m=1;m<=NM;m++)for(let r=1;r<=NR;r++){
+    const p=cellPaint(m,r);
+    ctx.fillStyle=p.fill; ctx.fillRect(X(m),Y(r),CELL-2,CELL-2);
+    if(p.label && p.fill!==HATCHPAT){
+      ctx.font='9px ui-monospace,monospace'; ctx.fillStyle=onFill(p.fill);
+      if(ctx.measureText(p.label).width<=CELL-8) ctx.fillText(p.label, X(m)+(CELL-2)/2, Y(r)+(CELL-2)/2);
+    }
+  }
+  if(word){
+    ctx.strokeStyle=dark?'#f2f4f8':'#141821'; ctx.lineWidth=1.6;
+    ctx.beginPath(); let started=false;
+    for(const p of word){ if(p.m===null){started=false;continue;}
+      const x=X(p.m)+(CELL-2)/2, y=Y(p.r)+(CELL-2)/2;
+      if(!started){ctx.moveTo(x,y);started=true;} else ctx.lineTo(x,y);}
+    ctx.stroke();
+    word.filter(p=>p.m!==null).forEach((p,i)=>{
+      const x=X(p.m)+(CELL-2)/2, y=Y(p.r)+(CELL-2)/2;
+      ctx.beginPath(); ctx.arc(x,y,i===0?6:4,0,7);
+      ctx.fillStyle=i===0?(dark?'#ffd166':'#b8860b'):(dark?'#f2f4f8':'#141821');
+      ctx.strokeStyle=dark?'#14161b':'#ffffff'; ctx.lineWidth=2; ctx.fill(); ctx.stroke();});
+  }
+}
+const SWS='display:inline-block;width:13px;height:13px;vertical-align:-2px;border-radius:3px;border:1px solid '+(dark?'rgba(255,255,255,.16)':'rgba(0,0,0,.14)')+';background:';
+const sw=c=>'<span style="'+SWS+c+'"></span>';
+const swHatch='<span style="'+SWS+NULLFILL+';background-image:repeating-linear-gradient(45deg,'+HATCH+' 0 1px,transparent 1px 4px);"></span>';
+function legend(){
+  const el=document.getElementById('legend'), cap=document.getElementById('caption');
+  if(mode==='law'){
+    const s=samples[sub];
+    el.innerHTML='observed &divide; 2<sup>&minus;(m+r)</sup>: &nbsp;&le;&frac12;&times; '+DIV.map(sw).join('')+' &ge;2&times; &nbsp;(centre = within 2 standard errors) &nbsp;&nbsp;'+swHatch+' insufficient sample';
+    cap.innerHTML=(s?'<b>'+s.n.toLocaleString()+'</b> letters from '+s.starts.toLocaleString()+' starts, computed in '+s.ms+'&nbsp;ms; worst deviation over m,&thinsp;r&nbsp;&le;&nbsp;4 is <b>'+s.worst.toFixed(3)+'</b> at ('+s.wcell+'). ':'')
+      +(sub==='bulk'
+        ? 'Bulk: '+NBULK.toLocaleString()+' seeded random odd starts below 2<sup>160</sup>, at most '+HBULK+' letters each, stopping at y&nbsp;&le;&nbsp;2<sup>48</sup> &mdash; fixed-horizon, unweighted, above a cut (aeh.md 13.5). mulberry32, seed '+SEED+'.'
+        : 'Bottom: every odd start 3&nbsp;&le;&nbsp;y&nbsp;&lt;&nbsp;'+BOT_HI.toLocaleString()+' run to 1 (step cap '+BOT_CAP+') &mdash; the fixed drainage basin, digits of specific small numbers rather than samples from a measure (aeh.md 13.1).')
+      +' Cells with expected count below '+MINEXP+' are hatched; a cell within two standard errors of its exact mass stays at the neutral centre whatever its ratio, since near that edge the standard error is already a fifth of the count and colouring it would paint sampling noise as structure (aeh.md 13.5). 2<sup>&minus;(m+r)</sup> is exact (aeh.md 13.6.1); the panel is empirical.';
+  }else if(mode==='price'){
+    el.innerHTML='bit-length of the smallest live witness: &nbsp;&le;5 '+SEQ.map(sw).join('')+' &ge;21';
+    cap.innerHTML='In-cell numeral is the witness y itself where it fits. A letter costs m&thinsp;+&thinsp;r&thinsp;+&thinsp;1 bits and its cheapest live door sits at roughly the class modulus &mdash; the digit budget of stage4.md 11.8.7.7 as a picture.';
+  }else if(mode==='succ'){
+    const w=sub==='nr'?'r':'m';
+    el.innerHTML='next letter&rsquo;s '+w+': &nbsp;'+sw(CAT[0])+' 1 &nbsp;'+sw(CAT[1])+' 2 &nbsp;'+sw(CAT[2])+' &ge;3 &nbsp;(exact value in cell)';
+    cap.innerHTML='The successor of the chosen representative, not of the cell: stratum(G(y)) for that one y. There is no structure to find &mdash; the itinerary language is the full shift, no forbidden word and no forbidden transition, so no finite-state admissibility graph exists (itinerary.md 14.15.2).'
+      +(sub==='nm'?' The one regularity that does show &mdash; a uniform bottom row &mdash; belongs to the smallest-witness choice and not to the letter: on (1,&thinsp;1), y&nbsp;=&nbsp;1 goes to (1,&thinsp;1), y&nbsp;=&nbsp;25 to (2,&thinsp;2), y&nbsp;=&nbsp;41 to (5,&thinsp;1) &mdash; all live doors of that one class.':'');
+  }else{
+    el.innerHTML='q of the smallest live witness: &nbsp;&lt;4 '+SEQ.map(sw).join('')+' &ge;512';
+    cap.innerHTML='q&nbsp;=&nbsp;(y+1)/2<sup>m</sup>, the odd payload the block carries into the tripling; log<sub>2</sub>&thinsp;q runs to 13.9 here, so the ramp is logarithmic. The banding is Lemma 14.15.1.3(i): q is pinned to 3<sup>&minus;m</sup>(1+2<sup>r</sup>) mod 2<sup>r+1</sup>, so the smallest such q repeats along a row with exactly the multiplicative order of 3 mod 2<sup>r+1</sup> &mdash; 2, 2, 4, 8, 16, &hellip; Only the bottom four rows have a period short enough to see across 12 columns, and it reads in colour only where the repeated values differ by orders of magnitude (clearest at r&nbsp;=&nbsp;3, 4); the numerals carry it exactly. Checked directly for r&nbsp;&le;&nbsp;11: observed period equals predicted order in every row, liveness never breaking it.';
+  }
+}
+function cellAt(ev){
+  const b=cv.getBoundingClientRect(), sc=W/b.width;
+  const m=Math.floor(((ev.clientX-b.left)*sc-LM)/CELL)+1, r=NR-Math.floor(((ev.clientY-b.top)*sc-TM)/CELL);
+  if(m<1||m>NM||r<1||r>NR) return null; return {m:m,r:r};
+}
+cv.addEventListener('mousemove',ev=>{
+  const p=cellAt(ev); if(!p){tip.style.display='none';return;}
+  const c=CELLS[p.m][p.r], k=p.m+p.r;
+  let h='letter (m, r) = ('+p.m+', '+p.r+')<br>mass 2<sup>&minus;'+k+'</sup> = 1/'+Math.pow(2,k).toLocaleString()
+    +'<br>class: y &equiv; '+c.res+' (mod 2<sup>'+(k+1)+'</sup>)'
+    +'<br>smallest live y = '+c.y+' &nbsp;q = '+c.q;
+  if(mode==='law'){
+    const s=samples[sub], e=s?EXPECT(s.n,p.m,p.r):0;
+    h+='<br>'+(!s?'computing&hellip;':e<MINEXP
+      ? 'insufficient sample: expected '+e.toFixed(1)+' &lt; '+MINEXP
+      : 'seen '+(s.cnt.get(p.m+','+p.r)||0).toLocaleString()+' / expected '+e.toFixed(1)+' = <b>'+((s.cnt.get(p.m+','+p.r)||0)/e).toFixed(3)+'</b> ('+sub+')<br>'+(((s.cnt.get(p.m+','+p.r)||0)-e)/Math.sqrt(e)).toFixed(1)+' standard errors');
+  }else if(mode==='price'){ h+='<br>witness price: <b>'+c.bits+' bits</b> (letter costs '+(k+1)+')';
+  }else if(mode==='succ'){ h+='<br>from that y: G(y) = '+G(c.y)+'<br>next letter <b>('+c.nm+', '+c.nr+')</b> &mdash; of this y, not of the cell';
+  }else{ h+='<br>log<sub>2</sub> q of that witness = <b>'+c.lq.toFixed(2)+'</b>'; }
+  tip.innerHTML=h;
+  const b=cv.getBoundingClientRect();
+  let lx=ev.clientX-b.left+14, ly=ev.clientY-b.top+10;
+  if(lx>b.width-250) lx-=280;
+  tip.style.left=lx+'px'; tip.style.top=ly+'px'; tip.style.display='block';
+});
+cv.addEventListener('mouseleave',()=>tip.style.display='none');
+cv.addEventListener('click',ev=>{
+  const p=cellAt(ev); if(!p) return;
+  let y=CELLS[p.m][p.r].y; const y0=y;
+  word=[]; const rows=[];
+  for(let i=0;i<40;i++){
+    const s=strat(y), inView=(s.m>=1&&s.m<=NM&&s.r>=1&&s.r<=NR);
+    word.push({m:inView?s.m:null, r:s.r}); rows.push('('+s.m+','+s.r+')');
+    if(y===1n){ rows.push('fixed point, self-loop'); break; }
+    y=s.g;
+  }
+  draw();
+  document.getElementById('wordPanel').style.display='block';
+  document.getElementById('wordTitle').innerHTML='Forward letter word of y = '+y0+', the smallest live door on ('+p.m+', '+p.r+') &mdash; the word of that one integer, not an orbit of the plane. Dots are drawn while the word stays inside the 12&times;12 view.';
+  document.getElementById('wordList').textContent=rows.join('  →  ');
+});
+const SUBS={law:[['bulk','bulk'],['bottom','bottom']], succ:[['nm','next m'],['nr','next r']]};
+function setSub(){
+  const w=document.getElementById('subWrap'), s=document.getElementById('sub'), o=SUBS[mode];
+  if(!o){w.style.display='none';return;}
+  w.style.display=''; w.childNodes[0].nodeValue=mode==='law'?'sample ':'color by ';
+  s.innerHTML=o.map(v=>'<option value="'+v[0]+'">'+v[1]+'</option>').join('');
+  sub=o[0][0]; s.value=sub;
+}
+function refresh(){
+  if(mode==='law' && !samples[sub]){
+    draw(); legend();
+    document.getElementById('caption').textContent='computing the '+sub+' sample…';
+    requestAnimationFrame(()=>{requestAnimationFrame(()=>{sample(sub);legend();draw();})});
+    return;
+  }
+  legend(); draw();
+}
+document.getElementById('mode').addEventListener('change',e=>{mode=e.target.value;setSub();refresh();});
+document.getElementById('sub').addEventListener('change',e=>{sub=e.target.value;refresh();});
+document.getElementById('clearBtn').addEventListener('click',()=>{
+  word=null; document.getElementById('wordPanel').style.display='none'; draw();});
+setSub(); refresh();
+</script>
+</body>
+</html>
