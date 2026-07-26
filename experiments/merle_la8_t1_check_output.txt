@@ -1,0 +1,87 @@
+﻿============================================================================
+CANARIES: the four real cycles (printed before any sweep)
+============================================================================
+  cycle    1: elements [1]
+             v-word [2], n = 1, K = 2
+  cycle   -1: elements [-1]
+             v-word [1], n = 1, K = 1
+  cycle   -5: elements [-5, -7]
+             v-word [1, 2], n = 2, K = 3
+  cycle  -17: elements [-17, -25, -37, -55, -41, -61, -91]
+             v-word [1, 1, 1, 2, 1, 1, 4], n = 7, K = 11
+
+(a) cycle product identity, exact on all four cycles, both shores
+     1: prod(3x+1) = 4 = 2^2 * 1: OK
+    -1: prod(3x+1) = -2 = 2^1 * -1: OK
+    -5: prod(3x+1) = 280 = 2^3 * 35: OK
+   -17: prod(3x+1) = -403123745024000 = 2^11 * -196837766125: OK
+  -17: prod(3x+1) = -403123745024000 = 2^11 * prod(x)  [entry figure] OK
+  per-step 3x_i+1 = 2^(v_i) x_(i+1) verified on all steps, all cycles
+
+(b) survivor bound + ceiling
+  (3x+1)(3X) <= 3x(3X+1)  <=>  X <= x : exhaustive + random, exact
+  (m+1)^n < 2*m^n whenever 2n < m : grid exact
+  3^n < R <= 3^n((3X+1)/3X)^n < 2*3^n on 400 random multisets, exact rationals
+  K forced = ceil(n log2 3) = bitlength(3^n): strict sandwich exact to n=2000
+  trivial cycle: 2 < 3, 3 < 2^2 < 6, K = 2 = ceil(log2 3) : OK
+
+(c) seam bound + log gap
+  (R - 3^n)*3X <= 2n*3^n on 400 random multisets, exact rationals
+  delta = 2/(3*2^71*ln2) = 4.07336e-22  [entry: 4.0734e-22]
+  exact window  sqrt(1/(2 delta))      = 35035491004  (= 3.50355e10)
+  withdrawn fig sqrt(1/(2*(delta/2)))  = 49547666543  (= 4.9547e10)
+
+(d) the window: 3.5035e10 (exact form) vs 3.5032e10 (integral form)
+  n <= sqrt(3*2^71*ln2/4) : floor = 35035491004  -> '3.5035e10' CORRECT for this form
+  4000 n^2 <= 2079*2^71   : n <= 35031771147  -> '3.5032e10' CORRECT for this form
+  2079/4000 < 3*ln2/4 (<=> 693/1000 < ln2): TRUE; integral window is a
+  rational UNDER-approximation — conservative, integral ⊂ exact. Both
+  figures are right for their own definitions; see findings for the pin.
+
+(e) continued fraction of log2(3), convergents, labeling, Hercher
+  partial quotients: [1, 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, 55, 1, 4, 3, 1, 1, 15, 1, 9, 2, 5, 7, 1, 1] ...
+  census scales 5,12,41,53,306,665,15601,190537 all present: OK
+  convergent side (above/below) verified by EXACT integer powers, j <= 13
+  best-approximation property verified EXHAUSTIVELY to n < 190537
+  classical convergent bound 1/(q_j+q_{j+1}) < theta_j < 1/q_{j+1}: OK, j <= 27
+  convergents with q_j <= window: exactly 22 (j = 0..21, standard indexing)
+  q_21 = 6586818670   q_22 = 65470613321   q_23 = 137528045312
+  LABELING PIN (standard indexing, q_0 = q_1 = 1 both counted):
+    6586818670   = q_21  -> stack 89d9efc's 'q_21 = 6.587e9' CORRECT
+    65470613321  = q_22  -> stack 0905b00's 'q_21 = 6.547e10' OFF BY ONE
+    137528045312 = q_23  -> stack 0905b00's 'Hercher's q_22' OFF BY ONE
+    (OUT-053's own line 'Hercher publie ... = q_23' uses the standard index)
+  (theta_21 - theta_22)/(q_21+q_22) = 1.1033e-22   [Hercher Remark 28 prints 1.1032e-22]
+  Hercher's printed 1.375e11 vs q_23 = 137528045312: printed figure is a
+  rounded-down display (q_23/1.375e11 = 1.000203); the underlying
+  threshold IS the convergent denominator q_23 exactly (see findings).
+
+(f) finite discharge: 22 integer criteria, margins, exact test, canary
+  tightest integer margin: 5.1713x at q_21 = 6586818670   [entry: 5.17x]
+  exact test at q_21: theta/(q*delta) = 5.4433x   [entry: 5.44x]
+  multiples n = m*q_j reduce to the same per-convergent test: verified
+  canary: at q_22 = 65470613321: 2000*q*(q+q') = 26580893368085642900386000
+          > 2079*2^71 = 4908899958942996199636992  -> criterion FAILS (non-vacuous) OK
+  first admissible scale under the exact seam test: n >= q_22 = 6.547e10
+  (stack 0905b00 states this correctly in substance, labeled 'q_21')
+
+(g) scope: the closure statement and the Hercher comparison
+  closure: no positive cycle with x_min >= 2^71 and n <= 35031771147
+  (n = number of ODD elements = p+1; hypotheses used: q > 0 i.e. the
+   positive shore, x_min >= 2^71 from Barina-type verification)
+  Hercher q_23 / integral window = 3.9258  [his '3.9x' claim]
+  Hercher q_23 / exact window    = 3.9254  (OUT-054 prints 3.92)
+
+(h) non-vacuity: where each real cycle exits T1's scope
+     1: n=1, K=2, q=2^K-3^n=    1, positive shore: True, x_min >= 2^71: False
+    -1: n=1, K=1, q=2^K-3^n=   -1, positive shore: False, x_min >= 2^71: False
+    -5: n=2, K=3, q=2^K-3^n=   -1, positive shore: False, x_min >= 2^71: False
+   -17: n=7, K=11, q=2^K-3^n= -139, positive shore: False, x_min >= 2^71: False
+  the three negative cycles fail the positive-shore hypothesis (q < 0);
+  the trivial cycle fails only x_min >= 2^71 — each exclusion is exactly
+  where the hypotheses say it must be. No link is contradicted.
+
+============================================================================
+TOTAL RECORDED CHECKS: 62   FAILURES: 0
+============================================================================
+ALL CHECKS PASSED
