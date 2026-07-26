@@ -1,4 +1,4 @@
-﻿=== CANARIES (hand-computed before any sweep) ===
+=== CANARIES (hand-computed before any sweep) ===
   anchor (n,K)=(5,8) -> q = 13: PASS  got 13 (exact integer)
   anchor (n,K)=(7,12) -> q = 1909: PASS  got 1909 (exact integer)
   word count = C(K-2, n-1) (brute enumeration, 7 small cells, exact): PASS

@@ -1,4 +1,4 @@
-﻿=== CANARIES (hand-computed first) ===
+=== CANARIES (hand-computed first) ===
   C0  trivial word and its square: q,R = (1,1) and (7,7)  [hand]
   C1  trivial-cycle inheritance: base cycle -> B^2 cycle, R_0(B^2) = R_0(B) * q_P/q_B = 1*7
   C2  (-5)-shore word ([2],[1]): q=-1, R=1; square: q=-17, R=17 = 1 * 17  [hand]

@@ -4,7 +4,7 @@ operational definitions, the four known cycles, and L-A4 descent)
 ==============================================================================
 
 P-CENSUS (his domain, n in [2,14], S in [1, min(9, 2n)]):
-  |q| = 1 words: exactly 1 — ([2],[1]) at (n,K) = (2,3), realizing x = -5.
+  |q| = 1 words: exactly 1 â€” ([2],[1]) at (n,K) = (2,3), realizing x = -5.
     (the +1 freebie word ([1],[1]) sits at n = 1, below his n >= 2 start;
      the -1 family is the s = 0 / all-sigma-1 climb, outside the alphabet)
   |q| > 1 hits: exactly 18 WORDS = 16 necklaces:
@@ -17,7 +17,7 @@ P-CENSUS (his domain, n in [2,14], S in [1, min(9, 2n)]):
   primitive hits: 2 words = 1 necklace (the -17 orbit), all south; north 0.
   frame agreement (q | B <=> q | R_0) at every word, both directions;
   stronger probe gcd(|q|, B) = gcd(|q|, R_0) expected to hold everywhere.
-P-EXTENSION (ALL S >= 1, n <= 14 — census completion beyond his S <= 9 window):
+P-EXTENSION (ALL S >= 1, n <= 14 â€” census completion beyond his S <= 9 window):
   additional hits exactly trivial^j at (j, 2j), j = 10..14; NOTHING else
   (closure by the ghost lemma + the cycle product identity 2^K = prod(3 + 1/x_t):
    south hits force K < n log2 3, i.e. S <= 8 for n <= 14, all inside his window;
@@ -38,10 +38,10 @@ P-TAIL (n = 15..200, S <= int(0.5849625 n)+3): south += ~0.16, north += ~0.33;
 P-REALIZABILITY: all census hits realize exactly (orbit = word, return, odd);
   his 18/18 reproduced, extension 23/23; the ghost identity
   3*B(W) + q = 2^{sigma_0} * B(shift W) is EXACT for every word (both shores),
-  hence v_2(3x+1) is forced at every step — the load-bearing lemma is provable,
+  hence v_2(3x+1) is forced at every step â€” the load-bearing lemma is provable,
   not merely empirical; fresh 2-adic draws expected 350/350.
 P-LOCK: among the four known cycles (+1, -1, -5, -17) exactly one has |q| > 1:
-  the -17 (q = -139) — "unique paid-lock" holds on the knowns; universality
+  the -17 (q = -139) â€” "unique paid-lock" holds on the knowns; universality
   beyond verified ranges is exactly the open condition, not checkable.
 
 ==============================================================================
@@ -71,7 +71,7 @@ GHOST IDENTITY: 3*B(W) + q = 2^{sigma_0} * B(shift W), with B(W) odd
   so B(W) is odd.  In 3*B(W) + q the term 3^n cancels q's -3^n; factoring
   2^{sigma_0} from the rest and reindexing gives exactly B(shift W), with q's
   2^K supplying the shifted word's last term.  Hence for x = B/q (q odd):
-  3x + 1 = 2^{sigma_0} * (B(shift W)/q), an odd 2-adic unit times 2^{sigma_0} —
+  3x + 1 = 2^{sigma_0} * (B(shift W)/q), an odd 2-adic unit times 2^{sigma_0} â€”
   v_2 is FORCED at every step, the orbit follows the word and returns.  EXACT.
 
 ==============================================================================
@@ -120,7 +120,7 @@ CENSUS SWEEP (his domain): every word, exact B, R_0, gcds, necklaces
     [OK] (12,19): 12376 words, 0 hits, lambda 1.730
 
   n = 1 (below his n >= 2 start): words ([1],[S]) have B = 1; |q| = 1 only
-  at S = 1 (the +1 freebie); |q| > 1 never divides B = 1 — no hits. EXACT.
+  at S = 1 (the +1 freebie); |q| > 1 never divides B = 1 â€” no hits. EXACT.
     [OK] n = 1 closure: B = 1 for all n = 1 words; only (1,1) has |q| = 1
 
 ==============================================================================
@@ -128,7 +128,7 @@ CENSUS EXTENSION to ALL S (n <= 14): exact closure beyond his window
 ==============================================================================
   South closure: a south hit realizes (ghost lemma) as a negative cycle;
   the product identity 2^K = prod_t(3 + 1/x_t) with every |x_t| >= 3 forces
-  2^K < 3^n, i.e. S < n(log2 3 - 1) <= 8.19 for n <= 14 — every possible south
+  2^K < 3^n, i.e. S < n(log2 3 - 1) <= 8.19 for n <= 14 â€” every possible south
   hit is inside the S <= 9 window already swept.  North extension cells
   (S >= 10): a hit realizes as a POSITIVE cycle with n <= 14 odd steps and
   x_min <= 1/(2^{K/n} - 3); for S > 2n, K/n > 2 gives x_min < 1: impossible.
@@ -152,7 +152,7 @@ L-A4 DESCENT cross-check (12.6.1.4): power hits scale by G_k exactly
     [OK] descent identities on all 16 non-primitive hits: 48/48
 
 ==============================================================================
-NECKLACE BUDGETS (exact Fractions; float readouts) — his domain
+NECKLACE BUDGETS (exact Fractions; float readouts) â€” his domain
 ==============================================================================
   SOUTH: lambda(necklaces) = 1.1175  [his 2dp: 1.12]   P(0) = e^-lambda = 0.3271
          necklace hits = 8 (primitive 1);  primitive-only budget lambda_prim = 1.0502  (flat observation:
@@ -172,7 +172,7 @@ NECKLACE BUDGETS (exact Fractions; float readouts) — his domain
     [OK] word budgets 3.41 south / 6.17 north (REQ-022 replication, 2dp)
     [OK] word hits 10 south / 8 north (REQ-022 replication)
   [Poisson P(0) = e^-lambda is a MODEL statement: uniform residue 1/|q|
-   per necklace trial, independence across cells — stated as model.]
+   per necklace trial, independence across cells â€” stated as model.]
 
 ==============================================================================
 TAIL BUDGET n = 15..200 (exact Burnside necklace counts per cell;
@@ -186,7 +186,7 @@ window S <= int(0.5849625 n)+3 as recorded from REQ-023; float readouts)
   TOTAL n=15..200: south = 0.1596, north = 0.3280   [entry: +0.16 / +0.33]
     [OK] tail totals ~ his (south within 0.02, north within 0.02)
   north residual n >= 61 (his 'beyond the verified range' cut, identified
-  from OUT-023's tranche structure — the committed script computes no
+  from OUT-023's tranche structure â€” the committed script computes no
   element-size criterion): 0.0050   [entry: ~5e-3]
     [OK] north residual n >= 61 ~ 0.005
 
@@ -203,7 +203,7 @@ window S <= int(0.5849625 n)+3 as recorded from REQ-023; float readouts)
   [note, flat: 84/53 is a principal convergent of log2 3; 27/17 is a
    semiconvergent (mediant of 8/5 and 19/12); the entry's 'convergent
    anchors' covers both loosely. The top SOUTH cell by budget is (24,38),
-   with (53,84) second — the entry names 84/53 for the south.]
+   with (53,84) second â€” the entry names 84/53 for the south.]
 
   replication of HIS approximation (words/p) per tranche, vs his output:
     n=[ 15, 30]:   0.1043 /   0.2648   his: 0.1043 / 0.2648
@@ -214,7 +214,7 @@ window S <= int(0.5849625 n)+3 as recorded from REQ-023; float readouts)
 
   effective decay rate (bits per unit n), from exact tranche sums
   (midpoint spacing), vs c_gen = 0.0793 (asymptotic; local rate expected
-  steeper — the margin approaches c_gen from above):
+  steeper â€” the margin approaches c_gen from above):
     [(15, 30)] -> [(31, 60)]: 0.0758 bits/n
     [(31, 60)] -> [(61, 120)]: 0.0830 bits/n
     [(61, 120)] -> [(121, 200)]: 0.0863 bits/n
@@ -229,7 +229,7 @@ window S <= int(0.5849625 n)+3 as recorded from REQ-023; float readouts)
     K=31: #words/q = 0.0336   x_min bound 1/(2^(K/n)-3) =     1.85
     K=34: #words/q = 0.0353   x_min bound 1/(2^(K/n)-3) =     1.00
   the formal per-cell budget does NOT decay with K, but realizable size
-  collapses — the window (his S <= 0.585n + 3) is an implicit part of the
+  collapses â€” the window (his S <= 0.585n + 3) is an implicit part of the
   model's operational definition; the entry states the sums without it.
 
 ==============================================================================
@@ -256,8 +256,8 @@ PAID-LOCK UNIQUENESS on the known cycle list (cycles.md 12.6.1.2)
     [OK] exactly one paid-lock cycle among the four knowns: the -17
   Verdict on the phrase: TRUE on the known list (the classical census,
   Lagarias 1985; cycles.md 12.6.1.2). 'In existence' is grounded on that list;
-  its completeness on the south shore is exactly the open ×3-1 cycles question
-  beyond verified ranges — the entry's own falsifier sentence carries this.
+  its completeness on the south shore is exactly the open Ã—3-1 cycles question
+  beyond verified ranges â€” the entry's own falsifier sentence carries this.
 
 ==============================================================================
 SUMMARY: 424 recorded checks/decisions (816870 frame-agreement words x2 counted once each), 0 failures
