@@ -1,0 +1,150 @@
+============================================================================================
+margin_inequality_proof_check.py  --  margin(n) >= c_gen*n at the true constant c_gen
+============================================================================================
+mp.dps = 80, enclosure guard = 200 bits, main sweep n = 1..20000, crude sweep n = 2..200000
+
+beta                     = 1.58496250072115618145373894395
+c_gen (entropy form)     = 0.0793186127748553871345020405792
+c_gen (closed form)      = 0.0793186127748553871345020405792
+log2 beta                = 0.664448707453889383348029277845
+LAM = log2(beta-1)       = -0.773583951828312928077897999821
+L   = log2(beta/(beta-1))= 1.43803265928220231142592727767
+1 - L                    = -0.438032659282202311425927277666
+Theorem A surplus  1 + log2 beta         = 1.66444870745388938334802927784
+theta->0 end   2 log2 beta - log2(beta-1)= 2.10248136673609169477395655551
+Theorem B' constant                      = 2.12171397510694569916137868263
+
+--------------------------------------------------------------------------------------------
+SECTION 0  --  canaries, and the exact-integer facts about beta the proof rests on
+--------------------------------------------------------------------------------------------
+  [PASS] c_gen: entropy form == closed form  |diff| = 5.2711e-82
+  [PASS] gamma*beta == c_gen   (gamma = 1 - h(1/log2 3), the Junction constant)  |diff| = 0.0
+  [PASS] h(1/beta) == log2 beta - ((beta-1)/beta)*log2(beta-1)  (the expansion used)
+  [PASS] h'(1/beta) == log2(beta-1) == -log2(x*),  x* = 1/(beta-1)  x* = 1.70951129135  (Merle's rational 12/7 = 1.71428571429)
+  [PASS] beta < 2         <=>  3 < 4                (gives L > 1, i.e. 1 - L < 0)
+  [PASS] beta > 3/2       <=>  3^2 > 2^3            (gives j = K-n-1 >= 1 for n >= 2)
+  [PASS] beta > 10/7      <=>  3^7 > 2^10           (gives 7*beta - 10 > 0)
+  [PASS] beta >= 291/184  <=>  3^184 >= 2^291       (gives q(8) >= 0 in the S8a quadratic)
+  [PASS]   (mirror: the high-precision beta satisfies exactly these four and nothing more is used)
+  [PASS] hand instance n=2:  K=4, C(2,1)=2, margin=3
+  [PASS] hand instance n=8:  K=13, C(11,7)=330
+  [PASS] K = bitlength(3^n) is the UNIQUE K with 3^n <= 2^K < 2*3^n  (n <= 400)
+  [PASS] word count  sum_r C(n-1,r-1)C(S-1,r-1) == C(K-2,n-1)  (all n,S <= 14)
+
+--------------------------------------------------------------------------------------------
+SECTION 1  --  main sweep n = 1..20000; every link of the chain checked separately
+--------------------------------------------------------------------------------------------
+  S1a domain:  min(k,j) - 1 >= 0 for n >= 2                min 0.0 at n=2       (19999 values)
+  S1b p-window: p - (1/b - 1/(b*m))                        min 8.319414835e-6 at n=19950   (19999 values)
+  S1c p-window: (1/b + (2-b)/(b*m)) - p                    min 6.698251991e-10 at n=15601   (19999 values)
+  S1d p identity residual  -|p - 1/b - (2-b-th)/(b*m)|     min -1.263146288e-81 at n=671     (19999 values)
+  S2  entropy bound:  m*h(p) - log2 C(m,k)                 min 1.0 at n=2       (19999 values)
+  S3  tangent bound:  tangent(m,k) - m*h(p)                min 3.436201596e-14 at n=15602   (19999 values)
+  S4  assembled identity residual (tracked as -|res|)      min -4.749892705e-77 at n=16769   (19999 values)
+  S5  K - m*h(p) - c_gen*n - (1 + log2 b)                  min 3.245471471e-5 at n=16266   (19999 values)
+  S5b concavity gap: K - m*h(p) - [c_gen*n+(1-L)th+CONST_TH0] min 3.436201596e-14 at n=15602   (19999 values)
+  S7  Robbins step: [m*h(p) - credit] - log2 C(m,k)        min 1.249520094e-5 at n=20000   (19999 values)
+  S8a k*j/m - 3n/10   (claimed for n >= 8)                 min 0.1454545455 at n=8       (19993 values)
+  S8b THEOREM B': margin - c_gen*n - (1/2)log2 n - CONST_B min 0.1494979158 at n=16266   (19999 values)
+  S6  THEOREM A: margin - c_gen*n - (1 + log2 b)           min 0.2562326798 at n=1       (20000 values)
+  S9  FINAL as stated: margin(n) - c_gen*n   (n >= 1)      min 1.920681387 at n=1       (20000 values)
+  S9b FINAL over the L-A7 cell domain n >= 2               min 2.841362774 at n=2       (19999 values)
+
+  [PASS] S1a holds over the whole sweep  min = 0.0 at n = 2
+  [PASS] S1b holds over the whole sweep  min = 8.319414835e-6 at n = 19950
+  [PASS] S1c holds over the whole sweep  min = 6.698251991e-10 at n = 15601
+  [PASS] S2 holds over the whole sweep  min = 1.0 at n = 2
+  [PASS] S3 holds over the whole sweep  min = 3.436201596e-14 at n = 15602
+  [PASS] S5 holds over the whole sweep  min = 3.245471471e-5 at n = 16266
+  [PASS] S5b holds over the whole sweep  min = 3.436201596e-14 at n = 15602
+  [PASS] S7 holds over the whole sweep  min = 1.249520094e-5 at n = 20000
+  [PASS] S8a holds over the whole sweep  min = 0.1454545455 at n = 8
+  [PASS] S8b holds over the whole sweep  min = 0.1494979158 at n = 16266
+  [PASS] S6 holds over the whole sweep  min = 0.2562326798 at n = 1
+  [PASS] S9 holds over the whole sweep  min = 1.920681387 at n = 1
+  [PASS] S9b holds over the whole sweep  min = 2.841362774 at n = 2
+  [PASS] S1d p-window identity residual < 1e-60  max |res| = 1.2631e-81
+  [PASS] S4 assembled identity residual < 1e-60  max |res| = 4.7499e-77
+  [PASS] S5b concavity gap >= 0 everywhere and decays: max 0.102481 at n = 2, min 3.4362e-14 at n = 15602
+  [PASS] S5b concavity gap over the upper half of the sweep is below 1e-4 (O(1/n) decay)  max over n >= 10000 : 2.6192e-5
+
+  widest log2 enclosure used over the sweep: 1.7956e-60 bits
+  smallest slack among the decided inequalities: 3.4362016e-14 bits
+  ratio (smallest slack) / (widest enclosure)  : 1.91373e+46
+
+--------------------------------------------------------------------------------------------
+SECTION 1b  --  precision robustness: the 50 tightest cases recomputed at dps = 160
+--------------------------------------------------------------------------------------------
+  [PASS] dps-80 vs dps-160 Theorem-A slack agreement on the 50 tightest cases  max |diff| = 1.0e-70
+  tightest 5 Theorem-A slacks: n=2: 1.1769141, n=3: 1.512633, n=4: 1.6963487, n=5: 2.0320676, n=6: 2.0522847
+
+--------------------------------------------------------------------------------------------
+SECTION 1c  --  the finite closure of Corollary B' at n = 2..7 (part of the PROOF)
+--------------------------------------------------------------------------------------------
+   n    K   C(K-2,n-1)      margin(n)        RHS            slack
+   2    4           2   3.0   2.780351201   0.2196488
+   3    5           3   3.415037499   3.152151064   0.26288644
+   4    7          10   3.678071905   3.438988426   0.23908348
+   5    8          15   4.093109404   3.679271086   0.41383832
+   6   10          56   4.192645078   3.890106902   0.30253818
+   7   12         210   4.285754482   4.080621726   0.20513276
+  [PASS] Corollary B' finite closure n = 2..7: all six slacks strictly positive
+
+--------------------------------------------------------------------------------------------
+SECTION 1d  --  THEOREM A' cell scope: all cells n+2 <= K <= n*beta + 4.79982787
+--------------------------------------------------------------------------------------------
+  cell window half-width above n*beta: 4.7998278717
+  [PASS] A' the K-form bound  margin(n,K) >= (1-L)K - LAM*n + 2log2 b - LAM  holds at every cell  107444 cells checked (n <= 600), 0 violations
+  [PASS] A' margin(n,K) >= c_gen*n at every cell in the window  min 2.84136277445 at (n,K) = (2,4)
+  [PASS] A' surplus 1+log2 b holds at every cell with K <= ceil(n*beta) (south shore + tuned)  min 1.176914067 at (n,K) = (2,4)
+  [PASS] NC-A' just above the window the K-form bound no longer delivers c_gen*n (so the window edge is real)  no n <= 200 where the bound still reaches c_gen*n at K = floor(n*beta+w)+3
+
+--------------------------------------------------------------------------------------------
+SECTION 2  --  cross-checks against the round's published figures
+--------------------------------------------------------------------------------------------
+  [PASS] min slack of margin(n) - c_gen*n over 2 <= n <= 20000 is 2.8414 at n = 2  measured 2.84136277445 at n = 2
+  [PASS] n = 1 (spent-stock cell, outside the L-A7 cell domain): margin(1) = 2, slack 1.9207  margin(1) - c_gen = 1.92068138723
+  ratio margin(n)/n, approaching c_gen from above (NUMERICAL, not part of the proof):
+      n = 100    margin/n = 0.137383734693
+      n = 1000   margin/n = 0.086993637543
+      n = 5000   margin/n = 0.0810727763945
+      n = 20000  margin/n = 0.0797948400217
+      c_gen    = 0.0793186127749
+  crude route (Stirling credit DISCARDED)
+    with the EXACT c_gen        : min 1.664453377 at n = 111202 ; max 2.102482029 at n = 190537
+    with the 7-digit 0.0793186  : min 1.664688958 at n = 16266 ; max 2.104916112 at n = 190537
+  [PASS] ledger crude-route min 1.6647 at n = 16266 reproduced under the DECIMAL constant
+  [PASS] ledger crude-route max 2.10492 at n = 190537 reproduced under the DECIMAL constant
+  [PASS] under the EXACT c_gen the crude-route min sits just above the proved floor 1+log2 b  proved floor 1.66444870745 <= measured min 1.66445337666 (at n = 111202, excess 4.6692e-6)
+  [PASS] under the EXACT c_gen the crude-route max sits just above the theta->0 end  theta->0 end 2.10248136674, measured max 2.10248202936 (concavity gap 6.6262e-7)
+
+--------------------------------------------------------------------------------------------
+SECTION 3  --  negative controls (each MUST fail; a pass here means a broken test)
+--------------------------------------------------------------------------------------------
+  [PASS] NC1 margin(n) >= c*n FAILS for c = c_gen + 0.001  first failure at n = 8857, value -0.023855587
+  [PASS] NC1 margin(n) >= c*n FAILS for c = c_gen + 0.00075  first failure at n = 12076, value -0.0027365923
+  [PASS] NC1 margin(n) >= c*n FAILS for c = 2/25 = 0.08  (Merle's own negative control)  first failure at n = 13406, value -0.0049924397
+  [PASS] NC1b control-of-the-control: at c = c_gen itself there is NO failure
+  [PASS] NC2 inflating the Theorem-A surplus by 0.26 FAILS (constant is near-sharp at n=1)  first failure at n = 1
+  [PASS] NC2b using the theta->0 end CONST_TH0 as if it were uniform FAILS (so the (1-L)*theta term is load-bearing)  first failure at n = 2
+
+  [PASS] NC3 slope at p0 = 0.55 is STRICTLY BELOW c_gen  slope = 0.048587414091
+  [PASS] NC3 slope at p0 = 0.6 is STRICTLY BELOW c_gen  slope = 0.0747185423961
+  [PASS] NC3 slope at p0 = 0.65 is STRICTLY BELOW c_gen  slope = 0.0775056132712
+  [PASS] NC3 slope at the tangent point p0 = 1/beta EQUALS c_gen exactly  slope - c_gen = 5.2711e-82
+  [PASS] NC3b the p0 = 0.60 tangent bound drifts below c_gen*n inside the sweep  first n = 383
+  [PASS] NC4 doubling the Stirling credit BREAKS the Robbins step  first violation at n = 2
+  [PASS] NC5 a 10x-too-narrow p-window FAILS (S1b/S1c are not vacuous)  first violation at n = 2
+  [PASS] NC6 the S8a constant 3/10 cannot be raised to 4/10  first violation at n = 8
+
+============================================================================================
+RESULT: all checks passed.
+
+Verified over n = 1..20000, tuned north cell K = ceil(n log2 3):
+  THEOREM A (elementary; entropy bound + concavity of h; no external input):
+      margin(n) > c_gen*n + 1 + log2(log2 3)  =  c_gen*n + 1.66444870745
+  THEOREM B' (Robbins' Stirling cited; n >= 2):
+      margin(n) > c_gen*n + (1/2)log2 n + 2.12171397511
+  THEOREM A' (cell scope; n <= 600, all K in [n+2, n*beta + 4.799827872]):
+      K - log2 C(K-2,n-1) >= c_gen*n   at every such cell (south shore included)
+============================================================================================
