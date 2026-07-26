@@ -1,0 +1,19 @@
+gamma   = 1 - h(1/log2 3)      = 0.0500444728117
+c_gen   = L - L log2 L + (L-1) log2(L-1) = 0.0793186127749
+gamma*L = 0.0793186127749   |gamma*L - c_gen| = 1.86541e-41
+
+margin(n) >= (S-1)*gamma, n = 2..2000
+  reading A, S = K    : failures 0  min slack 2.8498666 bits
+  reading B, S = K-n  : failures 0  min slack 2.9499555 bits
+  -> the inequality does NOT discriminate (B is the weaker statement)
+
+per-unit ratios at n = 2000:
+  K/n      = 1.585
+  (K-n)/n  = 0.585
+  log2 3   = 1.584962501  <- the conversion factor he uses (S ~ n*log2 3)
+
+implied per-n constant:
+  reading A, S = K   : gamma*log2 3       = 0.0793186127749 = c_gen  MATCH
+  reading B, S = K-n : gamma*(log2 3 - 1) = 0.0292741399632 != c_gen
+
+VERDICT: S = K. The preprint's S is our K (log2 d = S, d = 2^K).
