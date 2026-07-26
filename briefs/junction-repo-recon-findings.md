@@ -128,9 +128,14 @@ the accessible committed artifacts carry, verbatim:
 > `C(m,k) ≤ 2^{m·h(k/m)}`, with deficit constant `γ = 1 − h(1/log₂3)`; verified 2026-07-25
 > that `γ·log₂3 = c_gen` exactly (REQ-MATH-037).
 
-The dating in that header is **"preprint 2026"**; the brief's framing describes
-it as a preprint from spring 2025. Recorded flat, not resolved — the letter
-itself is the main session's source for the year and was not available here.
+The dating in that header is **"preprint 2026"**. *(Resolved at merge by the main
+session, which holds the letter: there is no discrepancy, and the error was ours.
+The letter says only "last spring" / "a preprint from last spring"; from
+2026-07-26 that is spring **2026**, consistent with the header. The "spring 2025"
+came from the brief's own framing — a main-session inference written into the
+brief, not anything Merle wrote. Corrected here so the round's record cannot
+carry a phantom inconsistency into the reply; the delegate flagged it correctly
+and deferred it, which is why it was caught.)*
 
 Same repository, `experiments/test_REQ-MATH-037_junction_gamma_is_cgen.py`,
 lines 2–5, the §3 statement as he transcribes it:
