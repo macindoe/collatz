@@ -1,0 +1,47 @@
+# Brief: round-10 shared-repo co-edit (L-A7 close-out, L-A8 key turn, our margin proof offered) — for a delegated session
+
+**Context required before starting (in order):** `README.md`, `AGENTS.md`, `HANDOFF.md` item 1 (all round-10 paragraphs), then the four round-10 records — `briefs/merle-la7-close-check-findings.md`, `briefs/merle-lean-r10-audit-findings.md`, `briefs/merle-la8-t1-check-findings.md`, `briefs/margin-inequality-proof-findings.md` — and `briefs/junction-repo-recon-findings.md`. Also read `briefs/merle-round9-coedit-findings.md` for the house co-edit style (offers inside the entry, his prose untouched, key-status lines stated honestly).
+
+## Provenance and state
+
+Shared repo `github.com/macindoe/one-obstruction-three-faces`, HEAD **`826970e`** (his; eleven commits over our `641a530`, `LEDGER.md` only). His Lean repo HEAD **`5c9b663`**. All three round-10 verification checks and our own margin proof are reviewed and merged our side; every script was re-run at review with byte-identical output.
+
+**This session prepares one shared-repo commit, LOCAL-ONLY, and does NOT push.** The push is gated on the author's explicit go-ahead, exactly as in rounds 8 and 9.
+
+## What goes in, entry by entry
+
+Write the blocks in the house style: our own additions clearly ours, his prose never edited, corrections offered rather than applied, and every key-status line honest about what it turns on.
+
+**L-A7 — close out and date-stamp.** His acceptance of the re-sourcing satisfied the condition our round-9 entry stated, so the entry moves from conditional to **two keys**; date-stamp the satisfied conditional (his acceptance commits, 2026-07-25). Add a Macindoe verification record for the new blocks: replication digit-exact per `briefs/merle-la7-close-check-findings.md` (crossings 372/440, south floor with min `9.3e-8` at `n = 190537`, margin slack `2.8414` at `n = 2`, entropy-route min `1.6647` at `n = 16266`, the 12/7 constants, the window `[5.727444, 5.747075]` with `s = 15, t = 86` the *unique* smallest admissible pair, atoms `0.088`/`0.327`, `key_core` on 1137 hub-admissible pairs, `n/13` slack `1.7003`, thresholds `1596`/`1655`/`1661`/`1722`). Then the offers, acceptance his call:
+- *(upgrade)* the south floor and the `γ` identity are **theorems, not numerics** — the one-line `ε + ε′ = 1` proof and the symbolic `γ·β = c_gen` derivation are in our findings; his "0 violations" and "error 0.0 at fifty digits" undersell what he has.
+- *(scope clause)* the negative-control count is `x`-specific: 241 at his `x = 1709/1000`, 256 at the entry's own `x = 12/7`.
+- *(scope clause)* the "1.700 bits" slack is the **route bound's**, not the true margin's.
+- *(hygiene, flat)* `OUT_REQ-MATH-043` is committed without a generator script — all six numbers reproduce from the REQ-035 method, so this is an offer to commit the script, not a doubt.
+
+**L-A7 — our margin proof, offered as the second proof.** This is the entry's centrepiece this round and it discharges the offer he accepted. State it exactly as `briefs/margin-inequality-proof-findings.md` states it, no stronger: **Theorem A**, all `n ≥ 1`, tuned north cell, `margin(n) > c_gen·n + 1 + log₂(log₂3)` at the **true** `c_gen`, elementary, citing nothing (four exact integer comparisons about `β` are the only facts used); **Theorem B′** the Robbins refinement (`n ≥ 2`, Robbins cited, six-case finite closure); **Theorem A′** the cell scope — tuned cell, the **entire south shore**, and the next three or four north cells, which closes the south-shore half of the coverage gap our audit recorded against his `marginTarget`. Include, because it is the honest and interesting part: **the Stirling warning we gave him was based on a wrong premise** — a constant surplus is not a shortage, the constant is provably positive and uniform, so the crude entropy bound closes on its own and concavity supplies the perturbation step with no remainder term. His route remains a genuinely independent second proof and the rational-`x` device is his own; say so plainly. Add the closed-form upgrade: his `[1.66, 2.10]` interval has endpoints exactly `1 + log₂β` and `2log₂β − Λ`, the oscillation being `{nβ}`. And the one flat correction: his crude-route figures come from `c_gen` as the 7-digit decimal; under the exact constant they are `1.664453` at `n = 111202` and `2.102482` at `n = 190537` — his numbers are right for the constant he used, and it earns a clause only because the true minimum is what matches the proved floor. Pin our artifacts by SHA (wiki `main`; see the gating condition below).
+
+**L-A8 — Macindoe key turned, scoped.** Per `briefs/merle-la8-t1-check-findings.md`: every link clean-room confirmed (identity exact on all four real cycles both shores, survivor/ceiling, seam, log gap, `δ = 4.0734e-22` with his factor-2 correction confirmed, 22 in-window convergents, discharge tightest `5.17×`/exact `5.44×`, canary at the next convergent, non-vacuity). **The key turns on the mathematics; all kernel claims are explicitly deferred** to the read-not-built statement-match record — say that in the entry rather than letting the key look wider than it is. Offers:
+- the window clause distinguishing the exact and integral windows (`35035491004` / `35031771147`) — both figures right, the definition shifted mid-entry without a naming clause;
+- the indexing convention pinned (`q₂₁ = 6586818670`) and the two subscript corrections (`q₂₂ = 65470613321`, `q₂₃ = 137528045312`);
+- the Hercher sentence restated: his bound is `K > 1.375·10^11` (Cor. 29, conditional on `X₀ ≥ 3·2^69`, met by Barina `2^71`), the underlying threshold exactly `q₂₃` — the frame-prediction point is **genuinely supported**, and the honest addition is that the scope comparison is not apples-to-apples;
+- our clean-room derivations of both named glue facts, offered as the ledger's statement of what "glue" means precisely, including the tightening that in-window `n` is a priori a *multiple* of a convergent denominator, closed by the same 22 checks;
+- flat hygiene notes (REQ-055/056 outputs without scripts; OUT-052/053 crashed-run tracebacks and two mutually shifted index conventions; the "exhaustively to `q₁₀ = 190537`" line matching neither the committed sweep bound nor its own indexing — we re-verified the property to `n < 190537`, so the fact stands).
+
+**L-A8 — the one substantive statement/prose mismatch, delivered kindly.** `ceiling_upper` proves only the upper half `2^K < 2·3^(p+1)`; the entry, the docstring and the commit all state both bounds, and the lower half is the unproved (elementary) `hceil` hypothesis threaded downstream. Offer the one-lemma repair (`ceiling_lower`) **or** the restatement as upper-half-plus-hypothesis — his choice. Note also, flat: the DeficitLemma axiom log covers 8 of the stated 10 theorems (`key_shifted`/`key15` unprobed, transitively covered), and `LegendreApprox` is absent from the log its header names.
+
+**Do NOT put the Junction repository question in the ledger.** It is correspondence, not a ledger fact, and it belongs in the reply (the parallel session). Nothing about it goes in this commit.
+
+## Queue
+
+1. Fresh clone into the scratchpad; verify HEAD is **`826970e`** by `ls-remote` *and* the clone. If it has moved, **stop and hand back** — do not rebase our blocks onto an unseen state.
+2. Prepare the commit on a local branch: `LEDGER.md` only. His prose untouched; our additions appended as new dated blocks in the established shape; offers inside the entries.
+3. Verify the patch applies clean on a pristine clone of `826970e` and is tree-identical to your prepared commit. Commit the portable patch to `briefs/merle-round10-coedit-patches/`.
+4. Record `briefs/merle-round10-coedit-findings.md` with **every prepared block verbatim**, the judgment calls listed, insertion/deletion counts, and any flags (in particular: whether our artifact pins resolve on the public wiki `main` — if they do not, say so, because the author must push wiki main first, exactly as in round 9).
+5. One scoped paragraph in `HANDOFF.md` item 1.
+
+## Rules
+
+- Branch **`merle-round10-coedit`** from your worktree HEAD; **verify the worktree base against current `main` first and rebase if it is stale** (a known quirk — worktrees are cut from session-start HEAD). State the base SHA in the findings.
+- **SHARED REPO NOT PUSHED.** Prepare locally only; the push is the author's call. If any push is attempted or blocked, stop and hand back — never route around it.
+- No reply paragraphs (parallel session). No wiki-page edits. Read-only everywhere outside this repo except the local scratchpad clone.
+- Register: flat and calibrated. Corrections are offered, never argued. He has spent this round withdrawing his own unbacked figures; match that standard rather than commenting on it.
