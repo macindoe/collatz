@@ -276,7 +276,13 @@ identical terms at both precisions; CF terms
 denominators `1, 1, 2, 5, 12, 41, 53, 306, 665, 15601, 31867, 79335, 111202,
 190537, 10590737, 10781274, 53715833, 171928773, 225644606, 397573379,
 6189245291, 6586818670`, correctly successor-paired and chained; and the
-denominators `≤` the integral window `⌊√(2079·2^71/4000)⌋ = 35 031 770 966`
+denominators `≤` the integral window `⌊√(2079·2^71/4000)⌋ = 35 031 771 147`
+*(corrected at review 2026-07-26: this line read `35 031 770 966`, which is wrong —
+the largest `n` with `4000n² ≤ 2079·2⁷¹` is `35 031 771 147`, recomputed independently
+by the main session in exact integers and agreeing with `briefs/merle-la8-t1-check-findings.md`
+§(d) and with the prepared co-edit block. Caught by the round-10 reply session while
+cross-checking the two records against each other. Nothing depends on it: the set of
+convergent denominators inside the window is the same 22 under either figure.)*
 are **exactly these 22** — the next, `q₂₂ = 65 470 613 321`, lies outside both
 windows and is the file's non-vacuity canary (with `q₂₃ = 137 528 045 312`,
 Hercher's, as its successor). **This is one of the two glue facts he names as
