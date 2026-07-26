@@ -1,0 +1,60 @@
+﻿==============================================================================
+PART A — DeficitLemma.lean statement canaries (exact integers)
+==============================================================================
+
+[A1] deficit_term_le: 12^k * 7^(m-k) * C(m,k) <= 19^m for k <= m
+  399 instances, exhaustive m<=25 + 40 random to m=400 + edges: all hold
+
+[A2] atoms (exact; margins in bits reported as floats of exact ints)
+  atom_A margin: 0.088 bits (his: 0.088)
+  atom_a margin: 0.327 bits (his: 0.327)
+  atom_D margin: 324.693 bits (his: ~325)
+
+[A3] key_core / key_shifted / key15 / margin_core on all hub-valid (k,j), k<=40
+  key_core 60, key_shifted 60, key15 60 (k<=12), margin_core 524 (k<=40): all hold
+  key15 first found failure outside hub: (k,j) = (0, 5)
+
+[A4] marginTarget: hypothesis range pins K uniquely; conclusion exact, n = 1..300
+  300 scales: hypothesis K is UNIQUE per n and equals the tuned north K0;
+  conclusion holds at every one (exact integers).
+  load-bearing check: at (n,K)=(100, 200) (outside window) the conclusion fails: True
+
+[A5] the encoding: C(K-2,n-1) IS the L-A7 word count; the unfolding to margin(n)
+  144 cells: sum-over-letter-counts equals C(n+S-2, n-1) = C(K-2, n-1) exactly
+  margin(n) >= n/13 for n = 1..2000; min TRUE-margin slack 1.923 bits at n = 1
+  ROUTE-implied slack: min 1.700 bits at n = 12  (his committed figure: 1.700 at n = 12 — same quantity)
+  constants: 1/13 = 0.0769231 vs c_gen = 0.0793186 (proved constant 3.0% below the asymptote)
+
+==============================================================================
+PART B — T1Structure.lean statement canaries
+==============================================================================
+
+[B1] pow_succ_lt_two_mul_pow / mul_pow_succ_le / succ_pow_le_pow_add (exact grids)
+  6302 instances, all hold
+  load-bearing: first failure with 2n >= m at (m,n) = (2, 2)
+
+[B2] cycle_prod_identity: rotation algebra + trivial-cycle instance
+  500 random (x, v): rotation-product law exact (zeros allowed)
+
+[B3] survivor_bound: per-factor lemma + product step (exact)
+  1860 instances: (3x+1)(3X) <= 3x(3X+1) iff X <= x, and the product form, exact
+
+[B4] INDEPENDENT convergent computation for log2(3) (two precisions)
+  CF terms a_0..a_29: [1, 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, 55, 1, 4, 3, 1, 1, 15, 1, 9, 2, 5, 7, 1, 1, 4, 8]
+  denominators q_0..q_25: [1, 1, 2, 5, 12, 41, 53, 306, 665, 15601, 31867, 79335, 111202, 190537, 10590737, 10781274, 53715833, 171928773, 225644606, 397573379, 6189245291, 6586818670, 65470613321, 137528045312, 753110839881, 5409303924479]
+  exact Legendre window sqrt(3*2^71*ln2/4)      = 3.503549e+10  (file/ledger cite 3.5035e10)
+  integral window floor sqrt(2079*2^71/4000)     = 3.503177e+10  (file/ledger cite 3.5032e10)
+  ratio exact/integral = 1.000106  (his: within 0.011%)
+
+[B5] discharge_all criterion, exact integers
+  all 22 pairs pass; tightest integer-form margin 5.17x at q = 6586818670  (his: 5.17x at 6586818670)
+  classical bound check + exact-test margins (Decimal, 150 digits):
+  exact-test tightest margin 5.44x at q = 6586818670  (his: 5.44x)
+  conservativity: 2079/2000 = 1.039500 < 3*ln2/2 = 1.039721  (integer form strictly stronger criterion, from ln 2 > 693/1000)
+
+[B6] LegendreApprox statement canary: Legendre criterion, exhaustive q <= 200
+  799 rationals scanned near L, 5 inside the 1/(2q^2) ball — every one is a convergent
+
+==============================================================================
+TOTAL: 15930 checks passed, 0 failed
+==============================================================================
