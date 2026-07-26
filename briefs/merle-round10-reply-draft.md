@@ -49,11 +49,15 @@ not buried:**
    depends on it: the 22-convergent count is identical under either number and under the
    exact window. The draft carries `35031771147`. Worth one line back to the audit record.
 
-**One bracketed field.** The round-10 co-edit commit is prepared in a **parallel session**
-and is not this session's work; its SHA is carried below as
-`[PENDING: shared-repo push — SHA to be filled at send time]`. The wiki-`main` pin is the
-drafting-time HEAD and must be pushed publicly before sending, or the artifact pins in the
-map paragraph will not resolve.
+**Both bracketed fields are now filled — resolved at review, 2026-07-26.** The round-10
+co-edit was prepared in a parallel session and pushed on the author's go-ahead: shared-repo
+HEAD is now **`c966875`**, over his `826970e` (verified unmoved immediately before the push,
+and the result confirmed by an independent fresh clone; tree `bcae6b6`, `LEDGER.md` only,
+49 insertions / 2 deletions). The prepared commit was `5481d2d` in the preparing session's
+clone — same tree, restamped by a fresh application, so `c966875` is the SHA to cite. The
+wiki-`main` pin is **`ae402b9`**, pushed publicly by the author first; all four artifact
+commits (`8e385b9`, `7cb47cb`, `bb9e5a7`, `cde2e5b`) were verified to resolve on public
+`main` before the shared-repo push went out.
 
 ---
 
@@ -367,9 +371,8 @@ do as about what it does — and with no schedule on either side. We are deliber
 proposing an outline or a section list here; that is its own conversation, and it should
 start when it starts.
 
-**Where everything lives.** Wiki `main` stands at `d9b2715`
-`[CHECK AT SEND TIME — the drafting-time HEAD; it must be pushed publicly before sending
-or the pins below will not resolve]`. The five round-10 records are
+**Where everything lives.** Wiki `main` stands at `ae402b9`, public — every artifact pinned
+below was verified to resolve there before the co-edit went out. The five round-10 records are
 `briefs/merle-la7-close-check-findings.md` (the L-A7 closure and the four new blocks),
 `briefs/margin-inequality-proof-findings.md` (our proof), `briefs/merle-la8-t1-check-findings.md`
 (the clean-room L-A8 chain), `briefs/merle-lean-r10-audit-findings.md` (the read-not-built
@@ -381,8 +384,7 @@ statement match on `DeficitLemma` and `T1Structure`) and `briefs/junction-repo-r
 The round-10 co-edit — the L-A7 date-stamp and verification record with its three offers,
 our margin proof offered as the second proof at the true constant, the L-A8 key turned on
 the mathematics with the kernel claims scoped out, and the `ceiling_upper` repair — is
-pushed at `[PENDING: shared-repo push — SHA to be filled at send time]`, over your
-`826970e`, `LEDGER.md` only, your prose untouched throughout.
+pushed at `c966875`, over your `826970e`, `LEDGER.md` only, your prose untouched throughout.
 
 No new claims ride along with any of this. Everything cited above sits at its named place
 in the five findings records, and the two bracketed fields are the only values not yet on
