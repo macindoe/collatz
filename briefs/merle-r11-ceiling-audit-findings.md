@@ -604,3 +604,207 @@ individually necessary. Edge `n = 1` (`3 < 4 < 6`) included.
   `4.0734·10⁻²²`; and the withdrawn `4.955·10^10` window reproduces as
   `4.95477·10^10`, exactly `√2 ×` the corrected exact window — the
   missing-factor-2 artifact, confirmed again.
+
+## Item 6 — axiom logs, the 13 → 15 reconciliation, and the `sorryAx` claim
+
+### T1 axiom log — `experiments/T1Structure_axioms.txt` at HEAD, verbatim
+
+```
+'T1Structure.ceiling_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.ceiling_pinned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.discharge_all' depends on axioms: [propext]
+'T1Structure.convPairs_length' does not depend on any axioms
+'T1Structure.log_gap_gen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.quotient_is_convergent_gen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.log_two_gt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.ratio_bound_at_barina' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.log_gap_at_barina' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.seam_gap_at_barina' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.succ_pow_le_pow_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.seam_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.cycle_prod_identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.survivor_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'T1Structure.ceiling_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+**Fifteen entries. Each expected set is what the letter claims:**
+`discharge_all` → `[propext]` only ✓; `convPairs_length` → "does not depend on
+any axioms" ✓; the remaining thirteen each exactly
+`[propext, Classical.choice, Quot.sound]` (kernel-3) ✓. The entries appear in
+exactly the order of the fifteen `#print axioms` lines at the end of
+`T1Structure.lean` (lines 460–480), one-to-one, nothing extra, nothing missing.
+
+**13 → 15 reconciliation: EXACT, and it is 13 + 2 with nothing else moved.**
+The diff of the log between `5c9b663` and HEAD adds exactly two lines,
+`ceiling_lower` and `ceiling_pinned`, at the top; **no entry is removed,
+renamed, reordered or re-axiomatised.** The thirteen pre-existing entries are
+byte-identical, including `discharge_all`'s `[propext]` and
+`convPairs_length`'s no-axioms line.
+
+**Two flat observations on the log, neither of substance:**
+
+1. **The log's two header lines were deleted.** At `5c9b663` the file began
+   `# T1Structure + LegendreApprox — #print axioms (committed, 2026-07-25T16:45Z)`
+   and `# VERIFIED FOUR WAYS: 0 'error:', 0 stack overflow/abort, 0 sorryAx,
+   0 native_decide.` Both are gone at HEAD. Effect: round-10's flag 3 (*"no
+   LegendreApprox entries in any committed axiom log despite the log header
+   naming the file"*) is now **resolved by withdrawing the claim rather than by
+   adding entries** — which is a legitimate resolution and arguably the honest
+   one, since `LegendreApprox.lean` still carries no `#print axioms` probe.
+   `LegendreApprox`'s axioms therefore remain unlogged; the "0 sorry, 0 axioms,
+   0 native_decide" prose about that file is still consistent by read (0 `sorry`,
+   0 `native_decide`, no `axiom` declarations — re-verified this session) and
+   still untraceable to a log. Cost of the deletion: the four-way verification
+   claim is no longer recorded *in* the artifact, only in the letter and the
+   commit messages. Flat; a one-line header stating what the file is and how it
+   was produced would carry both.
+2. **Two helper lemmas remain unprobed** in `T1Structure.lean`:
+   `mul_pow_succ_le` and `pow_succ_lt_two_mul_pow` (plus the `def convPairs`
+   and the five `example` canaries, which are not theorems). Both are
+   transitively covered by their consumers' probes (`pow_succ_lt_two_mul_pow`
+   feeds `ceiling_upper` and `seam_bound`, both probed), so nothing
+   mathematical hangs on it; but his hardened protocol's fourth check
+   ("presence in the theorem's own `#print axioms` probe") is not met for those
+   two. Same minor pattern as round 10's DeficitLemma flag, now the only
+   instance left in either file.
+
+**A correction to our own round-10 record, recorded flat.**
+`briefs/merle-lean-r10-audit-findings.md`, item 3, heads its list "The thirteen
+probed theorems, verbatim" and numbers `pow_succ_lt_two_mul_pow` as entry 2.
+`pow_succ_lt_two_mul_pow` was **not** probed at `5c9b663` and is not probed at
+HEAD; the thirteen entries in the log at `5c9b663` are the thirteen listed
+above minus `ceiling_lower` and `ceiling_pinned`, and that set excludes it.
+(The same paragraph's parenthetical — "13 probed = the eleven above numbered
+1–12 minus none, plus `discharge_all` and `convPairs_length`" — is internally
+inconsistent for the same reason: items 1–12 plus two is fourteen names.)
+Nothing depends on it: that findings file's *axiom-log* verdict ("all 13 probed
+theorems present, matching the in-file probes one-to-one") was and is correct
+about the log itself; only the verbatim list over-included one lemma. Recorded
+in the same spirit as the round-10 reply session's `35 031 770 966` correction
+and the Junction recon's spring-2025 dating slip: **ours, named as ours.**
+
+### `sorryAx` — ABSENT
+
+`grep -rn "sorryAx"` over the entire working tree at HEAD (all refs of the
+checkout, excluding `.git`) returns **exactly two lines, both prose inside the
+RETRACTED comment block** in `T1Structure.lean` (lines 320 and 327), narrating
+the `da2c8db` failure and the hardened protocol. There is no `sorryAx` in any
+axiom log, in any `.lean` declaration, or in any committed output. Likewise
+`0 sorry` and `0 native_decide` by read in both `T1Structure.lean` and
+`DeficitLemma.lean`: every grep hit for `sorry`, `native_decide` or `axiom` in
+those two files is either a docstring/comment or a `#print axioms` line. No
+`axiom` declaration exists in either file.
+
+**The volunteered `sorryAx` anecdote** (placing the lemma after its own uses,
+Lean's error recovery inserting `sorryAx` downstream, check 3 catching it in
+the same run) is **not verifiable read-not-built** — it is a claim about a
+compiler run, and no artifact of that run is committed. At HEAD `ceiling_lower`
+sits at line 128, **before** its two use sites at lines 264 and 358, so the
+final ordering is the correct one. Recorded as: consistent with the file as
+committed; the incident itself outside what this audit can reach.
+
+### DeficitLemma axiom log — now 10 of 10
+
+`experiments/DeficitLemma_axioms.txt` at HEAD carries **ten** entries —
+`deficit_term_le`, `deficit_choose_le`, `atom_A`, `atom_a`, `atom_D`,
+`key_core`, **`key_shifted`**, **`key15`**, `margin_core`, `marginTarget` —
+each exactly `[propext, Classical.choice, Quot.sound]`. The two that round 10
+recorded as unprobed now carry their own `#print axioms` lines in
+`DeficitLemma.lean` (lines 244–245, added by `6c084c5`), so **check 4 is met
+for them directly and not only transitively.** Round-10 flag 2 is closed.
+
+Also removed from that log by `6c084c5`: its two header lines and the three
+`exponentiation.threshold` warning lines. Flat, the same observation as (1)
+above with one addition — the log is now a curated list rather than a raw
+capture of the probe run. Nothing in it is wrong; but a log's evidentiary value
+comes from being the run's output, and warnings are part of that output.
+One-line note, offer-shaped, not a doubt.
+
+### The corrected DeficitLemma SCOPE header
+
+New text, verbatim (`OneObstruction/DeficitLemma.lean`, lines 25–33):
+
+```
+SCOPE, stated plainly. Everything below is proved: kernel-3, no `sorry`, no user axioms,
+no `native_decide`. `deficit_term_le` is the analytic heart (now elementary); `key_core`
+is the heart of the assembly — it absorbs the Diophantine hypothesis and the `j`-dependence.
+`MarginTarget` is PROVED below (2026-07-25) — the exponent bookkeeping from `key_core` +
+`deficit_term_le` to the `n`-indexed statement is now internal (`key_shifted` -> `key15` ->
+`margin_core` -> `marginTarget`), not left outside. This paragraph previously said it was
+outside Lean; corrected 2026-07-26 after Macindoe's round-10 audit flagged the stale header.
+The exact-integer cross-check stands as written (REQ-MATH-042, `n = 1..300`, 0 failures).
+```
+
+**It now matches the file it heads.** `marginTarget` is proved at line 231 of
+the same file; the chain the header names —
+`key_shifted → key15 → margin_core → marginTarget` — is exactly the sequence
+of declarations at lines 187, 213, 224 and 231, all probed. The stale clause
+("What remains outside Lean is pure exponent bookkeeping … to the `n`-indexed
+statement `MarginTarget`") is gone. The finder is named in the header itself.
+Round-10 flag 4 is closed.
+
+**One round-10 flat note remains unrepaired in that header, recorded without
+prejudice:** the header's earlier bullet still reads "minimum slack `1.700`
+bits at `n = 12`" with no clause saying *which* quantity that is the slack of.
+Round 10 established it is the **route-implied** bound's slack over `n/13`
+(reproduced digit-exact there), not the true margin's, whose minimum is at
+`n = 1`. That was recorded at round 10 as a reconciliation rather than a flag,
+and the round-10 co-edit already carries the offer to pin it; it is simply
+still open, and this is not a new finding.
+
+## Item 7 — the RETRACTED block at `c991430`
+
+**Present, standalone, in `OneObstruction/T1Structure.lean` at lines 312–334**
+— a `/- … -/` block of its own between the "Legendre invocation (March 1-ter)"
+section note and `log_two_gt`, **not** a one-line pointer. Verbatim:
+
+```
+/- ============================================================================
+   **RETRACTED — commit `da2c8db` (2026-07-25). PERMANENT RECORD, DO NOT REMOVE.**
+
+   CLAIMED: `quotient_is_convergent` (the non-general form, threshold literal `2^71`)
+   was kernel-3.
+
+   THE CLAIM WAS FALSE. `lake env lean` printed no `error:` line but had aborted with a
+   stack overflow at `maxRecDepth 40000`; at workable recursion depths the proof carried
+   `sorryAx`. I read "0 errors" without checking that the compiler had finished.
+
+   REAL OBSTRUCTION: elaboration blow-up on the literal `2^71` inside `nlinarith` — not a
+   mathematical gap. The theorem is re-proved below as `quotient_is_convergent_gen`, with
+   the threshold abstracted to a variable so no numeral reaches a tactic.
+
+   CONSEQUENCE: the verification protocol is hardened. Every check now tests for `error:`
+   AND stack overflow/abort AND `sorryAx` AND presence in the theorem's own
+   `#print axioms` probe.
+
+   This block is restored 2026-07-26 after Macindoe's round-10 audit observed, correctly,
+   that the standalone note had been superseded at `4856058` by a one-line reference —
+   so the record required `git log` to find. A record that requires `git log` is not a
+   record. It stays here.
+   ============================================================================ -/
+```
+
+**All five things he lists are stated:**
+
+| claimed | in the block |
+|---|---|
+| what was claimed | "CLAIMED: `quotient_is_convergent` (the non-general form, threshold literal `2^71`) was kernel-3." |
+| why it was false | "`lake env lean` printed no `error:` line but had aborted with a stack overflow at `maxRecDepth 40000`; at workable recursion depths the proof carried `sorryAx`." |
+| the real obstruction | "elaboration blow-up on the literal `2^71` inside `nlinarith` — not a mathematical gap." |
+| the fix | "re-proved below as `quotient_is_convergent_gen`, with the threshold abstracted to a variable so no numeral reaches a tactic." |
+| the four-way hardening | "Every check now tests for `error:` AND stack overflow/abort AND `sorryAx` AND presence in the theorem's own `#print axioms` probe." |
+
+Marked **"PERMANENT RECORD, DO NOT REMOVE"** in the block's own first line, and
+closing "It stays here." Our observation is named in it, correctly and
+without inflation.
+
+**No theorem at HEAD depends on the retracted result.** `grep -rn
+"quotient_is_convergent"` over `OneObstruction/`, `experiments/` and
+`README.md`, excluding the `_gen` form, returns **one line: the block's own
+"CLAIMED:" sentence.** The non-general `quotient_is_convergent` does not exist
+as a declaration anywhere in the tree; `quotient_is_convergent_gen` is the
+fresh threshold-abstract proof and nothing references the old name.
+Round-10 flag 5 is closed.
+
+Recorded flat, with no commentary: the block is there, it says the five things,
+and it is marked permanent.
