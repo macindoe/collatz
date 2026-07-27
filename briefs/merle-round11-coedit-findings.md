@@ -64,7 +64,10 @@ artifact, and the block's existing `52e8c5c` pin is untouched.
 |---|---|---|---|
 | 1 | **2026-07-28 09:35 AUSEST** (2026-07-27 23:35 UTC) | `git ls-remote` on `github.com/macindoe/one-obstruction-three-faces` | `c96687544fd387fd8bcff1df2c04056a2be99f3a` at both `HEAD` and `refs/heads/main` — **unmoved** |
 | 1b | same minute | fresh unauthenticated clone into the scratchpad | HEAD `c966875`, tree `bcae6b6` — the round-10 tree exactly, confirming the record |
-| 2 | **2026-07-28 09:47 AUSEST** (2026-07-27 23:47 UTC) | `git ls-remote`, immediately before finishing | `c96687544fd387fd8bcff1df2c04056a2be99f3a` — **still unmoved** |
+| 2 | **2026-07-28 09:48 AUSEST** (2026-07-27 23:48 UTC) | `git ls-remote`, immediately before finishing | `c96687544fd387fd8bcff1df2c04056a2be99f3a` — **still unmoved** |
+
+The public wiki remote was re-checked in the same command at the same minute
+and is still at `2225b68`, so the pre-push condition of §0 stands as written.
 
 Nothing of his has landed since our own round-10 push. No stop condition
 triggered; no re-seating was needed. The L-A8 and L-A3 entry texts at `c966875`
