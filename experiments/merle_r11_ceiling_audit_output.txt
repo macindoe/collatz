@@ -1,0 +1,154 @@
+
+==============================================================================
+CANARIES -- the real cycles, re-derived from the odd map in this script
+==============================================================================
+  cycle    1 : n=1  K= 2  elements=[1]
+               v=[2]   prod(3x+1)=4 = 2^K*prod(x)=4   q = 2^K-3^n = 1
+  cycle   -1 : n=1  K= 1  elements=[-1]
+               v=[1]   prod(3x+1)=-2 = 2^K*prod(x)=-2   q = 2^K-3^n = -1
+  cycle   -5 : n=2  K= 3  elements=[-5, -7]
+               v=[1, 2]   prod(3x+1)=280 = 2^K*prod(x)=280   q = 2^K-3^n = -1
+  cycle  -17 : n=7  K=11  elements=[-17, -25, -37, -55, -41, -61, -91]
+               v=[1, 1, 1, 2, 1, 1, 4]   prod(3x+1)=-403123745024000 = 2^K*prod(x)=-403123745024000   q = 2^K-3^n = -139
+
+==============================================================================
+CONSTANTS -- computed at two precisions, agreement asserted
+==============================================================================
+  delta = 2/(3*2^71*ln2) = 4.0733674416e-22   (2^71 = 2361183241434822606848)
+  partial quotients : [1, 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, 55, 1, 4, 3, 1, 1, 15, 1, 9, 2]
+  denominators q_j  : [1, 1, 2, 5, 12, 41, 53, 306, 665, 15601, 31867, 79335, 111202, 190537, 10590737, 10781274, 53715833, 171928773, 225644606, 397573379, 6189245291, 6586818670, 65470613321, 137528045312, 753110839881, 5409303924479]
+
+==============================================================================
+A -- ceiling_lower / ceiling_pinned instantiated at the real cycles
+==============================================================================
+  Lean hypotheses (both theorems):
+      x v : Fin (p+1) -> N        [elements are NATURAL numbers]
+      hstep : 3*x i + 1 = 2^(v i) * x (i+1)
+      hK    : K = sum v i
+      hX    : 0 < X
+      hmin  : forall i, X <= x i
+      hpX   : 2*(p+1) < 3*X       [ceiling_pinned / ceiling_upper only]
+  Conclusions: ceiling_lower  3^(p+1) < 2^K
+               ceiling_pinned 3^(p+1) < 2^K  AND  2^K < 2*3^(p+1)
+
+  cycle    1 : IN SCOPE at X=1.  3 < 4 < 6  -- both halves hold
+  cycle   -1 : OUT OF SCOPE (negative elements).  3^1 = 3 > 2^1 = 2 -- south shore, q = -1 < 0
+  cycle   -5 : OUT OF SCOPE (negative elements).  3^2 = 9 > 2^3 = 8 -- south shore, q = -1 < 0
+  cycle  -17 : OUT OF SCOPE (negative elements).  3^7 = 2187 > 2^11 = 2048 -- south shore, q = -139 < 0
+
+  Reading: exactly one real cycle -- the trivial one -- satisfies
+  ceiling_lower's hypotheses, and it satisfies the conclusion (3 < 4 < 6,
+  the file's own canary).  The three negative cycles are precisely the
+  cases where the conclusion FAILS, and precisely the cases the
+  positivity hypothesis excludes.  The hypothesis is load-bearing.
+
+==============================================================================
+B -- negative controls: the hypotheses are load-bearing, not decorative
+==============================================================================
+  B1. K one below the forced ceiling: 3^n < 2^K is FALSE for every n.
+  B2. Explicit non-cycle tuple with the conclusion false:
+      x = (1, 1), v = (0, 0) : hstep FAILS (3*1+1 = 4 != 2^0*1 = 1), and 3^2 = 9 > 2^0 = 1
+  B3. 200 random positive tuples with hstep broken and K below the ceiling:
+  B4. The proof's core inequality prod(3x) < prod(3x+1) on positive
+      multisets, and its collapse when a zero element is admitted:
+      -> positivity enters exactly at the cancellation, as the Lean proof
+         has it (hxpos from 0 < X <= x i, then Finset.prod_pos).
+  B5. hstep alone forbids x i = 0:
+      3*x+1 >= 1 for every natural x, and 2^v * 0 = 0, so no step
+      relation can have 0 on its right-hand side.  Positivity of every
+      element is already implied by hstep -- hX/hmin are the route the
+      file takes, not an extra assumption.
+
+==============================================================================
+C -- statement canaries for ceiling_lower / ceiling_pinned at synthetic (n, K)
+==============================================================================
+  For a cycle the two theorems together say: 2^K lies in [3^n, 2*3^n),
+  which pins K = ceil(n*log2 3) = bitlength(3^n) and nothing else.
+  Checked in exact integers.
+  320 synthetic scales checked (n = 1..300 dense, plus 301..5000 samples,
+  plus every convergent denominator and its double up to 200000);
+  edges n = 1 and n = 2 included.  K0 = bitlength(3^n) throughout.
+  n = 1 (the trivial cycle, the file's canary): 3 < 4 < 6.
+
+==============================================================================
+D -- the four repaired downstream statements, instantiated
+==============================================================================
+  The four statements at HEAD (hceil REMOVED from all of them):
+    ratio_bound_at_barina     hmin: 2^71 <= x i ; hpX: 2p < 3*2^71
+    log_gap_at_barina         same hypotheses
+    log_gap_gen               hX: 0 < X ; hmin: X <= x i ; hpX: 2p < 3X
+    quotient_is_convergent_gen  same + hwin: 4000*(p+1)^2 <= 2079*X
+
+  D1. The trivial cycle (n = 1, K = 2, x = 1), the only real cycle in N:
+      log_gap_gen at X=1: 0 < 0.287682072451781 < 0.666666666666667  -- both halves hold
+      (the left half IS ceiling_lower's content in logarithmic form:
+       g > 0 <=> 2^K > 3^n; it is now derived, not assumed.)
+      quotient_is_convergent_gen exits scope at hwin (4000*1 > 2079*1);
+      its conclusion is nonetheless true there: K/n = 2/1 = p_1/q_1.
+
+  D2. The three negative cycles: out of scope at the N typing / hmin,
+      exactly as at item A -- no size hypothesis is reached.
+
+  D3. Where the four downstream hypotheses can be satisfied at all.
+      A surviving cycle at X = 2^71 must satisfy the seam gap, which is
+      equivalent to  ||n*log2 3|| < n*delta,  delta = 2/(3*2^71*ln2).
+      By Legendre (the theorem's own conclusion) such an n is a multiple
+      of a convergent denominator q_j, and |n*L - K| = t*theta_j when
+      n = t*q_j, so the test reduces to  theta_j < q_j*delta.
+
+      j        q_j            theta_j       theta_j/(q_j*delta)  side  admits?
+      0                1   5.849625e-01   1436066127377334534144.000000  below   no
+      1                1   4.150375e-01   1018905132501575401472.000000  above   no
+      2                2   1.699250e-01   208580497437879566336.000000  below   no
+     19        397573379   1.526999e-10           942.904697  above   no
+     20       6189245291   1.380953e-10            54.775657  below   no
+     21       6586818670   1.460458e-11             5.443270  above   no
+     22      65470613321   6.654049e-12             0.249509  below   YES
+     23     137528045312   1.296485e-12             0.023143  above   YES
+     24     753110839881   1.716243e-13             0.000559  below   YES
+     25    5409303924479   9.511512e-14             0.000043  above   YES
+
+      Reading: inside the window the hypothesis set of all four
+      downstream theorems is EMPTY -- which is exactly the T1 closure.
+      The first scale the two-sided seam test cannot exclude is
+      q_22 = 65470613321 (the figure on record in
+      briefs/merle-la8-t1-check-findings.md section (f)), and it lies
+      outside the window: the four statements exit scope at hwin,
+      where they are designed to.
+
+  D3-bis. A refinement the repair makes explicit, recorded flat.
+      log_gap_gen's LEFT half -- now DERIVED from ceiling_lower rather
+      than assumed -- says 0 < K*ln2 - n*ln3, i.e. K > n*log2 3.  With
+      n = t*q_m and K = t*p_m (Legendre), K - n*L = -t*(q_m*L - p_m),
+      so a POSITIVE cycle can only sit on a convergent lying ABOVE
+      log2 3 -- the odd-indexed ones.  The two-sided screen above is
+      therefore not tight for the north shore:
+      first two-sided-admissible : q_22 = 65470613321 (below L -- south only)
+      first north-shore-admissible: q_23 = 137528045312 (above L)
+      That is Hercher's threshold exactly.  Nothing in the Lean chain
+      depends on this; it is recorded because ceiling_lower is what
+      makes the one-sidedness a theorem rather than a hypothesis.
+
+  D4. At n = q_23 = 137528045312 (the first scale a positive cycle
+      could occupy), with K = p_23 = ceil(n*log2 3):
+      0 < 8.986549e-13 < 3.883026e-11   (log gap, both halves hold)
+      hwin: 4000*n^2 = 75655852989358100709376000  >  2079*2^71 = 4908899958942996199636992  -- OUT OF SCOPE, correctly
+      K/n = 217976794617/137528045312 = p_23/q_23, a convergent of log2 3.
+
+==============================================================================
+E -- round-10 facts re-confirmed (the repair could have disturbed them)
+==============================================================================
+  all 22 pass; tightest 5.1713x at q = 6586818670 (LHS = 949258476701148143940000, RHS = 4908899958942996199636992)
+  exact test at the same q: 5.4433x -- integer form conservative by design
+  canary: FAILS at (q_22, q_23) = (65470613321, 137528045312) -- LHS 26580893368085642900386000 > RHS
+  delta = 4.073367e-22 ; withdrawn window 4.95477e+10 = sqrt(2) x corrected 3.50355e+10
+
+==============================================================================
+SUMMARY
+==============================================================================
+  recorded checks : 190
+  failures        : 0
+
+  Trust boundary: statements and structure only.  No Lean toolchain was
+  installed and no proof was compiled; kernel-3 / [propext] / no-axiom
+  claims rest on his committed logs and his four-way protocol.
