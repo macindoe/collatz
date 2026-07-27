@@ -391,3 +391,397 @@ None of this touches a theorem statement, a proof, or any number that enters
 the discharge. It is comment hygiene in the one file that did not get the
 sweep the scripts got — and it is exactly the class of thing this pass was for,
 which is why it is recorded rather than let go.
+
+---
+
+## Half 2 — the four negative measurements
+
+They are offered freely and claim nothing. They are verified in the same
+register.
+
+## 6. Item 8 — the cheap reproductions
+
+### 6.1 The four lag-1 autocorrelations, and which statistic they are
+
+Continued fractions built here from scratch at two precisions (2600 and 3000
+digits; π from `mpmath` at two precisions), with the number of *stable* partial
+quotients asserted before any statistic is computed: 2100 for `log₂3`, 1600
+each for π, `log₂5`, `log₂7` — all well above the 1500 used.
+
+| constant | his | ours, on `log a_i` | ours, on raw `a_i` |
+|---|---|---|---|
+| `log₂3` | `−0.070` | **`−0.0700`** | `−0.0055` |
+| π | `−0.063` | **`−0.0631`** | `−0.0012` |
+| `log₂5` | `−0.104` | **`−0.1035`** | `−0.0039` |
+| `log₂7` | `−0.103` | **`−0.1032`** | `−0.0088` |
+
+**All four reproduce**, to three decimals, **once the statistic is read as the
+lag-1 Pearson correlation of `log a_i`.** On the raw partial quotients the same
+four series give an order of magnitude less, and essentially noise — because
+under Gauss–Kuzmin `a_i` has infinite mean and infinite variance, so a raw
+Pearson is dominated by its single largest term (here `max a_i = 20776`, in π).
+Taking logs first is the right choice and is evidently what he did. It is worth
+**one scope clause** because the letter says "autocorrelation of the partial
+quotients", and a reader reproducing it literally will get `−0.006` and think
+something is wrong. For completeness: the rank (Spearman) version gives
+`−0.086 / −0.083 / −0.127 / −0.114` — same sign, same ordering, same
+conclusion, so nothing depends on the choice.
+
+**His retraction is CONFIRMED.** `log₂3`'s `−0.070` sits *inside* the range of
+the three control constants (`[−0.1035, −0.0631]`), and is the *second smallest*
+in magnitude of the four. Against real continued fractions on a common footing
+there is no anomaly to explain. Confirming a correspondent's own self-correction
+is exactly what the two-key protocol is for, and it confirms.
+
+### 6.2 Gauss–Kuzmin over 2000 partial quotients, and **the chi-squared question**
+
+The fit itself: over the 2000 stable partial quotients of `log₂3`, the largest
+deviation of any bin probability from Gauss–Kuzmin is `|p_obs − p_exp| =
+0.008425`, and the statistic is well below its degrees of freedom at every
+binning tried (`max χ²/dof = 0.5666` over binnings from 3 to 40 bins). **The
+substantive claim — that `log₂3` is statistically ordinary — survives every
+reading, unqualified.**
+
+**The number `0.00103` itself does not.** The brief asked us to establish
+whether it is a statistic, a p-value, or a normalised distance, and to give the
+value under each reading. Answering flatly:
+
+| reading | value over binnings 3…40 bins | verdict |
+|---|---|---|
+| chi-squared **statistic** | `1.079` … `22.10` | not `0.00103`; a statistic that small over 2000 draws would be a fit far too good to be random, not a good fit |
+| **p-value** | `0.9997` … `0.9982` (the fit is excellent, so the p-value is near 1) | `0.00103` as a p-value would mean **rejection** at the 0.1 % level — the opposite of what the letter says |
+| **normalised distance** `χ²/N` | `0.000540` … `0.011048` | right order of magnitude; **brackets** `0.00103` |
+| KL divergence | `0.000273` … `0.005947` | right order of magnitude |
+| squared Hellinger | `0.000137` … `0.003466` | right order of magnitude |
+
+So: **it is a normalised distance, not a statistic and not a p-value.** Which
+normalisation and which binning is not recoverable from the letter — the
+readings that land in the right decade span a factor of twenty across natural
+binnings, i.e. the quantity is binning-dependent at exactly the scale of the
+number quoted. The closest single reading found is `χ²/N` at bins
+`{1},…,{9},{≥10}`, which gives `0.001214`. **This is a question, not a dispute:
+one clause naming the normalisation and the binning would settle it, and
+nothing in the conclusion depends on the answer.**
+
+### 6.3 The denominator-ratio range, against φ
+
+| claim | ours | verdict |
+|---|---|---|
+| ratios run **1.02 to 55.6** | min `1.01799`, max `55.5836` | **match** |
+| the max | `q₁₄/q₁₃ = 10590737/190537`, the partial quotient `55` | confirmed |
+| the min | `q₁₅/q₁₄ = 10781274/10590737`, a partial quotient `1` | confirmed |
+| window-independence | the same min and max for *every* window `j = 1..h` with `h ≥ 16` — so the range does not depend on where he stopped | recorded |
+| φ's denominators are the Fibonacci numbers | exact for the first 30 | confirmed |
+| φ's ratios are the constant `1.618` | `[1.617978, 1.618056]` beyond `j = 10`; every partial quotient is `1` | confirmed |
+| `log₂3` is therefore not of golden type | its ratio range is ~54 wide against φ's ~1e−4 | confirmed |
+
+**His own scoping is correct and worth endorsing rather than merely recording.**
+Statistical ordinariness closes arguments that need `log₂3` to be *peculiar*;
+it does not touch arguments resting on **effective diophantine input**, because
+an effective irrationality exponent is perfectly compatible with a
+Gauss–Kuzmin-typical continued fraction. Our own L-A7 chain is the live example:
+it consumes Rhin 1987's *effective* exponent `13.3` and would consume it
+identically whatever the partial quotients looked like. He says exactly this,
+and it is right.
+
+## 7. Item 9 — the neighbours: the structural claim, verified; the empirics, his
+
+### 7.1 The structural claim, derived in our own coordinates
+
+Let `a` be **odd** and let `T_a(x) = (a·x + 1)/2^v` be the odd-to-odd map,
+`v = v₂(a·x+1) ≥ 1` (`a·x+1` is even because both `a` and `x` are odd). One
+step, in `log₂`:
+
+> `log₂ T_a(x) − log₂ x = log₂(a + 1/x) − v`.
+
+**The averaging convention, stated precisely — this is where such claims
+usually fail.** Two things are averaged and they are averaged differently:
+
+1. the `1/x` term is **dropped**; it is `O(1/x)`, its total along an orbit is
+   dominated by a convergent series once the orbit is above any fixed bound, and
+   it can therefore change no drift *sign*;
+2. `v` is averaged under the standard 2-adic model `P(v = k) = 2^{−k}` on
+   `k ≥ 1`, whose mean is `Σ k·2^{−k} = 2` **exactly**.
+
+Both are **per-step arithmetic means over odd steps** — not time averages along
+a single orbit, and not size-weighted. That is the convention under which the
+statement is true, and it is the convention in which the program's own drift
+statements (aeh.md §13; `README`'s "1/3 rate, drift — almost-everywhere
+statements only") are phrased.
+
+Then the per-step drift is `D_a = log₂ a − 2`, and
+
+> `D_a < 0 ⟺ log₂ a < 2 ⟺ a < 4`.
+
+Among odd `a` in `3..31`, exactly one has negative drift, and it is `a = 3`
+(`−0.415037`; `a = 5` gives `+0.321928`, `a = 7` gives `+0.807355`). The
+equivalence `log₂a < 2 ⟺ a < 4` is exact for every integer `a`.
+
+**Verdict: the structural claim is CORRECT, and it is exact arithmetic rather
+than a measurement** — it is structural exactly as he says. It is also standard
+(it is the textbook `5x+1`-divergence heuristic), and his own REQ-MATH-050 says
+so in as many words; nothing here is claimed as new by anyone.
+
+One boundary worth stating, because the sentence sits next to a table of cycle
+counts: a negative drift is a statement about the *average step*, and cycle
+existence is not a drift question. The structural claim explains why `a = 3` is
+the interesting `a`; it does not bear on how many cycles any `a` has.
+
+### 7.2 His empirics — recorded as his, unreplicated
+
+Recorded here without replication, with his own caveat carried as he states it:
+
+- correlation between cycle count and approximation quality of `log₂ a`:
+  **`+0.22`** (Markov constant), **`−0.29`** (largest partial quotient) —
+  nothing; **drift gives `−0.57`**;
+- worst-protected neighbour `a = 17` (partial quotient 215) has **no** cycles;
+  best-protected in range `a = 21` has **none either**;
+- his caveat, verbatim in substance: for large `a` the orbits leave his search
+  window, so those zeros mean **"not found here"**, and the drift statement does
+  not depend on the search.
+
+### 7.3 The stopping rule, biting — recorded
+
+Replicating the three correlations would require recomputing cycle counts for
+`ax+1` over odd `a = 3..31`, i.e. **a cycle search over other `a`**. The brief
+and `README`'s binding stopping rules forbid it, and the main session's launch
+instructions named this item specifically. **The want is recorded and the search
+is not run.** What that costs is stated plainly: `+0.22`, `−0.29` and `−0.57`
+stand entirely on his side of the two-key protocol and should be described that
+way anywhere they are used. What it does not cost is anything structural — the
+only non-empirical statement in item 3 is verified above, exactly, and it needs
+no search at all.
+
+## 8. Item 10 — the drift from the inside
+
+This is the substantive one and the effort went here.
+
+### 8.1 `D(x)` and its asymptotic — confirmed, with the next term
+
+`D(x) := log₂(3 + 1/x) − log₂(3 − 1/x) = log₂((3x+1)/(3x−1))` — the two forms
+are identical (verified at five values, to 50 digits).
+
+Writing `u = 1/(3x)`, `D(x) = (2/ln2)·artanh(u)`, whose series has **all
+positive** higher terms, so:
+
+> `D(x) = 2/(3x·ln2) · (1 + 1/(27x²) + O(x⁻⁴))`, and `D(x) > 2/(3x·ln2)` strictly.
+
+Confirmed numerically at 160 digits: at `x = 2⁷¹` the relative excess of `D`
+over its asymptote is `6.64319·10⁻⁴⁵`, and `1/(27x²) = 6.64319·10⁻⁴⁵` — agreeing
+to every printed digit. So his asymptotic `2/(3x·ln2)` is right, and the
+direction of the approximation is now pinned (`D` is *above* it, by a relative
+`1/(27x²)`).
+
+### 8.2 "Summed around a cycle that is exactly `n·δ`" — adjudicated
+
+**What is exact.** Split `D` into its two halves,
+`D⁺(x) := log₂(1 + 1/(3x))` (north) and `D⁻(x) := log₂(1 − 1/(3x))` (south), so
+`D = D⁺ − D⁻`. Then, for a cycle:
+
+> **Identity.** For a positive cycle of `n` odd elements with `K = Σ v_i`,
+> `Σ_i log₂(1 + 1/(3x_i)) = K − n·log₂3` **exactly**;
+> for a negative cycle (elements `y_i = |x_i|`),
+> `Σ_i log₂(1 − 1/(3y_i)) = K − n·log₂3` **exactly**.
+
+*Derivation, three lines, ours.* Each step is `3x_i + 1 = 2^{v_i}·x_{i+1}`, so
+`3 + 1/x_i = 2^{v_i}·x_{i+1}/x_i`. Multiplying around the cycle the `x`'s
+telescope and `Σ v_i = K`, giving `∏(3 + 1/x_i) = 2^K`, i.e.
+`Σ log₂(3 + 1/x_i) = K`. Subtract `n·log₂3`. The south shore is the same
+computation with `3y_i − 1 = 2^{v_i} y_{i+1}`. ∎
+
+Verified on **all four real cycles, both shores** (`+1`, `−1`, `−5`, `−17`),
+agreeing with `K − n·log₂3` to 45 digits in every case.
+
+**This identity *is* the seam identity, written per step.** Its right-hand side
+is `log₂(2^K/3^n)` — precisely the quantity T1's chain bounds (la8 §(c):
+`0 < K·ln2 − n·ln3 = ln(1 + q/3^n)`). So the "third face" claim is **correct**,
+and in fact stronger than he states it: the per-step drift does not merely
+*bound* the seam gap, it **sums to it exactly**.
+
+**What is not exact.** The sum of the *full* `D` around a cycle is not `n·δ`.
+`D` is strictly decreasing, so for a cycle with all elements `≥ X`:
+
+> `Σ_i D(x_i) ≤ n·D(X) = n·δ·(1 + 1/(27X²))`,  `δ := 2/(3X·ln2)`,
+
+with **equality if and only if every `x_i` equals `X`** — which no cycle
+achieves (exhibited: on the `−17` cycle `Σ D = 0.18834` against
+`n·D(x_min) = 0.39608`). So the statement is a **sharp upper bound whose
+equality case is the extremal one**, not an identity. At `X = 2⁷¹` the two sides
+agree to 44 decimal places, which is presumably why it reads as exact.
+
+**But the constant identification is exact enough to be structural, and it is
+the real content.** `δ`, the constant that makes T1's window finite, satisfies
+
+> `D(x_min) / δ = 1 + 6.64·10⁻⁴⁵` at `x_min = 2⁷¹`
+
+— i.e. **`δ` is the per-step north–south drift evaluated at the minimum
+element**, to a relative `1/(27x_min²)`. And the factor 2 in `δ` is *exactly*
+the two-shore doubling: `log₂(1+u) − log₂(1−u) = 2u/ln2 + O(u³)`.
+
+That last point deserves one flat sentence, because it is a reframing rather
+than a confirmation. In the la8 derivation the factor 2 in `δ` arrives from a
+**crude step** — the two-bound `(m+1)^n < 2m^n` used to control the difference
+of powers. In the drift reading it arrives from a **symmetry** — north and
+south contributing one unit each. Two different mechanisms landing on the same
+`2`. The drift reading is the one that explains the constant as structure
+rather than as slack, and that is a genuine gain in understanding even though
+no number moves.
+
+### 8.3 `x* = 7/3` — exact, unique, and what the two objects are
+
+- `(3x+1)/(3x−1)` at `x = 7/3` is `8/6 = 4/3` in exact rationals; his form
+  `(3 + 3/7)/(3 − 3/7) = 24/18 = 4/3` likewise. **Confirmed.**
+- `log₂(4/3) = 2 − log₂3` **identically** (`log₂4 − log₂3`). Confirmed to 50
+  digits — but note that this identity is a *tautology*; it carries the claim,
+  it is not the claim.
+- **Uniqueness, and it is exact:** `D(x) = log₂(4/3) ⟺ 3(3x+1) = 4(3x−1) ⟺
+  9x + 3 = 12x − 4 ⟺ 3x = 7 ⟺ x = 7/3`. One linear equation, one root. `D` is
+  strictly decreasing, so `D(x) > 2 − log₂3` below `7/3` and
+  `D(x) < 2 − log₂3` above.
+- At `x = 2⁷¹`: `D(x)/(2 − log₂3) = 9.81446·10⁻²²`. **His `9.8·10⁻²²`
+  confirmed.**
+
+**What "the sign information" is, as a quantity.** The two objects being
+compared are `D(x)` — the per-step cost of the `±` choice, which is what the
+sign of the `1` in `3x ± 1` is worth — and the constant `2 − log₂3 =
+0.4150374992788…`, which is "the drift" in exactly the sense item 3 uses (item
+3's drift is `log₂a − 2`; at `a = 3` its magnitude is `2 − log₂3`). The
+brief's candidate — our `|q| ≥ 1` seam input — is **not** the right
+identification in general, and saying so is the point of the check. The
+constant has three exact descriptions, all of the same number:
+
+- (a) the mean per-odd-step contraction of the Collatz map, `2 − E[v] + …`,
+  i.e. minus item 3's drift at `a = 3`;
+- (b) `D⁺(1) = log₂(1 + 1/3)`, the **north** per-step drift at `x = 1`;
+- (c) `K − n·log₂3` for the trivial cycle (`n = 1`, `K = 2`) — i.e. the
+  log-seam gap of the `|q| = 1` instance **at `n = 1` and only there**. In
+  general the seam input is `log₂(2^K/3^n) ≥ log₂(1 + 1/3^n)`, which is not a
+  constant.
+
+All three verified equal, exactly. So "the sign information equals the drift at
+`x* = 7/3`" **is** a statement about two well-defined objects and not a
+coincidence of two expressions — with the qualification that the identity
+quoted to justify it is trivial, and the content is the root.
+
+**One corollary, ours, which sharpens it into something with integer teeth:**
+
+> Since `D` is strictly decreasing and `7/3` lies strictly between the odd
+> integers `1` and `3`, **`x = 1` is the only odd positive integer at which the
+> sign information exceeds the drift** (`D(1) = 1` exactly, against
+> `2 − log₂3 = 0.415`; `D(3) = log₂(5/4) = 0.322` is already below it, and it
+> falls from there).
+
+Verified for every odd `x ≤ 199` and true by monotonicity beyond. That is the
+form in which his observation says something: *the `±1` matters more than the
+drift at exactly one odd integer, and that integer is the trivial cycle.*
+Everywhere else — "the terrain is grey", in his words — and at `2⁷¹` the sign
+is worth `10⁻²¹` of the drift.
+
+### 8.4 Verdict — theorem or measurement
+
+Of the four negatives:
+
+**Items 1, 2 and 3 are empirical records to be logged as his.** Item 1 (the
+golden ratio) and item 2 (the rhythm of the peaks) reproduce here, with two
+scope clauses (§6.1, §6.2) and no dispute; item 3's *empirics* are unreplicated
+by the stopping rule (§7.3). Item 3 does contain one exact statement — the
+drift dichotomy `log₂a < 2 ⟺ a < 4` — but it is standard and he says so, so it
+is a confirmation, not a hand-back.
+
+**Item 4 contains an exact statement worth restating as a theorem — but it is
+not the one he names.** The precedent is the two upgrades we already handed
+back (`ε + ε′ = 1`, and `γ·log₂3 = c_gen` with its symbolic derivation), where
+his numerics undersold what he had. The same thing has happened again:
+
+> **Hand back as a theorem.** For a cycle of the odd map with `n` odd elements
+> and `K = Σ v₂(3x_i ± 1)`, the summed per-step drift equals the log-seam gap
+> **exactly**, on both shores:
+> `Σ_i log₂(1 + 1/(3x_i)) = K − n·log₂3` (north) and
+> `Σ_i log₂(1 − 1/(3y_i)) = K − n·log₂3` (south).
+> **Corollary.** With `X = x_min`, `Σ_i D(x_i) ≤ n·D(X)` with equality only in
+> the extremal case, and `D(X) = δ·(1 + 1/(27X²))` where `δ = 2/(3X·ln2)` is
+> T1's constant. The factor 2 in `δ` is the two-shore symmetry.
+
+That is the "third face of the same wall" made exact, and it is a **structural
+statement for the joint note, not a measurement** — the drift is not a new
+object, it is the seam identity read one step at a time, and now with an
+identity rather than an approximation.
+
+**Two things in item 4 are correct but should not be restated as theorems.**
+"Summed around a cycle that is exactly `n·δ`" is a sharp bound with an extremal
+equality case, not an identity (§8.2) — handing it back as an identity would be
+handing back something false at the 45th decimal, and the honest restatement is
+the one above. And `x* = 7/3` is exact and unique, but the identity carrying it
+is a tautology; what is worth a sentence is the **corollary** in §8.3 — `x = 1`
+is the only odd integer where the sign outweighs the drift — which is his
+observation with integer teeth, and which he can have.
+
+---
+
+## 9. Flags, collected
+
+1. **`j = 21` is correct** — the surviving index label in the discharge is not
+   stale. Recomputed at all 22 convergents (§2.2).
+2. **The `053` no-result-changed claim holds**, with the precision that the
+   monotonicity sentence proves `≥ 22` and a separate computation supplies
+   `= 22`, at a margin of `2.0039×` (§3.4).
+3. **The citation claim (v) is confirmed** on our side (§3.5). Two adjacent
+   items recorded flat: the deleted `OUT-052` `(d-bis)` section whose figures
+   the ledger's L-A8 seed block cites; and our own la8 record's citation of the
+   old `OUT-053` structure, accurate as of its pin.
+4. **`T1Structure.lean` carries two different `q₂₁`** at `c991430` (lines 188
+   and 433), plus the pre-054 `δ` in the `seam_bound` docstring and the
+   withdrawn `4.955e10` in the file header (§5.2).
+5. **Cor. 29's `X₀ ≥ 3·2⁶⁹` is promised, not landed** — absent from the entire
+   Lean repository; its natural home is ledger prose, and the shared ledger has
+   not moved (§5).
+6. **The autocorrelation statistic is on `log a_i`**, not the raw partial
+   quotients; the letter's phrasing is one clause away from reproducible
+   (§6.1).
+7. **`0.00103` is a normalised distance**, not a statistic and not a p-value;
+   which normalisation and which binning is not recoverable, and the natural
+   readings span a factor of twenty around it (§6.2).
+8. Item 3's empirics are **his and unreplicated**; the stopping rule was
+   applied and the want recorded (§7.3).
+9. No pushes, no forks, issues, stars, watches or comments; clones read-only in
+   the scratchpad; no key turned, no ledger text, no reply paragraph. Cycles
+   front PARKED throughout.
+
+## 10. Recommendation (recommendation only — no key is turned here)
+
+**What belongs in the reply.**
+
+1. That the hygiene pass is verified, at the strongest grade available: the
+   three generator scripts exist, and all five relevant scripts were **run**
+   here and reproduce their committed outputs byte-identically. Every number
+   independently recomputed, 115 checks, 0 failures.
+2. That `5.17× at j = 21` is **correct** — worth saying explicitly, because he
+   had just changed conventions and the natural worry is that a label went
+   stale; it did not.
+3. The `053` argument accepted, with the one precision stated as a compliment
+   to his own red team rather than a correction: the monotonicity gives `≥`,
+   the equality is a computation, the margin was `2.0039×`, and he ran it.
+4. Three flat artifact notes, in descending order of size: (a) `T1Structure.lean`'s
+   two surviving `q₂₁`/`q₂₂` subscripts and the pre-054 `δ` in the same
+   docstring — the sweep reached the Python and not the Lean comments; (b) the
+   deleted `OUT-052` `(d-bis)` section whose median-15601 figures the ledger
+   cites, with the offer that he commit the script that produced it, exactly as
+   he did for 043/055/056; (c) Cor. 29's condition recorded as promised.
+5. The four negatives reproduced, with the two scope clauses (`log a_i`; the
+   chi-squared reading) put as questions, and his own retraction confirmed on a
+   common footing.
+6. **The theorem hand-back** of §8.4 — the per-step drift identity on both
+   shores, with `δ = D(x_min)(1 + 1/(27x_min²))` and the factor 2 named as the
+   two-shore symmetry — offered as the third-face claim made exact, with the
+   flat note that "exactly `n·δ`" is a sharp bound rather than an identity, and
+   the `x = 1` corollary handed back as his.
+
+**What belongs in a ledger entry: nothing yet.** The shared ledger has not
+moved since our own round-10 push, and the entire hygiene pass is artifact-side
+— it repairs the evidence under claims already recorded, and changes no claim.
+If anything eventually belongs in L-A8, it is one clause of the §8.4 theorem as
+the third face; that is a co-edit decision, gated on the author's go-ahead, and
+it is not drafted here.
+
+**Owed next:** main-session review (re-run `experiments/merle_r11_hygiene_check.py`)
+and merge. Nothing else is owed by this session.
