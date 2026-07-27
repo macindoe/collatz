@@ -357,3 +357,156 @@ exactly in-session. **No script is committed for this item** — there is nothin
 a script would carry that the table above does not, and the substantive
 computations behind these figures already have committed scripts
 (`experiments/merle_la8_t1_check.py`).
+
+---
+
+## Item 3 — the shared repository and `NOTE.md` (fresh clone, 2026-07-28)
+
+Method: unauthenticated `git clone https://github.com/macindoe/one-obstruction-three-faces.git`
+into the session scratchpad. Nothing was pushed, branched on the remote, or
+otherwise written.
+
+### 3.1 Current HEAD: **`c966875` — unmoved**
+
+```
+c96687544fd387fd8bcff1df2c04056a2be99f3a
+macindoe <begemite0.o@gmail.com>
+Sun Jul 26 19:21:46 2026 +1000
+Round-10 co-edits: L-A7 closed out at two keys with our margin proof offered as
+the second proof at the true c_gen; L-A8 Macindoe key turned on the mathematics,
+kernel claims deferred
+```
+
+This is **exactly the SHA our record expects** (HANDOFF item 1, "Round-10
+co-edit: PUSHED, 2026-07-26 … shared HEAD now `c966875`"). **The repository has
+not moved since our own round-10 push.** No new commits, by him or anyone; the
+commit immediately below ours is still his `826970e` of 2026-07-25.
+
+So the material fact the brief asks about is a negative one, and it is clean:
+**nothing of his has landed in the shared repository since round 10**, and his
+round-11 letter's proposals about `NOTE.md` are proposals only — he has not
+acted on them in the file. Working tree at HEAD: `LEDGER.md`, `NOTE.md`,
+`PROTOCOL.md`, `README.md`, and nothing else.
+
+### 3.2 `NOTE.md` against the "19 July skeleton" he remembers
+
+**The file is still the skeleton, and it still says so in its own first line.**
+Header, verbatim at HEAD:
+
+> **ARCHITECTURE DRAFT — for co-editing (Merle, 2026-07-19). Prose not started;
+> this is the load-bearing skeleton, seeded the way this repository seeds
+> everything: edit directly, strike freely. Every numbered claim enters via
+> LEDGER.md first (all entries below have their keys turned).**
+
+Working title, verbatim: *One obstruction, three faces: the Collatz cycle
+problem between size, digits, and the local–global seam.*
+
+**Section structure at HEAD — eight numbered sections plus an appendix list,
+unchanged since the skeleton commit:**
+
+| § | Heading, verbatim | What it carries | Ledger entries cited |
+|---|---|---|---|
+| 0 | The porch (elementary front door) | Gersonides 1342/43; the spent `\|q\| = 1` stock; the four real loops; the crank-proof detector | [L-A3] |
+| 1 | The problem and the two shores | the cycle half; the `×3−1` mirror; the anchor correspondence with its folklore provenance (Steiner 1977, Crandall 1978, Eliahou 1993, Halbeisen–Hungerbühler 1997, Simons 2005, Simons–de Weger 2005, Lagarias's bibliographies) | — |
+| 2 | Face I — size (the archimedean shadow) | the δ8 impossibility (Merle side) and the scissors; the staircase family (Macindoe side), contiguous `p ∈ {2,…,23}` | [L1] |
+| 3 | Face II — digits (the 2-adic body) | reduced coordinates and the anchor walk; the transport recurrence; the repeated-word gcd law | [L-A1], [L-A2] |
+| 4 | Face III — the seam (local–global) | no Hasse gap; the local obstruction at 7; the realization-height theorem | [L3], [L-A4] |
+| 5 | The quantitative complements | the Benford side-asymmetry; the AEH class skeleton and its measured spectrum | [L-A3], [L4] |
+| 6 | What remains, stated exactly | the residual hypothesis | [L-A4], [L-A3 cadeau B] |
+| 7 | Method (the actual novelty for many readers) | two stacks never merged; the two-key rule; the ledger as spine | [L1], [L-A3] |
+| — | Appendices (candidates) | A. the Lean artifact and its axiom profile; B. the shared test vectors; C. the two gateways | — |
+
+**§6, verbatim and in full, as it stands at HEAD:**
+
+> ## 6. What remains, stated exactly
+>
+> The residual hypothesis, now stated exactly: the **equidistribution of `R_r
+> mod q`** along the aperiodic forced family (the *arithmetic* distribution of
+> the seam residues across profiles — to be kept terminologically distinct from
+> the ergodic/statistical equidistribution of AEH orbits, `aeh.md 13.6.7`; note
+> that `R_r mod ℓ` is in fact non-uniform at every prime yet unconfined,
+> structural bias strongest at `7 = 2³−1`, consistent with the prime-local
+> probe's *no-coset-confinement* verdict; the structured refuge is closed by
+> descent [L-A4]); strictly weaker than `ProductBoundThreshold`; honestly placed
+> on the ×2×3 gap. The capacity–demand margin is positive and grows linearly —
+> `≈ 0.27·n` in the odd-step stratum, `≈ 0.08·n` in general [L-A3 cadeau B;
+> REQ-MATH-014] — so the no-conspiracy cycle-count decays like `2^(−margin)`,
+> making that one equidistribution the exact remaining gap. No promise past the
+> calculations.
+
+**The abstract-or-opening: there is no abstract.** `NOTE.md` has no abstract
+section and no position paragraph. The opening is **§0, "The porch (elementary
+front door)"** — the Gersonides front door — reached immediately after the
+header and the working title. Its text at HEAD:
+
+> Gersonides, 1342/43, *De numeris harmonicis*, written for the composer
+> Philippe de Vitry: the only pairs of harmonic numbers differing by one are
+> (1,2), (2,3), (3,4), (8,9) — a mod-8 remainder argument and a two-line
+> factoring. Fourteenth-century, referee-proof, and the reader meets it before
+> Baker. Consequence stated immediately: the "free locks" `|q| = 1` are a
+> **spent finite stock** (three tickets, dealt one north / two south), and the
+> four real loops of the map — `{+1}` and `{−1, −5, −17}` — are the stock's
+> biography [L-A3]. The crank-proof detector falls out as a corollary: any
+> parity/speed argument forbidding loops forbids the four that exist.
+
+Recorded against his three round-11 proposals, as facts about the file and
+nothing more:
+
+- *(i) make the counting dichotomy the load-bearing result and the three faces
+  its instances* — the file does not currently name a counting dichotomy at all.
+  The word "dichotomy" **does not occur in `NOTE.md`**. Its nearest present
+  content is §2's pairing of the δ8 impossibility with the staircase sharpness
+  as "One wall, one analytic face and one constructive face", and §6's
+  capacity–demand margin. The three faces are currently coordinate,
+  not instances of a stated result.
+- *(ii) state the position once, early, in the abstract* — **there is no
+  abstract to state it in.** The nearest thing to a position statement in the
+  file is §6's closing "No promise past the calculations", which is at the end,
+  not early.
+- *(iii) treat the genre as mapping-and-instruments rather than announcing a
+  result* — the file already leans that way: §7 is titled "Method (the actual
+  novelty for many readers)", and the shared `README.md` describes the whole
+  thing as "A joint technical-comparison note between two independent Collatz
+  research programs" whose status line reads "note not started".
+
+### 3.3 Is a 19 July skeleton what is actually there? **Yes structurally, no textually — and the date is off by one on his own header**
+
+Commit history of `NOTE.md`, complete:
+
+| Commit | Date (author TZ) | Author | What it did |
+|---|---|---|---|
+| `63c396d` | 2026-07-17 10:47 +1000 | macindoe | seeded the note **stub** with README/protocol/ledger |
+| `f496abe` | **2026-07-18 23:48 +0200** | Eric MERLE | **seeded the architecture skeleton** (the file this record calls "the skeleton") |
+| `61d2cf3` | 2026-07-23 09:16 +0200 | Eric MERLE | §4 realization-height reference made renumber-proof; pin invited on co-edit |
+| `430c00c` | 2026-07-24 09:06 +1000 | macindoe | §4: pinned the realization-height reference (`itinerary.md` 14.15.5(b), Cor. 14.15.5.4) |
+| `d2407b9` | 2026-07-24 09:07 +1000 | macindoe | §4: "positive integer" → "positive **odd** integer" |
+| `b8842bb` | **2026-07-24 12:40 +0200** | Eric MERLE | **§4 and §6 reframed** to the no-Hasse-gap / local-obstruction and equidistribution framing |
+| `6b9f2b1` | **2026-07-24 17:29 +0200** | Eric MERLE | **§6** arithmetic-vs-AEH-equidistribution disambiguation |
+
+Three facts, stated flatly:
+
+1. **Structurally it is the skeleton.** `git diff f496abe HEAD -- NOTE.md` is
+   **2 insertions, 2 deletions, in one file** — exactly one line of §4 and one
+   line of §6 rewritten. Every other line of the file, including the header, the
+   working title, all eight section headings and the text of §0, §1, §2, §3, §5
+   and §7, is byte-identical to the skeleton commit.
+2. **Textually it is not the 19 July text.** The two rewritten lines are the
+   two most load-bearing in the file — §4 (Face III, the seam) and §6 (what
+   remains) — and both were rewritten **by him on 2026-07-24**, absorbing our
+   two one-line pins in the process. The §4 line went from "solvable over ℝ,
+   over ℤ₂, over ℤ₃ at every rotation and over ℤ at none … **no finite place
+   alone will do it**" to the no-Hasse-gap / local-obstruction-at-7 statement;
+   the §6 line went from a single sentence ("The residual hypothesis
+   (anchor-walk rigidity beyond the spent stock), its relation to
+   `ProductBoundThreshold` (strictly weaker), and its honest placement on the
+   ×2×3 gap. No promise past the calculations.") to the paragraph quoted in §3.2
+   above. This matches our own record exactly (HANDOFF item 1: "**§4 and §6
+   rewritten by him 2026-07-24**").
+3. **The date.** The skeleton commit is timestamped **2026-07-18 23:48:48
+   +0200** — 18 July in his own timezone, by eleven minutes. The line *inside*
+   the file says "(Merle, 2026-07-19)", and that line is his and is unchanged.
+   So "the NOTE.md skeleton from 19 July" is his file's own self-description, is
+   off by one day against its own commit timestamp, and in any case does not
+   describe the current §4 and §6. **A misremembered date in a letter is not a
+   finding of substance; it is recorded here only so that the note's shape is
+   discussed against the file that exists.**
