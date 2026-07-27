@@ -510,3 +510,88 @@ Three facts, stated flatly:
    describe the current §4 and §6. **A misremembered date in a letter is not a
    finding of substance; it is recorded here only so that the note's shape is
    discussed against the file that exists.**
+
+---
+
+## Item 4 — the three faces, as `NOTE.md` presents them, and their status today
+
+Sources: `NOTE.md` and `LEDGER.md` at shared HEAD `c966875`, plus our own wiki.
+Half A checks the *independence* of the three; this item records only their
+*status*. Nothing here is a recommendation.
+
+### 4.1 The three faces and what each rests on
+
+**Face I — size (the archimedean shadow), `NOTE.md` §2.** Two halves, one
+per side.
+
+| Half | What it is | Ledger entry | Wiki / artifact home | Status as the ledger states it |
+|---|---|---|---|---|
+| the δ8 impossibility + the scissors (Merle side) | why no uniform Product-Bound refinement closes the window; required exponent below Dirichlet's floor, `k_min ~ X₀^{1/2}` vs `k_max ≤ X₀^{1/3}` | **none** | — | **no ledger entry exists** (see 4.3) |
+| the staircase family (Macindoe side) | the sharpness that makes the same wall constructive; contiguous verified range `p ∈ {2,…,23}` | **[L1]** as §2 cites it; the `p = 7` instance is **[L2]** | `cycles.md` §12.8.3 (staircase), §12.8.6 (the `p = 22` resolved obstruction) | **L1: `corrected` (both directions), and productive — closed 2026-07-17** — not a "two keys" entry, and not phrased as one. **L2: `two keys` (2026-07-16)** |
+
+**Face II — digits (the 2-adic body), `NOTE.md` §3.**
+
+| Component | Ledger entry | Wiki / artifact home | Status as the ledger states it |
+|---|---|---|---|
+| the transport recurrence; the collapse of the `p` divisibility conditions to one | **[L-A1]** | `itinerary.md` Lemma 14.15.9.2 (fixed-point form); his `TransportRecurrence.lean` | **both keys** on the mathematics, **plus the Lean key**: "With Macindoe's independent-code + fixed-point key, the mathematics of L-A1 now carries **both keys**, neither derived from the other." Kernel-3, 0 `sorry`, non-vacuity canary proved in Lean |
+| the repeated-word gcd law | **[L-A2]** | `experiments/prime_local_probe.py`, `experiments/merle_round5_check.py`; his `REQ-MATH-012` at `ec4f229` | **two keys** (2026-07-19) |
+
+**Face III — the seam (local–global), `NOTE.md` §4.**
+
+| Component | Ledger entry | Wiki / artifact home | Status as the ledger states it |
+|---|---|---|---|
+| the closure equation, the no-Hasse-gap reading and the local obstruction at 7 | **[L3]** | `experiments/merle_pincer_check.py` (item 3); `experiments/merle_round8_check.py` part (b); his `REQ-MATH-017` | **two keys** (2026-07-17), with the 2026-07-24 correction **accepted into the two-key record** ("Correction **accepted into the two-key record**") |
+| descent: no new cycle in structured families | **[L-A4]** | `cycles.md` Remark 12.6.1.4 | **two keys**, plus the **Lean key on the structured half** (`ContentDescent.lean`, kernel-3) with our statement-match recorded read-not-built |
+| the realization-height theorem | **none — it is ours, cited directly** | `itinerary.md` §14.15.5(b), **Corollary 14.15.5.4**; wrong-sign clause §14.15.5(c) | not a ledger entry; a wiki citation inside the face |
+
+### 4.2 Which faces are at two keys today, and which are not
+
+**At two keys today:**
+
+- **Face II, both components** — L-A1 (two keys + Lean) and L-A2 (two keys).
+  This face is fully two-keyed, with a kernel key on top.
+- **Face III, both ledger components** — L3 (two keys, correction absorbed) and
+  L-A4 (two keys + kernel key on the structured half). Its third component, the
+  realization-height theorem, is ours and carries no key because it is not a
+  ledger claim.
+- **Face I's Macindoe half** — via L2 (two keys) for the `p = 7` instance; L1,
+  the entry §2 actually cites, is a **`corrected`** entry, not a two-key one.
+
+**Not at two keys today:**
+
+- **Face I's Merle half — the δ8 impossibility.** It has **no ledger entry at
+  all**. `LEDGER.md` at `c966875` contains **zero** occurrences of "Product",
+  "Product-Bound", "δ8", "delta8" or "scissors". The claim exists in the shared
+  `README.md`'s scope sentence ("the δ8 impossibility and the staircase
+  sharpness as one obstruction") and in `NOTE.md` §2 and §6
+  (`ProductBoundThreshold`), and nowhere in the ledger. Under the note's own
+  stated rule — the header line "**Every numbered claim enters via LEDGER.md
+  first (all entries below have their keys turned)**" — this is the one
+  component of the three faces that has not entered.
+- **Face I's cited entry L1 is not a two-key entry.** Its status word is
+  `corrected` (both directions), closed 2026-07-17; it refuted a claim on each
+  side and yielded the contiguous verified range. It is a strong entry, but a
+  reader checking "all entries below have their keys turned" against L1 will
+  find a different status word.
+
+### 4.3 Two further status facts, recorded flat
+
+- **`L-A3` (B) is still conditional in the file.** §5 and §6 both lean on L-A3,
+  and §6 quotes the capacity–demand margin `≈ 0.27·n` / `≈ 0.08·n` from
+  "[L-A3 cadeau B; REQ-MATH-014]". The ledger's own last word on (B) at HEAD
+  reads: "Status of (B): our key is turned on the `n ~ 10³` replication, and the
+  asymptote is offered — **(B)'s quantification carries two keys once Merle's
+  acceptance of the asymptote lands.**" Our own record (HANDOFF item 1) has his
+  round-9 letter accepting the (B) constants, but **that acceptance has not been
+  written into the ledger entry**, so the shared file still shows the condition
+  open. Recorded as a bookkeeping gap between our record and the shared file,
+  not as a disagreement.
+- **The note's newest and strongest material is not in `NOTE.md` at all.**
+  `L-A5`, `L-A6`, `L-A7` and `L-A8` all postdate the skeleton and none is cited
+  anywhere in the file. In particular **`L-A8` — T1, the no-hair theorem, the
+  kernel-checked cycle exclusion that any "machine-checked fragment of the cycle
+  literature" clause would be about — appears in `LEDGER.md` at "two keys,
+  scoped exactly as above" and appears in `NOTE.md` nowhere.** Its kernel claims
+  became keyable only at the round-11 Lean re-audit
+  (`briefs/merle-r11-ceiling-audit-findings.md`), and no ledger text has been
+  written for that yet.
