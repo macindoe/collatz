@@ -793,3 +793,59 @@ The only items with any reply-side weight are the two internal tensions on his
 side recorded flat above — `docs/PROOF_ASSEMBLY.md` at 2.4 and the
 `collatz-audit-2026` summary row at 5.1 — and both are his to do as he sees fit
 with, if the author chooses to mention them at all.
+
+---
+
+## Closing
+
+His account of his own work checks out on almost every particular that can be
+checked, and several of them check out word for word: a README that claimed an
+unconditional no-cycles result for all `k`, rewritten in a commit whose own
+message says *"reduce claim to what is actually proved"*; a technical document
+naming two asymptotic programs each with an unclosed gap beyond `k = 200`; a
+preprint that states in its own text that complete exclusion for `k ≥ 69` needs
+an additional hypothesis; scope banners that go further than he described;
+Simons–de Weger as a genuine `axiom` declaration; and a status page that marks
+its own headline module INVALID by name.
+
+Three things did not check out, and they are recorded without adjudication of
+motive.
+
+1. **`AUDIT_V9` is not in any of the four repositories**, in any ref, at any
+   point in their history. The public audit series stops at V8 (2026-03-07),
+   whose verdict — *"le squelette structural tient … l'abstract suraffirme"* —
+   is the same shape as the one he described, three months earlier. The
+   round-10 posture applies unchanged: absence here is not evidence that the
+   record does not exist. `Projet_Collatz` is private by his decision and was
+   not looked at.
+2. **`STATUS.md` does not exist**; the status document that was rewritten is
+   `VERIFICATION.md`, and it was rewritten well.
+3. **The range beyond `k = 50000` is not marked OPEN.** The document that
+   discusses it, `docs/PROOF_ASSEMBLY.md`, marks it **PROVED** and closes with
+   *"No gap remains. The proof is unconditional for all `k ≥ 3`."* — about the
+   very module the rest of the repository marks invalid. That document was not
+   touched by the rewrite and has not been modified since the day it was added.
+
+And one thing about the whole picture that belongs in the record because it will
+otherwise be inferred silently: **every confirmed remediation is dated March or
+April 2026**, and no commit anywhere in the four repositories is later than
+2026-04-25 except the licence added at the flip. So the work he described is
+there, and it is older than the description. Whether the audit he recounted is
+the April 2026 adversarial audit — whose gate sign-offs, red-team reports, risk
+register and postmortem are all committed in `collatz-nocycle-lean4/docs/BIBLE/`
+— or a separate later record we have not seen, is not settled by anything
+public, and this session does not settle it.
+
+Two answers our record was waiting on are now closed at first hand. **The
+preprint's `S` is our `K`** — by definition, not by inference
+(`S = ⌈k log₂3⌉`), so flag 6 of `briefs/merle-la7-close-check-findings.md` is
+confirmed with no correction. And **`LegendreApprox.lean`'s home is confirmed**,
+the Junction copy is upstream by five months, and the diff against the T1-chain
+copy comes back as a two-line reordering of `open Real` with no mathematical
+content — so the one clause the round-10 reply flagged as bearing on what T1
+rests on is now answered, and it is a clean answer.
+
+Access record, restated: read-only clones and read-only public API calls only.
+**No fork, no issue, no pull request, no comment, no star, no watch, no follow,
+no push, no write of any kind, and no contact with anyone.** `Projet_Collatz`
+untouched, unrequested, unreached.
