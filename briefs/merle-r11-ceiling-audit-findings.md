@@ -808,3 +808,117 @@ Round-10 flag 5 is closed.
 
 Recorded flat, with no commentary: the block is there, it says the five things,
 and it is marked permanent.
+
+## Adjudication summary
+
+| Brief question | Answer |
+|---|---|
+| Graph and drift | HEAD `c991430`, linear over `6c084c5` over `5c9b663`, both his, both 2026-07-26. **No drift** in `ContentDescent.lean`, `ContentSeparation.lean`, `TransportRecurrence.lean` or `LegendreApprox.lean` |
+| `ceiling_lower` — same notion of cycle? | **YES** — `cycle_prod_identity`'s hypotheses plus `hK`/`hX`/`hmin`; no extra condition the ledger does not mention; oddness still not required (strictly more general than the prose, third round running) |
+| `Px > 0` proved or assumed? | **PROVED in-file**, two lines, from `0 < X ≤ xᵢ` then `Finset.prod_pos` |
+| `ceiling_lower` unconditional? | **YES** — no `hpX`, no `2^71`, no `hwin`, no real-number hypothesis; entirely in ℕ; only inputs are `cycle_prod_identity` and Mathlib `Finset` lemmas. This is what licenses the downstream removal |
+| `ceiling_pinned` = the L-A8 two bounds? | **YES, exactly** — `3^(p+1) < 2^K ∧ 2^K < 2*3^(p+1)`, same direction, same strictness, same index. The round-10 mismatch is closed at the statement level |
+| **`hceil` removal — real?** | **YES, VERIFIED, not taken.** Gone from all four signatures; not renamed, not weakened, not a structure/class field, and **not hoisted** — `T1Structure.lean` declares no `variable`, `include`, `omit`, `section`, `structure`, `class`, `instance`, `attribute` or `local` anywhere in 482 lines. Derived internally by `have hceil := ceiling_lower …` in `ratio_bound_at_barina` and `log_gap_gen`; inherited transitively by the other two |
+| Anything else changed in the four? | **NO.** Window constants, `2000`/`2079`, `4000n² ≤ 2079X`, the `2^71` numerals and every conclusion are character-identical |
+| Our own re-derivation | Agrees exactly; exact-integer, no analytic input; `n = p+1` is the same `n` as the la8 findings and cycles.md 12.1.1 — no index shift |
+| Canaries | **190 exact checks, 0 failures** (`experiments/merle_r11_ceiling_audit.py`), including the four real cycles both shores, the trivial cycle, four families of negative controls, 320 synthetic scales, and the round-10 facts |
+| T1 axiom log 13 → 15 | **EXACT: 13 + 2**, exactly `ceiling_lower` and `ceiling_pinned` added; nothing removed, renamed or re-axiomatised; `discharge_all` `[propext]`, `convPairs_length` `[]`, the rest kernel-3 |
+| `sorryAx` | **ABSENT** everywhere except two prose lines in the RETRACTED block |
+| DeficitLemma log | **10 of 10**, `key_shifted` and `key15` with their own probes — round-10 flag 2 closed |
+| SCOPE header | **Corrected in place and now matching the file**, finder named — round-10 flag 4 closed |
+| RETRACTED block | **Present, standalone, DO NOT REMOVE, all five things stated**, recorded verbatim; nothing at HEAD depends on the retracted result — round-10 flag 5 closed |
+
+**Round-10 flags, status at HEAD:**
+
+1. `ceiling_upper` upper-half-only — **CLOSED** (`ceiling_lower` + `ceiling_pinned`, and `hceil` removed rather than satisfied).
+2. DeficitLemma log 8 of 10 — **CLOSED** (10 of 10, own probes).
+3. No `LegendreApprox` entries despite the log header naming it — **closed by withdrawing the header claim**, not by adding entries; the file still has no probe and no log line. Flat.
+4. Stale DeficitLemma SCOPE header — **CLOSED**.
+5. In-file RETRACTED note superseded — **CLOSED**.
+6. `quotient_is_convergent_gen` concludes about the *reduced* `K/n` — **unchanged**, and he has now written the `t`-cancellation into `OUT_REQ-MATH-056.txt` himself, crediting it.
+7. Read-not-built — **unchanged**, and stated again at the head of this file.
+
+**New this round, all flat, none of substance:**
+
+- (i) The two axiom-log header lines and the three compiler-warning lines were deleted along with the repair, so both logs are now curated lists rather than raw probe output, and the four-way verification claim no longer appears in an artifact.
+- (ii) `mul_pow_succ_le` and `pow_succ_lt_two_mul_pow` remain unprobed in `T1Structure.lean` (transitively covered).
+- (iii) The volunteered `sorryAx` / error-recovery anecdote is not verifiable read-not-built; the file's final ordering is correct.
+- (iv) The `1.700 bits` slack in the DeficitLemma header is still unlabelled (a round-10 item already carried as an offer).
+- (v) The one-sidedness refinement of item 4 / item 5 D3-bis: `q₂₂` lies below `log₂3`, so the first *north-shore* admissible scale is `q₂₃` = Hercher's threshold. Not a discrepancy with anything of his; it tightens our own la8 §(f) sentence.
+- (vi) A correction to our own round-10 record (`pow_succ_lt_two_mul_pow` listed among the thirteen probed theorems), named as ours.
+
+**Handbacks: none. No discrepancy of digits, hashes, statements or list
+contents was found anywhere this round.**
+
+## Key recommendation (recommendation only — no key is turned here)
+
+**The round-10 condition is met, and L-A8's kernel claims can now be keyed —
+scoped exactly as the ContentDescent precedent scopes them.**
+
+Round 10 recommended, for `T1Structure`, *turn-with-offer*: the ledger's
+two-sided "`K` pinned" sentence should either gain the one-lemma
+`ceiling_lower` companion or be restated as upper-half-plus-hypothesis
+**before** the L-A8 block's kernel claims carry a two-key marking. He took the
+first option and went past it — the hypothesis is removed from the downstream
+signatures rather than merely discharged at the call sites, which is a stronger
+repair than the one offered. That condition is now satisfied, verified rather
+than taken.
+
+**What a Macindoe key can carry, scoped (the ContentDescent language):**
+
+- The **statement match**: fifteen declarations in `T1Structure.lean` matched
+  against the L-A8 blocks and the round-11 letter, `ceiling_lower` and
+  `ceiling_pinned` recorded verbatim, all four downstream signatures recorded
+  before and after.
+- The **dependency structure**: `hceil` verified *gone* — not renamed, not
+  weakened, not a structure field, not hoisted into a section `variable`,
+  `include` or `omit` (the file declares none) — and re-derived internally from
+  `ceiling_lower` at two located call sites, inherited transitively by the
+  other two. This is the part of the claim most easily reported in good faith
+  and still wrong, and it is the part that was checked hardest.
+- The **committed axiom logs**: T1 fifteen-for-fifteen with the expected sets,
+  the 13 → 15 reconciliation exact; DeficitLemma ten-for-ten; `sorryAx` absent.
+- The **truth of every statement as instantiated**: 190 exact checks, 0
+  failures, in fresh code that imports nothing of his and nothing of ours from
+  the prior rounds.
+- The **mathematics of the repair**, re-derived independently in our own words
+  and agreeing exactly, in the same `n = p+1` convention as the rest of the
+  chain.
+
+**What the key must state as outside it, in the same sentence** (the wording
+that worked for ContentDescent and for the round-10 L-A7 marginTarget line):
+**read-not-built.** We have no Lean toolchain and installed none; nothing was
+compiled. The kernel-3 / `[propext]` / `convPairs_length`-no-axioms /
+0-`sorry` / 0-`native_decide` claims rest on his committed logs and his
+four-way-hardened protocol, not on an our-side build. Also still outside any
+key: the two named continued-fraction glue facts remain unformalized (both
+independently confirmed our side at rounds 10 and 11, but confirmed is not
+kernel-proved), and `LegendreApprox.lean` carries no axiom-log entry at all.
+
+**Offers to carry, acceptance his call, all minor and all hygiene:**
+
+- (a) A one-line header on each axiom log stating what it is and how it was
+  produced — the deleted headers took the four-way claim out of the artifact
+  along with the stale `LegendreApprox` reference; keeping the raw probe output
+  (warnings included) is what makes a log evidence rather than a list.
+- (b) `#print axioms` probes for `mul_pow_succ_le` and `pow_succ_lt_two_mul_pow`
+  — the last two declarations in either file that check 4 does not reach
+  directly.
+- (c) A `#print axioms` probe and a log entry for `LegendreApprox`'s two
+  theorems, which would close round-10 flag 3 the other way as well.
+- (d) The `1.700 bits` clause in the DeficitLemma header pinned to the
+  *route-implied* bound (already offered in the round-10 co-edit; simply still
+  open).
+- (e) The one-sidedness observation, offered as a sharpening of the frame
+  rather than a correction: because `ceiling_lower` is now a theorem, a
+  positive cycle is confined to convergents *above* `log₂3`, which moves the
+  first admissible north-shore scale from `q₂₂` to `q₂₃ = 137528045312` —
+  Hercher's own threshold. Our la8 §(f) sentence is the one that would gain the
+  shore clause; his blocks do not state the two-sided figure.
+
+**Not recommended for the key, and not because of any doubt:** any language
+asserting that T1's chain is machine-checked *end to end*. The two glue facts
+are still named-not-formalized, exactly as his own honest-scope paragraph says,
+and this audit does not compile anything. The key belongs on the statements,
+the structure, the logs and the mathematics — which is precisely what the
+ContentDescent key carries.
