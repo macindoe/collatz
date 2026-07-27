@@ -394,3 +394,74 @@ The lower bound is now derived inside `ratio_bound_at_barina` and
 `log_gap_gen` from the kernel theorem `ceiling_lower`, and inherited by the
 other two. His sentence "derived internally now, so it cannot travel as an
 assumption again" is accurate as committed.
+
+## Item 4 — the repair re-derived independently, in our own words
+
+Written before reading his proof term line by line, and stated in the
+project's own coordinates rather than his.
+
+**Setup.** A genuine positive cycle of the odd Collatz map has `n` odd
+elements `x_0, …, x_{n-1}`, all positive integers, with
+
+  `3x_i + 1 = 2^{v_i} · x_{i+1}` (indices mod `n`),  `v_i = v_2(3x_i + 1) ≥ 1`,
+  `K = Σ_i v_i`.
+
+**Step 1 — the product identity.** Multiply the `n` step relations:
+
+  `∏_i (3x_i + 1) = ∏_i 2^{v_i} · ∏_i x_{i+1} = 2^K · ∏_i x_i`,
+
+the last equality because `i ↦ i+1` is a bijection of the index set, so the
+shifted product is the same product. (`briefs/merle-la8-t1-check-findings.md`
+§(a); his Lean proof uses `Fintype.prod_equiv (Equiv.addRight 1)`, which is
+that bijection.)
+
+**Step 2 — the strict per-factor inequality.** For every positive integer `x`,
+`3x < 3x + 1`. Both sides are positive integers, and the product of `n` strict
+inequalities between positive terms is strict, so
+
+  `3^n · ∏_i x_i = ∏_i (3x_i) < ∏_i (3x_i + 1)`.
+
+Positivity is needed twice and only here: to make each factor's inequality
+survive multiplication (`0 < 3x_i`), and to keep the left product from
+collapsing. If some `x_i = 0` the left product is `0` and the argument gives
+nothing.
+
+**Step 3 — cancel.** Substituting step 1 into step 2:
+
+  `3^n · ∏_i x_i < 2^K · ∏_i x_i`,
+
+and `∏_i x_i > 0`, so cancelling gives
+
+  **`3^n < 2^K`.** ∎
+
+**Index convention.** `n` here is the number of *odd* elements of the cycle,
+which is Lean's `p + 1` (the index type is `Fin (p+1)` and the conclusion is
+written `3 ^ (p+1) < 2 ^ K`). This is the same `n` used throughout
+`briefs/merle-la8-t1-check-findings.md` — §(a) derives the product identity
+with `n = p+1`, §(b) states the ceiling as `3^n < 2^K < 2·3^n`, §(g) records
+`n` = number of odd elements as the convention shared with Hercher's `K`, and
+the window `4000n² ≤ 2079X` is stated in that same `n`. It is also `cycles.md`
+12.1.1's `n` in `2^K = 3^n ∏(1+ε_t)`. **No index shift anywhere.** Note in
+passing that `n = p+1 ≥ 1` automatically, so the statement has no `n ≥ 1`
+side condition and the `n = 1` edge (the trivial cycle, `3 < 4`) is in scope.
+
+**Exactness.** Every step is an inequality or identity between positive
+integers: the product identity is an equality in ℕ, the per-factor step is
+`3x < 3x+1` in ℕ, and the cancellation is right-cancellation of a positive
+natural. **No analytic input of any kind** — no logarithm, no real number, no
+continued fraction, no size threshold. This is why the theorem is
+unconditional (item 2(c)) and why discharging `hceil` downstream imports
+nothing.
+
+**Relation to `ceiling_upper`.** The upper half is genuinely harder: it needs
+`(3X+1)^n < 2·(3X)^n`, which requires `2n < 3X` — a real, if weak, size
+condition. The lower half needs no such condition, which is exactly why the
+two halves have different hypothesis lists and why `ceiling_pinned` inherits
+`hpX` from the upper half alone. The asymmetry is in the mathematics, and his
+statements reflect it correctly.
+
+**One observation on the shape of the repair, flat.** His one-line summary
+("every factor `3x+1` strictly exceeds `3x`") is the same argument; we agree
+on it independently. It also confirms the round-10 characterisation: the gap
+was a *formalization* gap, not a mathematical one — the fact was always
+available in one line from a theorem already in the file.
