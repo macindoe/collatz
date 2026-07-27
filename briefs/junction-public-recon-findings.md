@@ -484,3 +484,136 @@ file being pin-insensitive at this level (it uses only
 **Read, not built** — no toolchain in this session; the standing pin from the
 round-10 audit is unchanged, that no committed `#print axioms` log contains any
 `LegendreApprox` entry although `T1Structure_axioms.txt`'s header names the file.
+
+---
+
+## Item 4 — the deficit lemma at first hand; flag 6 settled on the definition
+
+Source: `Collatz-Junction-Theorem/paper/preprint_en.tex` @ `a57d29e`,
+§3 *"Entropic deficit and nonsurjectivity"* (`\label{sec:entropy}`). The
+`DeficitLemma.lean` header's pointer — *"(Merle, Junction Theorem preprint 2026,
+§3)"* — resolves exactly: §3 is the section, and it contains the statement the
+header describes.
+
+Script: `experiments/junction_public_recon_deficit_check.py` with its committed
+output; 465 checks, 0 failures.
+
+### 4.1 The deficit lemma is there, and states what the header says
+
+Notation, verbatim (`\label{not:main}`):
+
+> `$k \geq 1$ denotes the \emph{length} of a cycle (number of odd steps);`
+> `$S = S(k) = \lceil k \log_2 3 \rceil$ is the \emph{Syracuse height};`
+> `$d = d(k) = 2^S - 3^k$ is the \emph{crystal module};`
+> `$C = C(k) = \binom{S-1}{k-1}$ is the number of admissible compositions;`
+> `$h(p) = -p\log_2 p - (1-p)\log_2(1-p)$ is the \emph{binary Shannon entropy}`
+
+Definition 3.1 (`\label{def:deficit}`, `eq:gamma`), verbatim:
+
+> `The \emph{entropic deficit} is the real number`
+> `  \gamma \;=\; 1 - h\!\left(\frac{1}{\log_2 3}\right),`
+> `where $h$ is the binary Shannon entropy.`
+
+The lemma itself, Proposition *"Linear deficit"*
+(`\label{prop:linear-deficit}`, `eq:deficit`), verbatim:
+
+> `For every $k \geq 1$ with $d(k) > 0$:`
+> `  \log_2 d - \log_2 C \;\geq\; (S-1) \cdot \gamma - \varepsilon(k),`
+> `where $\varepsilon(k) = O(\log k)$ is a logarithmic error arising from`
+> `the Diophantine approximation of $\log_2 3$.`
+
+So: `γ = 1 − h(1/log₂3)` exactly as the header says, stated **per unit of `S`**,
+with the binary-entropy bound as its engine
+(Lemma `lem:binomial-entropy`: `log₂ binom(S−1,k−1) ≤ (S−1)·h(α)`,
+`α = (k−1)/(S−1)`, cited to Cover–Thomas Thm 11.1.3). **Confirmed.**
+
+### 4.2 Flag 6 — `S` **is** our `K`. Confirmed, and now on the definition
+
+Round 10 settled this from the committed artifacts alone, on the units argument
+(`γ·log₂3 = c_gen` exactly, versus `γ·(log₂3 − 1) = 0.02928`), and recorded the
+inequality as non-discriminating. The preprint settles it more directly: **`S`
+is defined**, not inferred:
+
+`S = S(k) = ⌈k log₂ 3⌉`, with `k` the number of odd steps.
+
+Our `K = ⌈n log₂ 3⌉` with `n` the number of odd steps. Same formula, same
+argument, different letter. The naming clash with our own `S = K − n` is real
+and is his letter's `S`, not ours.
+
+Checked in the script (§A), by exact integer arithmetic rather than floating
+point (`S = (3**k).bit_length()`): `S(k) = ⌈k·log₂3⌉` for every `k = 1..400`,
+0 mismatches, and `S(3) = 5`, `S(5) = 8`, `S(100) = 159` reproduce the
+preprint's own printed values exactly. The round-10 units argument is also
+re-run and stands (§B): `γ·log₂3 − c_gen = 5.8·10⁻⁶²` at 60 digits, while the
+alternative reading gives `γ·(log₂3 − 1) = 0.029274…`, not `c_gen`.
+
+**Flag 6: CONFIRMED at first hand. No correction to the round-10 settlement.**
+
+### 4.3 Two differences from our L-A7 form, recorded flat
+
+Both are visible only now that the preprint can be read; neither was knowable
+from the committed scripts.
+
+**(a) The preprint's statement carries an error term; ours does not.** His
+committed transcription in
+`one-obstruction-three-faces-lean/experiments/test_REQ-MATH-037_junction_gamma_is_cgen.py`
+reads `# Junction: log2 d - log2 C >= (S-1)*gamma`, dropping the `− ε(k)`. The
+drop is harmless for the identity that script tests (`γ·log₂3 = c_gen`, a
+statement about constants) but it is not harmless as a reading of the
+proposition. Read literally without `ε(k)`, the printed inequality **fails**:
+over the sampled `k`, 8 negative-slack instances, minimum slack `−4.4848` at
+`k = 306` (a convergent denominator of `log₂3`), and `−2.4506` at `k = 200`
+(script §C). Those are exactly the cases `ε(k)` exists to absorb — the failures
+sit at convergents, where `log₂ d` falls furthest below `S`. So the error term
+is load-bearing, and the difference between his form and ours is precisely
+`S − log₂ d`, which is unbounded along convergents.
+
+Our own margin uses `K` where he uses `log₂ d`, so it has no error term at all:
+`margin(n) = K − log₂ binom(K−2, n−1) ≥ c_gen·n` for all `n ≥ 1`, with a uniform
+surplus `1 + log₂(log₂3) = 1.66444871` (Theorem A,
+`briefs/margin-inequality-proof-findings.md`). Script §E re-checks it at
+`n ∈ {1, 2, 5, 18, 100, 1000, 16266, 190537}`; minimum sampled slack `1.9207` at
+`n = 1`.
+
+**(b) The binomial index differs by one.** The preprint counts
+`C = binom(S−1, k−1)`; our L-A7 word count is `binom(K−2, n−1)`. His is the
+larger, by `log₂((S−1)/(S−k))` — `1.3479` bits at `k = 18`, rising to `1.4375`
+at `k = 2000` and to `log₂(log₂3 / (log₂3 − 1)) ≈ 1.43823` in the limit
+(script §D). Recorded because the two forms are otherwise term-for-term the
+same statement, and a future joint note should not let the two `C`s be read as
+one.
+
+### 4.4 Is the preprint's version proved, conditional, or exhibited?
+
+**Exhibited on a finite range and asymptotic beyond it, with the constant left
+inexplicit.** The proposition's own proof, verbatim in its load-bearing parts:
+
+> `For $\theta > 0$ (i.e.\ $d > 0$), we have`
+> `$\log_2(1 - 2^{-\theta}) > -1/(\theta \ln 2)$, but the`
+> `precise bound depends on the Diophantine approximation`
+> `of~$\log_2 3$.`
+>
+> `By continued fraction theory, if~$k$ is not a convergent`
+> `of~$\log_2 3$, then $\theta \geq c/k$ for some`
+> `constant~$c > 0$ …`
+>
+> `We verify numerically for every $k \in [18, 500]$`
+> `that $C(k) < d(k)$ … For $k > 500$, the asymptotic argument works because`
+> `$\log_2 C \leq (S-1)(1 - \gamma + O(1/k))$ while`
+> `$\log_2 d \geq S - O(\log k)$ (by Diophantine approximation)`
+
+The constant `c` is never made explicit, `ε(k)` is never bounded, and no
+effective threshold is produced; the finite range `k ∈ [18, 500]` is verified by
+computation and the rest is an asymptotic argument in `O`-notation. The theorem
+it feeds (`thm:nonsurj`, `C(k) < d(k)` for `k ≥ 18`) is *stated* as proved, and
+its proof is *"it suffices to verify that `(S−1)γ > ε(k)` for `k ≥ 18`"* —
+which is the same unquantified comparison.
+
+This is **not a criticism of the preprint**, which is a preprint and says what
+it is doing; it is the fact our record needs, because the L-A7 ledger entry
+rests on the margin inequality and the question of what the preprint supplies
+was open. **What the preprint supplies is the idea and the constant; what it
+does not supply is an effective inequality.** Our Theorem A supplies the latter
+for the `K`-form, elementary and citing nothing, and his rational-binomial
+`marginTarget` route supplies it at `1/13` in Lean. All three are on record; no
+comparison of merit is drawn here and none is needed.
