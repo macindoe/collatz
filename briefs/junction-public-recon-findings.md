@@ -617,3 +617,179 @@ does not supply is an effective inequality.** Our Theorem A supplies the latter
 for the `K`-form, elementary and citing nothing, and his rational-binomial
 `marginTarget` route supplies it at `1/13` in Lean. All three are on record; no
 comparison of merit is drawn here and none is needed.
+
+---
+
+## Item 5 — the other three repositories, light recon
+
+### 5.1 What each claims, in its own status words
+
+**`collatz-nocycle-lean4`** — the active repository of the four, per its own
+`docs/LINEAGE.md`. README `## Result`, verbatim:
+
+> `Under three published hypotheses (Baker, Barina, Continued Fractions),`
+> `no non-trivial cycle exists in the Collatz iteration.`
+> `Formally verified in **Lean 4** with **zero sorry** statements and **zero axioms**.`
+
+Main theorem, verbatim:
+
+> `theorem no_nontrivial_cycle_phase59`
+> `    (baker : BakerSeparation) (barina : BarinaVerification)`
+> `    (cf : DerivedLargeKBound)`
+> `    (n k : ℕ) (hcyc : IsOddCycle n k) : False`
+
+Shape: 93 tracked files at HEAD, 36 `.lean` under `ProjetCollatz/`, self-reported
+393 theorems, Lean/Mathlib v4.27.0. **By read: 0 `axiom` declarations, 0 real
+`sorry`, `native_decide` in 10 files (self-reported 182 occurrences).** The
+three hypotheses are Lean `structure`s taken as explicit parameters, not axioms
+— the README says so and the code bears it out. `expected_axioms.md` lists
+`propext, Classical.choice, Quot.sound` for the central theorem and names
+`Lean.ofReduceBool` / `Lean.trustCompiler` as the `native_decide` axioms on the
+`cf_gap_*` lemmas, currently isolated from the central chain. Formalised vs
+asserted, cleanly separated: the two-case split (`k ≤ 1322` via Baker + product
+bound; `k > 1322` via `DerivedLargeKBound`) is formalised; `DerivedLargeKBound`
+itself is the asserted content, and the repository says so and names the plan to
+discharge it (*"Phase Legendre"*). It carries the plain-words disclaimer quoted
+in 2.8, a `verify.sh`, a `reproduce.sh`, two `probes/` files including a
+dedicated `sorryAx` probe, and an audit apparatus under `docs/BIBLE/`
+(RISK_REGISTER, LIMITATIONS, four gate sign-offs, four red-team reports, a
+procedural-debt postmortem, environment snapshots and a SHA-256 integrity log).
+This is the most carefully instrumented of the four by a wide margin.
+
+**`collatz-cycles-lean`** — covered in item 2. Status words at HEAD: the archive
+banner, the reduced README `## Result` (three clauses), and `VERIFICATION.md`'s
+proved/not-proved tables. Shape: 47 tracked files (25 `.lean`), three Lean trees
+(`verified/` Lean 4.15 no Mathlib, `skeleton/` Lean 4.29.0-rc2 + Mathlib,
+`range-exclusion/` Lean 4.28, marked invalid), plus `paper/` (md/tex/pdf).
+**4 `axiom` declarations, 0 real `sorry`, `native_decide` across 13 files.**
+
+**`collatz-audit-2026`** — a meta-repository, not a formalisation. What it
+audits, in its own words:
+
+> `Ce dépôt centralise les résultats d'un audit mathématique rigoureux`
+> `de trois dépôts de recherche sur la conjecture de Collatz:`
+> `- Collatz-Junction-Theorem`
+> `- collatz-cycles-lean`
+> `- collatz-nocycle-lean4`
+
+i.e. it cross-references the other three, dated March 2026. Shape: 22 tracked
+files — three audit documents (`SYNTHESE_MARS2026.md`, `COMPLEMENT_RECHERCHE.md`,
+`PISTES_CROISEES.md`), eight Lean files (scaffolding), three Python scripts, two
+results files, two CI workflows. Its Lean is explicitly scaffolding and **does
+carry real `sorry`s** — `lean/BakerSeparationProof.lean:79` and `:122`,
+`lean/ContinuedFractionBridge.lean:35` and `:41` (the latter two commented
+*"Legendre 1798, ~150 lignes a formaliser"*) — with `lean/FinalAssembly.lean`
+stating the arithmetic openly: *"Si les 2 sorry sont combles: 0 sorry + 1 axiome
+= PREUVE COMPLETE"*. Its own new result is modest and stated as such: `k = 16`
+and `k = 17` proved without external dependency.
+
+**One flat hygiene note on `collatz-audit-2026`.** Its README's summary table
+reads:
+
+> `| Cycles de longueur 18+ | **Impossibles** | Théorème de Jonction (Merle) |`
+
+The Junction Theorem does not give impossibility for `k ≥ 18`; it gives
+non-surjectivity, and his own preprint says so in the same breath
+(*"nonsurjectivity alone does not exclude cycles"*, `rem:junction-scope`, quoted
+in 2.6). The row is a plain-language summary in a section headed *"vulgarisé,
+sans jargon"*, under an archive banner, in the repository that had no licence
+until the flip — so it is a small thing in a small place. Recorded because the
+brief asks for what is there, and because it is the one place in the four where
+a headline is still stronger than the document behind it besides
+`PROOF_ASSEMBLY.md`.
+
+### 5.2 Overlap with our own record, stated flat
+
+This is prior-art hygiene for a possible joint note. No priority is asserted, no
+credit is adjudicated, and no comparative adjective is used.
+
+**(i) Periods 1–3 / small-`k` cycle exclusion.** We close periods 1, 2, 3 in
+reduced coordinates in-house (cycles.md 12.2.3, 12.5.3, 12.7.5), matching Steiner
+and Simons–de Weger. His counterpart is `collatz-cycles-lean/lean/verified/`:
+`N₀(d(k)) = 0` for `k = 3..15` by Lean-certified computation, 280 theorems,
+0 `sorry`, 0 `axiom`, Lean 4.15 without Mathlib (first committed 2026-02/03).
+The objects differ — his `k` is the number of odd steps in Steiner's
+formulation, our `p` is the number of *blocks* of the reduced map — so the two
+ranges are not directly comparable and no generality claim is made either way.
+What is comparable and worth having on record: **both sides have an
+independently checkable small-range exclusion, his by Lean computation over
+compositions, ours by reduced-coordinate classification.** Dates: his
+2026-02-26/2026-03-26 (public), ours in this repository's git log.
+
+**(ii) The uniform trim / "`2^K` close to `3^n`" geometry.** Our Theorem 12.8.1
+derives, from the rotation size conditions `q ≤ R_r`, a bound
+`γ + log₂p > 0.585·n/(1.585^p − 1)` uniform in `p`, with `q = 2^K − 3^n`. His
+counterpart is **Range Exclusion** (`collatz-cycles-lean/docs/PROOF_ASSEMBLY.md`
+§3): `corrSum` over monotone compositions is confined to
+`[3^k − 1, 3^k + 3^r − 2]`, an interval of width `3^r − 1`, and the question is
+whether `d = 2^S − 3^k` can divide anything in it. **Both are "a hypothetical
+cycle forces `2^S` close to `3^k`, and the closeness is the whole content."**
+They are the same geometry in different coordinates. Two flat notes:
+
+- His §3.1 *"Forced Flatness Theorem"* (for `k ≥ 5`, the first
+  `L = 2k − S ≈ 0.415k` parts of any admissible composition are forced equal)
+  has **no counterpart in our record**; it is a statement about monotone
+  compositions of `S` into `k` parts and our block/exit coordinates do not have
+  it.
+- His decay `range/d = O(k^{4.125} · 3^{−0.415k})` and our trim's degradation
+  `1.585^(−p)` are **different quantities and must not be read as the same
+  number**: `3^{0.415} = 1.5777…` is `3^(2 − log₂3)`, while our `1.585` is
+  `log₂3 = 1.58496…`, and his exponent counts odd steps `k` where ours counts
+  blocks `p`. The numerical proximity is a coincidence of two different
+  constants.
+
+**(iii) The `1.585^(−p)` degradation and the staircase (cycles.md 12.8.3).**
+**No counterpart in any of the four.** There is no family of size-passing
+near-counterexamples anywhere in his repositories, and no statement that
+counting arguments cannot do substantially better. The word *escalier*
+("staircase") does occur, in
+`Collatz-Junction-Theorem/research_log/phase10l_choc_des_cristaux.md`, for a
+different object entirely — the rigid lattice path traced by the monomials
+`2^a 3^b` in `ℤ²` — and it is not our staircase. Recorded so the word cannot
+later be mistaken for a shared object.
+
+**(iv) Convergent denominators of `log₂3` as the location of the hard cases.**
+This one is a genuine antecedent on his side, months before L-A8/T1, and it is
+worth pinning. `collatz-cycles-lean/docs/PROOF_ASSEMBLY.md` §10.5, dated
+17 March 2026 in the document header and committed 2026-03-26, verbatim:
+
+> `**Consequence:** The "dangerous" $k$ values (where $\{k\alpha\}$ is smallest)`
+> `are confined to convergent denominators $q_n$ of the continued fraction of`
+> `$\alpha$. No other $k$ can approach 0 more closely. This regularizes the`
+> `problem: we only need to check that the Baker bound holds at convergent`
+> `denominators.`
+
+with §10.2 giving the CF of `log₂3` to 10,000 terms (citing Jackson–Matthews
+2002, OEIS A028507), §10.4 tabulating the irrationality measures
+(Rhin 1987 `8.616`, Salikhov 2007 `5.125`, Wu–Wang 2014 `5.1163` — for `log 3`,
+the same list the L-A7 re-sourcing adjudicated), and §10.5 citing Sós 1958's
+three-distance theorem, verified for `α = log₂3`, `N = 3..200`. **This is the
+same observation as L-A8/T1's frame-prediction point** (thresholds live on the
+convergent grid) and as the tightening our round-10 L-A8 check contributed (that
+an in-window `n` is a priori a *multiple* of a convergent denominator, cycles.md
+12.8.6.1's neighbourhood). It predates the correspondence on his side by four
+months. Recorded as prior art of his own, for citation in a joint note; nothing
+in our record is displaced by it, and our record already credits the
+convergent-grid framing to the L-A8 entry, which is his.
+
+### 5.3 Anything that would change a claim of ours if true
+
+**Nothing found does.** Every claim of ours that touches this material —
+periods 1–3, the uniform trim and its degradation, the staircase, the
+margin/deficit inequality at `c_gen`, the L-A7 constants, the L-A8 convergent
+window and Hercher's threshold — was checked against what these repositories
+say, and none is contradicted. Two flat consistency notes:
+
+- `collatz-cycles-lean/VERIFICATION.md` records *"No cycle k ≤ 91 — **PROVED**
+  (external) — Hercher (2025), J. Integer Seq."* That is the same Hercher our
+  L-A8 check adjudicated (there via Cor. 29's `K > 1.375·10^11`), and the `91`
+  is the crossover target cycles.md 12.8.5 already names. Consistent; nothing
+  to change.
+- His `k ≥ 69` Hypothesis (H) clause (2.6) is the `m ≥ 69` Simons–de Weger
+  ingredient round 10 identified in `collatz-conditional-cycles`. Same
+  ingredient, now readable in its own preprint. Consistent; nothing to change.
+
+The only items with any reply-side weight are the two internal tensions on his
+side recorded flat above — `docs/PROOF_ASSEMBLY.md` at 2.4 and the
+`collatz-audit-2026` summary row at 5.1 — and both are his to do as he sees fit
+with, if the author chooses to mention them at all.
