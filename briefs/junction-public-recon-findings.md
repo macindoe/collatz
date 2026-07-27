@@ -578,7 +578,7 @@ surplus `1 + log₂(log₂3) = 1.66444871` (Theorem A,
 **(b) The binomial index differs by one.** The preprint counts
 `C = binom(S−1, k−1)`; our L-A7 word count is `binom(K−2, n−1)`. His is the
 larger, by `log₂((S−1)/(S−k))` — `1.3479` bits at `k = 18`, rising to `1.4375`
-at `k = 2000` and to `log₂(log₂3 / (log₂3 − 1)) ≈ 1.43823` in the limit
+at `k = 2000` and to `log₂(log₂3 / (log₂3 − 1)) ≈ 1.43803` in the limit
 (script §D). Recorded because the two forms are otherwise term-for-term the
 same statement, and a future joint note should not let the two `C`s be read as
 one.
