@@ -771,7 +771,7 @@ observation with integer teeth, and which he can have.
    chi-squared reading) put as questions, and his own retraction confirmed on a
    common footing.
 6. **The theorem hand-back** of §8.4 — the per-step drift identity on both
-   shores, with `δ = D(x_min)(1 + 1/(27x_min²))` and the factor 2 named as the
+   shores, with `D(x_min) = δ·(1 + 1/(27x_min²))` and the factor 2 named as the
    two-shore symmetry — offered as the third-face claim made exact, with the
    flat note that "exactly `n·δ`" is a sharp bound rather than an identity, and
    the `x = 1` corollary handed back as his.
