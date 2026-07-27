@@ -595,3 +595,91 @@ per side.
   became keyable only at the round-11 Lean re-audit
   (`briefs/merle-r11-ceiling-audit-findings.md`), and no ledger text has been
   written for that yet.
+
+---
+
+## Item 5 — anything external that would embarrass the note
+
+One list, facts only, each with where it was checked. No recommendation attaches
+to any line.
+
+**(a) Published cycle results the note's exclusions do not reach.** Hercher
+2023: `m ≥ 92` at `X₀ = 704·2^60`, and `K > 1.375·10^11` at `X₀ = 3·2^69`
+(Cor. 29) — against the note's `n ≤ 3.5032·10^10` at `x_min ≥ 2^71`. Further on
+the conclusion by a factor **3.9258**, and on a strictly weaker verification
+hypothesis in both cases (item 2). Simons–de Weger 2005 (`m ≥ 68/76`) and
+Steiner 1977 are subsumed by Hercher. **Our own published record already says
+this in the same direction**: `publication.md` records periods 1–3 as
+"*subsumed* (Steiner; Simons–de Weger; Hercher; and now Lean formalizations).
+Value: brevity of the reduced-frame derivations. **Never claim priority.**"
+
+**(b) A third party has already machine-checked cycle literature, and one of it
+is accepted.** On `ccchallenge.org` at 2026-07-28 (item 1): `BohmSontacchi1978`,
+*"On the existence of cycles of given length…"*, is the register's **single
+Formalised (audited and accepted)** entry; `Eliahou1993`, *"New Lower Bounds on
+Nontrivial Cycle Lengths"*, carries a `lean4` formalisation at **Ready to be
+audited**; `Knight2026`, *"Collatz high cycles do not exist"*, is **Being
+formalised**. Any superlative about machine-checked cycle work is checkable in
+one click and would fail. His own correction from "the first" to "a" already
+absorbs this; the point here is that the register supports it twice over, not
+once.
+
+**(c) The same register also has the field's headline analytic result in the
+queue.** `Tao2022`, *"Almost all orbits of the Collatz map attain almost bounded
+values"*, is at **Ready to be audited**. Relevant only because a note that
+frames formalisation of the Collatz literature as new territory would be read
+against it.
+
+**(d) His own public repository contradicts itself at HEAD, and the note may
+cite that repository.** Verified at first hand this session, read-only, at
+`ericmerle3789/collatz-cycles-lean` HEAD **`1d77168`** (unmoved since the
+round-11 recon):
+
+- `VERIFICATION.md`, lines 18–19: `| Range Exclusion k=3..10000 | **INVALID** |
+  lean/range-exclusion/ uses wrong corrsum formula |` and `| Baker argument k ≥
+  10001 | **INVALID** | Applies to wrong function |`.
+- `docs/PROOF_ASSEMBLY.md` §10.6, same commit: `| $k > 50000$ | **PROVED** |
+  Baker–LMN: range $< d$ (condition A), $d \nmid (3^k-1)$ (condition B) |`,
+  closing **"No gap remains. The proof is unconditional for all $k \geq 3$."**
+
+So the same repository, at the same HEAD, marks the Range Exclusion module
+INVALID in its status file and calls the proof that rests on it unconditional in
+its assembly document. This is the fact `briefs/junction-public-recon-findings.md`
+records (that file having been missed by his own March–April rewrite);
+re-confirmed today, unchanged. It matters **if and only if** the note cites that
+repository.
+
+**(e) Two artifacts his letter named are not in any public ref**, per
+`briefs/junction-public-recon-findings.md`: **no `AUDIT_V9`** (the public audit
+series stops at V8, 2026-03-07, verdict *"l'abstract suraffirme"*) and **no
+`STATUS.md`** (the rewritten status page is `VERIFICATION.md`). Recorded as it
+was recorded there: **absence of a public copy is not evidence against his
+account.**
+
+**(f) Simons–de Weger enters his Lean stack as a genuine `axiom` declaration**
+(`briefs/junction-public-recon-findings.md`). Relevant if the note describes any
+of that formalisation as unconditional or as resting on the kernel alone.
+
+**(g) Prior art on the note's own frame-prediction point is his, and predates
+the correspondence.** `collatz-cycles-lean/docs/PROOF_ASSEMBLY.md` §10.5, dated
+**17 March 2026**, already confines the dangerous `k` to convergent denominators
+of `log₂3` — the L-A8/T1 point, four months before these rounds
+(`briefs/junction-public-recon-findings.md` §5.2(iv)). Recorded as a date and a
+document; no priority is adjudicated here, and half A carries this item too.
+
+**(h) Two small citation facts a referee could check.** (i) `NOTE.md` §1 cites
+"Steiner 1977"; `ccchallenge.org` catalogues the same paper as **`Steiner1978`**
+(*"A Theorem on the Syracuse Problem"*). Our own record has "Proc. 7th Manitoba
+Conf. (1977)" (`publication.md`, `cycles.md` 12.2.3, `open-problems.md`) — a
+conference-year vs proceedings-year difference, defensible either way, recorded
+so it is not discovered late. (ii) `Macindoe2026` on the register is pinned to
+the **v1 DOI** `10.5281/zenodo.21273548`, while our own standing decision pins
+hosting to **v2**, `10.5281/zenodo.21421120` (HANDOFF item 1, standing
+decisions). Anyone following the register's link lands on v1.
+
+**(i) The note's own header rule is checkable against its own file.** `NOTE.md`
+opens "Every numbered claim enters via LEDGER.md first (all entries below have
+their keys turned)", and §2's δ8 impossibility has no ledger entry, while §2's
+cited entry L1 carries the status word `corrected`, not `two keys` (item 4).
+This is internal rather than external, and is listed here only because it is the
+kind of thing an external reader checks first.
