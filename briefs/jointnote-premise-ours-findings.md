@@ -301,3 +301,231 @@ already concedes a kindred antecedent on his side while claiming the *dichotomy*
 — the pairing of trim with sharpness — as ours. The distinction our published text
 draws is between his impossibility lemma and our dichotomy; it does not claim the
 impossibility direction as ours alone.
+
+---
+
+## 5. The sentence's other two clauses, against our record only
+
+The external half of this — `ccchallenge.org`, Hercher's numbers, the shared
+repo's `NOTE.md` — is the sibling session's (`briefs/jointnote-premise-external-brief.md`)
+and is not duplicated here.
+
+### 5.1 "locates the obstruction that dichotomy identifies"
+
+Our record does **not** carry one object called "the obstruction". It carries four
+statements at four different grades, and the failure mode this brief names — calling
+a heuristic a located obstruction — is live, because the single statement our own
+README calls "the program's most important negative statement" is the one explicitly
+labelled a heuristic.
+
+**Status words, carried exactly:**
+
+| # | Statement | Where | Status word, verbatim from the page |
+|---|---|---|---|
+| a | Deciding one step at depth `k` consumes the state's 2-adic data to depth `σ + k + 2`, and nothing regenerates it | `stage4.md` 11.8.7.7; published as Prop. 3.9 | **"The consumption identity is proved"** |
+| b | Therefore bounded-window determinism cannot decide unbounded horizons | same sentence, same paragraph | **"the organizing heuristic, not a formalized theorem (the published paper's own register, adopted here)"** |
+| c | The residual difficulty splits in two and only two places: statistics for typical orbits, rigidity for cycles | `README.md`; `stage4.md` 11.8.7.7; published as the sentence after Prop. 3.9 | published: **"the paper's organizing negative observation"**; README: **"an organizing observation, and we treat it as load-bearing"** |
+| d | Uniform cycle exclusion requires the divisibility system — equivalently, rigidity of the closed anchor walk `Σ_t ΔM_t = 0` | `cycles.md` 12.8.4; published inside Theorem 4.6 | **Theorem** (the closing sentence of Thm 4.6); wiki carries it as **Remark 12.8.4** |
+| e | The spent unit stock (`q = ±1`) is the rational-anchor instance of the digit-match ceiling — linear closure demand against (poly)logarithmic tracking capacity | `cycles.md` 12.6.1.3 | **Remark**; its own Calibration paragraph: *"this is a unification note, not a lever, and nothing about cycle exclusion, the Bridge, or `q` dividing `R_0` moves"* |
+| f | The `×2×3` gap | `aeh.md` 13.6.7 | Not a result of ours. Named there as the thing **both** equidistribution statements sit on: *"which is exactly the kind of independence nobody can currently prove"*; the two are *"two faces of one missing genre of theorem, not … one statement in two notations"* |
+
+**What this means for the clause, stated flat.**
+
+- The **only** item at theorem grade that says what the obstruction *is*, is (d) — and
+  (d) is a statement about what uniform cycle exclusion *requires* (divisibility /
+  anchor-walk rigidity), not a proof that the requirement cannot be met. It locates,
+  it does not obstruct.
+- The item usually reached for as "where the difficulty lives" — README's own heading,
+  which is (b)+(c) — is at **heuristic** and **observation** grade, not theorem. README
+  says so in the same sentence it makes the claim: *"which strongly suggests — as the
+  organizing heuristic, not a formalized theorem — that no bounded amount of digit
+  information can decide an orbit's behavior forever."*
+- (e) explicitly disclaims being a lever.
+- (f) is not our result at all; `aeh.md` 13.6.7 records it as the shared naming from
+  the correspondence of 2026-07-24, and uses it to say that *neither* equidistribution
+  statement implies the other.
+
+**Verdict.** "Locates the obstruction" is supported only if "the obstruction" means
+(d): *what uniform cycle exclusion requires instead of counting*. Under that reading
+it is a published theorem sentence and the clause is honest. Under the reading a
+referee is at least as likely to take — the digit-budget localization, README's "where
+the difficulty actually lives" — the clause would be attaching a theorem-shaped verb
+to a statement our own record and our own published paper both label an organizing
+heuristic. Both readings are available from our record; the record does not choose
+between them.
+
+One further constraint, from `cycles.md` 12.8.4 itself: *"both are rare-event
+arithmetic questions, not counting questions."* The obstruction the dichotomy
+identifies is, by our own text, the *absence* of a tool (arithmetic/rigidity input),
+not the presence of a proved barrier.
+
+### 5.2 "exhibits it from three independent directions"
+
+**There is no "three directions" object in our record.** The phrase belongs to the
+shared repository, whose name is `one-obstruction-three-faces` and whose `NOTE.md`
+skeleton (Merle, 2026-07-19, recorded at `briefs/merle-round7-check-findings.md`
+§(iv)) has the working title *"One obstruction, three faces: the Collatz cycle problem
+between size, digits, and the local–global seam"* with §2 **Face I size [L1]**, §3
+**Face II digits [L-A1, L-A2]**, §4 **Face III the seam [L3]**. That is his
+architecture. Their current ledger status is the sibling session's item, not this one's.
+
+**Our record has three *different* triples, and none of them is that one.** They must
+not be conflated:
+
+1. **The three faces of the target-shift mechanism** — boundary-shell localization and
+   forced carry (`stage3.md` 11.8.6.3, Interpretation), the entry-depth targets
+   `1 − 2^s` (11.8.6.3.3), the ladder targets `3^(−k)` (`ladder.md` 15.5). `cycles.md`
+   12.6.1.3(d) adds the target family `c = −q` as a **fourth** face. This is about one
+   lemma, not about the cycle obstruction.
+2. **"Three directions have defined success criteria"** — published paper, Discussion,
+   verbatim: *"rigidity statements for closed anchor walks beyond the size level (the
+   only route past Theorem 4.6); transfer-operator analysis of the exact window chain;
+   and any progress on digits of 2-adic logarithms of integers."* These are three
+   *research directions*, not three exhibitions of an obstruction.
+3. **Two, not three** — README, `stage4.md` 11.8.7.7, and the published sentence after
+   Prop. 3.9 all say the residual difficulty splits *"cleanly in two, and only two,
+   places"*: statistics and rigidity. Our record's own count of the faces of the
+   difficulty is **two**.
+
+**Does "independent" survive the round-11 finding?**
+
+The finding, from `briefs/merle-r11-hygiene-check-findings.md` §8.2 and item 4, in its
+own words:
+
+> So the "third face" claim is **correct**, and in fact stronger than he states it:
+> the per-step drift does not merely *bound* the seam gap, it **sums to it exactly**.
+
+and
+
+> the drift is **not a new object, it is the seam identity read one step at a time**,
+> and now with an identity rather than an approximation.
+
+Two things follow, and they point opposite ways, so both are recorded:
+
+- **The drift is not an additional independent direction.** It is the seam identity
+  (Face III) re-expressed per step. Whatever the count of independent faces is, the
+  drift does not raise it.
+- **The finding calls the "third face" claim correct** — correct precisely *because*
+  the drift is a face of the *same* wall. Being the same wall is what makes it a face
+  and what makes it not independent. The two statements are consistent; the word doing
+  the work is "same".
+
+**Terminology discrepancy, recorded and not adjudicated.** His round-11 letter calls
+the drift *"a third face of the same wall"* (that is the phrase the hygiene findings
+quote and answer). This brief calls it *"a fourth face"*. Our record contains only the
+former wording; where the count "third" or "fourth" comes from is not settled by
+anything in our files, because his letter is counting faces of T1's wall and the note
+is counting faces of the obstruction, and those are two different lists.
+
+**Verdict.** "Three" survives the round-11 finding, because the drift was never one of
+the three — the finding removes a *candidate fourth*, it does not disturb the count.
+But "three independent directions" is **not supported from our record**, for a
+different reason: our record does not have three directions. It has his three faces
+(size / digits / seam, his architecture, ledger-backed on his side), and separately its
+own count of **two** (statistics / rigidity). And our own record supplies a positive
+reason to be careful with *independent* in this exact neighbourhood: `aeh.md` 13.6.7
+records two objects that both wear the word "equidistribution" and are *"two faces of
+one missing genre of theorem"*, and `cycles.md` 12.8.4 records that the cycle half and
+the divergence half *"are the same problem"*. Our record's characteristic move on this
+material is to show that apparently separate things are the same thing. A referee-facing
+claim of *independence* runs against that grain, and nothing in our files establishes
+the independence of the note's three.
+
+### 5.3 "a machine-checked fragment of the cycle literature" — what our record carries
+
+Not adjudicated here (his half, and the artifacts are his). Recorded flat, from
+`HANDOFF.md` item 1, so that the author has our side of it in one place: every kernel
+claim we have keyed is keyed **read-not-built** — no Lean toolchain exists in this
+workspace, and the trust boundary is stated in each findings file. The statement-match
+audits are ours; the machine-checking is his.
+
+---
+
+## 6. The prior-art item found this round, stated flat
+
+From `briefs/junction-public-recon-findings.md` §5.2(iv), recorded here without
+adjudication:
+
+`collatz-cycles-lean/docs/PROOF_ASSEMBLY.md` §10.5, **dated 17 March 2026** in the
+document header and **committed 2026-03-26**, verbatim:
+
+> **Consequence:** The "dangerous" `k` values (where `{kα}` is smallest) are confined
+> to convergent denominators `q_n` of the continued fraction of `α`. No other `k` can
+> approach 0 more closely. This regularizes the problem: we only need to check that
+> the Baker bound holds at convergent denominators.
+
+**What it bears on.** This is the same observation as the L-A8/T1 frame-prediction
+point — thresholds live on the convergent grid — and as the tightening our round-10
+L-A8 check contributed (that an in-window `n` is a priori a *multiple* of a convergent
+denominator, `cycles.md` 12.8.6.1's neighbourhood). **It is his, and it predates the
+correspondence on his side by four months** (correspondence begins 2026-07-16). It
+belongs in the note's credit language.
+
+**What it does not bear on.** It does not touch either half of the counting dichotomy.
+The recon records, in the same section: our `1.585^(−p)` degradation and his
+`3^(−0.415k)` are **different constants over different counters** (`3^0.415 = 1.5777…`
+is `3^(2−log₂3)`; our `1.585` is `log₂3 = 1.58496…`; his `k` counts odd steps, our `p`
+counts blocks) and *"the numerical proximity is a coincidence of two different
+constants"*; and there is **no counterpart anywhere in his four repositories** to the
+staircase family or to any statement that counting arguments cannot do substantially
+better (§5.2(iii); the word *escalier* occurs for a different object and is recorded
+so it cannot later be mistaken for a shared one). The recon's own bottom line:
+**"Nothing found would change a claim of ours."**
+
+No priority is adjudicated here. Dates and documents are recorded so the author can.
+
+---
+
+## 7. What a referee would find in our published record that the sentence must survive
+
+One short list. Every item is ours, published or in the wiki a published paper points
+at, and every one constrains what the note may claim.
+
+1. **The program disclaims a path to the conjecture.** `README.md`, closing paragraph,
+   verbatim: *"**What this program does not claim:** a path to the conjecture. Its
+   honest product is the conversion of folklore into exact statements — a faithful
+   reformulation, exact per-step laws, a precise localization of the difficulty, and
+   cycle results with unusually little machinery."*
+
+2. **The sharpness hedge is published and is not upgradable.** Theorem 4.6, v1 and v2:
+   *"we assess (supported by the verified instances, though not proved here for all
+   `p`)."* `publication.md`: *"The hedge sentence is not upgradable; better evidence,
+   not a closure, is what v2 added."* v2's own Version note: *"No theorem or universal
+   claim is strengthened."*
+
+3. **Periods 1–3 are rederivations and priority is disclaimed.** Published Theorem 4.4,
+   verbatim: *"These statements are contained in the classical results [Steiner,
+   Simons–de Weger, Hercher]; the derivations, not the theorems, are the contribution."*
+   `publication.md`: *"**Cycles, periods 1–3** — *subsumed*… Never claim priority."*
+
+4. **The digit budget's conclusion is a heuristic, in print.** Published Prop. 3.9:
+   *"we treat it as the organizing heuristic, not a formalized theorem."*
+   `publication.md` records the same for the budget's conclusion.
+
+5. **Our own published Related-work paragraph names a kindred lemma of his** (§4(b)
+   above), and the same paragraph is where a referee would check the dichotomy's
+   novelty claim.
+
+6. **The cycle front is parked and the ladder retired.** `README.md` stopping rules:
+   *"No per-period cycle search runs, period."* `cycles.md` 12.8.5. A note that implied
+   the counting result is a step on an active cycle programme would contradict our own
+   published and wiki strategy.
+
+7. **AEH's scope is almost-everywhere only, and the paper says the budget blocks
+   reaching it.** Published, after Hypothesis 5.1: AEH *"does not exclude individual
+   staircase tails … and by Proposition 3.9 it cannot be reached by finite-window
+   computation. Its content is a question about digits of 2-adic logarithms, older and
+   broader than the Collatz problem."*
+
+8. **One internal number a referee could catch.** README and `cycles.md` 12.8.5 give
+   the `p = 92` search bound as `n ~ 10^18`; `cycles.md` 12.8.2's own verification
+   table gives `n₀(92) ~ 4.78·10^21`. Both wiki, neither published. Recorded, not
+   corrected (this session does not edit wiki pages). A referee-facing sentence should
+   cite neither.
+
+9. **`publication.md` is not a published artifact.** It is a wiki planning page that
+   summarises the papers, and it uses the word "dichotomy" in wordings ("its sharpness
+   dichotomy", "the uniform-trim/staircase dichotomy") that are *not* the published
+   ones. The published wordings are "a sharp dichotomy for counting arguments" and
+   "the counting-limit dichotomy". Anything quoted to a referee should come from the
+   PDF.
