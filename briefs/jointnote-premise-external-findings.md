@@ -33,6 +33,31 @@ i.e. **2026-07-28, early morning, local (UTC+10)**. Dates below are given in the
 local convention the rest of the record uses (2026-07-28) with the UTC instant
 noted where it matters.
 
+## The per-fact table
+
+Every checkable external statement in his round-11 letter, one row each. Detail
+and verbatim text are in the numbered items below.
+
+| # | His statement | What the source says | Verdict | Checked | Source |
+|---|---|---|---|---|---|
+| 1 | ccchallenge.org is "Formalising the Collatz literature, one paper at a time" | tagline verbatim; `/story`: "collaboratively formalise the research literature on the Collatz conjecture using proof assistants" | **CONFIRMED** | 2026-07-28 | `ccchallenge.org/`, `/story` |
+| 2 | 371 entries | header "Literature (371 entries)" | **CONFIRMED, no drift** | 2026-07-28 | `ccchallenge.org/` |
+| 3 | one formalised | Formalised: **1** (`BohmSontacchi1978`) | **CONFIRMED, no drift** | 2026-07-28 | `/htmx/stats`, `/htmx/paper-list?status=audited` |
+| 4 | four in progress | Formalising: **4** | **CONFIRMED, no drift** | 2026-07-28 | `/htmx/stats` |
+| 5 | five awaiting audit | Ready to be audited: **5**; a separate "Being audited" bucket is 0 | **CONFIRMED, no drift** | 2026-07-28 | `/htmx/stats`, `?status=waiting_to_be_audited` |
+| 6 | Steiner listed, not formalised | `Steiner1978` + `Steiner1981a/b`, all ☆ Wishlist, **Formalisations (0)** | **CONFIRMED** | 2026-07-28 | `/htmx/paper-list?q=Steiner`, `/htmx/paper-detail/Steiner1978` |
+| 7 | Simons–de Weger listed, not formalised | `SimonsWeger2005`, ☆ Wishlist, **Formalisations (0)** | **CONFIRMED** | 2026-07-28 | `/htmx/paper-detail/SimonsWeger2005` |
+| 8 | Hercher listed, not formalised | `Hercher2023`, ☆ Wishlist, **Formalisations (0)** | **CONFIRMED** | 2026-07-28 | `/htmx/paper-detail/Hercher2023` |
+| 9 | `Macindoe2026` catalogued, with an empty "Add formalisation" | entry present, Zenodo v1 export recorded verbatim at §1.5; **"Formalisations (0) … No formalisations yet. … + Add Formalisation"** | **CONFIRMED** | 2026-07-28 | `/api/papers/Macindoe2026/bibtex`, `/htmx/paper-detail/Macindoe2026` |
+| 10 | **Eliahou 1993, "New Lower Bounds on Nontrivial Cycle Lengths", already carries a formalisation awaiting audit** | one `lean4` formalisation, **"Ready to be audited"**, "AI-assisted: aristotle" | **CONFIRMED — and the register supports his correction twice over** (the one *accepted* formalisation, Böhm–Sontacchi 1978, is also a cycle paper) | 2026-07-28 | `/htmx/paper-detail/Eliahou1993` |
+| 11 | "the first machine-checked fragment of the cycle literature" would have been false; "a fragment" is the honest form | see row 10 | **his self-correction is SUPPORTED** | 2026-07-28 | as row 10 |
+| 12 | Hercher `m >= 92` | abstract: "Let $m$ be the number of local minima… In this paper, we prove $m \geq 92$"; Theorem 23 | **CONFIRMED — right figure, right symbol**; flat note: `m` (local minima) ≠ `K` (odd members) | 2026-07-28 | arXiv:2201.00406v3; JIS 26 (2023) 23.3.5 |
+| 13 | Hercher `K > 1.375e11` | Cor. 29, conditional on `X₀ ≥ 3·2^69`; underlying threshold exactly `q₂₃ = 137528045312` | **CONFIRMED**, as our la8 record already had it | 2026-07-28 | `briefs/merle-la8-t1-check-findings.md`; abstract |
+| 14 | "on a strictly weaker verification hypothesis than ours" | Thm 23 needs `704·2^60`, Cor. 29 needs `1536·2^60`, the note's exclusion instantiates `2^71 = 2048·2^60` | **CONFIRMED, and it agrees with our record — the asymmetry runs in HERCHER's favour on both hypothesis and conclusion.** True of both his numbers, not only Cor. 29 | 2026-07-28 | Hercher Def. 4 & Cor. 29; `briefs/merle-la8-t1-check-findings.md` §(g) |
+| 15 | Hercher formalised nowhere | ccchallenge: 0; no counterpart in any of his repositories | **CONFIRMED** | 2026-07-28 | item 2.4 |
+| 16 | "the `NOTE.md` skeleton from 19 July" | skeleton commit `f496abe` is **2026-07-18 23:48 +0200**; the header line inside the file does say 2026-07-19; §4 and §6 were rewritten by him **2026-07-24** | **structure yes, text no, date off by one** — recorded flat | 2026-07-28 | shared repo `c966875` |
+| 17 | (our record's expectation) shared HEAD `c966875` | `c966875`, ours, 2026-07-26 | **CONFIRMED — unmoved; no new commits by anyone** | 2026-07-28 | fresh clone |
+
 ---
 
 ## Item 1 — `ccchallenge.org`, read directly (checked 2026-07-28)
@@ -683,3 +708,46 @@ their keys turned)", and §2's δ8 impossibility has no ledger entry, while §2'
 cited entry L1 carries the status word `corrected`, not `two keys` (item 4).
 This is internal rather than external, and is listed here only because it is the
 kind of thing an external reader checks first.
+
+---
+
+## Item 6 — record
+
+- **This file** is the record: the per-fact table above, the `ccchallenge` entry
+  for `Macindoe2026` verbatim, the Hercher citation with its printed statements,
+  the current `NOTE.md` structure, and the three-faces status list.
+- **No script is committed, and none was needed.** This was an external records
+  check. The only arithmetic anywhere in it is three integer comparisons of
+  verification bounds and one ratio (item 2.5), checked in-session; every
+  substantive computation these findings lean on already has a committed script
+  from an earlier round (`experiments/merle_la8_t1_check.py`,
+  `experiments/merle_r11_ceiling_audit.py`,
+  `experiments/junction_public_recon_deficit_check.py`).
+- **`HANDOFF.md` item 1** carries one scoped paragraph for this window. A
+  sibling session (`jointnote-premise-ours`) edits the same item in parallel;
+  this branch touches only its own lines.
+- **Encoding:** `python experiments/encoding_scan.py` run over the tracked tree
+  before the final commit — result recorded in that commit's message.
+
+## Obstructions encountered
+
+- **`curl` has no network in this sandbox** (`000`, zero bytes). All external
+  reads went through the fetch tool and through `gh api`/`git clone`, which do
+  work. This cost nothing: the site's own public `htmx` fragment routes gave the
+  exact status vocabulary and bucket arithmetic, and its open-source backend
+  (`github.com/ccchallenge-org/ccchallenge`, `backend/main.py`) confirmed which
+  routes are reads and which is the single `POST` (never called).
+- **`ccchallenge.org` has no per-paper page route.** `/paper/{key}` and
+  `/papers/{key}` both return 404; the entry is served as fragments. This is why
+  the `Macindoe2026` record is quoted from `/api/papers/Macindoe2026/bibtex` and
+  `/htmx/paper-detail/…` rather than from one page.
+- **Submitter attribution is not exposed** on any public fragment, so "whose
+  entry it appears to be" could not be established read-only. Recorded as not
+  determinable (§1.5).
+- **Hercher's paper was read at the abstract and at the located statements**
+  (Definition 4, Theorem 23, Corollary 29) via the arXiv listing and the
+  full-text HTML mirror; the printed JIS article was not re-read page by page,
+  our own round-10 direct reading of the arXiv v3 PDF
+  (`briefs/merle-la8-t1-check-findings.md`) remaining the authority for
+  everything except the two items this session adds (the `m ≥ 92` symbol check
+  and the `X₀ = 704·2^60` figure behind Theorem 23).
