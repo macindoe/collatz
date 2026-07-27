@@ -403,3 +403,84 @@ somewhere we have not looked and are not going to. **Absence of an `AUDIT_V9`
 in the four public repositories is not evidence that it does not exist**, and
 the round-10 posture — absence of a public copy is not evidence against his
 account — carries over unchanged to this one file.
+
+---
+
+## Item 3 — `LegendreApprox.lean`: the diff, performed
+
+Round 10 recorded **NOT PERFORMED** because no counterpart existed to diff
+against. Both counterparts now exist and are public.
+
+**Three copies, two blobs.**
+
+| Copy | Path | git blob | SHA-256 of file | Entered at | Unchanged since |
+|---|---|---|---|---|---|
+| Junction | `Collatz-Junction-Theorem` `lean/skeleton/LegendreApprox.lean` | `a4fae1f9606cbb2ec4cc2a6da7e6e786881c7adf` | `6beec7b45105854cc27c1cf1380b5156b6af34563426fe812f4818de0230bdda` | `09f481b`, **2026-02-26** (as `lean/LegendreApprox.lean`; moved to `lean/skeleton/` at `9afe0c1`, 2026-02-27) | byte-identical from `09f481b` to HEAD |
+| cycles-lean | `collatz-cycles-lean` `lean/skeleton/LegendreApprox.lean` | `a4fae1f9606cbb2ec4cc2a6da7e6e786881c7adf` | same as above | `93c64ee`, 2026-03-26 (initial release) | byte-identical since |
+| T1 chain | `one-obstruction-three-faces-lean` `OneObstruction/LegendreApprox.lean` | `b55095ac13eeafdf759d7d28b997a175e56e6392` | `a1d7e0abd5fb6089e17569efa78f771111a0d871f8b2e69d47c330eac9d43c1e` | `da2c8db`, 2026-07-25 | byte-identical at `da2c8db`, `5c9b663` **and at current HEAD `c991430`** |
+
+**Upstream by commit date: the Junction copy**, by five months
+(2026-02-26 vs 2026-07-25). The two Junction-family copies are byte-identical to
+each other; the T1-chain copy is the one that differs. His commit message at
+`da2c8db` — *"Reuses `LegendreApprox.abs_sub_ge_nat_div` from the Merle Junction
+repository (compiles unchanged in this toolchain, 0 errors)"* — is accurate as
+to origin. **Home: CONFIRMED**, the clause round 10 could only record as
+unconfirmed.
+
+**Verdict: NOT byte-identical, and the difference is immaterial.** Same length
+(3,175 bytes each), and the whole diff is a two-line reordering:
+
+```
+16,17d15
+< open Real
+<
+18a17,18
+>
+> open Real
+```
+
+i.e. the Junction copy has `open Real` **before** `namespace LegendreApprox`;
+the T1-chain copy has it **inside** the namespace. Nothing else differs — not
+one character of any statement, hypothesis, binder, docstring or tactic. The
+three declarations are identical in both:
+
+- `theorem abs_sub_ge_of_not_convergent (ξ : ℝ) (q : ℚ) (hnc : ∀ n, q ≠ ξ.convergent n) : 1 / (2 * (q.den : ℝ) ^ 2) ≤ |ξ - ↑q|`
+- `lemma divInt_den_dvd_nat (S k : ℕ) (_hk : 0 < k) : (Rat.divInt (↑S) (↑k)).den ∣ k`
+- `theorem abs_sub_ge_nat_div (ξ : ℝ) (S k : ℕ) (hk : 0 < k) (hnc : ∀ n, Rat.divInt (↑S) (↑k) ≠ ξ.convergent n) : 1 / (2 * (k : ℝ) ^ 2) ≤ |ξ - (S : ℝ) / k|`
+
+which are exactly the statements `briefs/merle-lean-r10-audit-findings.md`
+item 4 recorded and re-verified. `open Real` at file scope versus inside a
+`namespace` puts the same names in scope for the same declarations; **there is
+no divergence for the reply to carry, and nothing in the T1 chain's kernel
+claims turns on it.**
+
+**Drift check on the Junction side: none.** Blob `a4fae1f` from 2026-02-26 to
+HEAD, in both Junction-family repositories. (Incidentally confirmed on his Lean
+side too — blob `b55095a` at `da2c8db`, `5c9b663` and current HEAD `c991430`.
+The sibling session `merle-r11-ceiling-audit` owns that question; this is
+recorded only so the two records agree, and any reconciliation is the main
+session's.)
+
+**Junction copy's own counts, by read: 0 `sorry`, 0 `native_decide`, 0 `axiom`
+declarations.** Imports: `Mathlib.NumberTheory.DiophantineApproximation.Basic`
+and `Mathlib.Data.Rat.Lemmas` — identical to the T1-chain copy.
+
+**Build context: it differs, and the difference does not bear on T1.**
+
+| | Junction (`lean/`) | T1 chain (`one-obstruction-three-faces-lean`) |
+|---|---|---|
+| toolchain | `leanprover/lean4:v4.29.0-rc2` | `leanprover/lean4:v4.27.0` |
+| Mathlib pin | `mathlib4 @ v4.29.0-rc2` | `mathlib @ v4.27.0` |
+| lakefile | `lakefile.lean`, package `collatz_junction`, `autoImplicit := false`, `srcDir := "skeleton"` | `lakefile.toml`, package `otf-lean-merle`, no `leanOptions` |
+
+The T1 chain compiles **its own copy** under its own v4.27.0 pin — it does not
+import the Junction project — so the Junction repository's newer toolchain has
+no bearing on T1's kernel claims. What the Junction context does add is one flat
+data point our record did not have: the same three declarations are stated
+against two different Mathlib pins five months apart, and his `da2c8db` claim
+that the file *"compiles unchanged in this toolchain"* is consistent with the
+file being pin-insensitive at this level (it uses only
+`Real.exists_rat_eq_convergent`, `Rat.den_dvd` and elementary order lemmas).
+**Read, not built** — no toolchain in this session; the standing pin from the
+round-10 audit is unchanged, that no committed `#print axioms` log contains any
+`LegendreApprox` entry although `T1Structure_axioms.txt`'s header names the file.
