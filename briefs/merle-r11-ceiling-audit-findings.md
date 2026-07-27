@@ -460,8 +460,147 @@ two halves have different hypothesis lists and why `ceiling_pinned` inherits
 `hpX` from the upper half alone. The asymmetry is in the mathematics, and his
 statements reflect it correctly.
 
+**One observation on the shape of the repair, flat (see item 5, D3-bis).** The
+lower half is not only elementary — it is *one-signed*, and that is stronger
+than the two-sided screen our own round-10 records used. `log_gap_gen`'s left
+half, now derived rather than assumed, says `K > n·log₂3`. Combined with the
+Legendre step's `n = t·q_m`, `K = t·p_m`, this gives `K − nL = −t(q_m L − p_m)`,
+so a **positive** cycle can only sit on a convergent lying *above* `log₂3` —
+the odd-indexed ones. `briefs/merle-la8-t1-check-findings.md` §(f) records the
+first scale the seam chain cannot exclude as `q₂₂ = 65470613321`, which is the
+answer to the *two-sided* test `‖nL‖ < nδ`; `q₂₂` lies **below** `log₂3` and so
+can host only a south-shore configuration. The first scale admissible on the
+north shore is `q₂₃ = 137528045312` — Hercher's threshold exactly. Verified in
+item 5 at both working precisions. **Nothing in the Lean chain depends on
+this** (the closure runs on the window, and `q₂₂` is already outside it), and
+it is not a discrepancy with anything he has written; it is recorded because
+`ceiling_lower` is precisely what converts the one-sidedness from a threaded
+hypothesis into a theorem, and because our own §(f) sentence would read more
+tightly with the shore named.
+
 **One observation on the shape of the repair, flat.** His one-line summary
 ("every factor `3x+1` strictly exceeds `3x`") is the same argument; we agree
 on it independently. It also confirms the round-10 characterisation: the gap
 was a *formalization* gap, not a mathematical one — the fact was always
 available in one line from a theorem already in the file.
+
+## Item 5 — canaries, fresh code, exact integers
+
+`experiments/merle_r11_ceiling_audit.py`, written from scratch: pure Python
+stdlib (`decimal`, `fractions`, `math.isqrt`, `random`), importing nothing from
+any Merle repository, running none of his scripts, and importing nothing from
+`experiments/merle_lean_r10_audit.py` or `experiments/merle_la8_t1_check.py`.
+The cycle data is re-derived here from the odd map itself; the continued
+fraction of `log₂3` is recomputed here by exact Euclid on a scaled integer.
+Every decision that can be exact-integer is exact-integer; where a logarithm is
+unavoidable (scales `n ~ 10¹¹`, where `3ⁿ` cannot be formed) the work is done
+in `Decimal` at **two** precisions, 120 and 200 significant digits, with
+agreement asserted for every reported quantity. No float enters any pass/fail
+decision.
+
+**190 recorded checks, 0 failures.** Output committed as
+`experiments/merle_r11_ceiling_audit_output.txt`.
+
+**Canaries first — the four real cycles, re-derived.** Iterating the odd map
+`3x+1 = 2^v·x'` from the seeds `1, −1, −5, −17` reproduces
+`[1]` (`n=1, K=2`), `[−1]` (`n=1, K=1`), `[−5, −7]` (`n=2, K=3`) and
+`[−17, −25, −37, −55, −41, −61, −91]` (`n=7, K=11`); the product identity and
+every individual step relation hold exactly, and the `−17` figures reproduce
+the L-A8 entry digit-exact (`∏(3x+1) = −403123745024000`,
+`∏x = −196837766125`, `K = 11`).
+
+**(A) `ceiling_lower` / `ceiling_pinned` at the real cycles.** Exactly one real
+cycle — the trivial one — satisfies the hypotheses, and it satisfies both
+conclusions: `3 < 4 < 6`, the file's own canary, with `X = 1`, `hX`, `hmin`
+and `hpX` (`2 < 3`) all met. The three negative cycles are **out of scope**:
+the theorems are typed over ℕ and `0 < X ≤ xᵢ` is unsatisfiable for negative
+elements. They are also exactly the cases where the conclusion is **false** —
+`3 > 2`, `9 > 8`, `2187 > 2048` — so the positivity hypothesis is load-bearing,
+not decorative.
+
+**(B) Negative controls.**
+
+- `K` one below the forced ceiling never satisfies the lower bound: 400 of 400
+  for `n = 1..400`.
+- Explicit non-cycle tuple: `x = (1,1)`, `v = (0,0)` — `hstep` fails
+  (`3·1+1 = 4 ≠ 2^0·1 = 1`) and the conclusion fails (`3² = 9 > 2^0 = 1`).
+- 200 random positive tuples with `hstep` broken and `K` below the ceiling:
+  200 of 200 have both the hypothesis and the conclusion false.
+- The proof's core inequality on 400 random positive multisets (elements to
+  `10²⁵`): `∏(3xᵢ) < ∏(3xᵢ+1)` strictly, 400 of 400, and
+  `∏(3xᵢ) = 3ⁿ·∏xᵢ` exactly, 400 of 400 — the two steps the Lean proof does
+  with `Finset.prod_lt_prod_of_nonempty` and
+  `prod_mul_distrib`/`prod_const`/`card_univ`.
+- With a zero element admitted, `3ⁿ·∏xᵢ = 0` and the cancellation has nothing
+  to cancel — recorded because that is exactly where positivity enters.
+- Separately: `hstep` alone already forbids `xᵢ = 0` (`3x+1 ≥ 1 > 0 = 2^v·0`),
+  confirming item 2(a)'s reading that `hX`/`hmin` are the route the file takes,
+  not an extra assumption.
+
+**(C) Statement canaries at synthetic `(n, K)`.** 320 scales — `n = 1..300`
+dense, samples to `n = 5000`, plus every convergent denominator and its double
+up to 200 000 — each in exact integers with `K₀ = bitlength(3ⁿ)`:
+
+- lower bound `3ⁿ < 2^{K₀}`: 320/320;
+- upper bound `2^{K₀} < 2·3ⁿ`: 320/320;
+- `K₀` is the **unique** admissible `K` (checked against `K₀ ± 1, ± 2`):
+  320/320;
+- `K₀ − 1` fails the lower bound: 320/320; `K₀ + 1` fails the upper bound:
+  320/320.
+
+So `ceiling_pinned` pins `K = ⌈n·log₂3⌉` and nothing else, and both halves are
+individually necessary. Edge `n = 1` (`3 < 4 < 6`) included.
+
+**(D) The four repaired downstream statements.**
+
+- *Trivial cycle.* `ratio_bound_at_barina` and `log_gap_at_barina` exit scope
+  at `hmin` (`2^71 ≤ 1` is false) — correctly, and before any conclusion is
+  claimed. **`log_gap_gen` is genuinely in scope at `X = 1`** (`hX`, `hmin`,
+  `hpX : 0 < 3` all hold) and its conclusion holds:
+  `0 < 2ln2 − ln3 = 0.287682… < 2n/(3X) = 0.666667`. This is a real
+  instantiation of the repaired statement, and its **left half is exactly
+  `ceiling_lower`'s content in logarithmic form** — the half that used to be
+  the hypothesis. `quotient_is_convergent_gen` exits at `hwin`
+  (`4000 > 2079`), and its conclusion is true there anyway: `K/n = 2/1 = p₁/q₁`
+  is a convergent.
+- *Negative cycles.* Out of scope at the ℕ typing for all four; no size
+  hypothesis is ever reached.
+- *Inside the Barina window.* The seam hypothesis `‖n·log₂3‖ < n·δ` is checked
+  at every convergent denominator: it **fails at all 22 inside the window**,
+  margins from `10²¹×` down to the tightest `5.443270×` at
+  `q₂₁ = 6586818670`. So inside the window the hypothesis set of all four
+  downstream theorems is **empty** — which is precisely the T1 closure, and the
+  reason the statements are not vacuous by accident but vacuous by theorem.
+- *At the first admissible scale.* `q₂₂ = 65470613321` is the first scale the
+  two-sided test admits (ratio `0.249509`) and lies outside the window; the
+  one-sided refinement of item 4 pushes the first **north-shore** scale to
+  `q₂₃ = 137528045312`. Instantiated there with `K = p₂₃ = ⌈n·log₂3⌉`:
+  `0 < 8.986549·10⁻¹³ < 3.883026·10⁻¹¹` — both halves of the log gap hold;
+  `hwin` fails (`4000n² = 7.5656·10²⁵ > 2079·2^71 = 4.9089·10²⁴`), so the
+  statement exits scope **exactly at `hwin`**; and `K/n = p₂₃/q₂₃` is a
+  convergent, as the conclusion would say had `hwin` held. Convergent sides
+  verified to alternate at every `j ≤ 25`, stable at both precisions.
+
+**(E) Round-10 facts the repair could have disturbed — all re-confirmed.**
+
+- `convPairs` as committed at HEAD (unchanged from `5c9b663`) equals the
+  computed `(q_j, q_{j+1})` for `j = 0..21`, exactly; `convPairs_length = 22`.
+- Integral window `⌊√(2079·2^71/4000)⌋ = 35 031 771 147` by exact `isqrt`,
+  tight on both sides; exact Legendre window floor `35 035 491 004`; **the same
+  22 convergents under either**. (This re-confirms the figure the round-10
+  reply session corrected on `main` at `0816878`.)
+- Discharge criterion: all 22 pass
+  `2000·q·(q+q′) ≤ 2079·2^71 = 4 908 899 958 942 996 199 636 992`; tightest
+  **5.1713×** at `q = 6586818670` with LHS
+  `949 258 476 701 148 143 940 000` — his OUT-056 figures digit-exact; the
+  exact test at the same `q` gives **5.4433×**, so the integer form is
+  conservative in the right direction; the criterion **fails** at
+  `(q₂₂, q₂₃) = (65470613321, 137528045312)`, the non-vacuity canary.
+- Classical sandwich `1/(q_j+q_{j+1}) < θ_j < 1/q_{j+1}` at `j = 1..25`: 25/25.
+- Multiples cancellation `|t·q_j·L − t·p_j| = t·θ_j` at three `(j, t)`
+  instances — the tightening he has now written into `OUT_REQ-MATH-056.txt`
+  himself, crediting it.
+- `δ = 2/(3·2^71·ln2) = 4.073367·10⁻²²`, rounding to the entry's
+  `4.0734·10⁻²²`; and the withdrawn `4.955·10^10` window reproduces as
+  `4.95477·10^10`, exactly `√2 ×` the corrected exact window — the
+  missing-factor-2 artifact, confirmed again.
