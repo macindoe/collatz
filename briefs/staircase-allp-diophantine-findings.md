@@ -391,7 +391,18 @@ own range, not part of the requested sweep. The `n` column at `p = 22` is
 omitted because that row came from a deliberately small (30 s) probe whose
 per-row detail was not captured; its `γ/log₂p = 3.379` is recorded as-is.
 
-P36_PLACEHOLDER
+**`p = 36`: started, not completed — recorded as not run, not as a failure.**
+It was launched with the same recipe and a 45 s/pass budget and was still inside
+the exact big-integer verification when this session ended. At `p = 36`,
+`n ≈ 1.6·10^7`, `3^n` is a 25-Mbit integer and one full rotation-sum
+verification (Horner for `R_0` plus 36 transport steps) costs on the order of
+several minutes in CPython with no FFT multiplication — the cost grows like
+`n^1.585 ≈ 2.06^p`. This is a compute limit and nothing else: the availability
+side at `p = 36` is settled independently in §2 (`γ_mult(36) = 25.288`, witness
+`n = 2·10781274 = 21562548`; and the in-band witness `n = 10794880`,
+`γ = 12.711`, both exactly verified), and `p = 36` shows no anomaly of any kind
+in the candidate supply. The honest statement is: **`p = 24…35` verified,
+`p = 36` not completed.**
 
 **Reading the table, honestly.** Two budget regimes are mixed and the difference
 matters. Where the sharpening pass ran to completion (`p ≤ 28`) the recipe closes
@@ -417,8 +428,9 @@ capped rows suggests resistance.
 * The `p = 22` row is the same story on the period where the gap was first seen.
   `12.8.6.4` records `γ = 11.186` (13 correction moves) and `γ = 14.746` (8
   moves) at the two out-of-chain candidates; window-wide candidates reach
-  `γ/log₂p = 3.379` under a deliberately small 30 s budget, and `p = 21` and
-  `p = 23`-neighbouring periods reach `≈ 0.6`.
+  `γ/log₂p = 3.379` under a deliberately small 30 s budget, while the
+  neighbouring periods `p = 21` and `p = 24`, given the full budget, reach
+  `0.620` and `0.653`.
 * **No constructed instance passes the divisibility system.** Every one was
   tested exactly (`q | R_r` at all `p` rotations) and every one failed, matching
   `12.8.3` and `12.8.6.4`. The script's HALT-and-exit guard never fired.
@@ -465,7 +477,7 @@ Those are not the same statement, and they part company:
 `12.8.6.1` is CLOSED.** It is closed by replacing the intended route, not by
 completing it; the intended route is closed in the other direction, as an
 obstruction. Nothing here is labeled proved that is not backed by code that
-could have failed: 90+ checks, 0 failures, with negative controls that do fail
+could have failed: 92 checks, 0 failures, with negative controls that do fail
 where they should (an empty maximal gap; a flat profile; a `γ ≈ 1` candidate).
 
 **The interface with the sibling session (`staircase-allp-construction`).** That
