@@ -609,8 +609,9 @@ saturation: each climb block takes the largest depth the exact size condition al
 budget. No floating point occurs anywhere in it or in its verification, `⌈n·log₂3⌉` being
 `bitlength(3^n)`.
 
-What had been missing was one constant. Asking for a real profile whose deficit is constant across
-blocks forces `m_r = C(L−1)L^(r−1) + 1/(L−1)`: geometric, plus a fixed additive offset of
+What had been missing was one constant. Writing `L = log₂3` for the rest of this section: asking for
+a real profile whose deficit is constant across blocks forces `m_r = C(L−1)L^(r−1) + 1/(L−1)` —
+geometric, plus a fixed additive offset of
 `1/(L−1) = 1.70951` per block. The offset's meaning is mechanical — at the exchange rate
 `L − 1 = log₂(3/2)`, `1/(L−1)` units of standing depth generate exactly one bit of credit per block,
 which is precisely the one unit of exit valuation each climb block spends. A pure geometric profile
