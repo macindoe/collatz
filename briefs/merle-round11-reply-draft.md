@@ -503,6 +503,51 @@ already below it, and it falls from there). Which is to say: the `±1` outweighs
 exactly one odd integer, and that integer is the trivial cycle. Everywhere else the terrain is
 grey, in your words, and at `2⁷¹` the sign is worth `10⁻²¹` of the drift.
 
+## Two defects in our own record, both ours to hand back
+
+**`σ` was undefined at its point of use in Proposition 12.6.1, and the natural reading of it is
+wrong.** This is the frame you work in — Remark 12.6.1.1's transport recurrence is shared-ledger
+entry L-A1, kernel-verified on your side — so it is said plainly: our page carried a defect that
+could have misled you. The correct convention is `σ_j = s_j + m_(j+1)`, the exit valuation of block
+`j` plus the entry depth of block `j+1`, indices cyclic, and the shift is essential. It is now
+stated in place, in the Proposition, where `S_t = Σ_(j<t) σ_j` uses it. The section preamble had it
+112 lines above and only in the `m`-solved direction (`m_(t+1) = σ_t − s_t`); the Proposition itself
+gave the reader nothing at the point of use. The natural local misreading, `σ_j = m_j + s_j`, builds
+a different object — on random profiles it agrees with the right one 2 times in 300, and is wrong by
+up to three orders of magnitude.
+
+What makes that worth a paragraph rather than a line is that **every structural guardrail attached
+to 12.6.1 is blind to it**. The Proposition's own sanity identity — the trivial cycle
+`m_t = s_t = 1`, where `σ = 2` under both readings — reproduces `4^p − 3^p` either way. `K = Σ s_t + n`
+is a cyclic sum and cannot see it. The repetition multiplicativity of 12.6.1.4 and the ghost identity
+`v_2(3^(m_r) R_r − q) = s_r` pass under both. And the transport recurrence itself is satisfied
+**exactly under both conventions** — 1685/1685 in our check, and not as a sampling accident but with
+a proof: in `2^(σ_r) R_(r+1) = 3^(m_r) R_r + (2^(s_r) − 1)q` every `σ` telescopes away between the
+prefactor and the difference of prefix sums, leaving only the wrap term, which requires exactly
+`2^(Σσ) = 2^K`; both readings are cyclic rearrangements of the same multiset `{m_j} ∪ {s_j}`, so both
+give `Σσ = Σs + n = K`. Read self-consistently, L-A1 cannot discriminate. What does discriminate is
+any check that pins `σ` to a quantity the implementation does not itself supply: writing `σ_r` out as
+`s_r + m_(r+1)` inside the assertion — the misreading then fails at the first rotation — or an
+externally recorded number, such as the `gcd(q, R_r) = 7` at every rotation of 12.8.3's `p = 7` seed,
+which is `{7}` under the correct convention and `{1}` under the misreading.
+
+So we added a canary that rejects the wrong object, and it is yours if it is of any use:
+`experiments/record_defects_check.py`, three tiers — the published trivial-cycle identity first
+(kept only to catch a wholly broken implementation, and it accepts both conventions, which is the
+point of recording it), then the recurrence at every rotation of a profile with `m` and `s` unequal
+and `σ_r` spelled out, then the `gcd = 7` instance, which is wholly external. **40 checks, 0
+failures**; it accepts our own committed evaluator and rejects the misreading with a message naming
+the convention. If any of your artifacts build `R_r` from a profile rather than inheriting it, that
+is a five-minute check and worth having — offered as a tool, not as a doubt about anything of yours.
+
+**And one figure in our prose was wrong by a factor of 4,778.** The search bound Corollary 12.8.2
+gives at `p = 92` is `n₀(92) = 4.78·10^21`; `README.md` and `cycles.md` 12.8.5 both carried
+`~10^18`. The table inside 12.8.2 was right throughout — the prose had quoted Theorem 12.8.1's bare
+exponential rate, `1.585^92 = 2.53·10^18`, and dropped the corollary's own factor of about 1,890.
+Both figures are corrected. Nothing downstream moves: at either number a period-92 search must
+enumerate more than `10^1498` profiles, so the crossover plan stays withdrawn for exactly the reason
+it was withdrawn.
+
 ## The joint note — what we checked, and then it is yours
 
 You asked one question before any structure, and made three proposals. Here is what we
