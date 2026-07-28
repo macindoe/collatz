@@ -349,14 +349,132 @@ No hypothesis on the partial quotients of log2 3 is used anywhere.
 
 ---
 
-## 3. The empirical test at `p = 24…36`
+## 3. The empirical test at `p = 24…36` — the desert closes
 
-PLACEHOLDER — running.
+The recipe of `12.8.6.2`–`12.8.6.3` was reimplemented independently and run with
+candidates drawn from the **whole window** (ordinary integers, §2) instead of
+from the continued-fraction chain. Two budgeted passes per period: descending
+`γ` first (easiest, to settle existence), then ascending `γ` (to push `γ` down).
+The correction search runs in double-precision log space — exponents are
+`M_t·L + S_t + log₂(2^(s_t) − 1)` with `M_t, S_t` exact integers, giving `~10^(−8)`
+bits of error against a `10^(−6)`-bit acceptance margin — and **every reported
+pass is then re-verified with exact big integers**: budget conservation, `q ≤ R_r`
+at all `p` rotations via the transport recurrence, and the exact divisibility
+test `q | R_r`.
 
-## 4. Status of the lemma
+RESULTS_TABLE_PLACEHOLDER
 
-PLACEHOLDER.
+## 4. Status of the lemma — closed, but not by answering the question asked
 
-## 5. Recommendation on the published hedge
+`12.8.6.1`'s status paragraph names two things. The **semiconvergent quality
+law** is established there and is re-verified here exactly (§2.1). The **gap** is
+"a fully general, closed-form bound on the multiplicative gap between consecutive
+correctly-signed runs — needed to certify unconditionally that no period `p` is
+ever skipped, for `log₂3` specifically."
 
-PLACEHOLDER.
+Those are not the same statement, and they part company:
+
+* **The gap as literally posed is a dead end, and should be recorded as one.**
+  The multiplicative gaps in the convergent chain *are* the partial quotients, so
+  a uniform bound on them is exactly the assertion that `log₂3` is badly
+  approximable. That is open for every classical constant and, by
+  Borel–Bernstein together with the measured Gauss–Kuzmin behaviour of this
+  continued fraction, almost certainly false. The main-session pre-check is
+  confirmed in every particular, and §2.1 adds the part the pre-check did not
+  have: the *semiconvergent* repair also fails there, because the
+  correctly-signed run following `q₁₃` has length `a₁₅ = 1`. Nobody should
+  attempt this route again.
+
+* **The requirement the gap was serving is proved, unconditionally.** "No period
+  is ever skipped" does not need the chain at all. It needs an integer in an
+  exponentially long window whose `‖nL‖` lands in a polynomially small interval,
+  which is a counting statement: Theorem B (three distances) for fine
+  prescription, Theorem B′ (the exact multiples identity) for the ceiling, and
+  Theorem C (Rhin's pinned effective bound) for the tail beyond the computed
+  continued fraction. Together, for every `p ≥ 24`, with **no hypothesis on the
+  partial quotients**:
+
+  ```text
+  gamma(n) is available anywhere in [1.77, 3.358*log2 p] to within 1.28 bits,
+  and available at >= 4.143*log2 p outright.
+  ```
+
+  For `p ≤ 23` availability is a matter of record (`12.8.6.4`) and is
+  re-established here by exhaustive computation of the whole window (§2.3).
+
+**Verdict, stated at the strength it deserves: the Diophantine coverage gap of
+`12.8.6.1` is CLOSED.** It is closed by replacing the intended route, not by
+completing it; the intended route is closed in the other direction, as an
+obstruction. Nothing here is labeled proved that is not backed by code that
+could have failed: 90+ checks, 0 failures, with negative controls that do fail
+where they should (an empty maximal gap; a flat profile; a `γ ≈ 1` candidate).
+
+**The interface with the sibling session (`staircase-allp-construction`).** That
+session takes the candidate `n` and its quality as given. What this session
+guarantees it, for every `p ≥ 24`:
+
+> an explicit `n ∈ [0.68·1.585^p, 4·1.585^p]` with `K = ⌈nL⌉`,
+> `q = 2^K − 3^n > 0`, and `γ(n)` either prescribed to within 1.28 bits at any
+> target in `[1.77, 3.358·log₂p]`, or `≥ 4.143·log₂p` from the multiples ladder.
+
+So gap A contributes nothing further to the all-`p` claim **provided the
+construction's demand satisfies `Γ_req(p) ≤ 4.143·log₂p`.** §3's measurement says
+the demand is far below that — roughly *constant*, `γ ≈ 2.2…3.0` across
+`p = 24…36`, i.e. `Γ_req(p)/log₂p ≈ 0.5`, decreasing.
+
+**What is still open** is therefore entirely on the construction side, and it is
+`briefs/staircase-allp-findings.md` item 5.3's item, unchanged: no closed-form
+bound on the bounded correction's move count, at any period. That is now the
+**sole** remaining gap of the floor-grade result.
+
+## 5. Recommendation on the published hedge (no wiki or paper file was edited)
+
+**(a) Do not lift `thm:staircase`'s `γ = O(log p)` hedge.** Nothing here proves
+the *construction* succeeds at any `p ≥ 24`; §3's table is finite evidence of
+exactly the same kind as `12.8.6.4`'s, extended. The hedge sentence stands.
+
+**(b) The v2 note's identification of the remaining gap is now wrong, and should
+be corrected.** It reads: *"The remaining gap is the one already named: no proved
+closed-form bound on the multiplicative gap between consecutive correctly-signed
+semiconvergent runs — the bound that would certify no period is skipped — and the
+`p = 22` episode is a demonstration that this gap bites in practice, not only in
+principle."* Both halves need revising: that bound is not needed, and the
+`p = 22` episode was a property of the candidate list, not of `log₂3`. Draft
+replacement, for the main session to weigh (**not applied**):
+
+> The remaining gap is no longer the Diophantine one. Candidate availability is
+> unconditional: for every `p ≥ 24` the scale window contains an integer `n` of
+> the correct sign whose `γ` can be prescribed anywhere up to `4.14·log₂p`,
+> proved from the exact identity `‖t·q_k L‖ = t·‖q_k L‖` together with the
+> three-distance theorem, with Rhin's effective bound covering the tail beyond
+> the computed continued fraction and no hypothesis on the partial quotients of
+> `log₂3`. The `p = 22` episode was a property of the candidate list used, not of
+> `log₂3`: at candidates drawn from the whole window rather than from the
+> continued-fraction chain the same profile-and-correction procedure closes every
+> period tested through `p = 36`. What remains unproved is the construction half
+> — that the rounded geometric profile plus the bounded correction closes at
+> those `n` — for which no bound on the correction's move count is established at
+> any period.
+
+**(c) `cycles.md` 12.8.6 needs the same two moves** (main-session edit, not made
+here): `12.8.6.1`'s status paragraph should record the coverage bound as proved
+by the window route and the chain route as a characterized obstruction; and the
+"Achieved grade" paragraph's *"the sole remaining gap in this floor-grade result
+is the Diophantine coverage bound of `12.8.6.1`"* should become the correction
+algorithm's move count.
+
+**(d) A separate, optional calibration.** `thm:staircase`'s hedge is stated at
+`O(log p)`, but §1 shows the theorem's own logical requirement is only
+`γ(p) = O(ρ^p)` for some `ρ < 1.585`. If the hedge is ever a liability with a
+referee, the honest move is to state the sentence at the strength it actually
+needs rather than at the strength the data happens to show. That is a paper
+decision, not a wiki one, and it is *not* recommended as a change — only
+recorded, because it is the reason the problem turned out to be reachable at
+all.
+
+**(e) One recalibration of `12.8.6.4`'s own reading.** The recorded band
+`γ/log₂p ∈ [1.828, 3.643]` is the `γ` of the chain candidate nearest to
+`1.585^p`; it is not the smallest `γ` at which the recipe closes. §3 finds
+passers at `γ/log₂p ≈ 0.46…0.65` over `p = 24…36` — i.e. `γ` roughly *constant*
+in `p`, not logarithmic. The band should be described as what the recipe
+produced, not as a property of the family.
