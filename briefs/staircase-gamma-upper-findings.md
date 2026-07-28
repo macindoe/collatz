@@ -106,7 +106,7 @@ B(p) := 1.05*L*u + 1/u - u - (p-2) - L/u .
 negative for every `p ≥ 2`. Hence, with
 
 ```text
-Gamma*  :=  1.05*L*(L-1) + 1/(L-1) + 1 + eta   <=  3.683012100721 ,
+Gamma*  :=  1.05*L*(L-1) + 1/(L-1) + 1 + eta   <=  3.683012100722 ,
 ```
 
 **`Γ(p,n) < Γ*` for every `p ≥ 2` and every `n ≤ 1.05·L^p`** — the value
@@ -182,9 +182,9 @@ starting values `N` are actual counterexamples (first at `N = 22`).
 > **Theorem G (the `γ` bracket).** Let `p ≥ 16`. With
 >
 > ```text
-> Gamma*   = 1.05*L*(L-1) + 1/(L-1) + 1 + eta   <=  3.683012100721
+> Gamma*   = 1.05*L*(L-1) + 1/(L-1) + 1 + eta   <=  3.683012100722
 > delta_hi = -log_2(1 - 2^-Gamma*)              >=  0.116939066509
-> theta    = 8 - 5L                             <=  0.075187496394
+> theta    = 8 - 5L                             <=  0.075187496395
 > delta_lo = 0.0415       (any value < delta_hi - theta = 0.041751570114 will do)
 > ```
 >
