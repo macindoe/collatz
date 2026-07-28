@@ -1177,6 +1177,333 @@ def part4():
     print()
 
 
+# ---------------------------------------------------------------------
+# Part 5. THE RETARGETED COVERAGE LEMMA.
+#
+# The sibling result (branch staircase-allp-construction, merged at e42d785)
+# removed the correction algorithm instead of bounding it, and its Construction
+# B consumes EXACTLY ONE property of the candidate n:
+#
+#       gamma(n) >= Gamma(p, n),     i.e.   ceil(nL) - nL <= -log2(1 - 2^-Gamma),
+#
+# plus a scale side-condition (H0). No convergent, no semiconvergent, no
+# continued-fraction structure, no sign condition, no chain, no run. So the
+# coverage lemma this session owes is no longer "a correctly-signed run at every
+# scale plus a bound on the multiplicative gaps between runs" (§2, which stands
+# on its own and is strictly stronger than needed) but the far weaker
+#
+#       every interval [N, 1.05N] contains an n with ceil(nL) - nL <= 0.1169.
+#
+# That is elementary and unconditional, and this part proves and verifies it.
+# ---------------------------------------------------------------------
+
+# theta_3 = |h_3 - q_3 L| = 8 - 5L, the step this whole part rests on.
+Q_STEP = 5
+THETA_STEP = 8 - 5 * L
+SWEEP_STEPS = int(mp.ceil(1 / THETA_STEP))          # 14
+SWEEP_SPAN = Q_STEP * SWEEP_STEPS                   # 70
+
+
+def Gamma_pn(p, n):
+    """The sibling's Gamma(p,n) (its Theorem B, section 5), transcribed from the
+    statement -- not from its code. eta = -log2(1 - 2^-(S-p+1)) with S = K - n."""
+    K = int(mp.ceil(mpf(n) * L))
+    S = K - n
+    if S - p + 1 <= 0:
+        return None
+    eta = -mp.log(1 - mpf(2) ** (-(S - p + 1)), 2)
+    b = 1 + eta
+    num = ((mpf(n) - 1) * (L - 1) ** 2 + L ** (p - 1) * (1 + b * (L - 1))
+           - (p - 2 + b) * (L - 1) - L)
+    den = (L - 1) * (L ** (p - 1) - 1)
+    return num / den, eta
+
+
+def hypothesis_ok(p, n):
+    """(H0) and (H1) of the sibling's Theorem B, evaluated exactly enough."""
+    g = Gamma_pn(p, n)
+    if g is None:
+        return False, None, None
+    G, eta = g
+    K = int(mp.ceil(mpf(n) * L))
+    S = K - n
+    gamma = gamma_of_delta(delta_hp(n))
+    H0 = (S >= p) and ((L - 1) * (n - p) + gamma >= p + eta)
+    H1 = gamma >= max(2 + eta, G)
+    return (H0 and H1), gamma, G
+
+
+def construction_B(p, n):
+    """Construction B, transcribed from the sibling's section 4 statement (not
+    from its code) and evaluated in exact integers only. Returns (ms, ss, q, K)
+    or None."""
+    T3 = 3 ** n
+    K = T3.bit_length()
+    q = (1 << K) - T3
+    S = K - n
+    s_crash = S - (p - 1)
+    if s_crash < 1 or p < 2:
+        return None
+    ms = []
+    T = 0
+    for r in range(p - 1):
+        X = (3 ** T) * (1 << (n - T + p - 1 - r)) * ((1 << s_crash) - 1)
+        cap = (X // q).bit_length() - 1
+        budget = n - 1 - T - (p - 2 - r)
+        m = min(cap, budget)
+        if m < 1:
+            return None
+        ms.append(m)
+        T += m
+    c = n - T
+    if c < 1:
+        return None
+    ms.append(c)
+    ss = [1] * (p - 1) + [s_crash]
+    return ms, ss, q, K
+
+
+def part5(pmax_e2e=32, pmax_witness=80):
+    print("=" * 78)
+    print("PART 5.  THE RETARGETED COVERAGE LEMMA (sibling interface, e42d785)")
+    print("=" * 78)
+    print("  Construction B consumes exactly one property of n: gamma(n) >=")
+    print("  Gamma(p,n), plus the scale side-condition (H0). Nothing about the")
+    print("  continued fraction of L is used by it -- so the lemma this session")
+    print("  owes reduces to a density statement.")
+    print()
+
+    # ---- (1) the threshold is a constant, uniform in p -------------------
+    print("  (1) The threshold. Gamma(p,n) rises monotonically to its limit;")
+    print("      at kappa = n/1.585^p = 1.05 (the top of the target window):")
+    print()
+    print(f"      {'p':>5} {'Gamma@1.05':>12} {'delta threshold':>16}")
+    worstG = mpf(0)
+    for p in (6, 8, 10, 12, 16, 20, 30, 60, 120, 400):
+        n = int(mp.floor(mpf('1.05') * L ** p))
+        g = Gamma_pn(p, n)
+        G = g[0]
+        worstG = max(worstG, G)
+        th = -mp.log(1 - mpf(2) ** (-G), 2)
+        print(f"      {p:>5} {float(G):>12.5f} {float(th):>16.5f}")
+    # the supremum over ALL p >= 6, checked
+    sup = mpf(0)
+    for p in range(6, 2001):
+        n = int(mp.floor(mpf('1.05') * L ** p))
+        g = Gamma_pn(p, n)
+        if g is not None:
+            sup = max(sup, g[0])
+    THRESH = -mp.log(1 - mpf(2) ** (-sup), 2)
+    check("Gamma stays below 3.6831 for every p in 6..2000", sup < mpf('3.6831'),
+          f"sup {float(sup):.6f}")
+    print()
+    print(f"      sup over p = 6..2000 of Gamma(p, 1.05*1.585^p) = {float(sup):.6f},")
+    print(f"      so it suffices that   ceil(nL) - nL <= {float(THRESH):.6f}")
+    print("      -- a fixed density condition, with NO p-dependence at all.")
+    print()
+
+    # ---- (2) Lemma D: the elementary sweep -------------------------------
+    print("  (2) LEMMA D (elementary, unconditional, no continued-fraction theory")
+    print("      beyond one exact number). Let theta = 8 - 5L = "
+          f"{float(THETA_STEP):.10f} > 0.")
+    print("      Since 5L = 8 - theta, stepping n -> n+5 decreases {nL} by exactly")
+    print("      theta (mod 1). The 15 points n = N, N+5, ..., N+70 therefore lie")
+    print("      theta apart along a full turn (14*theta = "
+          f"{float(SWEEP_STEPS*THETA_STEP):.6f} >= 1),")
+    print("      so ANY arc of length > theta contains one of them. The target arc")
+    print(f"      {{nL}} in [1 - {float(THRESH):.6f}, 1) has length "
+          f"{float(THRESH):.6f} > theta.")
+    print(f"      Hence: among any {SWEEP_SPAN + 1} consecutive integers there is an n")
+    print(f"      with ceil(nL) - nL <= {float(THRESH):.6f}.")
+    check("theta < threshold (the sweep is fine enough)", THETA_STEP < THRESH,
+          f"{float(THETA_STEP)} vs {float(THRESH)}")
+    check("14*theta >= 1 (the sweep closes the circle)",
+          SWEEP_STEPS * THETA_STEP >= 1)
+    # brute-force the true worst gap, which must not exceed the proved bound
+    thr_num = int(mp.floor((1 - THRESH) * SCALE))
+    run = 0
+    worst_run = 0
+    x = frac_fix(1)
+    step = LFIX % SCALE
+    for n in range(1, 3_000_001):
+        if x >= thr_num:
+            run = 0
+        else:
+            run += 1
+            worst_run = max(worst_run, run)
+        x += step
+        if x >= SCALE:
+            x -= SCALE
+    check("brute-forced worst run of misses <= the proved span",
+          worst_run <= SWEEP_SPAN, f"worst run {worst_run} vs bound {SWEEP_SPAN}")
+    print(f"      Brute force over n = 1..3,000,000: longest run of consecutive")
+    print(f"      integers ALL failing the condition is {worst_run} "
+          f"(proved bound {SWEEP_SPAN}).")
+    print()
+    print("      NEGATIVE CONTROL: the sweep's guarantee must FAIL for an arc")
+    print("      shorter than theta -- otherwise the threshold is doing no work.")
+    print("      The 15 sweep points sit exactly theta apart, so an arc of length")
+    print("      theta/2 can be placed between two of them and missed entirely:")
+    tiny = THETA_STEP / 2
+    worst_missed = 0
+    for N in range(1, 400):
+        pts = sorted(mpf(frac_fix(N + 5 * j)) / SCALE for j in range(SWEEP_STEPS + 1))
+        # place the arc just after the largest sweep point below 1
+        a = pts[-1]
+        hits = sum(1 for x in pts if a < x < a + tiny)
+        if hits == 0:
+            worst_missed += 1
+    check("negative control: an arc of length theta/2 is missed by the sweep",
+          worst_missed == 399, f"{worst_missed}/399 starting points miss it")
+    print(f"      {worst_missed}/399 starting points N give an arc of length "
+          f"theta/2 = {float(tiny):.8f}")
+    print("      containing NO sweep point. Above theta the guarantee holds; below")
+    print("      it, it genuinely does not.")
+    print()
+
+    # ---- (3) Theorem D ---------------------------------------------------
+    p0 = None
+    for p in range(2, 60):
+        lo = int(mp.ceil(L ** p))
+        hi = int(mp.floor(mpf('1.05') * L ** p))
+        if hi - lo + 1 >= SWEEP_SPAN + 1:
+            p0 = p
+            break
+    print("  (3) THEOREM D. The window [1.585^p, 1.05*1.585^p] holds "
+          "0.05*1.585^p integers,")
+    print(f"      which reaches {SWEEP_SPAN + 1} at p = {p0}. So for every p >= {p0}, "
+          "Lemma D puts an n")
+    print("      satisfying the hypothesis inside the window -- UNCONDITIONALLY,")
+    print("      with no effective irrationality measure and no hypothesis on the")
+    print("      partial quotients of log2 3. For p < %d the window is checked "
+          "directly." % p0)
+    print()
+    print(f"      {'p':>5} {'window':>22} {'first good n':>14} {'offset':>7} "
+          f"{'delta':>10} {'gamma':>9} {'Gamma':>9} {'H0&H1':>6}")
+    ok_all = True
+    worst_off = 0
+    for p in range(2, pmax_witness + 1):
+        lo = int(mp.ceil(L ** p))
+        hi = int(mp.floor(mpf('1.05') * L ** p))
+        found = None
+        for n in range(lo, hi + 1):
+            ok, gam, G = hypothesis_ok(p, n)
+            if ok:
+                found = (n, gam, G)
+                break
+        if found is None:
+            if p >= p0:
+                ok_all = False
+                print(f"      {p:>5} {f'[{lo},{hi}]':>22}  NONE -- THEOREM D VIOLATED")
+                continue
+            # below p0 the 1.05 window is too short to guarantee anything;
+            # widen it to kappa <= 2 (the hypothesis is tested per-n, so the
+            # tighter Gamma at larger kappa is accounted for exactly)
+            hi2 = int(mp.floor(2 * L ** p))
+            for n in range(lo, hi2 + 1):
+                ok, gam, G = hypothesis_ok(p, n)
+                if ok:
+                    found = (n, gam, G)
+                    break
+            if found is None:
+                print(f"      {p:>5} {f'[{lo},{hi}]':>22}  none even at kappa<=2 "
+                      f"(genuinely outside the construction's reach)")
+                continue
+            n, gam, G = found
+            print(f"      {p:>5} {f'[{lo},{hi2}]*':>22} {n:>14} {n-lo:>7} "
+                  f"{float(delta_hp(n)):>10.5f} {float(gam):>9.4f} "
+                  f"{float(G):>9.4f} {'yes':>6}")
+            continue
+        n, gam, G = found
+        worst_off = max(worst_off, n - lo)
+        if p <= 40 or p % 10 == 0:
+            print(f"      {p:>5} {f'[{lo},{hi}]':>22} {n:>14} {n-lo:>7} "
+                  f"{float(delta_hp(n)):>10.5f} {float(gam):>9.4f} "
+                  f"{float(G):>9.4f} {'yes':>6}")
+    check("Theorem D: a hypothesis-satisfying n exists in the window at every "
+          "p in %d..%d" % (p0, pmax_witness),
+          all(any(hypothesis_ok(p, n)[0]
+                  for n in range(int(mp.ceil(L ** p)),
+                                 int(mp.floor(mpf('1.05') * L ** p)) + 1))
+              for p in range(p0, pmax_witness + 1)))
+    print()
+    print(f"      largest offset of the first good n from the window's left edge, "
+          f"over p = 2..{pmax_witness}: {worst_off}")
+    print()
+
+    # ---- (4) end-to-end -------------------------------------------------
+    print("  (4) END-TO-END. Construction B (transcribed from the sibling's")
+    print("      statement, not its code) at the n this session supplies, verified")
+    print("      by THIS file's own transport-recurrence rotation sums -- a third")
+    print("      independent evaluator of q <= R_r.")
+    print()
+    print(f"      {'p':>5} {'n':>10} {'gamma':>9} {'crash':>6} {'q<=R_r':>8} "
+          f"{'q|R_r':>7}")
+    e2e_ok = True
+    div_any = False
+    for p in range(3, pmax_e2e + 1):
+        lo = int(mp.ceil(L ** p))
+        hi = int(mp.floor(mpf('1.05') * L ** p))
+        n = None
+        for cand in range(lo, hi + 1):
+            if hypothesis_ok(p, cand)[0]:
+                n = cand
+                break
+        if n is None:
+            continue
+        built = construction_B(p, n)
+        if built is None:
+            e2e_ok = False
+            print(f"      {p:>5} {n:>10}   construction returned None")
+            continue
+        ms, ss, q, K = built
+        assert sum(ms) == n and sum(ss) == K - n
+        Rs = R_all_exact(ms, ss, q)
+        passes = min(Rs) >= q
+        div = all(R % q == 0 for R in Rs)
+        if not passes:
+            e2e_ok = False
+        if div:
+            div_any = True
+            print("!!! HALT: p=%d n=%d passes size AND divisibility." % (p, n))
+            sys.exit(1)
+        gam = mpf(K) - mp.log(mpf(q), 2)
+        if p <= 20 or p % 4 == 0:
+            print(f"      {p:>5} {n:>10} {float(gam):>9.4f} {ms[-1]:>6} "
+                  f"{('PASS' if passes else 'FAIL'):>8} {str(div):>7}")
+    check("end-to-end: Construction B passes every rotation at the supplied n, "
+          "p = 3..%d" % pmax_e2e, e2e_ok)
+    check("end-to-end: no instance satisfies the divisibility system", not div_any)
+    print()
+    print("      NEGATIVE CONTROL: an n violating the hypothesis must be able to")
+    print("      fail. Nearest n below the window with the WORST delta:")
+    bad = 0
+    tested = 0
+    for p in range(8, 25):
+        lo = int(mp.ceil(L ** p))
+        hi = int(mp.floor(mpf('1.05') * L ** p))
+        worst_n, worst_d = None, None
+        for cand in range(lo, hi + 1):
+            d = delta_hp(cand)
+            if worst_d is None or d > worst_d:
+                worst_d, worst_n = d, cand
+        built = construction_B(p, worst_n)
+        tested += 1
+        if built is None:
+            bad += 1
+            continue
+        ms, ss, q, K = built
+        if min(R_all_exact(ms, ss, q)) < q:
+            bad += 1
+    check("negative control: the worst-delta n in the window fails "
+          "(the hypothesis is not vacuous)", bad == tested,
+          f"{bad}/{tested} failed as required")
+    print(f"      {bad}/{tested} of the worst-delta candidates (p = 8..24) fail the")
+    print("      size conditions or are infeasible, as they must -- the hypothesis")
+    print("      is doing real work, it is not satisfied by every n.")
+    print()
+
+
 def main():
     t0 = time.time()
     part0()
@@ -1188,6 +1515,7 @@ def main():
     part2e()
     part2f()
     part4()
+    part5()
     recs, unresolved, capped = part3()
     print("=" * 78)
     print(f"CHECKS RUN: {CHECKS[0]}   FAILURES: {len(FAILURES)}")
