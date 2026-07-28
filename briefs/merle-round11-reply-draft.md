@@ -584,7 +584,7 @@ is a five-minute check and worth having — offered as a tool, not as a doubt ab
 gives at `p = 92` is `n₀(92) = 4.78·10^21`; `README.md` and `cycles.md` 12.8.5 both carried
 `~10^18`. The table inside 12.8.2 was right throughout — the prose had quoted Theorem 12.8.1's bare
 exponential rate, `1.585^92 = 2.53·10^18`, and dropped the corollary's own factor of about 1,890.
-Both figures are corrected. Nothing downstream moves: at either number a period-92 search must
+Both places are corrected. Nothing downstream moves: at either number a period-92 search must
 enumerate more than `10^1498` profiles, so the crossover plan stays withdrawn for exactly the reason
 it was withdrawn.
 
@@ -595,9 +595,11 @@ joint note's contribution sentence, we ran a premise check on our own side befor
 that check found the sharpness half of that sentence exactly half proved. The arc that followed is
 ours, and it closed.
 
-**The all-`p` sharpness claim is now proved** — and proved at a constant, which is stronger than the
-`γ = O(log p)` our own published theorem assesses. Two theorems compose, and the composition is the
-statement.
+**The all-`p` sharpness claim is now proved** — unconditionally for every `p ≥ 16`, by explicit
+finite check for `3 ≤ p ≤ 15`, and by direct exhibition at `p ∈ {2, 4}`, which lie outside the
+construction's reach — and proved at a constant, which is stronger than the `γ = O(log p)` our own
+published theorem assesses. Two theorems compose, each carrying hypotheses, and the composition is
+the statement; the scope is written out below and travels with the claim wherever it is stated.
 
 *Construction B* (`cycles.md` 12.8.6.2). Given a candidate `n`, with `K = ⌈n·log₂3⌉`, satisfying two
 hypotheses — a scale side-condition (H0), and a quality condition (H1) `γ ≥ Γ(p,n)` with `Γ`
@@ -728,8 +730,9 @@ above — and it closed on our side, not in the sentence.**
   witness: no trim uniform in `p` can extend the small-period constants, with the `p = 7` staircase
   (`n = 94`, `γ = 6.74`) as the witness. The all-`p` half carried our own published hedge, *"we
   assess (supported by the verified instances, though not proved here for all `p`)"* — present
-  verbatim in v1 and **unchanged in v2** — and that half is now proved, in the wiki, with the scope
-  above attached to it. **This is the one of the two that moved.** On the published record, two
+  verbatim in v1 and **unchanged in v2** — and that half is now proved, in the wiki: unconditionally
+  for `p ≥ 16`, by finite check for `3 ≤ p ≤ 15`, and by exhibition at `p ∈ {2,4}`, with the rest of
+  the scope as stated above. **This is the one of the two that moved.** On the published record, two
   things, because you may want to cite the paper in the note and should know which sentence is
   which. The hedge **stands as printed**: "not proved *here*" is a statement about the paper, the
   paper contains no such proof, and a later proof elsewhere does not falsify it. What is superseded
