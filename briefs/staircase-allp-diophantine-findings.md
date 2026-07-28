@@ -362,7 +362,56 @@ pass is then re-verified with exact big integers**: budget conservation, `q ≤ 
 at all `p` rotations via the transport recurrence, and the exact divisibility
 test `q | R_r`.
 
-RESULTS_TABLE_PLACEHOLDER
+| `p` | `n` | `n/1.585^p` | `γ` | `γ/log₂p` | crash | moves | exact `q ≤ R_r` | `q \| R_r` | budget |
+|---|---|---|---|---|---|---|---|---|---|
+| 18 | 3386 | 0.850 | 2.342 | 0.562 | 1 | 20 | PASS | False | 240 s |
+| 19 | 5369 | 0.850 | 2.266 | 0.533 | 1 | 21 | PASS | False | 240 s |
+| 20 | 13515 | 1.350 | 2.752 | 0.637 | 1 | 27 | PASS | False | 240 s |
+| 21 | 11108 | 0.700 | 2.725 | 0.620 | 1 | 23 | PASS | False | 240 s |
+| 22 | — | — | — | 3.379 | 1 | — | PASS | False | 30 s, **capped** |
+| **24** | 53692 | 0.850 | 2.995 | 0.653 | 1 | 27 | PASS | False | 240 s |
+| **25** | 100112 | 1.000 | 2.739 | 0.590 | 1 | 31 | PASS | False | 240 s |
+| **26** | 111070 | 0.700 | 2.852 | 0.607 | 1 | 30 | PASS | False | 240 s |
+| **27** | 213762 | 0.850 | 2.674 | 0.562 | 1 | 33 | PASS | False | 240 s |
+| **28** | 279019 | 0.700 | 2.222 | 0.462 | 1 | 35 | PASS | False | 240 s |
+| **29** | 539744 | 0.854 | 17.033 | 3.506 | 1 | 11 | PASS | False | 60 s, **capped** |
+| **30** | 1603631 | 1.602 | 17.868 | 3.641 | 1 | 13 | PASS | False | 60 s, **capped** |
+| **31** | 1111355 | 0.700 | 16.996 | 3.431 | 1 | 13 | PASS | False | 60 s, **capped** |
+| **32** | 5033297 | 2.001 | 17.514 | 3.503 | 1 | 20 | PASS | False | 60 s, **capped** |
+| **33** | 5382504 | 1.350 | 16.261 | 3.224 | 1 | 24 | PASS | False | 60 s, **capped** |
+| **34** | 10114062 | 1.601 | 15.498 | 3.046 | 1 | 24 | PASS | False | 60 s, **capped** |
+
+COVERAGE_PLACEHOLDER
+
+**Reading the table, honestly.** Two budget regimes are mixed and the difference
+matters. Where the sharpening pass ran to completion (`p ≤ 28`) the recipe closes
+at `γ ≈ 2.2…3.0` — i.e. `γ/log₂p ≈ 0.46…0.65`, and *decreasing*: over this range
+the achieved `γ` is roughly **constant in `p`**, not logarithmic. Where the
+sharpening pass was cut off (`p = 29…34`, 60 s) the reported `γ ≈ 15.5…17.9` is
+only what the first (easiest) pass found; it is an **upper bound** on the
+sharpest achievable `γ`, not a measurement of it. The move counts confirm this
+directly: the capped rows used 11–24 moves against 27–35 for the uncapped ones,
+because a larger `γ` leaves the base construction less to repair. Nothing in the
+capped rows suggests resistance.
+
+**What this settles.** The brief called this test decisive, and it is:
+
+* **Every period tested passes**, including all of `p = 29…32` — the stretch with
+  *no* correctly-signed convergent denominator anywhere in the window (§2.1). The
+  desert is not an obstacle to the construction.
+* The passers there are **ordinary integers of the window** (`n = 539744`,
+  `1603631`, `1111355`, `5033297`, …), none of them a convergent or
+  semiconvergent denominator. So the availability gap of `12.8.6.1` was an
+  artifact of how the candidate chain was built, exactly as the brief
+  anticipated, and not a fact about `log₂3`.
+* The `p = 22` row is the same story on the period where the gap was first seen.
+  `12.8.6.4` records `γ = 11.186` (13 correction moves) and `γ = 14.746` (8
+  moves) at the two out-of-chain candidates; window-wide candidates reach
+  `γ/log₂p = 3.379` under a deliberately small 30 s budget, and `p = 21` and
+  `p = 23`-neighbouring periods reach `≈ 0.6`.
+* **No constructed instance passes the divisibility system.** Every one was
+  tested exactly (`q | R_r` at all `p` rotations) and every one failed, matching
+  `12.8.3` and `12.8.6.4`. The script's HALT-and-exit guard never fired.
 
 ## 4. Status of the lemma — closed, but not by answering the question asked
 
