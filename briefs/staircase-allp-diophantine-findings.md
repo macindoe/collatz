@@ -299,6 +299,54 @@ the continued-fraction chain is one sparse, sign-restricted subset of it. The
 `p = 22` episode (`12.8.6.4`) was a property of how the candidate list was
 built, not of `log₂3`.
 
+### 2.4 A sharper certified ceiling, from the multiples law alone
+
+Theorem B routes through the three-distance theorem. In the desert one can do
+better with **no covering argument at all** — just the exact identity of §2.1.
+
+> **Theorem B′ (multiples ceiling).** For a correctly-signed convergent `q_k`,
+> let `t = ⌈lo/q_k⌉` and suppose `t·q_k ≤ hi` and `t·θ_k < 1/2`. Then
+> `n = t·q_k` lies in `W_p`, `K = t·h_k`, `K − nL = t·θ_k` **exactly**, and
+> `γ(n) = −log₂(1 − 2^(−t·θ_k))` exactly. Maximizing over `k`:
+> ```text
+> gamma_mult(p) / log2 p  >=  4.143   for every integer p in 24..712,
+> ```
+> attained at `p = 32`. No hypothesis on the partial quotients is used, and
+> nothing is estimated: every entry is one exact identity.
+
+Selected values (`q_k`, `t` are the witnesses):
+
+| `p` | 24 | 28 | 30 | 32 | 33 | 36 | 40 | 100 | 400 | 712 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `γ_mult` | 23.89 | 22.89 | 21.89 | 20.72 | 26.29 | 25.29 | 33.14 | 73.25 | 263.35 | 475.07 |
+| `/log₂p` | 5.21 | 4.76 | 4.46 | 4.14 | 5.21 | 4.89 | 6.23 | 11.03 | 30.47 | 50.14 |
+| `q_k` | 190537 | 190537 | 190537 | 190537 | 10781274 | 10781274 | 397573379 | — | — | — |
+| `t` | 1 | 2 | 4 | 9 | 1 | 2 | 1 | 1 | 3 | 2 |
+
+At `p = 24…30`, `γ_mult` agrees to three decimals with the *exhaustive*
+`γ_max` of §2.3 — across the desert the multiples of `q₁₃ = 190537` are not
+merely sufficient, they are the best the window has. This is the exact sense in
+which the desert is blanketed: **additively, by multiples of the last convergent
+before it**, not by semiconvergents (whose correctly-signed run there has length
+one) and not by any further convergent (there is none).
+
+**Combined certified statement (the deliverable of item 2), unconditional and
+effective:**
+
+```text
+For every p >= 24 the window [0.68*1.585^p, 4*1.585^p] contains an integer n
+with K = ceil(nL), q = 2^K - 3^n > 0, and
+
+   (i)  gamma(n) >= 4.143 * log2 p                    -- exact multiples identity,
+                                                         p in 24..712 (Thm B'),
+                                                         and Rhin's 0.049959p - 1.06
+                                                         for p >= 713 (Thm C);
+   (ii) gamma(n) prescribable to within 1.28 bits anywhere in
+        [1.77, 3.358 * log2 p]                        -- three distances (Thm B).
+
+No hypothesis on the partial quotients of log2 3 is used anywhere.
+```
+
 ---
 
 ## 3. The empirical test at `p = 24…36`
