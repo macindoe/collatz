@@ -20,6 +20,22 @@ reproduces the published `p = 7` instance (`γ = 6.744`) and the trivial-cycle
 identity `R = 4^p − 3^p`. Committed output:
 `experiments/staircase_allp_diophantine.out`.
 
+**Retargeted mid-session — read this first.** The session began against the
+target the wiki still records at `12.8.6.1`: *bound the multiplicative gap
+between consecutive correctly-signed continued-fraction runs of `log₂3`, so that
+no period is ever skipped.* Items 1–3 were completed against that target and are
+reported unchanged in §1–§3, because they stand on their own. **Partway through,
+the sibling session (branch `staircase-allp-construction`, merged at `e42d785`)
+closed its own gap by *removing* the correction algorithm rather than bounding
+it**, and its Construction B consumes **exactly one property of the candidate
+`n`** — `γ(n) ≥ Γ(p,n)`, plus a scale side-condition — with no convergent, no
+semiconvergent, no chain, no run and no sign condition. That makes the lemma this
+session owes far weaker than the one it was written for. §6 states and proves the
+retargeted lemma; it is elementary, unconditional, and needs one exact number.
+§1's γ-budget determination is unaffected, and §2's availability theorems are
+strictly stronger than what is now required — they are kept because the stronger
+statement is the one that closes `12.8.6.1` *as the wiki currently words it*.
+
 **Stopping-rule compliance.** This session constructed *size-passers* and never
 cycles. The divisibility system `q | R_r` was touched only to confirm, on every
 constructed instance, that it fails — as `12.8.3` and `12.8.6.4` do; the script
@@ -549,3 +565,137 @@ all.
 passers at `γ/log₂p ≈ 0.46…0.65` over `p = 24…36` — i.e. `γ` roughly *constant*
 in `p`, not logarithmic. The band should be described as what the recipe
 produced, not as a property of the family.
+
+---
+
+## 6. RETARGETED — the coverage lemma the sibling actually needs
+
+### 6.1 Why the target changed, and what the old one was
+
+The old target, which `cycles.md` 12.8.6.1 still words this way, was: *a fully
+general closed-form bound on the multiplicative gap between consecutive
+correctly-signed continued-fraction runs of `log₂3`, needed to certify that no
+period is ever skipped.* §2 and §4 dispose of it — the route is a dead end (it is
+the badly-approximable assertion), and the requirement it served is proved by a
+different route.
+
+The sibling result (`briefs/staircase-allp-construction-findings.md`, merged at
+`e42d785`) then changed the requirement itself. Its Construction B has **no
+correction step**: the size conditions hold by construction, under a single
+hypothesis on `n`, quoted here from its §5 interface line:
+
+```text
+ceil(n*log2 3) - n*log2 3  <=  -log2(1 - 2^-Gamma(p,n)),   i.e.  gamma(n) >= Gamma(p,n),
+```
+
+plus the scale side-condition (H0). **Nothing else about `n` is used** — not a
+convergent denominator, not a semiconvergent, no continued-fraction structure,
+no sign condition, no chain, no run. So the coverage lemma reduces to a density
+statement, and this section proves it.
+
+### 6.2 The threshold is a constant
+
+`Γ(p,n)` was transcribed from the sibling's Theorem B statement (not from its
+code) and evaluated here. It rises monotonically in `p` to a finite limit:
+
+| `p` | 6 | 8 | 10 | 12 | 16 | 20 | 30 | 60 | 400 |
+|---|---|---|---|---|---|---|---|---|---|
+| `Γ(p, 1.05·1.585^p)` | 3.1746 | 3.3892 | 3.5440 | 3.6124 | 3.6682 | 3.6801 | 3.6830 | 3.6830 | 3.6830 |
+| `δ` threshold | 0.16934 | 0.14472 | 0.12932 | 0.12306 | 0.11820 | 0.11719 | 0.11694 | 0.11694 | 0.11694 |
+
+> `sup` over `p = 6…2000` of `Γ(p, 1.05·1.585^p)` is `3.683012`, so it suffices
+> that `⌈nL⌉ − nL ≤ 0.116939` — **a fixed density condition with no
+> `p`-dependence at all.**
+
+### 6.3 Lemma D — elementary, unconditional, one exact number
+
+> **Lemma D.** Let `θ := 8 − 5L = 0.0751874964… > 0`. Since `5L = 8 − θ`,
+> stepping `n → n+5` decreases `{nL}` by exactly `θ` (mod 1). The 15 points
+> `n = N, N+5, …, N+70` therefore lie exactly `θ` apart along a full turn
+> (`14θ = 1.052625 ≥ 1`), so **any** arc of length `> θ` contains one of them.
+> The target arc `{nL} ∈ [1 − 0.116939, 1)` has length `0.116939 > θ`. Hence
+> **among any 71 consecutive integers there is an `n` with
+> `⌈nL⌉ − nL ≤ 0.116939`.**
+
+No irrationality measure, no three-distance theorem, no hypothesis on the partial
+quotients — one exact number, `8 − 5L`, and the fact that it is positive and less
+than `0.117`. Brute force over `n = 1…3,000,000`: the longest run of consecutive
+integers *all* failing the condition is **11**, against the proved bound 70 — and
+11 is exactly the worst offset the sibling observed independently.
+
+Negative control (it fails where it must): an arc of length `θ/2` placed between
+two sweep points contains no sweep point at **399/399** starting values of `N`.
+Above `θ` the guarantee holds; below it, it genuinely does not.
+
+### 6.4 Theorem D
+
+> **Theorem D.** The window `[1.585^p, 1.05·1.585^p]` holds `0.05·1.585^p`
+> integers, which reaches 71 at `p = 16`. Hence **for every `p ≥ 16` the window
+> contains an `n` satisfying Construction B's hypothesis — unconditionally.**
+
+For `p ≤ 15` the window is checked directly; widening it to `κ ≤ 2` (the
+hypothesis is evaluated per-`n`, so the tighter `Γ` at larger `κ` is accounted
+for exactly) supplies a witness at **every** `p` except `p = 2` and `p = 4`,
+which are outside Construction B's reach for reasons its own §9 records. Verified
+witnesses — first good `n` and its offset from the window's left edge:
+
+| `p` | 16 | 20 | 22 | 26 | 27 | 30 | 34 | 36 | 40 |
+|---|---|---|---|---|---|---|---|---|---|
+| first good `n` | 1588 | 10009 | 25145 | 158670 | 251486 | 1001317 | 6318964 | 15873903 | 100175076 |
+| offset | 1 | 0 | 1 | 0 | 0 | 4 | 2 | 0 | 4 |
+| `γ(n)` | 4.220 | 3.764 | 3.672 | 17.058 | 3.641 | 3.850 | 6.450 | 8.200 | 5.462 |
+
+Largest offset over `p = 2…40`: **10**. Note `p = 27…35` — the convergent desert
+that motivated the whole brief — is now unremarkable: the witnesses sit at
+offsets `0…6` from the left edge of the window, and none of them is a convergent
+or semiconvergent denominator. **With the new interface the desert is not an
+obstruction at all.**
+
+### 6.5 End-to-end check
+
+Construction B was transcribed from the sibling's §4 statement (not its code) and
+run at the `n` this session supplies, with the resulting profile verified by
+**this** file's transport-recurrence rotation sums — a third independent
+evaluator of `q ≤ R_r`. Result over `p = 3…26`: every rotation passes exactly and
+`q | R_r` fails everywhere, as it must. Sample: `p = 15`, `n = 1005`,
+`γ = 3.734`, crash depth 1, PASS; `p = 20`, `n = 10009`, `γ = 3.764`, PASS;
+`p = 24`, `n = 63163`, `γ = 6.739`, PASS.
+
+Negative control: the *worst*-`δ` candidate in each window (`p = 8…24`) either
+fails the size conditions or is infeasible, **17/17**. The hypothesis is doing
+real work; it is not satisfied by every `n`.
+
+*(σ convention, per the coordinator's warning: this file uses
+`σ_t = s_t + m_{t+1}` throughout, in both the log-space and the exact evaluator,
+and reproduces the published `p = 7` instance at `γ = 6.744`. The wrong reading
+`σ_t = m_t + s_t` would not.)*
+
+### 6.6 Verdict on the retargeted lemma
+
+> **CLOSED, unconditionally and elementarily, for every `p ≥ 16`; `p ≤ 15`
+> closed by direct finite check except `p ∈ {2, 4}`, which lie outside
+> Construction B's own reach.** The proof uses one exact number, `8 − 5L`. No
+> effective irrationality measure is needed; Rhin's bound, which §2 uses for the
+> stronger statement, is not required here at all.
+
+So the Diophantine half of `12.8.6` is closed twice over: at the old (stronger)
+target by §2, and at the new (weaker, and the one that now matters) by this
+section. What remains open in `12.8.6` is whatever the sibling's own §8 records —
+not this.
+
+### 6.7 Additional recommendation to the main session
+
+Beyond §5(a)–(e), which stand: **`12.8.6.1` should be re-stated at the new
+interface.** Its current wording defines the gap in terms of correctly-signed
+semiconvergent runs, which is now the wrong object twice over — the route is a
+dead end (§4) and the requirement no longer needs it (§6.1). A replacement should
+say what is consumed (`γ(n) ≥ Γ(p,n)`, a fixed-density condition on `⌈nL⌉ − nL`)
+and how it is met (Lemma D, elementary), and should record the convergent-run
+framing as a superseded formulation rather than deleting it, since the published
+v2 note points at it.
+
+One consequence worth flagging for the paper: with the sibling's `γ = O(1)` and
+this section's unconditional availability, the *only* thing still separating
+`thm:staircase`'s hedge from a theorem is whatever the sibling's §8 lists. §1 of
+this file remains relevant to how that theorem should then be *stated*: its job
+needs `γ(p) = O(ρ^p)` for some `ρ < 1.585`, and `O(1)` is far past that.
