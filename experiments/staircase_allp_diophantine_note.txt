@@ -17,6 +17,17 @@ single invocation.
   segment 2   python -c "part2f()"
               -> 2 checks, 0 failures
 
+  segment 2b  python -c "part5(pmax_e2e=26, pmax_witness=40)"
+              -> 9 checks, 0 failures; output in
+                 staircase_allp_diophantine_part5.out
+              This is the RETARGETED coverage lemma, written after the sibling
+              result (branch staircase-allp-construction, merged e42d785)
+              replaced the correction algorithm with a construction whose only
+              hypothesis on n is gamma(n) >= Gamma(p,n). It supersedes nothing
+              in segments 1-2 -- those prove a strictly stronger availability
+              statement -- but it is the part that matches what the construction
+              now consumes.
+
   segment 3   part3 over p = 24..36, run in slices with different wall-clock
               budgets per period. The budget is recorded in the 'cap' column of
               every row ('yes' = the sharpening pass was cut off, so the gamma
@@ -29,9 +40,16 @@ single invocation.
                 p = 29..32   budget  60 s/pass
                 p = 33..34   budget  60 s/pass
                 p = 35       budget  60 s/pass
-                p = 36       see the row, or its absence, in the .out
+                p = 36       started, NOT completed -- still inside the exact
+                             rotation-sum verification when the session ended.
+                             Recorded as not run, not as a failure. Item 3
+                             became optional once the sibling's interface
+                             landed (see part5), because its purpose -- testing
+                             whether the convergent desert blocks the
+                             construction -- is answered directly there.
 
 To reproduce as a single run:  python experiments/staircase_allp_diophantine.py
-(main() runs parts 0, 1, 2a-2f, 4 and then part3(24, 36) with a 300 s/pass
+(main() runs parts 0, 1, 2a-2f, 4, 5 and then part3(24, 36) with a 300 s/pass
 budget). Expect several hours for the tail, dominated by the exact rotation-sum
-verification at p >= 34.
+verification at p >= 34. Parts 0-2 and 5 together run in a few minutes and carry
+all of the session's proved statements; part 3 is empirical evidence only.
