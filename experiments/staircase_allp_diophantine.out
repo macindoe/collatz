@@ -1,0 +1,294 @@
+==============================================================================
+PART 0.  gamma <-> delta, checked against exact big integers
+==============================================================================
+  L = log2 3 = 1.584962500721156181453739...
+  gamma := K - log2 q,  q = 2^K - 3^n > 0,  K = ceil(n L),
+  delta := K - n L in (0,1)   =>   gamma = -log2(1 - 2^-delta).
+  gamma = -log2(1-2^-delta) verified against K - log2(2^K - 3^n) at 12 exponents; worst deviation 1.282e-36
+  K = ceil(n L) is realized exactly as (3**n).bit_length(): verified for n = 1..399
+
+==============================================================================
+PART 1.  THE GAMMA BUDGET -- what growth of gamma(p) the claim needs
+==============================================================================
+  Trim(c0,A):  gamma + log2 p > c0 * n / p^A,   c0 = 0.1157 (period 3).
+  Refuted at p by a size-passer with gamma(p) + log2 p <= c0*n(p)/p^A,
+  and the staircase forces n(p) >= 0.68 * 1.585^p.
+
+  gamma(p) growth law       A=0   A=1   A=2   A=3   A=5   A=10     <- smallest p0 with (REFUTE) for all p >= p0
+  2.5*log2 p   (observed)      11    18    26    35    56   116
+  p                            12    19    28    38    59   120
+  p^2                          19    28    37    48    71   133
+  2^sqrt(p)                    12    19    29    39    63   128
+  1.2^p                        11    21    35    52    90   200
+  1.5^p                        47   136   246   368   632  1356
+  1.585^p       (control)    none  none  none  none  none  none
+  0.05*1.585^p  (control)      11  none  none  none  none  none
+
+  Reading: every law with limsup log2(gamma(p))/p < log2 1.585 = 0.66446
+  defeats Trim(c0,A) for EVERY A from an explicit p0; the two controls
+  at growth rate 1.585^p defeat only finitely many A (or none).
+
+  The exact threshold. (REFUTE) for all A holds iff
+      gamma(p) * p^A / 1.585^p -> 0   for every fixed A,
+  i.e. iff log2 gamma(p) <= 0.66446*p - omega(log p).  The weakest
+  SIMPLE sufficient bound is therefore
+      gamma(p) = O(rho^p)   for any fixed rho < 1.585,
+  and a fortiori gamma(p) = 2^o(p), O(p^B), O(p), O(log p).
+  O(log p) is NOT needed for this job; O(p) has room to spare.
+
+  What the stronger readings need (the ladder):
+    J1  refute every polynomial-in-p trim   (the published sentence)
+        -> gamma(p) <= rho^p, any rho < 1.585.      [subexponential]
+    J2  refute every subexponential trim c0*n/2^o(p)
+        -> gamma(p) = 2^o(p).                        [subexponential]
+    J3  Theorem 12.8.1's rate 1.585^-p sharp up to a polynomial factor
+        -> gamma(p) = O(p^B).                        [polynomial]
+    J4  ... sharp up to a factor O(log p)
+        -> gamma(p) = O(log p).                      [logarithmic]
+  Only J4 needs the published hedge's own O(log p).
+
+  Quantified J3/J4: with n(p) = kappa*1.585^p, a size-passer of gamma(p)
+  caps every valid uniform trim constant c(p) (in gamma' > c(p)*n) at
+      c(p) <= (gamma(p) + log2 p) / (kappa * 1.585^p).
+  gamma(p)=O(log p) gives c(p) = O(log p * 1.585^-p) -- Theorem 12.8.1's
+  own 0.585/(1.585^p - 1) is then sharp to within a factor O(log p).
+  gamma(p)=O(p) gives O(p * 1.585^-p): sharp to within a factor O(p).
+
+==============================================================================
+PART 2a.  The continued fraction of L, its signs, and the desert
+==============================================================================
+  514 convergents computed (q up to ~10^265);
+  sign h_i - q_i L > 0 exactly at odd i; sandwich 1/(q_i+q_{i+1}) < |h_i - q_i L| < 1/q_{i+1} holds throughout.
+  partial quotients a_0..a_29: [1, 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, 55, 1, 4, 3, 1, 1, 15, 1, 9, 2, 5, 7, 1, 1, 4, 8]
+
+  Correctly-signed (s>0) convergent denominators up to 10^9:
+    [1, 5, 41, 306, 15601, 79335, 190537, 10781274, 171928773, 397573379]
+  The flagged gap q_13 = 190537 -> q_14 = 10590737 (ratio 55.6, a_14 = 55).
+  Rhin (12.5.3): ||nL|| > 0.003154 * n^-13.3 -- holds at all 514 convergents, worst
+  slack factor 1.316e+02 (the convergents are where the bound is tightest).
+
+  Convergent-desert scan over the recipe's own window [0.68*1.585^p, 3.5*1.585^p]:
+    periods with NO correctly-signed convergent denominator in window: [5, 9, 14, 15, 16, 17, 28, 29, 30, 31, 32, 36, 37, 38, 44]
+    (this is the availability gap of 12.8.6.1, re-derived here; note
+     the correctly-signed SEMIconvergent runs do not repair it: the run
+     following q_13 has length a_15 = 1, i.e. one member.)
+
+==============================================================================
+PART 2b.  Exact quality laws: multiples and semiconvergents
+==============================================================================
+  (i) MULTIPLES.  For a correctly-signed convergent q_k (s_k = h_k - q_k L
+      > 0) and t with t*theta_k < 1/2:   K - nL = t*theta_k EXACTLY at
+      n = t*q_k, K = t*h_k.  Checked below against ceil(nL) directly.
+      verified on 3376 (k,t) instances, 0 failures.
+
+  (ii) SEMICONVERGENTS.  n_j = q_(k-1) + j q_k, K_j = h_(k-1) + j h_k,
+      j = 1..a_(k+1), at a correctly-signed q_(k-1):
+          K_j - n_j L  =  theta_(k-1) - j*theta_k   EXACTLY,
+      strictly decreasing in j, positive throughout the run, and equal
+      to theta_(k+1) at j = a_(k+1) (the next correctly-signed
+      convergent). Worst case over j is j = a_(k+1): quality theta_(k+1),
+      i.e. the LARGEST gamma of the run; the smallest gamma of the run is
+      at j = 1, quality theta_(k-1) - theta_k.
+      verified on 44 (k,j) instances, 0 failures.
+      correctly-signed run lengths a_(k+1) at k-1 = q_1=1:2, q_3=5:3, q_5=41:5, q_7=306:23, q_9=15601:2, q_11=79335:1, q_13=190537:1, q_15=10781274:3, q_17=171928773:1, q_19=397573379:1, q_21=6586818670:2
+      -> runs are SHORT wherever the next partial quotient is small, so
+         semiconvergents do NOT blanket the desert additively; the
+         additive blanket is supplied by multiples and, unconditionally,
+         by the covering bound of Part 2c.
+
+==============================================================================
+PART 2c.  The window-covering bound (three distances), verified
+==============================================================================
+  CLAIM. Let k = max{i : q_i <= N/2}. For every N0, the N points
+  {nL}, n = N0..N0+N-1, have all circle gaps <= theta_(k-1) < 1/q_k.
+  Hence every arc of length > theta_(k-1) contains some {nL}.
+  2798 windows tested (N = 2..699 at four offsets, plus seven large N);
+  violations: 0; worst observed ratio maxgap/theta_(k-1) = 1.000000 (equality is attained, so the bound is sharp).
+
+  NEGATIVE CONTROL. The bound must FAIL to certify coverage when the
+  target arc is shorter than theta_(k-1). Checked by exhibiting, for
+  each of several N, an arc of length exactly theta_(k-1) containing no
+  point of the window (the maximal gap itself):
+  4/4 maximal gaps confirmed empty -- the covering threshold is not
+  an artifact of a loose estimate; below it, coverage genuinely fails.
+
+==============================================================================
+PART 2d.  Certified gamma ceiling at every period (availability)
+==============================================================================
+  For each p: N = #integers in the window; k = max{i: q_i <= N/2};
+  eps_min = 2*theta_(k-1); gamma_ceiling = log2(1/eps_min) + 0.5288.
+  Every gamma in [1.77, gamma_ceiling] is then prescribable to within
+  1.28 bits by choosing eps in [2*theta_(k-1), 1/2].  UNCONDITIONAL:
+  the only input is the (computed, finite) continued fraction of L.
+
+      p   log10 N     k     eps_min   gam_ceil   /log2 p  Rhin ceil   /log2 p
+      4      1.32     3   1.699e-01       2.09      1.04        nan       nan
+      5      1.53     4   7.519e-02       3.26      1.40        nan       nan
+      6      1.72     4   7.519e-02       3.26      1.26        nan       nan
+      7      1.92     5   1.955e-02       5.21      1.85        nan       nan
+      8      2.12     6   1.654e-02       5.45      1.82        nan       nan
+      9      2.32     6   1.654e-02       5.45      1.72        nan       nan
+     10      2.52     6   1.654e-02       5.45      1.64        nan       nan
+     11      2.72     6   1.654e-02       5.45      1.57        nan       nan
+     12      2.92     7   3.013e-03       7.90      2.20        nan       nan
+     13      3.12     7   3.013e-03       7.90      2.14        nan       nan
+     14      3.32     8   1.475e-03       8.93      2.35        nan       nan
+     15      3.52     8   1.475e-03       8.93      2.29        nan       nan
+     16      3.72     8   1.475e-03       8.93      2.23        nan       nan
+     17      3.92     8   1.475e-03       8.93      2.19        nan       nan
+     18      4.12     8   1.475e-03       8.93      2.14        nan       nan
+     19      4.32     8   1.475e-03       8.93      2.10        nan       nan
+     20      4.52     9   6.298e-05      13.48      3.12        nan       nan
+     21      4.72     9   6.298e-05      13.48      3.07        nan       nan
+     22      4.92    10   2.625e-05      14.75      3.31        nan       nan
+     23      5.12    10   2.625e-05      14.75      3.26        nan       nan
+     24      5.32    11   1.048e-05      16.07      3.51        nan       nan
+     25      5.52    12   5.287e-06      17.06      3.67        nan       nan
+     26      5.72    13   5.194e-06      17.08      3.63        nan       nan
+     27      5.92    13   5.194e-06      17.08      3.59        nan       nan
+     28      6.12    13   5.194e-06      17.08      3.55        nan       nan
+     29      6.32    13   5.194e-06      17.08      3.52        nan       nan
+     30      6.52    13   5.194e-06      17.08      3.48        nan       nan
+     31      6.72    13   5.194e-06      17.08      3.45        nan       nan
+     32      6.92    13   5.194e-06      17.08      3.42        nan       nan
+     33      7.12    13   5.194e-06      17.08      3.39        nan       nan
+     34      7.32    13   5.194e-06      17.08      3.36        nan       nan
+     35      7.52    15   7.545e-08      23.19      4.52        nan       nan
+     36      7.72    15   7.545e-08      23.19      4.49        nan       nan
+     37      7.92    15   7.545e-08      23.19      4.45        nan       nan
+     38      8.12    16   1.761e-08      25.29      4.82        nan       nan
+     39      8.32    16   1.761e-08      25.29      4.78        nan       nan
+     40      8.52    16   1.761e-08      25.29      4.75        nan       nan
+     50     10.52    21   1.381e-10      32.28      5.72        nan       nan
+     60     12.52    24   1.296e-12      39.02      6.61       1.96      0.33
+     80     16.52    32   1.534e-16      52.06      8.24       2.96      0.47
+    100     20.52    42   4.912e-21      66.99     10.08       3.95      0.60
+    200     40.52    85   1.452e-40     131.87     17.25       8.95      1.17
+    400     80.53   168   2.554e-80     263.93     30.53      18.94      2.19
+    600    120.53   236  5.163e-121     399.11     43.25      28.93      3.14
+    700    140.53   276  8.551e-141     464.82     49.18      33.93      3.59
+    713    143.13   279  7.380e-143     471.68     49.77      34.58      3.65
+    800    160.54   315  1.836e-160     530.16     54.97      38.93      4.04
+   1000    200.54   385  7.687e-201     664.29     66.66      48.92      4.91
+
+  min over ALL p in 21..712 of gamma_ceiling(p)/log2 p = 3.070  (attained at p = 21)
+  min over ALL p in 24..712 of gamma_ceiling(p)/log2 p = 3.358  (attained at p = 34)
+  min over ALL p in 35..712 of gamma_ceiling(p)/log2 p = 4.451  (attained at p = 37)
+
+  Reading: for every p >= 24 the window unconditionally affords an n
+  whose gamma can be prescribed anywhere up to 3.36*log2 p, and the
+  verified instance record of 12.8.6.4 already exhibits n at every
+  p <= 23.  The band actually used by the recipe over p = 2..23 was
+  gamma/log2 p in [1.828, 3.643].
+
+  Rhin-only ceiling (0.04996*p - 1.06) exceeds 2.5*log2 p for all p >= 465.
+  Rhin-only ceiling (0.04996*p - 1.06) exceeds 3.3*log2 p for all p >= 636.
+  Rhin-only ceiling (0.04996*p - 1.06) exceeds 3.643*log2 p for all p >= 712.
+  So the finite continued-fraction computation covers 24 <= p <= 712
+  and Rhin's effective measure covers p >= 713 with no CF input at all:
+  together, every period, with no hypothesis on the partial quotients.
+
+==============================================================================
+PART 2e.  What the window actually holds, and explicit witnesses
+==============================================================================
+  (i) EXHAUSTIVE. For p <= 30 the whole window is scanned: gamma_max(p)
+      is the largest gamma any n in the window can supply (the best
+      approximation actually present), against the certified worst-case
+      ceiling of Part 2d and against 3.643*log2 p, the top of the band
+      the recipe used over p = 2..23.
+
+     p  window size       best n    delta_min   gam_max  /log2 p  cert ceil   log2 N
+     4           21           17    5.564e-02     4.724    2.362      2.086     4.39
+     5           34           29    3.609e-02     5.339    2.299      3.262     5.09
+     6           53           41    1.654e-02     6.455    2.497      3.262     5.73
+     7           83           94    1.352e-02     6.744    2.402      5.205     6.38
+     8          132          147    1.051e-02     7.106    2.369      5.447     7.04
+     9          210          200    7.500e-03     7.591    2.395      5.447     7.71
+    10          332          306    1.475e-03     9.935    2.991      5.447     8.38
+    11          527          306    1.475e-03     9.935    2.872      5.447     9.04
+    12          835          971    1.412e-03     9.998    2.789      7.904     9.71
+    13         1323          971    1.412e-03     9.998    2.702      7.904    10.37
+    14         2096         2301    1.286e-03    10.132    2.661      8.934    11.03
+    15         3322         3631    1.160e-03    10.281    2.632      8.934    11.70
+    16         5266         6291    9.080e-04    10.634    2.659      8.934    12.36
+    17         8346         9616    5.931e-04    11.249    2.752      8.934    13.03
+    18        13227        15601    2.625e-05    15.746    3.776      8.934    13.69
+    19        20965        15601    2.625e-05    15.746    3.707      8.934    14.36
+    20        33229        15601    2.625e-05    15.746    3.643     13.484    15.02
+    21        52666        47468    1.577e-05    16.481    3.752     13.484    15.68
+    22        83475        79335    5.287e-06    18.058    4.049     14.746    16.35
+    23       132305        79335    5.287e-06    18.058    3.992     14.746    17.01
+    24       209697       190537    9.306e-08    23.886    5.210     16.071    17.68
+    25       332363       190537    9.306e-08    23.886    5.144     17.058    18.34
+    26       526783       190537    9.306e-08    23.886    5.082     17.083    19.01
+    27       834931       190537    9.306e-08    23.886    5.023     17.083    19.67
+    28      1323335       381074    1.861e-07    22.886    4.761     17.083    20.34
+    29      2097437       571611    2.792e-07    22.301    4.591     17.083    21.00
+    30      3324358       762148    3.723e-07    21.886    4.460     17.083    21.66
+
+  gamma_max(p) tracks log2(window size) = 0.664*p + O(1): the actual
+  supply is exponentially better than the worst-case covering bound,
+  which is pinned to the largest convergent denominator below N/2 and
+  therefore flattens across the desert.
+
+  (ii) EXPLICIT WITNESSES in the band, verified with exact big integers:
+     p            n  n/1.585^p        delta    gamma  gam/log2p  convergent?
+     4            5      0.792    7.519e-02    4.300      2.150          yes
+     5           29      2.899    3.609e-02    5.339      2.299           no
+     6           41      2.586    1.654e-02    6.455      2.497          yes
+     7           41      1.632    1.654e-02    6.455      2.299          yes
+     8           94      2.360    1.352e-02    6.744      2.248           no
+     9          147      2.329    1.051e-02    7.106      2.242           no
+    10          200      1.999    7.500e-03    7.591      2.285           no
+    11          253      1.596    4.487e-03    8.331      2.408           no
+    12          253      1.007    4.487e-03    8.331      2.324           no
+    13          612      1.536    2.950e-03    8.936      2.415           no
+    14          612      0.969    2.950e-03    8.936      2.347           no
+    15         1277      1.276    2.887e-03    8.967      2.295           no
+    16         2607      1.644    2.761e-03    9.031      2.258           no
+    17         2301      0.915    1.286e-03   10.132      2.479           no
+    18         2966      0.744    1.223e-03   10.205      2.447           no
+    19         4296      0.680    1.097e-03   10.362      2.439           no
+    20         6956      0.695    8.450e-04   10.738      2.485           no
+    21        17237      1.087    1.375e-03   10.036      2.285           no
+    22        18567      0.738    1.249e-03   10.174      2.282           no
+    23        36163      0.907    1.086e-03   10.376      2.294           no
+    24        53094      0.841    9.867e-04   10.514      2.293           no
+    25        70025      0.699    8.870e-04   10.668      2.297           no
+    26       118823      0.749    7.768e-04   10.859      2.310           no
+    27       182557      0.726    7.558e-04   10.899      2.292           no
+    28       278823      0.700    6.614e-04   11.091      2.307           no
+    29       438158      0.694    6.090e-04   11.210      2.308           no
+    30       693094      0.692    5.252e-04   11.424      2.328           no
+    31      1090434      0.687    4.886e-04   11.528      2.327           no
+    32      1710843      0.680    3.787e-04   11.896      2.379           no
+    33      2711661      0.680    3.320e-04   12.086      2.396           no
+    34      4299026      0.680    3.747e-04   11.911      2.341           no
+    35      6823475      0.681    3.917e-04   11.847      2.310           no
+    36     10794880      0.680    2.152e-04   12.711      2.459           no
+    37     17113138      0.680    3.338e-04   12.078      2.318           no
+    38     27116663      0.680    3.072e-04   12.198      2.324           no
+    39     42979367      0.680    2.677e-04   12.396      2.345           no
+    40     68130251      0.680    2.799e-04   12.331      2.317           no
+
+  Only the first few witnesses are convergent denominators at all; from
+  p = 8 up, every one is an ordinary integer. At the quality the
+  construction needs, the candidate supply is the whole window, and the
+  continued-fraction chain is one sparse subset of it.
+
+==============================================================================
+PART 4.  Cross-checks and negative controls
+==============================================================================
+  trivial cycle as a fake period-p cycle gives R_r = 4^p - 3^p at every
+  rotation, p in {1,2,3,4,7,11}: agrees with cycles.md 12.6.1.
+  published p=7 instance n=94: gamma = 6.744 (12.8.3: 6.74),
+  all seven rotations pass, divisibility fails -- reproduced by this
+  file's independent transport-recurrence evaluator.
+  negative control: the FLAT depth profile at p=12, n=251 fails q <= R_r (min R_r / q = 0.0000) -- the
+  geometric shape is doing real work, the test is not vacuous.
+  negative control: p=10, n=106 has gamma = 1.006 (delta near 1) and fails q <= R_r, as the two-sided reading of
+  Part 1 predicts: too SMALL a gamma is as fatal as too large.
+  negative control: p=14, n=465 has gamma = 1.008 (delta near 1) and fails q <= R_r, as the two-sided reading of
+  Part 1 predicts: too SMALL a gamma is as fatal as too large.
+
+CHECKS 90 FAILURES []

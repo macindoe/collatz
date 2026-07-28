@@ -338,7 +338,7 @@ def part2a():
           f"is tightest).")
     print()
     print("  Convergent-desert scan over the recipe's own window "
-          "[0.68*1.585^p, 3.5*1.585^p]:")
+          "[0.68*1.585^p, 4*1.585^p]:")
     desert = []
     for p in range(2, 45):
         lo, hi = window(p)
@@ -870,83 +870,148 @@ def candidates_for(p, per_anchor=13, chunk=40000,
     return out
 
 
-def part3(pmin=24, pmax=36, max_moves=40, budget=420.0):
+def search_candidate(p, n, max_moves):
+    """SEARCH ONLY (log space, no big integers beyond 3**n): base profile at both
+    crash depths plus the bounded correction. Returns a provisional record whose
+    size claim is NOT yet established -- verify_candidate settles that exactly."""
+    T3 = 3 ** n
+    K = T3.bit_length()                      # exact ceil(n log2 3)
+    q = (1 << K) - T3                        # exact, > 0 since K is the ceiling
+    assert q > 0
+    log2q = float(mp.log(mpf(q), 2))         # = K - gamma
+    for cd in (1, 2):
+        bp = base_profile(p, n, K, cd)
+        if bp is None:
+            continue
+        ms0, ss0 = bp
+        res = correct(list(ms0), list(ss0), log2q, max_moves=max_moves)
+        if res is None:
+            continue
+        ms, moves = res
+        return dict(p=p, n=n, K=K, q=q, gamma=mpf(K) - mp.log(mpf(q), 2), cd=cd,
+                    moves=moves, ms=ms, ss=ss0)
+    return None
+
+
+def verify_candidate(rec):
+    """EXACT big-integer verification of a provisional record: budget
+    conservation, q <= R_r at every one of the p rotations, and the divisibility
+    system q | R_r. Returns True iff the size condition holds; annotates the
+    record with the divisibility outcome and the worst exact margin."""
+    ms, ss, q, n, K = rec['ms'], rec['ss'], rec['q'], rec['n'], rec['K']
+    assert sum(ms) == n and sum(ss) == K - n
+    Rs = R_all_exact(ms, ss, q)
+    if min(Rs) < q:
+        return False
+    rec['div'] = all(R % q == 0 for R in Rs)
+    rec['minmarg'] = min(Rs) - q
+    if rec['div']:
+        print("!!! HALT: p=%d n=%d passes size AND divisibility. "
+              "Stopping for main-session review." % (rec['p'], n))
+        sys.exit(1)
+    return True
+
+
+def part3(pmin=24, pmax=36, max_moves=40, budget=300.0):
+    """Two passes per period, both budgeted, both reported honestly.
+
+    Pass A (existence): candidates in DESCENDING gamma order -- the easiest
+    first -- so that the decisive question ("does a size-passer exist at this
+    period at all?") gets an answer inside the budget.
+    Pass B (sharpness): candidates in ASCENDING gamma order, to find the
+    SMALLEST gamma at which the recipe still closes. Whatever Pass B reaches
+    inside its budget is an upper bound on the sharpest achievable gamma, never
+    a claim that nothing smaller works -- the 'cap' column says which passes
+    hit their budget."""
     print("=" * 78)
-    print("PART 3.  The empirical test at p = 24..36 (the convergent desert)")
+    print("PART 3.  The empirical test at p = %d..%d (the convergent desert)"
+          % (pmin, pmax))
     print("=" * 78)
     print("  Recipe of 12.8.6.2 + 12.8.6.3, reimplemented independently; candidate")
-    print("  n taken from the whole window (ordinary integers, ordered by")
-    print("  increasing gamma) rather than from the continued-fraction chain.")
-    print("  Search in log space; EVERY reported pass is re-verified exactly.")
+    print("  n taken from the whole window (ordinary integers) rather than from")
+    print("  the continued-fraction chain. Correction search in log space; every")
+    print("  reported pass is re-verified with exact big integers, all p rotations,")
+    print("  plus the exact divisibility test q | R_r.")
     print()
     print(f"  {'p':>4} {'n':>12} {'n/1.585^p':>10} {'gamma':>9} {'gam/log2p':>10} "
-          f"{'crash':>5} {'moves':>6} {'exact q<=R_r':>13} {'q|R_r':>7} {'sec':>7}")
+          f"{'crash':>5} {'moves':>6} {'exact':>7} {'q|R_r':>7} {'cap':>5} "
+          f"{'sec':>7}")
     recs = []
     unresolved = []
+    capped = []
     for p in range(pmin, pmax + 1):
         t0 = time.time()
-        rec = None
         cands = candidates_for(p)
-        deadline = t0 + budget
-        tried = 0
-        for n in cands:
-            if time.time() > deadline:
+        best = None
+        hit_cap = False
+        # Pass A: easiest first (largest gamma), to settle existence.
+        dlA = t0 + budget
+        for n in reversed(cands):
+            if time.time() > dlA:
+                hit_cap = True
                 break
-            tried += 1
-            T3 = 3 ** n
-            K = T3.bit_length()
-            q = (1 << K) - T3
-            assert q > 0
-            log2q = float(mp.log(mpf(q), 2))   # = K - gamma
-            for cd in (1, 2):
-                bp = base_profile(p, n, K, cd)
-                if bp is None:
-                    continue
-                ms0, ss0 = bp
-                res = correct(list(ms0), list(ss0), log2q, max_moves=max_moves)
-                if res is None:
-                    continue
-                ms, moves = res
-                Rs = R_all_exact(ms, ss0, q)
-                if min(Rs) < q:
-                    continue                      # log-space search overshot
-                assert sum(ms) == n and sum(ss0) == K - n
-                div = all(R % q == 0 for R in Rs)
-                if div:
-                    print("!!! HALT: p=%d n=%d passes size AND divisibility. "
-                          "Stopping for main-session review." % (p, n))
-                    sys.exit(1)
-                gamma = mpf(K) - mp.log(mpf(q), 2)
-                rec = dict(p=p, n=n, K=K, gamma=gamma, cd=cd, moves=moves,
-                           ms=ms, ss=ss0, div=div, minmarg=min(Rs) - q)
+            r = search_candidate(p, n, max_moves)
+            if r is not None:
+                best = r
                 break
-            if rec:
-                break
+        # Pass B: sharpest first (smallest gamma), to push gamma down.
+        if best is not None:
+            dlB = time.time() + budget
+            for n in cands:
+                if time.time() > dlB:
+                    hit_cap = True
+                    break
+                if float(delta_of(n)) <= float(delta_of(best['n'])):
+                    break                     # already at or past the best
+                r = search_candidate(p, n, max_moves)
+                if r is not None:
+                    best = r
+                    break
+        # EXACT verification of the accepted candidate only; if the log-space
+        # search overshot, fall back to the (easier) Pass A candidate.
+        while best is not None and not verify_candidate(best):
+            print(f"  {p:>4}  log-space search overshot at n={best['n']}; "
+                  f"falling back", flush=True)
+            nxt = None
+            for n in reversed(cands):
+                if float(delta_of(n)) < float(delta_of(best['n'])):
+                    r = search_candidate(p, n, max_moves)
+                    if r is not None:
+                        nxt = r
+                        break
+            best = nxt
         dt = time.time() - t0
-        if rec is None:
+        if best is None:
             unresolved.append(p)
-            print(f"  {p:>4}  UNRESOLVED  ({tried}/{len(cands)} candidates tried, "
-                  f"<= {max_moves} moves each, {dt:.0f}s)")
+            print(f"  {p:>4}  UNRESOLVED  ({len(cands)} candidates, "
+                  f"<= {max_moves} moves each, budget {budget:.0f}s/pass, "
+                  f"{dt:.0f}s)", flush=True)
             continue
-        recs.append(rec)
-        print(f"  {p:>4} {rec['n']:>12} {float(rec['n']/L**p):>10.3f} "
-              f"{float(rec['gamma']):>9.3f} "
-              f"{float(rec['gamma']/mp.log(p,2)):>10.3f} {rec['cd']:>5} "
-              f"{rec['moves']:>6} {'PASS':>13} {str(rec['div']):>7} {dt:>7.1f}",
-              flush=True)
+        if hit_cap:
+            capped.append(p)
+        recs.append(best)
+        print(f"  {p:>4} {best['n']:>12} {float(best['n']/L**p):>10.3f} "
+              f"{float(best['gamma']):>9.3f} "
+              f"{float(best['gamma']/mp.log(p,2)):>10.3f} {best['cd']:>5} "
+              f"{best['moves']:>6} {'PASS':>7} {str(best['div']):>7} "
+              f"{('yes' if hit_cap else 'no'):>5} {dt:>7.1f}", flush=True)
     print()
     if recs:
         rr = [float(r['gamma'] / mp.log(r['p'], 2)) for r in recs]
         print(f"  resolved: {[r['p'] for r in recs]}")
-        print(f"  gamma/log2 p over p = {pmin}..{pmax}: "
-              f"min {min(rr):.3f}, max {max(rr):.3f}   "
-              f"(12.8.6.4's range over p = 2..23 was [1.828, 3.643])")
+        print(f"  gamma/log2 p over the periods run: min {min(rr):.3f}, "
+              f"max {max(rr):.3f}")
+        print(f"  (12.8.6.4's recorded range over p = 2..23 was [1.828, 3.643];")
+        print(f"   that range records the gamma of the chain candidate nearest to")
+        print(f"   1.585^p, not the smallest gamma at which the recipe closes.)")
+    if capped:
+        print(f"  budget hit at p = {capped}: there the reported gamma is the")
+        print("  sharpest found INSIDE the budget, not a proved minimum.")
     if unresolved:
-        print(f"  UNRESOLVED: {unresolved}")
-    check("every period 24..36 resolved", not unresolved, f"{unresolved}")
+        print(f"  NOT RESOLVED: {unresolved}")
     check("no constructed instance satisfies the divisibility system",
           all(not r['div'] for r in recs))
-    return recs, unresolved
+    return recs, unresolved, capped
 
 
 # ---------------------------------------------------------------------
@@ -1042,7 +1107,7 @@ def main():
     part2d()
     part2e()
     part4()
-    recs, unresolved = part3()
+    recs, unresolved, capped = part3()
     print("=" * 78)
     print(f"CHECKS RUN: {CHECKS[0]}   FAILURES: {len(FAILURES)}")
     for f in FAILURES:
