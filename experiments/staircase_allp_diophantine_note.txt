@@ -1,0 +1,37 @@
+How experiments/staircase_allp_diophantine.out was produced
+===========================================================
+
+The .out file is the concatenation of several invocations of
+experiments/staircase_allp_diophantine.py rather than one end-to-end run, and
+this note records exactly which, because the split is not cosmetic: Part 3's
+per-period cost grows like n^1.585 with n ~ 1.585^p, and in this environment
+long-lived background processes were repeatedly killed mid-sweep. Splitting was
+the only way to get the large periods verified at all. Nothing about the split
+affects a pass/fail decision: every one is exact big-integer arithmetic inside a
+single invocation.
+
+  segment 1   python -c "part0(); part1(); part2a(); part2b(); part2c();
+                          part2d(); part2e(); part4()"
+              -> 90 checks, 0 failures
+
+  segment 2   python -c "part2f()"
+              -> 2 checks, 0 failures
+
+  segment 3   part3 over p = 24..36, run in slices with different wall-clock
+              budgets per period. The budget is recorded in the 'cap' column of
+              every row ('yes' = the sharpening pass was cut off, so the gamma
+              in that row is an upper bound on the sharpest achievable gamma,
+              not a measurement of it). Slices actually run:
+
+                p = 18..21   budget 240 s/pass   (cross-check, outside the brief's range)
+                p = 22       budget  30 s/pass   (cross-check)
+                p = 24..28   budget 240 s/pass
+                p = 29..32   budget  60 s/pass
+                p = 33..34   budget  60 s/pass
+                p = 35       budget  60 s/pass
+                p = 36       see the row, or its absence, in the .out
+
+To reproduce as a single run:  python experiments/staircase_allp_diophantine.py
+(main() runs parts 0, 1, 2a-2f, 4 and then part3(24, 36) with a 300 s/pass
+budget). Expect several hours for the tail, dominated by the exact rotation-sum
+verification at p >= 34.

@@ -380,8 +380,17 @@ test `q | R_r`.
 | **32** | 5033297 | 2.001 | 17.514 | 3.503 | 1 | 20 | PASS | False | 60 s, **capped** |
 | **33** | 5382504 | 1.350 | 16.261 | 3.224 | 1 | 24 | PASS | False | 60 s, **capped** |
 | **34** | 10114062 | 1.601 | 15.498 | 3.046 | 1 | 24 | PASS | False | 60 s, **capped** |
+| **35** | 25039682 | 2.500 | 16.333 | 3.184 | 1 | 27 | PASS | False | 60 s, **capped** |
 
-COVERAGE_PLACEHOLDER
+**Coverage, stated exactly.** The brief asked for `p = 24…36`. Periods
+`24…35` were run and every row above is exactly verified. `p = 36` is
+recorded separately below — it was the one period whose cost exceeded the
+slices available. Rows at `p = 18…22` are cross-checks against `12.8.6.4`'s
+own range, not part of the requested sweep. The `n` column at `p = 22` is
+omitted because that row came from a deliberately small (30 s) probe whose
+per-row detail was not captured; its `γ/log₂p = 3.379` is recorded as-is.
+
+P36_PLACEHOLDER
 
 **Reading the table, honestly.** Two budget regimes are mixed and the difference
 matters. Where the sharpening pass ran to completion (`p ≤ 28`) the recipe closes

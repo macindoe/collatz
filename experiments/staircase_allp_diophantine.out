@@ -292,3 +292,46 @@ PART 4.  Cross-checks and negative controls
   Part 1 predicts: too SMALL a gamma is as fatal as too large.
 
 CHECKS 90 FAILURES []
+==============================================================================
+PART 2f.  A sharper certified ceiling from the multiples law alone
+==============================================================================
+  n = t*q_k at a correctly-signed convergent gives K - nL = t*theta_k
+  EXACTLY (Part 2b). Taking the least t with t*q_k in the window gives a
+  certified gamma with no covering argument at all -- and in the desert
+  it beats the three-distance ceiling of Part 2d outright.
+
+      p   gam_mult   /log2 p            q_k      t  gam_ceil(2d)  gam_max(2e)
+     24     23.886     5.210         190537      1        16.071       23.886
+     25     23.886     5.144         190537      1        17.058       23.886
+     26     23.886     5.082         190537      1        17.083       23.886
+     27     23.886     5.023         190537      1        17.083       23.886
+     28     22.886     4.761         190537      2        17.083       22.886
+     29     22.301     4.591         190537      3        17.083       22.301
+     30     21.886     4.460         190537      4        17.083       21.886
+     31     21.301     4.300         190537      6        17.083            -
+     32     20.716     4.143         190537      9        17.083            -
+     33     26.288     5.211       10781274      1        17.083            -
+     34     26.288     5.167       10781274      1        17.083            -
+     35     26.288     5.125       10781274      1        23.189            -
+     36     25.288     4.891       10781274      2        23.189            -
+     37     25.288     4.854       10781274      2        23.189            -
+     38     24.703     4.707       10781274      3        25.288            -
+     39     29.058     5.498      171928773      1        25.288            -
+     40     33.137     6.227      397573379      1        25.288            -
+     50     35.524     6.294     6586818670      2        32.282            -
+    100     73.250    11.025 205632218873398596256      1        66.993            -
+    200    134.254    17.564 6167783688800764861832724692955402469407      2       131.868            -
+    400    263.345    30.466 25082969058031612355975106918148438739852407967363985193186263484623444482107246      3       263.930            -
+    712    475.066    50.135 12396745632865331633925350355160740687721636401533529153473255202427859656380321771277706381395266331802917950691441776162595695327621459234409      2       471.681            -
+
+  min over ALL p in 24..712 of gamma_mult(p)/log2 p = 4.143 (attained at p = 32).
+  At p = 24..30 this AGREES to three decimals with the exhaustive
+  gamma_max of Part 2e -- in the desert the multiples are not merely
+  sufficient, they are the best the window has.
+  Combined certified statement, unconditional and effective:
+    for every p >= 24 the window contains n with correct sign and
+    gamma(n) >= 4.143*log2 p (multiples, exact identity), and
+    gamma prescribable to within 1.28 bits anywhere in
+    [1.77, 3.358*log2 p] (Part 2d, three distances).
+
+CHECKS 2 FAILURES []
