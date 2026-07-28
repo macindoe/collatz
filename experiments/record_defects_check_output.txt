@@ -1,0 +1,94 @@
+==========================================================================
+PART 1 - which sigma convention reproduces experiments/uniform_trim.py
+==========================================================================
+  profiles tested                              : 300
+  sigma_j = s_j + m_(j+1) agrees with R_rot    : 300/300
+  sigma_j = m_j + s_j     agrees with R_rot    : 2/300
+  worst disagreement (misreading vs R_rot)     : 3.3 orders of magnitude
+  (the few agreements are profiles where the shift happens to be a wash)
+
+==========================================================================
+PART 2 - WHICH GUARDRAILS CAN SEE THE DIFFERENCE (the important part)
+==========================================================================
+  Every structural identity attached to Prop 12.6.1 depends on sigma ONLY
+  through the cyclic total sum(sigma) = sum(s) + n = K. Both conventions
+  are cyclic rearrangements with the SAME total, so all of them pass under
+  both readings. Measured, not asserted:
+
+  (a) sum(sigma) = K under both conventions          : True
+  (b) trivial cycle m=s=1, p in {1,2,3,4,7}: R = 4^p-3^p under both : True   <-- 12.6.1's only published canary, BLIND
+  (c) 12.6.1.1 transport recurrence, sigma read self-consistently:
+        sigma = s_j + m_(j+1) : 1685/1685 exact
+        sigma = m_j + s_j     : 1685/1685 exact   <-- ALSO BLIND
+      Reason (proof, not sampling): telescoping the recurrence, every
+      sigma cancels between 2^(sigma_r) and S_t - S'_(t-1); the only
+      residue is the wrap term, which needs 2^(sum sigma) = 2^K. Both
+      conventions give sum(sigma) = K, so both satisfy it identically.
+  (d) ghost identity v2(3^m_r R_r - q) = s_r  : 668/668 correct, 668/668 misread   <-- BLIND
+  (e) 12.6.1.4 multiplicativity R_0(B^k) = G_k R_0(B) : 120/120 correct, 120/120 misread   <-- BLIND
+
+  What DOES see it: any check that pins sigma to an EXTERNAL quantity
+  rather than letting the implementation supply its own. Two exist:
+  (f) 12.8.3's p=7 staircase seed (n=94, m=(4, 7, 9, 15, 23, 35, 1)):
+        12.6.1.1 records gcd(q, R_r) = 7 at every rotation.
+        sigma = s_j + m_(j+1) : gcd(q,R_r) over rotations = [7]   <-- matches the record
+        sigma = m_j + s_j     : gcd(q,R_r) over rotations = [1]   <-- DISCRIMINATES
+
+==========================================================================
+PART 3 - CANARY for the next implementer of Prop 12.6.1
+==========================================================================
+  sigma_j = s_j + m_(j+1)   (Prop 12.6.1)  : PASS
+  experiments/uniform_trim.py R_rot        : PASS
+  sigma_j = m_j + s_j       (the misreading) : REJECTED
+      tier 2: transport recurrence fails at rotation r=0 -- sigma_j is s_j + m_(j+1), NOT m_j + s_j
+  -> tier 1 alone accepts both; tiers 2 and 3 are what make it a canary.
+
+==========================================================================
+PART 4 - Corollary 12.8.2: recompute n_0(p) from its displayed equation
+   0.585 n / (1.585^p - 1) = log_2 p + (p + 13.3 (0.46057 + log n)) / log 2
+==========================================================================
+  recomputed vs the table in 12.8.2's Verification block:
+    p =   4:  n_0 =  1.415e+03   page:  1.410e+03   [OK]
+    p =   5:  n_0 =  2.605e+03   page:  2.610e+03   [OK]
+    p =  10:  n_0 =  3.884e+04   page:  3.880e+04   [OK]
+    p =  20:  n_0 =  5.835e+06   page:  5.840e+06   [OK]
+    p =  50:  n_0 =  1.138e+13   page:  1.140e+13   [OK]
+    p =  91:  n_0 =  2.986e+21   page:  2.990e+21   [OK]
+    p =  92:  n_0 =  4.778e+21   page:  4.780e+21   [OK]
+    p = 100:  n_0 =  2.047e+23   page:  2.050e+23   [OK]
+
+  n_0(92), recomputed          : 4.7781e+21
+  cycles.md 12.8.2 table       : 4.78e21   -> AGREES (rel. err 3.9e-04)
+  README + cycles.md 12.8.5    : 1e18      -> WRONG, low by a factor 4778
+
+  Do the two figures answer different questions? Probes:
+    1.585^92 (bare trim shape, no gamma' factor) = 2.528e+18   <-- ~1e18
+    92 * 1.585^92                                = 2.325e+20
+    n_0(92) / 1.585^92  (= gamma'/0.585 at n_0)  = 1890
+    K_0(92) ~ n_0*log_2(3) (n vs K rescaling)    = 7.573e+21
+    n_0(91) (in case of an off-by-one in p)      = 2.986e+21
+    -> no reading of Corollary 12.8.2 yields 1e18. The prose figure is the
+       bare exponential shape 1.585^p ~ 2.5e18, i.e. Theorem 12.8.1's rate
+       without the gamma' = log_2 p + (p + 13.3(0.46057+log n))/log 2
+       factor (gamma'/0.585 ~ 1890 at p = 92) that Cor. 12.8.2 supplies.
+       Same question, one figure simply omits a factor: the table is right.
+
+==========================================================================
+PART 5 - is 12.8.5's strategic conclusion sensitive to the repair?
+==========================================================================
+  12.8.5 withdraws the crossover plan because the p = 92 search bound is
+  infeasible. Verify that BOTH figures are infeasible, so the conclusion
+  does not depend on which number is quoted.
+
+    prose  n ~ 1e18   : profiles to enumerate >= C(n-1, 91) ~ 10^1498
+    table  n ~ 4.78e21: profiles to enumerate >= C(n-1, 91) ~ 10^1833
+
+    Reference scale: the exhaustive Collatz verification frontier is ~2^68
+    ~ 3e20 individual orbit starts. Both figures exceed any feasible search
+    by 1400+ orders of magnitude, and no stopping-rule threshold in README
+    lies between them. 12.8.5's conclusion -- crossover plan withdrawn,
+    cycle ladder retired, front parked -- is unchanged by the repair.
+
+==========================================================================
+TOTAL CHECKS: 40   FAILURES: 0
+==========================================================================

@@ -10,6 +10,12 @@ import math, itertools, random
 L3 = math.log2(3)
 
 def R_rot(ms, ss):
+    """cycles.md Prop 12.6.1 numerator. CONVENTION: sigma_j = s_j + m_{j+1}
+    (indices cyclic), NOT m_j + s_j -- see the `Spre` update below. The
+    trivial-cycle identity R = 4^p - 3^p passes under either reading, as do
+    the transport recurrence, the ghost identity and 12.6.1.4's
+    multiplicativity; experiments/record_defects_check.py part 3 is the
+    canary that does discriminate."""
     p = len(ms); R = 0; Spre = 0
     for t in range(p):
         R += 3**sum(ms[t+1:]) * (1 << Spre) * ((1 << ss[t]) - 1)
@@ -71,6 +77,7 @@ if passers:
 import math, random
 L3 = math.log2(3)
 def R_rot(ms, ss):
+    """As above: sigma_j = s_j + m_{j+1}, indices cyclic."""
     p = len(ms); R = 0; Spre = 0
     for t in range(p):
         R += 3**sum(ms[t+1:]) * (1 << Spre) * ((1 << ss[t]) - 1)
