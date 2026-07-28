@@ -6,6 +6,23 @@ session-start HEAD `2225b68`, which does not contain the brief; it was rebranche
 `9fdaa0f` — the brief commit, current `main`, carrying all five round-11 findings files —
 before anything below was written).
 
+**Adjusted** per `briefs/merle-round11-reply-adjust-brief.md`, 2026-07-29, branch
+`merle-round11-reply-adjust`, base main **`912f708`** (same stale worktree cut, rebranched
+before anything was changed). Between the two passes our side closed the all-`p` staircase
+question and repaired two defects in its own record. **What this pass changed, exhaustively:**
+two new sections were added before the joint-note section — *Two defects in our own record* and
+*The staircase at every period* — and four existing passages were adjusted because the new
+material made them stale: the joint-note section's *"already published"* paragraph (its clause
+that everything §12.8.6 claims is in the v2 note), the lead sentence of the two loose fits, the
+second of those two bullets (which is the half that closed, and which now carries the
+published-record clause), and the where-everything-lives map (the six new records with their
+check counts, and the wiki-`main` pin). **Nothing else was touched.** Every other paragraph is
+as reviewed, character for character; the four placeholders are untouched and empty; no
+contribution sentence, no wording for one, no outline and no genre proposal appears anywhere,
+in this pass or the last; and nothing is offered for the shared ledger — whether the staircase
+result becomes a ledger entry is a later co-edit and the author's decision, and this reply only
+reports it.
+
 Conventions as rounds 7–10. **Business paragraphs only:** the personal opening and closing,
 and anything answering his personal paragraphs — his training, the retraction, the "not a
 debt" symmetry, his own two false alarms in one week — are the author's own and are not
@@ -39,6 +56,28 @@ drift sums, `D(x_min)/δ − 1` against `1/(27x_min²)`, `D(1)` and `D(3)` again
 without `ε(k)`, and the `704 / 1536 / 2048` verification comparison. All agreed with the
 findings except the one item flagged at (1) below.
 
+The material added at the second pass was checked the same way, at its named place in
+`briefs/staircase-allp-construction-findings.md`, `briefs/staircase-allp-diophantine-findings.md`,
+`briefs/staircase-gamma-upper-findings.md`, `briefs/staircase-status-audit-findings.md`,
+`briefs/staircase-status-apply-findings.md` and `briefs/record-defects-repair-findings.md`, and
+against `cycles.md` §12.8.6 **as it now stands** rather than as those files describe it — the
+section was rewritten after three of them were written. Recomputed from scratch at 60 digits
+before being written down: `θ = 8 − 5·log₂3`, `Γ* = 3.68301210072111…`, `δ_hi = 0.1169390665…`
+and `δ_hi − θ = 0.0417515701…` (so `δ_lo = 0.0415` sits inside), the upper end
+`−log₂(1 − 2^(−0.0415)) = 5.14021148607…`, `1/(log₂3 − 1) = 1.70951…` against
+`log₂(3/2) = 0.5849625…`, `maxgap(11) = 0.1729375397…`, `maxgap(12) = 0.0977500433…` and
+`maxgap(13) = θ` exactly against the arc length `0.0754390665…`, the window counts
+`0.05·L^15 = 50.03` and `0.05·L^16 = 79.30`, `Γ`'s coefficients at `p = 2` and `p = 4` and the
+two canonical windows `[2.512, 2.638]`, `[6.311, 6.626]`, the continued fraction of `log₂3` with
+`q₉ = 15601`, `q₁₃ = 190537` and `a₁₅ = 1`, `1.585^92 = 2.527·10^18` with
+`n₀(92)/1.585^92 = 1890.4`, and the two `p = 22` candidate arithmetics. All agreed. The `σ`
+conventions were re-derived independently as well, in fresh code: the trivial-cycle identity
+passes under **both** readings at `p ∈ {1,2,3,4,7}`; the `gcd(q, R_r)` at 12.8.3's `p = 7` seed
+is `{7}` under the correct convention and `{1}` under the misreading; the transport recurrence
+read self-consistently passes under both (1653/1653 on this session's own draw, against
+1685/1685 on the findings' — same fact, different draw), and fails under the misreading only
+once `σ_r` is spelled out as `s_r + m_(r+1)` in the assertion.
+
 **Four things flagged here rather than buried:**
 
 1. *One constant in our own record does not reproduce, and the correction is ours.*
@@ -71,9 +110,10 @@ findings except the one item flagged at (1) below.
 - The round-11 co-edit is a **parallel session's** work and is not claimed here. Its
   shared-repo push SHA is carried as
   `[PENDING: shared-repo push — SHA to be filled at send time]`.
-- The wiki-`main` pin is **`9fdaa0f`** at drafting and is marked **CHECK AT SEND TIME**.
-  Public `main` is behind; it must be pushed first or none of the artifact pins in the
-  co-edit resolve. That check caught a real problem at rounds 9 and 10.
+- The wiki-`main` pin was **`9fdaa0f`** at first drafting and is **`912f708`** at this pass; it
+  is marked **CHECK AT SEND TIME** and it will move again when this pass merges, so it is to be
+  read then and not taken from here. Public `main` is behind; it must be pushed first or none of
+  the artifact pins in the co-edit resolve. That check caught a real problem at rounds 9 and 10.
 
 **Placeholders left in the draft, in order:** personal opening; his personal paragraphs; the
 joint note's contribution sentence and the answer to his three proposals; personal closing.
@@ -782,8 +822,9 @@ register from the **v1** DOI, `10.5281/zenodo.21273548`, while our own hosting d
 
 ## Where everything lives
 
-Wiki `main` stands at **`9fdaa0f`** — **CHECK AT SEND TIME**; it must be public before or with
-the shared-repo push or none of the co-edit's artifact pins resolve.
+Wiki `main` stands at **`912f708`** — **CHECK AT SEND TIME**, and it has moved twice since this
+reply was first drafted, so the pin is to be read at send time and not before; it must be public
+before or with the shared-repo push or none of the co-edit's artifact pins resolve.
 
 The five round-11 records are `briefs/merle-r11-ceiling-audit-findings.md` (the ceiling repair,
 the `hceil` removal, the axiom logs and the RETRACTED block),
@@ -801,6 +842,25 @@ and `experiments/merle_r11_hygiene_check.py` (**115 checks, 0 failures**), each 
 committed alongside. Each imports nothing from your repositories and nothing from the earlier
 `merle_*` checks in ours.
 
+The staircase result and the two record repairs are on the same footing, in six further records.
+`briefs/staircase-allp-construction-findings.md` carries Construction B and its five-step proof;
+`briefs/staircase-allp-diophantine-findings.md` carries the availability half, including the
+characterization of the old route as an obstruction; `briefs/staircase-gamma-upper-findings.md`
+carries the two-sided arc and the `γ` upper bound. Their code is
+`experiments/staircase_allp_construction.py` (0 failures),
+`experiments/staircase_allp_diophantine.py` (**92 checks, 0 failures**) and
+`experiments/staircase_gamma_upper.py` (**45 checks, 0 failures**), each with its output committed.
+`briefs/staircase-status-audit-findings.md` and `briefs/staircase-status-apply-findings.md` are the
+record of what the closure retired across the wiki and of what was applied — they carry no
+verification script, their own re-derivation being scratch, and eleven of the audit's drafted items
+did not survive that re-derivation and were corrected before anything was written down. The
+repairs are `briefs/record-defects-repair-findings.md`, with
+`experiments/record_defects_check.py` (**40 checks, 0 failures**), which is the canary above. The
+result itself lives at `cycles.md` §12.8.6, in four numbered statements: availability at 12.8.6.1,
+Construction B at 12.8.6.2, the superseded profile-plus-correction route kept in place and marked
+superseded at 12.8.6.3, and the instance record — including the `p = 22` rows and your credit — at
+12.8.6.4.
+
 The round-11 co-edit — the L-A8 kernel key turned and scoped in the ContentDescent language, the
 "K pinned" wording written as you proposed it, the one-sidedness sharpening, the round's hygiene
 offers, and our own L-A3 (B) date-stamp — is at
@@ -808,7 +868,7 @@ offers, and our own L-A3 (B) date-stamp — is at
 your prose untouched throughout.
 
 No new claims ride along with any of this. Everything cited above sits at its named place in the
-five findings records, and the two bracketed fields are the only values not yet on file.
+records named here, and the two bracketed fields are the only values not yet on file.
 
 ---
 
