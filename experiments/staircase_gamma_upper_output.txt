@@ -1,0 +1,238 @@
+
+==============================================================================
+PART 0 -- certified constants: L, theta, and the enclosure discipline
+==============================================================================
+  [ OK ] L enclosure is nonempty and tight (width < 1e-90)   width ~ 1e-135
+  [ OK ] L enclosure agrees with exact 3^b vs 2^a at 9 convergents
+  [ OK ] L enclosure is consistent with mpmath.iv's log(3)/log(2)
+  [ OK ] theta = 8 - 5L is positive and < 0.0752   theta in [0.075187496394, 0.075187496394]
+  [ OK ] integer enclosure L_INT_LO/2^256 < L < L_INT_HI/2^256
+  [ OK ] K = ceil(n*L) from the enclosure equals bit_length(3^n), 405 values
+  [ OK ] delta(n+5) = delta(n) + theta (mod 1) at 499 values
+
+==============================================================================
+PART 1 -- sup Gamma, the induced delta_hi, and the arc
+==============================================================================
+  Gamma* = 1.05*L*(L-1) + 1/(L-1) + 1 + eta  <=  3.683012100721  (eta < 2^-900 wherever used)
+  [ OK ] Gamma(p,n) = Gamma0(p,n) + eta exactly (beta enters with coefficient 1)
+  [ OK ] the correction bracket B(p) is negative for every p in 2..199, 300, 1000, 2000   B(2) <= -0.611461691351
+  [ OK ] the derivation's bound Gamma* + B(p)/(L^(p-1)-1) dominates Gamma0(p, n_max) at every tested p
+  [ OK ] Gamma(p, floor(1.05*L^p)) <= Gamma* at every tested p (strictly, once resolvable)   max 3.683012100721, attained only in the p -> infinity limit (p = 2000); the strict inequality is the negative bracket B(p), not this table
+  delta_hi = -log_2(1 - 2^-Gamma*) in [0.116939066509, 0.116939066509]
+  [ OK ] delta_hi's certified lower bound exceeds the record's rounded 0.116939   0.116939 is a safe (low) rounding of 0.116939066509
+  [ OK ] arc [delta_lo, delta_hi] is longer than theta  (the pigeonhole's own hypothesis)   len 0.075439066509 > theta 0.075187496394, margin 0.000251570114
+  delta in [0.041500000000, 0.116939066509]  =>  gamma in [3.683012100721, 5.140211486072]
+  [ OK ] the arc's lower end still meets Theorem B's hypothesis (gamma >= Gamma*)   gamma >= 3.683012100721 >= Gamma* = 3.683012100721
+  [ OK ] the arc's upper end is an absolute constant C < 5.1403   C = 5.140211486072
+  method optimum: delta_lo -> delta_hi - theta = 0.041751570114  =>  gamma < 5.131617549942 (infimum, not attained)
+  [ OK ] the chosen delta_lo = 0.0415 sits strictly inside the admissible range   0.0415 < 0.041751570114
+
+==============================================================================
+PART 2 -- the two-sided pigeonhole, and the window-size correction
+==============================================================================
+  [ OK ] maxgap{j*theta} for J*theta < 1 is max(theta, 1 - J*theta)  (three-distance check)
+  [ OK ] one-sided arc: the sharp minimal sweep is J = 12, i.e. 61 consecutive integers (the recorded Lemma D's 71 is valid but not minimal)   J = 12 -> 61 integers
+  [ OK ] two-sided arc: the sharp minimal sweep is J = 13, i.e. 66 consecutive integers   J = 13 -> 66 integers
+  [ OK ] two-sided arc: J = 12 (61 integers) genuinely does NOT suffice   maxgap(12) = 0.097750043269 > arc = 0.075439066509
+  [ OK ] the binding inequality is arc > theta, and it holds with certified margin   margin 0.000251570114
+  [ OK ] pigeonhole holds on the step-5 progression: some n in {N,N+5,...,N+65} is good, N = 1..20000   0/20000 failures
+  [ OK ] at J = 12 (61 integers) the two-sided sweep genuinely misses -- the criterion bites   447 failing starts in N=1..20000, first at N=22
+  [ OK ] brute force n <= 3e6: longest run of consecutive integers failing the TWO-SIDED arc   16, against the proved bound 65 (run ends at n=33)
+  [ OK ] brute force n <= 3e6: longest run failing the ONE-SIDED condition reproduces Lemma D's 11   11
+
+==============================================================================
+PART 3 -- p_0 from the window count, and the finite tail
+==============================================================================
+   p |   window [L^p, 1.05 L^p]        | #integers | >= 66 ?
+  ---+---------------------------------+-----------+--------
+    2 |            3 .. 2               |         0 | no
+    3 |            4 .. 4               |         1 | no
+    4 |            7 .. 6               |         0 | no
+    5 |           11 .. 10              |         0 | no
+    6 |           16 .. 16              |         1 | no
+    7 |           26 .. 26              |         1 | no
+    8 |           40 .. 41              |         2 | no
+    9 |           64 .. 66              |         3 | no
+   10 |          101 .. 105             |         5 | no
+   11 |          159 .. 166             |         8 | no
+   12 |          252 .. 263             |        12 | no
+   13 |          399 .. 418             |        20 | no
+   14 |          632 .. 662             |        31 | no
+   15 |         1001 .. 1050            |        50 | no
+   16 |         1587 .. 1665            |        79 | yes
+   17 |         2514 .. 2639            |       126 | yes
+   18 |         3985 .. 4183            |       199 | yes
+   19 |         6315 .. 6630            |       316 | yes
+   20 |        10009 .. 10509           |       501 | yes
+   21 |        15864 .. 16656           |       793 | yes
+   22 |        25144 .. 26400           |      1257 | yes
+   23 |        39851 .. 41843           |      1993 | yes
+   24 |        63162 .. 66320           |      3159 | yes
+  [ OK ] p_0 = 16: the canonical window first holds 66 consecutive integers at p = 16   p_0 = 16
+  [ OK ] p = 15 falls short (the finite tail is genuinely finite, not vacuous)   p=15 holds 50 integers, p=16 holds 79
+
+==============================================================================
+PART 4 -- the witness at each p, (H0), and the two-sided gamma bracket
+==============================================================================
+   p |        n | offset | delta(n)     | gamma(n) | Gamma(p,n) | (H0) | gamma<=C
+  ---+----------+--------+--------------+----------+------------+------+---------
+   16 |     1588 |      1 | 0.0795488548 |   4.2203 |     3.6231 |  yes | yes
+   17 |     2518 |      4 | 0.0644231841 |   4.5171 |     3.6283 |  yes | yes
+   18 |     3995 |     10 | 0.0748096189 |   4.3066 |     3.6325 |  yes | yes
+   19 |     6325 |     10 | 0.1121829386 |   3.7405 |     3.6337 |  yes | yes
+   20 |    10009 |      0 | 0.1103302819 |   3.7636 |     3.6337 |  yes | yes
+   21 |    15871 |      7 | 0.0601510545 |   4.6140 |     3.6351 |  yes | yes
+   22 |    25157 |     13 | 0.0983693578 |   3.9233 |     3.6358 |  yes | yes
+   23 |    39852 |      1 | 0.0744212604 |   4.3139 |     3.6358 |  yes | yes
+   24 |    63168 |      6 | 0.0887544460 |   4.0669 |     3.6361 |  yes | yes
+   25 |   100114 |      4 | 0.0642028021 |   4.5219 |     3.6363 |  yes | yes
+   26 |   158675 |      5 | 0.0751980705 |   4.2993 |     3.6364 |  yes | yes
+   27 |   251498 |     12 | 0.1009936306 |   3.8866 |     3.6365 |  yes | yes
+   28 |   398610 |     15 | 0.0975875399 |   3.9344 |     3.6365 |  yes | yes
+   29 |   631760 |      1 | 0.0905444023 |   4.0390 |     3.6365 |  yes | yes
+   30 |  1001317 |      4 | 0.1036653940 |   3.8502 |     3.6366 |  yes | yes
+   31 |  1587052 |      8 | 0.0933054876 |   3.9970 |     3.6366 |  yes | yes
+   32 |  2515409 |      5 | 0.0610234972 |   4.5936 |     3.6366 |  yes | yes
+   33 |  3986823 |      2 | 0.0479873779 |   4.9338 |     3.6366 |  yes | yes
+   34 |  6318969 |      7 | 0.0917805364 |   4.0200 |     3.6366 |  yes | yes
+   35 | 10015329 |     11 | 0.1026148835 |   3.8644 |     3.6366 |  yes | yes
+   36 | 15873908 |      5 | 0.0801024331 |   4.2106 |     3.6366 |  yes | yes
+   37 | 25159546 |      6 | 0.0548310378 |   4.7449 |     3.6366 |  yes | yes
+   38 | 39876927 |      0 | 0.0610050075 |   4.5940 |     3.6366 |  yes | yes
+   39 | 63203441 |      7 | 0.0984579478 |   3.9220 |     3.6366 |  yes | yes
+   40 | 100175081 |      9 | 0.1082956211 |   3.7895 |     3.6366 |  yes | yes
+  [ OK ] p = 16..40: window witness exists, meets (H1) and (H0), and has gamma <= C
+  [ OK ] (H0) holds for EVERY p >= 16 and EVERY n in the window, from the scale alone: S >= (L-1)L^p >= p, and (L-1)(n-p) + Gamma* >= p + eta   at p = 16 the two margins are 911.75 and 906.07
+  [ OK ] (H0)'s first clause is exactly what fails at the small p of the finite tail   at p = 2, (L-1)L^p = 1.4694 < 2
+
+  finite tail 2 <= p <= 15 (window widened only where the canonical one is short):
+   p |        n | kappa   | gamma(n) | Gamma(p,n) | (H0) | (H1) | gamma<=C
+  ---+----------+---------+----------+------------+------+------+---------
+    2 |     ---- | (no n in reach -- outside Construction B)
+    3 |        5 |  1.2557 |   4.2995 |     3.9342 |  yes |  yes | yes
+    4 |     ---- | (no n in reach -- outside Construction B)
+    5 |       17 |  1.6996 |   4.7242 |     3.7499 |  yes |  yes | yes
+    6 |       17 |  1.0723 |   4.7242 |     3.2562 |  yes |  yes | yes
+    7 |       34 |  1.3531 |   3.7518 |     3.6053 |  yes |  yes | yes
+    8 |       46 |  1.1550 |   4.0209 |     3.5104 |  yes |  yes | yes
+    9 |       70 |  1.1089 |   4.8031 |     3.5430 |  yes |  yes | yes
+   10 |      111 |  1.1095 |   4.4170 |     3.6004 |  yes |  yes | yes
+   11 |      164 |  1.0342 |   4.4798 |     3.5712 |  yes |  yes | yes
+   12 |      258 |  1.0265 |   4.2181 |     3.5938 |  yes |  yes | yes
+   13 |      405 |  1.0167 |   4.0445 |     3.6056 |  yes |  yes | yes
+   14 |      646 |  1.0232 |   3.7155 |     3.6263 |  yes |  yes | yes
+   15 |     1005 |  1.0043 |   3.7343 |     3.6190 |  yes |  yes | yes
+  [ OK ] finite tail 3 <= p <= 15: an explicit witness with the same two-sided bracket
+  [ OK ] p in {2,4}: no witness anywhere in a wide scan -- outside Construction B's reach, as its own scope note records   Gamma(2,n) = n + eta and Gamma(4,n) ~ 0.196n + 1.507, so gamma <= C caps n at 5 and 18; no such n meets the arc and (H0).  Their canonical windows [L^p, 1.05L^p] = (3, 2), (7, 6) hold no integer either.
+
+==============================================================================
+PART 5 -- Construction B end to end (own evaluator, exact big integers)
+==============================================================================
+  [ OK ] canary: trivial cycle gives R_r = q = 4^p - 3^p at p in {1,2,3,4,7,11}
+  [ OK ] canary: 12.6.1.1 transport recurrence holds at every rotation of 120 random profiles
+  [ OK ] canary: published p=7 staircase m=(4,7,9,15,23,35,1) passes all 7 size conditions   n=94, gamma=6.743
+  [ OK ] canary: it reproduces gamma = 6.744 and fails divisibility at all 7 rotations
+
+  end-to-end (window witness -> Construction B -> all p rotations, exact):
+   p |        n | gamma(n) | crash c | all q<=R_r | min R_r/q | any q|R_r
+  ---+----------+----------+---------+------------+-----------+----------
+    3 |        5 |   4.2995 |       1 |        yes |    2.8461 | no
+    5 |       17 |   4.7242 |       1 |        yes |    1.2919 | no
+    6 |       17 |   4.7242 |       1 |        yes |    1.3108 | no
+    7 |       34 |   3.7518 |       1 |        yes |    2.0412 | no
+    8 |       46 |   4.0209 |       1 |        yes |    1.2582 | no
+    9 |       70 |   4.8031 |       1 |        yes |    1.3621 | no
+   10 |      111 |   4.4170 |       1 |        yes |    1.6577 | no
+   11 |      164 |   4.4798 |       1 |        yes |    1.6469 | no
+   12 |      258 |   4.2181 |       1 |        yes |    1.3737 | no
+   13 |      405 |   4.0445 |       1 |        yes |    1.2792 | no
+   14 |      646 |   3.7155 |       1 |        yes |    1.8864 | no
+   15 |     1005 |   3.7343 |       1 |        yes |    1.9112 | no
+   16 |     1588 |   4.2203 |       1 |        yes |    1.3758 | no
+   17 |     2518 |   4.5171 |       1 |        yes |    1.6484 | no
+   18 |     3995 |   4.3066 |       1 |        yes |    1.4246 | no
+   19 |     6325 |   3.7405 |       1 |        yes |    1.5295 | no
+   20 |    10009 |   3.7636 |       1 |        yes |    1.5542 | no
+   21 |    15871 |   4.6140 |       1 |        yes |    1.3015 | no
+   22 |    25157 |   3.9233 |       1 |        yes |    1.4521 | no
+   23 |    39852 |   4.3139 |       1 |        yes |    1.4319 | no
+   24 |    63168 |   4.0669 |       1 |        yes |    1.2995 | no
+   25 |   100114 |   4.5219 |       1 |        yes |    1.3512 | no
+   26 |   158675 |   4.2993 |       1 |        yes |    1.4175 | no
+  [ OK ] end-to-end: every witness builds, passes all p size conditions, has crash depth 1, and FAILS q | R_r at every rotation   23 periods
+
+==============================================================================
+PART 6 -- negative controls (a bound that never bites has not been tested)
+==============================================================================
+  [ OK ] NC-1a: an arc of length 0.9*theta is NOT caught by the licensed 14-point sweep -- its maximal gap theta is left empty   maxgap(J) = theta = 0.075187496394 > 0.9*theta = 0.067668746754 for all J <= 13; the first J that would work is 26, costing 131 integers
+  [ OK ] NC-1b: and the failure is realised at actual N -- whole progressions are empty   1950 empty starts among N=1..20000 (first N=116)
+  [ OK ] NC-1c: the full arc with the same 14 sweep points is never empty, same 20000 starts   0 empty
+  [ OK ] NC-2: every n with delta < delta_lo has gamma > C  (the upper bound bites)   60 such n tested, 0 violations, largest gamma seen 17.057
+  [ OK ] NC-3a: every n above the EXACT threshold f(Gamma(p,n)) fails Theorem B's (H1)   494 tested, 0 violations
+  [ OK ] NC-3b: above the uniform delta_hi the hypothesis is nearly always lost too   495 n above delta_hi: 1 still meet (H1) on the exact Gamma (the cost of using sup Gamma), 494 lose it -- of those, 452 then fail a size condition and 42 still build a passer (Gamma's known ~0.6-0.9 bit conservativeness, not a soundness break)
+  [ OK ] NC-4: without the lower cut, the FIRST Lemma-D witness has unbounded-looking gamma   worst first-witness gamma = 17.057 at (p,n) = (26, 158670) -- exceeds C = 5.1402
+
+==============================================================================
+PART 7 -- the optimal constant, and the sweep-step ladder
+==============================================================================
+  (a) fixed sweep step 5, canonical window kappa <= 1.05:
+      delta_hi = 0.116939066509   theta = 0.075187496394
+      admissible delta_lo < delta_hi - theta = 0.041751570114
+      delta_lo = 0.0400000    ->  gamma <= 5.192576
+      delta_lo = 0.0415000    ->  gamma <= 5.140211
+      delta_lo = 0.0417500    ->  gamma <= 5.131671
+      delta_lo = 0.0417515    ->  gamma <= 5.131617  <-- infimum (not attained)
+
+  (b) using the exact Gamma(p,n) instead of its supremum Gamma*:
+      p |  Gamma(p,n_max) | delta_hi(p) | best gamma bound | gain vs C
+     ---+-----------------+-------------+------------------+----------
+       16 |        3.668218 |   0.1181950 |         5.089481 | 0.042135
+       20 |        3.680047 |   0.1171896 |         5.123107 | 0.008509
+       24 |        3.682443 |   0.1169870 |         5.129982 | 0.001634
+       30 |        3.682966 |   0.1169429 |         5.131486 | 0.000131
+       60 |        3.683012 |   0.1169390 |         5.131617 | 0.000000
+      200 |        3.683012 |   0.1169390 |         5.131617 | 0.000000
+      -> Gamma INCREASES in p, so the exact Gamma helps at SMALL p and not at large p;
+         the whole gain is ~0.04 bits at p = 16 and vanishes asymptotically.
+
+  (c) the refinement ladder.  Lengthening the SAME step-5 sweep past J*theta > 1
+      refines the grid (three-distance), so its maximal gap falls below theta and
+      the arc may be shortened to match -- a smaller gamma for a longer window,
+      hence a larger p_0.  This is the whole trade-off the method offers.
+      sweep J | integers | maximal gap  | delta_lo     | gamma bound | p_0
+     ---------+----------+--------------+--------------+-------------+----
+           12 |       61 | 0.0977500432 | 0.0191890232 |    6.241925 |  16
+           13 |       66 | 0.0751874963 | 0.0417515701 |    5.131617 |  16
+           39 |      196 | 0.0300624026 | 0.0868766638 |    4.096874 |  18
+           52 |      261 | 0.0225625468 | 0.0943765196 |    3.981125 |  19
+           92 |      461 | 0.0150626911 | 0.1018763754 |    3.874513 |  20
+          132 |      661 | 0.0075628353 | 0.1093762311 |    3.775737 |  21
+        13073 |    65366 | 0.0013908375 | 0.1155482289 |    3.699587 |  31
+        14802 |    74011 | 0.0005721031 | 0.1163669633 |    3.689805 |  31
+        15733 |    78666 | 0.0001312462 | 0.1168078202 |    3.684567 |  31
+        15866 |    79331 | 0.0000682666 | 0.1168707998 |    3.683820 |  31
+  [ OK ] ladder: the achieved gamma can be pushed to within 0.01 of the demand Gamma* at the cost of a larger p_0   best gamma bound 3.683758 vs Gamma* = 3.683012, at J = 15999 (79996 integers, p_0 = 32)
+
+  (d) the true minimum gamma over ALL size-passers is a different question.
+      Recorded, not searched: over the window witnesses of Part 4 the achieved
+      gamma is bracketed in [Gamma*, C]; Gamma(p,n) itself is the demand, and no
+      profile of this shape can have gamma below Gamma(p,n) by Theorem B's (star).
+      12.8.3's own p = 6 record (84 size-passers) already shows the family is not
+      unique at a period; no search was launched (README stopping rules).
+
+==============================================================================
+SUMMARY
+==============================================================================
+  45/45 checks passed.
+
+  THEOREM (gate P1).  With L = log_2 3, theta = 8 - 5L, and
+      Gamma* = 1.05*L*(L-1) + 1/(L-1) + 1        (<= 3.6830121007)
+      delta_hi = -log_2(1 - 2^-Gamma*)           (>= 0.1169390665)
+      delta_lo = 0.0415,  delta_hi - delta_lo = 0.0754390665 > theta = 0.0751874963
+  among any 66 consecutive integers there is an n with delta(n) in [delta_lo, delta_hi],
+  hence with  Gamma(p,n) < Gamma* <= gamma(n) <= 5.140211.  The window
+  [L^p, 1.05 L^p] holds 66 consecutive integers for every p >= 16, and (H0) holds
+  at every such n.  So Construction B yields, for every p >= 16, a period-p
+  size-passer with  3.6830 <= gamma <= 5.1402  --  gamma = O(1), proved.
+  3 <= p <= 15 by the explicit finite check above; p in {2,4} are outside
+  Construction B's reach (their canonical windows hold no integer).
