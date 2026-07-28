@@ -127,7 +127,7 @@ At `n = 20,001` this is `> 2^(-198.9)`, while the lemma's requirement is `< 2^(6
 ω_r · 3^(a_(r-1)) · q = R_r := Σ_(t=0)^(p-1) 3^(M_t) · 2^(S_t) · (2^(s_t) - 1),
 ```
 
-where, reading indices in rotation order starting at `r`: `M_t = Σ_(j>t) m_j` and `S_t = Σ_(j<t) σ_j`. In particular `q > 0` divides all `p` numbers `R_r`, and `q <= min_r R_r`.
+where, reading indices in rotation order starting at `r`: `M_t = Σ_(j>t) m_j` and `S_t = Σ_(j<t) σ_j`, with `σ_j = s_j + m_(j+1)` the step's `2`-valuation `v_2(C_j)` of the section preamble, indices cyclic — the shift is essential, `m_(j+1)` and not `m_j`. In particular `q > 0` divides all `p` numbers `R_r`, and `q <= min_r R_r`.
 
 **Proof.** Unrolling the step identity `p` times gives, for any state, `ω_p · 2^(Σσ) 3^(Σa) = 3^(Σd) ω_0 + Σ_t 3^(D_t + A_t) 2^(S_t) (2^(s_t) - 1)` with `D_t = Σ_(j>t) d_j`, `A_t = Σ_(j<t) a_j` — verified numerically for `p = 3, 4, 5` on random orbits, zero failures. Imposing closure and substituting `d_j = m_j + a_(j-1)` gives `D_t + A_t = M_t + Σ a - a_(p-1)`; cancelling `3^(Σa - a_(p-1))` yields the displayed equation, and rotations give the rest. Positivity: the right side is positive. ∎
 
