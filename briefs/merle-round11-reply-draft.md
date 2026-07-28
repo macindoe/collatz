@@ -6,6 +6,23 @@ session-start HEAD `2225b68`, which does not contain the brief; it was rebranche
 `9fdaa0f` — the brief commit, current `main`, carrying all five round-11 findings files —
 before anything below was written).
 
+**Adjusted** per `briefs/merle-round11-reply-adjust-brief.md`, 2026-07-29, branch
+`merle-round11-reply-adjust`, base main **`912f708`** (same stale worktree cut, rebranched
+before anything was changed). Between the two passes our side closed the all-`p` staircase
+question and repaired two defects in its own record. **What this pass changed, exhaustively:**
+two new sections were added before the joint-note section — *Two defects in our own record* and
+*The staircase at every period* — and four existing passages were adjusted because the new
+material made them stale: the joint-note section's *"already published"* paragraph (its clause
+that everything §12.8.6 claims is in the v2 note), the lead sentence of the two loose fits, the
+second of those two bullets (which is the half that closed, and which now carries the
+published-record clause), and the where-everything-lives map (the six new records with their
+check counts, and the wiki-`main` pin). **Nothing else was touched.** Every other paragraph is
+as reviewed, character for character; the four placeholders are untouched and empty; no
+contribution sentence, no wording for one, no outline and no genre proposal appears anywhere,
+in this pass or the last; and nothing is offered for the shared ledger — whether the staircase
+result becomes a ledger entry is a later co-edit and the author's decision, and this reply only
+reports it.
+
 Conventions as rounds 7–10. **Business paragraphs only:** the personal opening and closing,
 and anything answering his personal paragraphs — his training, the retraction, the "not a
 debt" symmetry, his own two false alarms in one week — are the author's own and are not
@@ -39,6 +56,28 @@ drift sums, `D(x_min)/δ − 1` against `1/(27x_min²)`, `D(1)` and `D(3)` again
 without `ε(k)`, and the `704 / 1536 / 2048` verification comparison. All agreed with the
 findings except the one item flagged at (1) below.
 
+The material added at the second pass was checked the same way, at its named place in
+`briefs/staircase-allp-construction-findings.md`, `briefs/staircase-allp-diophantine-findings.md`,
+`briefs/staircase-gamma-upper-findings.md`, `briefs/staircase-status-audit-findings.md`,
+`briefs/staircase-status-apply-findings.md` and `briefs/record-defects-repair-findings.md`, and
+against `cycles.md` §12.8.6 **as it now stands** rather than as those files describe it — the
+section was rewritten after three of them were written. Recomputed from scratch at 60 digits
+before being written down: `θ = 8 − 5·log₂3`, `Γ* = 3.68301210072111…`, `δ_hi = 0.1169390665…`
+and `δ_hi − θ = 0.0417515701…` (so `δ_lo = 0.0415` sits inside), the upper end
+`−log₂(1 − 2^(−0.0415)) = 5.14021148607…`, `1/(log₂3 − 1) = 1.70951…` against
+`log₂(3/2) = 0.5849625…`, `maxgap(11) = 0.1729375397…`, `maxgap(12) = 0.0977500433…` and
+`maxgap(13) = θ` exactly against the arc length `0.0754390665…`, the window counts
+`0.05·L^15 = 50.03` and `0.05·L^16 = 79.30`, `Γ`'s coefficients at `p = 2` and `p = 4` and the
+two canonical windows `[2.512, 2.638]`, `[6.311, 6.626]`, the continued fraction of `log₂3` with
+`q₉ = 15601`, `q₁₃ = 190537` and `a₁₅ = 1`, `1.585^92 = 2.527·10^18` with
+`n₀(92)/1.585^92 = 1890.4`, and the two `p = 22` candidate arithmetics. All agreed. The `σ`
+conventions were re-derived independently as well, in fresh code: the trivial-cycle identity
+passes under **both** readings at `p ∈ {1,2,3,4,7}`; the `gcd(q, R_r)` at 12.8.3's `p = 7` seed
+is `{7}` under the correct convention and `{1}` under the misreading; the transport recurrence
+read self-consistently passes under both (1653/1653 on this session's own draw, against
+1685/1685 on the findings' — same fact, different draw), and fails under the misreading only
+once `σ_r` is spelled out as `s_r + m_(r+1)` in the assertion.
+
 **Four things flagged here rather than buried:**
 
 1. *One constant in our own record does not reproduce, and the correction is ours.*
@@ -71,9 +110,10 @@ findings except the one item flagged at (1) below.
 - The round-11 co-edit is a **parallel session's** work and is not claimed here. Its
   shared-repo push SHA is carried as
   `[PENDING: shared-repo push — SHA to be filled at send time]`.
-- The wiki-`main` pin is **`9fdaa0f`** at drafting and is marked **CHECK AT SEND TIME**.
-  Public `main` is behind; it must be pushed first or none of the artifact pins in the
-  co-edit resolve. That check caught a real problem at rounds 9 and 10.
+- The wiki-`main` pin was **`9fdaa0f`** at first drafting and is **`912f708`** at this pass; it
+  is marked **CHECK AT SEND TIME** and it will move again when this pass merges, so it is to be
+  read then and not taken from here. Public `main` is behind; it must be pushed first or none of
+  the artifact pins in the co-edit resolve. That check caught a real problem at rounds 9 and 10.
 
 **Placeholders left in the draft, in order:** personal opening; his personal paragraphs; the
 joint note's contribution sentence and the answer to his three proposals; personal closing.
@@ -503,6 +543,156 @@ already below it, and it falls from there). Which is to say: the `±1` outweighs
 exactly one odd integer, and that integer is the trivial cycle. Everywhere else the terrain is
 grey, in your words, and at `2⁷¹` the sign is worth `10⁻²¹` of the drift.
 
+## Two defects in our own record, both ours to hand back
+
+**`σ` was undefined at its point of use in Proposition 12.6.1, and the natural reading of it is
+wrong.** This is the frame you work in — Remark 12.6.1.1's transport recurrence is shared-ledger
+entry L-A1, kernel-verified on your side — so it is said plainly: our page carried a defect that
+could have misled you. The correct convention is `σ_j = s_j + m_(j+1)`, the exit valuation of block
+`j` plus the entry depth of block `j+1`, indices cyclic, and the shift is essential. It is now
+stated in place, in the Proposition, where `S_t = Σ_(j<t) σ_j` uses it. The section preamble had it
+112 lines above and only in the `m`-solved direction (`m_(t+1) = σ_t − s_t`); the Proposition itself
+gave the reader nothing at the point of use. The natural local misreading, `σ_j = m_j + s_j`, builds
+a different object — on random profiles it agrees with the right one 2 times in 300, and is wrong by
+up to three orders of magnitude.
+
+What makes that worth a paragraph rather than a line is that **every structural guardrail attached
+to 12.6.1 is blind to it**. The Proposition's own sanity identity — the trivial cycle
+`m_t = s_t = 1`, where `σ = 2` under both readings — reproduces `4^p − 3^p` either way. `K = Σ s_t + n`
+is a cyclic sum and cannot see it. The repetition multiplicativity of 12.6.1.4 and the ghost identity
+`v_2(3^(m_r) R_r − q) = s_r` pass under both. And the transport recurrence itself is satisfied
+**exactly under both conventions** — 1685/1685 in our check, and not as a sampling accident but with
+a proof: in `2^(σ_r) R_(r+1) = 3^(m_r) R_r + (2^(s_r) − 1)q` every `σ` telescopes away between the
+prefactor and the difference of prefix sums, leaving only the wrap term, which requires exactly
+`2^(Σσ) = 2^K`; both readings are cyclic rearrangements of the same multiset `{m_j} ∪ {s_j}`, so both
+give `Σσ = Σs + n = K`. Read self-consistently, L-A1 cannot discriminate. What does discriminate is
+any check that pins `σ` to a quantity the implementation does not itself supply: writing `σ_r` out as
+`s_r + m_(r+1)` inside the assertion — the misreading then fails at the first rotation — or an
+externally recorded number, such as the `gcd(q, R_r) = 7` at every rotation of 12.8.3's `p = 7` seed,
+which is `{7}` under the correct convention and `{1}` under the misreading.
+
+So we added a canary that rejects the wrong object, and it is yours if it is of any use:
+`experiments/record_defects_check.py`, three tiers — the published trivial-cycle identity first
+(kept only to catch a wholly broken implementation, and it accepts both conventions, which is the
+point of recording it), then the recurrence at every rotation of a profile with `m` and `s` unequal
+and `σ_r` spelled out, then the `gcd = 7` instance, which is wholly external. **40 checks, 0
+failures**; it accepts our own committed evaluator and rejects the misreading with a message naming
+the convention. If any of your artifacts build `R_r` from a profile rather than inheriting it, that
+is a five-minute check and worth having — offered as a tool, not as a doubt about anything of yours.
+
+**And one figure in our prose was wrong by a factor of 4,778.** The search bound Corollary 12.8.2
+gives at `p = 92` is `n₀(92) = 4.78·10^21`; `README.md` and `cycles.md` 12.8.5 both carried
+`~10^18`. The table inside 12.8.2 was right throughout — the prose had quoted Theorem 12.8.1's bare
+exponential rate, `1.585^92 = 2.53·10^18`, and dropped the corollary's own factor of about 1,890.
+Both places are corrected. Nothing downstream moves: at either number a period-92 search must
+enumerate more than `10^1498` profiles, so the crossover plan stays withdrawn for exactly the reason
+it was withdrawn.
+
+## The staircase at every period — proved, with the scope attached
+
+One clause on where this came from, because it belongs to you: your letter asked the author for the
+joint note's contribution sentence, we ran a premise check on our own side before answering it, and
+that check found the sharpness half of that sentence exactly half proved. The arc that followed is
+ours, and it closed.
+
+**The all-`p` sharpness claim is now proved** — unconditionally for every `p ≥ 16`, by explicit
+finite check for `3 ≤ p ≤ 15`, and by direct exhibition at `p ∈ {2, 4}`, which lie outside the
+construction's reach — and proved at a constant, which is stronger than the `γ = O(log p)` our own
+published theorem assesses. Two theorems compose, each carrying hypotheses, and the composition is
+the statement; the scope is written out below and travels with the claim wherever it is stated.
+
+*Construction B* (`cycles.md` 12.8.6.2). Given a candidate `n`, with `K = ⌈n·log₂3⌉`, satisfying two
+hypotheses — a scale side-condition (H0), and a quality condition (H1) `γ ≥ Γ(p,n)` with `Γ`
+displayed in closed form — an explicit integer profile satisfies **all `p`** size conditions
+`q ≤ R_r`, at crash depth exactly `1`, **with no correction step at all**. The construction is greedy
+saturation: each climb block takes the largest depth the exact size condition allows, subject to a
+budget. No floating point occurs anywhere in it or in its verification, `⌈n·log₂3⌉` being
+`bitlength(3^n)`.
+
+What had been missing was one constant. Writing `L = log₂3` for the rest of this section: asking for
+a real profile whose deficit is constant across blocks forces `m_r = C(L−1)L^(r−1) + 1/(L−1)` —
+geometric, plus a fixed additive offset of
+`1/(L−1) = 1.70951` per block. The offset's meaning is mechanical — at the exchange rate
+`L − 1 = log₂(3/2)`, `1/(L−1)` units of standing depth generate exactly one bit of credit per block,
+which is precisely the one unit of exit valuation each climb block spends. A pure geometric profile
+therefore runs a deficit of exactly one bit per block, `Θ(p)` overall, while a single local repair
+move buys `O(1)` bits — which is why no `O(1)` or `O(log p)` bound on the old recipe's move count
+could ever have followed from its shortfall, and why the right move was to remove the correction step
+rather than to bound it. The rounding rule is the whole content: at the *same* `n`, greedy saturation
+passes 29 periods of 29 where partial-sum rounding of the pure geometric passes 6, its six successes
+all at `p ≤ 8`, failing 24 of 30 rotations by `p = 30`.
+
+*Availability* (12.8.6.1). Such an `n` exists in every scale window, **unconditionally**: no
+hypothesis on the partial quotients of `log₂3`, no effective irrationality measure, no
+continued-fraction chain, no sign condition on a run, no membership in anything. The entire
+Diophantine input is one exact number, `θ = 8 − 5·log₂3 = 0.0751874964…`, together with the fact
+that it is positive and shorter than a target arc. Because `5·log₂3 = 8 − θ`, stepping `n → n+5`
+advances `δ(n) = ⌈n·log₂3⌉ − n·log₂3` by exactly `θ` on the circle, so the sweep is an arithmetic
+progression and the governing condition is a maxgap condition — sharp, and an iff: an arc of length
+`ℓ` is met from *every* starting phase precisely when `maxgap{ jθ mod 1 : 0 ≤ j ≤ J } ≤ ℓ`. For the
+two-sided arc `[0.0415, 0.1169390665…]`, whose length `0.0754390665…` exceeds `θ`, the minimal sweep
+is `J = 13`, since `maxgap(13) = θ` exactly while `maxgap(12) = 0.0977500433…` fails — so **66
+consecutive integers suffice and 61 do not**. The window `[L^p, 1.05·L^p]` holds `0.05·L^p` integers,
+which is 50 at `p = 15` and 79 at `p = 16`, and that is where the threshold comes from.
+
+**The scope, and it travels with every statement of the result.** `3.683012 ≤ γ ≤ 5.140212`, both
+ends absolute constants with no `p` in either. Unconditional for every `p ≥ 16`. `3 ≤ p ≤ 15` by
+explicit finite check at a widened scale (`κ = n/L^p` up to `1.70`) — a finite check, not the
+argument above. And `p ∈ {2, 4}` lie **outside Construction B's reach** and are covered by direct
+exhibition instead: there `Γ(2,n) = n + η` and `Γ(4,n) = 0.196191·n + 1.507147 + η`, so a bounded `γ`
+caps `n` at 5 and at 18, and their canonical windows `[2.512, 2.638]` and `[6.311, 6.626]` hold no
+integer at all. So this is a composition of **two theorems with hypotheses**, not one unconditional
+statement, and "at every period" means every period, two of them by exhibition. Three further limits
+belong to the true statement and are not softened: `Γ` is conservative by `0.6`–`0.9` bits, because
+the size-condition step keeps one term of `R_r` and discards `p−1` positive ones, so (H1) is
+sufficient and not necessary and the certified family is narrower than the empirical one; the
+independent verification stops at `p ≈ 32` on big-integer cost (`n ≈ 2.5·10^6`, `3^n` at four million
+bits), which is a limit on the check and not on the theorem, nothing in which degrades with `p`; and
+`3.683012` is the method's own floor, lengthening the sweep driving the achieved `γ` down toward it
+at the cost of a larger first period.
+
+**What it settles and what it does not.** Every configuration built is a **size-passer only**: all
+were tested against the divisibility system `q | R_r` at every rotation and all fail, exactly as the
+published `p = 7` instance does. Nothing here is evidence about exclusion. 12.8.5's conclusion is
+unchanged at any grade — the crossover plan stays withdrawn, the cycle front stays parked, and the
+residual content of cycle exclusion is still anchor-walk rigidity. This is sharper evidence that
+counting cannot do better, and nothing else.
+
+**The `p = 22` episode, and your pincer.** With the route general the diagnosis is visible in full,
+and it is the one you named: the binding constraint at `p = 22` was a property of the *candidate
+list* — the recipe drew from the continued-fraction chain of `log₂3`, which has a genuine hole at
+that scale — and not a property of `log₂3`. Your Diophantine pincer hypothesis named that cause and
+both closing candidates, `n = 25217 = 15601 + 9616` and `n = 31202 = 2·15601`; 12.8.6.4 credits it in
+those terms and that record stands unchanged. Under the new route the episode does not arise at all,
+because from `p = 8` upward not one working witness is a convergent or semiconvergent denominator:
+the chain is a sparse, sign-restricted subset of the candidate supply, and the construction never
+needed it. That is not a demotion of the observation. It is the same diagnosis, made general.
+
+The route the earlier formulation named is closed too, but **in the other direction** — as a
+characterized obstruction rather than an unfinished proof. The multiplicative gaps in the convergent
+chain *are* the partial quotients, so a uniform bound on them is exactly the assertion that `log₂3`
+is badly approximable: open for every classical constant and, by Borel–Bernstein together with the
+measured Gauss–Kuzmin behaviour of this expansion, almost certainly false. The semiconvergent repair
+fails there too — the correctly-signed run following `q₁₃ = 190537` has length `a₁₅ = 1`.
+
+**Verification**, since it is a for-all-`p` claim. Three fresh scripts, importing nothing from the
+earlier staircase code and nothing of yours. `experiments/staircase_allp_construction.py` builds and
+certifies a witness at every `p ∈ {2,…,32}` outside `{2,4}`, each one re-verified through `R_r`
+computed from Proposition 12.6.1 at all `p` rotations, exact big-integer comparison at every
+pass/fail decision, **0 failures**, with each proof step checked separately over a grid of `(p,n)`.
+`experiments/staircase_allp_diophantine.py` is a second, structurally different evaluator — Horner
+for `R_0`, then your own transport recurrence for every other rotation, with an exact divisibility
+assertion at each transport step — carrying Construction B transcribed from the statement rather than
+from the code: **92 checks, 0 failures**. `experiments/staircase_gamma_upper.py` (**45 checks, 0
+failures**) holds the constants as exact rational inequalities rather than floats: `log₂3` is
+enclosed to within `10^(−135)` by an `atanh` series with an explicit remainder bound, cross-certified
+against exact `3^b`-versus-`2^a` comparisons and against directed-rounding interval arithmetic, and
+every per-`n` decision is an exact integer comparison that raises rather than guesses. The negative
+controls bite: an arc of length `0.9θ` is missed by the licensed sweep at 1,950 of 20,000 starting
+phases where the true arc is missed at none; `J = 12` genuinely fails two-sidedly at 447 of the first
+20,000 starts; and dropping the lower cut returns first witnesses with `γ` up to `17.058`, three
+times the bound, so the lower cut is load-bearing and not decoration.
+
 ## The joint note — what we checked, and then it is yours
 
 You asked one question before any structure, and made three proposals. Here is what we
@@ -514,8 +704,9 @@ page.** Both halves are paper 1 **v1**, DOI 10.5281/zenodo.21273548, §4, printe
 DOI 10.5281/zenodo.21421120. The mirror paper (10.5281/zenodo.21303918) carries no part of it —
 its own `thm:dich` is the 3-adic one-step predecessor window, a different theorem about a
 different object, so a sentence citing the mirror paper for this would be wrong. No load-bearing
-half is wiki-only. The `p ∈ {2,…,23}` contiguous evidence is v2 only, and §12.8.6's machinery is
-wiki-only while everything it *claims* is in the v2 note.
+half is wiki-only. The `p ∈ {2,…,23}` contiguous evidence is v2 only. §12.8.6's machinery was
+wiki-only while everything it *claimed* was in the v2 note; that is no longer so, and the section
+above is the reason — §12.8.6 now carries a proof that appears in no published version of ours.
 
 **The phrase is yours.** "Counting dichotomy" has zero occurrences in the wiki, in `paper/`, in
 `sources/`, or in either PDF. What it contracts are two phrases in our own **published**
@@ -525,8 +716,9 @@ arguments for cycles"*. So the mathematics and the word are ours and the two-wor
 yours, and it is a faithful one. Worth telling you plainly, since you are proposing to put it in
 a referee's mouth.
 
-**Two places where the fit is looser than the sentence implies, and they are the two a referee
-would find.**
+**Two places where the fit was looser than the sentence implies, and they are the two a referee
+would find. The first stands exactly as recorded. The second has since closed — that is the section
+above — and it closed on our side, not in the sentence.**
 
 - *"Counting closes every period"* overstates what we published. What Theorem 4.5 and Corollary
   12.8.2 give is **effective finiteness** at every period — the candidate set is finite and
@@ -534,13 +726,23 @@ would find.**
   finite computation, and our own stopping rules forbid running it past `p = 3`. Our published
   wording is careful about exactly this and says "giving effective finiteness at every period",
   never "closes".
-- *"Provably cannot close them uniformly"* is **exactly half proved**, and our own paper marks
-  the seam. The no-extension statement is a theorem by exhibited witness: no trim uniform in `p`
-  can extend the small-period constants, with the `p = 7` staircase (`n = 94`, `γ = 6.74`) as
-  the witness. The all-`p` claim carries our own published hedge, *"we assess (supported by the
-  verified instances, though not proved here for all `p`)"* — present verbatim in v1 and
-  **unchanged in v2**, and not upgradable; better evidence, not a closure, is what v2 added. The
-  word "provably" attaches to the first sentence and not to the second.
+- *"Provably cannot close them uniformly"* was **exactly half proved** when the check was run, and
+  our own paper marks the seam. The no-extension statement was already a theorem by exhibited
+  witness: no trim uniform in `p` can extend the small-period constants, with the `p = 7` staircase
+  (`n = 94`, `γ = 6.74`) as the witness. The all-`p` half carried our own published hedge, *"we
+  assess (supported by the verified instances, though not proved here for all `p`)"* — present
+  verbatim in v1 and **unchanged in v2** — and that half is now proved, in the wiki: unconditionally
+  for `p ≥ 16`, by finite check for `3 ≤ p ≤ 15`, and by exhibition at `p ∈ {2,4}`, with the rest of
+  the scope as stated above. **This is the one of the two that moved.** On the published record, two
+  things, because you may want to cite the paper in the note and should know which sentence is
+  which. The hedge **stands as printed**: "not proved *here*" is a statement about the paper, the
+  paper contains no such proof, and a later proof elsewhere does not falsify it. What is superseded
+  is the v2 note's identification of the remaining gap — the sentence naming a closed-form bound on
+  the multiplicative gap between consecutive correctly-signed semiconvergent runs, and reading the
+  `p = 22` episode as that gap biting. It is wrong on both halves for the reasons above, and an
+  erratum correcting **only** that sentence, silent on the hedge, is drafted and not issued. The
+  note's own repository pointer is pinned to a frozen commit, so the paper is at least
+  self-consistent against its own citation.
 
 **"Three independent directions" — information, not a veto.** The three faces are your
 architecture: the shared repository's name, and `NOTE.md`'s §2 size / §3 digits / §4 seam. Our
@@ -624,8 +826,9 @@ register from the **v1** DOI, `10.5281/zenodo.21273548`, while our own hosting d
 
 ## Where everything lives
 
-Wiki `main` stands at **`9fdaa0f`** — **CHECK AT SEND TIME**; it must be public before or with
-the shared-repo push or none of the co-edit's artifact pins resolve.
+Wiki `main` stands at **`912f708`** — **CHECK AT SEND TIME**, and it has moved twice since this
+reply was first drafted, so the pin is to be read at send time and not before; it must be public
+before or with the shared-repo push or none of the co-edit's artifact pins resolve.
 
 The five round-11 records are `briefs/merle-r11-ceiling-audit-findings.md` (the ceiling repair,
 the `hceil` removal, the axiom logs and the RETRACTED block),
@@ -643,6 +846,25 @@ and `experiments/merle_r11_hygiene_check.py` (**115 checks, 0 failures**), each 
 committed alongside. Each imports nothing from your repositories and nothing from the earlier
 `merle_*` checks in ours.
 
+The staircase result and the two record repairs are on the same footing, in six further records.
+`briefs/staircase-allp-construction-findings.md` carries Construction B and its five-step proof;
+`briefs/staircase-allp-diophantine-findings.md` carries the availability half, including the
+characterization of the old route as an obstruction; `briefs/staircase-gamma-upper-findings.md`
+carries the two-sided arc and the `γ` upper bound. Their code is
+`experiments/staircase_allp_construction.py` (0 failures),
+`experiments/staircase_allp_diophantine.py` (**92 checks, 0 failures**) and
+`experiments/staircase_gamma_upper.py` (**45 checks, 0 failures**), each with its output committed.
+`briefs/staircase-status-audit-findings.md` and `briefs/staircase-status-apply-findings.md` are the
+record of what the closure retired across the wiki and of what was applied — they carry no
+verification script, their own re-derivation being scratch, and eleven of the audit's drafted items
+did not survive that re-derivation and were corrected before anything was written down. The
+repairs are `briefs/record-defects-repair-findings.md`, with
+`experiments/record_defects_check.py` (**40 checks, 0 failures**), which is the canary above. The
+result itself lives at `cycles.md` §12.8.6, in four numbered statements: availability at 12.8.6.1,
+Construction B at 12.8.6.2, the superseded profile-plus-correction route kept in place and marked
+superseded at 12.8.6.3, and the instance record — including the `p = 22` rows and your credit — at
+12.8.6.4.
+
 The round-11 co-edit — the L-A8 kernel key turned and scoped in the ContentDescent language, the
 "K pinned" wording written as you proposed it, the one-sidedness sharpening, the round's hygiene
 offers, and our own L-A3 (B) date-stamp — is at
@@ -650,7 +872,7 @@ offers, and our own L-A3 (B) date-stamp — is at
 your prose untouched throughout.
 
 No new claims ride along with any of this. Everything cited above sits at its named place in the
-five findings records, and the two bracketed fields are the only values not yet on file.
+records named here, and the two bracketed fields are the only values not yet on file.
 
 ---
 
