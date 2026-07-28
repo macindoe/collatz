@@ -661,8 +661,9 @@ page.** Both halves are paper 1 **v1**, DOI 10.5281/zenodo.21273548, §4, printe
 DOI 10.5281/zenodo.21421120. The mirror paper (10.5281/zenodo.21303918) carries no part of it —
 its own `thm:dich` is the 3-adic one-step predecessor window, a different theorem about a
 different object, so a sentence citing the mirror paper for this would be wrong. No load-bearing
-half is wiki-only. The `p ∈ {2,…,23}` contiguous evidence is v2 only, and §12.8.6's machinery is
-wiki-only while everything it *claims* is in the v2 note.
+half is wiki-only. The `p ∈ {2,…,23}` contiguous evidence is v2 only. §12.8.6's machinery was
+wiki-only while everything it *claimed* was in the v2 note; that is no longer so, and the section
+above is the reason — §12.8.6 now carries a proof that appears in no published version of ours.
 
 **The phrase is yours.** "Counting dichotomy" has zero occurrences in the wiki, in `paper/`, in
 `sources/`, or in either PDF. What it contracts are two phrases in our own **published**
@@ -672,8 +673,9 @@ arguments for cycles"*. So the mathematics and the word are ours and the two-wor
 yours, and it is a faithful one. Worth telling you plainly, since you are proposing to put it in
 a referee's mouth.
 
-**Two places where the fit is looser than the sentence implies, and they are the two a referee
-would find.**
+**Two places where the fit was looser than the sentence implies, and they are the two a referee
+would find. The first stands exactly as recorded. The second has since closed — that is the section
+above — and it closed on our side, not in the sentence.**
 
 - *"Counting closes every period"* overstates what we published. What Theorem 4.5 and Corollary
   12.8.2 give is **effective finiteness** at every period — the candidate set is finite and
@@ -681,13 +683,22 @@ would find.**
   finite computation, and our own stopping rules forbid running it past `p = 3`. Our published
   wording is careful about exactly this and says "giving effective finiteness at every period",
   never "closes".
-- *"Provably cannot close them uniformly"* is **exactly half proved**, and our own paper marks
-  the seam. The no-extension statement is a theorem by exhibited witness: no trim uniform in `p`
-  can extend the small-period constants, with the `p = 7` staircase (`n = 94`, `γ = 6.74`) as
-  the witness. The all-`p` claim carries our own published hedge, *"we assess (supported by the
-  verified instances, though not proved here for all `p`)"* — present verbatim in v1 and
-  **unchanged in v2**, and not upgradable; better evidence, not a closure, is what v2 added. The
-  word "provably" attaches to the first sentence and not to the second.
+- *"Provably cannot close them uniformly"* was **exactly half proved** when the check was run, and
+  our own paper marks the seam. The no-extension statement was already a theorem by exhibited
+  witness: no trim uniform in `p` can extend the small-period constants, with the `p = 7` staircase
+  (`n = 94`, `γ = 6.74`) as the witness. The all-`p` half carried our own published hedge, *"we
+  assess (supported by the verified instances, though not proved here for all `p`)"* — present
+  verbatim in v1 and **unchanged in v2** — and that half is now proved, in the wiki, with the scope
+  above attached to it. **This is the one of the two that moved.** On the published record, two
+  things, because you may want to cite the paper in the note and should know which sentence is
+  which. The hedge **stands as printed**: "not proved *here*" is a statement about the paper, the
+  paper contains no such proof, and a later proof elsewhere does not falsify it. What is superseded
+  is the v2 note's identification of the remaining gap — the sentence naming a closed-form bound on
+  the multiplicative gap between consecutive correctly-signed semiconvergent runs, and reading the
+  `p = 22` episode as that gap biting. It is wrong on both halves for the reasons above, and an
+  erratum correcting **only** that sentence, silent on the hedge, is drafted and not issued. The
+  note's own repository pointer is pinned to a frozen commit, so the paper is at least
+  self-consistent against its own citation.
 
 **"Three independent directions" — information, not a veto.** The three faces are your
 architecture: the shared repository's name, and `NOTE.md`'s §2 size / §3 digits / §4 seam. Our
