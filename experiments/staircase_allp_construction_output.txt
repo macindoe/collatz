@@ -1,0 +1,366 @@
+
+==============================================================================
+PART 0.  Canaries -- is rotation_numerators() the real 12.6.1?
+==============================================================================
+   trivial p=1  : q = 4^p-3^p = 1             all R_r equal q : True
+   trivial p=2  : q = 4^p-3^p = 7             all R_r equal q : True
+   trivial p=3  : q = 4^p-3^p = 37            all R_r equal q : True
+   trivial p=4  : q = 4^p-3^p = 175           all R_r equal q : True
+   trivial p=7  : q = 4^p-3^p = 14197         all R_r equal q : True
+   trivial p=11 : q = 4^p-3^p = 4017157       all R_r equal q : True
+   transport recurrence 2^sigma_r R_{r+1} = 3^{m_r} R_r + (2^{s_r}-1)q
+   over 200 random profiles, all rotations : mismatches = 0
+   12.8.3 p=7 instance m=[4, 7, 9, 15, 23, 35, 1] : n=94 K=149 gamma=6.744  all pass=True
+   per-rotation margins log2(R_r/q) = 3.03 1.37 2.47 0.73 0.51 0.96 54.43
+   divisibility q | R_r : [False, False, False, False, False, False, False]  (must be all False)
+
+==============================================================================
+PART 1.  The construction, first passer at the canonical scale n ~ L^p
+==============================================================================
+   For each p: start at n0 = round(L^p) and walk n upward until the
+   construction exists AND all p exact size conditions q <= R_r hold.
+   'off' is n - n0, the search distance -- the Diophantine cost.
+
+   'cert' = does this n meet the PROVED hypothesis gamma >= Gamma(p,n)?
+   'ncert/off' = the first n at the scale that does, and its offset.
+
+    p       n0        n   off   x_n      gamma   Gamma  g/log2p  kappa  c   minmarg  div  cert   ncert  off2
+    2          3        5     2  0.0752    4.300   5.000   4.300  1.990   2   1.344  False False       -     -
+    3          4        5     1  0.0752    4.300   2.934   2.713  1.256   1   1.509  False True        5     1
+    4          6       10     4  0.1504    3.337   3.469   1.668  1.585   1   0.816  False False       -     -
+    5         10       10     0  0.1504    3.337   2.948   1.437  1.000   1   1.322  False True       10     0
+    6         16       17     1  0.0556    4.724   3.194   1.828  1.072   1   0.391  False True       17     1
+    7         25       27     2  0.2060    2.910   3.330   1.036  1.075   3   0.988  False False      29     4
+    8         40       41     1  0.0165    6.455   3.389   2.152  1.030   1   0.584  False True       41     1
+    9         63       63     0  0.1474    3.364   3.438   1.061  0.998   1   0.639  False False      70     7
+    10       100      104     4  0.1639    3.219   3.535   0.969  1.040   1   0.704  False False     111    11
+    11       159      164     5  0.0661    4.480   3.571   1.295  1.034   1   0.720  False True      164     5
+    12       251      251     0  0.1744    3.135   3.568   0.874  0.999   1   0.647  False False     253     2
+    13       398      398     0  0.1849    3.055   3.589   0.826  0.999  12   0.635  False False     400     2
+    14       631      634     3  0.1338    3.497   3.609   0.919  1.004   1   0.697  False False     641    10
+    15      1001     1005     4  0.1127    3.734   3.619   0.956  1.004   1   0.935  False True     1005     4
+    16      1586     1588     2  0.0795    4.220   3.623   1.055  1.001   1   0.460  False True     1588     2
+    17      2514     2518     4  0.0644    4.517   3.628   1.105  1.002   1   0.721  False True     2518     4
+    18      3984     3988     4  0.1695    3.173   3.631   0.761  1.001   1   0.658  False False    3995    11
+    19      6315     6320     5  0.0370    5.304   3.633   1.249  1.001   1   0.289  False True     6320     5
+    20     10009    10009     0  0.1103    3.764   3.634   0.871  1.000   1   0.636  False True    10009     0
+    21     15863    15864     1  0.1549    3.296   3.635   0.750  1.000   1   0.569  False False   15871     8
+    22     25143    25145     2  0.1179    3.671   3.635   0.823  1.000   1   0.544  False True    25145     2
+    23     39851    39852     1  0.0744    4.314   3.636   0.954  1.000   1   0.518  False True    39852     1
+    24     63162    63163     1  0.0136    6.739   3.636   1.470  1.000   1   0.138  False True    63163     1
+    25    100109   100114     5  0.0642    4.522   3.636   0.974  1.000   1   0.434  False True   100114     5
+    26    158670   158670     0  0.0000   17.058   3.636   3.629  1.000   1   0.004  False True   158670     0
+    27    251485   251486     1  0.1205    3.641   3.636   0.766  1.000   1   0.568  False True   251486     1
+    28    398595   398598     3  0.1171    3.681   3.637   0.766  1.000   1   0.553  False True   398598     3
+    29    631758   631760     2  0.0905    4.039   3.637   0.831  1.000   1   0.350  False True   631760     2
+    30   1001313  1001317     4  0.1037    3.850   3.637   0.785  1.000   1   0.577  False True  1001317     4
+
+   certified search distance: max 11, mean 3.6 (over 27 periods)
+   periods with NO theorem-certified n at the canonical scale: [2, 4]
+   (small-p artifact: Gamma's n-coefficient is (L-1)/(L^{p-1}-1),
+    which is O(1) only once L^{p-1} >> 1.  Those p have exact
+    passers by direct exhibition above -- they are covered by
+    the finite check, not by the asymptotic hypothesis.)
+   search distance n - n0 : max 5, mean 2.1  (NOT growing with p)
+   gamma achieved         : min 2.910  max 17.058  (BOUNDED, not O(log p))
+   gamma / log2 p         : min 0.750  max 4.300  (DECREASING in p)
+
+==============================================================================
+PART 1b.  Shape of the constructed profiles (the +1/(L-1) offset)
+==============================================================================
+   The greedy profile is geometric PLUS a constant additive offset
+   1/(L-1) = 1.7095 per block: (L-1) * 1/(L-1) = 1 is exactly the one
+   unit of exit valuation each climb block spends.  12.8.6.2's PURE
+   geometric profile omits it -- that omission is the shortfall.
+
+   p=7   n=27       m = [2, 3, 3, 4, 5, 7, 3]
+        ratios m_{j+1}/m_j = 1.500 1.000 1.333 1.250 1.400   (-> L = 1.5850 from below)
+   p=10  n=104      m = [3, 3, 4, 6, 8, 12, 18, 27, 22, 1]
+        ratios m_{j+1}/m_j = 1.000 1.333 1.500 1.333 1.500 1.500 1.500 0.815   (-> L = 1.5850 from below)
+   p=14  n=634      m = [3, 4, 5, 7, 10, 15, 23, 35, 55, 86, 135, 213, '...', 1]
+        ratios m_{j+1}/m_j = 1.333 1.250 1.400 1.429 1.500 1.533 1.522 1.571 1.564   (-> L = 1.5850 from below)
+   p=18  n=3988     m = [3, 3, 4, 6, 8, 12, 18, 27, 42, 66, 103, 162, '...', 1]
+        ratios m_{j+1}/m_j = 1.000 1.333 1.500 1.333 1.500 1.500 1.500 1.556 1.571   (-> L = 1.5850 from below)
+   p=22  n=25145    m = [3, 4, 5, 7, 10, 15, 23, 35, 55, 86, 135, 213, '...', 1]
+        ratios m_{j+1}/m_j = 1.333 1.250 1.400 1.429 1.500 1.533 1.522 1.571 1.564   (-> L = 1.5850 from below)
+   p=26  n=158670   m = [17, 26, 40, 62, 97, 153, 242, 382, 605, 958, 1517, 2403, '...', 1]
+        ratios m_{j+1}/m_j = 1.529 1.538 1.550 1.565 1.577 1.582 1.579 1.584 1.583   (-> L = 1.5850 from below)
+   p=30  n=1001317  m = [3, 4, 5, 7, 10, 15, 23, 36, 56, 87, 137, 216, '...', 1]
+        ratios m_{j+1}/m_j = 1.333 1.250 1.400 1.429 1.500 1.533 1.565 1.556 1.554   (-> L = 1.5850 from below)
+
+==============================================================================
+PART 2.  Shortfall of the base construction 12.8.6.2 at the SAME n
+==============================================================================
+   D_r := (m_r + r + eta) - (gamma + (L-1) T_{r-1})  is the deficit in
+   condition (C_r).  For the exact-real geometric profile it equals
+       D_r = m_0 + r - gamma + eta,
+   so D_max = m_0 + (p-2) - gamma + eta:  LINEAR IN p.  Predicted
+   (with <=1 unit of partial-sum rounding slop):
+       D_pred = a0 + (p-2) - gamma + 1 + (L-1)/2,  a0 = n(L-1)/(L^{p-1}-1)
+
+    p        n   gamma   D_pred   D_meas(1-term)  minmarg(full R)  passes
+    2          5   4.300    1.993          0.115            0.206      True
+    3          5   4.300   -0.073         -1.300            2.675      True
+    4         10   3.337    1.918         -0.069            1.007      True
+    5         10   3.337    2.057          1.154            0.707      True
+    6         17   4.724    1.673          1.057            0.567      True
+    7         27   2.910    4.446          2.827           -1.233      False
+    8         41   6.455    1.831         -0.079            1.679      True
+    9         63   3.364    5.877          3.822           -2.035      False
+    10       104   3.219    7.053          6.343           -4.743      False
+    11       164   4.480    6.781          5.854           -4.119      False
+    12       251   3.135    9.090          8.026           -6.239      False
+    13       398   3.055   10.167          8.704           -6.917      False
+    14       634   3.497   10.729          9.103           -7.316      False
+    15      1005   3.734   11.491          9.984           -8.197      False
+    16      1588   4.220   12.001         10.232           -8.445      False
+    17      2518   4.517   12.705         12.147          -10.360      False
+    18      3988   3.173   15.048         13.646          -11.859      False
+    19      6320   5.304   13.917         13.036          -11.249      False
+    20     10009   3.764   16.456         14.783          -12.996      False
+    21     15864   3.296   17.924         16.399          -14.612      False
+    22     25145   3.671   18.548         17.024          -15.237      False
+    23     39852   4.314   18.906         16.974          -15.187      False
+    24     63163   6.739   17.480         16.505          -14.718      False
+    25    100114   4.522   20.698         19.137          -17.350      False
+    26    158670  17.058    9.162          8.516           -6.729      False
+    27    251486   3.641   23.579         21.944          -20.157      False
+    28    398598   3.681   24.539         23.440          -21.653      False
+    29    631760   4.039   25.181         23.833          -22.046      False
+    30   1001317   3.850   26.369         25.825          -24.038      False
+
+   The measured deficit tracks the p-linear prediction.  That is the
+   structural reason 12.8.6.3's move count grew with p (0 at small p,
+   13 at p = 22) and why no O(1)/O(log p) bound on it was available:
+   the base profile's deficit is Theta(p) at fixed gamma.
+
+==============================================================================
+PART 3.  The proof's own steps, checked numerically
+==============================================================================
+   Step 1 (well-definedness).  f_r := gamma + (L-1)T_{r-1} - r - eta,
+     cap_r = floor(f_r).  f_{r+1} - f_r = (L-1)cap_r - 1, so cap_r >= 2
+     forces f nondecreasing, hence cap_{r+1} >= 2: gamma >= 2 + eta
+     alone makes the greedy run to completion.  Checked: cap_r = floor(f_r)
+     exactly (the big-integer cap agrees with the real formula), and
+     cap_r >= 2 throughout whenever gamma >= 2 + eta.
+
+   Step 2 (growth).  T_r > L T_{r-1} + gamma - r - beta, beta = 1 + eta,
+     so T_r > A_r where A_r = L A_{r-1} + gamma - r - beta, A_{-1} = 0.
+
+   Step 3 (closed form).  A_r = [L^{r+1}((gamma-beta)(L-1) - 1)
+     + (r+beta-gamma)(L-1) + L] / (L-1)^2, and A_{p-2} >= n-1 is
+     exactly gamma >= Gamma(p,n).
+
+   Step 4 (landing).  T-hat_{p-2} >= n-1 forces the landing budget to
+     bind, hence T_{p-2} = n-1 and crash depth exactly 1.
+
+    p        n   gamma    min(cap_r)  min(That_r - A_r)  A_{p-2}-(n-1)  g-Gamma  c
+    5         10   3.337           2              0.078           -0.2   -0.026  -
+    5         17   4.724           4              0.298            8.9    0.983  1
+    7         27   2.910           2              0.092          -10.7   -0.421  -
+    7         29   5.339           5              0.662           49.0    1.930  1
+    9         63   3.364           3              0.636           -4.9   -0.073  -
+    9         70   4.803           4              0.197           83.6    1.260  1
+    11       162   2.728           2              0.272         -140.8   -0.832  -
+    11       164   4.480           4              0.520          153.8    0.909  1
+    13       398   3.055           3              0.945         -228.5   -0.534  -
+    13       400   6.595           6              0.405         1284.3    3.001  1
+    15      1003   2.491           2              0.509        -1213.7   -1.126  -
+    15      1005   3.734           3              0.266          124.3    0.115  1
+    17      2516   2.738           2              0.262        -2411.5   -0.890  -
+    17      2518   4.517           4              0.483         2408.3    0.889  1
+    19      6318   2.904           2              0.096        -4963.0   -0.729  -
+    19      6320   5.304           5              0.696        11376.7    1.671  1
+    21     15864   3.296           3              0.704        -5791.3   -0.339  -
+    21     15871   4.614           4              0.386        16746.9    0.979  1
+    23     39852   4.314           4              0.686        29146.7    0.678  1
+
+   certified instances whose crash depth was checked: 42
+   Gamma >= 2 over 21482 (p,n) pairs satisfying (H0): min Gamma = 2.000000 at (p,n) = (2, 2), violations = 0
+   (the minimum is attained with EQUALITY, so the 2+eta clause of (H1)
+    is exactly tight there and slack everywhere else.)
+   (outside (H0) it does dip: Gamma(3,2) = 1.774, Gamma(2,1) = 1.000)
+   over 1772 greedy steps: cap != floor(f) : 0 ; cap < 2 with gamma >= 2+eta : 0
+   T_r <= A_r violations : 0 ;  closed-form / Gamma-equivalence failures : 0
+
+==============================================================================
+NC-A.  The quality hypothesis bites (perturb gamma downward)
+==============================================================================
+   At each p sweep n over a window at the canonical scale.  For each n
+   record d(n) = gamma(n) - Gamma(p,n) and whether the construction's
+   p exact size conditions all hold.  Two things are being tested:
+     SOUNDNESS  every n with d >= 0 passes  (the theorem)
+     BITE       some n in the window fails  (the hypothesis is not vacuous)
+   d is used per-n, not against a single number, because Gamma depends
+   on n through kappa = n/L^p and the window spans a range of kappa.
+
+    p   #n  #pass  #d>=0  #(d>=0 & fail)   max d among FAILERS   min d among passers
+    4     64      4      0               0                -0.748                -3.096
+    7     64     11      3               0                -1.029                -1.383
+    10    64     11      5               0                -0.858                -0.832
+    13    64     13      8               0                -0.745                -0.636
+    16    64     13      8               0                -0.754                -0.630
+    19    64     12      8               0                -0.717                -0.597
+    22    64     14      9               0                -0.751                -0.639
+
+==============================================================================
+NC-A2.  Soundness across kappa (the formula's other variable)
+==============================================================================
+   Same test, but sweeping the scale multiplier so kappa = n/L^p runs
+   over 1..8.  Gamma grows like 0.92714*kappa + 2.70933, so the
+   hypothesis must get HARDER as kappa grows; if it did not, the
+   kappa-dependence of the formula would be decoration.
+
+    p  mult   kappa  #pass/#n   #(d>=0 & fail)   Gamma(mid)
+    8      1    1.00     11/64                  0        3.365
+    8      2    2.01      7/64                  0        4.335
+    8      3    3.01      5/64                  0        5.305
+    8      5    5.02      2/64                  0        7.244
+    8      8    8.04      0/64                  0       10.154
+    12     1    1.00     14/64                  0        3.568
+    12     2    2.00     11/64                  0        4.500
+    12     3    3.00      6/64                  0        5.432
+    12     5    4.99      4/64                  0        7.295
+    12     8    7.99      0/64                  0       10.091
+    16     1    1.00     13/64                  0        3.622
+    16     2    2.00     10/64                  0        4.550
+    16     3    3.00      6/64                  0        5.478
+    16     5    5.00      2/64                  0        7.334
+    16     8    8.00      0/64                  0       10.118
+    20     1    1.00     13/64                  0        3.634
+    20     2    2.00     10/64                  0        4.561
+    20     3    3.00      6/64                  0        5.488
+    20     5    5.00      4/64                  0        7.343
+    20     8    8.00      0/64                  0       10.125
+
+==============================================================================
+NC-B.  The rounding rule is load-bearing (perturb the rounding)
+==============================================================================
+   Same n, same crash depth, same shape -- only the rule that turns
+   the real profile into integers changes.
+     greedy      : saturate (C_r) exactly, in big integers  [THIS WORK]
+     partialsum  : round the partial sums of the PURE geometric  [12.8.6.2]
+     perblock    : round each m_j of the PURE geometric on its own
+
+    p        n   greedy  partialsum  perblock   #fail(ps)  #fail(pb)
+    2          5   PASS    PASS        PASS              0          0
+    3          5   PASS    PASS        PASS              0          0
+    4         10   PASS    PASS        PASS              0          0
+    5         10   PASS    PASS        PASS              0          0
+    6         17   PASS    PASS        PASS              0          0
+    7         27   PASS    fail        fail              2          1
+    8         41   PASS    PASS        PASS              0          0
+    9         63   PASS    fail        fail              4          4
+    10       104   PASS    fail        fail              4          4
+    11       164   PASS    fail        fail              4          5
+    12       251   PASS    fail        fail              7          7
+    13       398   PASS    fail        fail              8          8
+    14       634   PASS    fail        fail              9          8
+    15      1005   PASS    fail        fail              9          9
+    16      1588   PASS    fail        fail              9          9
+    17      2518   PASS    fail        fail             10         10
+    18      3988   PASS    fail        fail             13         13
+    19      6320   PASS    fail        fail             11         12
+    20     10009   PASS    fail        fail             14         14
+    21     15864   PASS    fail        fail             16         16
+    22     25145   PASS    fail        fail             16         16
+    23     39852   PASS    fail        fail             16         16
+    24     63163   PASS    fail        fail             15         15
+    25    100114   PASS    fail        fail             18         18
+    26    158670   PASS    fail        fail              7          7
+    27    251486   PASS    fail        fail             21         21
+    28    398598   PASS    fail        fail             22         22
+    29    631760   PASS    fail        fail             23         22
+    30   1001317   PASS    fail        fail             24         24
+
+   greedy passes 29/29; partial-sum-geometric 6/29; per-block 6/29
+
+==============================================================================
+NC-C.  The crash depth is load-bearing (perturb c)
+==============================================================================
+   Re-run the construction with the crash depth forced up to c, for
+   c = 1, 2, 4, 8, ... and find the largest c whose p exact size
+   conditions all still hold.  The derived ceiling is (C_{p-1}):
+       c * L  <=  gamma + (L-1)*n - (p-1) - eta,
+   i.e. c <= c_max = (gamma + (L-1)n - (p-1))/L ~ 0.369*n.
+   A crash depth ABOVE c_max must fail; below it must pass.
+
+    p        n   c_max(derived)   largest passing c   first failing c   fails at rotation
+    6         17            6.1                   4                 8   [5]
+    9         63           20.3                  16                32   [8]
+    12       251           87.7                  64               128   [11]
+    15      1005          364.4                 256               512   [14]
+    18      3988         1463.1                1024              2048   [17]
+    21     15864         5844.4                4096              8192   [20]
+    24     63163        23301.3               16384             32768   [23]
+    27    251486        92801.9               65536            131072   [26]
+    30   1001317       369540.4              262144            524288   [29]
+
+==============================================================================
+NC-D.  The construction sits ON the boundary (perturb one block up)
+==============================================================================
+   Local perturbation: m_j += delta, m_{j+1} -= delta.  This leaves
+   every partial sum T_i (i != j) and n, K, q untouched, so it
+   tightens exactly one condition -- (C_j) -- and relaxes (C_{j+1}).
+   Smallest delta at which the EXACT test q <= R_j fails, per block:
+   if the greedy caps were slack, these would be of order the block
+   size; saturated caps give O(1).
+
+    p        n   #blocks tested   delta: min / median / max
+    6         17                2   1 / 1 / 1
+    8         41                3   1 / 1 / 2
+    10       104                8   1 / 2 / 2
+    12       251               10   1 / 2 / 2
+    14       634               12   1 / 2 / 2
+    16      1588               13   1 / 1 / 1
+    18      3988               16   1 / 2 / 2
+    20     10009               18   1 / 2 / 2
+    22     25145               20   1 / 2 / 2
+
+==============================================================================
+NC-E.  The gamma formula as a function of p and the quality parameter
+==============================================================================
+   Gamma(p,n) -> 0.92714*kappa + 2.70933 as p grows, with NO p term.
+   Push kappa up by taking n at 2x, 4x, 8x, 16x the canonical scale;
+   the search window is sized from the predicted density of n of the
+   required quality, 1.4427*2^-Gamma, so 'no passer' would be a real
+   result and not a budget artifact.
+
+    p   mult      n     kappa   gamma   Gamma  0.92714k+2.709   x_n        need x<=   window   off
+    10     1      104    1.040   3.219   3.535        3.673   0.16390   0.13381       44     4
+    10     2      200    1.999   7.591   4.439        4.563   0.00750   0.06812       88     0
+    10     4   window 330 needed for quality 0.018148 exceeds n0/4 = 200 -- kappa would drift; not a failure, a scale limit
+    10     8   window 4525 needed for quality 0.001326 exceeds n0/4 = 400 -- kappa would drift; not a failure, a scale limit
+    10    16   window 60000 needed for quality 0.000007 exceeds n0/4 = 800 -- kappa would drift; not a failure, a scale limit
+    14     1      634    1.004   3.497   3.609        3.640   0.13377   0.12379       48     3
+    14     2     1265    2.004   6.018   4.538        4.567   0.02244   0.06369       94     3
+    14     4     2530    4.007   5.029   6.400        6.425   0.04487   0.01729      346     6
+    14     8   window 4584 needed for quality 0.001309 exceeds n0/4 = 2524 -- kappa would drift; not a failure, a scale limit
+    14    16   window 60000 needed for quality 0.000008 exceeds n0/4 = 5048 -- kappa would drift; not a failure, a scale limit
+    18     1     3988    1.001   3.173   3.631        3.637   0.16955   0.12151       49     4
+    18     2     7968    2.000   6.272   4.557        4.564   0.01879   0.06261       95     0
+    18     4    15936    4.000   5.281   6.412        6.418   0.03759   0.01704      352     0
+    18     8    32120    8.062   8.334  10.180       10.184   0.00448   0.00130     4633   248
+    18    16   window 60000 needed for quality 0.000008 exceeds n0/4 = 31872 -- kappa would drift; not a failure, a scale limit
+    22     1    25145    1.000   3.671   3.635        3.637   0.11792   0.12104       49     2
+    22     2    50292    2.000   4.485   4.563        4.564   0.06591   0.06238       96     6
+    22     4   100579    4.000   4.699   6.417        6.418   0.05664   0.01698      353     7
+    22     8   201430    8.011   8.697  10.136       10.137   0.00348   0.00129     4644   286
+    22    16   428542   17.044  16.464  18.512       18.512   0.00002   0.00001    60000 26254
+
+   Read the last two columns as the interface to the Diophantine half:
+   the construction consumes ONLY 'x_n <= need', a CONSTANT-quality
+   condition at fixed kappa -- no convergent, no continued fraction.
+
+==============================================================================
+PART 4.  Beyond the existing record (12.8.6.4 stops at p = 23)
+==============================================================================
+    p        n     off   gamma   Gamma  g/log2p  minmarg  div   secs
+    31   1587045      2   3.033   3.637   0.612   0.611  False   32.0
+    32   2515409      5   4.594   3.637   0.919   0.345  False   95.4
+
+==============================================================================
+SUMMARY
+==============================================================================
+   total failed checks: 0
+   wall clock: 407.6 s
