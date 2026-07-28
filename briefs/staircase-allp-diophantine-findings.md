@@ -255,8 +255,9 @@ with K = ceil(nL), q = 2^K - 3^n > 0, and gamma(n) prescribable to within
 ```
 
 Proof: Theorem B plus the finite computed continued fraction for
-`24 ≤ p ≤ 712`; Theorem C alone for `p ≥ 713` (where it delivers `3.643·log₂p`,
-more than needed). Nothing about the partial quotients of `L` is assumed
+`24 ≤ p ≤ 712`; Theorem C alone for `p ≥ 712` (from which it delivers
+`3.643·log₂p`, more than needed) — the two ranges overlap at `p = 712`, so there
+is no seam. Nothing about the partial quotients of `L` is assumed
 anywhere. For `p ≤ 23`, `12.8.6.4`'s verified instance record already exhibits
 `n` at every period, and §2.3 below re-derives the complete availability profile
 there by exhaustive computation.
@@ -340,7 +341,7 @@ with K = ceil(nL), q = 2^K - 3^n > 0, and
    (i)  gamma(n) >= 4.143 * log2 p                    -- exact multiples identity,
                                                          p in 24..712 (Thm B'),
                                                          and Rhin's 0.049959p - 1.06
-                                                         for p >= 713 (Thm C);
+                                                         for p >= 712 (Thm C);
    (ii) gamma(n) prescribable to within 1.28 bits anywhere in
         [1.77, 3.358 * log2 p]                        -- three distances (Thm B).
 
@@ -396,7 +397,7 @@ P36_PLACEHOLDER
 matters. Where the sharpening pass ran to completion (`p ≤ 28`) the recipe closes
 at `γ ≈ 2.2…3.0` — i.e. `γ/log₂p ≈ 0.46…0.65`, and *decreasing*: over this range
 the achieved `γ` is roughly **constant in `p`**, not logarithmic. Where the
-sharpening pass was cut off (`p = 29…34`, 60 s) the reported `γ ≈ 15.5…17.9` is
+sharpening pass was cut off (`p = 29…35`, 60 s) the reported `γ ≈ 15.5…17.9` is
 only what the first (easiest) pass found; it is an **upper bound** on the
 sharpest achievable `γ`, not a measurement of it. The move counts confirm this
 directly: the capped rows used 11–24 moves against 27–35 for the uncapped ones,
