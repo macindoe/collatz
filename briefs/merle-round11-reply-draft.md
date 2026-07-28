@@ -548,6 +548,108 @@ Both figures are corrected. Nothing downstream moves: at either number a period-
 enumerate more than `10^1498` profiles, so the crossover plan stays withdrawn for exactly the reason
 it was withdrawn.
 
+## The staircase at every period — proved, with the scope attached
+
+One clause on where this came from, because it belongs to you: your letter asked the author for the
+joint note's contribution sentence, we ran a premise check on our own side before answering it, and
+that check found the sharpness half of that sentence exactly half proved. The arc that followed is
+ours, and it closed.
+
+**The all-`p` sharpness claim is now proved** — and proved at a constant, which is stronger than the
+`γ = O(log p)` our own published theorem assesses. Two theorems compose, and the composition is the
+statement.
+
+*Construction B* (`cycles.md` 12.8.6.2). Given a candidate `n`, with `K = ⌈n·log₂3⌉`, satisfying two
+hypotheses — a scale side-condition (H0), and a quality condition (H1) `γ ≥ Γ(p,n)` with `Γ`
+displayed in closed form — an explicit integer profile satisfies **all `p`** size conditions
+`q ≤ R_r`, at crash depth exactly `1`, **with no correction step at all**. The construction is greedy
+saturation: each climb block takes the largest depth the exact size condition allows, subject to a
+budget. No floating point occurs anywhere in it or in its verification, `⌈n·log₂3⌉` being
+`bitlength(3^n)`.
+
+What had been missing was one constant. Asking for a real profile whose deficit is constant across
+blocks forces `m_r = C(L−1)L^(r−1) + 1/(L−1)`: geometric, plus a fixed additive offset of
+`1/(L−1) = 1.70951` per block. The offset's meaning is mechanical — at the exchange rate
+`L − 1 = log₂(3/2)`, `1/(L−1)` units of standing depth generate exactly one bit of credit per block,
+which is precisely the one unit of exit valuation each climb block spends. A pure geometric profile
+therefore runs a deficit of exactly one bit per block, `Θ(p)` overall, while a single local repair
+move buys `O(1)` bits — which is why no `O(1)` or `O(log p)` bound on the old recipe's move count
+could ever have followed from its shortfall, and why the right move was to remove the correction step
+rather than to bound it. The rounding rule is the whole content: at the *same* `n`, greedy saturation
+passes 29 periods of 29 where partial-sum rounding of the pure geometric passes 6, its six successes
+all at `p ≤ 8`, failing 24 of 30 rotations by `p = 30`.
+
+*Availability* (12.8.6.1). Such an `n` exists in every scale window, **unconditionally**: no
+hypothesis on the partial quotients of `log₂3`, no effective irrationality measure, no
+continued-fraction chain, no sign condition on a run, no membership in anything. The entire
+Diophantine input is one exact number, `θ = 8 − 5·log₂3 = 0.0751874964…`, together with the fact
+that it is positive and shorter than a target arc. Because `5·log₂3 = 8 − θ`, stepping `n → n+5`
+advances `δ(n) = ⌈n·log₂3⌉ − n·log₂3` by exactly `θ` on the circle, so the sweep is an arithmetic
+progression and the governing condition is a maxgap condition — sharp, and an iff: an arc of length
+`ℓ` is met from *every* starting phase precisely when `maxgap{ jθ mod 1 : 0 ≤ j ≤ J } ≤ ℓ`. For the
+two-sided arc `[0.0415, 0.1169390665…]`, whose length `0.0754390665…` exceeds `θ`, the minimal sweep
+is `J = 13`, since `maxgap(13) = θ` exactly while `maxgap(12) = 0.0977500433…` fails — so **66
+consecutive integers suffice and 61 do not**. The window `[L^p, 1.05·L^p]` holds `0.05·L^p` integers,
+which is 50 at `p = 15` and 79 at `p = 16`, and that is where the threshold comes from.
+
+**The scope, and it travels with every statement of the result.** `3.683012 ≤ γ ≤ 5.140212`, both
+ends absolute constants with no `p` in either. Unconditional for every `p ≥ 16`. `3 ≤ p ≤ 15` by
+explicit finite check at a widened scale (`κ = n/L^p` up to `1.70`) — a finite check, not the
+argument above. And `p ∈ {2, 4}` lie **outside Construction B's reach** and are covered by direct
+exhibition instead: there `Γ(2,n) = n + η` and `Γ(4,n) = 0.196191·n + 1.507147 + η`, so a bounded `γ`
+caps `n` at 5 and at 18, and their canonical windows `[2.512, 2.638]` and `[6.311, 6.626]` hold no
+integer at all. So this is a composition of **two theorems with hypotheses**, not one unconditional
+statement, and "at every period" means every period, two of them by exhibition. Three further limits
+belong to the true statement and are not softened: `Γ` is conservative by `0.6`–`0.9` bits, because
+the size-condition step keeps one term of `R_r` and discards `p−1` positive ones, so (H1) is
+sufficient and not necessary and the certified family is narrower than the empirical one; the
+independent verification stops at `p ≈ 32` on big-integer cost (`n ≈ 2.5·10^6`, `3^n` at four million
+bits), which is a limit on the check and not on the theorem, nothing in which degrades with `p`; and
+`3.683012` is the method's own floor, lengthening the sweep driving the achieved `γ` down toward it
+at the cost of a larger first period.
+
+**What it settles and what it does not.** Every configuration built is a **size-passer only**: all
+were tested against the divisibility system `q | R_r` at every rotation and all fail, exactly as the
+published `p = 7` instance does. Nothing here is evidence about exclusion. 12.8.5's conclusion is
+unchanged at any grade — the crossover plan stays withdrawn, the cycle front stays parked, and the
+residual content of cycle exclusion is still anchor-walk rigidity. This is sharper evidence that
+counting cannot do better, and nothing else.
+
+**The `p = 22` episode, and your pincer.** With the route general the diagnosis is visible in full,
+and it is the one you named: the binding constraint at `p = 22` was a property of the *candidate
+list* — the recipe drew from the continued-fraction chain of `log₂3`, which has a genuine hole at
+that scale — and not a property of `log₂3`. Your Diophantine pincer hypothesis named that cause and
+both closing candidates, `n = 25217 = 15601 + 9616` and `n = 31202 = 2·15601`; 12.8.6.4 credits it in
+those terms and that record stands unchanged. Under the new route the episode does not arise at all,
+because from `p = 8` upward not one working witness is a convergent or semiconvergent denominator:
+the chain is a sparse, sign-restricted subset of the candidate supply, and the construction never
+needed it. That is not a demotion of the observation. It is the same diagnosis, made general.
+
+The route the earlier formulation named is closed too, but **in the other direction** — as a
+characterized obstruction rather than an unfinished proof. The multiplicative gaps in the convergent
+chain *are* the partial quotients, so a uniform bound on them is exactly the assertion that `log₂3`
+is badly approximable: open for every classical constant and, by Borel–Bernstein together with the
+measured Gauss–Kuzmin behaviour of this expansion, almost certainly false. The semiconvergent repair
+fails there too — the correctly-signed run following `q₁₃ = 190537` has length `a₁₅ = 1`.
+
+**Verification**, since it is a for-all-`p` claim. Three fresh scripts, importing nothing from the
+earlier staircase code and nothing of yours. `experiments/staircase_allp_construction.py` builds and
+certifies a witness at every `p ∈ {2,…,32}` outside `{2,4}`, each one re-verified through `R_r`
+computed from Proposition 12.6.1 at all `p` rotations, exact big-integer comparison at every
+pass/fail decision, **0 failures**, with each proof step checked separately over a grid of `(p,n)`.
+`experiments/staircase_allp_diophantine.py` is a second, structurally different evaluator — Horner
+for `R_0`, then your own transport recurrence for every other rotation, with an exact divisibility
+assertion at each transport step — carrying Construction B transcribed from the statement rather than
+from the code: **92 checks, 0 failures**. `experiments/staircase_gamma_upper.py` (**45 checks, 0
+failures**) holds the constants as exact rational inequalities rather than floats: `log₂3` is
+enclosed to within `10^(−135)` by an `atanh` series with an explicit remainder bound, cross-certified
+against exact `3^b`-versus-`2^a` comparisons and against directed-rounding interval arithmetic, and
+every per-`n` decision is an exact integer comparison that raises rather than guesses. The negative
+controls bite: an arc of length `0.9θ` is missed by the licensed sweep at 1,950 of 20,000 starting
+phases where the true arc is missed at none; `J = 12` genuinely fails two-sidedly at 447 of the first
+20,000 starts; and dropping the lower cut returns first witnesses with `γ` up to `17.058`, three
+times the bound, so the lower cut is load-bearing and not decoration.
+
 ## The joint note — what we checked, and then it is yours
 
 You asked one question before any structure, and made three proposals. Here is what we
