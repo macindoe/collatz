@@ -247,10 +247,12 @@ def Gamma_threshold(p, n, eta=0.0):
 # ==========================================================================
 
 def base_geometric(p, n, K=None, crash_depth=1, per_block=False):
-    """Construction 12.8.6.2, re-implemented independently: p-1 climb blocks
-    with depths rounded from the PURE geometric profile m_j ~ a*L^j, by
-    rounding the partial sums (per_block=False) or each m_j on its own
-    (per_block=True), plus one crash block."""
+    """The superseded recipe's PURE geometric base profile (cycles.md
+    12.8.6.3), re-implemented independently: p-1 climb blocks with depths
+    rounded from m_j ~ a*L^j, by rounding the partial sums (per_block=False)
+    or each m_j on its own (per_block=True), plus one crash block. This is
+    the negative control -- the profile lacking the additive 1/(L-1) offset
+    -- not the greedy Construction B of 12.8.6.2 that construct() builds."""
     if K is None:
         K = K_of(n)
     S = K - n
@@ -507,7 +509,11 @@ def part1b(rows):
 
 
 # ==========================================================================
-# PART 2.  The shortfall of Construction 12.8.6.2, and its p-growth
+# PART 2.  The shortfall of the superseded recipe's PURE geometric base
+#          profile (cycles.md 12.8.6.3), and its p-growth.  Wherever the
+#          printed text of this Part cites 12.8.6.2, the object meant is
+#          that pure-geometric profile, i.e. 12.8.6.3.  The printed strings
+#          are left as they stand so the committed output stays byte-exact.
 # ==========================================================================
 
 def part2(rows):

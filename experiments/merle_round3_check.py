@@ -418,10 +418,12 @@ def item3_period2_search(NMAX=200):
 
 
 def base_construct(p, n, K, crash_depth):
-    """Construction 12.8.6.2, fresh: p-1 unit-exit climb blocks with
-    geometric depths (ratio L) rounded by partial sums (ROUND_HALF_EVEN),
-    one crash block (depth = crash_depth, all remaining s-budget).
-    Convention-pinned to the committed scripts' reading of 12.8.6.2."""
+    """The superseded recipe's pure-geometric base profile (cycles.md
+    12.8.6.3), fresh: p-1 unit-exit climb blocks with geometric depths
+    (ratio L) rounded by partial sums (ROUND_HALF_EVEN), one crash block
+    (depth = crash_depth, all remaining s-budget). Not the greedy-saturation
+    Construction B of 12.8.6.2. Convention-pinned to the committed scripts'
+    reading of that pure-geometric profile."""
     S = K - n
     if p < 2 or S <= p - 1:
         return None

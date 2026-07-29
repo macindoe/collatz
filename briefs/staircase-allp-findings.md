@@ -1,5 +1,7 @@
 # Findings: staircase-allp (2026-07-16)
 
+> **Superseded — the route recorded here is refuted, not merely unfinished.** Semiconvergents of `log₂3`, a rounded pure-geometric profile and a bounded correction search are replaced wholesale by `cycles.md` 12.8.6, and item 5.3's proposed target — an `O(1)`/`O(log p)` bound on the correction algorithm's move count — is *refuted as a target* (12.8.6.3); what replaced it is in `briefs/staircase-allp-construction-findings.md` (the construction), `briefs/staircase-allp-diophantine-findings.md` (availability) and `briefs/staircase-gamma-upper-findings.md` (the `γ` bracket). Kept as a failed route per `AGENTS.md`. Sub-numbers below carry their pre-rewrite meanings: "12.8.6.2" here is the pure-geometric profile, which is now 12.8.6.3.
+
 This is not an off-brief findings log in the usual sense — the session stayed
 on-brief throughout (Diophantine lemma, explicit construction, bounded
 correction, verified instances; no per-period cycle search, no

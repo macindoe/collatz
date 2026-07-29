@@ -39,5 +39,5 @@ Find the claim's verification line in its wiki section (what was checked, the ra
 - **assessed** — a stated judgment with evidence, explicitly not proved. The paper's `thm:staircase` sharpness half is the canonical example and remains stated that way *in print*; the wiki has since proved it (`cycles.md` 12.8.6), which is exactly the divergence this page exists to make visible.
 - **calibrated** — an empirical program executed with controls; says what survived, not what is true.
 - **formulation grade** — a definition and its easy direction, recorded to name an open object precisely.
-- **floor grade** — a delegation outcome: the attempt's minimum deliverable (extended evidence plus a documented obstruction), reached when the theorem itself was not.
+- **floor grade** — a delegation outcome: the attempt's minimum deliverable (extended evidence plus a documented obstruction), reached when the theorem itself was not. No wiki section stands at this grade; it grades the superseded earlier staircase attempt (`briefs/staircase-allp-findings.md`), which is the outcome the published v2 note reports, and which `cycles.md` 12.8.6 replaced with a proof.
 - **parked** — closed by a binding stopping rule (`README.md`), not by resolution; reopens only under the rule's own condition.

@@ -16,7 +16,9 @@
 # labeled. Every other section (2 onward) is independently written, uses
 # no code from experiments/staircase_allp.py, and answers each of items
 # 2-4 with its own implementation of the wiki's stated formulas (cycles.md
-# 12.6.1 rotation sums, 12.8.6.1 Diophantine input, 12.8.6.2 construction).
+# 12.6.1 rotation sums, 12.8.6.1 Diophantine input, and the pure-geometric
+# base profile of the superseded profile-plus-correction recipe, 12.8.6.3
+# -- not 12.8.6.2's greedy-saturation Construction B).
 #
 # Exact integer arithmetic for every pass/fail decision (q <= R_r,
 # divisibility, feasibility of the rounded profile). Decimal/float
@@ -371,10 +373,14 @@ def sanity_identity_fresh():
 
 def construct_12_8_6_2_fresh(p, n, K, crash_depth=1,
                               rounding=decimal.ROUND_HALF_EVEN):
-    """Independent implementation of Construction 12.8.6.2: p-1 climb
-    blocks of unit exit valuation, geometric depths of ratio L rounded by
-    the partial-sum method, plus one crash block of the given depth and
-    the whole remaining exit-valuation budget. Returns (ms, ss) or None."""
+    """Independent implementation of the base profile of the superseded
+    profile-plus-correction recipe (cycles.md 12.8.6.3): p-1 climb blocks
+    of unit exit valuation, geometric depths of ratio L rounded by the
+    partial-sum method, plus one crash block of the given depth and the
+    whole remaining exit-valuation budget. This is the PURE geometric
+    profile, not the greedy-saturation Construction B of 12.8.6.2; the
+    function name is a code identifier, not the citation.
+    Returns (ms, ss) or None."""
     S = K - n
     if p < 2 or S <= p - 1:
         return None
@@ -470,7 +476,8 @@ def item2b_literal_n_rows():
     previously computed only in ad-hoc shell sessions; AGENTS.md requires
     the record to stay runnable and reproduce what it claims).
 
-    (a) Merle's two literal p=22 n-values, base construction 12.8.6.2
+    (a) Merle's two literal p=22 n-values, the pure-geometric base
+        construction of the superseded recipe (cycles.md 12.8.6.3)
         (fresh code), no correction -- expected to reproduce his
         (9, -7.86) and (6, -4.80) exactly at cd=1.
     (b) The p=23 near-miss transcription probe n=39488 quoted in the
