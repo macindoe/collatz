@@ -1,0 +1,36 @@
+# Brief: the Rhin 13.3 re-source warning — adjudicate before the note leans on it — for a delegated session
+
+**Context required before starting (in order):** `README.md` (binding stopping rules), `AGENTS.md`, `HANDOFF.md` item 1 (the round-9 L-A7 and round-10 L-A7-closure paragraphs), `briefs/merle-round12-letter.md` Part 2 §5 (the warning paragraph, beginning "One warning I owe you"), `briefs/merle-la7-mu-check-findings.md` §2 (our original μ adjudication — the citable record this window re-examines), `briefs/merle-la7-close-check-findings.md` (the closure at two keys), `briefs/junction-public-recon-findings.md` (the §10.4 tabulation his closing section mentions).
+
+## Provenance
+
+L-A7 stands at **two keys** on a chain whose external ingredient is, per our own round-9 adjudication, **Rhin 1987 (Prop. p. 160, exponent 13.3)** for `log₂3`, with Simons–de Weger 2005 Lemma 12 as the printed Collatz-side precedent — the re-sourcing Merle accepted in full at round 10. His round-12 letter now warns, against his own record: `research_log/BILAN_R201.md` (public, his `Collatz-Junction-Theorem` repo) **marks it PROVED that the constant 13.3 is misattributed to Rhin 1987** — the argument being that Rhin treats irrationality measures rather than linear forms in two logarithms, for which it gives Laurent 2008 at ≈ 18.5 and LMN 1995 at ≈ 23.55 — while his own `experiments/test_REQ-MATH-035` in the Lean repo carries "Rhin 1987, exponent 13.3" as the re-sourced rule. Two of his public artifacts disagree; he does not know which is right; **L-A7 should be re-sourced before the joint note leans on the number**. His structural point (an effective exponent is compatible with a Gauss–Kuzmin-typical expansion) stands at any value.
+
+Note the stakes precisely: if 13.3 is wrong for what our chain consumes, the L-A7 headline (`tail < 5.2·10⁻⁴` beyond `n ≈ 2233`) moves again, and a two-keyed ledger entry cites a bad constant. If 13.3 is right, his BILAN's "PROVED misattributed" is the error and the finding runs the other way. Either way the adjudication must rest on the primary statement, not on either side's memory of it.
+
+**Stopping-rule compliance:** a literature adjudication on a closed entry's ingredient; no proof effort, no cycle search.
+
+## Queue
+
+1. **Record both of his artifacts verbatim** (fresh read-only clones, scratchpad): `research_log/BILAN_R201.md` from `Collatz-Junction-Theorem` (the PROVED-misattributed block, in full, with its argument), and `experiments/test_REQ-MATH-035*` from his Lean repo (the "Rhin 1987, exponent 13.3" rule as carried, plus its canaries `q(5,8) = 13`, `q(7,12) = 1909` if present). Record what each claims and where they collide.
+2. **Re-pin the primary statement** (web access granted for THIS item, literature only). What exactly does Rhin 1987 ("Approximants de Padé et mesures effectives d'irrationalité", Progr. Math. 71, the proposition our findings cite at p. 160) assert? Candidates to distinguish, and this is the crux:
+   - a simultaneous/linear-form bound `|x₀ + x₁·log 2 + x₂·log 3| ≥ H^{−ν}` for integer triples of height `H` (if so: with which `ν`, which height convention, which effective range);
+   - versus a direct irrationality measure for a single quotient like `log₂3`.
+   Work the conversion explicitly in the findings: what our L-A7 chain consumes is `|log₂3 − K/n| ≥ κ/n^μ` — derive the μ that Rhin's actual statement yields for `log₂3` (mind the specialization `x₀ = 0` if the statement is a three-term form: is the two-term case covered at the same exponent? mind also the `H` vs `max(|K|,n)` height conversion and where a `+1` lands on the exponent). Quote Simons–de Weger 2005 Lemma 12 exactly — it is the printed precedent for using this constant on this problem, and their sourcing sentence is evidence about what Rhin proves.
+3. **Adjudicate the BILAN argument on its merits.** His BILAN says Rhin treats "irrationality measures rather than linear forms in two logarithms" and offers Laurent 2008 (~18.5) / LMN 1995 (~23.55) as the true two-log constants. Check the direction of this argument against item 2: linear-forms-in-two-logs bounds (Laurent–Mignotte–Nesterenko lineage) are a *different instrument* than Padé-type measures, generally with worse exponents for this pair — establish whether the BILAN's claim rests on a confusion of instruments (Rhin's Padé result covering the pair `(log 2, log 3)` directly) or whether it has caught a genuine misuse (e.g. 13.3 belonging to a different quantity than the one L-A7 consumes). Your verdict must name the exact statement 13.3 attaches to, or the exact reason none does.
+4. **Sensitivity, if and only if the exponent moves.** If the sourced value for what the chain consumes is not 13.3 (whether 14.3-via-conversion, Laurent's ~18.5, LMN's ~23.55, or anything else), recompute the L-A7 headline under each candidate with the machinery recorded in `briefs/merle-la7-mu-check-findings.md` (its sensitivity table is the template; a small fresh script `experiments/merle_la7_rhin_check.py` + output). State plainly which of the ledger's printed numbers move and which stand. If 13.3 is confirmed, say so and no script is needed — do not invent computation (the premise pre-check pattern: a findings file may say nothing needed computing).
+5. **Deliverable:** the verdict at one of three grades — (a) 13.3 CONFIRMED for what the chain consumes (BILAN wrong, kindly); (b) 13.3 attaches to a related-but-different statement, with the correct converted exponent and the headline sensitivity; (c) unsourceable from the primary literature, with the best-sourced fallback and sensitivity. Plus drafted co-edit language for L-A7's source line under (b)/(c) only, and the reply-material paragraph either way (his warning answered with the primary statement quoted).
+
+## Record
+
+- `briefs/merle-la7-rhin-check-findings.md` — both artifacts verbatim; the primary statement quoted with full citation (author, year, venue, proposition number, exact inequality including constants and validity range); the conversion derivation written out; the BILAN adjudication; sensitivity if applicable; the verdict and drafted material.
+- `experiments/merle_la7_rhin_check.py` + committed output ONLY if item 4 triggers.
+- Do NOT edit `HANDOFF.md` or any existing findings file. Five windows run in parallel this round.
+
+## Rules
+
+- Branch **`merle-la7-rhin-check`** from your worktree HEAD. FIRST verify the worktree contains this brief; if missing, merge/rebase onto local `main` first; state your base SHA in the findings.
+- Web use is bounded: literature searches and paper/abstract fetches on THIS question only; read-only clones of his two public repos; no contact with anyone; no interaction with his repositories.
+- File edits via Edit/Write tools only; run `experiments/encoding_scan.py` before your final commit and record RESULT: CLEAN.
+- His BILAN being wrong is a finding delivered kindly — he flagged the collision himself and asked for exactly this adjudication. Our own round-9 adjudication being incomplete is equally a finding, stated as ours, mechanism named.
+- No reply paragraphs beyond the drafted material; no key turns; no co-edit commits; do NOT merge. Stop after Record.
