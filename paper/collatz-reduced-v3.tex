@@ -33,7 +33,7 @@ We study the Collatz dynamics in a reduced coordinate system that compresses eac
 \end{abstract}
 
 \subsection*{Version note}
-v1, July 2026 (original publication). v2, July 2026: restored the subtitle of the \texttt{merle} citation; added a note evidencing the sharpness hedge of Theorem~\ref{thm:staircase} (Section~\ref{sec:cycles}), prompted by correspondence with Eric Merle. No theorem or universal claim is strengthened; v2 adds a finite computational evidence record. v2-specific Zenodo DOI: 10.5281/zenodo.21421120. v3, [month] 2026: a correction appended to the Note added in v2 (Section~\ref{sec:cycles}) --- the note's identification of the remaining gap has been superseded on both halves in the project record, and the correction states what closed, at what scope, and where the record is. The original sentence stays in place; no theorem, proof, or other text changes. v3-specific Zenodo DOI: [set at upload].
+v1, July 2026 (original publication). v2, July 2026: restored the subtitle of the \texttt{merle} citation; added a note evidencing the sharpness hedge of Theorem~\ref{thm:staircase} (Section~\ref{sec:cycles}), prompted by correspondence with Eric Merle. No theorem or universal claim is strengthened; v2 adds a finite computational evidence record. v2-specific Zenodo DOI: 10.5281/zenodo.21421120. v3, [month] 2026: a correction appended to the Note added in v2 (Section~\ref{sec:cycles}) --- the note's identification of the remaining gap has been superseded on both halves in the project record, and the correction states what closed, at what scope, and where the record is. The original sentence stays in place; no theorem or proof changes; one notational clause is added in Proposition~\ref{prop:elim}, defining $\sigma_j$ at its point of use ($\sigma_j = s_j + m_{j+1}$, as in Definition~\ref{def:reduced}). v3-specific Zenodo DOI: [set at upload].
 
 \subsection*{Author's note}
 
@@ -175,7 +175,7 @@ Fix a hypothetical $p$-block cycle of $F$ with entry depths $m_t \ge 1$, exit va
 \begin{proposition}[elimination identity]\label{prop:elim}
 $q > 0$, and for every rotation $r$,
 \[ \w_r\, 3^{a_{r-1}}\, q \;=\; R_r \;:=\; \sum_{t=0}^{p-1} 3^{M_t}\, 2^{S_t}\,(2^{s_t}-1), \]
-where, in rotation order starting at $r$, $M_t = \sum_{j>t} m_j$ and $S_t = \sum_{j<t}\sigma_j$. Hence $q \mid R_r$ and $q \le \min_r R_r$. For the trivial cycle, $R = 4^p - 3^p = q$ identically.
+where, in rotation order starting at $r$, $M_t = \sum_{j>t} m_j$ and $S_t = \sum_{j<t}\sigma_j$, with $\sigma_j = s_j + m_{j+1}$, indices cyclic (the step's $\sigma = \vt{C}$, $m_+ = \sigma - s$, of Definition~\ref{def:reduced}; the shift is essential, $m_{j+1}$ and not $m_j$). Hence $q \mid R_r$ and $q \le \min_r R_r$. For the trivial cycle, $R = 4^p - 3^p = q$ identically.
 \end{proposition}
 
 \begin{proof}
