@@ -286,3 +286,42 @@ findings' §8.2 sentence and the sent reply's line 516 — the reply is sent and
 history (no edit possible), so the correction rides in the round-12 response; the
 hygiene findings file is the main session's to annotate at merge, not this window's to
 edit.
+
+---
+
+## 3. §4(e)/(f) — flat confirms, small numbers, and the credit record
+
+### 3.1 Every number, reproduced
+
+| claim | ours (script) | verdict |
+|---|---|---|
+| `log₂(1+u) − log₂(1−u) = 2u/ln2 + O(u³)`, cubic coefficient `2/(3ln2)` | coefficient `0.96179670` vs `2/(3ln2) = 0.96179669` | MATCH (script 3.1) |
+| `x* = 7/3` unique: `3(3x+1) = 4(3x−1) ⟺ x = 7/3` | single root in exact rationals; `(3x*+1)/(3x*−1) = 4/3` exactly | MATCH (script 3.2) |
+| `log₂(4/3) = 2 − log₂3` identically | to working precision at both dps | MATCH (script 3.2) |
+| `D` strictly decreasing on `(1/3, ∞)` | `u = 1/(3x)` decreasing, `artanh` increasing; grid confirms | MATCH (script 3.3) |
+| `D(1) = 1` exact | `(3+1)/(3−1) = 2` in rationals; `log₂2 = 1` | MATCH, exact (script 3.4) |
+| `D(3) = log₂(5/4) = 0.321928 < s = 2 − log₂3 = 0.415037` | `10/8 = 5/4` exact; digits match | MATCH (script 3.5) |
+| `D(2⁷¹)/s = 9.8145e-22` | `9.814456·10⁻²²` | MATCH (script 3.6; his round-11 `9.8·10⁻²²` and our `9.8145·10⁻²²` were already on record) |
+
+His restated corollary reads correctly with its referents: `D` strictly decreasing and
+`D(7/3) = s`, so `D(x) > s` exactly for `x < 7/3`; the only odd positive integer below
+`7/3` is `1`, where `D(1) = 1` exactly and already `D(3)` falls below `s`. Nothing to
+correct anywhere in (e) or (f).
+
+### 3.2 The credit record, as he fixed it — no action, just the record
+
+- **The factor 2 (two-shore reading): "jointly arrived at."** His §4(e): the
+  identification is ours ("the identification is yours and I had not made it"), the
+  frame it lands on (the drift reading) is his item 4, and "the note should carry it as
+  jointly arrived at." Recorded as he states it. Our own round-11 blocks credit it the
+  same way in substance (our observation on his frame); no record text changes hands.
+- **The corollary: his; the proof: ours.** His §4(f): he keeps the corollary at the
+  grade we assigned it ("returning a credit you have already weighed is not modesty, it
+  is a second error in your ledger"), and states flatly that the carrying argument —
+  uniqueness via `3(3x+1) = 4(3x−1)`, one linear equation, one root, `D` strictly
+  decreasing — is ours. So: **corollary Merle, proof Macindoe**, and the referent he
+  adds ("that integer is the trivial cycle") matches our own §8.3 wording. This matches
+  the shared LEDGER block as pushed ("the corollary with integer teeth is ours and he
+  can have it"), which now reads consistently with his acceptance; nothing to repair.
+- His self-corrections inside §4 (the `9.8145e-22` referent added; "grey terrain" his,
+  as we noted) are recorded as his.
