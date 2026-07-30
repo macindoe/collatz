@@ -415,3 +415,106 @@ plateau are Eric Merle's (round-12 correspondence), verified here." (ii) The blo
 also the natural home Merle's §9 asks for if the marked section is instead read as the
 joint note's apparatus section — the text above is written to survive either placement
 unchanged.
+
+---
+
+## 5. §10 — the silence: established, not assumed
+
+### 5.1 What his round-11 item 2 actually claimed
+
+Our record of his round-11 letter's four negatives is
+`briefs/merle-r11-hygiene-check-brief.md` (the letter itself is not on file verbatim;
+the brief's Half-2 list is the transcription the whole round worked from). Item 2,
+verbatim from that record (line 21):
+
+> **The rhythm of the peaks.** No memory, no clustering (variance/mean² **0.831**
+> against controls 0.745–0.949), no spectral line (top peak **5.62×** variance against
+> a control maximum of **6.64×**). Includes his own withdrawn false alarm: a lag-1
+> autocorrelation of **−0.077** raised against an i.i.d. Gauss–Kuzmin null, which is
+> the wrong null (the Gauss map makes consecutive partial quotients weakly dependent by
+> construction). Recomputed against real continued fractions on a common footing, 1500
+> terms each: `log₂3` −0.070, π −0.063, `log₂5` −0.104, `log₂7` −0.103.
+
+So the item has **three sub-claims** (no memory; no clustering; no spectral line) plus
+the withdrawn false alarm. One numbering note, flat: his round-12 §10 says "your
+confirmation of my item-1 retraction covers the same detector" — in his own numbering
+the autocorrelation retraction evidently sits with item 1 (the golden ratio); our brief
+transcribed it inside item 2. Same retraction, same detector, no substance in the
+difference; recorded so the two numberings cannot later be read as two events.
+
+### 5.2 What our side did with it — the silence is real, and it is total on two of three parts
+
+- **The memory sub-claim was verified**, on the corrected footing:
+  `briefs/merle-r11-hygiene-check-findings.md` §6.1 rebuilt the four lag-1
+  autocorrelations from scratch (all four reproduce to three decimals on `log aᵢ`;
+  `log₂3`'s `−0.070` inside the control range, second smallest of four), and the sent
+  reply carries that paragraph ("Your retraction is confirmed, on a common footing",
+  `briefs/merle-round11-reply-draft.md` lines 436–450).
+- **The clustering and spectral sub-claims were never touched.** The numbers `0.831`,
+  `0.745–0.949`, `5.62×`, `6.64×` occur in exactly one file in this repository — the
+  hygiene brief's transcription — and in no findings file, no script, no committed
+  output, and no reply paragraph (swept by grep this session). The hygiene findings'
+  §8.4 sentence "item 2 (the rhythm of the peaks) reproduce here" is, read strictly,
+  **an overstatement of its own §6**: what reproduced was the retraction's
+  autocorrelations and item 1's Gauss–Kuzmin fit; the two structural detector results
+  of item 2 were not reproduced anywhere. Recorded as ours, flat.
+- **The sent round-11 reply contains no sentence on item 2's conclusion** — no
+  "rhythm", no clustering, no spectral, none of the four numbers (grep of the sent
+  draft, this session). His §10 statement "appears nowhere in your letter — I checked
+  the full text" is **CONFIRMED from our side**.
+
+### 5.3 The three options, against what our record supports
+
+His question is narrow: does the structural half ("no memory, no clustering, no
+spectral line") survive the detector being wrong — retain, retain with a scope clause,
+or strike?
+
+1. **Retain as-is: not supported.** The conclusion was drawn with an instrument its
+   author has disowned (the i.i.d. Gauss–Kuzmin null), two of its three clauses are
+   unreplicated on our side, and the detector's spec (what counts as a "peak", the
+   threshold, the normalisation behind `variance/mean²`, the spectral estimator) is
+   not recoverable from our record — the same non-recoverability the `0.00103`
+   had before his round-12 §5 resolved it. Retaining flat would put a disowned
+   detector's conclusion at record grade.
+2. **Retain with a scope clause: supported, with a split.** The **"no memory"** clause
+   survives the detector's death *independently*: it was re-established on the
+   corrected instrument (real continued fractions on a common footing) and replicated
+   our side — that clause is not merely retainable, it is at two-keys-in-substance
+   grade. The **"no clustering"** and **"no spectral line"** clauses are his
+   measurements, unreplicated, and their printed control ranges (`0.745–0.949`,
+   `6.64×`) cannot be re-read from our record because we cannot establish which null
+   produced the controls — if the controls are real-constant CFs (as the ranges'
+   plural suggests), the disowned-null critique may not even apply to them, but that
+   is exactly what our record cannot say.
+3. **Strike: not supported either.** Striking discards a replicated negative (the
+   memory clause) and two descriptive measurements nobody disputes; the null-model
+   failure he reported was in the *significance calibration*, and his own retraction
+   plus our common-footing recomputation repaired that half rather than voiding it.
+
+### 5.4 Recommendation
+
+**Option 2, in exactly the `+0.22/−0.29/−0.57` shape** (the precedent:
+`briefs/merle-r11-hygiene-check-findings.md` §7.2–7.3 and the sent reply's "recorded as
+yours and unreplicated … those three numbers stand entirely on your side of the two-key
+protocol and we will describe them that way wherever they are used"):
+
+- the **memory clause** recorded as replicated on the corrected footing, both sides —
+  citing the §6.1 table, not the disowned detector;
+- the **clustering and spectral clauses** recorded as his, unreplicated, on his side of
+  the ledger, with the detector spec named as the one thing that would change that: one
+  clause each (peak definition + threshold; the null behind the control ranges;
+  series length) and replication our side becomes a cheap statistics computation on the
+  continued fraction of `log₂3`. Unlike round-11's item 3, **the stopping rules do not
+  place this out of reach** — no cycle search is involved, and the README's
+  equidistribution rule explicitly allows experiments to feed the ledger — so the
+  honest answer to his "if your stopping rules place it out of reach, that is an
+  answer" is: they do not; what places it out of reach today is the unrecoverable
+  spec, which is his to supply if he wants the second key;
+- the conclusion sentence itself ("no memory, no clustering, no spectral line")
+  retained **with the scope clause**, not struck: one clause replicated, two his-side
+  pending spec.
+
+This is established from the record above, not assumed: the split between the three
+clauses is forced by which numbers exist where, and the stopping-rule half was checked
+against README's rules rather than presumed. Drafting the reply paragraph is the
+response window's job, not this one's.
