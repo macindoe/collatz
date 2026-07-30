@@ -193,3 +193,96 @@ round-12 response is expected to travel as a PR per the author's §13 acceptance
 
 *(A paired one-sentence §4(b) correction is drafted at §2.4 below; the two would travel
 in the same commit.)*
+
+---
+
+## 2. §4(b) — the diagnosis we both reached is refuted; his scale-invariance claim is exact
+
+### 2.1 The claim, verified at his four scales
+
+The `−17` cycle is derived in-script from its seed (elements
+`{17, 25, 37, 55, 41, 61, 91}`, `n = 7`, `K = 11`; script 2.1). Rescaling the shape to
+`x_min = 17·2^k` and computing `R(k) = Σᵢ D(xᵢ·2^k) / (7·D(17·2^k))`:
+
+| scale | `R(k)`, 22 digits | `|R − shape|` |
+|---|---|---|
+| `17·2^20` | `0.4755266037564546434541` | `2.98·10⁻¹⁷` |
+| `17·2^71` | `0.4755266037564546732308` | `5.87·10⁻⁴⁸` |
+| `17·2^200` | `0.4755266037564546732308` | below dps-240 resolution |
+| `17·2^1000` | `0.4755266037564546732308` | below dps-240 resolution |
+
+**His `0.4755266037564546…` is confirmed at every scale, as printed** — all four values
+begin with exactly those 16 digits (script 2.3). One flat precision note, recorded
+because this window's job is digits: his figure is a *truncation* (the 17th significant
+digit of the limit is a 7, so a 16-digit rounding would print `…4547`), and at
+`k = 20` the value differs from the limit in the 17th digit (`…46434…` against
+`…46732…`) — a relative deviation of `6.3·10⁻¹⁷`, consistent with the `O(x_min⁻²)`
+correction (`1/(27·(17·2^20)²) = 1.16·10⁻¹⁶`) and invisible at his printed precision.
+Nothing he printed is wrong; the invariance is exact *to leading order* and his own
+sentence says so.
+
+### 2.2 The leading-order identity, verified
+
+His mechanism sentence — "to leading order the ratio is `(1/n)·Σᵢ(x_min/xᵢ)`, a pure
+function of shape" — is confirmed twice over:
+
+- the exact rational `(1/7)·Σ(17/xᵢ) = 0.4755266037564546 7323…` (script 2.2) is the
+  value all four scales converge to;
+- the deviation `R(k) − shape` falls by a factor `4.0000` per doubling of scale
+  (script 2.4) — the `O(x_min⁻²)` signature, i.e. exactly the truncation term of §1.
+
+The real cycles with two or more elements both show the same structure (script 2.5):
+`−17` native ratio `0.4754938591` (within `O(1/(27·17²))` of the shape constant), `−5`
+native ratio `0.8568830442` against its shape constant `6/7 = 0.8571428571…`, and the
+rescaled `−5` shape is scale-invariant at `6/7` to 15 digits at `k ∈ {20, 71, 200}`. On
+`−17` at native scale his §4(a) numbers reproduce: `Σ D = 0.188336` against
+`n·D(x_min) = 0.396085`, factor `2.103` (script 2.5).
+
+### 2.3 What actually agrees to 44 decimals, and what the error was
+
+The pairing that converges is the **per-step** one: `D(X)/δ = 1 + 6.64·10⁻⁴⁵` at
+`X = 2⁷¹` — 44 zero decimals in the ratio (script 2.6). The summed pairing does not
+converge at any scale: `Σᵢ D(xᵢ)/(n·δ(x_min)) = 0.4755…` on the `−17` shape at
+`17·2^67` (script 2.6), and canary C0.4 shows the ratio motionless between `k = 20` and
+`k = 1000` (`|R(1000) − R(20)| = 3·10⁻¹⁷`) where the 44-decimals diagnosis predicts
+drift toward 1. Canary C0.3 exhibits the degenerate/spread pair: all elements at
+`x_min` gives ratio exactly 1 (the equality case that fooled the regime), any spread
+gives the shape constant. **His account of the mechanism — the per-step convergence was
+transferred to the sum — is exactly what the numbers show, and his rule ("a claim about
+a sum over a configuration must be tested on a configuration with spread") is the right
+lesson; it is the regime column again, phrased for sums.**
+
+### 2.4 Where our record carries the 44-decimals explanation, and the drafted correction
+
+The sentence is ours (hygiene check, round 11), was co-drafted independently by him
+(his §4(b) says so), and sits at:
+
+- `briefs/merle-r11-hygiene-check-findings.md` line 609–610 (§8.2): "At `X = 2⁷¹` the
+  two sides agree to 44 decimal places, which is presumably why it reads as exact.";
+- `briefs/merle-round11-reply-draft.md` lines 516–517 (**sent**): "At `X = 2⁷¹` the two
+  sides agree to 44 decimal places, which is presumably why it reads as exact.";
+- the shared LEDGER block (§1.3(a) above, same sentence inside the L-A8 hand-back;
+  mirrored in `briefs/merle-round11-coedit-findings.md` line 180 and the archived patch
+  line 105);
+- `experiments/merle_r11_hygiene_check.py` line 974 + its committed output line ~325
+  (the "EXTREMAL limit … 44 decimal places" prose; §1.3(g)).
+
+Drafted one-sentence LEDGER correction (travels with §1.4's block, NOT pushed):
+
+> **And the diagnosis in the same block — "the two sides agree to 44 decimal places,
+> which is presumably why it reads as exact" — is refuted, jointly (2026-07-30).** Both
+> of us drafted it; Merle refuted it (round 12, §4(b)): the ratio
+> `Σᵢ D(xᵢ)/(n·D(x_min))` is scale-invariant — `0.4755266037564546…` for the `−17`
+> shape at `x_min = 17·2^20`, `17·2⁷¹`, `17·2^200` and `17·2^1000` alike, because to
+> leading order it is `(1/n)·Σᵢ(x_min/xᵢ)`, a pure function of shape — so no scale
+> makes the summed pair agree. What agrees to 44 decimals at `2⁷¹` is the per-step pair
+> `D(X)` against `δ`; that convergence was transferred to the sum, by both of us. The
+> equality case of the bound is the degenerate configuration only. Verified both sides
+> (his four rescalings; Macindoe artifact as above, spread-vs-degenerate canaries
+> included).
+
+For our own wiki-side record the same refutation applies verbatim to the hygiene
+findings' §8.2 sentence and the sent reply's line 516 — the reply is sent and stands as
+history (no edit possible), so the correction rides in the round-12 response; the
+hygiene findings file is the main session's to annotate at merge, not this window's to
+edit.
