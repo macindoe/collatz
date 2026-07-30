@@ -518,3 +518,103 @@ This is established from the record above, not assumed: the split between the th
 clauses is forced by which numbers exist where, and the stopping-rule half was checked
 against README's rules rather than presumed. Drafting the reply paragraph is the
 response window's job, not this one's.
+
+---
+
+## 6. The two small corrections, verified and recorded
+
+### 6.1 The 3,175 — his 3,100 is right, and the mechanism is ours to name
+
+Re-verified independently in the fresh clones (read-only, scratchpad):
+
+| fact | value | where |
+|---|---|---|
+| `git cat-file -s b55095a` (T1-chain `LegendreApprox.lean`) | **3,100 bytes** | his Lean repo at `d48ba9e` |
+| newlines in blob `b55095a` | **75 LF, 0 CR**, file ends with LF | same |
+| `git cat-file -s a4fae1f` (Junction-family copy) | **3,100 bytes**, 75 LF, 0 CR | `collatz-cycles-lean` clone |
+| `3,100 + 75` | **3,175** | script 5.1 |
+
+**Mechanism, named:** our figure came from a Windows working-copy measurement — with
+CRLF conversion active at checkout, each of the 75 LF-terminated lines gains one `\r`
+byte, and a 3,100-byte blob measures exactly 3,175 bytes on disk. Both copies were
+measured that way, which is why `briefs/junction-public-recon-findings.md` prints
+"(3,175 bytes each)": the *each* is faithful — the two blobs are the same size — and
+the number is the inflated one for both. His "the one number of yours I could not
+reproduce this round" is therefore correct and the correction is ours; nothing else in
+that findings item moves (the blob identities, the two-line `open Real` diff, the
+immateriality verdict, and the SHA-256 values are all statements about blob content and
+are unaffected — indeed the recorded SHA-256 hashes are hashes of the *blobs*, which is
+consistent, so the file mixed one working-copy measurement into an otherwise
+blob-grade table; that is the whole defect).
+
+**Drafted addendum for `briefs/junction-public-recon-findings.md` Item 3** (dated note,
+original untouched, the main session applies at merge):
+
+> *(Addendum 2026-07-30, ours: the byte figure two paragraphs up is a working-copy
+> measurement, not a blob size. Both blobs are `git cat-file -s` = **3,100 bytes**
+> (75 LF-terminated lines, no CR); under this machine's CRLF checkout each copy
+> measures 3,100 + 75 = 3,175 bytes on disk, which is the figure printed. "Same size
+> each" stands; the honest byte count is 3,100. Flagged by Merle, round 12; mechanism
+> verified in fresh clones, `briefs/merle-r12-drift-check-findings.md` §6.1.)*
+
+### 6.2 The §10.2 sentence — fifteen printed quotients, Jackson–Matthews cited for the 10,000
+
+Verified at the **pinned** recon commit `collatz-cycles-lean` `1d77168`
+(`docs/PROOF_ASSEMBLY.md`, section `### 10.2. Continued Fractions of $\log_2 3$`,
+line 247), verbatim:
+
+> The continued fraction expansion $\alpha = [1; 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1,
+> 1, 55, ...]$ (OEIS A028507) has been computed to 10,000 terms (Jackson–Matthews
+> 2002).
+
+That display contains exactly **fifteen** partial quotients (`a₀ = 1` through
+`a₁₄ = 55`, then an ellipsis), and they are the correct first fifteen of `log₂3`; the
+10,000 is a *reported computation*, cited to Jackson–Matthews 2002 (the reference
+resolves in the same file, line 407: T. H. Jackson, K. R. Matthews, *J. Integer Seq.*
+**5** (2002), Article 02.2.7). **His correction is confirmed in every particular.**
+
+**Which sentence of ours overstated it:** `briefs/junction-public-recon-findings.md`
+§5.2(iv), line 762 —
+
+> with §10.2 giving the CF of `log₂3` to 10,000 terms (citing Jackson–Matthews 2002,
+> OEIS A028507),
+
+which reads as the file *supplying* 10,000 terms. It prints fifteen and attributes the
+10,000-term computation. Our sentence had the citation present but attached to the
+wrong role. His own clause stands with it: our point about §10.5 (the
+convergent-confinement antecedent) is unaffected either way.
+
+**Drafted correction** (same treatment — dated addendum for the main session, original
+untouched):
+
+> *(Addendum 2026-07-30, ours: "giving the CF of `log₂3` to 10,000 terms" overstates
+> the file — §10.2 prints **fifteen** partial quotients, `[1; 1, 1, 2, 2, 3, 1, 5, 2,
+> 23, 2, 2, 1, 1, 55, ...]`, and cites Jackson–Matthews 2002 for the 10,000-term
+> computation. Verified at the pinned `1d77168`. Flagged by Merle, round 12; the §10.5
+> point this section makes is unaffected.
+> `briefs/merle-r12-drift-check-findings.md` §6.2.)*
+
+(For completeness: `collatz-cycles-lean` HEAD has moved to `b38758d` — his three
+round-12 retraction-marker commits over the pin; the §10.2 sentence is byte-identical
+at HEAD, checked incidentally. The junction-followup window owns those commits; nothing
+further is claimed here.)
+
+---
+
+## 7. Compliance and counts
+
+- **Checks: 152 (76 distinct × 2 precisions), 0 failures**; verdict lists identical at
+  dps 120 and 240; committed output regenerated via raw redirection — no BOM, pure
+  ASCII (verified byte-level before commit).
+- Read-only outside this repo: three scratchpad clones (SHAs in the header), zero
+  interaction of any kind with either of his repositories or the shared repo beyond
+  `git clone`/`cat-file`/`show`.
+- `HANDOFF.md`, `cycles.md`, and every existing findings file untouched; all
+  corrections drafted here only. No key turned, no ledger text pushed, no reply
+  paragraph drafted beyond the two marked correction blocks and the proposed
+  `12.8.6.1` block.
+- Stopping rules: verification and record repair throughout; the one place a new
+  computation was considered (§5.4's replication of the clustering/spectral detector)
+  is recorded as *permitted but blocked on his spec*, and was not run.
+- `experiments/encoding_scan.py`: **RESULT: CLEAN** (run before the final commit).
+- One number in this file that could not be verified at a named place: none.
