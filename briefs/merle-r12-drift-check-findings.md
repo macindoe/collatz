@@ -325,3 +325,93 @@ correct anywhere in (e) or (f).
   can have it"), which now reads consistently with his acceptance; nothing to repair.
 - His self-corrections inside §4 (the `9.8145e-22` referent added; "grey terrain" his,
   as we noted) are recorded as his.
+
+---
+
+## 4. §9 — the rotation reformulation, every claim checked
+
+Nothing passed on his word; every claim below was recomputed from scratch (script
+part 4, with the exact `K(n) = bitlength(3ⁿ)` supplying `δ(n) = ⌈nL⌉ − nL` and the
+maxgap computed directly from the sorted circle points at both precisions).
+
+### 4.1 Claim-by-claim verdicts
+
+| # | his claim | verdict | our figures (script) |
+|---|---|---|---|
+| 1 | `5L = 8 − θ`, `θ = 8 − 5·log₂3 = 0.0751874964…` | **CONFIRMED** (with one digit note: the true digits are `0.07518749639…`, so his ellipsis-suffixed figure is a 9-digit rounding, not a truncation — same convention `cycles.md 12.8.6.1` already uses) | script 4.1 |
+| 2 | `δ(n)` advances by `θ` **mod 1** under `n → n+5`; second case iff `δ(n) ≥ 1 − θ` | **CONFIRMED** — the step is `θ` or `θ − 1` and nothing else over `n = 1..2000`, and the wrap condition is exactly `δ(n) ≥ 1 − θ` (his "when `δ(n) < 1 − θ`" is the complementary clause, same content) | script 4.3 |
+| 3 | wrap count over `n = 1..2000` is 150, fraction `0.075 ≈ θ` | **CONFIRMED** — exactly 150 | script 4.3 |
+| 4 | `K(n+1) − K(n) ∈ {1,2}`, identity `= 1 + (⌈(n+1)(L−1)⌉ − ⌈n(L−1)⌉)` | **CONFIRMED** over `n = 1..2000`; the identity is immediate from `⌈nL⌉ − n = ⌈n(L−1)⌉` | script 4.4 |
+| 5 | Sturmian of slope `L − 1 = log₂(3/2) = 0.584963`, **not** `L` | **CONFIRMED** — mechanical words need slope in `[0,1]`, and the step-2 indicator is the slope-`(L−1)` mechanical word; letter-2 frequency over 2000 steps is exactly `1170/2000 = 0.585` | script 4.4 |
+| 6 | factor complexity `p(m) = m + 1` for `m = 1..12` | **CONFIRMED** on a 20,000-letter word: `p(1..12) = 2,3,…,13` | script 4.4 |
+| 7 | aperiodicity ⟺ irrationality of `log₂3` | statement-grade (standard Sturmian fact), consistent; not a computation | — |
+| 8 | `1/θ = 13.3000838`; for `J ≤ 13` the points `{jθ}` are already sorted, so `maxgap(J) = max(θ, 1 − Jθ)` **exactly**, no three-distance machinery | **CONFIRMED** — `13θ = 0.97744 < 1`, the closed form matches the directly computed maxgap for every `J = 1..13` at both precisions | script 4.1, 4.5 |
+| 9 | reproduces `maxgap(12) = 0.0977500433`, `maxgap(13) = θ` "to every digit you printed" | **CONFIRMED** — `0.0977500432694`, rounding to our printed `0.0977500433` (`cycles.md 12.8.6.1`; `briefs/staircase-gamma-upper-findings.md` §3 prints `0.097750043269`, same number) | script 4.5 |
+| 10 | criterion `J ≥ (1 − ℓ)/θ = 12.2967` with `ℓ = 0.1169390665 − 0.0415 = 0.0754390665` | **CONFIRMED** — `12.296738`, ceil 13; identical to Lemma G's `J = ⌈(1 − ℓ)/θ⌉` for `ℓ > θ` | script 4.6 |
+| 11 | **new result:** maxgap stays exactly `θ` for `J = 13..25`, first falls at `J = 26` to `14θ − 1 = 0.0526249495` | **CONFIRMED**, and structurally: at each `J` in `13..25` exactly `26 − J` unsplit `θ`-gaps remain; the points `j = 14..26` land in the 13 original `θ`-intervals one each, every one at offset `14θ − 1` into its interval | script 4.7 |
+| 12 | identity `13(14θ − 1) + 14(1 − 13θ) = 1` | **CONFIRMED identically** — the `θ`-coefficient is `13·14 − 14·13 = 0` and the constant is `−13 + 14 = 1`; the gap multiset at `J = 26` is exactly thirteen `(14θ−1)`s and fourteen `(1−13θ)`s, 27 gaps for 27 points | script 4.7 |
+| 13 | margin `ℓ − θ = 2.5157e-4`, `0.3335 %` of arc | **CONFIRMED** — `2.5157011·10⁻⁴`, `0.333475 %` (rounds to his `0.3335 %`) | script 4.8 |
+| 14 | cost-not-failure: losing `θ ≤ ℓ` moves the sweep from 66 to 131 consecutive integers (via `J = 26`) and the unconditional range from `p ≥ 16` to `p ≥ 18`; window sizes `0.05L^p` are `125.7` at `p = 17`, `199.2` at `p = 18` | **CONFIRMED** — `5·13+1 = 66`, `5·26+1 = 131`; window sizes `125.688`/`199.210`; exact integer counts `{p=15: 50, 16: 79, 17: 126, 18: 199}`, so 66 first fits at `p = 16` and 131 first fits at `p = 18`, two periods added to the finite check exactly as he says | script 4.9 |
+
+Negative controls (canaries C0.5a–c): `maxgap(11) = 0.1729375397 > ` both arcs; `J = 12`
+genuinely fails the two-sided arc (89 failing starts in `N ≤ 4000`, first at `N = 22` —
+the same first counterexample the gamma-upper record found); and the sortedness device
+is genuinely `J ≤ 13`-only (`14θ = 1.0526 > 1`). His result is not vacuous and not an
+artifact of the sorted regime.
+
+**Relation to the merged record, stated flat.** Claims 1–3, 8–10 are re-derivations of
+what `cycles.md 12.8.6.1` (and `briefs/staircase-gamma-upper-findings.md` §3) already
+prove — his contribution there is the *packaging* (the closed form
+`maxgap = max(θ, 1 − Jθ)` for the unwrapped range, replacing the gap-multiset
+argument's generality where it is not needed). Claims 4–6 (the Sturmian step sequence
+at slope `L − 1`, with the ceiling identity and the complexity check) and 11–14 (the
+`J = 13..25` plateau, the `J = 26` fall with its partition identity, and the quantified
+cost of losing `θ ≤ ℓ`) are **new content, his**, verified here. Claim 5's "not `L`"
+corrects nothing of ours — no record text states a slope; it corrects his own first
+formulation, as his letter says.
+
+### 4.2 The proposed `12.8.6.1` block — proposed here, `cycles.md` NOT edited
+
+He asked for exactly this: the reformulation in the marked section of `12.8.6.1`, under
+both names. The natural place is a fourth italic-marker paragraph inside Theorem
+`12.8.6.1`, between *What is consumed.* and *Superseded formulation…* (matching the
+page's existing marker style), with one sentence added to the *Verified* paragraph.
+Proposed text, consistent with the merged wording (same `θ`, `ℓ`, `J`, window-count
+conventions; nothing in the theorem statement or proof changes):
+
+> *The rotation reformulation (Eric Merle with Ben Macindoe, round 12, 2026-07-30).*
+> The proof above is a statement about the irrational rotation by `θ` on `ℝ/ℤ`, and two
+> of its objects have names there. The step sequence `K(n+1) − K(n) ∈ {1, 2}` is the
+> Sturmian word of slope `L − 1 = log_2(3/2) = 0.584963` (not `L`: mechanical words
+> take slopes in `[0, 1]`, and `K(n+1) − K(n) = 1 + (⌈(n+1)(L−1)⌉ − ⌈n(L−1)⌉)`);
+> letter-2 frequency `0.585` over the first `2000` steps, factor complexity
+> `p(m) = m + 1` for `m = 1..12`, aperiodicity exactly the irrationality of `log_2 3`.
+> And since `1/θ = 13.3000838`, for every `J <= 13` the points `{jθ : 0 <= j <= J}`
+> have not wrapped and are already sorted, so `maxgap(J) = max(θ, 1 − Jθ)` **exactly**
+> — giving `maxgap(12) = 0.0977500433` and `maxgap(13) = θ` with no three-distance
+> machinery, and the sweep condition as `J >= (1 − ℓ)/θ = 12.2967`, i.e. `J = 13`.
+> Beyond the sorted range the plateau is rigid (Merle): `maxgap(J) = θ` **exactly** for
+> every `J = 13..25`, and it first falls at `J = 26`, to `14θ − 1 = 0.0526249495` — the
+> points `j = 14..26` split the thirteen `θ`-intervals one at a time, each at offset
+> `14θ − 1`, with `13(14θ − 1) + 14(1 − 13θ) = 1` identically. This prices the margin
+> `ℓ − θ = 2.5157·10⁻⁴` (`0.33 %` of the arc): **losing `θ <= ℓ` is a cost, not a
+> failure** — the sweep lengthens from `66` to `131` consecutive integers (`J = 26`),
+> which the window `[L^p, 1.05·L^p]` first supplies at `p = 18` (`126` integers at
+> `p = 17`, `199` at `p = 18`), moving the unconditional range from `p >= 16` to
+> `p >= 18` and widening the finite check by two periods. Nothing in the theorem or its
+> constants moves; this names the mechanism and prices its slack.
+
+with the *Verified* paragraph gaining:
+
+> `; the rotation facts and the `J = 26` plateau: `experiments/merle_r12_drift_check.py`
+> (2026-07-30, 152 checks, 0 failures, two working precisions)`
+
+Two notes for the main session. (i) The credit line above follows his request ("under
+both our names") with the plateau result explicitly tagged his, which matches the
+verification asymmetry: the reformulation and the `J = 26` result are his, the theorem
+and the check are ours. If the page convention prefers the `12.8.6.4` credit style, an
+equivalent form is a trailing "credit: the rotation naming and the `J = 13..25`
+plateau are Eric Merle's (round-12 correspondence), verified here." (ii) The block is
+also the natural home Merle's §9 asks for if the marked section is instead read as the
+joint note's apparatus section — the text above is written to survive either placement
+unchanged.
