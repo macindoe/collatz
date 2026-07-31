@@ -1,0 +1,200 @@
+
+==========================================================================
+WORKING PRECISION dps = 120
+==========================================================================
+
+-- PART 0: canaries and negative controls (before anything) --
+[PASS] C0.1 display-as-equality REFUTED at x=1 (relative gap ~2.58e-3)  -- rel gap = 0.00258121
+[PASS] C0.2 the same gap at 2^71 is below 1e-88 (invisible in-regime)  -- rel gap = 7.94376e-89
+[PASS] C0.3 degenerate ratio == 1, spread ratio ~0.4755 (k=20)  -- degen = 1.0000000, spread = 0.47552660
+[PASS] C0.3 degenerate ratio == 1, spread ratio ~0.4755 (k=200)  -- degen = 1.0000000, spread = 0.47552660
+[PASS] C0.4 ratio does NOT drift toward 1 with scale (refutes 44-dec diagnosis)  -- |r(1000)-r(20)| = 2.978e-17
+[PASS] C0.5a maxgap(11) = 0.1729375397... > both arc lengths  -- maxgap(11) = 0.17293753966
+[PASS] C0.5b J=12 (61 integers) genuinely fails two-sided arc, first at N=22  -- 89 failing starts in N <= 4000, first = 22
+[PASS] C0.5c sortedness device breaks at J=14 (14*theta wraps past 1)  -- 13*theta = 0.97743745, 14*theta = 1.0526249
+
+-- PART 1: section 4(d) - the series, his figures, the chain --
+[PASS] 1.1 series denominators (2k+1)*9^k = 27, 405, 5103 exactly  -- [27, 405, 5103]
+[PASS] 1.2 residual after three terms ~ 1/(59049 x^8) at x=10  -- resid/next_term = 1.00091
+[PASS] 1.3 relative error at x=1 is 2.58e-3  -- computed 0.00258121
+[PASS] 1.3 relative error at x=3 is 3.06e-5  -- computed 3.06276e-5
+[PASS] 1.3 relative error at x=17 is 2.96e-8  -- computed 2.95674e-8
+[PASS] 1.3 relative error at x=2^71 is 7.94e-89  -- computed 7.94376e-89
+[PASS] 1.4 leading gap D/delta - 1 at 2^71 = 6.6432e-45 (his recomputation)  -- computed 6.6431927e-45
+[PASS] 1.4 record's 6.643193e-45 also correct at its own precision  -- computed 6.6431927e-45
+[PASS] 1.4 gap / (1/(27x^2)) = 1 + 1/(15x^2) + O(x^-4)  -- second-order coeff*(15x^2) = 1.00000
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=1  -- D-mid = 0.002581, mid-delta = 0.03562
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=7/3  -- D-mid = 3.484e-5, mid-delta = 0.002804
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=3  -- D-mid = 9.860e-6, mid-delta = 0.001319
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=17  -- D-mid = 1.673e-9, mid-delta = 7.251e-6
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=100  -- D-mid = 2.375e-13, mid-delta = 3.562e-8
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=2361183241434822606848  -- D-mid = 3.236e-110, mid-delta = 2.706e-66
+[PASS] 1.6 log2-ratio and (2/ln2)artanh forms identical
+
+-- PART 2: section 4(b) - scale invariance of the sum ratio --
+[PASS] 2.1 -17 cycle: n=7, K=11, elements {17,25,37,55,41,61,91}  -- n=7, K=11
+[PASS] 2.1 -5 cycle: n=2, K=3, elements {5,7}
+[PASS] 2.1 -1 cycle: n=1, K=1
+[PASS] 2.2 (1/7)Sum(17/x_i) = 0.4755266037564546... (16 digits, truncated)  -- exact = 0.4755266037564546732308
+   ratio R(k) = Sum D(x_i*2^k) / (7*D(17*2^k)):
+     k =    20: R = 0.4755266037564546434541   |R - shape| = 2.98e-17
+[PASS] 2.3 R(17*2^20) begins 0.4755266037564546 (16 digits, truncated)  -- R = 0.475526603756454643
+     k =    71: R = 0.4755266037564546732308   |R - shape| = 5.87e-48
+[PASS] 2.3 R(17*2^71) begins 0.4755266037564546 (16 digits, truncated)  -- R = 0.475526603756454673
+     k =   200: R = 0.4755266037564546732308   |R - shape| = 0.0
+[PASS] 2.3 R(17*2^200) begins 0.4755266037564546 (16 digits, truncated)  -- R = 0.475526603756454673
+     k =  1000: R = 0.4755266037564546732308   |R - shape| = 0.0
+[PASS] 2.3 R(17*2^1000) begins 0.4755266037564546 (16 digits, truncated)  -- R = 0.475526603756454673
+[PASS] 2.4 deviation falls ~4x per doubling (O(scale^-2) confirmed)  -- d(k=20)/d(k=21) = 4.0000
+[PASS] 2.5 -17 native ratio 0.4754... within O(1/(27*17^2)) of shape  -- native = 0.4754938591, shape = 0.4755266038
+[PASS] 2.5 -5 native ratio within O(1/(27*25)) of shape 6/7  -- native = 0.8568830442, shape 6/7 = 0.8571428571
+[PASS] 2.5 -5 shape ratio scale-invariant at 6/7 = 0.857142857...  -- R(k=20,71,200) = ['0.857142857143', '0.857142857143', '0.857142857143']
+[PASS] 2.5 on -17: Sum D = 0.188336, n*D(x_min) = 0.396085, factor 2.103  -- 0.188336, 0.396085, 2.103
+[PASS] 2.6 D(X)/delta at 2^71 = 1 + 6.64e-45 (44 zero decimals in the ratio)  -- D/delta - 1 = 6.64319e-45
+[PASS] 2.6 the summed pair does NOT converge: Sum D/(n*delta(x_min)) ~ 0.4755 at 17*2^67  -- summed ratio = 0.4755266038
+
+-- PART 3: sections 4(e)/(f) - flat confirms, small numbers --
+[PASS] 3.1 two-shore reading: residual coefficient = 2/(3 ln2)  -- coeff = 0.96179670 vs 2/(3ln2) = 0.96179669
+[PASS] 3.2 3(3x+1) = 4(3x-1) has the single root x = 7/3
+[PASS] 3.2 (3x*+1)/(3x*-1) = 4/3 exactly
+[PASS] 3.2 log2(4/3) = 2 - log2 3 identically
+[PASS] 3.3 D strictly decreasing on sampled grid (0.4 .. 19.8)
+[PASS] 3.4 D(1) = 1 EXACT ((3+1)/(3-1) = 2 in rationals)  -- D(1) - 1 = 0.0
+[PASS] 3.5 D(3) = log2(5/4) exactly (10/8 = 5/4 in rationals)
+[PASS] 3.5 D(3) = 0.321928 and s = 0.415037 (his printed digits)  -- D(3) = 0.32192809, s = 0.4150375
+[PASS] 3.6 D(2^71)/s = 9.8145e-22  -- computed 9.814456e-22
+
+-- PART 4: section 9 - the rotation reformulation, every claim --
+[PASS] 4.1 theta = 8 - 5*log2(3) rounds to 0.0751874964 (9 sig digits)  -- theta = 0.075187496394219 (truncated digits 0.0751874963...)
+[PASS] 4.1 1/theta = 13.3000838  -- 1/theta = 13.3000837634
+[PASS] 4.2 K(n) = bitlength(3^n) = ceil(nL) for n = 1..2000
+[PASS] 4.3 delta(n+5) - delta(n) is theta or theta-1, nothing else
+[PASS] 4.3 wrap condition is exactly delta(n) >= 1 - theta
+[PASS] 4.3 wrap count over n = 1..2000 is 150 (fraction 0.075 ~ theta)  -- wraps = 150, fraction = 0.075
+[PASS] 4.4 K(n+1) - K(n) in {1,2} for n = 1..2000
+[PASS] 4.4 identity K(n+1)-K(n) = 1 + (ceil((n+1)(L-1)) - ceil(n(L-1)))
+[PASS] 4.4 letter-2 frequency over 2000 steps = 0.585 (his figure)  -- count = 1170, freq = 0.585
+[PASS] 4.4 slope L - 1 = 0.584963 (his digits)  -- L-1 = 0.584962501
+[PASS] 4.4 factor complexity p(m) = m+1 for m = 1..12  -- p(1..12) = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+[PASS] 4.5 for J <= 13 the points {j*theta} have not wrapped (13*theta < 1)  -- 13*theta = 0.97743745
+[PASS] 4.5 maxgap(J) = max(theta, 1 - J*theta) EXACTLY for J = 1..13
+[PASS] 4.5 maxgap(12) = 0.0977500433 (his digits)  -- maxgap(12) = 0.0977500432694
+[PASS] 4.5 maxgap(13) = theta
+[PASS] 4.6 l = 0.0754390665 (exact difference of the two decimals)  -- l = 0.0754390665
+[PASS] 4.6 (1 - l)/theta = 12.2967, rounded up to J = 13  -- criterion = 12.296738
+[PASS] 4.7 maxgap(J) = theta exactly for J = 13..25, with 26-J unsplit theta-gaps at each J
+[PASS] 4.7 first fall at J = 26: maxgap = 14*theta - 1 = 0.0526249495  -- maxgap(26) = 0.0526249495191
+[PASS] 4.7 gap multiset at J = 26: thirteen (14theta-1) + fourteen (1-13theta)  -- (13, 14, 27)
+[PASS] 4.7 13(14theta-1) + 14(1-13theta) = 1 identically (0*theta + 1)
+[PASS] 4.7 points j = 14..26 split the 13 theta-intervals one at a time, each at offset 14theta-1  -- intervals hit = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+[PASS] 4.8 l - theta = 2.5157e-4  -- margin = 0.00025157011
+[PASS] 4.8 margin = 0.3335% of arc length l  -- 0.333475 %
+[PASS] 4.9 sweep sizes: 5*13+1 = 66 and 5*26+1 = 131
+[PASS] 4.9 window sizes 0.05*L^p: 125.7 at p = 17, 199.2 at p = 18  -- 125.688, 199.21
+[PASS] 4.9 exact integer counts: p=15,16 hold 66 first at 16; 131 first at p = 18  -- counts = {15: 50, 16: 79, 17: 126, 18: 199}
+
+-- PART 5: the CRLF arithmetic --
+[PASS] 5.1 3,100 bytes + 75 lines (LF -> CRLF, one byte per line) = 3,175
+
+==========================================================================
+WORKING PRECISION dps = 240
+==========================================================================
+
+-- PART 0: canaries and negative controls (before anything) --
+[PASS] C0.1 display-as-equality REFUTED at x=1 (relative gap ~2.58e-3)  -- rel gap = 0.00258121
+[PASS] C0.2 the same gap at 2^71 is below 1e-88 (invisible in-regime)  -- rel gap = 7.94376e-89
+[PASS] C0.3 degenerate ratio == 1, spread ratio ~0.4755 (k=20)  -- degen = 1.0000000, spread = 0.47552660
+[PASS] C0.3 degenerate ratio == 1, spread ratio ~0.4755 (k=200)  -- degen = 1.0000000, spread = 0.47552660
+[PASS] C0.4 ratio does NOT drift toward 1 with scale (refutes 44-dec diagnosis)  -- |r(1000)-r(20)| = 2.978e-17
+[PASS] C0.5a maxgap(11) = 0.1729375397... > both arc lengths  -- maxgap(11) = 0.17293753966
+[PASS] C0.5b J=12 (61 integers) genuinely fails two-sided arc, first at N=22  -- 89 failing starts in N <= 4000, first = 22
+[PASS] C0.5c sortedness device breaks at J=14 (14*theta wraps past 1)  -- 13*theta = 0.97743745, 14*theta = 1.0526249
+
+-- PART 1: section 4(d) - the series, his figures, the chain --
+[PASS] 1.1 series denominators (2k+1)*9^k = 27, 405, 5103 exactly  -- [27, 405, 5103]
+[PASS] 1.2 residual after three terms ~ 1/(59049 x^8) at x=10  -- resid/next_term = 1.00091
+[PASS] 1.3 relative error at x=1 is 2.58e-3  -- computed 0.00258121
+[PASS] 1.3 relative error at x=3 is 3.06e-5  -- computed 3.06276e-5
+[PASS] 1.3 relative error at x=17 is 2.96e-8  -- computed 2.95674e-8
+[PASS] 1.3 relative error at x=2^71 is 7.94e-89  -- computed 7.94376e-89
+[PASS] 1.4 leading gap D/delta - 1 at 2^71 = 6.6432e-45 (his recomputation)  -- computed 6.6431927e-45
+[PASS] 1.4 record's 6.643193e-45 also correct at its own precision  -- computed 6.6431927e-45
+[PASS] 1.4 gap / (1/(27x^2)) = 1 + 1/(15x^2) + O(x^-4)  -- second-order coeff*(15x^2) = 1.00000
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=1  -- D-mid = 0.002581, mid-delta = 0.03562
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=7/3  -- D-mid = 3.484e-5, mid-delta = 0.002804
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=3  -- D-mid = 9.860e-6, mid-delta = 0.001319
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=17  -- D-mid = 1.673e-9, mid-delta = 7.251e-6
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=100  -- D-mid = 2.375e-13, mid-delta = 3.562e-8
+[PASS] 1.5 strict chain D > delta*(1+1/(27x^2)) > delta at x=2361183241434822606848  -- D-mid = 3.236e-110, mid-delta = 2.706e-66
+[PASS] 1.6 log2-ratio and (2/ln2)artanh forms identical
+
+-- PART 2: section 4(b) - scale invariance of the sum ratio --
+[PASS] 2.1 -17 cycle: n=7, K=11, elements {17,25,37,55,41,61,91}  -- n=7, K=11
+[PASS] 2.1 -5 cycle: n=2, K=3, elements {5,7}
+[PASS] 2.1 -1 cycle: n=1, K=1
+[PASS] 2.2 (1/7)Sum(17/x_i) = 0.4755266037564546... (16 digits, truncated)  -- exact = 0.4755266037564546732308
+   ratio R(k) = Sum D(x_i*2^k) / (7*D(17*2^k)):
+     k =    20: R = 0.4755266037564546434541   |R - shape| = 2.98e-17
+[PASS] 2.3 R(17*2^20) begins 0.4755266037564546 (16 digits, truncated)  -- R = 0.475526603756454643
+     k =    71: R = 0.4755266037564546732308   |R - shape| = 5.87e-48
+[PASS] 2.3 R(17*2^71) begins 0.4755266037564546 (16 digits, truncated)  -- R = 0.475526603756454673
+     k =   200: R = 0.4755266037564546732308   |R - shape| = 1.27e-125
+[PASS] 2.3 R(17*2^200) begins 0.4755266037564546 (16 digits, truncated)  -- R = 0.475526603756454673
+     k =  1000: R = 0.4755266037564546732308   |R - shape| = 0.0
+[PASS] 2.3 R(17*2^1000) begins 0.4755266037564546 (16 digits, truncated)  -- R = 0.475526603756454673
+[PASS] 2.4 deviation falls ~4x per doubling (O(scale^-2) confirmed)  -- d(k=20)/d(k=21) = 4.0000
+[PASS] 2.5 -17 native ratio 0.4754... within O(1/(27*17^2)) of shape  -- native = 0.4754938591, shape = 0.4755266038
+[PASS] 2.5 -5 native ratio within O(1/(27*25)) of shape 6/7  -- native = 0.8568830442, shape 6/7 = 0.8571428571
+[PASS] 2.5 -5 shape ratio scale-invariant at 6/7 = 0.857142857...  -- R(k=20,71,200) = ['0.857142857143', '0.857142857143', '0.857142857143']
+[PASS] 2.5 on -17: Sum D = 0.188336, n*D(x_min) = 0.396085, factor 2.103  -- 0.188336, 0.396085, 2.103
+[PASS] 2.6 D(X)/delta at 2^71 = 1 + 6.64e-45 (44 zero decimals in the ratio)  -- D/delta - 1 = 6.64319e-45
+[PASS] 2.6 the summed pair does NOT converge: Sum D/(n*delta(x_min)) ~ 0.4755 at 17*2^67  -- summed ratio = 0.4755266038
+
+-- PART 3: sections 4(e)/(f) - flat confirms, small numbers --
+[PASS] 3.1 two-shore reading: residual coefficient = 2/(3 ln2)  -- coeff = 0.96179670 vs 2/(3ln2) = 0.96179669
+[PASS] 3.2 3(3x+1) = 4(3x-1) has the single root x = 7/3
+[PASS] 3.2 (3x*+1)/(3x*-1) = 4/3 exactly
+[PASS] 3.2 log2(4/3) = 2 - log2 3 identically
+[PASS] 3.3 D strictly decreasing on sampled grid (0.4 .. 19.8)
+[PASS] 3.4 D(1) = 1 EXACT ((3+1)/(3-1) = 2 in rationals)  -- D(1) - 1 = 0.0
+[PASS] 3.5 D(3) = log2(5/4) exactly (10/8 = 5/4 in rationals)
+[PASS] 3.5 D(3) = 0.321928 and s = 0.415037 (his printed digits)  -- D(3) = 0.32192809, s = 0.4150375
+[PASS] 3.6 D(2^71)/s = 9.8145e-22  -- computed 9.814456e-22
+
+-- PART 4: section 9 - the rotation reformulation, every claim --
+[PASS] 4.1 theta = 8 - 5*log2(3) rounds to 0.0751874964 (9 sig digits)  -- theta = 0.075187496394219 (truncated digits 0.0751874963...)
+[PASS] 4.1 1/theta = 13.3000838  -- 1/theta = 13.3000837634
+[PASS] 4.2 K(n) = bitlength(3^n) = ceil(nL) for n = 1..2000
+[PASS] 4.3 delta(n+5) - delta(n) is theta or theta-1, nothing else
+[PASS] 4.3 wrap condition is exactly delta(n) >= 1 - theta
+[PASS] 4.3 wrap count over n = 1..2000 is 150 (fraction 0.075 ~ theta)  -- wraps = 150, fraction = 0.075
+[PASS] 4.4 K(n+1) - K(n) in {1,2} for n = 1..2000
+[PASS] 4.4 identity K(n+1)-K(n) = 1 + (ceil((n+1)(L-1)) - ceil(n(L-1)))
+[PASS] 4.4 letter-2 frequency over 2000 steps = 0.585 (his figure)  -- count = 1170, freq = 0.585
+[PASS] 4.4 slope L - 1 = 0.584963 (his digits)  -- L-1 = 0.584962501
+[PASS] 4.4 factor complexity p(m) = m+1 for m = 1..12  -- p(1..12) = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+[PASS] 4.5 for J <= 13 the points {j*theta} have not wrapped (13*theta < 1)  -- 13*theta = 0.97743745
+[PASS] 4.5 maxgap(J) = max(theta, 1 - J*theta) EXACTLY for J = 1..13
+[PASS] 4.5 maxgap(12) = 0.0977500433 (his digits)  -- maxgap(12) = 0.0977500432694
+[PASS] 4.5 maxgap(13) = theta
+[PASS] 4.6 l = 0.0754390665 (exact difference of the two decimals)  -- l = 0.0754390665
+[PASS] 4.6 (1 - l)/theta = 12.2967, rounded up to J = 13  -- criterion = 12.296738
+[PASS] 4.7 maxgap(J) = theta exactly for J = 13..25, with 26-J unsplit theta-gaps at each J
+[PASS] 4.7 first fall at J = 26: maxgap = 14*theta - 1 = 0.0526249495  -- maxgap(26) = 0.0526249495191
+[PASS] 4.7 gap multiset at J = 26: thirteen (14theta-1) + fourteen (1-13theta)  -- (13, 14, 27)
+[PASS] 4.7 13(14theta-1) + 14(1-13theta) = 1 identically (0*theta + 1)
+[PASS] 4.7 points j = 14..26 split the 13 theta-intervals one at a time, each at offset 14theta-1  -- intervals hit = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+[PASS] 4.8 l - theta = 2.5157e-4  -- margin = 0.00025157011
+[PASS] 4.8 margin = 0.3335% of arc length l  -- 0.333475 %
+[PASS] 4.9 sweep sizes: 5*13+1 = 66 and 5*26+1 = 131
+[PASS] 4.9 window sizes 0.05*L^p: 125.7 at p = 17, 199.2 at p = 18  -- 125.688, 199.21
+[PASS] 4.9 exact integer counts: p=15,16 hold 66 first at 16; 131 first at p = 18  -- counts = {15: 50, 16: 79, 17: 126, 18: 199}
+
+-- PART 5: the CRLF arithmetic --
+[PASS] 5.1 3,100 bytes + 75 lines (LF -> CRLF, one byte per line) = 3,175
+
+==========================================================================
+ROUNDING ROBUSTNESS: verdict lists at dps=120 and dps=240 IDENTICAL
+TOTAL CHECKS: 152 (76 distinct x 2 precisions)
+FAILURES: 0
+RESULT: ALL CHECKS PASS AT BOTH PRECISIONS
