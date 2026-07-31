@@ -10,7 +10,9 @@ from memory). Verifier: `experiments/merle_la9_check.py` + committed output —
 repository and nothing from any earlier check of ours; canaries printed
 first, pinned to externally recorded numbers; logs at two working precisions
 with agreement asserted; every decision that can be an exact integer
-comparison is one.
+comparison is one. `experiments/encoding_scan.py` run before the final
+commit: **RESULT: CLEAN** (359 tracked files; 0 invalid, 0 BOM, 0
+double-encoding signatures).
 
 ## 1. The repositories, read-only, and the record
 
