@@ -439,6 +439,13 @@ unconfirmed.
 > open Real
 ```
 
+*(Addendum 2026-07-30, ours: the byte figure two paragraphs up is a working-copy
+measurement, not a blob size. Both blobs are `git cat-file -s` = **3,100 bytes**
+(75 LF-terminated lines, no CR); under this machine's CRLF checkout each copy
+measures 3,100 + 75 = 3,175 bytes on disk, which is the figure printed. "Same size
+each" stands; the honest byte count is 3,100. Flagged by Merle, round 12; mechanism
+verified in fresh clones, `briefs/merle-r12-drift-check-findings.md` §6.1.)*
+
 i.e. the Junction copy has `open Real` **before** `namespace LegendreApprox`;
 the T1-chain copy has it **inside** the namespace. Nothing else differs — not
 one character of any statement, hypothesis, binder, docstring or tactic. The
@@ -771,6 +778,13 @@ an in-window `n` is a priori a *multiple* of a convergent denominator, cycles.md
 months. Recorded as prior art of his own, for citation in a joint note; nothing
 in our record is displaced by it, and our record already credits the
 convergent-grid framing to the L-A8 entry, which is his.
+
+*(Addendum 2026-07-30, ours: "giving the CF of `log₂3` to 10,000 terms" overstates
+the file — §10.2 prints **fifteen** partial quotients, `[1; 1, 1, 2, 2, 3, 1, 5, 2,
+23, 2, 2, 1, 1, 55, ...]`, and cites Jackson–Matthews 2002 for the 10,000-term
+computation. Verified at the pinned `1d77168`. Flagged by Merle, round 12; the §10.5
+point this section makes is unaffected.
+`briefs/merle-r12-drift-check-findings.md` §6.2.)*
 
 ### 5.3 Anything that would change a claim of ours if true
 
