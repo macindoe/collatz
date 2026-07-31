@@ -1,0 +1,122 @@
+==============================================================================
+PART 0 -- CANARIES (written against externally recorded numbers)
+==============================================================================
+  [PASS] stable CF prefix of log2 3 covers >= 2100 terms (two precisions)  (3319 stable terms)
+  [PASS] first 28 partial quotients match the committed record (merle_r11_hygiene_check.py)
+  [PASS] q13 = 190537 (external pin: cycles.md / la8 record)
+  [PASS] q21 = 6586818670, q22 = 65470613321, q23 = 137528045312 (external pin: la8 record / Lean file)
+  [PASS] q21 + q22 = 72057431991, Hercher's Table-1 all-m semiconvergent (external pin: la8 Hercher adjudication)
+  [PASS] Gauss-Kuzmin masses: sum_{k=1..8} P(k) + P(>=9) = 1 exactly
+  [PASS] his written-ahead canaries: k_max(c=6) = 1322, k_max(c=5.125) = 3693  (1322, 3693)
+
+==============================================================================
+PART 1 -- the entry's figures under HIS operational definitions
+==============================================================================
+  chain (his REQ-001):   m <= (k^(c+1) + k)/3   (m = cycle minimum,
+  k = odd-element count); closing the window = chain excludes k = K_H
+  c* (X0 = 2^71)        = 0.961722
+  c* (X0 = 2075*2^60)   = 0.962232
+  [PASS] c* = 0.9617 at X0 = 2^71 (entry's headline figure)  (0.961722)
+  [PASS] c* = 0.9622 at X0 = 2075*2^60 (entry's parenthetical)  (0.962232)
+  k_max(c=2) = 19205118
+  [PASS] k_max(c=2) = 1.9205e7 (entry)  (19205118)
+  [PASS] missing factor on k at c=2 is 7159.5 (entry)  (7159.55)
+  X0 required to close at c=2: 2^109.4170
+  [PASS] X0 required at c=2 is 2^109.4 (entry)  (2^109.4170)
+  [PASS] missing computation factor is 2^38.4 (entry)  (2^38.4170)
+  [PASS] k_max(c=5.125) = 3693, short by ~37 million (entry)  (factor 3.723e+07)
+
+==============================================================================
+PART 2 -- the clean-room derivation, and the convention adjudication
+==============================================================================
+  Sharp chain, derived from scratch (findings section 3 writes it out):
+    product identity     prod(3x_i + 1) = 2^K prod x_i
+    =>  2^K/3^k = prod(1 + 1/(3x_i)) <= exp(k/(3m)),   m = x_min
+    =>  eps*ln2 <= k/(3m)  with  eps = K - k*log2(3) = ||k L||  (positive cycle)
+    =>  m <= k / (3*ln2*eps).
+  Diophantine input, MEASURE convention  |L - p/q| > kappa/q^mu:
+    eps > kappa/k^(mu-1)   =>   m < k^mu / (3*kappa*ln2).
+  HIS chain (k^(c+1)+k)/3 equals this at mu = c+1, kappa = 1/ln2: his 'c' is
+  the LINEAR-FORM exponent (K*ln2 - k*ln3 > k^-c), one below the measure.
+  [PASS] his chain at c=2 = sharp chain at mu=3.0, kappa=1/ln2 (within the +k term)  (sharp 1.92051e+07 vs his 19205118)
+  [PASS] his chain at c=5.125 = sharp chain at mu=6.125, kappa=1/ln2 (within the +k term)  (sharp 3693.07 vs his 3693)
+
+  required MEASURE exponent mu* to close the current window (X0 = 2^71, K_H = 1.375e11):
+    his own constant convention (kappa = 1/ln2 = 1.4427)           mu* = 1.9617
+    kappa = 1 (the entry's implicit normalisation)                 mu* = 1.9474
+    kappa = 1/sqrt(5) (Hurwitz: best constant ANY irrational admits) mu* = 1.9161
+  [PASS] required measure exponent mu* < 2 in every constant convention (the route IS shut -- Dirichlet floor mu >= 2)
+  [PASS] his c* + 1 equals mu* at his constant convention (0.9617 -> 1.9617)  (1.9617 vs 1.9617)
+  Dirichlet margin in the measure convention: 2 - mu* = 0.0383 (his kappa) ... 0.0839 (Hurwitz kappa)
+  [PASS] the margin to the Dirichlet floor is ~0.04-0.09 in the exponent, NOT the ~1.04 the 0.9617-vs-2 pairing suggests
+    mu = 2, kappa = 1                   : k_max = 7.007e+10, missing factor 1.962 on k; X0 needed = 2^72.95 (missing 2^1.95)
+    mu = 2, kappa = 1/sqrt(5), Hurwitz  : k_max = 4.686e+10, missing factor 2.934 on k; X0 needed = 2^74.11 (missing 2^3.11)
+  [PASS] at the TRUE dream (measure mu = 2) the deficit is a factor ~2-3 on k and ~2^2-2^3.2 of computation -- not 7159.5 / 2^38.4
+
+==============================================================================
+PART 3 -- the scissors race: replication, then the second regime
+==============================================================================
+  raw Crandall k_min(2^71) = 3.489e+10; Hercher/k_min = 3.940
+  [PASS] raw Crandall at 2^71 = 3.49e10 (entry sanity figure)  (3.4895e+10)
+  [PASS] factor below Hercher = 3.9 (entry)  (3.9404)
+  window ratio k_min/k_max(c=2): 1817 at 2^71, 9.104e+19 at 2^400
+  [PASS] ratio 1817 at 2^71 (entry)  (1816.94)
+  [PASS] ratio 9e19 at 2^400 (entry)  (9.104e+19)
+  alpha on HIS grid (5 local slopes): 0.489, 0.482, 0.511, 0.508, 0.505
+  [PASS] alpha on his grid spans 0.482..0.511 (entry: measured range)  ([0.4819, 0.5109])
+  [PASS] his own measured band STRADDLES 1/2 (some local slopes < 0.5)
+  extended regime [2^400, 2^2000], step 50 bits: local alpha in [0.449, 0.553]
+  full chord alpha over [2^71, 2^2000] = 0.5001
+  [PASS] extended regime: every 50-bit local slope stays above 1/3  (min 0.4488)
+  [PASS] extended regime: local slopes below 1/2 occur there too (alpha > 1/2 is NOT established by measurement)
+  [PASS] full chord alpha over [2^71, 2^2000] is ~0.5  (0.5001)
+  [PASS] 1-bit log-k_min table agrees with the exact Fraction evaluator at e = 71, 400, 2000
+  sliding-window chord slopes of log2 k_min, every 1-bit start in [2^71, 2^2000]:
+    width    1 bits: min 0.0000, max 1.0000, share below 1/3: 826/1929
+    width   30 bits: min 0.3229, max 0.6816, share below 1/3: 3/1900
+    width  100 bits: min 0.4434, max 0.5474, share below 1/3: 0/1830
+    width  200 bits: min 0.4681, max 0.5284, share below 1/3: 0/1730
+    width  400 bits: min 0.4867, max 0.5129, share below 1/3: 0/1530
+  [PASS] at 1-bit resolution the local slope hits both ~0 and ~1 -- 'alpha' is a property of the sampling grid, not of the object
+  [PASS] alpha > 1/3 FAILS on 30-bit windows (deserts around the large partial quotients)  (min 0.3229)
+  [PASS] alpha > 1/3 holds at every 200-bit window over [2^71, 2^2000] -- the claim is width-dependent, and safe at the widths the entry uses  (min 0.4681)
+  [PASS] alpha > 1/2 fails even at 400-bit windows -- the measurement cannot support 'widens forever at the Dirichlet floor'  (min 0.4867)
+  control (phi): k_min/k_max at mu=2, kappa=1/sqrt5 over 2^100..2^400: min 1.081, max 1.347
+  [PASS] control (phi): for a badly approximable number at the exact Dirichlet-Hurwitz floor the window ratio sits in a fixed narrow band (a photo finish decided by constants) while the entry's c=2 race grows by 17 orders over the same span -- 'widens forever' is a property of mu > 2, not of the route
+  control (Liouville-flavoured): min rung slope = 0.0000
+  [PASS] control (Liouville-flavoured): the instrument DOES report alpha < 1/3 when the quotients explode -- log2 3's alpha > 1/3 is informative, not built into the formula
+
+==============================================================================
+PART 4 -- REQ-067: the volunteered defect, verified independently
+==============================================================================
+  dps=400 float-loop expansion diverges from the true one at index 385 (0-based)
+  [PASS] divergence index = 385 (his claim), i.e. 1615 of 2000 terms are noise  (index 385, noise 1615)
+  P3 eight-head-bin statistic: correct sequence 0.00078, dps=400 sequence 0.00103
+  [PASS] corrected figure 0.00078 on the true sequence  (0.000775)
+  [PASS] the withdrawn 0.00103 reproduces on the dps=400 sequence  (0.001034)
+  six-number table (rows: bin dev, chi2/N at B=10, max chi2/dof B=3..40):
+    correct sequence : 0.008425  0.001214  0.5666
+    dps=400 sequence : 0.006075  0.001249  1.0504
+  [PASS] largest bin deviation 0.008425 on the correct sequence (his row 1)  (0.008425)
+  [PASS] chi2/N = 0.001214 at B=10 on the correct sequence (his row 2)  (0.001214)
+  [PASS] max chi2/dof over ALL B in 3..40 = 0.5666 on the correct sequence (his row 3 -- the exhaustive form of our printed < 0.567: IT HOLDS)  (0.56657)
+  [PASS] wrong-sequence triple 0.004496 / 0.001249 / 1.0504 (his table)  (0.004496 / 0.001249 / 1.05041)
+  [PASS] at dof = B the two maxima become 0.5524 / 1.0204 (his sensitivity note)  (0.55241 / 1.02040)
+  [PASS] at dof = B-2 the correct sequence itself reaches 1.0793 (his note)  (1.07934)
+
+==============================================================================
+PART 5 -- the 052bis load-bearing rows, reimplemented
+==============================================================================
+  first ten eps-small n: [14936, 15601, 31202, 46803, 47468, 63069, 78670, 79335, 94271, 94936]
+  smallest-denominator column: [306, 15601, 15601, 306, 15601, 15601, 306, 79335, 306, 15601], median 15601
+  [PASS] the four ledger rows: 14936 = [(665,22),(306,1)], 15601, 31202, 46803
+  [PASS] eps-small smallest-denominator column matches the committed one, median 15601
+  [PASS] every eps-small n below 200000 has smallest denominator >= 306
+  census over ALL n < 200000: 897 have smallest denominator >= 306 (rate 0.4485%); P(0 in 200 draws) = 0.407
+  independent 200-draw control (our seed): median 2, max 306, reaching 306: 1/200
+  [PASS] the qualitative verdict is robust: typical-n median <= 5 against the eps-small 15601, and the census rate of >= 306 among all n < 200000 is ~1-2%  (median 2, rate 0.4485%)
+  [PASS] his printed '0/200 reaching 306' is a seed-typical but not seed-robust summary: P(0 in 200) sits well below certainty at the census rate  (P = 0.407, our seed drew 1/200)
+
+==============================================================================
+TOTAL: 50 checks, 0 failures
+==============================================================================
