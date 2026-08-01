@@ -143,7 +143,7 @@ proved exactly as Lemma~\ref{lem:squaring} after writing $3^d\w - c = 9^{-N(c)}\
 \end{proof}
 
 \begin{remark}[verification notes]\label{rem:verify1}
-Each law above was checked by independently written code: the valuation law on $8{,}000$ random states across both lifting components; the entry-depth law exhaustively on all $62{,}937$ valid states with $\w < 3000$, $d < 64$; the absorption law on $60{,}000$ random states including $341$ boundary cases $d = h(s)$. Zero discrepancies. The entry-depth verification is recorded at \texttt{stage3.md} \S11.8.6.3 of the project record, and the independent re-verification of 2026-07-06 in that page's status header.
+Each law above was checked by independently written code, with zero discrepancies. The valuation law on $8{,}000$ random states across both lifting components, and the entry-depth law exhaustively on all $62{,}937$ valid states with $\w < 3000$, $d < 64$; both are recorded at \texttt{stage3.md} \S11.8.6.3 of the project record and in that page's status header. The absorption law on $327{,}980$ states --- all $266{,}680$ valid states with $\w < 20{,}000$, $d \le 40$, plus $60{,}000$ random states with $\w < 2^{64}$, $d \le 200$, plus $1{,}300$ states built to order --- checked against both this Lemma and its form in the record, $983{,}954$ comparisons in all. Because $a_+$ is a $3$-adic function of $\w$ on the boundary branch $d = h(s)$, that branch is constructed rather than sampled: $3{,}196$ of the states lie on it, $880$ of them built explicitly across $d \in \{1,2,3\}$, and the shallow branch $d < h(s)$ likewise ($533$ states, $420$ built). Code: \texttt{experiments/absorption\_law.py}.
 \end{remark}
 
 \begin{theorem}[low-order anchor-increment law]\label{thm:deltaM}
