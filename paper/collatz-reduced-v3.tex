@@ -181,7 +181,7 @@ Fix a hypothetical $p$-block cycle of $F$ with entry depths $m_t \ge 1$, exit va
 \begin{proposition}[elimination identity]\label{prop:elim}
 $q > 0$, and for every rotation $r$,
 \[ \w_r\, 3^{a_{r-1}}\, q \;=\; R_r \;:=\; \sum_{t=0}^{p-1} 3^{M_t}\, 2^{S_t}\,(2^{s_t}-1), \]
-where, in rotation order starting at $r$, $M_t = \sum_{j>t} m_j$ and $S_t = \sum_{j<t}\sigma_j$, with $\sigma_j = s_j + m_{j+1}$, indices cyclic (the step's $\sigma = \vt{C}$, $m_+ = \sigma - s$, of Definition~\ref{def:reduced}; the shift is essential, $m_{j+1}$ and not $m_j$). Hence $q \mid R_r$ and $q \le \min_r R_r$. For the trivial cycle, $R = 4^p - 3^p = q$ identically.
+where, in rotation order starting at $r$, $M_t = \sum_{j>t} m_j$ and $S_t = \sum_{j<t}\sigma_j$, with $\sigma_j = s_j + m_{j+1}$, indices cyclic (the step's $\sigma = \vt{C}$, $m_+ = \sigma - s$, of Definition~\ref{def:reduced}; the shift is essential, $m_{j+1}$ and not $m_j$; and $M_t$, a partial sum of entry depths, is unrelated to the anchor $M(\w)$ of Section~\ref{sec:anchor} --- this is the project record's own notation, \texttt{cycles.md} \S12.6.1, kept so that paper and record read together). Hence $q \mid R_r$ and $q \le \min_r R_r$. For the trivial cycle, $R = 4^p - 3^p = q$ identically.
 \end{proposition}
 
 \begin{proof}
@@ -269,9 +269,9 @@ This work was developed through extensive AI-assisted research over three years 
 \bibitem{sdw} J.~Simons, B.~de~Weger, \emph{Theoretical and computational bounds for $m$-cycles of the $3n+1$ problem}, Acta Arith.\ 117 (2005), 51--70.
 \bibitem{hercher} C.~Hercher, \emph{There are no Collatz $m$-cycles with $m \le 91$}, J.\ Integer Seq.\ 26 (2023); arXiv:2201.00406.
 \bibitem{lagarias} J.~C.~Lagarias, \emph{The 3x+1 problem: an annotated bibliography}, I--II, arXiv math/0309224, math/0608208.
-\bibitem{yu} K.~Yu, \emph{Linear forms in $p$-adic logarithms} I--III, Compositio Math.\ (1989--2007).
+\bibitem{yu} K.~Yu, \emph{Linear forms in $p$-adic logarithms}, Acta Arith.\ 53 (1989), 107--186; \emph{Linear forms in $p$-adic logarithms II}, Compositio Math.\ 74 (1990), 15--113; \emph{Linear forms in $p$-adic logarithms III}, Compositio Math.\ 91 (1994), 241--276.
 \bibitem{bl} Y.~Bugeaud, M.~Laurent, \emph{Minoration effective de la distance $p$-adique entre puissances de nombres alg\'ebriques}, J.\ Number Theory 61 (1996), 311--342.
-\bibitem{rhin} G.~Rhin, \emph{Approximants de Pad\'e et mesures effectives d'irrationalit\'e}, S\'emin.\ Th\'eor.\ Nombres Paris (1987); see also Q.~Wu, Math.\ Comp.\ 72 (2003), 901--911.
+\bibitem{rhin} G.~Rhin, \emph{Approximants de Pad\'e et mesures effectives d'irrationalit\'e}, in: S\'eminaire de Th\'eorie des Nombres, Paris 1985--86, Progr.\ Math.\ 71, Birkh\"auser, Boston, 1987, pp.\ 155--164 (the Proposition used here is on p.~160); see also Q.~Wu, \emph{On the linear independence measure of logarithms of rational numbers}, Math.\ Comp.\ 72 (2003), no.\ 242, 901--911.
 \bibitem{barina} D.~Barina, \emph{Improved verification limit for the convergence of the Collatz conjecture}, J.\ Supercomputing (2025).
 \bibitem{merle} E.~Merle, \emph{On the non-existence of non-trivial Collatz cycles: a conditional formal proof in Lean 4, with documented structural obstructions}, preprint, Zenodo DOI 10.5281/zenodo.19790406 (2026).
 \bibitem{llmcollatz} \emph{Exploring Collatz Dynamics with Human--LLM Collaboration}, arXiv:2603.11066 (2026).
