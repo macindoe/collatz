@@ -393,6 +393,36 @@ The exact line I would add, immediately after the "Interpretation" paragraph clo
 
 **Not made — the author's call, and wiki pages are off-limits this round.**
 
+### R2-5 — the `stage3.md` line, placed. **Done.** (Author-approved after R2-4.)
+
+The one wiki edit authorised on this branch. `stage3.md` and nothing else in it.
+
+**Where:** immediately after the "Interpretation" paragraph closing §11.8.6.2 ("…remains the next unresolved target."), before the `#### 11.8.6.3.` heading — exactly the position specified in R2-4. **Pure insertion: `git diff --stat stage3.md` reports `2 insertions(+)`, 0 deletions.** Front matter, the Current-state paragraph, and §11.8.6.3's existing "Numerical verification" paragraph are untouched.
+
+**The placeholder is gone.** The drafted line carried "seed `31006`-style fixed" with a parenthetical telling the placer to substitute; the placed line reads `seed 40101` and carries no residue of that wording.
+
+**Every figure re-checked against `experiments/absorption_law_output.txt` at placement**, one more time, as instructed — all eleven agree with the committed output:
+
+| in the line | in the output |
+|---|---|
+| `327,980` states | `states verified : 327980` |
+| `266,680` exhaustive, `ω < 20,000`, `1 <= d <= 40` | Part 2 header + `266680 valid states` |
+| `60,000` random, `ω < 2^64`, `d <= 200`, seed `40101` | Part 3 header + `60000 random states` |
+| `1,300` constructed | Part 4 `880` + Part 5 `420` |
+| `983,954` checks, `0` failures | `TOTAL: 983954 checks, 0 failures.` |
+| branch (iii) `d = h(s)`: `3,196`, `880` built | `branch (iii) h(s) = d : 3196 (the boundary; 880 of them constructed)` |
+| built at `d ∈ {1,2,3}` | Part 4's three `[PASS] 4a` rows |
+| branch (ii) `d < h(s)`: `533`, `420` built | `branch (ii) h(s) > d : 533`; `[PASS] 5a … 420` |
+| `h(s)` exhaustive to `s <= 600` | Part 1 header + `[PASS] 1a … all 600 values` |
+| control: `140` of `280` | `[PASS] 7a … WRONG on 140 of 280 constructed` |
+| control: `99` of `99` even `s` | `[PASS] 7b … fails at 99 of 99 even s` |
+
+**Reproducibility claimed no more strongly than it holds.** The placed line says "re-running it reproduces the committed output" — not "byte-identical". My own re-run was byte-identical (`diff -q`, LF both sides), but a re-run redirected through a shell that emits CRLF differs in line endings while reproducing the content, which is what the coordinator observed. The weaker phrasing is true in both cases.
+
+**Register.** One current line, in the form `aeh.md` and `cycles.md` use (`**Verified** — script, conditions, date. …`), overwritable on re-verification rather than appended to. No change log, no dated narrative, no "was X, now Y". Every symbol it uses — `ω`, `d`, `s`, `h(s)`, `a_+`, `β` — is defined in §11.8.6.2 itself.
+
+**One thing I did not do, deliberately:** the front matter's `updated: 2026-07-23` is now stale by this edit. `AGENTS.md`'s status-change workflow would ordinarily bump it, but the instruction was explicit that the front matter is not to be touched, and this is a verification record rather than a status change — the section's `status:` is unaffected. **Flagged, not made.** If the author wants it bumped to `2026-08-01` it is a one-field edit.
+
 ### Round-2 gates
 
 - **Build:** rebuilt from clean. `pdflatex -interaction=nonstopmode -halt-on-error` exits **0 on two consecutive runs**; **0 overfull boxes**, 0 undefined or multiply-defined references. Title/author metadata still populated, DOI target and both `cycles.md` permalinks unchanged, 12 pages (unchanged from round 1). PDF rebuilt in the sandbox and copied back as the artifact only.
