@@ -1,7 +1,7 @@
 ---
 status: OPEN — the program's terminal open object, consolidated; states the object and its observed mechanisms, no proof effort on this page
 scope: new section 16 (post-monolith); cross-cutting — owned by neither stage4.md nor reverse.md §14
-updated: 2026-07-23
+updated: 2026-08-02
 source: consolidation of 11.8.5.6 (forward bridge), 11.8.7.7 (digit budget), 14.13 (reverse precision loss); the author's framing — "the bridge between the M(ω)'s is itself the question"
 ---
 
@@ -66,7 +66,7 @@ The core-extraction deficit (16.2): the forward digit budget (stage4.md 11.8.7.7
 
 ### 16.4.3. The forward escape — what closing the Bridge buys typical orbits
 
-- **The exact missing hypothesis.** Anchor equidistribution in its precise bulk form `π_k` (aeh.md 13.2); the conditional theorems fix what it buys — the frequency ledger, the `1/3` `3`-gain rate, the classical drift, all almost-everywhere — and what it cannot — individual staircase tails (aeh.md 13.3, esp. 13.3.3); its symbolic name is the genericity form (aeh.md 13.6): bulk Bernoulli-genericity of the integers' door letter words.
+- **The exact missing hypothesis.** Anchor equidistribution in its precise ensemble form against the product law `π_k` (aeh.md 13.2.1); the conditional theorems fix what it buys — the frequency ledger and the `1/3` `3`-gain rate, for all but a density-zero set of starting values over a prescribed finite horizon, with no drift or contraction consequence — and what it cannot — individual staircase tails (aeh.md 13.3, esp. 13.3.3); its symbolic name is the genericity form (aeh.md 13.6): bulk Bernoulli-genericity of the integers' door letter words.
 - **The empirical texture.** Fair-coin anchor digits, density `0.497` (stage1.md 11.8.4.2); the frequency and size ledgers, empirically sharp to three decimals (stage1.md 11.8.4.4).
 - **The regime split.** The open object lives in the *bulk* (while `x` is large), where uniformity stands unqualified; the wild statistics are confined to the fixed *bottom* drainage basin of small integers (aeh.md 13.1).
 - **The single-sequence endpoints.** The anchor's own bit string was searched for internal structure — statistical batteries, an automaticity/algebraicity screen, operation lenses, PractRand — and came back clean at every endpoint (anchor-digit-search.md §17.7): calibration for this escape, not progress on it.
