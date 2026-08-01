@@ -4,17 +4,17 @@
 **Base SHA actually cut from:** `e1c7d5f6d7ba0c0bb7d34df3fd44205ba8c4e7cb` — verified with `git rev-parse HEAD` before starting; the working tree was clean apart from the untracked brief.
 **Pushed:** nothing. **Merged:** nothing. The branch is handed back checked out in the working directory.
 
-**Tracked files edited:** `paper/collatz-reduced-v3.tex` and the rebuilt `paper/collatz-reduced-v3.pdf`, plus this file. No wiki page, no script, no `sources/`, no `viz/`, no `README.md`/`index.md`/`publication.md`/`TOUR.md`/`HANDOFF.md` was touched.
+**Tracked files edited:** `paper/collatz-reduced-v3.tex` and the rebuilt `paper/collatz-reduced-v3.pdf`, plus this file; and in round 2, the new `experiments/absorption_law.py` with its committed output (added under the author's ruling — see the round-2 section). No wiki page, no `sources/`, no `viz/`, no `README.md`/`index.md`/`publication.md`/`TOUR.md`/`HANDOFF.md` was touched.
 
-**Diff:** 36 insertions, 24 deletions in the `.tex`; the PDF rebuilt.
+**Diff, both rounds:** 36 insertions, 24 deletions in the `.tex` (round 2's two edits fell on lines round 1 had already touched, so the counts are unchanged); the PDF rebuilt; `experiments/absorption_law.py` and its output added in round 2.
 
-**Encoding scan:** `python experiments/encoding_scan.py` → `369 tracked files … RESULT: CLEAN` (0 non-UTF-8, 0 BOMs, 0 double-encoding signatures). Every edit was made with the file-editing tools; no `Get-Content`/`Set-Content` was used on a tracked file.
+**Encoding scan:** `python experiments/encoding_scan.py` → round 1 `369 tracked files … RESULT: CLEAN`; round 2, after the new script, `371 tracked files … RESULT: CLEAN` (0 non-UTF-8, 0 BOMs, 0 double-encoding signatures). Every edit was made with the file-editing tools; no `Get-Content`/`Set-Content` was used on a tracked file.
 
 ---
 
 ## The independent numerical re-verification
 
-Fresh code, importing nothing from `experiments/`, exact integer (and `Fraction`) arithmetic at every decision. Run once, output quoted below verbatim in the relevant items. The script lives in this session's scratchpad and is deliberately **not** added to `experiments/` (out of scope).
+Fresh code, importing nothing from `experiments/`, exact integer (and `Fraction`) arithmetic at every decision. Run once, output quoted below verbatim in the relevant items. This script — the one that re-verified items 2, 3 and 4 — lives in the session scratchpad and is deliberately **not** added to `experiments/`: round 1's brief put `experiments/` out of scope. (Round 2 lifted that for one purpose only; the absorption-law check `experiments/absorption_law.py` is a *separate* and independently written file, and is committed. See R2-1.)
 
 ---
 
@@ -305,3 +305,102 @@ Line 30 is `\maketitle`; the cause is line 26's `\;` and `\cdot` in the `\date` 
 2. **`thm:onestep`'s undecided rate.** The paper says "under the product law of Section 5 the undecided rate is `≈ 2^{-(k+1)}`". `stage4.md`'s Remark (undecided rate) derives that figure "under the **uniformity heuristic**", `P(lifting)·2^{-(k-1)} ≈ (1/4)·2^{-(k-1)}` — i.e. from a *uniform* depth/class assumption, which item 1 has just established is **not** `π_k`'s depth marginal. The measured rates (`0.0275` at `k=4`, `0.0019` at `k=8`) are unaffected, and the figure is stated as an approximation, so nothing is false; but the attribution "under the product law of Section 5" is now the wrong provenance for a number derived under uniformity. Small, real, and a wiki-side question as much as a paper-side one.
 3. **`hyp:aeh` and `aeh.md` `13.2.1` share a residual imprecision.** With the cut fixed, a convergent orbit supplies only finitely many qualifying visits, so the inner "orbit length → ∞" limit is degenerate on exactly the orbits the conjecture says are all of them. The paper now says this out loud (item 6); the wiki does not, and `13.6.4` has the same shape. Not a defect in either statement's intent — `13.6.6` is explicit that the cut is what makes the question nondegenerate — but the two pages would read better if `13.2.1`/`13.6.4` carried the same sentence the paper now carries.
 4. **`rem:verify1`'s absorption figure has no provenance at all** (item 10 obstruction). This is the one item on this list I would raise first.
+
+---
+
+## Round 2 — the author's rulings
+
+Same branch, same discipline: per-item commits, content separate from structure, nothing pushed, nothing merged.
+
+### R2-1 — Appendix A made true by re-running the check. **Done.**
+
+**New file: `experiments/absorption_law.py`**, with its committed output `experiments/absorption_law_output.txt`, following the neighbours' convention (`anchor_increment.py`, `one_step_propagation.py`, `margin_asymptote_output.txt`, …): a module docstring naming the page and result it supports, `[PASS]`/`[FAIL]` lines, a `TOTAL: N checks, M failures.` footer, and a nonzero exit on any failure.
+
+**What it supports**, stated at the top of the file: `stage3.md` §11.8.6.2 (Proposition 11.8.6.2.1, the exact 3-adic law for `C`) together with its sub-law `h(s) = v_3(2^s − 1)`, and the paper's `lem:absorption`. Every state is checked against **both** forms — the record's three-case comparison of `d` against `h(s)`, and the paper's case split on the parity of `s` — plus the paper's "gains a factor of 3 exactly when `s` is even" trigger.
+
+**Independence is structural, not merely asserted.** The truth value is `v_3(C)` obtained by trial division of `C` and by nothing else; the predicted value is evaluated from `(ω, d, s)` through the law's branches and never sees `C`. Neither path can compute the other. The file imports nothing from any other script in the repository. All arithmetic is exact integer; no floating point appears anywhere. Deterministic (seed `40101`); the run was repeated and the output is **byte-identical**.
+
+**The boundary branch is constructed, not waited for.** `d = h(s)` forces `s` even, and `h(s) = 1 + v_3(s)`, so `d = 1` needs `3 ∤ s`, `d = 2` needs `v_3(s) = 1`, `d = 3` needs `v_3(s) = 2`. Solving `v_2(3^d ω − 1) = s` exactly pins `ω` to one residue class mod `2^{s+1}`, which the script walks. Every such `(d, s)` with `s ≤ 44` is built: `d = 1` at fifteen values of `s`, `d = 2` at five, `d = 3` at two. Branch (ii), `d < h(s)`, is rare under sampling for the same reason and is constructed the same way.
+
+**The run, verbatim from `experiments/absorption_law_output.txt`:**
+
+```text
+Part 1 (sub-law h(s), exhaustive s = 1..600)      0 failures
+Part 2 (exhaustive, w < 20000, 1 <= d <= 40)      266680 states, 0 discrepancies
+         branch counts: (i) h<d = 264354,  (ii) h>d = 106,  (iii) h=d = 2220
+Part 3 (random, w < 2^64, d <= 200, seed 40101)    60000 states, 0 discrepancies
+         branch counts: (i) h<d = 59897,   (ii) h>d = 7,    (iii) h=d = 96
+Part 4 (BOUNDARY d = h(s), constructed)              880 states, ALL in branch (iii)
+         d = 1 at s in [2,4,8,10,14,16,20,22,26,28,32,34,38,40,44]
+         d = 2 at s in [6,12,24,30,42]
+         d = 3 at s in [18,36]
+         v_3(w + beta) histogram: {0: 440, 1: 308, 2: 88, 3: 44}
+Part 5 (branch (ii) d < h(s), constructed)           420 states, all in branch (ii)
+Part 6 (canaries)                                  (263,1) a_+ = 2 ; (2375,1) a_+ = 4
+Part 7 (negative controls)                         both bite
+
+Summary
+  states verified          : 327980
+    branch (i)   h(s) < d  : 324251
+    branch (ii)  h(s) > d  : 533     (420 constructed)
+    branch (iii) h(s) = d  : 3196    (880 constructed)
+
+TOTAL: 983954 checks, 0 failures.
+```
+
+**Boundary cases the run actually hit: 3,196**, of which **880 were constructed**, spread deliberately over `d ∈ {1, 2, 3}`; the remaining 2,316 arose in the two sweeps (2,220 exhaustive, 96 random).
+
+**The negative controls matter more than they look.** Dropping the boundary branch — i.e. using `min(d, h(s))` everywhere — is wrong on **140 of 280** constructed boundary states, not all of them. That is the honest shape of the thing: on the boundary branch `a_+ = d + v_3(ω + β)`, and `v_3(ω + β) = 0` about half the time, in which case the truncated law coincides with the truth by accident. **So a sampler that merely lands on boundary cases has roughly even odds of missing the defect on each one** — which is precisely why the branch had to be constructed and counted rather than sampled and hoped for. It is also, exactly, why the `(263,1)`/`(2375,1)` pair could sit undetected behind Theorem 3.8.
+
+**`rem:verify1` rewritten** (`paper/collatz-reduced-v3.tex` line 146) around the numbers this run produced, with the script named. The unsupported "`60,000` random states including `341` boundary cases `d = h(s)`" is **deleted**, not carried forward and not reproduced. The valuation-law (`8,000`) and entry-depth (`62,937`) figures are unchanged — those two do have a record — and the `stage3.md` §11.8.6.3 pointer is kept.
+
+**One observation about the deleted figures, offered so the record is fair to them:** they were unreproducible, not demonstrably false. `341` boundary hits in `60,000` samples is `0.57%`, and my exhaustive small-depth sweep gives `2220/266680 = 0.83%` — the same order. My *random* sweep hit only `96` in `60,000`, but it samples `d ≤ 200`, which suppresses `d = 1` and hence the commonest boundary case. So the old figure is consistent with a small-`d` sampler. It still had to go: nothing in the repository could produce it, and Appendix A promises a runnable script.
+
+**Appendix A was not weakened.** Every computational claim in the paper now cites either a runnable script or a record section that carries the check.
+
+### R2-2 — `thm:smallp`'s undefined constant. **Done. `c = 6`.**
+
+Verified against the page myself, three independent ways, all consistent:
+
+- `cycles.md` **Lemma 12.5.2** states the trim as `0 < K·log 2 − n·log 3 < 2^(6 - n/5)` (line 101);
+- **Theorem 12.5.3** quotes it back in the same form (line 106);
+- the page's own arithmetic checks it: "the lemma's requirement is `< 2^(6 - 20001/5) = 2^(-3994.2)`" (line 114), and `6 − 20001/5 = −3994.2` exactly.
+
+**Changed** (line 204): `2^{c-n/5}` → `2^{6-n/5}`. Kept to the constant. The period-3 companion `2^{3-0.115n}` already matches `cycles.md` Lemma 12.7.4 and is untouched.
+
+**Small correction to the instruction, for the record:** the ruling says "`cycles.md` 12.5.3 gives `2^(6 - n/5)`". That is true as a *quotation site* — 12.5.3 does print it — but the lemma that *states* the trim is **12.5.2**, which is what the paper now cites for it (item 9, last round). No consequence; noting it only so the two citations are not later thought to disagree.
+
+### R2-3 — §1 and Contributions (iv): left exactly as they are. **Recorded as known-open.**
+
+Per the ruling, **not touched**. For the record, the two sites are:
+
+- **line 55** (§1, prose summary): "A finite window of state digits then decides the next step in a trichotomy that never errs."
+- **line 53** (Contributions, item (iv)): "an error-free finite-window trichotomy for the next step".
+
+Both carry the unqualified reading that the abstract and `thm:onestep` now qualify: the deciding data is the residue window **together with the stratum labels `(s, σ, a_+)`**, and `a_+` is a 3-adic function of `ω` that no residue window determines at any `k` (`aeh.md` (q1); the `(263,1)`/`(2375,1)` pair). **Known-open, author's call, deliberately not made.**
+
+### R2-4 — Does `stage3.md` owe a line? **In my reading, yes — and here it is, unmade.**
+
+`AGENTS.md` is explicit on both halves. *"Before marking anything 'proved': run an independent numerical check (not the one quoted in the text — a fresh implementation), and record what was checked, the range, and the date in the page."* And, in Conventions: *"When a result is verified, record the current verification inline per the proved-claim workflow — what was checked, the range, the date, one line — and overwrite it next time rather than appending a new entry."*
+
+§11.8.6.2 presently carries **no verification line at all** — the section runs from Proposition 11.8.6.2.1 through Corollaries 11.8.6.2.2–11.8.6.2.3 to the "Interpretation" paragraph and stops (the "Numerical verification" paragraph at line 611 belongs to §11.8.6.3, the entry-depth law). This round produced exactly the kind of check that rule asks for, so on my reading the section is owed one line. **I have not added it.**
+
+The exact line I would add, immediately after the "Interpretation" paragraph closing §11.8.6.2 (i.e. at line 505, before the `#### 11.8.6.3.` heading at line 506) — a single current line, to be overwritten on re-verification rather than appended to:
+
+> **Verified** (2026-08-01, `experiments/absorption_law.py`, fresh code importing nothing from any other script here; exact integer arithmetic, no floating point; deterministic, seed `31006`-style fixed, re-run byte-identical): `327,980` valid states — all `266,680` with `ω < 20,000`, `1 <= d <= 40`, plus `60,000` random with `ω < 2^64`, `d <= 200`, plus `1,300` constructed — each checked against this Proposition's three cases, against the paper's `lem:absorption` form, and against the `3`-gain trigger (`a_+ > 0` iff `s` even): `983,954` comparisons, `0` failures. The resonant branch `d = h(s)` is **constructed rather than sampled** — `3,196` states in all, `880` built explicitly at `d ∈ {1,2,3}` by solving `v_2(3^dω − 1) = s` exactly — as is the shallow branch `d < h(s)` (`533` states, `420` built); the sub-law `h(s)` is exhaustive for `s <= 600`. Two negative controls bite: dropping the resonant branch is wrong on `140` of `280` constructed boundary states (it coincides by accident whenever `v_3(ω + β) = 0`), and `h(s)` perturbed to `2 + v_3(s)` fails at all `99` even `s` tested.
+
+(The seed is literally `40101`; substitute it when placing the line. I have written the sentence to the page's register rather than the paper's.)
+
+**Not made — the author's call, and wiki pages are off-limits this round.**
+
+### Round-2 gates
+
+- **Build:** rebuilt from clean. `pdflatex -interaction=nonstopmode -halt-on-error` exits **0 on two consecutive runs**; **0 overfull boxes**, 0 undefined or multiply-defined references. Title/author metadata still populated, DOI target and both `cycles.md` permalinks unchanged, 12 pages (unchanged from round 1). PDF rebuilt in the sandbox and copied back as the artifact only.
+- **Encoding scan:** `python experiments/encoding_scan.py` → `371 tracked files … RESULT: CLEAN` (0 non-UTF-8, 0 BOMs, 0 double-encoding signatures). The new script is ASCII-only; all edits were made with the file-editing tools.
+- **Scope:** files touched this round are `experiments/absorption_law.py` (new), `experiments/absorption_law_output.txt` (new), `paper/collatz-reduced-v3.tex`, `paper/collatz-reduced-v3.pdf`, and this file. No wiki page was edited.
+
+### What I found wrong or worth flagging this round
+
+1. **Nothing in the ruling was wrong on substance.** The one imprecision is the 12.5.2/12.5.3 attribution noted in R2-2.
+2. **The boundary branch coincides with the truncated law about half the time** (140 of 280). This is the sharpest thing I learned this round and it is now on the record in both the script and `stage3.md`'s owed line: incidental sampling of the branch is *not* equivalent to testing it, because the branch only differs from `min(d, h(s))` when `v_3(ω + β) > 0`. Any future re-verification should construct, not sample.
+3. **`stage3.md` §11.8.6.2 has never carried a verification line** (see R2-4). That is a pre-existing gap in the record, not something this round created — but this round is the first time there is a script to point it at.
