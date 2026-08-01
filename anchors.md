@@ -1,7 +1,7 @@
 ---
 status: REFERENCE (pointers only); the single-sequence digit-structure search it formerly carried (§17.7–17.10) is executed and clean at every endpoint — see anchor-digit-search.md
 scope: sections 17.1–17.6 (post-monolith); cross-cutting reference — owned by no single stage/reverse/cycles/aeh page; §17.7–17.10 split to anchor-digit-search.md 2026-07-23
-updated: 2026-07-23
+updated: 2026-08-02
 source: consolidation of stage1-synthesis.md 11.8.3.6/11.8.3.11, stage1.md 11.8.4.2, stage2.md 11.8.5.6, stage4.md 11.8.7, reverse.md 14.2/14.12–14.13, ladder.md §15, cycles.md 12.3/9.8.4, aeh.md §13, bridge.md §16, archive/appendix-a.md A.4.6–A.6; the author's request to centralize anchor exploration in one place (2026-07-12)
 ---
 
@@ -56,7 +56,7 @@ Pointers only, in dependency order:
 ## 17.6. Statistics: AEH (the existing, cross-sectional layer)
 
 - stage1.md 11.8.4.2: first empirical hint — digit density `0.497` across `2,499` families.
-- aeh.md §13: the real depth — bulk-form hypothesis (13.2.1), conditional theorems on what it buys and doesn't (13.3), an 8-round calibration campaign (13.4), one anomaly chased down and dissolved with a routing lemma (13.5), and the named symbolic equivalence (13.6, the genericity form): AEH ⟺ bulk Bernoulli-genericity of the door letter word.
+- aeh.md §13: the real depth — ensemble-form hypothesis (13.2.1), conditional theorems on what it buys and doesn't (13.3), an 8-round calibration campaign (13.4), one anomaly chased down and dissolved with a routing lemma (13.5), and the named symbolic equivalence (13.6, the genericity form): AEH ⟺ bulk Bernoulli-genericity of the door letter word.
 - Every test in aeh.md is **cross-sectional**: it asks "averaged over many orbits/states, does this statistic match the coin-flip prediction?" None of it looks at one anchor's own bit string as a standalone object.
 - Bulk-vs-bottom split (aeh.md 13.1): small numbers are known-structured; the hypothesis only claims to hold in the bulk.
 - External replication (aeh.md 13.4, measured grade): an independent implementation reproduces the class skeleton's exact values and the ledger.

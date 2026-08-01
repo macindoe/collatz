@@ -1,7 +1,7 @@
 ---
 status: ACTIVE — forward/backward duality complete (14.1–14.12; density bound c* = 0.3304, 14.6); door/exit seam relocates the core-extraction deficit onto the forward digit budget (14.14); the itinerary-language arc (§14.15) lives at itinerary.md — Bridge status unchanged throughout
 scope: sections 14.1–14.14 (post-monolith); §14.15 split to itinerary.md 2026-07-23
-updated: 2026-07-23
+updated: 2026-08-02
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
 ---
 
@@ -59,7 +59,7 @@ d = v₃(2^s y + 1) = 1 + v₃(s − M₃(y)).
 | ledger `P(s = j) = 2^(−j)` | ledger `P(d = j) = 2·3^(−j)` |
 | residue classes mod 8 gate the law | residue class mod 3 gates the parity |
 | deterministic forward orbit | infinitely-branching backward tree |
-| AEH: orbit equidistribution (§13) | density of the tree in ℕ (14.4) |
+| AEH: ensemble equidistribution (§13) | density of the tree in ℕ (14.4) |
 
 The conjecture, in this language: the deterministic 2-adic forward flow and the 3-adic backward tree rooted at `(1,1)` describe the same object — every state lies on both.
 
