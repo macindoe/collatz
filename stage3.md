@@ -1,7 +1,7 @@
 ---
 status: closed at the valuation level, per reduced step, all residue classes
 scope: monolith 11.8.6
-updated: 2026-07-23
+updated: 2026-08-01
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
