@@ -503,6 +503,8 @@ m_+ = v_2(C) - s = v_2(x_exit + 1)
 
 remains the next unresolved target.
 
+**Verified** — `experiments/absorption_law.py`, fresh code (imports nothing from any other script here; exact integer arithmetic at every pass/fail decision, no floating point; deterministic, seed `40101`, and re-running it reproduces the committed output `experiments/absorption_law_output.txt`), 2026-08-01. `327,980` valid states — all `266,680` with `ω < 20,000`, `1 <= d <= 40`, plus `60,000` random with `ω < 2^64`, `d <= 200`, plus `1,300` constructed — each checked against this Proposition's three cases, against the published paper's `lem:absorption` form of the same law, and against the `3`-gain trigger (`a_+ > 0` iff `s` even): `983,954` checks, `0` failures. The resonant branch `d = h(s)` is **constructed rather than sampled** — `3,196` states in all, `880` of them built explicitly at `d ∈ {1, 2, 3}` by solving `v_2(3^dω - 1) = s` exactly, which pins `ω` to one class mod `2^(s+1)` — as is the shallow branch `d < h(s)` (`533` states, `420` built); the sub-law `h(s)` is exhaustive for `s <= 600`. Two negative controls bite: dropping the resonant branch is wrong on `140` of `280` constructed boundary states (the two agree by accident whenever `v_3(ω + β) = 0`, so incidental sampling of that branch is not equivalent to testing it), and `h(s)` perturbed to `2 + v_3(s)` fails at all `99` even `s` tested.
+
 #### 11.8.6.3. The target-shift lemma and the entry-depth law
 
 The preceding subsection controls the `3`-adic absorption term `a_+ = v_3(C)` by comparing `d` with `h(s) = v_3(2^s - 1)`. This subsection closes the remaining component of the next-depth formula, the `2`-adic entry-depth term
