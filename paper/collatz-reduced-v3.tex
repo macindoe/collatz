@@ -206,7 +206,9 @@ $p=1$: the fixed-point equation is $\w\,3^a(2^{s+m}-3^m) = 2^s-1$; the sign and 
 \begin{theorem}[uniform trim]\label{thm:uniform}
 Every nontrivial $p$-block cycle satisfies, with $\gamma := K - \log_2 q$,
 \[ \gamma + \log_2 p \;>\; \frac{(\LL - 1)\, n}{(\LL)^{\,p} - 1}. \]
-Consequently, combined with Rhin's effective bound \cite{rhin} in the form $K\log 2 - n\log 3 > \exp\bigl(-13.3\,(0.46057 + \log n)\bigr)$, the candidate set at every period is finite and explicitly bounded: $n \le n_0(p)$, the unique solution in $n$ of
+Consequently the candidate set at every period is finite and explicitly bounded. Combined with Rhin's effective bound \cite{rhin},
+\[ K\log 2 - n\log 3 \;>\; \exp\bigl(-13.3\,(0.46057 + \log n)\bigr), \]
+every nontrivial $p$-block cycle has $n \le n_0(p)$, the unique solution in $n$ of
 \[ \frac{(\LL - 1)\,n}{(\LL)^{\,p} - 1} \;=\; \log_2 p \;+\; \frac{p + 13.3\,(0.46057 + \log n)}{\log 2}, \]
 so that $n_0(p) = O(p\,(\LL)^p)$.
 \end{theorem}
