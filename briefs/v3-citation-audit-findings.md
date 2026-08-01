@@ -207,3 +207,100 @@ Line 263 of the tex still reads "every wiki section and script named in this pap
 commit `e1c7d5f`". `main` is now `9ff55d3`. That is a verification-record pin, not a bibliography
 field, so this round left it alone — but it is stale, and it is the kind of thing worth settling
 before a DOI is minted against the document.
+
+*(Resolved in the round below. It was worse than stale.)*
+
+---
+
+# Appendix 2: the Appendix A record pin (2026-08-01, branch `v3-record-pin`)
+
+Base: `main` at **`ed79d4a`** (the citation-fix merge). Two commits, as instructed, plus a third
+carrying this findings text only — flagged here so the count is not a surprise: the paper changes
+are exactly two commits; commit B is the pin and nothing else.
+
+| commit | what |
+|---|---|
+| **`6a9183a`** | build: PDF rebuilt from the audited tex. The final *content* commit. |
+| **`643e864`** | Appendix A pin `e1c7d5f` → `6a9183a`, plus the PDF rebuilt so tex and PDF agree. |
+
+## The old pin was self-refuting, not merely stale
+
+Appendix A claimed "every wiki section and script named in this paper is cited at commit
+`e1c7d5f`". Verified directly:
+
+- **`experiments/absorption_law.py` does not exist at `e1c7d5f`** (`git cat-file -e` fails).
+  It is the script the *preceding sentence in the same paragraph* leans on for the absorption
+  law's verification.
+- The `stage3.md` paragraph naming it is likewise absent at `e1c7d5f`. It was added under
+  **§11.8.6.2** (the diff places it immediately before the §11.8.6.3 heading) in the same round
+  that added the script. Note the paper's own §-citation on line 146 is to §11.8.6.3, which *does*
+  exist at `e1c7d5f`; the missing material is the §11.8.6.2 verification paragraph and the script.
+
+So the document pinned a commit that could not support the sentence doing the pinning. Everything
+else named in the paper — the other five scripts, all fourteen sections — was already present at
+`e1c7d5f`; `absorption_law.py` was the single failure.
+
+## Verification that the new pin holds
+
+Enumerated mechanically from the tex rather than by eye (`\texttt{}` tokens and `\S` references
+parsed out), then checked at `6a9183a`:
+
+**6 scripts, all PRESENT** (`git cat-file -e 6a9183a:<path>`): `absorption_law.py`,
+`anchor_increment.py`, `one_step_propagation.py`, `period1_cycles.py`, `period2_cycles.py`,
+`period3_cycles.py`.
+
+**14 sections, all PRESENT** — and each confirmed to appear as an actual heading or labelled
+statement, not as incidental text, because a bare substring match would have passed on numbers
+appearing in running prose:
+
+| page | sections | form found |
+|---|---|---|
+| `aeh.md` | 13.1, 13.4 | `## 13.1. Two regimes, one lesson`; `## 13.4. Calibration record` |
+| `aeh.md` | 13.6.3, 13.6.5, 13.6.6 | `**Lemma 13.6.3 …**`, `**Proposition 13.6.5 …**`, `**Remark 13.6.6 …**` |
+| `cycles.md` | 12.2.3, 12.5.2, 12.5.3, 12.6.1, 12.6.2, 12.7.4, 12.7.5 | `**Theorem/Lemma/Proposition …**` in each case |
+| `cycles.md` | 12.8.6 | `## 12.8.6. The Staircase at Every Period` |
+| `stage3.md` | 11.8.6.3 | `#### 11.8.6.3. The target-shift lemma and the entry-depth law` |
+
+## Why pinning the previous commit is correct, not an off-by-one
+
+A self-referential pin cannot name its own commit: the commit that records a SHA can never be the
+commit that SHA identifies. The sentence does not claim otherwise. It claims that the wiki
+sections and scripts *named in the paper* are present at the pinned commit — and at `6a9183a`
+they all are. What `6a9183a` does not contain is the paper's own final PDF and pin text, which
+the sentence never asserts.
+
+## The other two pins were already safe
+
+Lines 232 and 235 cite `cycles.md` at `72ec88e` and `9d9d1ec`. Re-confirmed:
+
+| pin | object | ancestor of `origin/main` | `cycles.md` present |
+|---|---|---|---|
+| `72ec88e` | exists | **YES** | yes |
+| `9d9d1ec` | exists | **YES** | yes |
+
+Both resolve publicly today. Unchanged by this round. They are, at present, the *only* pins in the
+document that a reader could follow.
+
+## Build gate (both commits)
+
+`pdflatex -interaction=nonstopmode -halt-on-error`: **exit 0 on three consecutive runs**,
+**0 overfull boxes**, **no undefined references or citations**, **13 pages** — the approved count.
+The one underfull `\hbox` (badness 10000, lines 277–278) is the stranded `llmcollatz` reference on
+page 13 and is expected. Built in a sandbox temp dir; only the PDF artifact copied back. The pin
+was read back out of the typeset PDF to confirm it renders as `6a9183a`, not merely that the tex
+says so.
+
+Encoding scan over all 373 tracked files: **RESULT: CLEAN**, exit 0.
+
+## ⚠ For the author, before Zenodo: nothing here is public yet
+
+**`origin/main` is still at `e1c7d5f`.** Everything from these sessions — the six citation fixes,
+the rebuilt PDF, and the new pin — exists only locally.
+
+The consequence is direct: **`6a9183a` will not resolve on GitHub until `main` is pushed.** Until
+then the new pin dangles in exactly the way the old one did, and the paper would ship asserting a
+commit no reader can fetch. The push must happen **before or with** the Zenodo upload, not after.
+
+This failure mode is already on the project record from an earlier round, which is why it is
+called out here rather than assumed. The audit's whole premise is that a claim a reader cannot
+check is worth less than one they can — a pin to an unpushed commit is precisely such a claim.
