@@ -60,7 +60,7 @@ Block-like decompositions and stochastic models are classical (Terras \cite{terr
 \section{The reduced system}\label{sec:reduced}
 
 \begin{definition}\label{def:reduced}
-A \emph{reduced state} is a pair $(\w, d)$ with $\w$ odd, $3\nmid\w$, $d \ge 1$. Set
+A \emph{reduced state} is a pair $(\w, d)$ with $\w$ odd and positive, $3\nmid\w$, $d \ge 1$. Set
 \[ A = 3^d\w - 1,\qquad s = \vt{A},\qquad x_{\mathrm{exit}} = A/2^s,\qquad C = A + 2^s, \]
 \[ \sigma = \vt{C},\qquad a_+ = \vth{C},\qquad m_+ = \sigma - s,\qquad \wnext = \frac{C}{2^{\sigma}3^{a_+}},\qquad \dnext = m_+ + a_+, \]
 and define the \emph{reduced map} $F(\w,d) = (\wnext, \dnext)$. The \emph{projection} $R$ sends an odd $x$ with $x + 1 = 2^m 3^a \w$ ($3\nmid\w$) to $R(x) = (\w, m + a)$.
@@ -111,7 +111,7 @@ $Y^2 = 9^d\w^2 = 9^{d}\,9^{-M(\w)}\cdot\bigl(9^{M(\w)}\w^2\bigr) = 9^{\,d - M(\w
 \begin{theorem}[global valuation law]\label{thm:vlaw}
 Call $(\w,d)$ \emph{lifting} if $3^d\w \equiv 1 \pmod 8$, i.e.\ $\w\equiv1\ (8)$ with $d$ even or $\w\equiv3\ (8)$ with $d$ odd. On the lifting classes
 \[ s = \vt{3^d\w - 1} = 2 + \vt{d - M(\w)} \;\ge\; 3, \]
-while on the six non-lifting residue-parity classes $s \in \{1,2\}$ is the constant determined by $(\w \bmod 8,\, d \bmod 2)$: $s = 1$ on $(1,\mathrm{odd}), (5,\mathrm{odd}), (7,\mathrm{even}), (3,\mathrm{even})$ and $s = 2$ on $(5,\mathrm{even}), (7,\mathrm{odd})$. Unconditionally $s \le C(\w)(\log d)^2$ by $p$-adic Baker theory \cite{yu,bl}.
+while on the six non-lifting residue-parity classes $s \in \{1,2\}$ is the constant determined by $(\w \bmod 8,\, d \bmod 2)$: $s = 1$ on $(1,\mathrm{odd}), (5,\mathrm{odd}), (7,\mathrm{even}), (3,\mathrm{even})$ and $s = 2$ on $(5,\mathrm{even}), (7,\mathrm{odd})$. Unconditionally $s \le C(\w)\,(1 + \log d)^2$ by $p$-adic Baker theory \cite{yu,bl}.
 \end{theorem}
 
 \begin{proof}
