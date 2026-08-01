@@ -1,6 +1,6 @@
 ---
 status: index
-updated: 2026-07-23
+updated: 2026-08-02
 ---
 
 # Collatz Reduction — Wiki Index
@@ -23,7 +23,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 | `stage3.md` | §11.8.6: decomposition of `C`, target-shift lemma, entry-depth law, per-step depth law | closed per step |
 | `stage4.md` | §11.8.7: the odd core `ω_+` / anchor increment — low-order law (11.8.7.3.1), one-step propagation (11.8.7.6.1), digit budget (11.8.7.7) | per-step results proved; open residue → bridge.md §16 |
 | `publication.md` | Novelty assessment (claim-by-claim verdicts), pinned citations for all #TODOs, 2024–26 landscape, framing recommendation | sweep complete |
-| `aeh.md` | §13: the Anchor Equidistribution Hypothesis — precise bulk formulation (13.2), conditional theorems (13.3), calibration record (13.4), anomaly resolved with routing lemma (13.5), the genericity form (13.6) | formalized; calibration clean; symbolic form named and proved |
+| `aeh.md` | §13: the Anchor Equidistribution Hypothesis — precise ensemble formulation (13.2), conditional theorems (13.3), calibration record (13.4), anomaly resolved with routing lemma (13.5), the genericity form (13.6) | formalized; calibration clean; symbolic form named and proved |
 | `ladder.md` | §15: the depth ladder — exact dichotomy relating (ω,d) and (ω,d+1): one Collatz step off-spike, an affine kick at spikes; the divergence question answered | closed as local law |
 | `bridge.md` | §16: the terminal open object — the anchor increment at unbounded depth; the core-extraction deficit (two-sided digit budget) as its observed mechanism; consolidates 11.8.5.6 / 11.8.7.7 / 14.13 | OPEN (consolidation) |
 | `anchors.md` | §17.1–17.6: consolidated reference for the anchor across the wiki (pointers only) | REFERENCE |
