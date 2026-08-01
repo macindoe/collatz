@@ -143,7 +143,7 @@ proved exactly as Lemma~\ref{lem:squaring} after writing $3^d\w - c = 9^{-N(c)}\
 \end{proof}
 
 \begin{remark}[verification notes]\label{rem:verify1}
-Each law above was checked by independently written code: the valuation law on $8{,}000$ random states across both lifting components; the entry-depth law exhaustively on all $62{,}937$ valid states with $\w < 3000$, $d < 64$; the absorption law on $60{,}000$ random states including $341$ boundary cases $d = h(s)$. Zero discrepancies. Scripts accompany the paper.
+Each law above was checked by independently written code: the valuation law on $8{,}000$ random states across both lifting components; the entry-depth law exhaustively on all $62{,}937$ valid states with $\w < 3000$, $d < 64$; the absorption law on $60{,}000$ random states including $341$ boundary cases $d = h(s)$. Zero discrepancies. The entry-depth verification is recorded at \texttt{stage3.md} \S11.8.6.3 of the project record, and the independent re-verification of 2026-07-06 in that page's status header.
 \end{remark}
 
 \begin{theorem}[low-order anchor-increment law]\label{thm:deltaM}
@@ -169,7 +169,7 @@ Deciding one step at depth $k$ consumes the state's $2$-adic data to depth $\sig
 \end{heuristic}
 
 \begin{remark}[verification note]
-The trichotomy was run along real orbits for $k \in \{4,8\}$: $21{,}296$ steps, $21{,}000$ decided with zero errors, $296$ flagged deep with zero violations of the bound $s_+ \ge k+2$.
+The trichotomy was run along real orbits for $k \in \{4,8\}$: $21{,}296$ steps, $21{,}000$ decided with zero errors, $296$ flagged deep with zero violations of the bound $s_+ \ge k+2$. Code: \texttt{experiments/one\_step\_propagation.py}; the low-order law of Theorem~\ref{thm:deltaM} is checked by \texttt{experiments/anchor\_increment.py}.
 \end{remark}
 
 Heuristic~\ref{prop:budget} is the paper's organizing negative observation: it splits the residual difficulty into a statistical question for typical orbits (Section~\ref{sec:aeh}) and a rigidity question for cycles (Section~\ref{sec:cycles}); we know of no residual content outside those two.
@@ -201,7 +201,7 @@ $F$ has no nontrivial cycles of $1$, $2$, or $3$ blocks. These statements are co
 \end{theorem}
 
 \begin{proof}[Proof outline]
-$p=1$: the fixed-point equation is $\w\,3^a(2^{s+m}-3^m) = 2^s-1$; the sign and size constraints pin $2^s$ into a window of endpoint ratio $(1-3^{-m})/(1-2^{-m}) < 2$, leaving at most one candidate $s$ per $m$; exact search kills $m \le 20{,}000$ and Steiner's theorem \cite{steiner} covers all $m$ via the block--circuit correspondence. $p=2,3$: budget-trim lemmas (casework over rotations' dominant terms, using $\sum s_t = K - n$) force $0 < K\log2 - n\log3 < 2^{c-n/5}$ resp.\ $2^{3-0.115n}$; exact searches to $n = 20{,}000$ find no solutions; any effective irrationality measure for $\LL$ \cite{rhin} excludes the tail. Full details and the searches accompany the paper.
+$p=1$: the fixed-point equation is $\w\,3^a(2^{s+m}-3^m) = 2^s-1$; the sign and size constraints pin $2^s$ into a window of endpoint ratio $(1-3^{-m})/(1-2^{-m}) < 2$, leaving at most one candidate $s$ per $m$; exact search kills $m \le 20{,}000$ and Steiner's theorem \cite{steiner} covers all $m$ via the block--circuit correspondence. $p=2,3$: budget-trim lemmas (casework over rotations' dominant terms, using $\sum s_t = K - n$) force $0 < K\log2 - n\log3 < 2^{c-n/5}$ resp.\ $2^{3-0.115n}$; exact searches to $n = 20{,}000$ find no solutions; any effective irrationality measure for $\LL$ \cite{rhin} excludes the tail. Full details are in the project record: the three classifications at \texttt{cycles.md} \S12.2.3, \S12.5.3 and \S12.7.5, the two trim lemmas at \S12.5.2 and \S12.7.4, and the ceiling lemma that supplies $K = \lceil n\LL\rceil$ at \S12.6.2. The searches are \texttt{experiments/period1\_cycles.py}, \texttt{experiments/period2\_cycles.py} and \texttt{experiments/period3\_cycles.py}.
 \end{proof}
 
 \begin{theorem}[uniform trim]\label{thm:uniform}
@@ -260,7 +260,7 @@ In reduced coordinates the Collatz problem factors cleanly. The local arithmetic
 
 \appendix
 \section{Methodology, responsibility, and records}\label{app:method}
-This work was developed through extensive AI-assisted research over three years (2023--2026), from a hand-drawn origin note (13 March 2023) through seventy-nine drafts to a research wiki whose pages carry status headers, verification records, and refuted claims with their refutation data. The author is responsible for the published claims, the research direction, and the standards of evidence; the AI collaborator carried out the mathematical development within the author's coordinate system --- formulations, proofs, computations, and connections to the literature. Because this division of labor is unusual, correctness claims rest on the documented verification protocol rather than on authorial authority alone: every computational claim cites a runnable script; every result labeled proved was re-verified with independently written code before being so labeled; the calibration campaign's four dissolved anomalies, and two corrected search-filter errors on the cycle side, are documented rather than smoothed over. The complete record (wiki, code, draft history, origin note) is public at \url{https://github.com/macindoe/collatz}.
+This work was developed through extensive AI-assisted research over three years (2023--2026), from a hand-drawn origin note (13 March 2023) through seventy-nine drafts to a research wiki whose pages carry status headers, verification records, and refuted claims with their refutation data. The author is responsible for the published claims, the research direction, and the standards of evidence; the AI collaborator carried out the mathematical development within the author's coordinate system --- formulations, proofs, computations, and connections to the literature. Because this division of labor is unusual, correctness claims rest on the documented verification protocol rather than on authorial authority alone: every computational claim cites a runnable script; every result labeled proved was re-verified with independently written code before being so labeled; the calibration campaign's four dissolved anomalies, and two corrected search-filter errors on the cycle side, are documented rather than smoothed over. The complete record (wiki, code, draft history, origin note) is public at \url{https://github.com/macindoe/collatz}; every wiki section and script named in this paper is cited at commit \texttt{e1c7d5f}.
 
 \begin{thebibliography}{99}
 \bibitem{terras} R.~Terras, \emph{A stopping time problem on the positive integers}, Acta Arith.\ 30 (1976), 241--252.
