@@ -1,7 +1,7 @@
 ---
 status: open / calibrated
 scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record); 11.10 added post-monolith (per-letter window height laws, itinerary.md 14.15.9; recorded as 11.9 in pre-2026-07-23 briefs); 11.11 added post-monolith (what AEH's budget clause supplies, aeh.md 13.2.3)
-updated: 2026-08-02
+updated: 2026-08-03
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -194,7 +194,7 @@ itinerary.md `14.15.9`'s whole-period height laws hold only for windows aligned 
 
 ## 11.11. What AEH's budget clause supplies past the digit budget
 
-aeh.md `13.2.3` records what the hypothesis says about its own exponent budget: inside the digit budget (`τ < 1`) the budget does not bind and the empirical exponent mean converges to `E_B[m + r] = 4`, both unconditionally (`13.2.4`(g)); past it the hypothesis gives the vanishing *frequency* of the cemetery symbol `†` and nothing more, and a vanishing frequency is not a bound on a sum over its complement, so the Cesàro statement `T_N^(−1)Σ_(n<T_N)(m_n + r_n) → 4` does not follow. Two questions are left open by that reading. A candidate argument for both is drafted at `briefs/v3r4-clock-findings.md` §2 and §7.8; neither is claimed by any page, and `13.3.2` stands as written until the first closes.
+aeh.md `13.2.3` records what the hypothesis says about its own exponent budget, and `13.2.4`(g) what the cylinder count proves inside it; neither is restated here. On the reading those two fix, the Cesàro statement `T_N^(−1)Σ_(n<T_N)(m_n + r_n) → 4` is a theorem inside the digit budget and does not follow past it. Two questions are left open by that reading. A candidate argument for both is drafted at `briefs/v3r4-clock-findings.md` §2 and §7.8; neither is claimed by any page, and `13.3.2` stands as written until the first closes.
 
 **Open question 1: may `τ` be taken down to `4θ`, and what does the in-budget prefix carry if it may?** `13.2.1` is quantified "for every admissible `(τ, θ)`". Fix `θ` and put `n* = min{n ≤ T_N : S_n ≥ Λ_N}`, so the in-budget prefix is blocks `0, …, n*−1`. The drafted argument bounds `T_N^(−1)Σ_(n<n*−1)(m_n + s_n)` above by `Λ_N/T_N → τ/θ` (block `n*−1` is tallied) and below by `4` (Fatou on the letter marginals of `13.2.2` at `L = 1`), then takes `τ_k = θ(4 + 1/k)` — admissible for every large `k` — and diagonalizes in `k` to pin the prefix mean at `4`, hence `Σm/T_N → 2`, `Σs/T_N → 2` and a block drift of `−β` along the prefix. The hinge is the quantifier: whether the hypothesis is to be read as asserted at pairs with `τ` arbitrarily close to `4θ`, or only with slack bounded away from it. **Closure is checkable in either direction:** a reason inside the record to prefer a fixed slack (which deletes the prefix statement outright), or an argument that the quantifier is as written *together with* the prefix statement written out at that quantifier, including the altitude step's per-step `O(1/x_exit)` error summed inside the budget. It is also unmeasured: the calibration campaign reports pooled full-horizon frequencies, and no run reports the distribution across orbits of `S_(n*−1)/T_N` at `τ/θ` near `4`, which is the quantity the statement is about (aeh.md `13.4`, `13.5`).
 
