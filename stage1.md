@@ -1,7 +1,7 @@
 ---
 status: closed — entry map, tower map, and Stage 1 reduction summary; the synthesis proper (11.8.3) is split to stage1-synthesis.md
 scope: monolith 11.8.1-11.8.2, 11.8.4 (11.8.3 → stage1-synthesis.md)
-updated: 2026-07-22
+updated: 2026-08-02
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -617,9 +617,16 @@ dissolved or exported:
     digit behavior of the anchors (classical: digits of 2-adic logarithms;
         effective floor imported, finer statistics beyond current theory)
 
-heuristic, empirically sharp (11.8.4.4):
+formal inside the digit budget (aeh.md 13.2.4(d)-(e), 13.2.4.1;
+    every horizon rate theta < 1/4 block per bit, for all but a
+    vanishing density of starting values of each size):
     frequency ledger P(s=1)=1/2, P(s=2)=1/4, P(s=k)=2^(-k),
-    3-gain rate 1/3,
+    3-gain rate 1/3
+        (both as marginals of pi_{k,D}, exact below the cap;
+        past the budget they are AEH-conditional -- aeh.md
+        13.3.1, 13.3.2)
+
+heuristic, empirically sharp (11.8.4.4):
     drift log(3/4) per odd step (classical)
 
 open:
