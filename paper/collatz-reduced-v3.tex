@@ -319,14 +319,26 @@ $\theta\,\mathbb{E}_B[m+r] < \tau$; \emph{admissible} means both. Every
 $\tau < 1$ is protected outright by the bound above, and every
 $\tau < (1-\log_2\sqrt3)^{-1} = 4.8188\ldots$ is protected at natural density one
 by Inselmann \cite[Thm.~1.10]{inselmann} --- the same unit, nothing converted.
-Consistency is a theorem where the cylinder count runs and is part of
-Hypothesis~\ref{hyp:aeh} where it does not, since $\pi_{k,D}$ gives $\dagger$ no
-mass; it says exactly that blocks average $\mathbb{E}_B[m+r] = 4$ of exponent.
+Consistency is compatibility with the target law rather than a claim about
+orbits: under $B$ a block spends $\mathbb{E}_B[m+r] = 4$ of exponent, so
+$4\theta < \tau$ says exactly that $B$ itself predicts no out-of-budget block,
+which is what $\pi_{k,D}$'s giving $\dagger$ no mass requires. Where the cylinder
+count runs it is more, and unconditionally: for $\tau < 1$ no block of the horizon
+leaves the budget and the empirical exponent mean converges to $4$
+(\texttt{aeh.md} Lemma 13.2.4(g), whose two error terms are precisely the two
+clauses of admissibility). Past that range the hypothesis supplies less, and only
+about frequencies: that $\dagger$ has vanishing frequency says all but $o(T_N)$ of
+the first $T_N$ blocks are within budget, and a vanishing frequency of $\dagger$ is
+not a bound on a sum over its complement. The block at which the budget is
+exhausted is tallied at full weight and its letter is unbounded, and the $o(T_N)$
+blocks past it are uncontrolled, so $T_N^{-1}\sum_{n<T_N}(m_n+r_n) \to 4$ does not
+follow there and can fail by any amount.
 Hence $4\theta < \tau < 1$ is $\theta < 1/4$ and $4\theta < \tau < 4.8188\ldots$
 is $\theta < 1/\beta = 1.2047\ldots$, where $\beta = 2(2-\LL) = 0.8301\ldots$ is
 the classical per-block contraction rate and $4/\beta = (1-\log_2\sqrt3)^{-1}$ is
-an identity: the block reading of either threshold divides by a mean the
-hypothesis itself supplies.
+an identity --- each of these being arithmetic on the definition of consistency,
+with the divisor in either block reading the mean of the target law: a theorem
+about orbits below the budget, and not a consequence of the hypothesis above it.
 
 The hypothesis has an unconditional base case, and it is Heuristic~\ref{prop:budget}
 with a number on it. The classical coding fact --- the odd integers whose first $n$
@@ -384,14 +396,16 @@ $T$ and extends it by the factor $(1-\log_2\sqrt3)^{-1} = 4.8188\ldots$. That fa
 is $(1/\beta)/(1/4)$ --- the identity $4/\beta = 2/(2-\LL)$ --- and is the same
 number in any time units; the endpoints read as $1/4$ and $1/\beta$ blocks per bit
 only after dividing by the mean exponent per block, which is a theorem where the
-cylinder count runs and is Hypothesis~\ref{hyp:aeh} where it does not.
+cylinder count runs (\texttt{aeh.md} Lemma 13.2.4(g)) and, past it, is neither a
+theorem nor a consequence of Hypothesis~\ref{hyp:aeh} (\texttt{aeh.md} \S13.2.3).
 
 AEH implies the ledger, in the form the hypothesis has: $s$ is a coordinate of
 the observable, so $P(s = j) = 2^{-j}$ is a marginal of $\pi_{k,D}$ rather than a
 deduction, exactly at every $j < D$ and up to the cap's single tail cell above;
 and for every $\varepsilon$ and every horizon rate, all but a vanishing density of
 the odd starting values of each size carry those frequencies along their first
-$T_N$ blocks, all of them within the budget. Evaluating
+$T_N$ blocks, all but $o(T_N)$ of them within the budget --- and all of them when
+$\tau < 1$. Evaluating
 each odd $x$ once, at its own dyadic scale $2^{\lfloor \log_2 x\rfloor}$, turns
 that array of statements into a single one: the odd integers that fail at their
 own scale have natural density zero (\texttt{aeh.md} Proposition 13.2.5). The
