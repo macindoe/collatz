@@ -1,7 +1,7 @@
 ---
 status: open / calibrated
 scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record); 11.10 added post-monolith (per-letter window height laws, itinerary.md 14.15.9; recorded as 11.9 in pre-2026-07-23 briefs)
-updated: 2026-07-23
+updated: 2026-08-02
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -82,6 +82,8 @@ Questions here include:
 * Do repeated `3`-gain patterns explain any of the visible clustering, locking, or average-drift effects seen empirically?
 
 The local trigger is now explicit; the unresolved issue is the global arithmetic and dynamical significance of that trigger. The first question also has a predicted answer: under the equidistribution heuristic the `3`-gain rate is exactly `1/3`, matched empirically to three decimal places (`11.8.4.4`); under AEH it is a conditional theorem (aeh.md `13.3.2`), and what remains open is its unconditional derivation along orbits.
+
+**Calibration note (2026-08-02, aeh.md `13.2.4`).** The first question is now closed unconditionally inside the digit budget: for every horizon rate `θ < 1/4` block per bit, the `3`-gain rate `1/3` and the frequency ledger hold — at every block length, as marginals of `π_{k,D}` — for all but a vanishing density of starting values of each size, by the classical cylinder count (aeh.md `13.2.4`(d)–(e), `13.2.4.1`), with the exceptional set of natural density zero in the integers at dyadic-shell scale (`13.2.5`). The rate is exactly `0` at `θ = 1/4`, so what remains open is the range past the budget, where the statement is AEH-conditional as above, and the derivation along an individual orbit, which no density statement supplies (aeh.md `13.3.3`).
 
 ## 11.4. Canonical Normal Forms for Reduced States
 

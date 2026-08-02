@@ -35,11 +35,11 @@
 \maketitle
 
 \begin{abstract}
-We study the Collatz dynamics in a reduced coordinate system that compresses each deterministic valuation run into a single block, producing a self-map $F$ on states $(\w,d)$ --- an odd core prime to $3$ and a depth. The reduction is faithful: the Collatz conjecture is equivalent to every $F$-orbit reaching $(1,1)$, with nontrivial cycles in bijection. In these coordinates the local arithmetic admits exact laws. A single $2$-adic quantity, the \emph{anchor} $M(\w) = -2\log\w/\log 9 \in \Z_2$, governs the step: the exit valuation obeys the global law $s = 2 + \vt{d - M(\w)}$ whenever $3^d\w \equiv 1 \pmod 8$ and is constant on the remaining residue classes; the depth evolution closes exactly in terms of the anchor displacement together with a stated $3$-adic absorption law; and the anchor increment along one step obeys an exact law modulo any power of $2$, computable from graded residues of the state. A finite window of digits, together with the step's stratum labels, consequently decides each step in an error-free trichotomy, while a digit-budget accounting indicates that no bounded window can decide infinite horizons --- localizing the difficulty of the problem in the digit supply of the anchors. On the cycle side, a one-line elimination identity yields short rederivations of the classical exclusions for cycles of one, two, and three blocks. Our main new theorem is a sharp dichotomy for counting arguments: a trim uniform in the number of blocks $p$ exists, giving effective finiteness at every period, but its constant necessarily degrades like $(\LL)^{-p}$ --- an explicit family of near-counterexamples (\emph{staircases}: geometric climbs closed by a single crash, precisely divergent-orbit profiles bent into loops) shows counting arguments cannot do substantially better, so uniform cycle exclusion requires arithmetic (divisibility) input, not sharper counting. Finally we state the equidistribution hypothesis implicit in the classical heuristics as a precise conjecture about an exactly computable product law, prove its consequences conditionally, and report a calibration campaign whose four apparent anomalies all dissolved under controls --- one of them via an exact routing lemma that a biased estimator had been reflecting.
+We study the Collatz dynamics in a reduced coordinate system that compresses each deterministic valuation run into a single block, producing a self-map $F$ on states $(\w,d)$ --- an odd core prime to $3$ and a depth. The reduction is faithful: the Collatz conjecture is equivalent to every $F$-orbit reaching $(1,1)$, with nontrivial cycles in bijection. In these coordinates the local arithmetic admits exact laws. A single $2$-adic quantity, the \emph{anchor} $M(\w) = -2\log\w/\log 9 \in \Z_2$, governs the step: the exit valuation obeys the global law $s = 2 + \vt{d - M(\w)}$ whenever $3^d\w \equiv 1 \pmod 8$ and is constant on the remaining residue classes; the depth evolution closes exactly in terms of the anchor displacement together with a stated $3$-adic absorption law; and the anchor increment along one step obeys an exact law modulo any power of $2$, computable from graded residues of the state. A finite window of digits, together with the step's stratum labels, consequently decides each step in an error-free trichotomy, while a digit-budget accounting indicates that no bounded window can decide infinite horizons --- localizing the difficulty of the problem in the digit supply of the anchors. On the cycle side, a one-line elimination identity yields short rederivations of the classical exclusions for cycles of one, two, and three blocks. Our main new theorem is a sharp dichotomy for counting arguments: a trim uniform in the number of blocks $p$ exists, giving effective finiteness at every period, but its constant necessarily degrades like $(\LL)^{-p}$ --- an explicit family of near-counterexamples (\emph{staircases}: geometric climbs closed by a single crash, precisely divergent-orbit profiles bent into loops) shows counting arguments cannot do substantially better, so uniform cycle exclusion requires arithmetic (divisibility) input, not sharper counting. Finally we state the equidistribution hypothesis implicit in the classical heuristics as a precise conjecture --- that the block letters of uniformly sampled large starts carry, at every finite block length, the frequencies of an exactly computable Bernoulli law --- prove its consequences conditionally, exhibit an unconditional base case inside the digit budget, and report a calibration campaign whose four apparent anomalies all dissolved under controls --- one of them via an exact routing lemma that a biased estimator had been reflecting.
 \end{abstract}
 
 \subsection*{Version note}
-v1, July 2026 (original publication). v2, July 2026: restored the subtitle of the \texttt{merle} citation; added a note evidencing the sharpness hedge of Theorem~\ref{thm:staircase} (Section~\ref{sec:cycles}), prompted by correspondence with Eric Merle. No theorem or universal claim is strengthened in v2, which adds a finite computational evidence record. v2-specific Zenodo DOI: 10.5281/zenodo.21421120. v3, August 2026: a correction appended to the Note added in v2 (Section~\ref{sec:cycles}) --- the note's identification of the remaining gap has been superseded on both halves in the project record, and the correction states what closed, at what scope, where the record is, and that the proof is established there and not reproduced here. The original sentence stays in place and Theorem~\ref{thm:staircase}'s statement is unchanged; its sharpness assessment, previously the theorem's closing clause, is now set out beside it under \emph{Sharpness evidence and assessment}, so that the theorem environment carries only what the paper proves. v3 also makes eight repairs, each bringing a definition or a statement back into line with the project record. Definition~\ref{def:reduced} now requires $\w > 0$, without which $(-1,1)$ leaves $F$ undefined; Theorem~\ref{thm:vlaw}'s unconditional bound reads $C(\w)(1+\log d)^2$, the printed $(\log d)^2$ being vacuous at $d = 1$; Theorem~\ref{thm:onestep} states its depth-$k$ window as the residues of Theorem~\ref{thm:deltaM} \emph{together with} the stratum labels $(s,\sigma,a_+)$, matching its own proof, with Theorem~\ref{thm:deltaM} unchanged; the depth component of $\pi_k$ (Section~\ref{sec:aeh}) is the exact convolution law rather than the window chain's stationary law; Hypothesis~\ref{hyp:aeh} is restated in ensemble form --- uniformly sampled starts, a horizon linked to the sampling scale, per-visit weighting, a single limit --- the previous single-orbit reading being empty on every convergent orbit; Theorem~\ref{thm:uniform}'s $n_0(p)$ is defined; the digit budget is labelled a heuristic, as its own text always said, and no part of it is now claimed as proved; and Proposition~\ref{prop:elim} defines $\sigma_j$ at its point of use ($\sigma_j = s_j + m_{j+1}$, as in Definition~\ref{def:reduced}) and distinguishes $M_t$ from the anchor. Section~\ref{sec:aeh} no longer states a descent or contraction consequence of Hypothesis~\ref{hyp:aeh}: that conclusion is a theorem without the hypothesis, and stronger, so the section is reframed onto what the hypothesis alone supplies, which is distributional. The stationary $3$-adic law it uses is attributed to Tao's Syracuse random variable, and the unconditional density line the hypothesis does not add to --- Terras, Everett, Korec, Inselmann, Tao --- is cited in Related work, together with the two further $3$-adic studies (Wirsching, Thomas) that a reader of Tao's footnote will reach. Verification pointers and script names are made concrete throughout. No numbered theorem's claim is strengthened, weakened, or renumbered, and nothing new is proved here; v3 reports a stronger result established in the project record and not reproduced in this paper. v3-specific Zenodo DOI: 10.5281/zenodo.21730505.
+v1, July 2026 (original publication). v2, July 2026: restored the subtitle of the \texttt{merle} citation; added a note evidencing the sharpness hedge of Theorem~\ref{thm:staircase} (Section~\ref{sec:cycles}), prompted by correspondence with Eric Merle. No theorem or universal claim is strengthened in v2, which adds a finite computational evidence record. v2-specific Zenodo DOI: 10.5281/zenodo.21421120. v3, August 2026 (drafted; the version-specific DOI below is reserved and this version is not yet published): a correction is appended to the Note added in v2 (Section~\ref{sec:cycles}) --- the note's identification of the remaining gap has been superseded on both halves in the project record, and the correction states what closed, at what scope, where the record is, and that the proof is established there and not reproduced here. The original sentence stays in place and Theorem~\ref{thm:staircase}'s statement is unchanged; its sharpness assessment, previously the theorem's closing clause, is set out beside it under \emph{Sharpness evidence and assessment}, so that the theorem environment carries only what the paper proves. v3 also brings each definition and statement back into line with the project record. Definition~\ref{def:reduced} requires $\w > 0$, without which $(-1,1)$ leaves $F$ undefined; Theorem~\ref{thm:vlaw}'s unconditional bound reads $C(\w)(1+\log d)^2$, the printed $(\log d)^2$ being vacuous at $d = 1$; Theorem~\ref{thm:onestep} states its depth-$k$ window as the residues of Theorem~\ref{thm:deltaM} \emph{together with} the stratum labels $(s,\sigma,a_+)$, matching its own proof, with Theorem~\ref{thm:deltaM} unchanged; Theorem~\ref{thm:uniform}'s $n_0(p)$ is defined; the digit budget is labelled a heuristic, as its own text always said, and no part of it is claimed as proved; and Proposition~\ref{prop:elim} defines $\sigma_j$ at its point of use ($\sigma_j = s_j + m_{j+1}$, as in Definition~\ref{def:reduced}) and distinguishes $M_t$ from the anchor. Section~\ref{sec:aeh} carries one object where it previously carried several. Its observable is the capped window $W_{k,D}$, at a depth $k$ and a cap $D$ quantified together, the cap bounding the stratum labels as well as the depth; the comparison law $\pi_{k,D}$ is the law of that window under the two-sided Bernoulli measure, its depth component the exact convolution rather than the window chain's stationary law, and ``product'' names its two proved clauses and no others --- in particular the window process is stationary but not independent across time. Hypothesis~\ref{hyp:aeh} is stated in ensemble form --- uniformly sampled starts, a horizon linked to the sampling scale, every block counted once, a single limit --- in letter coordinates and at every finite block length, retiring both the single-orbit reading, which is empty on every convergent orbit, and the single-visit reading, which is strictly weaker; the distance is total variation on the finite window alphabet, named where it is used; and the bulk cut is replaced by an exponent budget whose admissibility is defined and whose protection is a deterministic identity rather than an assumption. Section~\ref{sec:aeh} states no descent or contraction consequence of Hypothesis~\ref{hyp:aeh}: that conclusion is a theorem without the hypothesis, and stronger, so the section is framed onto what the hypothesis alone supplies, which is distributional. Its unconditional base case is given with the exact rate at which it holds and the exact horizon at which that rate vanishes, and its density conclusion is stated at dyadic-shell scale, where it is exact --- the union over all sampling scales being a triangular array that no per-scale statement controls. The stationary $3$-adic law is attributed to Tao's Syracuse random variable and its negative-time reading to Tao's own footnote; the unconditional density line the hypothesis does not add to --- Terras, Everett, Korec, Inselmann, Tao --- is cited in Related work, together with the two further $3$-adic studies (Wirsching, Thomas) that a reader of Tao's footnote will reach, with those horizons given in the step units in which they are proved, their reading in reduced blocks being a consequence of Hypothesis~\ref{hyp:aeh} rather than an input to it. The calibration record is reported with the two ceilings it does not reach past. Verification pointers and script names are concrete throughout. No numbered theorem's claim is strengthened, weakened, or renumbered, and nothing new is proved here; v3 reports two results established in the project record and not reproduced in this paper --- the sharpness construction of Section~\ref{sec:cycles} and the base-case assembly of Section~\ref{sec:aeh}. v3-specific Zenodo DOI (reserved): 10.5281/zenodo.21730505.
 
 \subsection*{Author's note}
 
@@ -53,10 +53,10 @@ The idea is to stop watching individual steps. Writing $x + 1 = 2^m u$ with $u$ 
 
 \paragraph{Contributions.} (i) A reduced self-map $F$ on states $(\w,d)$, with an in-paper proof of well-definedness, whose convergence problem and cycle set are exactly equivalent to those of $T$ (Section~\ref{sec:reduced}). (ii) A global anchor law for the exit valuation $s$, derived from one squaring lemma (Section~\ref{sec:anchor}). (iii) Exact residue-class formulas for the depth evolution, including an explicit $3$-adic absorption law (Theorem~\ref{thm:depth}). (iv) An exact low-order law for the anchor increment and an error-free trichotomy deciding the next step from a finite residue window together with the step's stratum labels, with a digit-budget accounting (Theorems~\ref{thm:deltaM}--\ref{thm:onestep}, Heuristic~\ref{prop:budget}). (v) A cycle elimination identity, short rederivations of the classical small-cycle exclusions, and --- the main new theorems --- a uniform trim with effective finiteness at every period together with a sharpness family showing the exponential loss is intrinsic to size-counting (Section~\ref{sec:cycles}). (vi) The equidistribution hypothesis stated exactly, its consequences proved conditionally, and a calibration record (Section~\ref{sec:aeh}).
 
-Section~\ref{sec:anchor} is the technical heart. The exit valuation, the $3$-absorption, the next depth, and the low-order digits of the next anchor all obey exact laws in terms of the anchor displacement $d - M(\w)$. A finite window of state digits and stratum labels then decides the next step in a trichotomy that never errs, and an elementary accounting argument shows each decision \emph{consumes} digits irreversibly, indicating that bounded information cannot decide unbounded horizons. In these coordinates the difficulty of the problem is not diffuse: it is the question of where the digits of the anchors come from. Section~\ref{sec:cycles} tests the one regime where finite data can beat unbounded depth --- cycles --- and proves both what counting can do there (effective finiteness, uniformly in the period) and that it can do no more (the staircase family). Since the staircase is precisely a divergent-orbit profile closed into a loop, the cycle half and the divergence half of the problem's residual difficulty are, in a concrete sense, the same object. Section~\ref{sec:aeh} formalizes the statistical half: the folklore ``fair-coin'' heuristics (Terras \cite{terras}) become an exact statement about an explicitly computable product law $\pi_k$, whose ledger consequences are unconditional theorems \emph{about} $\pi_k$.
+Section~\ref{sec:anchor} is the technical heart. The exit valuation, the $3$-absorption, the next depth, and the low-order digits of the next anchor all obey exact laws in terms of the anchor displacement $d - M(\w)$. A finite window of state digits and stratum labels then decides the next step in a trichotomy that never errs, and an elementary accounting argument shows each decision \emph{consumes} digits irreversibly, indicating that bounded information cannot decide unbounded horizons. In these coordinates the difficulty of the problem is not diffuse: it is the question of where the digits of the anchors come from. Section~\ref{sec:cycles} tests the one regime where finite data can beat unbounded depth --- cycles --- and proves both what counting can do there (effective finiteness, uniformly in the period) and that it can do no more (the staircase family). Since the staircase is precisely a divergent-orbit profile closed into a loop, the cycle half and the divergence half of the problem's residual difficulty are, in a concrete sense, the same object. Section~\ref{sec:aeh} formalizes the statistical half: the folklore ``fair-coin'' heuristics (Terras \cite{terras}) become an exact statement about the block letters of typical orbits --- equivalently about an explicitly computable window law $\pi_{k,D}$ --- whose ledger consequences are unconditional theorems \emph{about} $\pi_{k,D}$.
 
 \subsection*{Related work and provenance}
-Block-like decompositions and stochastic models are classical (Terras \cite{terras}; see Lagarias \cite{lagarias} for the literature), and the $2$-adic conjugacy of the Collatz map to the shift underlies all Haar-genericity heuristics. The unconditional density line descending from Terras is long and is not what Section~\ref{sec:aeh} adds to. Terras \cite{terras} and Everett \cite{everett} place descent below the start at natural density one; Korec \cite{korec} lowers the target to $y^{c}$ for every $c > \log_4 3 = 0.7924\ldots$, in natural density and within $O(\log y)$ steps; Inselmann \cite{inselmann} carries a two-sided trajectory law --- the orbit tracked to within $m^{\pm\varepsilon}$ of its classical drift, simultaneously at every time up to the full descent horizon $(\log_2\tfrac43)^{-1}\log_2 m$ --- at natural density one, and so reaches $m^{\varepsilon}$ for every fixed $\varepsilon>0$; and Tao \cite{tao} reaches every divergent threshold, in logarithmic density. What Hypothesis~\ref{hyp:aeh} asserts is not descent but the exact window law $\pi_k$ itself, at horizons past the digit budget of Heuristic~\ref{prop:budget}. Tao's paper carries a footnote to two further $3$-adic studies, and neither is the object appearing here. Wirsching \cite{wirsching} completes the root of the predecessor tree $3$-adically and studies the inverse map as a Markov chain on $[0,1] \times \Z_3^{\times}$ in order to \emph{count} predecessors; his inverse branches therefore carry equal weight and his limiting $3$-adic law is Haar, whereas the law appearing in Section~\ref{sec:aeh} weights each branch by the probability $2^{-a}$ that an orbit takes it and is consequently not uniform --- $(\tfrac23,\tfrac13)$ at level one where Haar gives $(\tfrac12,\tfrac12)$. The two programmes are nonetheless siblings in shape: what Wirsching needs is that a Collatz-generated object be unbiased in $3$-adic coordinates, and Hypothesis~\ref{hyp:aeh} is that one is unbiased in $2$-adic coordinates. Thomas \cite{thomas} proves that the integers whose orbit reaches $1$ with all six frequencies over the units modulo $18$ below $\tfrac16 + 0.0215$ have counting function at most $N^{0.9999}$; he constructs no limiting measure, and the law recorded here implies his conclusion, its level-one form already forcing some class to frequency at least $\tfrac29$. Two-adic and Diophantine methods dominate the cycle literature \cite{steiner,sdw,hercher,eliahou}; effective linear forms in logarithms \cite{yu,bl,rhin} are the engine, and the verified range of the conjecture stands at $2^{71}$ \cite{barina}. Two contemporary human--AI efforts are close in spirit: a documented exploration \cite{llmcollatz} develops a burst--gap decomposition and an orbit equidistribution conjecture, and a Lean~4 formalization \cite{merle} proves cycle exclusion conditionally on Baker-type and verification hypotheses, including an impossibility lemma for measure-based uniform bounds kindred to our Theorem~\ref{thm:staircase}; neither contains the anchor machinery, exact per-step laws, or the counting-limit dichotomy developed here. A bachelor's thesis of Rackl (Klagenfurt, 2021) applies valuation methods to Syracuse cycles via the classical cycle equation; it likewise contains none of the present apparatus. The division of labor in the present work is stated precisely, because it matters for both credit and blame. The reduced coordinate system itself --- the odd core (``seed''), the block cascade, the states $(\w,d)$, and the driving question of Section~\ref{sec:anchor} --- is the human author's invention, originating in a hand-drawn note of 13~March~2023 that predates the collaboration. The analytical superstructure erected on it --- the anchor formulation, the cycle apparatus, the equidistribution formalization, and the proofs --- was developed in AI-assisted research under the author's direction, drawing on the classical literature's concepts; any overlap with contemporary work lies in that layer, not in the coordinate system. Appendix~\ref{app:method} states the responsibility and verification protocol.
+Block-like decompositions and stochastic models are classical (Terras \cite{terras}; see Lagarias \cite{lagarias} for the literature), and the $2$-adic conjugacy of the Collatz map to the shift underlies all Haar-genericity heuristics. The unconditional density line descending from Terras is long and is not what Section~\ref{sec:aeh} adds to. Terras \cite{terras} and Everett \cite{everett} place descent below the start at natural density one; Korec \cite{korec} lowers the target to $y^{c}$ for every $c > \log_4 3 = 0.7924\ldots$, in natural density and within $O(\log y)$ steps; Inselmann \cite{inselmann} carries a two-sided trajectory law --- the orbit tracked to within $m^{\pm\varepsilon}$ of its classical drift, simultaneously at every time up to $(\log_2\tfrac43)^{-1}\log_2 m$ Syracuse steps, the full descent horizon in that unit --- at natural density one, and so reaches $m^{\varepsilon}$ for every fixed $\varepsilon>0$; and Tao \cite{tao} reaches every divergent threshold, in logarithmic density. All of these horizons are counted in steps, and their reading in the reduced blocks of Section~\ref{sec:aeh} is not free: it divides by a mean number of steps per block that is itself part of what Hypothesis~\ref{hyp:aeh} asserts. What Hypothesis~\ref{hyp:aeh} asserts is not descent but the letter statistics themselves --- equivalently the exact window law $\pi_{k,D}$ --- at horizons past the digit budget of Heuristic~\ref{prop:budget}. Tao's paper carries a footnote to two further $3$-adic studies, and neither is the object appearing here. Wirsching \cite{wirsching} completes the root of the predecessor tree $3$-adically and studies the inverse map as a Markov chain on $[0,1] \times \Z_3^{\times}$ in order to \emph{count} predecessors; his inverse branches therefore carry equal weight and his limiting $3$-adic law is Haar, whereas the law appearing in Section~\ref{sec:aeh} weights each branch by the probability $2^{-a}$ that an orbit takes it and is consequently not uniform --- $(\tfrac23,\tfrac13)$ at level one where Haar gives $(\tfrac12,\tfrac12)$. The two programmes are nonetheless siblings in shape: what Wirsching needs is that a Collatz-generated object be unbiased in $3$-adic coordinates, and Hypothesis~\ref{hyp:aeh} is that one is unbiased in $2$-adic coordinates. Thomas \cite{thomas} proves that the integers whose orbit reaches $1$ with all six frequencies over the units modulo $18$ below $\tfrac16 + 0.0215$ have counting function at most $N^{0.9999}$; he constructs no limiting measure, and the law recorded here implies his conclusion, its level-one form already forcing some class to frequency at least $\tfrac29$. Two-adic and Diophantine methods dominate the cycle literature \cite{steiner,sdw,hercher,eliahou}; effective linear forms in logarithms \cite{yu,bl,rhin} are the engine, and the verified range of the conjecture stands at $2^{71}$ \cite{barina}. Two contemporary human--AI efforts are close in spirit: a documented exploration \cite{llmcollatz} develops a burst--gap decomposition and an orbit equidistribution conjecture, and a Lean~4 formalization \cite{merle} proves cycle exclusion conditionally on Baker-type and verification hypotheses, including an impossibility lemma for measure-based uniform bounds kindred to our Theorem~\ref{thm:staircase}; neither contains the anchor machinery, exact per-step laws, or the counting-limit dichotomy developed here. A bachelor's thesis of Rackl (Klagenfurt, 2021) applies valuation methods to Syracuse cycles via the classical cycle equation; it likewise contains none of the present apparatus. The division of labor in the present work is stated precisely, because it matters for both credit and blame. The reduced coordinate system itself --- the odd core (``seed''), the block cascade, the states $(\w,d)$, and the driving question of Section~\ref{sec:anchor} --- is the human author's invention, originating in a hand-drawn note of 13~March~2023 that predates the collaboration. The analytical superstructure erected on it --- the anchor formulation, the cycle apparatus, the equidistribution formalization, and the proofs --- was developed in AI-assisted research under the author's direction, drawing on the classical literature's concepts; any overlap with contemporary work lies in that layer, not in the coordinate system. Appendix~\ref{app:method} states the responsibility and verification protocol.
 
 \section{The reduced system}\label{sec:reduced}
 
@@ -157,7 +157,7 @@ Three digit-determinacy facts chain together. (a) For $u \equiv 1\ (8)$, $N(u) \
 \end{proof}
 
 \begin{theorem}[one-step trichotomy]\label{thm:onestep}
-The \emph{depth-$k$ window} of a valid state $(\w,d)$ consists of the residues of Theorem~\ref{thm:deltaM} together with the stratum labels $(s, \sigma, a_+)$. From the depth-$k$ window alone, one can determine: the exact next depth $\dnext$ and next residue-parity class; the exact value $s_+ \in \{1,2\}$ if the next class is non-lifting; and, if lifting, the truncation of the next displacement mod $2^k$ --- yielding $s_+$ exactly when nonzero, and the correct report ``$s_+ \ge k+2$'' when zero. The window never outputs a wrong value; under the product law of Section~\ref{sec:aeh} the undecided rate is $\approx 2^{-(k+1)}$.
+The \emph{depth-$k$ window} of a valid state $(\w,d)$ consists of the residues of Theorem~\ref{thm:deltaM} together with the stratum labels $(s, \sigma, a_+)$. From the depth-$k$ window alone, one can determine: the exact next depth $\dnext$ and next residue-parity class; the exact value $s_+ \in \{1,2\}$ if the next class is non-lifting; and, if lifting, the truncation of the next displacement mod $2^k$ --- yielding $s_+$ exactly when nonzero, and the correct report ``$s_+ \ge k+2$'' when zero. The window never outputs a wrong value; under the law $\pi_{k,D}$ of Section~\ref{sec:aeh} the undecided rate is $\approx 2^{-(k+1)}$.
 \end{theorem}
 
 \begin{proof}
@@ -238,23 +238,56 @@ Prompted by correspondence with Eric Merle concerning this theorem's sharpness h
 
 \section{The equidistribution hypothesis, made exact}\label{sec:aeh}
 
-Why is a product law the right comparison object? By Theorem~\ref{thm:onestep}, all dynamical decisions at horizon one are functions of the depth-$k$ window; the natural null model is therefore a measure on windows, and the natural choice of measure is forced by the structure: the $\w$-residues carry the anchor digits, for which Haar measure is the canonical reference (this is where the classical $2$-adic shift-conjugacy heuristics live), while the depth $d$ is \emph{dynamical} --- it is produced by Theorem~\ref{thm:depth} --- and so receives not Haar measure but the exact renewal law of the depth itself: $\dnext = m_+ + a_+$ with $m_+$ geometric$(1/2)$ and \emph{independent} of the absorption $a_+$, so that it is the distribution of the depth, and not that of the absorption, which is the convolution of the two. The stationary $3$-adic law governing $a_+$ (\texttt{aeh.md} \S13.6.5) is not new here: it is Tao's Syracuse random variable $\mathrm{Syrac}(\Z_3)$ \cite[Lemma~1.12 and Remark~1.13]{tao}, in the present normalisation. Precisely, the $3$-adic past-limit of the block coordinate has the law of $\mathrm{Syrac}(\Z_3)/2$ --- the two differ by the $3$-adic unit $2^{-1}$ because one block here is a run of Syracuse steps terminated by the first exponent $\ge 2$, so that the block chain sees the Syracuse chain conditioned on that event --- and hence $a_+ = \vth{\mathrm{Syrac}(\Z_3) + 2}$. The values $P(a_+ = 0) = \tfrac23$, $P(a_+ = 1) = \tfrac{19}{63}$, $P(a_+ \ge 2) = \tfrac{2}{63}$, and thence $P(d = 1) = \tfrac13$, $P(d = 2) = \tfrac{20}{63}$, are read off the nine values of $\mathrm{Syrac}(\Z/9\Z)$ that Tao computes. What the present coordinates add is the \emph{joint labelled} law (\texttt{aeh.md} \S13.6.3(v)): the $\w$-residues are Haar-uniform among odd residues and independent of the depth, with $\dnext = m_+ + a_+$ and $m_+ \perp a_+$, the whole carried on the residues \emph{together with} the stratum labels $(s,\sigma,a_+)$ that Theorem~\ref{thm:onestep} reads --- $a_+$ being a $3$-adic function of $\w$ (Lemma~\ref{lem:absorption}) which the finite $2$-adic residue window does not determine. Let $\pi_k$ denote this product law. The stationary law of the exact window chain is a $\sim\!1\%$-accurate model of that depth marginal rather than the marginal itself --- the resolution at which \texttt{aeh.md} \S13.4 recorded it --- and the two differ by exactly computed rationals (\texttt{aeh.md} \S13.6.5). The class skeleton of the chain is computable exactly: e.g.\ from class $(\w\equiv1\ (8),\ d$ odd$)$ the next depth is exactly $1$ (since $m_+ = 1$, $a_+ = 0$ there), and from $(\w \equiv 5\ (8),\ d$ odd$)$, $P(\dnext \text{ even}) = \tfrac23$ exactly. Under $\pi_k$, unconditionally: $P(s = j) = 2^{-j}$ (four of eight classes give $s=1$, two give $s=2$, and the lifting shells are geometric); the $3$-gain rate is $\sum_{j\,\mathrm{even}} 2^{-j} = \tfrac13$ by Lemma~\ref{lem:absorption}; and the classical negative drift is a property of $\pi_k$ --- but only of $\pi_k$: window equidistribution at each fixed $k$ does not control the means of the unbounded $m_+$ and $s$, so no drift or contraction statement about orbits follows from it (\texttt{aeh.md} \S13.3.2). The folklore ``ledger'' is thus a theorem \emph{about} $\pi_k$; the empirical question is only whether the orbits of typical starting values follow $\pi_k$.
+What is the right comparison object? By Theorem~\ref{thm:onestep}, all dynamical decisions at horizon one are functions of the depth-$k$ window; the natural null model is therefore a measure on windows, and the natural choice of measure is forced by the structure: the $\w$-residues carry the anchor digits, for which Haar measure is the canonical reference (this is where the classical $2$-adic shift-conjugacy heuristics live), while the depth $d$ is \emph{dynamical} --- it is produced by Theorem~\ref{thm:depth} --- and so receives not Haar measure but the exact renewal law of the depth itself: $\dnext = m_+ + a_+$ with $m_+$ geometric$(1/2)$ and \emph{independent} of the absorption $a_+$, so that it is the distribution of the depth, and not that of the absorption, which is the convolution of the two. The stationary $3$-adic law governing $a_+$ (\texttt{aeh.md} \S13.6.5) is not new here: it is Tao's Syracuse random variable $\mathrm{Syrac}(\Z_3)$ \cite[Lemma~1.12 and Remark~1.13]{tao}, in the present normalisation. Precisely, the $3$-adic past-limit of the block coordinate has the law of $\mathrm{Syrac}(\Z_3)/2$ --- the two differ by the $3$-adic unit $2^{-1}$ because one block here is a run of Syracuse steps terminated by the first exponent $\ge 2$, so that the block chain sees the Syracuse chain conditioned on that event --- and hence $a_+ = \vth{\mathrm{Syrac}(\Z_3) + 2}$. The values $P(a_+ = 0) = \tfrac23$, $P(a_+ = 1) = \tfrac{19}{63}$, $P(a_+ \ge 2) = \tfrac{2}{63}$, and thence $P(d = 1) = \tfrac13$, $P(d = 2) = \tfrac{20}{63}$, are read off the nine values of $\mathrm{Syrac}(\Z/9\Z)$ that Tao computes. What the present coordinates add is the \emph{joint labelled} law (\texttt{aeh.md} \S13.6.3(v)): the $\w$-residues are Haar-uniform among odd residues and independent of the depth, with $\dnext = m_+ + a_+$ and $m_+ \perp a_+$, the whole carried on the residues \emph{together with} the stratum labels $(s,\sigma,a_+)$ --- $a_+$ being a $3$-adic function of $\w$ (Lemma~\ref{lem:absorption}) which the finite $2$-adic residue window does not determine. Two integers fix the observable: a depth $k$ and a \emph{cap} $D$, chosen together and quantified over. The \emph{capped depth-$k$ window} at a visit is
+\[
+  W_{k,D} \;=\; \bigl(\, \w \bmod 2^{k+2},\; d \wedge D,\; s \wedge D,\;
+  \sigma \wedge D,\; a_+ \wedge D \,\bigr), \qquad u \wedge D := \min(u,D),
+\]
+a finite alphabet of at most $2^{k+1}D^3(D+1)$ letters; the cap is what bounds it, and it must cap the labels as well as the depth, since $\sigma$ and $a_+$ are unbounded. This is \emph{not} the window of Theorem~\ref{thm:onestep}: that object carries residues to the state-dependent depth $\sigma + k + 2$ together with the \emph{exact} labels, so its alphabet is countably infinite, and it decides the next step. $W_{k,D}$ decides nothing; it is a statistic, and no statement in this section asks more of it. Let $\pi_{k,D}$ denote the law of $W_{k,D}$ under the two-sided Bernoulli measure $\hat B = \bigotimes_{i \in \Z}(\mathrm{geom}(\tfrac12) \times \mathrm{geom}(\tfrac12))$ on the door-letter alphabet --- two-sided because the absorption $a_+$ is a function of the orbit's $3$-adic past and has no realisation on the one-sided $2$-adic side (\texttt{aeh.md} \S13.6.3(iii), \S13.6.5); reading the stationary Syracuse variable as the outcome of an iteration extending to arbitrarily large negative times is Tao's own alternative to his positive-time indexing \cite[Remark~1.13, footnote~4 of arXiv~v7]{tao}. ``Product'' names exactly two clauses of $\pi_{k,D}$ --- residue $\perp$ depth, and $m_+ \perp a_+$ --- and no others: $\pi_{k,D}$ is not a product across its coordinates ($s$ is an exact function of the full state), and the process $(W_{k,D}(n))_n$ is stationary but not independent across time (e.g.\ from $(\w \equiv 1\ (8),\ d$ odd$)$ the next depth is exactly $1$). The stationary law of the exact window chain is a $\sim\!1\%$-accurate model of the depth marginal of $\pi_{k,D}$ rather than the marginal itself --- the resolution at which \texttt{aeh.md} \S13.4 recorded it --- and the two differ by exactly computed rationals (\texttt{aeh.md} \S13.6.5). The class skeleton of the chain is computable exactly: the transition from $(\w\equiv1\ (8),\ d$ odd$)$ cited above holds because $m_+ = 1$ and $a_+ = 0$ there, and from $(\w \equiv 5\ (8),\ d$ odd$)$, $P(\dnext \text{ even}) = \tfrac23$ exactly. Under $\pi_{k,D}$, unconditionally: $P(s = j) = 2^{-j}$ at every $j < D$ (four of eight classes give $s=1$, two give $s=2$, and the lifting shells are geometric), the mass beyond the cap sitting in one tail cell; the $3$-gain rate is $\sum_{j\,\mathrm{even}} 2^{-j} = \tfrac13$ by Lemma~\ref{lem:absorption}, exact up to that same cell, whose parity split the cap hides; and the classical negative drift is a property of $\pi_{k,D}$ --- but only of $\pi_{k,D}$: window equidistribution at each fixed $(k,D)$ does not control the means of the unbounded $m_+$ and $s$, so no drift or contraction statement about orbits follows from it (\texttt{aeh.md} \S13.3.2). The folklore ``ledger'' is thus a theorem \emph{about} $\pi_{k,D}$; the empirical question is only whether the orbits of typical starting values follow $\pi_{k,D}$.
 
 \begin{hypothesis}[AEH, ensemble form]\label{hyp:aeh}
-Fix a depth $k$, a horizon rate $\theta > 0$, and a cut sequence $X_N \to \infty$
-with $\log X_N = o(\log N)$. For each $N$, draw $x$ uniformly from the odd integers
-of $[N, 2N)$; put $(\w_0,d_0) = R(x)$ and $(\w_{n+1},d_{n+1}) = F(\w_n,d_n)$; and let
-$\nu_{k,N}(x)$ be the empirical distribution of the depth-$k$ windows of the first
-$T = \lceil \theta \log_2 N\rceil$ visits, restricted to the \emph{bulk} visits ---
-those with $x_{\mathrm{exit}} > X_N$ --- each qualifying visit counted once and no
-visit reweighted by the orbit it came from. Then for every $\varepsilon > 0$,
+Fix a \emph{budget rate} $\tau > 0$ and a \emph{block horizon rate} $\theta > 0$;
+for each $N$ put $b = \lfloor\log_2 N\rfloor$, $\Lambda_N = \lceil \tau b\rceil$
+and $T_N = \lceil \theta b\rceil$. Draw $x$ uniformly from the odd integers of
+$[N, 2N)$; put $(\w_0,d_0) = R(x)$ and $(\w_{n+1},d_{n+1}) = F(\w_n,d_n)$; let the
+\emph{letter} at block $n$ be $\ell_n = (m_{+,n},\,s_{n+1})$, and let
+$S_n = \sum_{i<n}(m_i + s_i)$ be the \emph{exponent spent} before block $n$ ---
+the number of $2$'s divided out from $x$ to $x_{\mathrm{exit}}(n-1)$. Tally block
+$n$ at the symbol
+\[
+  \tilde\ell_n \;=\; \ell_n \ \text{ if } S_n < \Lambda_N, \qquad
+  \tilde\ell_n \;=\; \dagger \ \text{ otherwise.}
+\]
+For a finite word $w = (w_1,\dots,w_L)$ of letters, let $f_N(w,x)$ be the
+frequency of $w$ among the $T_N - L + 1$ blocks
+$(\tilde\ell_n,\dots,\tilde\ell_{n+L-1})$, $0 \le n \le T_N - L$: every
+block counted exactly once, at weight $1/(T_N-L+1)$ --- the same number for
+every block of every orbit, so no block is reweighted by the orbit it came from
+and no denominator is random. Then for every finite word $w$ and every
+$\varepsilon > 0$,
 \[
   \frac{2}{N}\,\#\bigl\{\, x \text{ odd},\ N \le x < 2N \;:\;
-     \lVert \nu_{k,N}(x) - \pi_k \rVert > \varepsilon \,\bigr\}
+  \bigl| f_N(w,x) - B[w] \bigr| > \varepsilon \,\bigr\}
   \;\longrightarrow\; 0 \qquad (N \to \infty),
 \]
-for every admissible $\theta$ and $(X_N)$.
+where, writing $w_i = (m_i, r_i)$ for the components of the $i$-th letter of $w$,
+$B[w] = \prod_{i} 2^{-(m_i + r_i)}$, and $B[w] = 0$ for any $w$ containing
+$\dagger$, for every admissible pair $(\tau,\theta)$ in the sense defined below.
 \end{hypothesis}
+
+Equivalently, and this is the form the calibration measures: for every $k$, $D$
+and $L$, the empirical distribution of the $L$-blocks of consecutive capped
+windows $W_{k,D}$ over the same tallied blocks, with $\dagger$ carried through
+and given mass $0$ by $\pi^{(L)}_{k,D}$, converges in total variation on the
+finite window alphabet, off a vanishing density of starts, to
+$\pi^{(L)}_{k,D}$, the $L$-block law of the stationary process under $\hat B$.
+The equivalence is Theorem 13.6.4 of \texttt{aeh.md}, a deterministic dictionary
+between letters and labelled window blocks; the case $L = 1$ recovers
+$\pi_{k,D}$, and $\pi^{(L)}_{k,D} \neq \pi_{k,D}^{\otimes L}$. A single sampled
+orbit segment has no infinite past at its first block, so the reconstruction of
+$W_{k,D}$ from letters is exact only away from the segment's start; the
+deviation occupies $O(1)$ blocks of a horizon $T_N \to \infty$ and contributes
+$O(1/T_N)$ to every frequency above.
 
 There is one limit here, $N \to \infty$, and the sample grows because the sampling
 scale grows rather than because any one orbit is run forever. That is forced. Along
@@ -262,74 +295,148 @@ a fixed orbit no limiting procedure survives: the unrestricted empirical distrib
 is false on every convergent orbit, whose tail sits at $(1,1)$ forever; and above a
 fixed cut a convergent orbit supplies only finitely many qualifying visits, and none
 at all once the cut exceeds its maximum, so a limit taking orbit length first and the
-cut second is empty rather than merely delicate, in whichever order it is taken. The
-bulk cut survives with a smaller and different job: it excises the \emph{bottom
-regime} --- the fixed drainage basin of small integers, whose window statistics are
-the digits of particular numbers rather than samples from a measure
-(\texttt{aeh.md} \S13.1) --- for those sampled orbits that reach it inside the
-horizon. The requirement $\log X_N = o(\log N)$ keeps it from becoming a selection
-rule, a cut that binds censoring exactly the largest descents and so biasing the
-quantities being measured (\texttt{aeh.md} \S13.4, \S13.5); for
-$\theta < 1/\beta$, where $\beta = 2(2-\LL) = 0.8301\ldots$ is the classical
-per-block contraction rate, the cut binds on a vanishing density of starts and the
-tally denominator is the deterministic $\lceil\theta\log_2 N\rceil$ that
-\texttt{aeh.md} \S13.5's standing rule --- fixed horizon, unweighted, per-visit
-sampling from uniform starts --- was written to secure.
+cut second is empty rather than merely delicate, in whichever order it is taken.
+
+The horizon does the job a bulk cut would do, and does it without one. A step of
+the one-division map $y \mapsto y/2$ or $(3y+1)/2$ never lowers $\log_2$ by more
+than $1$, so $\log_2 x_{\mathrm{exit}}(n-1) \ge \log_2 x - S_n$ for every start and
+every $n$, with no exceptional set; inside a budget $\tau < 1$ of the start's own
+bits every tallied exit therefore exceeds $N^{1-\tau}$, far above the
+\emph{bottom regime} of \texttt{aeh.md} \S13.1 --- the fixed drainage basin of
+small integers, whose window statistics are the digits of particular numbers
+rather than samples from a measure. That matters because any altitude
+threshold is a selection on the observable itself:
+$x_{\mathrm{exit}} = (3^{d}\w - 1)/2^{s}$, so a cut on it censors large $s$, and a
+cut on the core $\wnext$ censors large $s$, $m_+$ and $a_+$ together. The budget
+clause $S_n < \Lambda_N$ is instead \emph{predictable} --- decided by blocks
+strictly earlier than the one it admits --- and the tally denominator is the
+deterministic $T_N$ that \texttt{aeh.md} \S13.5's
+standing rule --- fixed horizon, unweighted, per-visit sampling from uniform
+starts --- was written to secure. Call $\tau$ \emph{protected} when all but a
+vanishing density of starts keep every in-budget exit above any $X_N$ with
+$\log X_N = o(\log N)$, and $(\tau,\theta)$ \emph{consistent} when
+$\theta\,\mathbb{E}_B[m+r] < \tau$; \emph{admissible} means both. Every
+$\tau < 1$ is protected outright by the bound above, and every
+$\tau < (1-\log_2\sqrt3)^{-1} = 4.8188\ldots$ is protected at natural density one
+by Inselmann \cite[Thm.~1.10]{inselmann} --- the same unit, nothing converted.
+Consistency is a theorem where the cylinder count runs and is part of
+Hypothesis~\ref{hyp:aeh} where it does not, since $\pi_{k,D}$ gives $\dagger$ no
+mass; it says exactly that blocks average $\mathbb{E}_B[m+r] = 4$ of exponent.
+Hence $4\theta < \tau < 1$ is $\theta < 1/4$ and $4\theta < \tau < 4.8188\ldots$
+is $\theta < 1/\beta = 1.2047\ldots$, where $\beta = 2(2-\LL) = 0.8301\ldots$ is
+the classical per-block contraction rate and $4/\beta = (1-\log_2\sqrt3)^{-1}$ is
+an identity: the block reading of either threshold divides by a mean the
+hypothesis itself supplies.
 
 The hypothesis has an unconditional base case, and it is Heuristic~\ref{prop:budget}
 with a number on it. The classical coding fact --- the odd integers whose first $n$
 blocks realize a prescribed itinerary form exactly one residue class modulo
 $2^{S+1}$, $S$ the itinerary's total exponent (Terras \cite{terras}; in the present
 coordinates \texttt{itinerary.md} \S14.15.1.5) --- makes the first $n$ blocks of a
-uniform start from $[2^L, 2^{L+1})$ exactly product-distributed on the event
-$S + 1 \le L$, whose complement has probability $e^{-\Theta(L)}$ whenever
-$n \le (\tfrac14 - \varepsilon)L$. Since $S$ accumulates at mean rate $4$ per block ---
-the $\sigma \approx 4.0$ of Heuristic~\ref{prop:budget}, exactly $2 + 2$ under
-$\pi_k$ --- Hypothesis~\ref{hyp:aeh} is a \emph{theorem} for every horizon rate
-$\theta < 1/4$. A descent from $N$ to $O(1)$ takes $1/\beta = 1.2047\ldots$ blocks
-per bit, some $4.8$ times as long. Hypothesis~\ref{hyp:aeh} is exactly the assertion
-that the product law still describes the orbit after the start's digits have been
-spent; the digit budget locates the frontier, and this is the statistical statement
-on the far side of it. That frontier is the classical one: the same $\theta < 1/4$
-is where Terras's count stops, and $1 - \beta/4 = \log_4 3$ is exactly the exponent
-Korec \cite{korec} obtains by exhausting it. It is a frontier of this technique and
+start drawn uniformly from \emph{any} window of $2^{J}$ consecutive integers
+exactly product-distributed on the event $S + 1 \le J$: the event that the itinerary
+has not outspent the start's supply of binary digits. Writing
+$b = \lfloor\log_2 N\rfloor$, this gives, for every $J \ge 2$,
+\[
+  \bigl\lVert \mathrm{Law}(\ell_0,\dots,\ell_{n-1}) - B^{\otimes n}
+    \bigr\rVert_{\mathrm{TV}}
+  \;\le\; \frac{2^{J+2}}{N} + P_B(S_n \ge J),
+  \quad
+  P_B(S_n \ge J) = P\bigl(\mathrm{Bin}(J-1,\tfrac12) < 2n\bigr),
+\]
+the identity on the right because $S_n$ is the waiting time for the $2n$-th head in
+a fair coin sequence. The first term is the price of a general window $[N,2N)$ over
+a dyadic one and is negligible for $J \le (1-\eta)b$; the second decays at the exact
+rate $\log 2 - H(2\theta)$ per bit at $n = \lceil\theta b\rceil$, $H$ the binary
+entropy --- positive for every $\theta < 1/4$ and \emph{zero} at $\theta = 1/4$,
+since the optimal Chernoff tilt is $e^{\lambda} = 2(1-2\theta)$ and needs
+$\lambda > 0$. The bound is on the joint law of the whole length-$n$ word, so it
+controls every finite block length at once. Together with the concentration of
+empirical pattern frequencies, the removal of the segment's initial past-boundary
+--- $O(1)$ blocks of a horizon $T_N \to \infty$ --- and the altitude bound above,
+which makes the budget its own protection, this yields the hypothesis outright:
+Hypothesis~\ref{hyp:aeh} is a \emph{theorem} for every admissible $(\tau,\theta)$
+with $\tau < 1$, equivalently for every horizon rate $\theta < 1/4$, at every
+block length. The assembly is Lemma 13.2.4 of \texttt{aeh.md}.
+
+The natural clock here is total exponent, not blocks. The frontier is one unit of
+exponent per bit of start --- the start's own digit supply, with no estimate in it
+--- and it reads as $1/4$ blocks per bit only through the mean exponent per block,
+$\mathbb{E}_B[m+r] = 4$, the $\sigma \approx 4.0$ of Heuristic~\ref{prop:budget}
+and exactly $2+2$ under $\pi_{k,D}$. That conversion is available here precisely
+because the word is exactly $B$ here. A descent from $N$ to $O(1)$ takes
+$1/\beta = 1.2047\ldots$ blocks per bit, equivalently $4.8188\ldots$ units of
+exponent per bit, some $4.8$ times as far. Hypothesis~\ref{hyp:aeh} is exactly the
+assertion that the law still describes the orbit after the start's digits have
+been spent; the digit budget locates the frontier, and this is the statistical
+statement on the far side of it. That frontier is the classical one: the same
+$\theta < 1/4$ is where Terras's count stops, and $1 - \beta/4 = \log_4 3$ is
+exactly the exponent Korec \cite{korec} obtains by exhausting it. It is a frontier
+of this technique and
 not of the problem --- Inselmann \cite{inselmann} crosses it unconditionally for the
 trajectory envelope and the first moment, by an argument that buys the missing
-iteration invariance from a density notion stronger than natural density rather than
-from a sharper count.
+iteration invariance from a density notion stronger than natural density
+($*$-density: every initial segment carries all but $O(N^{-\delta})$ of its mass
+for some $\delta > 0$, which sets of natural density one need not do) rather than
+from a sharper count. His
+horizons are in step time: he starts from the classical range of $\log_2 m$ steps of
+$T$ and extends it by the factor $(1-\log_2\sqrt3)^{-1} = 4.8188\ldots$. That factor
+is $(1/\beta)/(1/4)$ --- the identity $4/\beta = 2/(2-\LL)$ --- and is the same
+number in any time units; the endpoints read as $1/4$ and $1/\beta$ blocks per bit
+only after dividing by the mean exponent per block, which is a theorem where the
+cylinder count runs and is Hypothesis~\ref{hyp:aeh} where it does not.
 
-AEH implies the ledger with error $O(2^{-k})$ via Theorem~\ref{thm:onestep}, in the
-form the hypothesis has: for every $\varepsilon$ and every horizon rate, all but a
-set of starting values of natural density zero carry those frequencies along their
-first $\lceil\theta\log_2 x\rceil$ bulk blocks. The descent consequence is not stated
+AEH implies the ledger, in the form the hypothesis has: $s$ is a coordinate of
+the observable, so $P(s = j) = 2^{-j}$ is a marginal of $\pi_{k,D}$ rather than a
+deduction, exactly at every $j < D$ and up to the cap's single tail cell above;
+and for every $\varepsilon$ and every horizon rate, all but a vanishing density of
+the odd starting values of each size carry those frequencies along their first
+$T_N$ blocks, all of them within the budget. Evaluating
+each odd $x$ once, at its own dyadic scale $2^{\lfloor \log_2 x\rfloor}$, turns
+that array of statements into a single one: the odd integers that fail at their
+own scale have natural density zero (\texttt{aeh.md} Proposition 13.2.5). The
+union over \emph{all} sampling scales is a different and larger object and is not
+controlled --- the bad sets form a triangular array, each testing a horizon and a
+budget that move with the scale, and vanishing density in every window does not
+thin their unrestricted union. The error $O(2^{-k})$ of
+Theorem~\ref{thm:onestep} prices a different statement ---
+\emph{predicting} the next exit valuation from a window --- which the hypothesis
+does not use. The descent consequence is not stated
 here, because it is a theorem without the hypothesis. That all but a set of starting
 values of natural density zero drop below $x^{\eta}$, for every fixed $\eta > 0$,
-within $O(\log x)$ blocks is Inselmann \cite[Cor.~1.4]{inselmann}; his
-\cite[Thm.~1.10]{inselmann} is stronger than anything Hypothesis~\ref{hyp:aeh} yields
-here, being two-sided, uniform in the time, and unconditional, and it already runs to
-the full descent horizon $1/\beta$ blocks per bit rather than the $1/4$ at which the
-cylinder count of Section~\ref{sec:aeh} stops. The first entry of the ledger --- that
-odd steps occupy half the schedule to the same horizon --- is likewise unconditional
-\cite[Thm.~1.6]{inselmann}. What the hypothesis supplies beyond these is
+within $(1-\log_2\sqrt3)^{-1}\log_2 x$ steps of $T$, hence within $O(\log x)$
+blocks, is Inselmann \cite[Cor.~1.4]{inselmann}; his \cite[Thm.~1.10]{inselmann} is
+stronger than anything Hypothesis~\ref{hyp:aeh} yields here, being two-sided,
+uniform in the time, and unconditional, and it runs to
+$(\log_2\tfrac43)^{-1}\log_2 m$ Syracuse steps --- $4.8188\ldots$ times the
+classical range at which the cylinder count of Section~\ref{sec:aeh} stops, the two
+measured in the same units. The first entry of the ledger --- that odd steps occupy
+half the schedule to the same horizon --- is likewise unconditional
+\cite[Thm.~1.6]{inselmann}, and is exactly what carries his own passage from
+$T$-time to Syracuse time. The further passage to block time needs the frequency
+with which a Syracuse step ends a block, a two-letter statistic of the parity word
+that neither theorem supplies and that $\pi_{k,D}$ does; it is therefore a
+consequence of Hypothesis~\ref{hyp:aeh} and not available to underwrite it. What
+the hypothesis supplies beyond these is
 distributional and is the whole of its content: the full $2^{-j}$ marginal at every
-$j$, the exact $\tfrac13$ rate of Lemma~\ref{lem:absorption}, and the depth law, at
-every finite depth and past the budget at which the classical count stops. Its
-exceptional set is a density-zero set of \emph{starting values} at a prescribed
-finite horizon --- not a null set of orbits, and not a statement about any orbit's
-infinite tail. It does not exclude individual staircase tails
+$j$ below the cap, the exact $\tfrac13$ rate of Lemma~\ref{lem:absorption}, and the
+depth law, at every finite depth and past the budget at which the classical count
+stops. Its exceptional set is a set of \emph{starting values} of vanishing density
+at a prescribed finite horizon --- not a null set of orbits, and not a statement
+about any orbit's infinite tail. It does not exclude individual staircase tails
 (Remark~\ref{rem:staircase}); it does not iterate --- the image of a density-one set
 of starts need not be density-one at the next scale, an obstruction Tao states in the
 same terms \cite{tao}; and by Heuristic~\ref{prop:budget} it cannot be reached by
 finite-window computation. Its content is a question about digits of $2$-adic
 logarithms, older and broader than the Collatz problem.
 
-\paragraph{Calibration.} An eight-round campaign (per-orbit statistics, $1{,}600$--$2{,}600$ independent orbits per cell) produced four apparent violations of $\pi_k$-uniformity, each dissolved by a sharper control: an $s{=}3$ marginal excess (artifact of small starting values); pair correlations (same); digit biases (contamination by the \emph{bottom regime} --- the fixed drainage basin of small integers, where deviations reach $z=41$ but reflect particular numbers, not a measure); and finally a $5\sigma$ digit bias in a single cell surviving a $2^{40}$ cut. The last dissolved under fixed-horizon unweighted sampling ($0.2503\pm0.0015$ against null $0.25$ over $84{,}739$ visits) and was explained exactly:
+\paragraph{Calibration.} An eight-round campaign (per-orbit statistics over each cell's own conditional counts, $1{,}600$--$2{,}600$ independent orbits per cell, under an altitude cut on the core) produced four apparent violations of $\pi_{k,D}$-uniformity, each dissolved by a sharper control: an $s{=}3$ marginal excess (artifact of small starting values); pair correlations (same); digit biases (contamination by the \emph{bottom regime} --- the fixed drainage basin of small integers, which is that cut's own complement, where deviations reach $z=41$ but reflect particular numbers, not a measure); and finally a $5\sigma$ digit bias in a single cell surviving a $2^{40}$ cut. The last dissolved under fixed-horizon unweighted sampling ($0.2503\pm0.0015$ against null $0.25$ over $84{,}739$ visits) and was explained exactly:
 
 \begin{lemma}[deterministic routing]\label{lem:routing}
 For $\w \equiv 1 \pmod 8$, $d = 1$: here $s = 1$, $C = 3\w + 1$, $\vt{C} = 2$, $a_+ = 0$, so $\wnext = (3\w+1)/4$ and $\dnext = 1$; the residue $\w \bmod 32$ determines the next class exactly: $1 \mapsto (1,1)$ (immediate self-return), $9 \mapsto (7,1)$, $17 \mapsto (5,1)$, $25 \mapsto (3,1)$, the lifting class.
 \end{lemma}
 
-Ratio estimators over correlated visit sequences inherit this routing (residue $25$ leads into deep descent, hence fewer qualifying visits, hence inflated per-orbit weight), manufacturing a bias aimed at one residue of the unique class with a self-loop channel. Bulk uniformity stands unqualified at all tested depths.
+Ratio estimators over correlated visit sequences inherit this routing (residue $25$ leads into deep descent, hence fewer qualifying visits, hence inflated per-orbit weight), manufacturing a bias aimed at one residue of the unique class with a self-loop channel. Uniformity stands unqualified at every tested depth and cell, within two ceilings the campaign does not reach past. It tests block lengths $L = 1$ and $L = 2$ --- single cells and consecutive-pair cells, and no longer pattern than that --- and is silent above; and its adjudicating runs pool per visit across orbits, so what they measure is the across-orbit average of the per-start frequencies, a consequence of Hypothesis~\ref{hyp:aeh} rather than the per-start statement itself, which would be tested by the distribution across orbits of $\lVert\nu - \pi_{k,D}\rVert_{\mathrm{TV}}$ and is not among the runs reported (\texttt{aeh.md} \S13.4, \S13.5). A third qualifier belongs to the campaign rather than to the hypothesis: its altitude guard cuts on the core $\wnext$ rather than on the door, which censors $s$, $m_+$ and $a_+$ at once, and it does bind at finite size --- in the adjudicating run it removes $2.6\%$ of visits and moves the reported statistics at the third decimal (\texttt{aeh.md} \S13.4). Hypothesis~\ref{hyp:aeh} carries no cut of any kind; it tallies within the exponent budget, which bounds every tallied exit from below without selecting on the letter being tallied.
 
 \section{Discussion}
 
@@ -337,7 +444,7 @@ In reduced coordinates the Collatz problem factors cleanly. The local arithmetic
 
 \appendix
 \section{Methodology, responsibility, and records}\label{app:method}
-This work was developed through extensive AI-assisted research over three years (2023--2026), from a hand-drawn origin note (13 March 2023) through seventy-nine drafts to a research wiki whose pages carry status headers, verification records, and refuted claims with their refutation data. The author is responsible for the published claims, the research direction, and the standards of evidence; the AI collaborator carried out the mathematical development within the author's coordinate system --- formulations, proofs, computations, and connections to the literature. Because this division of labor is unusual, correctness claims rest on the documented verification protocol rather than on authorial authority alone: every computational claim cites a runnable script; every result labeled proved was re-verified with independently written code before being so labeled; the calibration campaign's four dissolved anomalies, and two corrected search-filter errors on the cycle side, are documented rather than smoothed over. The complete record (wiki, code, draft history, origin note) is public at \url{https://github.com/macindoe/collatz}; every wiki section and script named in this paper is cited at commit \texttt{c2d465a}.
+This work was developed through extensive AI-assisted research over three years (2023--2026), from a hand-drawn origin note (13 March 2023) through seventy-nine drafts to a research wiki whose pages carry status headers, verification records, and refuted claims with their refutation data. The author is responsible for the published claims, the research direction, and the standards of evidence; the AI collaborator carried out the mathematical development within the author's coordinate system --- formulations, proofs, computations, and connections to the literature. Because this division of labor is unusual, correctness claims rest on the documented verification protocol rather than on authorial authority alone: every computational claim cites a runnable script; every result labeled proved was re-verified with independently written code before being so labeled; the calibration campaign's four dissolved anomalies, and two corrected search-filter errors on the cycle side, are documented rather than smoothed over. The complete record (wiki, code, draft history, origin note) is public at \url{https://github.com/macindoe/collatz}; every wiki section and script named in this paper is cited at commit \texttt{677a76a}.
 
 \begin{thebibliography}{99}
 \small

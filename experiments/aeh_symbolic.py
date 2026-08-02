@@ -538,10 +538,21 @@ def check_depth_comparison(pa, pd):
 
 def check_orbit_texture(pa, pd, pi_chain, seed=31005, NORB=8000, BURN=10, HOR=30, CUT=1 << 30):
     """Fixed-horizon, unweighted, per-visit sampling from uniform starts (13.5
-    standing rule): starts in [2^70, 2^71) so the bulk cut omega > 2^30 never
-    binds within the burn-in + horizon (no survivorship selection at finite
-    size; 13.2.1's limit regime realized directly); fixed burn-in of BURN steps
-    from the artificial start state, then exactly HOR steps, every visit pooled."""
+    standing rule): starts in [2^70, 2^71), fixed burn-in of BURN steps from
+    the artificial start state, then exactly HOR steps, every visit pooled.
+
+    The core cut omega > 2^30 DOES bind in this run: it removes 4,191 of
+    158,580 visits (2.6 %) and binds on 15.5 % of orbits, against 2,653
+    (1.7 %) and 8.9 % for the door cut x_exit > 2^30, the two rules
+    disagreeing on 1,538 visits (aeh.md 13.4).  So there is survivorship
+    selection at finite size, and it is selection on the observable itself:
+    the core cut censors large s, m_+ and a_+ at once, moving the s-marginal
+    at the third decimal (mean s 1.9999 uncensored, 1.9930 under the door
+    cut, 1.9871 here).  The behaviour below is deliberately left as it is --
+    the values recorded at aeh.md 13.6.5 were produced by it, and changing it
+    would orphan them.  aeh.md 13.2.1 no longer carries a bulk cut at all: it
+    tallies within an exponent budget (13.2.3), which bounds every tallied
+    exit from below without selecting on the letter being tallied."""
     print("\n== 9. Orbit texture (fixed horizon, unweighted, per-visit, uniform starts;")
     print(f"      starts 2^70, burn-in {BURN}, horizon {HOR}, cut omega > 2^30; 13.5 rule) ==")
     rng = random.Random(seed)

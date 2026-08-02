@@ -1,7 +1,7 @@
 ---
 status: closed — entry map, tower map, and Stage 1 reduction summary; the synthesis proper (11.8.3) is split to stage1-synthesis.md
 scope: monolith 11.8.1-11.8.2, 11.8.4 (11.8.3 → stage1-synthesis.md)
-updated: 2026-07-22
+updated: 2026-08-02
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -576,7 +576,7 @@ hence `E[s] = 2`, and (by Lemma `9.3.1`) the `3`-gain rate is
 P(s even) = 1/4 + 2^(-4) + 2^(-6) + ... = 1/3.
 ```
 
-Three remarks on the status of this ledger. First, it is a heuristic, but its only nontrivial ingredient — the geometric tail on the lifting branch — is exactly the anchor-digit pseudo-randomness for which Appendix `A.4.6` provides direct evidence and `11.8.3.11` provides the unconditional worst-case cap. Second, it is empirically sharp: over `48,000` block steps of orbits launched from random seeds near `10^18`, the observed frequencies match the table to three decimal places, and the observed `3`-gain rate is `0.3338`. Third, it locates the deep-cascade machinery correctly: generic block steps are shallow (`s <= 2` with probability `3/4`), and Stages 1–2 govern an exceptional set with geometric tail — the machinery is a theory of the rare events, not of the typical step.
+Three remarks on the status of this ledger. First, its status divides at the digit budget: the ledger is the `s`-marginal of the capped-window law `π_{k,D}`, exact below the cap, and inside the budget it is unconditional — proved at every horizon rate `θ < 1/4` block per bit, for all but a vanishing density of starting values of each size (aeh.md `13.2.4`(d)–(e), `13.2.4.1`). Past the budget it remains a heuristic, and its only nontrivial ingredient there — the geometric tail on the lifting branch — is exactly the anchor-digit pseudo-randomness for which Appendix `A.4.6` provides direct evidence and `11.8.3.11` provides the unconditional worst-case cap. Second, it is empirically sharp: over `48,000` block steps of orbits launched from random seeds near `10^18`, the observed frequencies match the table to three decimal places, and the observed `3`-gain rate is `0.3338`. Third, it locates the deep-cascade machinery correctly: generic block steps are shallow (`s <= 2` with probability `3/4`), and Stages 1–2 govern an exceptional set with geometric tail — the machinery is a theory of the rare events, not of the typical step.
 
 **Size ledger.** The reduced coordinates hide `|x|`; it is restored as follows. A block entry `x = 2^m·u - 1` has exit `x_exit = (3^m·u - 1)/2^s` (the `3`-adic content `a` of `u` cancels between `d = m + a` and `u = 3^a ω`), so
 
@@ -617,9 +617,16 @@ dissolved or exported:
     digit behavior of the anchors (classical: digits of 2-adic logarithms;
         effective floor imported, finer statistics beyond current theory)
 
-heuristic, empirically sharp (11.8.4.4):
+formal inside the digit budget (aeh.md 13.2.4(d)-(e), 13.2.4.1;
+    every horizon rate theta < 1/4 block per bit, for all but a
+    vanishing density of starting values of each size):
     frequency ledger P(s=1)=1/2, P(s=2)=1/4, P(s=k)=2^(-k),
-    3-gain rate 1/3,
+    3-gain rate 1/3
+        (both as marginals of pi_{k,D}, exact below the cap;
+        past the budget they are AEH-conditional -- aeh.md
+        13.3.1, 13.3.2)
+
+heuristic, empirically sharp (11.8.4.4):
     drift log(3/4) per odd step (classical)
 
 open:
