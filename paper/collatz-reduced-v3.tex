@@ -349,17 +349,24 @@ $2^{S+1}$, $S$ the itinerary's total exponent (Terras \cite{terras}; in the pres
 coordinates \texttt{itinerary.md} \S14.15.1.5) --- makes the first $n$ blocks of a
 start drawn uniformly from \emph{any} window of $2^{J}$ consecutive integers
 exactly product-distributed on the event $S + 1 \le J$: the event that the itinerary
-has not outspent the start's supply of binary digits. Writing
+has not outspent the start's supply of binary digits. That fact is about the word
+beginning at $x$ itself, and the word displayed below is not that word: $\ell_0$ is
+the letter of the block \emph{after} the start's own. So the count is applied to the
+\emph{extended} word of $n+1$ letters --- the start's own letter followed by
+$\ell_0,\dots,\ell_{n-1}$ --- whose total exponent is exactly $S_{n+1}$, the
+divisions from $x$ down to $x_{\mathrm{exit}}(n)$; the law displayed is a marginal
+of that word's, and so has no larger total variation. Writing
 $b = \lfloor\log_2 N\rfloor$, this gives, for every $J \ge 2$,
 \[
   \bigl\lVert \mathrm{Law}(\ell_0,\dots,\ell_{n-1}) - B^{\otimes n}
     \bigr\rVert_{\mathrm{TV}}
-  \;\le\; \frac{2^{J+2}}{N} + P_B(S_n \ge J),
+  \;\le\; \frac{2^{J+2}}{N} + P_B(S_{n+1} \ge J),
   \quad
-  P_B(S_n \ge J) = P\bigl(\mathrm{Bin}(J-1,\tfrac12) < 2n\bigr),
+  P_B(S_{n+1} \ge J) = P\bigl(\mathrm{Bin}(J-1,\tfrac12) < 2(n+1)\bigr),
 \]
-the identity on the right because $S_n$ is the waiting time for the $2n$-th head in
-a fair coin sequence. The first term is the price of a general window $[N,2N)$ over
+the identity on the right because $S_{n+1}$ is the waiting time for the $2(n+1)$-th
+head in a fair coin sequence. The first term is the price of a general window
+$[N,2N)$ over
 a dyadic one and is negligible for $J \le (1-\eta)b$; the second decays at the exact
 rate $\log 2 - H(2\theta)$ per bit at $n = \lceil\theta b\rceil$, $H$ the binary
 entropy --- positive for every $\theta < 1/4$ and \emph{zero} at $\theta = 1/4$,
