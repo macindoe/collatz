@@ -1,0 +1,328 @@
+From 31e1266c449924951152ed4366b820db89253869 Mon Sep 17 00:00:00 2001
+From: Ben Macindoe <macindoebenjamin@gmail.com>
+Date: Mon, 3 Aug 2026 21:13:22 +1000
+Subject: [PATCH 3/3] rounds/R12-macindoe.md: the round-12 letter, business
+ paragraphs only
+
+Opens the rounds/ convention in this repository, mirroring Merle's
+rounds/R11-merle.md in his Lean repository. Answers, in order: section
+5 first (the binning convention confirmed exactly his; the REQ-067
+divergence-at-385 defect verified in full); the L-A9 grade-line
+attack, delivered flat, with the split-grade key offer pointed at the
+ledger; the Rhin 13.3 adjudication (grade (a), his own artifacts
+split cleanly, the BILAN retired); the three section-4 acceptances as
+ours, mechanisms named; the section-9 incorporation into cycles.md
+12.8.6.1 under both names; the section-10 silence, answered with a
+scope-split recommendation; the sections 1-2 closures at full weight,
+carried over nearly verbatim from the junction follow-up recon; the
+two small corrections (the 3,175-byte CRLF mechanism; the section
+10.2 fifteen-quotients correction); the erratum answer against the
+now-published v3 (DOI 10.5281/zenodo.21730505), including the
+self-reported frozen Version-note defect; the section-12 business
+half, with both author placeholders left empty per the standing
+exclusion; section 13 answered by the object itself; and the
+where-everything-lives map. Personal paragraphs, the pen decision,
+the cost answer, and sending all remain the author's, by mail.
+
+Co-authored-by: Eric Merle
+---
+ rounds/R12-macindoe.md | 287 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 287 insertions(+)
+ create mode 100644 rounds/R12-macindoe.md
+
+diff --git a/rounds/R12-macindoe.md b/rounds/R12-macindoe.md
+new file mode 100644
+index 0000000..685eb8a
+--- /dev/null
++++ b/rounds/R12-macindoe.md
+@@ -0,0 +1,287 @@
++# Round 12 — Macindoe to Merle
++
++*Reply to Merle's round-11 letter of 2026-07-30 (`rounds/R11-merle.md` at `d48ba9e` in his
++Lean repository). Delivered under §13's accepted proposal: the technical half of this
++correspondence enters the shared repository one round per pull request, with the second
++key being the approving review. This file carries the business paragraphs only — the
++personal half of the reply travels by mail, per the accepted split.*
++
++---
++
++## 1. Your §5, answered first, since you asked to know quickly.
++
++The binning convention you guessed is exactly ours. `experiments/merle_r11_hygiene_check.py`,
++function `gk_stats`: classes `{1}, ..., {B-1}, {>=B}` for the binning parameter `B`, with
++`dof = B-1` and a closed-form tail probability for the last class. That is the convention
++your §5 restated, and your argument built on it stands. One honest caveat, though: our
++committed run tried thirteen binnings (`B ∈ {3,5,7,9,10,11,12,15,18,20,25,30,40}`), not
++all thirty-eight `B ∈ [3,40]`. Your exhaustive maximum over the full range,
++`max chi2/dof = 0.56657 < 0.567`, is verified on our side and is the stronger statement —
++it is true, and it closes a gap our own run left open.
++
++Your REQ-067 defect is verified in full, independently, from a fresh continued-fraction
++implementation. The expansion your script built at `mp.dps = 400` diverges from the true
++continued fraction of `log_2 3` at index 385 (0-based); 1615 of the 2000 terms taken were
++rounding noise, not partial quotients. On the corrected sequence the figure is `0.00078`,
++not `0.00103`, and all six of your comparison numbers reproduce to the digit: largest bin
++deviation `0.008425`, chi2/N over the complete partition `0.001214`, and the exhaustive
++`max chi2/dof < 0.567` bound at `0.5666` — none of which our reimplementation of the wrong
++sequence reproduces (`0.004496` / `0.001249` / `1.0504` there). The fix at `dps = 3000`
++with the doubled-precision canary is exactly the right remedy, and the substantive
++conclusion is unchanged: `log_2 3` is a statistically ordinary irrational.
++
++## 2. The L-A9 verdict: the attack, delivered flat.
++
++Your delta-8 entry asked for exactly one thing checked hardest — the grade line — and we
++attacked it clean-room, in fresh code importing nothing from either of your repositories.
++The verdict: the arithmetic is flawless (every figure reproduces to the digit, including
++the two you flagged as approximate), and the impossibility conclusion is **confirmed and
++strengthened** — it survives the sharp chain, every constant convention, the Hurwitz
++boundary case, and a golden-ratio negative control. What does not survive the attack is
++the grade line's stated margin. `c* ≈ 0.9617` is the linear-form exponent (Dirichlet floor
++`c ≥ 1`); "no irrational has an effective exponent below 2" is the measure convention
++(floor `μ ≥ 2`, and `μ = c* + 1 ≈ 1.96`). Paired in one sentence they read as a gap of
++roughly 1.04; in either single convention the route is actually shut by **0.04 to 0.08 in
++the exponent** — a razor, not the distance the pairing suggests. The "diophantine dream
++`c = 2`" clause has the same displacement: it names the measure exponent `μ = 2`, but the
++deficits beside it (the missing factor 7159.5 on `k`, the `2^38.4` of computation) are
++computed at `μ = 3`, a regime nothing conjectures for `log_2 3`. At the true dream
++(`μ = 2, κ = 1`) the deficit is a factor of only 1.96 on `k` and `2^1.95` of computation.
++Two smaller notes travel with it: "Salikhov's real `c = 5.125`" is Salikhov's measure of
++`ln 3`, not `log_2 3` — the same transplant our la7-mu check already adjudicated — and the
++"exact Barina bound `2075*2^60`" is an unarchived project-counter snapshot, not a citable
++figure; the paper-stated bound is `2^71`. Worth noting as a cross-check rather than a
++coincidence: the one-power-of-`k` gap between your `c` and the measure exponent `μ = c+1`
++is the same `+1` conversion the Rhin adjudication below derived independently, converting
++a height-based bound into a per-index measure.
++
++The scissors half replicates entirely and is honestly labelled measured. Extended to
++`2^2000` it gains scope (full chord `0.5001`, comfortably above 1/3); at width it loses
++some (30-bit windows dip to `0.3229`, below 1/3 — the claim is safe from about 100-bit
++widths upward, which is where your own grid sits). And `alpha > 1/3` is the right
++threshold only in the entry's own convention: against the true Dirichlet floor the
++forever-form of the claim needs `alpha > 1/2`, and the measurement **straddles** it — your
++own band is 0.482-0.511, our extended chord is 0.5001. The race at the floor is a photo
++finish the measurement cannot decide, though it does decide the race for every published
++or reachable effective exponent. This is not a defect to fix; proving `alpha > 1/3` is
++itself a `mu(log_2 3) <= 3`-class statement, so "measured, not proved" is the right grade
++permanently, not provisionally.
++
++Split-grade key turn, offered in the ledger: the Dirichlet half — the claim, the chain
++reduction, the floor argument — is ready to turn as unconditional theorem-grade,
++conditional on offer h1 there (the single-convention restatement). The scissors half
++stays at measured grade for good. Five offers, h1 through h5, are drafted inside the L-A9
++entry.
++
++## 3. The Rhin answer: adjudicated, and it is good news.
++
++Your two public artifacts split cleanly on this one: the Lean rule is right, the BILAN is
++wrong, and the BILAN's error has an identifiable, honorable mechanism. The primary
++statement is Rhin 1987 (Progress in Mathematics 71, pp. 155-164), Proposition p. 160: for
++all integers `u0, u1, u2` with `H = max(|u1|,|u2|)`, `|u0 + u1 log 2 + u2 log 3| > H^(-13.3)`
++— a linear-form bound covering `(log 2, log 3)` directly, which is the "tres bonne mesure
++d'independance lineaire sur Z effective de 1, log 2 et log 3" of the paper's own zbMATH
++review (Zbl 0632.10034), proved in the same paper whose title instrument is Padé-type
++irrationality measures. The paper contains both; your BILAN's premise ("Rhin traite des
++mesures d'irrationalite, pas des formes lineaires en 2 logarithmes") sees the first half
++and denies the second. Simons-de Weger 2005 apply precisely this Proposition (Lemma 12:
++`Lambda > e^(-13.3(0.46057+log K))`, proof, verbatim: "We apply the Proposition on p. 160
++of [Rh] with u0 = 0, H = u1 = K + L, and u2 = -K"), stating in the same section that for
++`x log 2 + y log 3` "the result of Rhin [Rh] is best"; an independent generalized-Collatz
++application (arXiv:2205.10582, Lemmas 10/12) makes the same application with both height
++cases exercised. Your BILAN's Laurent 2008 ~= 18.5 and LMN 1995 ~= 23.55 are constants of
++a different instrument: in Laurent 2008 they sit in the C2 row of Table 1 (25.2 down to
++17.9) multiplying `D^4*(log b'+...)^2*log A1*log A2` — coefficients of a `(log)^2`
++expression, not exponents on the height — so they cannot stand in for 13.3, and for this
++specific pair the Padé route beats them, which is why the cycle literature uses Rhin. What
++your audit caught was nonetheless real: R200 had written "Rhin (1987): |S*log2-k*log3| >
++exp(-13.3*(log S)^2)" — the LMN shape with Rhin's constant transplanted into it. That
++statement is indeed not Rhin's; drop the square and it is, verbatim. The auditor rejected
++the attribution where the defect was the transcription. So: 13.3 stands for exactly what
++L-A7 consumes, the headline `n ~ 2233` and every committed number stand unmoved, L-A7's
++source line needs no edit, and BILAN_R201's R201-I3 "PROUVE" is the artifact to retire —
++on its own record's terms, since your re-sourced rule already carries the correct
++statement. Your structural point survives at any value, as you said. One boundary we
++carry jointly, unchanged from round 9: neither side has yet read p. 160 in the 1987
++volume itself; the two published applications apply the Proposition with no threshold
++clause from heights of a few hundred, and L-A7's use only needs `H = K0 >= 952` — but if a
++library copy is reachable on your side, that one look closes the last gap in the pin.
++Recorded in the ledger as a flat adjudication; no number in L-A7 moves.
++
++## 4. Your §4 acceptances, entered as ours.
++
++Three items, one sentence each, mechanisms named, entered in the L-A8 ledger block.
++
++The displayed `D(x_min) = delta*(1 + 1/(27*x_min^2))` was wrong, and it is our error: it
++is the truncation of a positive series after its first correction term, not an identity.
++What is exact is the strict chain `D(x) > delta*(1 + 1/(27x^2)) > delta` for every
++`x > 1/3` — the direction of everything built on it survives; only the equals sign did
++not. Mechanism: an asymptotic taken for an identity, undetectable at the scale this
++correspondence works in — structurally the same shape as your own §4(a), as you said.
++
++The diagnosis we both reached — "the two sides agree to 44 decimal places, which is
++presumably why it reads as exact" — is also refuted, jointly. The ratio
++`sum_i D(x_i)/(n*D(x_min))` is scale-invariant at `0.4755266037564546...` for the `-17`
++shape at every scale we rebuilt it at, because to leading order it is a pure function of
++shape; no scale makes it converge to 1. What agrees to 44 decimals at `2^71` is the
++per-step pair `D(X)` against `delta`, and that convergence was transferred to the sum, by
++both of us.
++
++And the credit record, exactly as you fixed it: the two-shore factor-2 reading is jointly
++arrived at (the identification ours, the frame it lands on yours); the corollary is
++yours, the carrying proof (uniqueness via `3(3x+1) = 4(3x-1)`, one linear equation, one
++root, `D` strictly decreasing) is ours — so `x = 1` is the only odd positive integer at
++which the sign information exceeds the drift, and that integer is the trivial cycle.
++Nothing here needed correcting on our side beyond the two sentences above; both drafted
++corrections sit in the ledger, in the L-A8 block, directly under the theorem hand-back.
++
++## 5. The §9 answer: all fourteen claims verified, and the block is in.
++
++Every one of your fourteen claims in the rotation reformulation was recomputed from
++scratch and confirmed: the Sturmian step sequence at slope `log_2(3/2)`, not `log_2 3`;
++the closed-form `maxgap(J) = max(theta, 1 - J*theta)` for `J <= 13`; and the new result —
++the plateau `maxgap(J) = theta` exactly for `J = 13..25`, first falling at `J = 26` to
++`14*theta - 1`. Your "cost, not failure" arithmetic is exact: losing `theta <= l` widens
++the sweep from 66 to 131 consecutive integers, which the window `[L^p, 1.05*L^p]` first
++supplies at `p = 18` rather than `p = 16` — two periods added to the finite check, priced
++to the digit.
++
++The block is incorporated: `cycles.md` 12.8.6.1's marked section, between *What is
++consumed* and *Superseded formulation*, under both our names, exactly where you asked for
++it and in your own words with the theorem and its constants untouched. Wiki commit
++`e586d35`.
++
++## 6. The §10 answer: the silence, answered.
++
++Your item 2 from round 11 is confirmed absent from our round-11 reply — we checked the
++full text and found no sentence on it, exactly as you say. The silence is real, and it is
++total on two of its three clauses. The **memory** clause survives independently: it was
++re-established on the corrected instrument (real continued fractions on a common
++footing, not the disowned i.i.d. Gauss-Kuzmin null) and replicated on our side. The
++**clustering** and **spectral** clauses were never touched here — the four numbers you
++quoted (`0.831`, the control range, the two variance ratios) occur nowhere in our record
++outside the transcription of your own letter, and the detector's spec (the peak
++definition and threshold, the null behind the control ranges, the series length) is not
++recoverable from what we have.
++
++Recommendation: retain the conclusion with a scope clause, not flat and not struck. The
++memory clause stands on the corrected footing, both sides. The clustering and spectral
++clauses stand as yours, unreplicated, on your side of the ledger. And to your question
++directly: the stopping rules do **not** place this out of reach — no cycle search is
++involved, and the equidistribution rule explicitly allows experiments to feed the ledger.
++What places it out of reach today is the unrecoverable detector spec, and that is yours to
++supply if you want the second key: one clause each for the peak definition and threshold,
++the null behind the control ranges, and the series length, and replication on our side
++becomes a cheap computation on the continued fraction of `log_2 3`.
++
++## 7. Your §§1-2: closed at full weight.
++
++We re-cloned both repositories and checked point by point, and all three of round 11's
++not-found verdicts are closed, at full weight. `AUDIT_V9` is public at `audits/` on
++`proof-assembly-v1` at `98b2de6` with the date you named, and its parent is the commit
++that GitHub's own push log shows as origin's tip from 18 March until 29 July — so "exactly
++one commit ahead, never pushed" is what the graph says, not just what you say. `STATUS.md`
++is committed with line 52 replaced by its reason, and the three things you said it says,
++it says verbatim. And we counted the `PROOF_ASSEMBLY.md` markers ourselves at `b38758d`
++and got eighteen, your named lines where you named them, nothing deleted, and the two
++copies byte-identical at every one of the six commits — we compared the committed blobs,
++one step stronger than the working-copy diff you ran, and they agree at every stage.
++Round 11's posture sentence — absence of a public copy is not evidence against the
++account — resolves here exactly the way it was written to allow. One count of ours for
++your sequence: under a single convention (in-place markers, the block's own heading
++excluded) we get 7 -> 15 -> 18 rather than 7 -> 14 -> 18, and your carry-commit says
++sixteen — three stated counts, three conventions, converging only at the end. That is not
++a correction of the finding; it is a fourth instance of it, and your remedy sentence
++already covers all four: the pattern and the range, never the tally.
++
++## 8. Two small corrections, ours.
++
++Your 3,100-byte figure for `LegendreApprox.lean` is right; our 3,175 is a working-copy
++measurement, not a blob size. Both blobs are `git cat-file -s` = 3,100 bytes (75
++LF-terminated lines, no CR); under this machine's CRLF checkout each copy measures
++3,100 + 75 = 3,175 bytes on disk, which is the figure we printed. "Same size each" stands;
++the honest byte count is yours.
++
++Your §10.2 correction is confirmed in every particular: `docs/PROOF_ASSEMBLY.md` prints
++exactly fifteen partial quotients of `log_2 3` — `[1; 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1,
++1, 55, ...]` — and cites Jackson-Matthews 2002 for the 10,000-term computation; it does
++not itself give the expansion to 10,000 terms. Our sentence overstated the file's own
++contribution; the point about the antecedent convergent-confinement result stands either
++way.
++
++## 9. The erratum answer: the section that changed.
++
++The sequence question is answered by the fact: **v3 is published**, 2026-08-03, DOI
++10.5281/zenodo.21730505 (verified live: the version-specific DOI resolves, dated
++2026-08-03, listed as a new version of the v2 DOI). And the delta from what we described
++to you needs to be stated plainly, in your own §2 vocabulary: what we described as a
++drafted one-sentence erratum shipped as a full revision after external review — the
++object shipped is a superset of the object described.
++
++What the revision is, in one paragraph: every definition, statement and scope word was
++brought back into line with the project record — `Def 2.1` gains `omega > 0`; `Thm 3.3`'s
++bound is corrected to `(1 + log d)^2`, the printed form having been false at `d = 1`;
++`Thm 3.8` states its window with the stratum labels; `n_0(p)` is defined explicitly; the
++digit budget is demoted to a labelled heuristic; `Section 5` is restated around one
++object, one clock, and one hypothesis in ensemble form. The *Note added in v2* and its gap
++sentence are replaced by a *Status of the assessment* paragraph; the old sentence is no
++longer in the paper, and the narrative of how the route changed lives in
++`paper/collatz-reduced-version-history.md`, in the project record. The document shortened
++from 18 pages to 15. No numbered theorem's claim is strengthened, weakened or renumbered,
++and nothing new is proved in the paper itself.
++
++Citation guidance: **v3** for the dichotomy phrases — both verified verbatim, surviving
++unchanged: "a sharp dichotomy for counting arguments" and "the counting-limit dichotomy
++developed here" — and for Theorem 4.6's closing obstruction sentence ("uniform cycle
++exclusion therefore requires the divisibility system — equivalently, rigidity of the
++closed anchor walk"), which is still inside the theorem environment; what moved out of
++that environment in v3 is only the `gamma = O(log p)` assessment, so the environment now
++carries only proved content — a cleaner citation target than before. **v2** for the
++contiguous `p in {2,...,23}` evidence note, which v3's Status paragraph replaces.
++
++Canonical-citation line: the published record is amended; paper 1 is at v3 (version DOI
++10.5281/zenodo.21730505), one canonical object under the concept DOI ("Cite all
++versions" on the Zenodo record page); the correction sits in what was Section 4's v2
++note, restated as the Status paragraph. The ccchallenge `Macindoe2026` entry is catalogued
++from the v1 export; this is noted flat, and the citation above states the canonical DOI
++rather than chasing the register.
++
++One more thing, self-reported at full grade before you find it, since that is the
++standard you set and the standard we intend to hold to: the published PDF's own Version
++note still carries its drafting-time self-description — "drafted; the version-specific
++DOI on the title page is reserved and this version is not yet published" — frozen into
++the immutable file at upload, even though the title page above it carries the real,
++resolving DOI. Recorded in the version-history file. The remedy is a Zenodo metadata note
++(metadata stays editable after publication); that note is the author's to write.
++
++## 10. Your §12, business half.
++
++The author accepts the two-page-note shape — the counting dichotomy plus the located
++obstruction, every other prerequisite deferred to a second version — and the erratum
++precondition set for it is now met.
++
++[THE AUTHOR'S: the pen]
++
++[THE AUTHOR'S: the cost answer]
++
++## 11. Your §13, answered by the object itself.
++
++This pull request is the proposal enacted rather than merely accepted: one round, one
++pull request, and the second key is your approving review — on the round's content and,
++per §4(d), on the regime column now sitting in `PROTOCOL.md` beside the two keys, which
++enters this ledger by your own proposal.
++
++## 12. Where everything lives.
++
++Six sources this round, all public at the wiki `main` pin below: `briefs/merle-la9-check-findings.md`
++(50 checks, 0 failures), `briefs/merle-r12-drift-check-findings.md` (152 checks — 76
++distinct at two working precisions — 0 failures), `briefs/merle-la7-rhin-check-findings.md`
++(literature adjudication; no script needed), `briefs/junction-followup-recon-findings.md`
++(read-only recon; no script needed), `briefs/erratum-v3-prep-findings.md` (the v3
++packaging record, every constant recomputed at 60 working digits against the merged
++record), and `paper/collatz-reduced-version-history.md` (the per-version narrative,
++including the frozen Version-note defect above). Paper 1's version DOI: 10.5281/zenodo.21730505
++(v3, 2026-08-03). Wiki `main` pin: `6ffe463` or later — **CHECK AT SEND TIME**: verify
++`https://github.com/macindoe/collatz` resolves at or past this commit before this file is
++sent, since the pin is a live remote and this session's resolution check is a point-in-time
++read.
+-- 
+2.45.2.windows.1
+
