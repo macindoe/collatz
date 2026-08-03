@@ -1,0 +1,34 @@
+From 3dda4be14ad0341c5e2ffa657f77a13426c0fc7c Mon Sep 17 00:00:00 2001
+From: Ben Macindoe <macindoebenjamin@gmail.com>
+Date: Mon, 3 Aug 2026 21:07:57 +1000
+Subject: [PATCH 1/3] PROTOCOL.md: the regime column (Merle's proposal, round
+ 12 section 4(d), accepted)
+
+Beside the two keys, each ledger entry now records the regime it was
+discharged in, and any asserted equality records a second regime
+chosen against it. Proposed by Eric Merle (round 12, section 4(d)) as
+the guardrail against exactly the failure mode that produced this
+round's two errors -- one per side, both made and caught in the same
+regime the correspondence works in. Accepted by the author; the
+approving review of this pull request is the second key on it. No
+other section of the file is restructured.
+---
+ PROTOCOL.md | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/PROTOCOL.md b/PROTOCOL.md
+index db7061d..c2328f9 100644
+--- a/PROTOCOL.md
++++ b/PROTOCOL.md
+@@ -16,6 +16,8 @@ Each side's verification stack lives in its own repository and is never merged i
+ 
+ `LEDGER.md`, one entry per numbered claim: statement, status (`proposed` / `one key` / `two keys` / `refuted` / `corrected`), and the verification artifact per side (commit-pinned link, script name, what it checks). Refuted and corrected entries are kept, with what refuted them — on both sides, deletions are not how errors are handled.
+ 
++**The regime column (Merle's proposal, round 12 §4(d); accepted by the author, second key = this pull request's approving review).** Beside the two keys, each entry records the regime it was discharged in; any claim asserting an equality additionally records a second regime chosen against it. Two round-12 errors — one on each side, in the same L-A8 block — were made and caught in exactly the regime the correspondence works in (Barina's threshold, the `2⁷¹` window, `q₂₁` through `q₂₃`), and would have passed both keys had the regime not changed; this column is the guardrail against exactly that.
++
+ ## 4. Corrections
+ 
+ Disagreements between the stacks are recorded precisely, then resolved by computation, and the resolution names which side's record needed correcting (precedent: the p = 22 exchange corrected one claim on each side; ledger entry L1).
+-- 
+2.45.2.windows.1
+
