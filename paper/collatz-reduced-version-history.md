@@ -54,9 +54,15 @@ formulation*) and §12.8.6.3, precisely because the published note names it.
 
 ## v3 — August 2026
 
-Drafted and not yet published; version-specific DOI 10.5281/zenodo.21730505 reserved. After external
+Published 2026-08-03; version-specific DOI 10.5281/zenodo.21730505. After external
 review, each definition, statement and scope word is brought back into line with the project record.
 Source at `paper/collatz-reduced-v3.tex`.
+
+*(One defect of the published artifact, recorded here because this file is the narrative home:
+the PDF's own Version note carries its drafting-time self-description — "drafted; the
+version-specific DOI on the title page is reserved and this version is not yet published" —
+frozen at upload into the immutable file. The Zenodo record's publication date, 2026-08-03, is
+authoritative. Found in the post-publication reconciliation, ours.)*
 
 ### The staircase (Section 4)
 
