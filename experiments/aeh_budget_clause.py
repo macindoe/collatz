@@ -24,7 +24,14 @@ What is checked
   5. the ingredients of (g)'s budget-versus-letter offset: the clock identity
      x_exit(n-1) = T_1^(S_n)(x), monotonicity of the budget count, the bound of
      the offset by the start's own block exponent m_0 + s_0, the exact law
-     P_B(m + r >= t) = t 2^(1-t), and the composite bound the offset clause uses.
+     P_B(m + r >= t) = t 2^(1-t), and the composite bound the offset clause uses;
+  6. the SOURCE of that one-letter law for the start's own block: the one-letter
+     cylinder law of itinerary.md `14.15.1.3`(i)/`14.15.1.5` applied to x's own
+     word.  (a) is a statement about stratum(G(x)) and at n = 1 gives the law of
+     l_0, not of the start's block, so it cannot supply this.  Checked exactly,
+     over every odd start of [N, 2N) at four N: the single-class structure, the
+     per-cell deviation from the geometric weight 2^-(m+r), and the tail
+     P(m_0 + s_0 >= t) against t 2^(1-t) with the boundary error visible.
 
 Run:  python aeh_budget_clause.py
 """
@@ -362,6 +369,86 @@ def check_offset_law(flags):
     return bad
 
 
+# ------------------------- 6. the start's own letter, and where its law comes
+#                              from: the one-letter cylinder law applied to x
+
+
+def start_letter_law(N):
+    """Exact law of stratum(x) = (m_0, s_0) for x uniform on the odd [N, 2N).
+
+    Returns (counts, nodd, classes): counts[(m, r)] the number of odd
+    x in [N, 2N) whose own block is (m, r); nodd the number of odd starts;
+    classes[(m, r)] the set of residues of those x modulo 2^(m+r+1).
+
+    itinerary.md 14.15.1.3(i) (= 14.15.1.5 at length one, applied to x's own
+    word rather than to G(x)'s) says stratum(x) = (m, r) holds exactly on one
+    odd residue class mod 2^(m+r+1), so every classes[(m, r)] must be a
+    singleton and every count must be within 1 of N / 2^(m+r+1).  That is the
+    whole of the replacement source 13.2.4(g) needs, and it is about the
+    start's own letter -- which 13.2.4(a), a statement about stratum(G(x)),
+    is not.
+    """
+    counts, classes, nodd = {}, {}, 0
+    x = N | 1
+    while x < 2 * N:
+        nodd += 1
+        m, s, _ = block_step(x)
+        counts[(m, s)] = counts.get((m, s), 0) + 1
+        classes.setdefault((m, s), set()).add(x % (1 << (m + s + 1)))
+        x += 2
+    return counts, nodd, classes
+
+
+def check_start_letter_law():
+    """13.2.4(g)'s replacement source, proved rather than asserted."""
+    print("\n6. the start's own letter: the one-letter cylinder law at x")
+    print("   itinerary.md 14.15.1.3(i)/14.15.1.5 at length one on x's own")
+    print("   word.  (13.2.4(a) is about stratum(G(x)); at n = 1 it gives the")
+    print("   law of l_0, not of the start's own block.)")
+    bad = 0
+    print("\n   (i) single-class structure and per-cell deviation from 2^-(m+r)")
+    print("   %10s %8s %7s %9s %11s %11s %11s"
+          % ("N", "cells", "multi", "off-by>1", "max|p-w|", "2/N", "TV"))
+    scales = []
+    for N in (1 << 16, 1 << 19, 1 << 22, 1000003):
+        counts, nodd, classes = start_letter_law(N)
+        multi = sum(1 for c in classes.values() if len(c) != 1)
+        offby = sum(1 for (m, r), c in counts.items()
+                    if abs(c - N / 2.0 ** (m + r + 1)) > 1)
+        bad += multi + offby
+        worst, worstcell, l1 = 0.0, None, 0.0
+        for (m, r), c in counts.items():
+            d = abs(c / nodd - 2.0 ** (-(m + r)))
+            l1 += d
+            if d > worst:
+                worst, worstcell = d, (m, r)
+        missing = 1.0 - sum(2.0 ** (-(m + r)) for (m, r) in counts)
+        tv = 0.5 * (l1 + missing)
+        print("   %10d %8d %7d %9d %11.3e %11.3e %11.3e"
+              % (N, len(counts), multi, offby, worst, 2.0 / N, tv))
+        print("        worst cell (m,r) = %s;  %d odd starts" % (worstcell, nodd))
+        scales.append((N, nodd, counts))
+
+    print("\n   (ii) the tail the offset clause consumes:")
+    print("        P(m_0 + s_0 >= t) exactly, against t 2^(1-t), with the")
+    print("        boundary error bounded by (t-1)(t-2)/N")
+    for N, nodd, counts in scales:
+        print("        N = %d" % N)
+        print("        %4s %13s %13s %12s %10s"
+              % ("t", "exact", "t 2^(1-t)", "|difference|", "(t-1)(t-2)/N"))
+        for t in (2, 4, 6, 8, 10, 12, 14):
+            meas = sum(c for (m, r), c in counts.items() if m + r >= t) / nodd
+            closed = t / 2.0 ** (t - 1)
+            pred = (t - 1) * (t - 2) / float(N)
+            ok = abs(meas - closed) <= pred
+            bad += (not ok)
+            print("        %4d %13.8f %13.8f %12.3e %10.3e %s"
+                  % (t, meas, closed, abs(meas - closed), pred,
+                     "" if ok else "  EXCEEDED"))
+    print("   structural failures in 6: %d" % bad)
+    return bad
+
+
 if __name__ == "__main__":
     print("aeh.md Lemma 13.2.4(g) / Corollary 13.2.4.1 -- independent check")
     print("=" * 72)
@@ -369,5 +456,7 @@ if __name__ == "__main__":
     check_rate()
     fl = check_orbits()
     b2 = check_offset_law(fl)
+    b3 = check_start_letter_law()
     print("\n" + "=" * 72)
-    print("structural failures: tail identity %d, offset law %d" % (b1, b2))
+    print("structural failures: tail identity %d, offset law %d, "
+          "start letter %d" % (b1, b2, b3))
