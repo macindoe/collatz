@@ -342,3 +342,17 @@ Three changes were applied at review, directly in the archived patches, and re-v
 3. *(0003, letter §5, register.)* The parenthetical "(subject to the main session's re-pin if the merge SHA differs)" dropped — internal vocabulary, and moot: the wiki merge is performed `--no-ff`, so `e586d35` survives on `main` exactly as cited.
 
 The re-application is clean; the regenerated commits are `aceeb9e` → `5c08878` → `ba977b5` with tree **`f9e465d957e1ad056a40d922ae9c5f3e3302d0d6`**, which supersedes §3's recorded tree `822afb8` (SHAs restamp on every fresh `git am`; the tree is the object to check — and it differs here because the content was edited, unlike the round-10/11 restamps). One letter-only precision was independently re-verified at review before acceptance: the REQ-067 divergence index 385 is 0-based with `a₀` counted (la9 findings line 418), reproduced in-session — dps 3000 and 6000 agree on all 2000 terms, first divergence at index 385 exactly.
+
+## 7. The author's paragraphs placed (main session, 2026-08-03) — the package is send-ready
+
+The two placeholders in `rounds/R12-macindoe.md` §10 are filled with the author's own
+answers, in the file register he chose (option (b): the tightened versions here, the full
+colour by mail): **the pen is taken**, with a first draft of the note promised as its own
+pull request this week and §11's abstract question resolved by the pen-holder; **the cost
+answer** — rhythm not heavy, caps in place and held, the one mid-run cutoff named
+accurately as a model-specific allocation (not the monthly cap) with the resumed agent's
+mid-flight conclusions re-derived, and the real constraint named as latency, not budget.
+The section's lead sentence moves to first person with it. Patch 0003 regenerated from
+the amended commit; re-verified end-to-end on a second pristine clone of `7c05458`:
+clean `git am`, zero placeholders, tree **`8e9b1eb250e4d3ff24890841491e01aab8fb1f61`**,
+which supersedes §6's `f9e465d`. This is the tree the author sends.

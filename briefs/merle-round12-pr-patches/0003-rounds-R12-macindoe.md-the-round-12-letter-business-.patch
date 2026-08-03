@@ -1,7 +1,7 @@
-From 31e1266c449924951152ed4366b820db89253869 Mon Sep 17 00:00:00 2001
+From 2029637149bd7e3cb8eaa2c3575d1b391d20039d Mon Sep 17 00:00:00 2001
 From: Ben Macindoe <macindoebenjamin@gmail.com>
 Date: Mon, 3 Aug 2026 21:13:22 +1000
-Subject: [PATCH 3/3] rounds/R12-macindoe.md: the round-12 letter, business
+Subject: [PATCH] rounds/R12-macindoe.md: the round-12 letter, business
  paragraphs only
 
 Opens the rounds/ convention in this repository, mirroring Merle's
@@ -26,16 +26,16 @@ the cost answer, and sending all remain the author's, by mail.
 
 Co-authored-by: Eric Merle
 ---
- rounds/R12-macindoe.md | 287 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 287 insertions(+)
+ rounds/R12-macindoe.md | 298 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 298 insertions(+)
  create mode 100644 rounds/R12-macindoe.md
 
 diff --git a/rounds/R12-macindoe.md b/rounds/R12-macindoe.md
 new file mode 100644
-index 0000000..685eb8a
+index 0000000..cc76f67
 --- /dev/null
 +++ b/rounds/R12-macindoe.md
-@@ -0,0 +1,287 @@
+@@ -0,0 +1,298 @@
 +# Round 12 — Macindoe to Merle
 +
 +*Reply to Merle's round-11 letter of 2026-07-30 (`rounds/R11-merle.md` at `d48ba9e` in his
@@ -294,13 +294,24 @@ index 0000000..685eb8a
 +
 +## 10. Your §12, business half.
 +
-+The author accepts the two-page-note shape — the counting dichotomy plus the located
-+obstruction, every other prerequisite deferred to a second version — and the erratum
-+precondition set for it is now met.
++I accept the two-page-note shape — the counting dichotomy plus the located obstruction,
++every other prerequisite deferred to a second version — and the erratum precondition set
++for it is now met.
 +
-+[THE AUTHOR'S: the pen]
++I'm happy to take the pen. The drafting capacity on my side is not the bottleneck, and
++you have provided the concrete base to work from: a first draft of the note will follow
++as its own pull request this week. Taking the pen also resolves §11's abstract question —
++the pen-holder creates the place for the position paragraph. We continue to rely on the
++both-keys-turned convention for verification and critique: nothing enters the signed
++version on one key.
 +
-+[THE AUTHOR'S: the cost answer]
++On cost: the rhythm is not heavy at this end, and nothing needs slowing. Spend caps are
++in place and held — one review agent was cut off mid-run this round at a model-specific
++allocation, not the monthly cap, and resumed cleanly a few hours later with its
++mid-flight conclusions re-derived rather than trusted; your own failure mode in
++different units, and the symmetry is noted. The real constraint on my side is latency,
++not budget: a solution takes sometimes three minutes and sometimes three hours, and I am
++not always available the moment an agent finishes. The fuller answer travels by mail.
 +
 +## 11. Your §13, answered by the object itself.
 +
