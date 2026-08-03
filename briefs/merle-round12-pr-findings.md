@@ -330,3 +330,15 @@ brief's explicit instruction.
   anywhere; no PR opened anywhere — the push and the PR are the author's send, gated on
   his go-ahead, per the brief.
 - `HANDOFF.md`, `publication.md`, and every pre-existing findings file: untouched.
+
+---
+
+## 6. Review changes (main session, 2026-08-03) — three edits, patches regenerated in place
+
+Three changes were applied at review, directly in the archived patches, and re-verified by a fresh `git am` on a pristine clone of `7c05458`:
+
+1. *(0002, LEDGER, wording defect.)* The garbled clause "Status stays **DRAFT** on this stated until offer h1 is accepted" → "The entry's status stays **DRAFT** until offer h1 is accepted".
+2. *(0002, LEDGER, pin filled.)* The artifact placeholder `[PIN: main merge SHA at push time]` filled with **`913f577`** — the merge commit carrying `experiments/merle_la9_check.py`, already public on wiki `main` (verified resolving at review, HTTP 200).
+3. *(0003, letter §5, register.)* The parenthetical "(subject to the main session's re-pin if the merge SHA differs)" dropped — internal vocabulary, and moot: the wiki merge is performed `--no-ff`, so `e586d35` survives on `main` exactly as cited.
+
+The re-application is clean; the regenerated commits are `aceeb9e` → `5c08878` → `ba977b5` with tree **`f9e465d957e1ad056a40d922ae9c5f3e3302d0d6`**, which supersedes §3's recorded tree `822afb8` (SHAs restamp on every fresh `git am`; the tree is the object to check — and it differs here because the content was edited, unlike the round-10/11 restamps). One letter-only precision was independently re-verified at review before acceptance: the REQ-067 divergence index 385 is 0-based with `a₀` counted (la9 findings line 418), reproduced in-session — dps 3000 and 6000 agree on all 2000 terms, first divergence at index 385 exactly.
