@@ -283,3 +283,20 @@ reconciliation's direct statement.
   the note itself says so in its closing section.
 - Not merged; the main session reviews (patch, tree, every reachable table row) and
   merges. Stopped after Record.
+
+---
+
+## Review change (main session, 2026-08-03) — one edit, the patch regenerated
+
+One substantive defect found at review and repaired in place: the δ8 paragraph paired
+`c* ≈ 0.9617` with "no irrational has an effective exponent below 2" in one sentence —
+the exact convention mix `briefs/merle-la9-check-findings.md` established against the
+ledger entry and offer h1 exists to repair. The public note cannot repeat the defect the
+same round handed back. The sentence now carries the h1 single-convention form: the
+linear-form exponent with its measure equivalent `μ* = c* + 1 ≈ 1.96` beside it, the
+floor stated in both conventions (`c ≥ 1`, `μ ≥ 2`), and the honest razor ("by a few
+hundredths in the exponent") in place of the implied chasm. Re-verified by fresh
+`git am` on a pristine `7c05458`: clean, tree **`1e8847947a5c6bc8956e7bf784694fa2837c542f`**,
+superseding the pre-review `9e7360e`. Also re-verified at review directly against the
+published tex: the obstruction sentence including its formula, both abstract phrases,
+and `γ := K − log₂ q` as the paper's own definition (line 208) — all character-exact.
