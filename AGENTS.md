@@ -9,6 +9,7 @@ This repository follows the LLM-wiki pattern: three layers with different mutati
 3. **`experiments/`** — verification and pilot code. Each script states which page/result it supports. Scripts are kept runnable; results (counts, ranges, dates) are quoted in the owning page.
 4. **`README.md`** — the human-facing map, including the program's strategy and stopping rules. Those rules are binding on agents too: check them before opening new computational fronts (in particular: no per-period cycle searches unless they serve the uniform trim lemma).
 5. **This file** — the schema. Update it when the structure or workflows change.
+6. **`paper/`** — the published papers: their sources, their PDFs, and `collatz-reduced-version-history.md`, the per-version record of what each released version of paper 1 says and what changed between versions. That file is the one place the change-log genre belongs, and the exception to the rule below: released versions are frozen at DOIs, so a reader holding one PDF cannot read a past state back out of the repository the way any wiki page can be read back at a commit. It records the paper, not the mathematics — where a claim's standing has moved on, the owning wiki page is still the authority.
 
 ## Conventions
 
