@@ -40,6 +40,7 @@ We study the Collatz dynamics in a reduced coordinate system that compresses eac
 
 \subsection*{Version note}
 v1, July 2026 (original publication). v2, July 2026 (v2-specific Zenodo DOI: 10.5281/zenodo.21421120): the subtitle of the \texttt{merle} citation restored, and a note added evidencing the sharpness hedge of Theorem~\ref{thm:staircase}, prompted by correspondence with Eric Merle. v3, August 2026 (drafted; the version-specific DOI on the title page is reserved and this version is not yet published): after external review, each definition, statement and scope word is brought back into line with the project record; the sharpness assessment of Section~\ref{sec:cycles} is reported as proved there; and Section~\ref{sec:aeh} is restated around one object and one hypothesis in ensemble form. No numbered theorem's claim is strengthened, weakened, or renumbered in either revision, and nothing new is proved in this paper; v3 reports two results established in the project record and not reproduced here. The repair history, item by item, is in this version's release description.
+
 \subsection*{Author's note}
 
 \emph{Dear reader --- I'm no mathematician, and I learned much of this paper's terminology during the process of formalizing it ($p$-adic valuations were completely new to me as a formal concept). It all began when I got hooked on a strange recursive pattern in the prime factors of a Collatz chain, and that idea pushed me into conversation with AI. We cleaned my idea up into the states $(\w,d)$, with the primary goal of factoring as much deterministic behaviour as possible out of the question, in the hope of focusing attention where it matters. That simplification is what enables the paper's main contributions: exact laws for every single step; a uniform trim that caps what size-counting can achieve against cycles; and an exact hypothesis pointing the remaining question toward more fundamental ``fair-coin'' mathematics. Because this work is AI-assisted and because I am not formally trained in the relevant mathematics, Appendix~\ref{app:method} describes the verification protocol used throughout the project. The complete research record is public at \url{https://github.com/macindoe/collatz}. --- Ben}
@@ -221,13 +222,13 @@ For each rotation, $q \le R_r < p\,2^{\max_t e_t}$, where the exact exponent ide
 No trim uniform in $p$ can extend the small-period constants: there exist configurations satisfying every rotation's exact size condition $q \le R_r$ whose $\gamma$ falls far below any polynomial-in-$p$ extension of the constants of periods $2$--$3$. Explicitly, at $p=7$, $n=94$, the staircase $m = (4,7,9,15,23,35,1)$ with $s = (1,\dots,1,\,S-6)$ passes all seven size tests with $\gamma = 6.74$, where the period-$3$ constant would demand $\gamma > 8.9$; $84$ further verified instances occur at $p=6$ alone. All such configurations fail the divisibility conditions $q \mid R_r$. Uniform cycle exclusion therefore requires the divisibility system --- equivalently, rigidity of the closed anchor walk $\sum_t \Delta M_t = 0$.
 \end{theorem}
 
-\paragraph{Sharpness evidence and assessment.} The construction behind these witnesses --- block depths growing geometrically at ratio $\approx\LL$ with unit exit valuations, closed by a single block of unit depth and maximal exit valuation --- tracks the extremal configuration of the max-plus recursion in the proof of Theorem~\ref{thm:uniform}. Supported by the verified instances, though not proved here for all $p$, we assess that it passes all size conditions with $\gamma = O(\log p)$ for every $p$. This assessment is evidence for Theorem~\ref{thm:staircase} and no part of it: the theorem is closed at $p = 6, 7$ by the witnesses exhibited above. The assessment has since been proved in the project record, at a scope and a shape stronger than assessed here; the status paragraph below states what was proved, where, and at what scope.
+\paragraph{Sharpness evidence and assessment.} The construction behind these witnesses --- block depths growing geometrically at ratio $\approx\LL$ with unit exit valuations, closed by a single block of unit depth and maximal exit valuation --- tracks the extremal configuration of the max-plus recursion in the proof of Theorem~\ref{thm:uniform}. Supported by the verified instances, though not proved here for all $p$, we assess that it passes all size conditions with $\gamma = O(\log p)$ for every $p$. This assessment is evidence for Theorem~\ref{thm:staircase} and no part of it: the theorem is closed at $p = 6, 7$ by the witnesses exhibited above. The status paragraph below states what was proved, where, and at what scope.
 
 \begin{remark}\label{rem:staircase}
 The staircase profile --- geometric depth growth with shallow exits --- is exactly the growth regime of divergent orbits. Size analysis cannot forbid it as a cycle for the same reason drift analysis cannot forbid divergence. The two halves of the residual difficulty meet in one configuration.
 \end{remark}
 
-\paragraph{Status of the assessment (August 2026).} Prompted by correspondence with Eric Merle concerning this theorem's sharpness hedge (his related formal work is cited in \cite{merle}), the assessment above has since been \emph{proved} in the project record, at a scope and a shape stronger than it claims, and is not reproduced here; Theorem~\ref{thm:staircase} stands above exactly as written. A passing size-condition witness is constructed at every period, and the whole Diophantine input is one exact number: $8 - 5\LL = 0.0751874964\ldots$ is positive and below the target arc's length, so any $66$ consecutive integers contain an admissible exponent $n$, and the scale window at period $p$ holds $0.05\,(\LL)^{p}$ integers --- $79$ already at $p = 16$ --- while a corrected profile, the geometric climb with a fixed additive offset $1/(\LL - 1) = 1.70951$ per block, satisfies all $p$ size conditions by construction, with no correction step. The two halves compose to a proof for every $p \ge 16$, at $\gamma$ between the absolute constants $3.683012$ and $5.140212$ --- no $p$-dependence at all --- with $3 \le p \le 15$ meeting the same bracket by finite check and $p \in \{2,4\}$, outside the construction's reach, covered by direct exhibition. Every constructed configuration remains a size-passer only and fails the divisibility conditions $q \mid R_r$, as the instances above do: sharper evidence that counting cannot do better, and no evidence about exclusion. The record is \texttt{cycles.md} \S12.8.6 (\url{https://github.com/macindoe/collatz/blob/9d9d1ec/cycles.md}); the note added in v2 and the continued-fraction route it named are in the release description and at \S12.8.6.3 there.
+\paragraph{Status of the assessment (August 2026).} Prompted by correspondence with Eric Merle concerning this theorem's sharpness hedge (his related formal work is cited in \cite{merle}), the assessment above has since been \emph{proved} in the project record, at a scope and a shape stronger than it claims, and is not reproduced here; Theorem~\ref{thm:staircase} stands above exactly as written. A passing size-condition witness is constructed at every period, and the whole Diophantine input is one exact number: $8 - 5\LL = 0.0751874964\ldots$ is positive and below the target arc's length, so any $66$ consecutive integers contain an admissible exponent $n$, and the scale window at period $p$ holds $0.05\,(\LL)^{p}$ integers --- $79$ already at $p = 16$ --- while a corrected profile, the geometric climb with a fixed additive offset $1/(\LL - 1) = 1.70951$ per block, satisfies all $p$ size conditions by construction, with no correction step. The two halves compose to a proof for every $p \ge 16$, at $\gamma$ between the absolute constants $3.683012$ and $5.140212$ --- no $p$-dependence at all --- with $3 \le p \le 15$ meeting the same bracket by finite check and $p \in \{2,4\}$, outside the construction's reach, covered by direct exhibition. Every constructed configuration remains a size-passer only and fails the divisibility conditions $q \mid R_r$, as the instances above do: sharper evidence that counting cannot do better, and no evidence about exclusion. The record is \texttt{cycles.md} \S12.8.6 (\url{https://github.com/macindoe/collatz/blob/9d9d1ec/cycles.md}); the note added in v2 and the continued-fraction route it named are in the release description and at \S12.8.6.1 and \S12.8.6.3 there.
 
 \section{The equidistribution hypothesis, made exact}\label{sec:aeh}
 
@@ -271,9 +272,9 @@ $\dagger$, for every admissible pair $(\tau,\theta)$ in the sense defined below.
 Equivalently, and this is the form the calibration measures: for every $k$, $D$
 and $L$, the empirical distribution of the $L$-blocks of consecutive capped
 windows $W_{k,D}$ over the same tallied blocks, with $\dagger$ carried through
-and given mass $0$, converges in total variation on the finite window alphabet,
-off a vanishing density of starts, to $\pi^{(L)}_{k,D}$, the $L$-block law of the
-stationary process under $\hat B$.
+and given mass $0$ by $\pi^{(L)}_{k,D}$, converges in total variation on the
+finite window alphabet, off a vanishing density of starts, to
+$\pi^{(L)}_{k,D}$, the $L$-block law of the stationary process under $\hat B$.
 The equivalence is Theorem 13.6.4 of \texttt{aeh.md}, a deterministic dictionary
 between letters and labelled window blocks; the case $L = 1$ recovers
 $\pi_{k,D}$, and $\pi^{(L)}_{k,D} \neq \pi_{k,D}^{\otimes L}$. A sampled segment
@@ -284,8 +285,8 @@ $O(1/T_N)$ to every frequency above.
 
 There is one limit here, $N \to \infty$, and the sample grows because the sampling
 scale grows rather than because any one orbit is run forever. That is forced: along
-a fixed orbit the unrestricted empirical distribution is false, every convergent
-tail sitting at $(1,1)$ forever, while above a fixed cut a convergent orbit
+a fixed convergent orbit the unrestricted empirical distribution is false, the
+tail sitting at $(1,1)$ forever, while above a fixed cut such an orbit
 supplies only finitely many qualifying visits and none at all once the cut exceeds
 its maximum, so a limit in orbit length is empty rather than merely delicate, in
 whichever order it is taken (\texttt{aeh.md} \S13.6.6).
@@ -295,7 +296,8 @@ the one-division map $y \mapsto y/2$ or $(3y+1)/2$ never lowers $\log_2$ by more
 than $1$, so $\log_2 x_{\mathrm{exit}}(n-1) \ge \log_2 x - S_n$ for every start and
 every $n$, with no exceptional set; inside a budget $\tau < 1$ of the start's own
 bits every tallied exit therefore exceeds $N^{1-\tau}$, far above the
-\emph{bottom regime} of \texttt{aeh.md} \S13.1. That matters because any altitude
+\emph{bottom regime} of \texttt{aeh.md} \S13.1, the fixed drainage basin of small
+integers. That matters because any altitude
 threshold is a selection on the observable itself --- a cut on
 $x_{\mathrm{exit}} = (3^{d}\w - 1)/2^{s}$ censors large $s$, and a cut on the core
 $\wnext$ censors large $s$, $m_+$ and $a_+$ together --- whereas the budget clause
@@ -379,7 +381,7 @@ count stops, and $1 - \beta/4 = \log_4 3$ is exactly the exponent Korec
 \cite{korec} obtains by exhausting it --- and it is a frontier of this technique
 and not of the problem, Inselmann \cite{inselmann} crossing it unconditionally for
 the trajectory envelope and the first moment, in step time and by a stronger
-density notion rather than a sharper count.
+density notion rather than a sharper count (\texttt{aeh.md} \S13.3.2).
 
 AEH implies the ledger, in the form the hypothesis has: $s$ is a coordinate of
 the observable, so $P(s = j) = 2^{-j}$ is a marginal of $\pi_{k,D}$ rather than a
@@ -397,9 +399,10 @@ budget that move with the scale, and vanishing density in every window does not
 thin their unrestricted union. The
 descent consequence is not stated here, because it is a theorem without the
 hypothesis and a stronger one: Inselmann's \cite[Cor.~1.4, Thm.~1.10]{inselmann},
-cited in Related work, is two-sided, uniform in the time, unconditional, and runs
-to $4.8188\ldots$ times the classical range at which this section's cylinder count
-stops, the two measured in the same units. His \cite[Thm.~1.6]{inselmann} is what
+cited in Related work, are unconditional and run to $4.8188\ldots$ times the
+classical range at which this section's cylinder count stops, the two measured in
+the same units, the second two-sided and uniform in the time. His
+\cite[Thm.~1.6]{inselmann}, a density statement about odd steps, is what
 carries his own passage from $T$-time to Syracuse time; the further passage to
 block time needs the frequency with which a Syracuse step ends a block, a
 two-letter statistic of the parity word that neither theorem supplies and that
@@ -419,7 +422,7 @@ same terms \cite{tao}; and by Heuristic~\ref{prop:budget} it cannot be reached b
 finite-window computation. Its content is a question about digits of $2$-adic
 logarithms, older and broader than the Collatz problem.
 
-\paragraph{Calibration.} An eight-round campaign (per-orbit statistics over each cell's own conditional counts, $1{,}600$--$2{,}600$ independent orbits per cell, under an altitude cut on the core) produced four apparent violations of $\pi_{k,D}$-uniformity, each dissolved by a sharper control: an $s{=}3$ marginal excess and pair correlations (artifacts of small starting values); digit biases (contamination by the \emph{bottom regime}, the fixed drainage basin of small integers, where deviations reach $z=41$ but reflect particular numbers rather than a measure); and a $5\sigma$ digit bias in one cell surviving a $2^{40}$ cut. The last dissolved under fixed-horizon unweighted sampling ($0.2503\pm0.0015$ against null $0.25$ over $84{,}739$ visits) and was explained exactly:
+\paragraph{Calibration.} An eight-round campaign (per-orbit statistics over each cell's own conditional counts, $1{,}600$--$2{,}600$ independent orbits per cell, under an altitude cut on the core) produced four apparent violations of $\pi_{k,D}$-uniformity, each dissolved by a sharper control: an $s{=}3$ marginal excess and pair correlations (artifacts of small starting values); digit biases (contamination by the bottom regime, where deviations reach $z=41$ but reflect particular numbers rather than a measure); and a $5\sigma$ digit bias in one cell surviving a $2^{40}$ cut. The last dissolved under fixed-horizon unweighted sampling ($0.2503\pm0.0015$ against null $0.25$ over $84{,}739$ visits) and was explained exactly:
 
 \begin{lemma}[deterministic routing]\label{lem:routing}
 For $\w \equiv 1 \pmod 8$, $d = 1$: here $s = 1$, $C = 3\w + 1$, $\vt{C} = 2$, $a_+ = 0$, so $\wnext = (3\w+1)/4$ and $\dnext = 1$; the residue $\w \bmod 32$ determines the next class exactly: $1 \mapsto (1,1)$ (immediate self-return), $9 \mapsto (7,1)$, $17 \mapsto (5,1)$, $25 \mapsto (3,1)$, the lifting class.
@@ -429,7 +432,7 @@ Ratio estimators over correlated visit sequences inherit this routing (residue $
 
 \section{Discussion}
 
-In reduced coordinates the Collatz problem factors cleanly. The local arithmetic is under exact control: one $2$-adic logarithm governs the step, and finite windows decide steps without error. What remains is a single question wearing two costumes: for typical starting values, whether the anchors' digits equidistribute (Hypothesis~\ref{hyp:aeh} --- statistics); for cycles, whether closed anchor walks are rigid (Theorem~\ref{thm:staircase} --- arithmetic). The staircase shows the costumes cover the same body. Three directions have defined success criteria: rigidity statements for closed anchor walks beyond the size level (the only route past Theorem~\ref{thm:staircase}); transfer-operator analysis of the exact window chain; and any progress on digits of $2$-adic logarithms of integers, a problem this paper inherits rather than creates.
+In reduced coordinates the Collatz problem factors cleanly. The local arithmetic is under exact control: one $2$-adic logarithm governs the step, and finite windows decide steps without error. What remains is a single question wearing two costumes: for typical starting values, whether the anchors' digits equidistribute (Hypothesis~\ref{hyp:aeh} --- statistics); for cycles, whether closed anchor walks are rigid (Theorem~\ref{thm:staircase} --- arithmetic). The staircase shows the costumes cover the same body. Three directions have defined success criteria: rigidity statements for closed anchor walks beyond the size level (the only route past Theorem~\ref{thm:staircase}); transfer-operator analysis of the chain of exact depth-$k$ windows (Theorem~\ref{thm:onestep}); and any progress on digits of $2$-adic logarithms of integers, a problem this paper inherits rather than creates.
 
 \appendix
 \section{Methodology, responsibility, and records}\label{app:method}
