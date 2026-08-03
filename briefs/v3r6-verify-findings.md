@@ -524,7 +524,10 @@ lands in the child commit. That is the same pattern as the previous round's pin 
 ## 7. Housekeeping
 
 * **UTF-8 integrity.** Every touched file decodes as UTF-8, no BOM, no `U+FFFD`, and a repo-wide
-  mojibake sweep (`Ã`, `â€`, `Î¸`, `â‰¤`) finds hits only inside earlier round *briefs* that quote
+  mojibake sweep (the double-encoded byte forms of `—`, `θ`, `≤` and the `Ã`-prefixed family —
+  the literal patterns deliberately not reproduced here, per the HANDOFF quirk: a quoted sample
+  makes this file a permanent scanner false positive, which the original wording of this line
+  did in fact become) finds hits only inside earlier round *briefs* that quote
   those byte sequences as test patterns. Glyph counts in `aeh.md`, `29ecb1b → HEAD`: `≤` 68→68,
   `—` 197→198, `ε` 34→34, `θ` 77→78, `τ` 66→66, `†` 9→9, `β` 16→16, `π` 31→31, `ω` 43→43, `σ` 22→22,
   `δ` 10→12, `Σ` 33→33, `₂` 52→52, `√` 9→9, `⌊` 6→6, `≥` 80→80, `⊥` 7→7. The three deltas (`—`+1,

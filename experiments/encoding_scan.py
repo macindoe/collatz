@@ -56,6 +56,12 @@ def repo_root():
 
 
 def main():
+    # A finding's sample can contain characters the Windows default console
+    # encoding cannot represent; without this the report crashes mid-print,
+    # after the count header and before the file name and RESULT line --
+    # which is exactly how a real finding went unread on 2026-08-03.
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     root = repo_root()
     os.chdir(root)
     files = [f for f in subprocess.run(['git', 'ls-files'], capture_output=True,
