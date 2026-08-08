@@ -1,4 +1,4 @@
-From ac182701ceefd3a45d9933f67a4b4a4a341a33a8 Mon Sep 17 00:00:00 2001
+From 0a690db3d647def779c09d086f2c1a289f0460c3 Mon Sep 17 00:00:00 2001
 From: macindoe <macindoebenjamin@gmail.com>
 Date: Mon, 3 Aug 2026 23:17:38 +1000
 Subject: [PATCH] NOTE-v1.md: the two-page first version -- the counting
@@ -12,7 +12,7 @@ Subject: [PATCH] NOTE-v1.md: the two-page first version -- the counting
 
 diff --git a/NOTE-v1.md b/NOTE-v1.md
 new file mode 100644
-index 0000000..d5abda1
+index 0000000..46e61d2
 --- /dev/null
 +++ b/NOTE-v1.md
 @@ -0,0 +1,61 @@
@@ -66,7 +66,7 @@ index 0000000..d5abda1
 +
 +Benjamin James Macindoe · Eric Merle
 +
-+[THE AUTHOR'S: credit wording]
++This note is a collaborative effort of mutual verification. Each claim raised was independently verified by the other and attribution is made where it appears. The full record's details can be traced in `LEDGER.md`.
 +
 +## References
 +

@@ -300,3 +300,16 @@ hundredths in the exponent") in place of the implied chasm. Re-verified by fresh
 superseding the pre-review `9e7360e`. Also re-verified at review directly against the
 published tex: the obstruction sentence including its formula, both abstract phrases,
 and `γ := K − log₂ q` as the paper's own definition (line 208) — all character-exact.
+
+## The author's decisions placed (main session, 2026-08-03)
+
+Credit wording placed verbatim (one terminal period added): *"This note is a
+collaborative effort of mutual verification. Each claim raised was independently
+verified by the other and attribution is made where it appears. The full record's
+details can be traced in `LEDGER.md`."* The `[GRADE AT SIGNING…]` bracket is
+**retained by the author's decision** — it resolves when the Macindoe key actually
+turns, not at PR-open (the draft is a draft; the bracket must still not survive into
+the merged, signed note, so CHECK-AT-SEND marker (6) narrows to the credit half, done,
+plus the bracket at signature). Style calls confirmed as drafted; the ~8% length
+overage accepted. Patch regenerated and re-verified on a pristine `7c05458`: clean
+apply, tree **`97efe6339cb490c260e3e1e604d4c2993c954883`**, superseding `1e88479`.
