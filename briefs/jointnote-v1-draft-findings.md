@@ -313,3 +313,14 @@ the merged, signed note, so CHECK-AT-SEND marker (6) narrows to the credit half,
 plus the bracket at signature). Style calls confirmed as drafted; the ~8% length
 overage accepted. Patch regenerated and re-verified on a pristine `7c05458`: clean
 apply, tree **`97efe6339cb490c260e3e1e604d4c2993c954883`**, superseding `1e88479`.
+
+## The T1 paragraph tightened (author's request, main session, 2026-08-03)
+
+The apparatus section's L-A8/T1 paragraph compressed ~40% at the author's request: the
+five-link chain enumeration, the θⱼ formula, `propext`, and the ledger-detail clauses
+("dependency structure", "truth as instantiated", the toolchain sentence) now rest on
+the ledger pointer. All four scope guards verified individually present after the
+swap: "read, not built"; "no end-to-end machine checking is claimed or implied"; the
+glue facts "outside the kernel claims"; "machine-checkable chain, not range". Patch
+regenerated, re-verified clean on pristine `7c05458`: tree
+**`d374546ba10964b4e00c79df37eca50bb77aef3e`** — the send tree, superseding `97efe63`.
