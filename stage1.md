@@ -1,7 +1,7 @@
 ---
 status: closed — entry map, tower map, and Stage 1 reduction summary; the synthesis proper (11.8.3) is split to stage1-synthesis.md
 scope: monolith 11.8.1-11.8.2, 11.8.4 (11.8.3 → stage1-synthesis.md)
-updated: 2026-08-02
+updated: 2026-08-12
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -659,17 +659,18 @@ and the next depth satisfies
 d_+ = v_2(C) - s + v_3(C).
 ```
 
-Thus the conversion from valuation theory to reduced dynamics is only partially complete:
+The conversion from valuation theory to reduced dynamics is now closed at the valuation level, on all residue classes:
 
 ```text
 completed:
     parity of s,
-    3-gain
+    3-gain,
+    control of C and the laws for d_+ (11.8.6 — stage3.md)
 
-still open:
-    control of C,
-    laws for d_+,
-    eventual refinement of ω_+
+open:
+    the odd core ω_+ — by 11.8.5.6 the anchor increment
+        (per-step laws proved, stage4.md; the unbounded-depth
+        residue is the Bridge, bridge.md §16)
 ```
 
 This compact snapshot should be read only as a checkpoint. Its purpose is not to replace the fuller discussion of `11.8.4.1`–`11.8.4.4`, but to gather the current state of the program into one visible ledger before Route A passes from Stage 2 into the later dynamical stages.

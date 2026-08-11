@@ -1,7 +1,7 @@
 ---
 status: program / status ledger
 scope: monolith 11.8 intro, guardrail, stage prospectus, 11.8.8, 11.9 (11.8.7 moved to stage4.md)
-updated: 2026-07-22
+updated: 2026-08-12
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -96,7 +96,7 @@ Under this guarded interpretation, Route A provides a disciplined path forward: 
 
 The frequency and size ledgers of `11.8.4.4` fix the scope of that path. The typical step is governed by the classical drift picture, which Route A confirms but does not improve. Route A's proper target is the exact arithmetic of the exceptional set — the deep cascades and their anchor structure — together with the fiber-to-orbit bridge of `11.8.5.6`. Claims on behalf of the program should be calibrated accordingly.
 
-**Strategy and stopping rules.** The program-level strategy — which fronts are open, what each is for, what counts as done, and what triggers parking a front — lives in `README.md` and is binding (see also `AGENTS.md`). In brief: the cycle ladder (§12) is not climbed per period; work there serves only the uniform trim lemma. The guardrail above applies to computational fronts exactly as it applies to residue refinement: results without structure are engineering, not progress.
+**Strategy and stopping rules.** The program-level strategy — which fronts are open, what each is for, what counts as done, and what triggers parking a front — lives in `README.md` and is binding (see also `AGENTS.md`). In brief: the cycle ladder (§12) is retired and the front parked (12.8.5); it reopens only under README's stopping rule. The guardrail above applies to computational fronts exactly as it applies to residue refinement: results without structure are engineering, not progress.
 
 ## 11.9. Closing Perspective
 

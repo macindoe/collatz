@@ -1,7 +1,7 @@
 ---
 status: ACTIVE — forward/backward duality complete (14.1–14.12; density bound c* = 0.3304, 14.6); door/exit seam relocates the core-extraction deficit onto the forward digit budget (14.14); the itinerary-language arc (§14.15) lives at itinerary.md — Bridge status unchanged throughout
 scope: sections 14.1–14.14 (post-monolith); §14.15 split to itinerary.md 2026-07-23
-updated: 2026-08-02
+updated: 2026-08-12
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
 ---
 
@@ -367,7 +367,7 @@ v_3(G(y) − G(z)) = v_3(y − z) + m.
 
 **Verified** — `experiments/door_seam.py`, functions `test_item5_offset` and `test_item5_deep_strata`. Graded law at offset `f=1`, `K ∈ {2,4,6,8}`: `250` base points and `1,250` lifted pairs per `K` (each pair shares `y mod 3^{K+1}` and the `(m,r)`-stratum with its base point, differs by a large multiple of `3^{K+1}·2^{m+r+10}`), `0` failures at every `K`. Deep-stratum stress test, `m ∈ {1,5,10,15,20}` forced by construction, `K=4`: `120` base points each, `0` failures — the constant offset holds even at large `m`. Tightness: the same test at offset `f=0` (`y` known only mod `3^K`), `K=5`: `1,250` pairs, `873` failures, confirming `f=1` is not slack (2026-07-14).
 
-**Theorem 14.14.5.4 (the total two-case metric law).** *(Added 2026-07-15, branch `block-map`, per `briefs/block-map-brief.md`, item 3 — a strengthening of the tightness paragraph above, which stands and is not being repaired.)* For live doors `y, z` on the same `(m,r)`-stratum (`14.14.4`), `y ≠ z`:
+**Theorem 14.14.5.4 (the total two-case metric law).** *(A strengthening of the tightness paragraph above, which stands and is not being repaired.)* For live doors `y, z` on the same `(m,r)`-stratum (`14.14.4`), `y ≠ z`:
 
 ```text
 (i)  v_3(z−y) = 0   ⟺   ΔM_3(z) − ΔM_3(y) is odd (the parity component in E_3);

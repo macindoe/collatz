@@ -1,5 +1,7 @@
 # Findings: staircase-allp-construction (gap B) — 2026-07-28
 
+> **Pre-rewrite numbering.** Sub-numbers here are pre-rewrite: "12.8.6.2" in this file is the pure-geometric profile, now `cycles.md` 12.8.6.3; the Construction B it proves is now numbered 12.8.6.2 (applied with deviations — see `briefs/staircase-status-apply-findings.md`).
+
 Brief: `briefs/staircase-allp-construction-brief.md`. Branch
 `staircase-allp-construction`. **Base SHA `e0c34a9`** — the worktree was cut
 from `2225b68`, which did not contain the brief; the branch was re-cut at
