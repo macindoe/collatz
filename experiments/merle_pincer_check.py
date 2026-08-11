@@ -517,7 +517,8 @@ def item2c_correction_runs(deadline_s=240.0):
     out = []
     out.append(f"Correction runs (algorithm 12.8.6.3 via Section 1's "
                 f"instrumented copy): max_moves=40, deadline={deadline_s:.0f}s "
-                f"per run, crash_depth=1, base construction 12.8.6.2.")
+                f"per run, crash_depth=1, base construction = 12.8.6.3's "
+                f"pure-geometric base profile.")
     p = 22
     cases = [
         (31202, "Merle's off-scale point (his pre-correction margin -4.80, "

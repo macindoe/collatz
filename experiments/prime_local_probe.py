@@ -936,7 +936,7 @@ def item2_measurement1():
     print(f"Instance record: {len(records)}/22 periods regenerated "
           f"(p in {{2,...,23}}); {n_gt1}/{len(records)} have gcd(q,R_0) > 1. "
           f"ALL are sector '+' (q>0) BY CONSTRUCTION -- the staircase "
-          f"recipe (12.8.6.2) always uses K = ceil(n log2 3), so this "
+          f"recipe (12.8.6.3) always uses K = ceil(n log2 3), so this "
           f"instance record alone cannot supply the mandatory sector "
           f"comparison for item 2; that is supplied by measurement 3's "
           f"baseline scans instead, which explicitly cover both signs.")

@@ -495,7 +495,7 @@ def part1b(rows):
     print("   The greedy profile is geometric PLUS a constant additive offset")
     print("   1/(L-1) = %.4f per block: (L-1) * 1/(L-1) = 1 is exactly the one"
           % (1 / LM1))
-    print("   unit of exit valuation each climb block spends.  12.8.6.2's PURE")
+    print("   unit of exit valuation each climb block spends.  12.8.6.3's PURE")
     print("   geometric profile omits it -- that omission is the shortfall.")
     print()
     for r in rows:
@@ -510,14 +510,11 @@ def part1b(rows):
 
 # ==========================================================================
 # PART 2.  The shortfall of the superseded recipe's PURE geometric base
-#          profile (cycles.md 12.8.6.3), and its p-growth.  Wherever the
-#          printed text of this Part cites 12.8.6.2, the object meant is
-#          that pure-geometric profile, i.e. 12.8.6.3.  The printed strings
-#          are left as they stand so the committed output stays byte-exact.
+#          profile (cycles.md 12.8.6.3), and its p-growth.
 # ==========================================================================
 
 def part2(rows):
-    hdr("PART 2.  Shortfall of the base construction 12.8.6.2 at the SAME n")
+    hdr("PART 2.  Shortfall of 12.8.6.3's pure-geometric base profile at the SAME n")
     print("   D_r := (m_r + r + eta) - (gamma + (L-1) T_{r-1})  is the deficit in")
     print("   condition (C_r).  For the exact-real geometric profile it equals")
     print("       D_r = m_0 + r - gamma + eta,")
@@ -794,7 +791,7 @@ def nc_rounding(rows):
     print("   Same n, same crash depth, same shape -- only the rule that turns")
     print("   the real profile into integers changes.")
     print("     greedy      : saturate (C_r) exactly, in big integers  [THIS WORK]")
-    print("     partialsum  : round the partial sums of the PURE geometric  [12.8.6.2]")
+    print("     partialsum  : round the partial sums of the PURE geometric  [12.8.6.3]")
     print("     perblock    : round each m_j of the PURE geometric on its own")
     print()
     print("    p        n   greedy  partialsum  perblock   #fail(ps)  #fail(pb)")

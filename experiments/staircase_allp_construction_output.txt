@@ -70,7 +70,7 @@ PART 1b.  Shape of the constructed profiles (the +1/(L-1) offset)
 ==============================================================================
    The greedy profile is geometric PLUS a constant additive offset
    1/(L-1) = 1.7095 per block: (L-1) * 1/(L-1) = 1 is exactly the one
-   unit of exit valuation each climb block spends.  12.8.6.2's PURE
+   unit of exit valuation each climb block spends.  12.8.6.3's PURE
    geometric profile omits it -- that omission is the shortfall.
 
    p=7   n=27       m = [2, 3, 3, 4, 5, 7, 3]
@@ -89,7 +89,7 @@ PART 1b.  Shape of the constructed profiles (the +1/(L-1) offset)
         ratios m_{j+1}/m_j = 1.333 1.250 1.400 1.429 1.500 1.533 1.565 1.556 1.554   (-> L = 1.5850 from below)
 
 ==============================================================================
-PART 2.  Shortfall of the base construction 12.8.6.2 at the SAME n
+PART 2.  Shortfall of 12.8.6.3's pure-geometric base profile at the SAME n
 ==============================================================================
    D_r := (m_r + r + eta) - (gamma + (L-1) T_{r-1})  is the deficit in
    condition (C_r).  For the exact-real geometric profile it equals
@@ -239,7 +239,7 @@ NC-B.  The rounding rule is load-bearing (perturb the rounding)
    Same n, same crash depth, same shape -- only the rule that turns
    the real profile into integers changes.
      greedy      : saturate (C_r) exactly, in big integers  [THIS WORK]
-     partialsum  : round the partial sums of the PURE geometric  [12.8.6.2]
+     partialsum  : round the partial sums of the PURE geometric  [12.8.6.3]
      perblock    : round each m_j of the PURE geometric on its own
 
     p        n   greedy  partialsum  perblock   #fail(ps)  #fail(pb)
@@ -356,11 +356,11 @@ NC-E.  The gamma formula as a function of p and the quality parameter
 PART 4.  Beyond the existing record (12.8.6.4 stops at p = 23)
 ==============================================================================
     p        n     off   gamma   Gamma  g/log2p  minmarg  div   secs
-    31   1587045      2   3.033   3.637   0.612   0.611  False   32.0
-    32   2515409      5   4.594   3.637   0.919   0.345  False   95.4
+    31   1587045      2   3.033   3.637   0.612   0.611  False   31.7
+    32   2515409      5   4.594   3.637   0.919   0.345  False   95.9
 
 ==============================================================================
 SUMMARY
 ==============================================================================
    total failed checks: 0
-   wall clock: 407.6 s
+   wall clock: 404.0 s
