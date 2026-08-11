@@ -167,7 +167,7 @@ def main():
 
     print("=" * 70)
     print("p = 22 CERTIFICATE 1: n = 25217 -- Merle's in-scale point")
-    print("(construction 12.8.6.2 + 13 correction moves of 12.8.6.3;")
+    print("(superseded recipe of 12.8.6.3: pure-geometric profile + 13 correction moves;")
     print(" briefs/merle-pincer-check-findings.md item 2)")
     print("=" * 70)
     ms_a = [1, 1, 3, 3, 6, 10, 14, 24, 37, 59, 95, 149, 235, 372, 588,
@@ -177,7 +177,7 @@ def main():
 
     print("=" * 70)
     print("p = 22 CERTIFICATE 2: n = 31202 -- Merle's off-scale point")
-    print("(construction 12.8.6.2 + 8 correction moves of 12.8.6.3;")
+    print("(superseded recipe of 12.8.6.3: pure-geometric profile + 8 correction moves;")
     print(" briefs/merle-pincer-check-findings.md item 2)")
     print("=" * 70)
     ms_b = [1, 2, 3, 4, 8, 11, 18, 29, 46, 73, 115, 182, 290, 460, 728,

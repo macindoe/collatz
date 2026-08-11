@@ -2,8 +2,8 @@
 # the gamma budget, unconditional candidate availability at every scale, and
 # the empirical test across the convergent desert p = 24..36.
 #
-# Supports: briefs/staircase-allp-diophantine-findings.md, and the sole
-# remaining gap of the floor-grade result at cycles.md 12.8.6.
+# Supports: briefs/staircase-allp-diophantine-findings.md, and the
+# availability theorem (12.8.6.1) of the proved result at cycles.md 12.8.6.
 #
 # INDEPENDENCE. This script imports nothing from experiments/staircase_allp.py,
 # experiments/uniform_trim.py, experiments/p22_passer.py, or any other file in
@@ -1007,7 +1007,7 @@ def part3(pmin=24, pmax=36, max_moves=40, budget=300.0):
     print("PART 3.  The empirical test at p = %d..%d (the convergent desert)"
           % (pmin, pmax))
     print("=" * 78)
-    print("  Recipe of 12.8.6.2 + 12.8.6.3, reimplemented independently; candidate")
+    print("  Superseded profile-plus-correction recipe of 12.8.6.3, reimplemented independently; candidate")
     print("  n taken from the whole window (ordinary integers) rather than from")
     print("  the continued-fraction chain. Correction search in log space; every")
     print("  reported pass is re-verified with exact big integers, all p rotations,")

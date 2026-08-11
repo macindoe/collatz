@@ -1,7 +1,7 @@
 ==============================================================================
 PART 3.  The empirical test at p = 24..36 (the convergent desert)
 ==============================================================================
-  Recipe of 12.8.6.2 + 12.8.6.3, reimplemented independently; candidate
+  Superseded profile-plus-correction recipe of 12.8.6.3, reimplemented independently; candidate
   n taken from the whole window (ordinary integers) rather than from
   the continued-fraction chain. Correction search in log space; every
   reported pass is re-verified with exact big integers, all p rotations,
@@ -15,16 +15,16 @@ PART 3.  The empirical test at p = 24..36 (the convergent desert)
   gamma, not a measurement of it.
 
      p            n  n/1.585^p     gamma  gam/log2p crash  moves   exact   q|R_r   cap     sec
-    18         3386      0.850     2.342      0.562     1     20    PASS   False    no     9.9
-    19         5369      0.850     2.266      0.533     1     21    PASS   False    no    19.1
-    20        13515      1.350     2.752      0.637     1     27    PASS   False    no    36.3
-    21        11108      0.700     2.725      0.620     1     23    PASS   False    no    36.1
+    18         3386      0.850     2.342      0.562     1     20    PASS   False    no     8.8
+    19         5369      0.850     2.266      0.533     1     21    PASS   False    no    17.3
+    20        13515      1.350     2.752      0.637     1     27    PASS   False    no    32.2
+    21        11108      0.700     2.725      0.620     1     23    PASS   False    no    31.9
     22            -          -         -      3.379     1      -    PASS   False   yes       -
-    24        53692      0.850     2.995      0.653     1     27    PASS   False    no    83.9
-    25       100112      1.000     2.739      0.590     1     31    PASS   False    no    83.8
-    26       111070      0.700     2.852      0.607     1     30    PASS   False    no   152.3
-    27       213762      0.850     2.674      0.562     1     33    PASS   False    no   120.4
-    28       279019      0.700     2.222      0.462     1     35    PASS   False    no    98.9
+    24        53692      0.850     2.995      0.653     1     27    PASS   False    no    85.7
+    25       100112      1.000     2.739      0.590     1     31    PASS   False    no    87.6
+    26       111070      0.700     2.852      0.607     1     30    PASS   False    no   156.2
+    27       213762      0.850     2.674      0.562     1     33    PASS   False    no   124.4
+    28       279019      0.700     2.222      0.462     1     35    PASS   False    no    96.4
     29       539744      0.854    17.033      3.506     1     11    PASS   False   yes    68.4
     30      1603631      1.602    17.868      3.641     1     13    PASS   False   yes    86.0
     31      1111355      0.700    16.996      3.431     1     13    PASS   False   yes    73.7
