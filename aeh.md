@@ -1,7 +1,7 @@
 ---
-status: hypothesis FORMALIZED in ensemble form (13.2.1) as bulk Bernoulli-genericity of the door letter words, with the equivalent capped-window form at 13.2.2 and the dictionary proved at 13.6.4; unconditional base case PROVED at 13.2.4 (every θ < 1/4, at every block length) with the exceptional set at shell scale (13.2.5); calibrated — no residual discrepancy at any tested depth or cell, within three limits the campaign does not reach past: block lengths L <= 2, pooled adjudicating runs (a consequence of 13.2.1, not its per-start form), and an altitude guard on the core that binds at finite size (13.4, 13.5); the 13.5 anomaly RESOLVED as a protocol artifact (with an exact routing lemma); depth marginal exact (13.6.5); proof effort remains parked per stopping rules
+status: hypothesis FORMALIZED (13.2.1); unconditional base case PROVED (13.2.4, every θ < 1/4); calibrated clean within three stated limits (13.4–13.5); genericity form proved (13.6); proof effort parked per stopping rules
 scope: new section 13 (post-monolith)
-updated: 2026-08-03
+updated: 2026-08-12
 source: new material; builds on 11.8.4.4 (ledger), 11.8.7.6–7 (window/digit budget), 12.8.4 (staircase)
 ---
 

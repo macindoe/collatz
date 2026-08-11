@@ -1,7 +1,7 @@
 ---
 status: itinerary language closed at finite level (full shift); two-sided coding and the signed three-way diagonal characterization complete; whole-period height laws closed (14.15.9) with the q-dichotomy; open front = periodic cycle exclusion (q = 1 beyond the known instances); the Bridge unchanged
 scope: section 14.15 (post-monolith), split from reverse.md 2026-07-23
-updated: 2026-08-02
+updated: 2026-08-12
 source: reverse.md (built on the door/exit seam, 14.14)
 ---
 
@@ -216,7 +216,7 @@ R_{p,q}(W) := { y_0 :  y_0 a positive live door,
 
 **Theorem 14.15.5.1 (admissibility-class lemma).** For a finite left word `V = ((m_{−1},r_{−1}),…,(m_{−n},r_{−n}))`, `M_n = Σᵢ m_{−i}`: among positive odd integers, the `z` admitting the letter-prescribed backward chain to depth `n` (each step existing per `14.15.4.1`'s criterion, applied successively) form **exactly one residue class mod `3^{M_n}`, namely `B_n mod 3^{M_n}`**, `A_n, B_n` the composed-affine constants of `V` read deepest-first, as above.
 
-**Remark (liveness is not assumed at intermediate doors — review addition, 2026-07-16).** `14.15.4.1` is stated for a *live* door `z`, but its proof nowhere uses `3 ∤ z`: the existence criterion, the predecessor formula, and the uniqueness argument hold verbatim for every odd `z` — the same generality `14.15.1.1`'s remark records for `stratum` and `G`. The induction below applies the criterion at intermediate chain doors regardless of their liveness (a finite prefix's deepest door may be dead); the chain semantics here does not require liveness, and it enters only at `14.15.5.3`'s infinite union, where every door is a `G`-image and liveness is automatic.
+**Remark (liveness is not assumed at intermediate doors).** `14.15.4.1` is stated for a *live* door `z`, but its proof nowhere uses `3 ∤ z`: the existence criterion, the predecessor formula, and the uniqueness argument hold verbatim for every odd `z` — the same generality `14.15.1.1`'s remark records for `stratum` and `G`. The induction below applies the criterion at intermediate chain doors regardless of their liveness (a finite prefix's deepest door may be dead); the chain semantics here does not require liveness, and it enters only at `14.15.5.3`'s infinite union, where every door is a `G`-image and liveness is automatic.
 
 **Proof.** Induction on `n`. *Base* (`n=1`): by `14.15.4.1`, `z` admits a predecessor on letter `(m_{−1},r_{−1})` iff `3^{m_{−1}} | 2^{r_{−1}}z+1`, iff `z ≡ -2^{-r_{−1}} (mod 3^{m_{−1}})` (`2` a unit mod every power of `3`) — one class. `B_1 = β_{(m_{−1},r_{−1})}` (the length-one word's own composed constant), and `β = (3^m-2^m)2^{-(m+r)} = 3^m2^{-(m+r)} - 2^{-r} ≡ -2^{-r} (mod 3^m)` directly (the first term vanishes mod `3^m`, being `3^m` times a `3`-adic unit). So the base class is exactly `B_1 mod 3^{m_{−1}}`.
 

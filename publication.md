@@ -1,5 +1,5 @@
 ---
-status: novelty verdicts per claim below, a dated snapshot (2026-08-03) — the statistical layer's consequences subsumed (Inselmann 2024) and 13.6.5's law attributed (Tao); paper 1 published at v3 (DOI 10.5281/zenodo.21730505, 2026-08-03; v2 DOI 10.5281/zenodo.21421120) and the mirror paper published (DOI 10.5281/zenodo.21303918)
+status: novelty assessment, dated snapshot (2026-08-03); papers published — paper 1 v3 DOI 10.5281/zenodo.21730505, mirror DOI 10.5281/zenodo.21303918
 scope: publication planning; citation pins for the wiki's #TODOs
 updated: 2026-08-12
 ---

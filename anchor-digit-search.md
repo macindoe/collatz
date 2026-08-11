@@ -1,7 +1,7 @@
 ---
-status: executed search, clean at every endpoint — statistical batteries in breadth (17.7.1) and depth (17.7.2), the automaticity/algebraicity screen (17.7.3, M(ω) not 2-automatic), three operation lenses (17.7.4), and PractRand to 1 GB (17.7.5)
+status: executed search, clean at every endpoint (17.7.1–17.7.5; M(ω) not 2-automatic)
 scope: sections 17.7–17.10 (post-monolith; the single-sequence digit-structure search program), split from anchors.md 2026-07-23
-updated: 2026-07-23
+updated: 2026-08-12
 source: anchors.md (the hub retains §17.1–17.6)
 ---
 
