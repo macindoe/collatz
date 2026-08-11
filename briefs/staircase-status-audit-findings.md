@@ -1,5 +1,7 @@
 # Findings: staircase-status-audit — what the all-`p` closure retires (2026-07-28)
 
+> **Superseded as drafts.** The drafted texts here were applied with eleven deviations — the applied record is `briefs/staircase-status-apply-findings.md`; gates (P1)/(P2) are both discharged (`briefs/staircase-gamma-upper-findings.md`; the author's P2 call).
+
 Brief: `briefs/staircase-status-audit-brief.md`. Branch `staircase-status-audit`.
 **Base SHA `82f0523`** — the worktree was cut from `2225b68`, which does not
 contain the brief; the branch was re-cut at `82f0523` before any work began.

@@ -1,5 +1,7 @@
 # Junction Theorem repository — recon and self-audit confirmation
 
+> **Superseded verdicts.** Every NOT FOUND / NOT CONFIRMED / NOT PERFORMED verdict here is superseded: reachability by `briefs/junction-public-recon-findings.md` (four repos made public; the `LegendreApprox` home CONFIRMED, the diff PERFORMED) and the self-audit by `briefs/junction-followup-recon-findings.md` (the three round-11 NOT-FOUNDs CONFIRMED at full weight — the account was true, the copies not public); the posture sentence stands.
+
 Brief: `briefs/junction-repo-recon-brief.md`. Branch `junction-repo-recon`, base
 `9d22dc8` (the worktree was cut at `b860fe8`, a strict ancestor that does not
 contain the brief; the branch was taken from `main` at `9d22dc8`, which does).

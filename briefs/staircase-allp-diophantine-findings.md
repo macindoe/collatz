@@ -1,5 +1,7 @@
 # Findings: staircase-allp-diophantine (2026-07-28)
 
+> **Pre-rewrite numbering.** One use below ("recipe of `12.8.6.2`–`12.8.6.3`", §3) carries the pre-rewrite meaning — the pure-geometric profile plus correction, now `cycles.md` 12.8.6.3; the (i)/(ii) results are restated at the sharper `maxgap`/two-sided form in `briefs/staircase-status-apply-findings.md`, and the availability theorem this file proves is still the one cited.
+
 Brief: `briefs/staircase-allp-diophantine-brief.md`. Target: the Diophantine
 coverage gap named at `cycles.md` 12.8.6.1 as the **sole remaining gap** of the
 floor-grade all-`p` staircase result, and the hedge it keeps alive in the
