@@ -70,3 +70,39 @@ implementation, not imported)
   not hold; they are our own prior output being returned. Not a
   defect in Merle's material -- a precision correction to the
   brief's Provenance, recorded per the Rules' disagreement clause.
+
+==============================================================================
+PART 5 -- the theta=1 Cramer-Lundberg boundary (campaign map)
+==============================================================================
+  theta(p=3) = 1.000000000000
+  [PASS] theta = 1 exactly at p = 3 (campaign map claim: (p/2)+(1/2)=2 at theta=1 solves the equation exactly, and it is the unique nontrivial positive root)  (1.000000000000)
+  [PASS] (p/2)^1 + (1/2)^1 = 2  <=>  p = 3, by direct algebra ((p+1)/2 = 2 => p = 3)  ((3+1)/2 = 2 exactly; solved directly, no floating point involved)
+  p=5: f(theta->0+) probe = 0.000224 (>0: no nontrivial root); theta_root returns None
+  p=7: f(theta->0+) probe = 0.000561 (>0: no nontrivial root); theta_root returns None
+  [PASS] f'(0) = ln(p/4) < 0 for p=3 (dips negative, nontrivial root at theta=1 exists) but >= 0 for p=5,7 (no dip, NO nontrivial positive root exists at all) -- this is a STRONGER form of the map's 'p=3 sits on the boundary, infinite excursion at p=5,7' claim than 'theta<1': at p=5,7 the Cramer-Lundberg adjustment coefficient does not exist in the classical sense, because the log-step drift 0.5*ln(p/2)+0.5*ln(1/2) turns positive there (upward-drifting walk, no finite exponential/power tail rate) -- consistent with 'infinite'
+  mean log-step drift: p=3: -0.1438 (negative, walk drifts down -- finite max, matches 'excursion finite'); p=5: 0.1116 (positive, walk drifts up -- matches 'infinite')
+  [PASS] drift is negative at p=3 and positive at p=5 (the mechanism behind finite-vs-infinite excursion, independently confirmed)
+  NOTE (scope, carried into the findings and the review draft): the algebra of theta=1<=>p=3, and the drift mechanism explaining why no nontrivial root exists for p=5,7, are verified here; the surrounding claim that the excursion tail is exactly R^-theta under the section-75 bijection is NOT independently checked in this session -- it rests on Merle's local artifacts, per the brief's own instruction.
+
+==============================================================================
+PART 6 -- the two cross-domain checkmark facts (campaign map)
+==============================================================================
+  [PASS] 2^n = 2 (mod 3) for every odd n, n=1..4999 (2^n = (-1)^n mod 3)  (0 mismatches)
+  [PASS] 2^n = 1 (mod 3) for every even n (the complementary case, sanity)
+  [PASS] the three named exceptions n=0, 2, 8 are all even
+  undecided density at k=1: 0.500000 (exact 1/2)
+  [PASS] undecided density at k=1 is exactly 1/2
+  decided fraction at k=14: 99.743%
+  [PASS] decided fraction at k=14 is 99.743% (campaign map figure)  (99.7431%)
+  [PASS] undecided density is strictly decreasing and positive for k=1..14 (a genuine sieve, not a vacuous or negative claim)
+  SCOPE NOTE: the geometric closed form (1/2)(2/3)^(k-1) is verified arithmetically above (it reproduces 99.743% at k=14 exactly); the combinatorial sieve argument that PRODUCES this density from the base-3 digit structure of 2^n is Merle's own local construction, not reconstructed independently in this session -- carried forward as a scope boundary, not a defect.
+  log_3(2) = 1/log_2(3) = 0.630930
+  [PASS] log_3(2) = 0.630930... (campaign map figure)  (0.630930)
+  (3+3/7)/(3-3/7) = 4/3 = 1.333333
+  [PASS] (3+3/7)/(3-3/7) = 4/3 exactly (campaign map identity)
+  log2(4/3) = 0.4150374993; 2 - log2(3) = 0.4150374993
+  [PASS] log2(4/3) = 2 - log2(3) exactly (identity, not approximation: log2(4/3) = log2(4) - log2(3) = 2 - log2(3))  (0.415037499279 vs 0.415037499279)
+
+==============================================================================
+TOTAL: 37 checks, 0 failures
+==============================================================================

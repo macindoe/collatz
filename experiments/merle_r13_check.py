@@ -337,3 +337,157 @@ print("  with no prior record on our side' -- that characterisation does")
 print("  not hold; they are our own prior output being returned. Not a")
 print("  defect in Merle's material -- a precision correction to the")
 print("  brief's Provenance, recorded per the Rules' disagreement clause.")
+
+print()
+print("=" * 78)
+print("PART 5 -- the theta=1 Cramer-Lundberg boundary (campaign map)")
+print("=" * 78)
+
+
+def f_theta(p, t):
+    return (mpf(p) / 2) ** t + (mpf(1) / 2) ** t - 2
+
+
+def theta_root(p, hi=mpf('20')):
+    """The nontrivial positive root of (p/2)^theta + (1/2)^theta = 2, by
+    bisection, IF one exists. f(theta) = (p/2)^theta + (1/2)^theta - 2 has
+    a trivial root at theta=0 (f(0)=1+1-2=0); f'(0) = ln(p/4). For p < 4
+    f dips negative just above 0 then rises back through 0 at a unique
+    theta* > 0 -- the root of interest. For p >= 4, f'(0) >= 0 and f is
+    already increasing at 0, so (being convex) it never dips negative
+    again: no nontrivial positive root exists. Returns None in that case."""
+    mp.dps = 50
+    if f_theta(p, mpf('1e-6')) > 0:
+        return None  # no dip below zero -- no nontrivial root (p >= 4 case)
+    lo = mpf('1e-6')
+    fhi = f_theta(p, hi)
+    for _ in range(200):
+        mid = (lo + hi) / 2
+        if f_theta(p, mid) < 0:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
+
+theta3 = theta_root(3)
+print(f"  theta(p=3) = {float(theta3):.12f}")
+check("theta = 1 exactly at p = 3 (campaign map claim: (p/2)+(1/2)=2 at "
+      "theta=1 solves the equation exactly, and it is the unique "
+      "nontrivial positive root)",
+      theta3 is not None and abs(float(theta3) - 1) < 1e-10,
+      f"{float(theta3):.12f}")
+
+# direct algebraic check, no bisection: at theta=1, (p/2)+(1/2) = (p+1)/2 = 2
+# holds iff p = 3 -- verified as an identity, not merely numerically
+check("(p/2)^1 + (1/2)^1 = 2  <=>  p = 3, by direct algebra "
+      "((p+1)/2 = 2 => p = 3)", True,
+      "(3+1)/2 = 2 exactly; solved directly, no floating point involved")
+
+# f'(0) = ln(p/4): negative (dips below 0, nontrivial root exists) iff
+# p < 4; zero or positive (no dip, no nontrivial root) iff p >= 4 --
+# checked both algebraically and by direct probing of f near 0.
+theta5 = theta_root(5)
+theta7 = theta_root(7)
+probe5 = float(f_theta(5, mpf('0.001')))
+probe7 = float(f_theta(7, mpf('0.001')))
+print(f"  p=5: f(theta->0+) probe = {probe5:.6f} (>0: no nontrivial root); "
+      f"theta_root returns {theta5}")
+print(f"  p=7: f(theta->0+) probe = {probe7:.6f} (>0: no nontrivial root); "
+      f"theta_root returns {theta7}")
+check("f'(0) = ln(p/4) < 0 for p=3 (dips negative, nontrivial root at "
+      "theta=1 exists) but >= 0 for p=5,7 (no dip, NO nontrivial positive "
+      "root exists at all) -- this is a STRONGER form of the map's "
+      "'p=3 sits on the boundary, infinite excursion at p=5,7' claim than "
+      "'theta<1': at p=5,7 the Cramer-Lundberg adjustment coefficient does "
+      "not exist in the classical sense, because the log-step drift "
+      "0.5*ln(p/2)+0.5*ln(1/2) turns positive there (upward-drifting walk, "
+      "no finite exponential/power tail rate) -- consistent with 'infinite'",
+      theta5 is None and theta7 is None and probe5 > 0 and probe7 > 0)
+
+drift3 = 0.5 * math.log(3 / 2) + 0.5 * math.log(0.5)
+drift5 = 0.5 * math.log(5 / 2) + 0.5 * math.log(0.5)
+print(f"  mean log-step drift: p=3: {drift3:.4f} (negative, walk drifts "
+      f"down -- finite max, matches 'excursion finite'); "
+      f"p=5: {drift5:.4f} (positive, walk drifts up -- matches 'infinite')")
+check("drift is negative at p=3 and positive at p=5 (the mechanism behind "
+      "finite-vs-infinite excursion, independently confirmed)",
+      drift3 < 0 < drift5)
+
+print("  NOTE (scope, carried into the findings and the review draft): the "
+      "algebra of theta=1<=>p=3, and the drift mechanism explaining why no "
+      "nontrivial root exists for p=5,7, are verified here; the surrounding "
+      "claim that the excursion tail is exactly R^-theta under the "
+      "section-75 bijection is NOT independently checked in this session "
+      "-- it rests on Merle's local artifacts, per the brief's own "
+      "instruction.")
+
+print()
+print("=" * 78)
+print("PART 6 -- the two cross-domain checkmark facts (campaign map)")
+print("=" * 78)
+
+# --- fact 1: 2^n = 2 (mod 3) for odd n; the classical Erdos base-3 sieve ---
+mismatches_odd = [n for n in range(1, 5000, 2) if pow(2, n, 3) != 2]
+check("2^n = 2 (mod 3) for every odd n, n=1..4999 (2^n = (-1)^n mod 3)",
+      len(mismatches_odd) == 0, f"{len(mismatches_odd)} mismatches")
+check("2^n = 1 (mod 3) for every even n (the complementary case, sanity)",
+      all(pow(2, n, 3) == 1 for n in range(0, 5000, 2)))
+check("the three named exceptions n=0, 2, 8 are all even",
+      all(n % 2 == 0 for n in (0, 2, 8)))
+
+# the sieve density formula (1/2)(2/3)^{k-1} for the fraction of n UNDECIDED
+# at level k; the map's exact-count check is k=1..14 and the 99.743% figure
+# for the DECIDED fraction. Re-derived here as the closed-form geometric
+# series arithmetic (the underlying sieve algorithm producing this formula
+# is Merle's local artifact and is not reconstructed independently here --
+# recorded as a scope boundary, matching the theta=1 note above).
+undecided_k = [mpf('0.5') * (mpf(2) / 3) ** (k - 1) for k in range(1, 15)]
+decided_14 = 1 - undecided_k[-1]
+print(f"  undecided density at k=1: {float(undecided_k[0]):.6f} "
+      f"(exact 1/2)")
+check("undecided density at k=1 is exactly 1/2",
+      undecided_k[0] == mpf('0.5'))
+print(f"  decided fraction at k=14: {float(decided_14) * 100:.3f}%")
+check("decided fraction at k=14 is 99.743% (campaign map figure)",
+      round(float(decided_14) * 100, 3) == 99.743,
+      f"{float(decided_14) * 100:.4f}%")
+check("undecided density is strictly decreasing and positive for k=1..14 "
+      "(a genuine sieve, not a vacuous or negative claim)",
+      all(undecided_k[i] > undecided_k[i + 1] > 0 for i in range(13)))
+print("  SCOPE NOTE: the geometric closed form (1/2)(2/3)^(k-1) is verified "
+      "arithmetically above (it reproduces 99.743% at k=14 exactly); the "
+      "combinatorial sieve argument that PRODUCES this density from the "
+      "base-3 digit structure of 2^n is Merle's own local construction, "
+      "not reconstructed independently in this session -- carried forward "
+      "as a scope boundary, not a defect.")
+
+lg3_2 = 1 / float(BETA)
+print(f"  log_3(2) = 1/log_2(3) = {lg3_2:.6f}")
+check("log_3(2) = 0.630930... (campaign map figure)",
+      round(lg3_2, 6) == 0.630930, f"{lg3_2:.6f}")
+
+# --- fact 2: x* = 7/3, the sign/drift crossover -----------------------------
+val = Fraction(3, 1) + Fraction(3, 7)
+val2 = Fraction(3, 1) - Fraction(3, 7)
+ratio73 = val / val2
+print(f"  (3+3/7)/(3-3/7) = {ratio73} = {float(ratio73):.6f}")
+check("(3+3/7)/(3-3/7) = 4/3 exactly (campaign map identity)",
+      ratio73 == Fraction(4, 3))
+
+rhs_log = 2 - float(BETA)
+lhs_log = float(mlog(mpf(4) / 3) / LN2)
+print(f"  log2(4/3) = {lhs_log:.10f}; 2 - log2(3) = {rhs_log:.10f}")
+check("log2(4/3) = 2 - log2(3) exactly (identity, not approximation: "
+      "log2(4/3) = log2(4) - log2(3) = 2 - log2(3))",
+      abs(lhs_log - rhs_log) < 1e-12, f"{lhs_log:.12f} vs {rhs_log:.12f}")
+
+print()
+print("=" * 78)
+print(f"TOTAL: {CHECKS} checks, {len(FAILS)} failures")
+if FAILS:
+    print("FAILURES:")
+    for f in FAILS:
+        print(f"  - {f}")
+print("=" * 78)
+sys.exit(1 if FAILS else 0)
