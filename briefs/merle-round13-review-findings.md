@@ -561,8 +561,9 @@ items.)*
 > Second key — approving review (round 13, per PROTOCOL §13).
 >
 > Verified independently on my side, fresh code throughout (two scripts,
-> `experiments/merle_r13_check.py` and `experiments/merle_r13_peak_
-> replication.py`, 95 checks total, 0 failures):
+> `experiments/merle_r13_check.py` and
+> `experiments/merle_r13_peak_replication.py`, 70 checks total — 53 + 17 —
+> 0 failures):
 >
 > **§1 (L-A9, h1–h4).** CONFIRMED, to six decimal places. `c* = 0.961722`,
 > `μ* = 1.961722`; the margin is `0.0383` in both single conventions
@@ -755,8 +756,26 @@ round; no race."
 - No key turned by this session: the review draft (§7.1) recommends turning
   the second key on the corrected L-A9 entry, but the recommendation is the
   main session's and the author's to act on, per the Rules. Every numeric
-  check this session ran passed (95 checks across both scripts, 0
+  check this session ran passed (70 checks across both scripts — 53 in
+  `merle_r13_check.py`, 17 in `merle_r13_peak_replication.py` — 0
   failures); had any failed, this section would say so and the draft above
   would flag rather than approve.
 - Nothing merged; nothing pushed; nothing sent anywhere. Drafts and
   recommendations only, as instructed.
+
+---
+
+## 9. Review changes (main session, 2026-08-22) — one numeric correction, applied in place
+
+Both scripts re-run at review from the branch worktree; outputs byte-identical
+to the committed `merle_r13_check_output.txt` and
+`merle_r13_peak_replication_output.txt` (both scripts are seeded; `fc.exe`
+reports no differences). The scripts' own TOTAL lines are **53** and **17**
+checks — **70 total**, not the "95" the review draft (§7.1) and the
+compliance note (§8) stated; that figure was an arithmetic slip in the
+window's own summary, not in any verification. Corrected in both places
+before merge, along with a line-wrap that had split
+`merle_r13_peak_replication.py` across a quoted line inside the draft. No
+other content moved; the delegate's §2.1 correction of the brief's
+"new numbers" characterization was checked against `merle_la9_check.py`'s
+committed PART 3 output and accepted as written.
