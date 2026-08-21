@@ -484,6 +484,259 @@ check("log2(4/3) = 2 - log2(3) exactly (identity, not approximation: "
 
 print()
 print("=" * 78)
+print("PART 7 -- section-96 mechanism, RECONSTRUCTION not reproduction")
+print("=" * 78)
+print("""
+  The accelerated map: for odd x, one step is x -> (p*x+1) / 2^v, v =
+  v_2(p*x+1) (the exact power of 2 making the quotient odd again). The
+  claim under reconstruction: no multiplicative altitude V(x) = x*f(x mod
+  2^k), fixed k, can be strictly decreasing at every step, for any f.
+
+  THE TELESCOPING STEP, written out. Let g = log f. For large x (the p*x+1
+  term dominating the +1), log V(x') - log V(x) ~= (log p - v*log 2) +
+  [g(r') - g(r)], where r = x mod 2^k, r' = x' mod 2^k. Strict decrease at
+  every step requires (log p - v_i*log 2) + g(r_{i+1}) - g(r_i) < 0 for
+  every edge (r_i, v_i, r_{i+1}) of the RESIDUE graph (odd residues mod
+  2^k, one outgoing edge per node: r -> (p*r+1)/2^v mod 2^k, using the
+  small representative -- an operational convention, recorded as such
+  below). Summing this inequality around any directed cycle r_1 -> r_2 ->
+  ... -> r_L -> r_1 of that graph, the g(r_{i+1}) - g(r_i) terms telescope
+  to exactly 0 (a closed sum around a cycle), leaving the NECESSARY,
+  f-independent condition:
+
+      Sum_{i=1}^{L} (log p - v_i * log 2)  <  0      i.e.      p^L < 2^K,
+      K = Sum v_i.
+
+  A residue cycle failing this (p^L >= 2^K, computed as an EXACT integer
+  comparison below, no floating point) is called FAULTY: no choice of f
+  can make V strictly decreasing along it -- the constraint set is
+  unsatisfiable regardless of f.
+""")
+
+OPERATIONAL_GAPS = []
+
+
+def v2_exact(n):
+    v = 0
+    while n % 2 == 0:
+        n //= 2
+        v += 1
+    return v, n
+
+
+def residue_graph(p, k):
+    """One outgoing edge per odd residue mod 2^k: r -> (p*r+1)/2^v mod 2^k,
+    using the canonical small representative r in [1, 2^k). GUESSED
+    CONVENTION (recorded as a gap): this transition depends only on the
+    representative, not on the residue class's higher bits; a real integer
+    x = r + m*2^k generally reaches a DIFFERENT next residue for m != 0
+    once v > 0 (checked algebraically: x' mod 2^k = r' + p*m*2^(k-v) mod
+    2^k), so this graph is a deterministic MODEL, not a literal quotient
+    of the true dynamics -- exactly the gap the phantom/real distinction
+    below is built to probe."""
+    mod = 2 ** k
+    succ, val = {}, {}
+    for r in range(1, mod, 2):
+        v, odd_part = v2_exact(p * r + 1)
+        succ[r] = odd_part % mod
+        val[r] = v
+    return succ, val
+
+
+def find_all_cycles(succ):
+    """The graph is a function (one out-edge per node), so it is a union
+    of rho-shapes; standard functional-graph cycle detection enumerates
+    every distinct cycle exactly once."""
+    visited = set()
+    cycles = []
+    for start in succ:
+        if start in visited:
+            continue
+        path, index = [], {}
+        cur = start
+        while cur not in visited and cur not in index:
+            index[cur] = len(path)
+            path.append(cur)
+            cur = succ[cur]
+        if cur in index:
+            cycles.append(path[index[cur]:])
+        visited.update(path)
+    return cycles
+
+
+def cycle_K_and_faulty(p, cyc, val):
+    L = len(cyc)
+    K = sum(val[r] for r in cyc)
+    faulty = p ** L >= 2 ** K  # exact integer comparison, no logs
+    return L, K, faulty
+
+
+def real_step(p, x):
+    v, odd_part = v2_exact(p * x + 1)
+    return odd_part
+
+
+def genuine_closed_orbit_search(p, k, L, m_bound):
+    """OPERATIONAL CONVENTION (recorded as a gap): 'phantom' is tested here
+    as: does ANY actual integer x0 = r + m*2^k (r odd in [1,2^k), 0<=m<
+    m_bound) satisfy X_L(x0) = x0 EXACTLY under REAL (unrounded) L-step
+    iteration of the true map -- a genuine closed orbit of period dividing
+    L? This is the strong, literal sense of 'the cycle is real'; the
+    weaker sense (some real trajectory's residues merely PASS THROUGH the
+    designed pattern once, without closing) is a different, weaker test
+    not used here as the phantom/real criterion, because a residue match
+    alone does not imply X_L = X_0 -- for a faulty cycle the real value
+    grows by the very factor p^L/2^K > 1 that makes it faulty, so passing
+    through the pattern and closing into a true cycle are different
+    events. x0=1 is the map's own trivial fixed point and recurs in every
+    search trivially; it is excluded from the reported count."""
+    mod = 2 ** k
+    found = []
+    for r in range(1, mod, 2):
+        for m in range(m_bound):
+            x0 = r + m * mod
+            x = x0
+            for _ in range(L):
+                x = real_step(p, x)
+            if x == x0:
+                found.append(x0)
+    return found
+
+
+def edge_realizability_sanity(p, k, succ, val, n_sample=20000, seed=20260817):
+    """Merle's own reported check ('20,000 random edges, all realised'),
+    reconstructed: for a random sample of edges (r, v, r') in the graph,
+    confirm SOME actual integer x = r + m*2^k reaches next-residue r' with
+    the designed valuation v. TRUE BY CONSTRUCTION for m=0 (the graph was
+    built from exactly that transition) -- this check is a tautological
+    confirmation the graph is well-formed, not independent evidence; the
+    substantive test is the genuine-closed-orbit search above. Recorded
+    as a gap: it is not clear from the campaign map's one-line description
+    whether Merle's own 'realised' check meant this same tautology or a
+    weaker/stronger notion; reconstructed at face value."""
+    import random
+    rng = random.Random(seed)
+    nodes = list(succ.keys())
+    sample = rng.sample(nodes, min(n_sample, len(nodes)))
+    if len(sample) < n_sample:
+        sample = [rng.choice(nodes) for _ in range(n_sample)]
+    ok = 0
+    for r in sample:
+        n = p * r + 1
+        v, odd_part = v2_exact(n)
+        if v == val[r] and odd_part % (2 ** k) == succ[r]:
+            ok += 1
+    return ok, len(sample)
+
+
+def run_reconstruction(p, k, orbit_m_bound_budget=2_000_000):
+    succ, val = residue_graph(p, k)
+    cycles = find_all_cycles(succ)
+    rows = []
+    for cyc in cycles:
+        L, K, faulty = cycle_K_and_faulty(p, cyc, val)
+        rows.append((cyc, L, K, faulty))
+    faulty_rows = [r for r in rows if r[3] and r[1] > 1]  # exclude L=1 (never faulty for p<2^k trivially useful)
+    print(f"  p={p}, k={k}: {len(cycles)} distinct residue cycles, "
+          f"lengths {sorted(r[1] for r in rows)}, "
+          f"{len(faulty_rows)} faulty (excluding any trivial L=1)")
+    ok, n = edge_realizability_sanity(p, k, succ, val)
+    check(f"p={p},k={k}: edge realizability sanity, {n} random edges "
+          "all realised (tautological by construction -- see docstring)",
+          ok == n, f"{ok}/{n}")
+    phantom_results = []
+    for cyc, L, K, faulty in faulty_rows:
+        mod = 2 ** k
+        m_bound = max(1, min(3000, orbit_m_bound_budget // mod))
+        found = genuine_closed_orbit_search(p, k, L, m_bound)
+        nontrivial = [x for x in found if x != 1]
+        phantom = len(nontrivial) == 0
+        phantom_results.append((L, K, mod * m_bound, phantom, nontrivial[:3]))
+        print(f"    faulty cycle L={L}, K={K} (p^L={p**L} >= 2^K={2**K}): "
+              f"genuine-closed-orbit search up to x0<{mod*m_bound:,} -> "
+              f"{'PHANTOM (no nontrivial closed orbit found)' if phantom else f'NONTRIVIAL ORBIT FOUND: {nontrivial[:3]}'}")
+    return rows, faulty_rows, phantom_results
+
+
+print("  -- p = 7, k = 8 (Merle's own worked example) --")
+rows78, faulty78, phantom78 = run_reconstruction(7, 8)
+check("p=7,k=8: at least one faulty cycle exists in this reconstruction "
+      "(the mechanism has something to test)", len(faulty78) > 0,
+      f"{len(faulty78)} faulty cycles")
+check("p=7,k=8: every faulty cycle found is PHANTOM up to the tested "
+      "bound (matches the campaign map's '100% of the faulty residue "
+      "cycles are phantoms at p=7,k=8')",
+      all(r[3] for r in phantom78), f"{sum(r[3] for r in phantom78)}/"
+      f"{len(phantom78)} phantom")
+
+print()
+print("  -- p = 3, small k (does the mechanism reproduce?) --")
+p3_summary = []
+for k in range(4, 13):
+    rows, faulty, phantom = run_reconstruction(3, k)
+    p3_summary.append((k, len(faulty)))
+
+print(f"  p=3 faulty-cycle count by k: {p3_summary}")
+any_faulty_small_k = any(n > 0 for k, n in p3_summary if k <= 9)
+check("p=3, k<=9: FINDING recorded flat -- NO faulty cycles exist at all "
+      "in this reconstruction for k=4..9 (only the trivial fixed point "
+      "x=1 -- the mechanism does NOT reproduce at small k for p=3, unlike "
+      "the clean p=7,k=8 case); the brief asked to report this either way",
+      not any_faulty_small_k, f"faulty counts at k=4..9: "
+      f"{[n for k,n in p3_summary if k<=9]}")
+check("p=3, k=10..12: faulty cycles DO appear once k is large enough "
+      "(non-monotonic in k -- present at k=10,12, absent again at k=14,16, "
+      "see below)", any(n > 0 for k, n in p3_summary if 10 <= k <= 12))
+
+print()
+print("  -- p = 3, k = 14, 16 (checking the non-monotonicity holds) --")
+for k in (14, 16):
+    rows, faulty, phantom = run_reconstruction(3, k)
+
+print()
+print("  INTERPRETATION (recorded as a finding, not asserted as proved):")
+print("  for p=3, log2(3) is famously close to low-height rationals (the")
+print("  whole L-A9/cycles.md front is built on exactly this closeness),")
+print("  so p^L vs 2^K is a near-tie at small scale and 'faulty' status is")
+print("  fragile in k -- appearing and disappearing as k grows through")
+print("  different partial-quotient regimes of log2(3)'s own continued")
+print("  fraction (Part 4 above). For p=7, log2(7)=2.807 sits nowhere near")
+print("  such a tie, so faulty cycles appear immediately and robustly at")
+print("  k=8. This is a plausible mechanism for why the reconstruction")
+print("  reproduces cleanly at p=7 but not at small k for p=3 -- offered")
+print("  as an observation, not verified further in this session.")
+
+print()
+print("  GAPS RECORDED (operational definitions guessed, per the brief):")
+print("  1. Residue-graph transition uses the canonical small representat-")
+print("     ive only (r -> (p*r+1)/2^v mod 2^k); shown algebraically that")
+print("     this is NOT the same as the true quotient dynamics once v>0,")
+print("     since higher bits of an actual integer change the next")
+print("     residue. This is exactly why a 'faulty cycle' in the graph")
+print("     need not be realized by any actual integer -- it is the model")
+print("     the phantom/real distinction is built to probe, not an")
+print("     incidental limitation.")
+print("  2. 'Edge realizable' interpreted as: some actual integer reaches")
+print("     the designed target residue with the designed valuation --")
+print("     true by construction at m=0 for every edge, so this check")
+print("     (matching Merle's reported '20,000 random edges, all")
+print("     realised') is a tautological well-formedness confirmation,")
+print("     not independent evidence; recorded as such rather than as a")
+print("     substantive result.")
+print("  3. 'Phantom' is tested as: no actual integer x0 in a bounded")
+print("     search closes a genuine period-L orbit (X_L = X_0 exactly).")
+print("     A weaker test (the residue PATTERN merely recurring once")
+print("     along some real trajectory, without X_L = X_0) was considered")
+print("     and rejected as the criterion, because for a faulty cycle the")
+print("     real value grows by exactly the factor p^L/2^K > 1 that makes")
+print("     it faulty -- so a residue match at step L does not mean the")
+print("     integer returned, only that its residue class did.")
+print("  4. All searches are bounded (x0 up to a few million per cycle);")
+print("     'phantom' is reported relative to that bound, not as a proof")
+print("     of non-existence for all integers.")
+
+print()
+print("=" * 78)
 print(f"TOTAL: {CHECKS} checks, {len(FAILS)} failures")
 if FAILS:
     print("FAILURES:")

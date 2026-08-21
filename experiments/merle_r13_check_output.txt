@@ -104,5 +104,116 @@ PART 6 -- the two cross-domain checkmark facts (campaign map)
   [PASS] log2(4/3) = 2 - log2(3) exactly (identity, not approximation: log2(4/3) = log2(4) - log2(3) = 2 - log2(3))  (0.415037499279 vs 0.415037499279)
 
 ==============================================================================
-TOTAL: 37 checks, 0 failures
+PART 7 -- section-96 mechanism, RECONSTRUCTION not reproduction
+==============================================================================
+
+  The accelerated map: for odd x, one step is x -> (p*x+1) / 2^v, v =
+  v_2(p*x+1) (the exact power of 2 making the quotient odd again). The
+  claim under reconstruction: no multiplicative altitude V(x) = x*f(x mod
+  2^k), fixed k, can be strictly decreasing at every step, for any f.
+
+  THE TELESCOPING STEP, written out. Let g = log f. For large x (the p*x+1
+  term dominating the +1), log V(x') - log V(x) ~= (log p - v*log 2) +
+  [g(r') - g(r)], where r = x mod 2^k, r' = x' mod 2^k. Strict decrease at
+  every step requires (log p - v_i*log 2) + g(r_{i+1}) - g(r_i) < 0 for
+  every edge (r_i, v_i, r_{i+1}) of the RESIDUE graph (odd residues mod
+  2^k, one outgoing edge per node: r -> (p*r+1)/2^v mod 2^k, using the
+  small representative -- an operational convention, recorded as such
+  below). Summing this inequality around any directed cycle r_1 -> r_2 ->
+  ... -> r_L -> r_1 of that graph, the g(r_{i+1}) - g(r_i) terms telescope
+  to exactly 0 (a closed sum around a cycle), leaving the NECESSARY,
+  f-independent condition:
+
+      Sum_{i=1}^{L} (log p - v_i * log 2)  <  0      i.e.      p^L < 2^K,
+      K = Sum v_i.
+
+  A residue cycle failing this (p^L >= 2^K, computed as an EXACT integer
+  comparison below, no floating point) is called FAULTY: no choice of f
+  can make V strictly decreasing along it -- the constraint set is
+  unsatisfiable regardless of f.
+
+  -- p = 7, k = 8 (Merle's own worked example) --
+  p=7, k=8: 4 distinct residue cycles, lengths [1, 3, 4, 31], 3 faulty (excluding any trivial L=1)
+  [PASS] p=7,k=8: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+    faulty cycle L=31, K=67 (p^L=157775382034845806615042743 >= 2^K=147573952589676412928): genuine-closed-orbit search up to x0<768,000 -> PHANTOM (no nontrivial closed orbit found)
+    faulty cycle L=4, K=8 (p^L=2401 >= 2^K=256): genuine-closed-orbit search up to x0<768,000 -> PHANTOM (no nontrivial closed orbit found)
+    faulty cycle L=3, K=4 (p^L=343 >= 2^K=16): genuine-closed-orbit search up to x0<768,000 -> PHANTOM (no nontrivial closed orbit found)
+  [PASS] p=7,k=8: at least one faulty cycle exists in this reconstruction (the mechanism has something to test)  (3 faulty cycles)
+  [PASS] p=7,k=8: every faulty cycle found is PHANTOM up to the tested bound (matches the campaign map's '100% of the faulty residue cycles are phantoms at p=7,k=8')  (3/3 phantom)
+
+  -- p = 3, small k (does the mechanism reproduce?) --
+  p=3, k=4: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=4: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=5: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=5: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=6: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=6: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=7: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=7: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=8: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=8: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=9: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=9: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=10: 2 distinct residue cycles, lengths [1, 26], 1 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=10: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+    faulty cycle L=26, K=37 (p^L=2541865828329 >= 2^K=137438953472): genuine-closed-orbit search up to x0<1,999,872 -> PHANTOM (no nontrivial closed orbit found)
+  p=3, k=11: 2 distinct residue cycles, lengths [1, 25], 1 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=11: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+    faulty cycle L=25, K=37 (p^L=847288609443 >= 2^K=137438953472): genuine-closed-orbit search up to x0<1,998,848 -> PHANTOM (no nontrivial closed orbit found)
+  p=3, k=12: 3 distinct residue cycles, lengths [1, 6, 7], 2 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=12: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+    faulty cycle L=7, K=9 (p^L=2187 >= 2^K=512): genuine-closed-orbit search up to x0<1,998,848 -> PHANTOM (no nontrivial closed orbit found)
+    faulty cycle L=6, K=7 (p^L=729 >= 2^K=128): genuine-closed-orbit search up to x0<1,998,848 -> PHANTOM (no nontrivial closed orbit found)
+  p=3 faulty-cycle count by k: [(4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (10, 1), (11, 1), (12, 2)]
+  [PASS] p=3, k<=9: FINDING recorded flat -- NO faulty cycles exist at all in this reconstruction for k=4..9 (only the trivial fixed point x=1 -- the mechanism does NOT reproduce at small k for p=3, unlike the clean p=7,k=8 case); the brief asked to report this either way  (faulty counts at k=4..9: [0, 0, 0, 0, 0, 0])
+  [PASS] p=3, k=10..12: faulty cycles DO appear once k is large enough (non-monotonic in k -- present at k=10,12, absent again at k=14,16, see below)
+
+  -- p = 3, k = 14, 16 (checking the non-monotonicity holds) --
+  p=3, k=14: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=14: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=16: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=16: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+
+  INTERPRETATION (recorded as a finding, not asserted as proved):
+  for p=3, log2(3) is famously close to low-height rationals (the
+  whole L-A9/cycles.md front is built on exactly this closeness),
+  so p^L vs 2^K is a near-tie at small scale and 'faulty' status is
+  fragile in k -- appearing and disappearing as k grows through
+  different partial-quotient regimes of log2(3)'s own continued
+  fraction (Part 4 above). For p=7, log2(7)=2.807 sits nowhere near
+  such a tie, so faulty cycles appear immediately and robustly at
+  k=8. This is a plausible mechanism for why the reconstruction
+  reproduces cleanly at p=7 but not at small k for p=3 -- offered
+  as an observation, not verified further in this session.
+
+  GAPS RECORDED (operational definitions guessed, per the brief):
+  1. Residue-graph transition uses the canonical small representat-
+     ive only (r -> (p*r+1)/2^v mod 2^k); shown algebraically that
+     this is NOT the same as the true quotient dynamics once v>0,
+     since higher bits of an actual integer change the next
+     residue. This is exactly why a 'faulty cycle' in the graph
+     need not be realized by any actual integer -- it is the model
+     the phantom/real distinction is built to probe, not an
+     incidental limitation.
+  2. 'Edge realizable' interpreted as: some actual integer reaches
+     the designed target residue with the designed valuation --
+     true by construction at m=0 for every edge, so this check
+     (matching Merle's reported '20,000 random edges, all
+     realised') is a tautological well-formedness confirmation,
+     not independent evidence; recorded as such rather than as a
+     substantive result.
+  3. 'Phantom' is tested as: no actual integer x0 in a bounded
+     search closes a genuine period-L orbit (X_L = X_0 exactly).
+     A weaker test (the residue PATTERN merely recurring once
+     along some real trajectory, without X_L = X_0) was considered
+     and rejected as the criterion, because for a faulty cycle the
+     real value grows by exactly the factor p^L/2^K > 1 that makes
+     it faulty -- so a residue match at step L does not mean the
+     integer returned, only that its residue class did.
+  4. All searches are bounded (x0 up to a few million per cycle);
+     'phantom' is reported relative to that bound, not as a proof
+     of non-existence for all integers.
+
+==============================================================================
+TOTAL: 53 checks, 0 failures
 ==============================================================================
