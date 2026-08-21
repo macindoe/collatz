@@ -1,0 +1,72 @@
+==============================================================================
+PART 0 -- CANARIES
+==============================================================================
+  [PASS] log2(3) = 1.5849625007211562... (double-precision cross-check)  (1.5849625007211561)
+  [PASS] Hercher window K_H = 1.375e11 (la9-check-findings, round-13 text)
+  [PASS] Barina X0 = 2^71 (paper-stated, cycles.md 12.6.3)
+
+==============================================================================
+PART 1 -- L-A9 round-13 LEDGER numbers: c*, mu*, margin, floor factor
+==============================================================================
+  c* (linear-form exponent) at X0=2^71: 0.961722
+  [PASS] c* = 0.961722 (round-13 letter and PR body figure, to 6 digits)  (0.961722)
+  mu* = c* + 1 = 1.961722
+  [PASS] mu* ~ 1.96 (LEDGER: 'mu* = c* + 1 ~ 1.96')  (1.9617)
+  margin in linear-form convention (floor 1): 0.0383
+  margin in measure convention (floor 2): 0.0383
+  [PASS] the two margins are identical (convention-invariant, since mu=c+1 shifts both the exponent and its floor by the same +1)  (0.038278 vs 0.038278)
+  [PASS] margin = 0.0383 (Merle's review + R13 letter figure, more precise than round-12's own '0.038')  (0.0383)
+  k_max(mu=2, kappa=1/sqrt5) = 4.6859e+10; K_H / k_max = 2.9343
+  [PASS] ratio rounds to 2.93 at 2 decimal places (h2 text / la9 findings)  (2.9343)
+  [PASS] ratio rounds to 2.9 at 1 decimal place (h1 text / R13 letter/LEDGER: 'stay open today by a factor 2.9') -- RECONCILED: 2.9 is the 1-decimal rounding of the same 2.9345..., not a distinct figure  (2.9343)
+
+==============================================================================
+PART 2 -- the true-dream deficits at mu=2 (offer h2's honest regime)
+==============================================================================
+  k_max(mu=2, kappa=1) = 7.0071e+10; K_H / k_max = 1.9623
+  [PASS] factor ~2 on k at kappa=1 (LEDGER: 'a factor ~2 on k (1.96 at kappa=1'); la9 findings: missing factor 1.96  (1.9623)
+  X0 needed (kappa=1) = 9.092e+21 = 2^72.95; missing 2^1.95
+  [PASS] missing 2^1.95 of computation at kappa=1 (la9 findings 4.2)  (2^1.9451)
+  [PASS] LEDGER's rounded '~2^2' is consistent with the true 2^1.95
+  missing bits at kappa=1/sqrt5 (Hurwitz): 2^3.11
+  [PASS] missing 2^3.11 of computation at the Hurwitz constant (la9 findings)  (2^3.1060)
+
+==============================================================================
+PART 3 -- Salikhov's c=5.125: ln3 vs log2(3), the transplant checked
+==============================================================================
+  [PASS] Salikhov's 5.125 = 41/8 exactly  (41/8 = 5.125)
+  [PASS] ln(3) != log2(3) as real numbers (the two targets of the transplant are numerically distinct, not merely notationally)  (ln3=1.098612, log2(3)=1.584963)
+  citation (standing record, briefs/merle-la7-mu-check-findings.md 2.1): Salikhov 2007's 5.125 is mu(ln 3); the L-A9 entry's chain uses the linear-form exponent for (log 2, log 3), a different object with no published measure near 5. The transplant is doubly displaced (wrong number AND wrong slot: measure-of-ln3, not linear-form-of-log2(3)) and immaterial to the conclusion since every published effective exponent (Rhin's 13.3-derived mu_eff=14.3) is far above mu* anyway.
+
+==============================================================================
+PART 4 -- h4's three re-stated numbers, remeasured fresh (own alpha
+machinery: same method as la9-check's Crandall-jaw scan, independent
+implementation, not imported)
+==============================================================================
+  CF stability canary: dps=5000 vs dps=7000 agree on all 1600 terms: True
+  [PASS] partial quotients stable across two precisions for all 1600 terms (the REQ-067-class fragility the la9 findings warn about)
+  1600 terms give 1600 convergent denominators; 2^2000 first exceeded at index 1171 (well inside the 1600-term, stable-agreeing budget)
+  [PASS] the convergent grid reaches past 2^2000 while still inside the stability-verified term range  (index 1171 of 1600)
+  [PASS] fast log-domain k_min matches exact Fraction evaluator at e=71  (35.022283 vs 35.022283)
+  [PASS] fast log-domain k_min matches exact Fraction evaluator at e=400  (200.164828 vs 200.164828)
+  [PASS] fast log-domain k_min matches exact Fraction evaluator at e=2000  (999.649112 vs 999.649112)
+  full chord alpha over [2^71, 2^2000] = 0.5001
+  [PASS] extended chord alpha ~= 0.5001 (h4/LEDGER text, re-measured)  (0.500066)
+  30-bit sliding-window slopes: min 0.3229, max 0.6816
+  [PASS] 30-bit local-slope floor ~= 0.32 (h4/LEDGER text: 'min 0.32 at 30 bits', re-measured)  (0.3229)
+  [PASS] band-exit below ~100 bits: the 30-bit floor sits below 1/3 while the 100-bit floor does not (h4: 'band-exit below ~100 bits')  (30-bit min 0.3229, 100-bit min 0.4434)
+  400-bit sliding-window floor: 0.4867; implied widening threshold mu > 2.0548
+  [PASS] mu > ~2.05 widening threshold (h4/LEDGER text, re-measured)  (2.0548)
+
+  FINDING (recorded, not a Merle defect): all three h4 numbers just
+  re-verified -- chord 0.5001, 30-bit floor 0.32, mu>~2.05 -- are
+  the same figures experiments/merle_la9_check.py already printed
+  (PART 3 there: 'full chord alpha ... = 0.5001', 'width 30 bits:
+  min 0.3229', 'width 400 bits: min 0.4867' => 1/0.4867=2.05).
+  Offer h4 (merle-la9-check-findings.md 6.4) drafted this wording
+  from that output, and Merle's round-13 text applies it near-
+  verbatim. The brief's Queue 2 describes these as 'NEW numbers
+  with no prior record on our side' -- that characterisation does
+  not hold; they are our own prior output being returned. Not a
+  defect in Merle's material -- a precision correction to the
+  brief's Provenance, recorded per the Rules' disagreement clause.
