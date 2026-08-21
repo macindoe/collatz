@@ -1,0 +1,29 @@
+From a8ebf57e7ec24cc0e873cfa4ab52c723ba7a647c Mon Sep 17 00:00:00 2001
+From: macindoe <macindoebenjamin@gmail.com>
+Date: Sat, 22 Aug 2026 02:05:44 +1000
+Subject: [PATCH] NOTE-v1.md: restate the L-A9 grade sentence to the
+ post-round-13 state, drop the signing bracket
+
+The Dirichlet half turned two keys in round 13 (PR #3, offers h1-h4 applied
+and reviewed); the bracket [GRADE AT SIGNING -- re-read L-A9 before
+signature.] has resolved and is removed. Nothing else on the page moves.
+---
+ NOTE-v1.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/NOTE-v1.md b/NOTE-v1.md
+index 44255eb..0efdfa7 100644
+--- a/NOTE-v1.md
++++ b/NOTE-v1.md
+@@ -36,7 +36,7 @@ The second version owes each face a full section; here each gets one clause. **S
+ 
+ The spine above rests on published papers and elementary reading. Two further claims rest on the collaboration's verification apparatus: the shared `LEDGER.md`, where every claim enters first and is verified independently on both sides — it carries *two keys* once each collaborator has verified it in his own stack, fresh code or proof, neither derived from the other — with the regime it was discharged in.
+ 
+-**The δ8 entry (`LEDGER.md`, L-A9): the analytic face of the size wall.** The claim: the Product-Bound route — closing the current window (the frontier and bound above) by improving effective irrationality constants for `log₂3` — cannot succeed: it needs a linear-form bound at exponent `c* ≈ 0.9617` — equivalently an irrationality measure `μ* = c* + 1 ≈ 1.96` — and Dirichlet's floor is `c ≥ 1` (`μ ≥ 2`): the route is shut for every constant, not merely for `log₂3`, by a few hundredths in the exponent. The entry's second half is marked *measured*: the open window widens as verification advances — the reachable scale grows at best like `X₀^{1/3}`, the demanded scale measured at `X₀^α`, `α = 0.482–0.511` over `X₀ ∈ [2⁷¹, 2⁴⁰⁰]` — a finite-range measurement, not a proof. Nothing in the entry is formalised, and nothing in it excludes a cycle; it closes one proof route. Grade at this writing: one key (Merle — exact arithmetic, written-ahead canaries); the second key under review, a split grade proposed — the Dirichlet half toward two keys, the measured half permanently a measurement. [GRADE AT SIGNING — re-read L-A9 before signature.]
++**The δ8 entry (`LEDGER.md`, L-A9): the analytic face of the size wall.** The claim: the Product-Bound route — closing the current window (the frontier and bound above) by improving effective irrationality constants for `log₂3` — cannot succeed: it needs a linear-form bound at exponent `c* ≈ 0.9617` — equivalently an irrationality measure `μ* = c* + 1 ≈ 1.96` — and Dirichlet's floor is `c ≥ 1` (`μ ≥ 2`): the route is shut for every constant, not merely for `log₂3`, by a few hundredths in the exponent. The entry's second half is marked *measured*: the open window widens as verification advances — the reachable scale grows at best like `X₀^{1/3}`, the demanded scale measured at `X₀^α`, `α = 0.482–0.511` over `X₀ ∈ [2⁷¹, 2⁴⁰⁰]` — a finite-range measurement, not a proof. Nothing in the entry is formalised, and nothing in it excludes a cycle; it closes one proof route. Grade at this writing: two keys on the Dirichlet half (Merle — exact arithmetic, written-ahead canaries; Macindoe — clean-room derivation, independently verified) — the current-window impossibility is unconditional theorem-grade; the measured half permanently a measurement.
+ 
+ **The machine-checked fragment (`LEDGER.md`, L-A8): T1's window closure.** The statement: *no positive cycle of the odd map with minimum element `≥ 2⁷¹` and at most `3.5032·10¹⁰` odd members* — the same count Hercher's `K` measures. The proof chain, ending in a finite discharge over the 22 in-window convergent denominators of `log₂3`, is formalised in Lean 4 in Merle's stack — fifteen kernel-checked theorems, zero `sorry`, no user axioms, committed axiom logs — except for two named continued-fraction glue facts, independently confirmed but outside the kernel claims. Macindoe's keys are scoped as the ledger scopes them: the mathematics of every link clean-room; the kernel claims by statement match and the committed logs — read, not built; no end-to-end machine checking is claimed or implied. The window sits strictly inside Hercher's bound on a stronger verification hypothesis: its value is the machine-checkable chain, not range.
+ 
+-- 
+2.45.2.windows.1
+
