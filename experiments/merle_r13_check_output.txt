@@ -1,0 +1,219 @@
+==============================================================================
+PART 0 -- CANARIES
+==============================================================================
+  [PASS] log2(3) = 1.5849625007211562... (double-precision cross-check)  (1.5849625007211561)
+  [PASS] Hercher window K_H = 1.375e11 (la9-check-findings, round-13 text)
+  [PASS] Barina X0 = 2^71 (paper-stated, cycles.md 12.6.3)
+
+==============================================================================
+PART 1 -- L-A9 round-13 LEDGER numbers: c*, mu*, margin, floor factor
+==============================================================================
+  c* (linear-form exponent) at X0=2^71: 0.961722
+  [PASS] c* = 0.961722 (round-13 letter and PR body figure, to 6 digits)  (0.961722)
+  mu* = c* + 1 = 1.961722
+  [PASS] mu* ~ 1.96 (LEDGER: 'mu* = c* + 1 ~ 1.96')  (1.9617)
+  margin in linear-form convention (floor 1): 0.0383
+  margin in measure convention (floor 2): 0.0383
+  [PASS] the two margins are identical (convention-invariant, since mu=c+1 shifts both the exponent and its floor by the same +1)  (0.038278 vs 0.038278)
+  [PASS] margin = 0.0383 (Merle's review + R13 letter figure, more precise than round-12's own '0.038')  (0.0383)
+  k_max(mu=2, kappa=1/sqrt5) = 4.6859e+10; K_H / k_max = 2.9343
+  [PASS] ratio rounds to 2.93 at 2 decimal places (h2 text / la9 findings)  (2.9343)
+  [PASS] ratio rounds to 2.9 at 1 decimal place (h1 text / R13 letter/LEDGER: 'stay open today by a factor 2.9') -- RECONCILED: 2.9 is the 1-decimal rounding of the same 2.9345..., not a distinct figure  (2.9343)
+
+==============================================================================
+PART 2 -- the true-dream deficits at mu=2 (offer h2's honest regime)
+==============================================================================
+  k_max(mu=2, kappa=1) = 7.0071e+10; K_H / k_max = 1.9623
+  [PASS] factor ~2 on k at kappa=1 (LEDGER: 'a factor ~2 on k (1.96 at kappa=1'); la9 findings: missing factor 1.96  (1.9623)
+  X0 needed (kappa=1) = 9.092e+21 = 2^72.95; missing 2^1.95
+  [PASS] missing 2^1.95 of computation at kappa=1 (la9 findings 4.2)  (2^1.9451)
+  [PASS] LEDGER's rounded '~2^2' is consistent with the true 2^1.95
+  missing bits at kappa=1/sqrt5 (Hurwitz): 2^3.11
+  [PASS] missing 2^3.11 of computation at the Hurwitz constant (la9 findings)  (2^3.1060)
+
+==============================================================================
+PART 3 -- Salikhov's c=5.125: ln3 vs log2(3), the transplant checked
+==============================================================================
+  [PASS] Salikhov's 5.125 = 41/8 exactly  (41/8 = 5.125)
+  [PASS] ln(3) != log2(3) as real numbers (the two targets of the transplant are numerically distinct, not merely notationally)  (ln3=1.098612, log2(3)=1.584963)
+  citation (standing record, briefs/merle-la7-mu-check-findings.md 2.1): Salikhov 2007's 5.125 is mu(ln 3); the L-A9 entry's chain uses the linear-form exponent for (log 2, log 3), a different object with no published measure near 5. The transplant is doubly displaced (wrong number AND wrong slot: measure-of-ln3, not linear-form-of-log2(3)) and immaterial to the conclusion since every published effective exponent (Rhin's 13.3-derived mu_eff=14.3) is far above mu* anyway.
+
+==============================================================================
+PART 4 -- h4's three re-stated numbers, remeasured fresh (own alpha
+machinery: same method as la9-check's Crandall-jaw scan, independent
+implementation, not imported)
+==============================================================================
+  CF stability canary: dps=5000 vs dps=7000 agree on all 1600 terms: True
+  [PASS] partial quotients stable across two precisions for all 1600 terms (the REQ-067-class fragility the la9 findings warn about)
+  1600 terms give 1600 convergent denominators; 2^2000 first exceeded at index 1171 (well inside the 1600-term, stable-agreeing budget)
+  [PASS] the convergent grid reaches past 2^2000 while still inside the stability-verified term range  (index 1171 of 1600)
+  [PASS] fast log-domain k_min matches exact Fraction evaluator at e=71  (35.022283 vs 35.022283)
+  [PASS] fast log-domain k_min matches exact Fraction evaluator at e=400  (200.164828 vs 200.164828)
+  [PASS] fast log-domain k_min matches exact Fraction evaluator at e=2000  (999.649112 vs 999.649112)
+  full chord alpha over [2^71, 2^2000] = 0.5001
+  [PASS] extended chord alpha ~= 0.5001 (h4/LEDGER text, re-measured)  (0.500066)
+  30-bit sliding-window slopes: min 0.3229, max 0.6816
+  [PASS] 30-bit local-slope floor ~= 0.32 (h4/LEDGER text: 'min 0.32 at 30 bits', re-measured)  (0.3229)
+  [PASS] band-exit below ~100 bits: the 30-bit floor sits below 1/3 while the 100-bit floor does not (h4: 'band-exit below ~100 bits')  (30-bit min 0.3229, 100-bit min 0.4434)
+  400-bit sliding-window floor: 0.4867; implied widening threshold mu > 2.0548
+  [PASS] mu > ~2.05 widening threshold (h4/LEDGER text, re-measured)  (2.0548)
+
+  FINDING (recorded, not a Merle defect): all three h4 numbers just
+  re-verified -- chord 0.5001, 30-bit floor 0.32, mu>~2.05 -- are
+  the same figures experiments/merle_la9_check.py already printed
+  (PART 3 there: 'full chord alpha ... = 0.5001', 'width 30 bits:
+  min 0.3229', 'width 400 bits: min 0.4867' => 1/0.4867=2.05).
+  Offer h4 (merle-la9-check-findings.md 6.4) drafted this wording
+  from that output, and Merle's round-13 text applies it near-
+  verbatim. The brief's Queue 2 describes these as 'NEW numbers
+  with no prior record on our side' -- that characterisation does
+  not hold; they are our own prior output being returned. Not a
+  defect in Merle's material -- a precision correction to the
+  brief's Provenance, recorded per the Rules' disagreement clause.
+
+==============================================================================
+PART 5 -- the theta=1 Cramer-Lundberg boundary (campaign map)
+==============================================================================
+  theta(p=3) = 1.000000000000
+  [PASS] theta = 1 exactly at p = 3 (campaign map claim: (p/2)+(1/2)=2 at theta=1 solves the equation exactly, and it is the unique nontrivial positive root)  (1.000000000000)
+  [PASS] (p/2)^1 + (1/2)^1 = 2  <=>  p = 3, by direct algebra ((p+1)/2 = 2 => p = 3)  ((3+1)/2 = 2 exactly; solved directly, no floating point involved)
+  p=5: f(theta->0+) probe = 0.000224 (>0: no nontrivial root); theta_root returns None
+  p=7: f(theta->0+) probe = 0.000561 (>0: no nontrivial root); theta_root returns None
+  [PASS] f'(0) = ln(p/4) < 0 for p=3 (dips negative, nontrivial root at theta=1 exists) but >= 0 for p=5,7 (no dip, NO nontrivial positive root exists at all) -- this is a STRONGER form of the map's 'p=3 sits on the boundary, infinite excursion at p=5,7' claim than 'theta<1': at p=5,7 the Cramer-Lundberg adjustment coefficient does not exist in the classical sense, because the log-step drift 0.5*ln(p/2)+0.5*ln(1/2) turns positive there (upward-drifting walk, no finite exponential/power tail rate) -- consistent with 'infinite'
+  mean log-step drift: p=3: -0.1438 (negative, walk drifts down -- finite max, matches 'excursion finite'); p=5: 0.1116 (positive, walk drifts up -- matches 'infinite')
+  [PASS] drift is negative at p=3 and positive at p=5 (the mechanism behind finite-vs-infinite excursion, independently confirmed)
+  NOTE (scope, carried into the findings and the review draft): the algebra of theta=1<=>p=3, and the drift mechanism explaining why no nontrivial root exists for p=5,7, are verified here; the surrounding claim that the excursion tail is exactly R^-theta under the section-75 bijection is NOT independently checked in this session -- it rests on Merle's local artifacts, per the brief's own instruction.
+
+==============================================================================
+PART 6 -- the two cross-domain checkmark facts (campaign map)
+==============================================================================
+  [PASS] 2^n = 2 (mod 3) for every odd n, n=1..4999 (2^n = (-1)^n mod 3)  (0 mismatches)
+  [PASS] 2^n = 1 (mod 3) for every even n (the complementary case, sanity)
+  [PASS] the three named exceptions n=0, 2, 8 are all even
+  undecided density at k=1: 0.500000 (exact 1/2)
+  [PASS] undecided density at k=1 is exactly 1/2
+  decided fraction at k=14: 99.743%
+  [PASS] decided fraction at k=14 is 99.743% (campaign map figure)  (99.7431%)
+  [PASS] undecided density is strictly decreasing and positive for k=1..14 (a genuine sieve, not a vacuous or negative claim)
+  SCOPE NOTE: the geometric closed form (1/2)(2/3)^(k-1) is verified arithmetically above (it reproduces 99.743% at k=14 exactly); the combinatorial sieve argument that PRODUCES this density from the base-3 digit structure of 2^n is Merle's own local construction, not reconstructed independently in this session -- carried forward as a scope boundary, not a defect.
+  log_3(2) = 1/log_2(3) = 0.630930
+  [PASS] log_3(2) = 0.630930... (campaign map figure)  (0.630930)
+  (3+3/7)/(3-3/7) = 4/3 = 1.333333
+  [PASS] (3+3/7)/(3-3/7) = 4/3 exactly (campaign map identity)
+  log2(4/3) = 0.4150374993; 2 - log2(3) = 0.4150374993
+  [PASS] log2(4/3) = 2 - log2(3) exactly (identity, not approximation: log2(4/3) = log2(4) - log2(3) = 2 - log2(3))  (0.415037499279 vs 0.415037499279)
+
+==============================================================================
+PART 7 -- section-96 mechanism, RECONSTRUCTION not reproduction
+==============================================================================
+
+  The accelerated map: for odd x, one step is x -> (p*x+1) / 2^v, v =
+  v_2(p*x+1) (the exact power of 2 making the quotient odd again). The
+  claim under reconstruction: no multiplicative altitude V(x) = x*f(x mod
+  2^k), fixed k, can be strictly decreasing at every step, for any f.
+
+  THE TELESCOPING STEP, written out. Let g = log f. For large x (the p*x+1
+  term dominating the +1), log V(x') - log V(x) ~= (log p - v*log 2) +
+  [g(r') - g(r)], where r = x mod 2^k, r' = x' mod 2^k. Strict decrease at
+  every step requires (log p - v_i*log 2) + g(r_{i+1}) - g(r_i) < 0 for
+  every edge (r_i, v_i, r_{i+1}) of the RESIDUE graph (odd residues mod
+  2^k, one outgoing edge per node: r -> (p*r+1)/2^v mod 2^k, using the
+  small representative -- an operational convention, recorded as such
+  below). Summing this inequality around any directed cycle r_1 -> r_2 ->
+  ... -> r_L -> r_1 of that graph, the g(r_{i+1}) - g(r_i) terms telescope
+  to exactly 0 (a closed sum around a cycle), leaving the NECESSARY,
+  f-independent condition:
+
+      Sum_{i=1}^{L} (log p - v_i * log 2)  <  0      i.e.      p^L < 2^K,
+      K = Sum v_i.
+
+  A residue cycle failing this (p^L >= 2^K, computed as an EXACT integer
+  comparison below, no floating point) is called FAULTY: no choice of f
+  can make V strictly decreasing along it -- the constraint set is
+  unsatisfiable regardless of f.
+
+  -- p = 7, k = 8 (Merle's own worked example) --
+  p=7, k=8: 4 distinct residue cycles, lengths [1, 3, 4, 31], 3 faulty (excluding any trivial L=1)
+  [PASS] p=7,k=8: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+    faulty cycle L=31, K=67 (p^L=157775382034845806615042743 >= 2^K=147573952589676412928): genuine-closed-orbit search up to x0<768,000 -> PHANTOM (no nontrivial closed orbit found)
+    faulty cycle L=4, K=8 (p^L=2401 >= 2^K=256): genuine-closed-orbit search up to x0<768,000 -> PHANTOM (no nontrivial closed orbit found)
+    faulty cycle L=3, K=4 (p^L=343 >= 2^K=16): genuine-closed-orbit search up to x0<768,000 -> PHANTOM (no nontrivial closed orbit found)
+  [PASS] p=7,k=8: at least one faulty cycle exists in this reconstruction (the mechanism has something to test)  (3 faulty cycles)
+  [PASS] p=7,k=8: every faulty cycle found is PHANTOM up to the tested bound (matches the campaign map's '100% of the faulty residue cycles are phantoms at p=7,k=8')  (3/3 phantom)
+
+  -- p = 3, small k (does the mechanism reproduce?) --
+  p=3, k=4: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=4: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=5: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=5: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=6: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=6: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=7: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=7: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=8: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=8: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=9: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=9: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=10: 2 distinct residue cycles, lengths [1, 26], 1 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=10: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+    faulty cycle L=26, K=37 (p^L=2541865828329 >= 2^K=137438953472): genuine-closed-orbit search up to x0<1,999,872 -> PHANTOM (no nontrivial closed orbit found)
+  p=3, k=11: 2 distinct residue cycles, lengths [1, 25], 1 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=11: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+    faulty cycle L=25, K=37 (p^L=847288609443 >= 2^K=137438953472): genuine-closed-orbit search up to x0<1,998,848 -> PHANTOM (no nontrivial closed orbit found)
+  p=3, k=12: 3 distinct residue cycles, lengths [1, 6, 7], 2 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=12: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+    faulty cycle L=7, K=9 (p^L=2187 >= 2^K=512): genuine-closed-orbit search up to x0<1,998,848 -> PHANTOM (no nontrivial closed orbit found)
+    faulty cycle L=6, K=7 (p^L=729 >= 2^K=128): genuine-closed-orbit search up to x0<1,998,848 -> PHANTOM (no nontrivial closed orbit found)
+  p=3 faulty-cycle count by k: [(4, 0), (5, 0), (6, 0), (7, 0), (8, 0), (9, 0), (10, 1), (11, 1), (12, 2)]
+  [PASS] p=3, k<=9: FINDING recorded flat -- NO faulty cycles exist at all in this reconstruction for k=4..9 (only the trivial fixed point x=1 -- the mechanism does NOT reproduce at small k for p=3, unlike the clean p=7,k=8 case); the brief asked to report this either way  (faulty counts at k=4..9: [0, 0, 0, 0, 0, 0])
+  [PASS] p=3, k=10..12: faulty cycles DO appear once k is large enough (non-monotonic in k -- present at k=10,12, absent again at k=14,16, see below)
+
+  -- p = 3, k = 14, 16 (checking the non-monotonicity holds) --
+  p=3, k=14: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=14: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+  p=3, k=16: 1 distinct residue cycles, lengths [1], 0 faulty (excluding any trivial L=1)
+  [PASS] p=3,k=16: edge realizability sanity, 20000 random edges all realised (tautological by construction -- see docstring)  (20000/20000)
+
+  INTERPRETATION (recorded as a finding, not asserted as proved):
+  for p=3, log2(3) is famously close to low-height rationals (the
+  whole L-A9/cycles.md front is built on exactly this closeness),
+  so p^L vs 2^K is a near-tie at small scale and 'faulty' status is
+  fragile in k -- appearing and disappearing as k grows through
+  different partial-quotient regimes of log2(3)'s own continued
+  fraction (Part 4 above). For p=7, log2(7)=2.807 sits nowhere near
+  such a tie, so faulty cycles appear immediately and robustly at
+  k=8. This is a plausible mechanism for why the reconstruction
+  reproduces cleanly at p=7 but not at small k for p=3 -- offered
+  as an observation, not verified further in this session.
+
+  GAPS RECORDED (operational definitions guessed, per the brief):
+  1. Residue-graph transition uses the canonical small representat-
+     ive only (r -> (p*r+1)/2^v mod 2^k); shown algebraically that
+     this is NOT the same as the true quotient dynamics once v>0,
+     since higher bits of an actual integer change the next
+     residue. This is exactly why a 'faulty cycle' in the graph
+     need not be realized by any actual integer -- it is the model
+     the phantom/real distinction is built to probe, not an
+     incidental limitation.
+  2. 'Edge realizable' interpreted as: some actual integer reaches
+     the designed target residue with the designed valuation --
+     true by construction at m=0 for every edge, so this check
+     (matching Merle's reported '20,000 random edges, all
+     realised') is a tautological well-formedness confirmation,
+     not independent evidence; recorded as such rather than as a
+     substantive result.
+  3. 'Phantom' is tested as: no actual integer x0 in a bounded
+     search closes a genuine period-L orbit (X_L = X_0 exactly).
+     A weaker test (the residue PATTERN merely recurring once
+     along some real trajectory, without X_L = X_0) was considered
+     and rejected as the criterion, because for a faulty cycle the
+     real value grows by exactly the factor p^L/2^K > 1 that makes
+     it faulty -- so a residue match at step L does not mean the
+     integer returned, only that its residue class did.
+  4. All searches are bounded (x0 up to a few million per cycle);
+     'phantom' is reported relative to that bound, not as a proof
+     of non-existence for all integers.
+
+==============================================================================
+TOTAL: 53 checks, 0 failures
+==============================================================================

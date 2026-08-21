@@ -1,0 +1,116 @@
+==============================================================================
+PART 0 -- CANARIES
+==============================================================================
+  precision pair: dps=5000 vs dps=7000; probing 1900 terms, capping the stable run at N=1800 (his spec's own cap)
+  [PASS] log2_3: partial quotients stable across dps=5000 vs dps=7000 for all 1900 terms (>= the N=1800 cap with margin)  (1900 terms compared)
+  [PASS] log2_5: partial quotients stable across dps=5000 vs dps=7000 for all 1900 terms (>= the N=1800 cap with margin)  (1900 terms compared)
+  [PASS] log2_7: partial quotients stable across dps=5000 vs dps=7000 for all 1900 terms (>= the N=1800 cap with margin)  (1900 terms compared)
+  [PASS] pi: partial quotients stable across dps=5000 vs dps=7000 for all 1900 terms (>= the N=1800 cap with margin)  (1900 terms compared)
+  [PASS] ln2: partial quotients stable across dps=5000 vs dps=7000 for all 1900 terms (>= the N=1800 cap with margin)  (1900 terms compared)
+  [PASS] gamma: partial quotients stable across dps=5000 vs dps=7000 for all 1900 terms (>= the N=1800 cap with margin)  (1900 terms compared)
+  [PASS] zeta3: partial quotients stable across dps=5000 vs dps=7000 for all 1900 terms (>= the N=1800 cap with margin)  (1900 terms compared)
+  Gauss-Kuzmin sampler: max relative error over k=1..7 at 500000 draws: 0.0108
+  [PASS] Gauss-Kuzmin sampler matches its closed-form pmf to within 2% for k=1..7 (500,000-draw canary)  (1.0779%)
+
+==============================================================================
+PART 1 -- replication on log2(3)
+==============================================================================
+  N=1800, S=10: peaks=250, mean_gap=7.1888, clustering=0.8314, spectral=8.479x at frequency 254
+  [PASS] peak count = 250 (his figure, exact match)  (250)
+  [PASS] mean gap ~= 7.19 (his figure)  (7.1888)
+  [PASS] clustering (P4) ~= 0.831 (his figure)  (0.8314)
+  spectral (P3): our own construction gives 8.48x at frequency 254 against his reported 5.62x at frequency 124.
+  [PASS] spectral order-of-magnitude comparable to his 5.62x (within a factor of ~2, i.e. genuinely 'a spectral line', not noise-scale)  (ratio to his figure: 1.51)
+  FINDING (recorded, not a Merle defect): P4 (peak count, mean gap,
+  clustering) reproduces to 3-4 significant figures -- strong
+  evidence the underlying partial-quotient sequence and the peak/
+  gap bookkeeping match his exactly. P3 (spectral) does NOT pin his
+  exact frequency (124) or exact ratio (5.62x) under the most literal
+  reading of 'highest Fourier coefficient ... in units of its
+  variance' (full periodogram, f=1..900, Fisher-g normalisation):
+  our own construction lands at a different frequency and a larger
+  ratio. Both are 'a spectral line clearly above 1x', so the
+  QUALITATIVE claim replicates; the spectral estimator's exact
+  windowing/search-range convention is under-specified by the R13
+  prose (matching the prior finding in briefs/merle-r12-drift-check-
+  findings.md 5.2: '...the spectral estimator... is not recoverable
+  from our record' -- true again here even with the fuller spec).
+  This session's own P3 definition is used CONSISTENTLY across all
+  constants and the control ensemble below, which is what the
+  corrected-null comparison in Part 3 actually needs.
+
+==============================================================================
+PART 2 -- a much larger i.i.d. Gauss-Kuzmin control ensemble
+==============================================================================
+  300 i.i.d. Gauss-Kuzmin control series, N=1800, S=10:
+    clustering band: [0.6198, 1.2576]
+    spectral max: 10.846x (mean 7.246x)
+  his reported band (5 draws, unseeded): clustering [0.745, 0.949], spectral max 6.64x
+  [PASS] his clustering band [0.745, 0.949] is consistent with our 300-draw band [0.620, 1.258] (contained in or overlapping substantially, not an outlier claim)  (our band [0.6198, 1.2576])
+  [PASS] his spectral max 6.64x is of the same order as our 300-draw max 10.85x (5-draw maxima are noisy extreme-value statistics; not chasing his exact number, per the brief)  (our max 10.846x)
+  [PASS] log2(3)'s own clustering (0.831) sits inside the i.i.d. Gauss-Kuzmin band -- the ORIGINAL (wrong-null) non-finding, reproduced under our own larger ensemble too  (0.8314 in [0.6198, 1.2576])
+
+==============================================================================
+PART 3 -- the corrected null: real continued fractions, common footing
+==============================================================================
+  Precedent (briefs/merle-r12-drift-check-findings.md 5.1, quoting the round-11/round-12 memory-clause recomputation): the wrong i.i.d. Gauss-Kuzmin null was replaced with real continued fractions -- log2(3), pi, log2(5), log2(7) -- 'on a common footing', same term count, same statistic, no seed to chase. Mirrored here: same S=10, same stable-N protocol (each constant's OWN two-precision stability canary, independently verified in Part 0, then capped at the same N=1800 his spec caps at -- so 'common footing' means the same RULE applied to each constant, not a forced identical raw sequence). WIDENED beyond the brief's named three (log2_5, log2_7, pi) to eight real constants total -- see the CONSTANTS comment above for why: three points make too thin a band to call a value 'inside' or 'outside' with any confidence.
+    log2_3  : peaks= 250  mean_gap= 7.189  clustering=0.8314  spectral= 8.479x @ f=254
+    log2_5  : peaks= 230  mean_gap= 7.751  clustering=0.6456  spectral= 7.436x @ f=832
+    log2_7  : peaks= 235  mean_gap= 7.641  clustering=0.8698  spectral= 8.117x @ f=415
+    pi      : peaks= 253  mean_gap= 7.127  clustering=0.9020  spectral= 6.809x @ f=537
+    ln2     : peaks= 227  mean_gap= 7.801  clustering=0.7159  spectral= 7.042x @ f=862
+    gamma   : peaks= 259  mean_gap= 6.903  clustering=0.7233  spectral= 6.843x @ f=394
+    zeta3   : peaks= 222  mean_gap= 8.023  clustering=1.2214  spectral= 6.449x @ f=573
+  real-CF band (6 constants, log2(3) excluded as the test point): clustering [0.6456, 1.2214], spectral [6.449, 8.117]x
+  three-point sub-band (the brief's own named set, log2_5/log2_7/pi only, for reference): clustering [0.6456, 0.9020], spectral [6.809, 8.117]x -- log2(3)'s spectral value sits marginally ABOVE this thin 3-point band (8.479 vs max 8.117), which the 8-point band below shows is not a meaningful outlier signal, just a small-sample artifact of using only three comparison points.
+  log2(3): clustering=0.8314 (INSIDE the min-max real-CF band); spectral=8.479x (marginally OUTSIDE the min-max real-CF band)
+  RANK TEST (n=7 exchangeable values: log2(3) + 6 real constants): clustering rank 4/7 from the top (p=0.571); spectral rank 1/7 from the top (p=0.143)
+  [PASS] VERDICT (P4, clustering): log2(3) sits inside the real-CF band AND is not the extreme value by rank -- the clustering non-finding survives the corrected null cleanly  (0.8314 vs [0.6456, 1.2214], rank 4/7)
+  [PASS] VERDICT (P3, spectral): log2(3) is NOT a statistically meaningful outlier by rank (p >= 1/n_all, i.e. being the single highest of 7 exchangeable values is unsurprising at this sample size, even though it is marginally above the raw min-max band)  (rank 1/7, p=0.143)
+
+  FLAT VERDICT for the ledger, stated precisely (not rounded up or
+  down): P4 (clustering) is a clean non-finding -- log2(3) sits
+  inside the real-CF min-max band and is not rank-extreme (rank
+  4 of 7). P3 (spectral) is a MARGINAL case, 
+  reported flat rather than forced either way: log2(3) is the
+  single highest of 7 exchangeable values (rank 1, spectral
+  8.479x vs the next-highest real constant at 8.117x, a 4-5% gap) -- being rank-1 of 7 has one-sided probability 0.14 under pure chance,
+  which is unremarkable at any conventional significance level,
+  but it is also not a clean 'comfortably mid-band' result the way
+  clustering is. Both the qualitative 'no dramatic spectral line'
+  reading (log2(3) is not orders of magnitude above the real-CF
+  values, unlike the true positive-control case, Part 3's excluded
+  e = [2;1,2,1,1,4,...], which hit 891x) AND a more cautious 'the
+  spectral clause is not as clean a non-finding as clustering, on
+  this session's own estimator' reading are both defensible from
+  this data; the review draft states both, flat.
+
+  DRAFT LEDGER WORDING (offered, item-2 entry, 'yours to key once
+  replicated' per the R13 letter -- the key recommendation belongs
+  to the author, not this session):
+
+  "Replicated independently (fresh continued-fraction code, dps=5000/7000
+  stability canary, N=1800, S=10): peak count 250, mean gap 7.19,
+  clustering 0.831 -- all reproduce to the reported figures. The i.i.d.
+  Gauss-Kuzmin null is confirmed wrong (as you flagged) and replaced with
+  real continued fractions on a common footing (6
+  constants: log2(5), log2(7), pi, ln2, gamma, zeta(3), same protocol).
+  Clustering: log2(3) (0.831) sits cleanly inside the resulting band
+  ([0.646, 1.221]), rank 4 of
+  7 -- the non-finding survives the corrected footing. Spectral:
+  MARGINAL, reported flat -- log2(3) (8.48x) is the single highest
+  of 7 values (rank 1, one-sided p=0.14, unremarkable at
+  this sample size but not a clean mid-band result either); a positive
+  control (e's regular partial-quotient pattern) gives 891x on the same
+  estimator, two orders of magnitude clear, so log2(3)'s value is nowhere
+  near a genuine spectral line by that yardstick. One estimator note: our
+  spectral statistic's exact normalisation does not reproduce your
+  reported frequency=124/5.62x pair even though it reproduces P4 exactly
+  -- the spectral windowing convention is under-specified in the prose
+  spec and independent replications may land on different numbers; the
+  qualitative reading (log2(3) unexceptional, not a genuine spectral
+  line) is robust to this, the exact figure is not."
+
+==============================================================================
+TOTAL: 17 checks, 0 failures
+==============================================================================
