@@ -10,7 +10,7 @@ Everything in quotation marks below is transcribed from the PDF pages; each carr
 
 ## 0. Verdict
 
-**The conditional edit is not applied.** Q1 comes out *no* on the mechanism the brief supposed, and Q2 comes out **(c)**: the whole-descent letter statistics are not in Tao verbatim and are not an immediate corollary of his displayed statements; they would need an argument he does not give, whose shape is visible in Section 3 and whose error accounting closes on paper, but which is not on the page. The brief's condition (Q1 and Q2 both (a) or (b)) is therefore not met, and `publication.md` and `aeh.md` are untouched on this branch. Proposed before/after wording is carried in §7 with the uncertainty stated.
+**The conditional edit is not applied.** Q1 comes out *no* on the mechanism the brief supposed, and Q2 comes out **(c)**: the whole-descent letter statistics are not in Tao verbatim and are not an immediate corollary of his displayed statements; they would need an argument he does not give, whose shape is visible in Section 3 and whose error accounting closes on paper, but which is not on the page. The brief's condition (Q1 and Q2 both (a) or (b)) is therefore not met, and this read left `publication.md` and `aeh.md` untouched; the main session then applied §7's wording on this branch. Before/after wording is carried in §7 with the uncertainty stated.
 
 One-line answers:
 
@@ -148,9 +148,9 @@ One wording in the record that the read touches: `aeh.md` `13.3.3` says "Tao rec
 
 ---
 
-## 7. What changes in the record — proposed wording, not applied
+## 7. What changes in the record — proposed wording, applied on this branch by main-session decision
 
-The brief's condition for editing is not met. The wording below is what the read supports *now* — the (c) status, not a future proof — and applying any of it is the main session's call. No theorem, proof or number on either page moves; each proposal touches only the named sentences.
+The brief's condition for editing is not met. The wording below is what the read supports *now* — the (c) status, not a future proof — and applying any of it was the main session's call: having reviewed these findings in full, it directed that 7.1–7.3 be applied on this branch exactly as written (2026-09-04), and they were. No theorem, proof or number on either page moves; each proposal touches only the named sentences.
 
 ### 7.1 `publication.md`, the AEH bullet, fourth sub-bullet
 
