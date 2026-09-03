@@ -99,7 +99,7 @@ The Section 5 mechanics (where Proposition 1.9 is applied, at his (5.4)) are the
 
 ## 6. The terminology question (pending)
 
-The author has raised a terminology-alignment question for the statistics half in the light of §3.3. It is recorded here as pending and not decided; no page was changed on its account, and the README clause was rewritten only for consistency with publication.md's existing verdict. The main session's recommendation will be recorded in HANDOFF.md (open work item 4) when the author decides.
+The author has raised a terminology-alignment question for the record's coinages against the established literature. It is recorded here as pending and not decided; no page was changed on its account, and the README clause was rewritten only for consistency with publication.md's existing verdict. The main session's recommendation will be recorded in HANDOFF.md (open work item 4) when the author decides.
 
 ## 7. Where this lands in the record
 
