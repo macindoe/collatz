@@ -1,0 +1,71 @@
+digit_budget_avalanche.py -- assessment date 2026-09-04
+starts: 250 draws of a 256-bit odd core (top bit set, 3 not dividing), d_0 uniform in 1..4; k = 8; T = 40 blocks
+per start, every bit j = 1..255 is flipped once (flips making 3 | w_0 are skipped)
+
+PART 1 -- change probabilities per block; 177 valid starts
+  P(.) = probability that the quantity at block t differs after flipping bit j, averaged over j = 1..8
+  budget = mean cumulative sigma_0 + .. + sigma_{t-1}; maxj = largest j with any change at block t, over all starts
+    t   budget   P_core   P_exit   P_letter   maxj_core  maxj_exit  maxj_letter   Hamming(w_t, j<=8)
+    0     0.0     0.875    1.000    0.261          7         22          14            0.004
+    1     4.2     0.988    0.993    0.539        255         25          18            0.268
+    2     8.2     0.987    0.989    0.638        255         26          21            0.428
+    3    12.1     0.980    0.986    0.676        255         34          26            0.473
+    5    19.7     0.978    0.984    0.668         39         39          30            0.484
+    8    31.8     0.964    0.978    0.678         58         58          52            0.486
+   12    47.8     0.964    0.960    0.657         83         83          76            0.484
+   16    63.9     0.957    0.963    0.657         98        101          95            0.484
+   20    80.1     0.950    0.957    0.629        117        119         111            0.476
+   30   120.0     0.953    0.953    0.607        158        160         153            0.480
+   40   160.7     0.948    0.944    0.634        207        208         197            0.474
+  never spent: over blocks t = 1..40, P(core mod 2^8 changed | bit j in 1..8 flipped) ranges 0.942 .. 0.988
+               P(exit mod 2^8 changed) ranges 0.943 .. 0.993; P(letter s_t changed) ranges 0.539 .. 0.704
+  P_core by block, t = 1..40: 0.99 0.99 0.98 0.98 0.98 0.98 0.97 0.96 0.96 0.96 0.97 0.96 0.96 0.96 0.96 0.96 0.95 0.95 0.95 0.95 0.96 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.94 0.94 0.95 0.95 0.94 0.95 0.95
+  P_letter by block, t = 1..40: 0.54 0.64 0.68 0.64 0.67 0.70 0.70 0.68 0.67 0.63 0.68 0.66 0.69 0.64 0.66 0.66 0.68 0.65 0.64 0.63 0.65 0.62 0.65 0.64 0.64 0.66 0.63 0.61 0.67 0.61 0.60 0.64 0.64 0.64 0.62 0.64 0.65 0.61 0.63 0.63
+
+PART 2 -- first block at which the LETTER s_t differs after flipping bit j (mean over starts; 40 = never within 40 blocks)
+     j :     1     2     4     8    16    24    32    48    64    96   128   160   200   250
+   t_1 :   0.0   0.8   1.3   2.2   4.4   6.2   8.3  12.2  16.4  24.4  32.0  38.9  40.0  40.0
+   j/4 :   0.2   0.5   1.0   2.0   4.0   6.0   8.0  12.0  16.0  24.0  32.0  40.0  50.0  62.5
+  bits j >= 200: 4950 (start, j) pairs, 0 with any letter change within 40 blocks (mean budget at block 40: 160.7)
+  P(s_t changed | bit j flipped), rows t = 1, 2, 4, 8, 16; columns j = 1..64 (digit = round(10 P), '-' = 0):
+   t= 1 778754422110000000----------------------------------------------
+   t= 2 576777755442311010-00-------------------------------------------
+   t= 4 76666776777766654333221100--------------------------------------
+   t= 8 6677777776667766778777766776665654322211110000000--0------------
+   t=16 6777677677767767676777777666766777677776767677667766676666465443
+
+PART 3 -- locality of the exit and the letter; the core artifact
+  sharp per-start bound: exit changes with j >= sum_{i<t} sigma_i + k + s_t: 0; letter changes with j >= sum_{i<t} sigma_i + s_t + 1: 0
+  [PASS] exit locality: no change of x_exit(t) mod 2^k at j >= sum_{i<t} sigma_i + k + s_t
+  [PASS] letter locality: no change of s_t at j >= sum_{i<t} sigma_i + s_t + 1
+  smallest uniform c per block such that no exit / letter change occurs at j >= sum_{i<t} sigma_i + k + c
+  (the sharp bound gives c_exit <= max s_t and c_letter <= max s_t + 1 - k, maxima over the starts; 'none' = no change at any j)
+    t   c_exit  c_letter  max s_t
+    0      15        7      15
+    1       9        2       9
+    2       8        1       8
+    3      12        5      12
+    5       6        0       8
+    8       8        0       8
+   12       7        0       7
+   16       7       -1       8
+   20       7        0       7
+   30       9        2       9
+   40      10        1      10
+  core changes at j >= sum_{i<t} sigma_i + k + s_t (where the exit cannot move): 2263 events
+    by block: t=1: 1929, t=2: 217, t=3: 117
+    exit x_exit(t) mod 2^k unchanged: 2263 / 2263
+    letter s_t unchanged: 2263 / 2263; every letter s_0..s_t unchanged: 2263 / 2263
+    underlying integer X_t = 3^{d_t} w_t unchanged mod 2^k: 2263 / 2263
+    depth d_t differs: 2263 / 2263; d_t(base) - d_t(flipped) takes the values -7 (x4), -6 (x1), -5 (x12), -4 (x32), -3 (x102), -2 (x324), -1 (x944), +1 (x480), +2 (x131), +3 (x233)
+    an earlier block t* < t with a different 3-gain a_{t*}: 2263 / 2263; the first such block resonant, d = h(s) = v_3(2^s - 1), same (s, d) in both runs: 2263 / 2263
+  [PASS] every high-j core change leaves the exit, every letter and X_t mod 2^k unchanged
+  [PASS] every high-j core change is a factor of 3 moved between w and d at an earlier resonant step
+
+PART 4 -- decorrelation: P(s_16 changed | bit j flipped) against 2/3 = 1 - sum_j 2^{-2j} (two independent ledger draws differ)
+    j = 1..8 individually: 0.649 0.678 0.674 0.748 0.604 0.698 0.651 0.553
+    mean over j = 1..8: 0.6568;  mean over j = 1..32: 0.6525;  2/3 = 0.6667
+    the same mean (j = 1..8) at t = 8, 30, 40: 0.6783, 0.6069, 0.6337
+    (descriptive; no pass/fail)
+
+SUMMARY: 4 checks, 0 failures

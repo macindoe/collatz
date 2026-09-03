@@ -1,7 +1,7 @@
 ---
 status: OPEN — the program's terminal open object, consolidated; states the object and its observed mechanisms, no proof effort on this page
 scope: new section 16 (post-monolith); cross-cutting — owned by neither stage4.md nor reverse.md §14
-updated: 2026-08-02
+updated: 2026-09-04
 source: consolidation of 11.8.5.6 (forward bridge), 11.8.7.7 (digit budget), 14.13 (reverse precision loss); the author's framing — "the bridge between the M(ω)'s is itself the question"
 ---
 
@@ -37,7 +37,7 @@ reverse:  knowing y to 3^(d+r)  pins ω' to only 3^r      (d = v₃(N) digits lo
 
 and that exponent is `≥ 1` every step in both directions — `σ ≥ 2` forward (`C = 2^s(odd+1)` with `s ≤ σ`), `d ≥ 1` reverse (admissible `s` force `3 | N`). Nothing regenerates the supply, so **no bounded-precision iterate of the anchor exists in either direction.** Call this the **core-extraction deficit**: the bridge is open because the map's defining act — pulling a coprime core out of a raw number — spends anchor precision it cannot recover.
 
-The two directions are one fact under the `2↔3` mirror (14.3). The forward digit budget (11.8.7.7), which localizes typical-orbit difficulty to the anchor digit supply, and the reverse affine-collapse obstruction (14.13), which forbids a stationary residue LP, are the same phenomenon read from opposite ends: forward strips `2^σ` from `C`, reverse strips `3^d` from `N`, and each pays its own prime's digits.
+The two directions are one fact under the `2↔3` mirror (14.3). The forward digit budget (11.8.7.7), which localizes typical-orbit difficulty to the anchor digit supply, and the reverse affine-collapse obstruction (14.13), which forbids a stationary residue LP, are the same phenomenon read from opposite ends: forward strips `2^σ` from `C`, reverse strips `3^d` from `N`, and each pays its own prime's digits. What the forward budget does and does not say about an orbit's memory of its start — a delay line rather than a fuel gauge, with strict locality of exits and letters and a resonant-step artifact confined to the `(ω, d)` core — is calibrated at stage4.md `11.8.7.7` (Calibration, 2026-09-04) and is not restated here.
 
 **Verified** — `experiments/digit_duality.py`, fresh implementations importing nothing from the repo (AGENTS.md house norm). Forward precision law with the depth coordinate held fixed to isolate the `ω`-tail, `d ∈ {5, 7, 12}`: zero conflicts pinning `ω_+ mod 2^r` from `ω mod 2^(σ+r)`, and a broken pin one digit shorter — `σ` digits lost, exactly. Reverse precision law: zero conflicts pinning `ω' mod 3^r` from `y mod 3^(d+r)`, broken one digit shorter — `d` digits lost, exactly. Measured mean loss per step: `σ ≈ 4.0` (min `2`) forward, `d ≈ 1.5` (min `1`) reverse.
 

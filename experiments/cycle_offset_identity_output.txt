@@ -1,0 +1,38 @@
+cycle_offset_identity.py -- assessment date 2026-09-04
+
+PART 1 -- 3000 random profiles, p in 1..6, entries m_t, s_t in 1..6, no closure
+  profiles 3000 (q < 0 on 335 of them; q | R_0 on 20)
+  the profiles with q | R_0, and the integer x = 2^K F_n(a)/q each returns (count in the sample):
+    m = [1], s = [1]: x = 1  (x9)
+    m = [2], s = [1]: x = -5  (x11)
+  [PASS] every divisible profile returns an element of a known cycle ({1}, {-1}, {-5, -7}, the period-7 negative cycle)
+  [PASS] identity 2^{m_0} R_0 = 2^K F_n(a) + q on every profile  (0 failures)
+  [PASS] the composed block maps give Aff_a exactly: slope 3^n/2^K, constant F_n(a); so N_0 = 2^K F_n(a)  (0 failures)
+  [PASS] biconditional q | R_0  <=>  q | 2^K F_n(a): agreement 3000/3000
+
+PART 2 -- the known cycles, from their valuation words (Lagarias 1985 lists them; Boehm-Sontacchi 1978 is the classical cycle equation)
+  x0 = 1: blocks (m, s) = [(1, 1)], entries [1]; a = [2], n = 1, K = 2, q = 1; 2^K F_n(a)/q = 1
+  [PASS] x0 = 1: the block dictionary word equals the direct Syracuse valuation word, and Syr^n returns to x0
+  [PASS] x0 = 1: x = 2^K F_n(a)/q returns the cycle element
+  [PASS] x0 = 1: R_0 = u_0 q with u_0 = 1, and the identity holds
+  x0 = -5: blocks (m, s) = [(2, 1)], entries [-5]; a = [1, 2], n = 2, K = 3, q = -1; 2^K F_n(a)/q = -5
+  [PASS] x0 = -5: the block dictionary word equals the direct Syracuse valuation word, and Syr^n returns to x0
+  [PASS] x0 = -5: x = 2^K F_n(a)/q returns the cycle element
+  [PASS] x0 = -5: R_0 = u_0 q with u_0 = -1, and the identity holds
+  x0 = -17: blocks (m, s) = [(4, 1), (3, 3)], entries [-17, -41]; a = [1, 1, 1, 2, 1, 1, 4], n = 7, K = 11, q = -139; 2^K F_n(a)/q = -17
+  [PASS] x0 = -17: the block dictionary word equals the direct Syracuse valuation word, and Syr^n returns to x0
+  [PASS] x0 = -17: x = 2^K F_n(a)/q returns the cycle element
+  [PASS] x0 = -17: R_0 = u_0 q with u_0 = -1, and the identity holds
+
+PART 3 -- the p = 7 staircase of 12.8.3: m = (4, 7, 9, 15, 23, 35, 1), s = (1, 1, 1, 1, 1, 1, 49)
+  n = 94, K = 149, q = 2^149 - 3^94 > 0 with bit length 143
+  [PASS] K = 149 is the ceiling: 2^148 < 3^94 < 2^149
+  [PASS] identity holds on the staircase
+  [PASS] q does not divide R_0, and q does not divide 2^K F_n(a) (both conditions fail together)
+  [PASS] gcd(q, R_r) = 7 at every rotation (12.6.1.6)  (gcds [7, 7, 7, 7, 7, 7, 7])
+
+PART 4 -- 12.6.1.4's repetition factor on the offset: for P = B^k,
+  G_k = sum_{c<k} 3^{(k-1-c) n_B} 2^{c K_B},  q_P = q_B G_k,  R_0(P) = R_0(B) G_k,  and  2^{K_P} F(a^k) = G_k 2^{K_B} F(a)
+  [PASS] repetition factor: q, R_0 and 2^K F_n(a) all scale by G_k on 100 (B, k) pairs  (0 failures)
+
+SUMMARY: 18 checks, 0 failures
