@@ -1,7 +1,7 @@
 ---
 status: REFERENCE (lookup and collision visibility only; no fact lives here)
 scope: wiki-wide symbol registry — one row per symbol per frame, defining pointers by section number, closing collision index; subsumes spine.md §4 by reference
-updated: 2026-08-15
+updated: 2026-09-04
 source: the signed-layer containment audit (2026-08-15); briefs/symbols-registry-brief.md
 ---
 
@@ -9,13 +9,16 @@ source: the signed-layer containment audit (2026-08-15); briefs/symbols-registry
 
 This page is the wiki's one lookup surface for notation: one row per symbol **per frame** — glyph, one-line meaning, defining pointer, cross-links — closing with a collision index for every glyph that carries more than one meaning across the wiki. Every fact stays on its owning page; a row's meaning is a reminder, never a statement of record, and spine.md §4 (the note's own Dictionary of Symbols) remains the authority for the spine's four layers, subsumed here by reference. **Standing norm:** a session introducing notation checks this page first; a new symbol gets a row with its defining pointer; a reused glyph gets its collision cross-linked in the same commit.
 
+**Conventions against the literature.** The map symbols are fixed once, at TOUR.md's dictionary section, which also maps every coined term of this registry to its literature name or records that it has none: this record's `T` is the odd-to-odd map (Tao's `Syr`), `T₁` the one-division map (the literature's `T` — Terras 1976, Lagarias 1985), `Col` the raw map (Tao's symbol), and `T_N` a horizon, not a map.
+
 ## 1. Spine / block frame
 
 Defined in spine.md §3 (definitions) and §4 (the note's dictionary); transforms in §5.
 
 | Symbol | Meaning | Defined | Elsewhere |
 |---|---|---|---|
-| `T` | the Collatz map on the positive integers: `x/2` (even), `3x+1` (odd) | spine.md §3.1, §4.1 | aeh.md's `T` is the odd-to-odd map — see collision index |
+| `Col` | the Collatz map on the positive integers: `x/2` (even), `3x+1` (odd) — Tao's symbol | spine.md §3.1, §4.1 | the wiki's `T` is the odd-to-odd map, next row — index; convention note at TOUR.md |
+| `T` | the odd-to-odd Collatz map `x ↦ (3x+1)/2^{v₂(3x+1)}` on positive odd integers — Tao's `Syr`; the literature's one-division `T` is `T₁` (§6) | spine.md §9.8 | `G = T^m` (reverse.md 14.14.7.1); `T₁`, `T_N` kept apart at aeh.md 13.2.3 (§6); `T_{odd}` (spine.md §6) and `T₃` (reverse.md 14.10) are separate symbols — index |
 | `x` | an integer of the raw dynamics; at a block entry, `x = 2^m u − 1` | spine.md §3.1, §4.1 | `x_exit` below |
 | `u` | the odd seed of a BlockEntry | spine.md §3.3, §4.3 | |
 | `m` | 2-adic entry depth, `m = v₂(x+1) ≥ 1` | spine.md §3.3, §4.3 | `m_t` (§3), `m(y)` (§4); the odd-step frame's `m` is **not** this — index |
@@ -144,7 +147,7 @@ aeh.md §13: the hypothesis (13.2), the symbolic identification (13.6).
 
 | Symbol | Meaning | Defined | Elsewhere |
 |---|---|---|---|
-| `T`, `T₁` | this frame's `T` is the **odd-to-odd** map (`G = T^m`); `T₁` the one-division map `y ↦ y/2` or `(3y+1)/2`; three readings of `T` kept apart in-page | aeh.md 13.2.3 | spine's `T` is the raw map — index |
+| `T`, `T₁` | this frame's `T` is the **odd-to-odd** map (`G = T^m`); `T₁` the one-division map `y ↦ y/2` or `(3y+1)/2`; three readings of `T` kept apart in-page | aeh.md 13.2.3 | the raw map is `Col` (spine.md §3.1); `T₁` is the literature's `T` — index |
 | `σ` | the shift on the full letter shift; `Φ ∘ G = σ ∘ Φ` | aeh.md Theorem 13.6.2(3) | index |
 | `Φ` | the coding `y ↦ (stratum(G^i(y)))_{i≥0}`, a bijection off `X_sing` onto the full shift | aeh.md Theorem 13.6.2(2) | |
 | `X_sing` | the countable singular set: odd `y ∈ Z₂` whose forward `G`-orbit hits `−1` | aeh.md Theorem 13.6.2 | itinerary.md 14.15.3(a), remark |
@@ -177,7 +180,8 @@ Every glyph with two or more registry rows, all meanings side by side. Frame num
 | `S` | **(3)** partial `σ`-sums `S_t = Σ_{j<t} σ_j` (cycles.md 12.6.1) · **(4)** word/prefix/period exponent masses `S(W)`, `S_n`, `S_P` (itinerary.md 14.15.1.2/14.15.3/14.15.9) · **(6)** exponent spent `S_n` — itself carrying two in-page readings, budget `Σ(m+s)` vs letter `Σ(m+r)`, kept apart at aeh.md 13.2.3. |
 | `R` | **(1)** the projection `R(u,m) = (ω,d)` (spine.md §3.6) · **(3)** rotation numerators `R_r` (cycles.md 12.6.1) · **(4/5)** realization sets `R_{p,q}`, `R^σ_{p,q}` (itinerary.md 14.15.4.3/14.15.6.8). |
 | `k` | **(3, odd-step frame)** odd-step count — that frame's `k` is this wiki's `n` (cycles.md 12.6.1.2) · **(2)** ladder step in the targets `c = 3^{−k}` (ladder.md 15.5.1) · **(5)** progression index `κ = ±k` with `k⁺_n`, `k⁻_n`, `k₀` (itinerary.md 14.15.9.6–14.15.9.7) · **(6)** window depth in `W_{k,D}` (aeh.md 13.2). Also the wiki's default truncation-precision parameter (`mod 2^k`, `mod 3^k`) — a bound variable, not a row. |
-| `T` | **(1)** the raw Collatz map (spine.md §3.1) · **(6)** the odd-to-odd map, with `T₁` (one-division) and `T_N` (block horizon) — the three readings kept apart at aeh.md 13.2.3. |
+| `T` | **(1)** the odd-to-odd map (spine.md §9.8; the `T` of every frame apart from the subscripted symbols) — Tao's `Syr` · **(6)** `T₁`, the one-division map — the literature's `T` (Terras 1976, Lagarias 1985) — and `T_N`, the block horizon: the three readings kept apart at aeh.md 13.2.3. Also a bare horizon count in aeh.md 13.5/13.6.4 ("first `T` blocks") and partial `m`-sums `T_j` in cycles.md §12.8 — bound variables, not rows. `T_{odd}` (spine.md §6) and `T₃` (reverse.md 14.10) are separate symbols. Convention note: TOUR.md. |
+| `Col` | one meaning in this record — the raw Collatz map (spine.md §3.1) — entered for the literature-side collision: Tao's `Col` is this map, while the literature's `T` (Terras, Lagarias) is not it but `T₁`; this record's `T` is neither. |
 | `F` | **(1)** the reduced map (spine.md §3.7) · **(4)** rotation-composed affine maps `F_i` (itinerary.md 14.15.9.2). |
 | `G` | **(4)** the exit map on doors (reverse.md 14.14.3.1) · **(3)** repetition factor `G_k` (cycles.md 12.6.1.4). Lowercase `g_j`/`g_P` (§4) are the letter maps and the composed unit. |
 | `A` | **(1)** step numerator `A = 3^d ω − 1` (spine.md §4.5) · **(4)** composed multipliers `A_n`, `A_P` (reverse.md 14.14.8.2; itinerary.md 14.15.9) · **(3)** an arc of blocks in `w(A)` (cycles.md §12.8). |
