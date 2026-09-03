@@ -1,7 +1,7 @@
 ---
 status: hypothesis FORMALIZED (13.2.1); unconditional base case PROVED (13.2.4, every θ < 1/4); calibrated clean within three stated limits (13.4–13.5); genericity form proved (13.6); proof effort parked per stopping rules
 scope: new section 13 (post-monolith)
-updated: 2026-08-12
+updated: 2026-09-04
 source: new material; builds on 11.8.4.4 (ledger), 11.8.7.6–7 (window/digit budget), 12.8.4 (staircase)
 ---
 

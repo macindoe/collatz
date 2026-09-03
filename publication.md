@@ -1,7 +1,7 @@
 ---
 status: novelty assessment, dated snapshot (2026-08-03); papers published — paper 1 v3 DOI 10.5281/zenodo.21730505, mirror DOI 10.5281/zenodo.21303918
 scope: publication planning; citation pins for the wiki's #TODOs
-updated: 2026-08-12
+updated: 2026-09-04
 ---
 
 > **Current state.** Claim-by-claim novelty assessment against the classical literature and the 2024–26 landscape, a dated snapshot as of 2026-08-03. Headline: the program's *statistical* layer has classical shadows, contemporary company, and — for its consequences — outright priority against it: the AEH descent/contraction consequence is unconditional at natural density 1 (Inselmann 2024), its first moment with it, and `13.6.5`'s depth law is Tao's `Syrac(Z_3)` in door normalisation, leaving `13.6.3`(v)'s joint law, `13.6.4`'s equivalence and the calibration record as the unfound residue. The *exact-law* layer (anchor coordinates, global valuation law, window trichotomy, digit budget) appears distinctive as a framework; the *cycle* layer's results are subsumed but its sharpness dichotomy (uniform trim capped at `1.585^(-p)`, staircase witness) is the strongest candidate for a genuinely new theorem. Parallel human–LLM Collatz work now exists on arXiv — both a caution and a precedent.
