@@ -1,7 +1,7 @@
 ---
 status: REFERENCE (pointers only); the single-sequence digit-structure search it formerly carried (§17.7–17.10) is executed and clean at every endpoint — see anchor-digit-search.md
 scope: sections 17.1–17.6 (post-monolith); cross-cutting reference — owned by no single stage/reverse/cycles/aeh page; §17.7–17.10 split to anchor-digit-search.md 2026-07-23
-updated: 2026-08-02
+updated: 2026-09-04
 source: consolidation of stage1-synthesis.md 11.8.3.6/11.8.3.11, stage1.md 11.8.4.2, stage2.md 11.8.5.6, stage4.md 11.8.7, reverse.md 14.2/14.12–14.13, ladder.md §15, cycles.md 12.3/9.8.4, aeh.md §13, bridge.md §16, archive/appendix-a.md A.4.6–A.6; the author's request to centralize anchor exploration in one place (2026-07-12)
 ---
 
@@ -13,7 +13,7 @@ source: consolidation of stage1-synthesis.md 11.8.3.6/11.8.3.11, stage1.md 11.8.
 
 Two anchors, one family, plus a mirror:
 
-- **`N(ω)`, the 2-adic anchor** (stage1-synthesis.md 11.8.3.6): defined by the congruence tower `9^n ≡ ω⁻¹ (mod 2^k)` for all `k`; identified as `N(ω) = -log ω / log 9`, a 2-adic logarithm. Native only to `ω ≡ 1 (mod 8)`.
+- **`N(ω)`, the 2-adic anchor** (stage1-synthesis.md 11.8.3.6): defined by the congruence tower `9^n ≡ ω⁻¹ (mod 2^k)` for all `k`; identified as `N(ω) = -log ω / log 9`, a 2-adic logarithm, whose isometry — the literature's lifting-the-exponent identity (stage1-synthesis.md, the remark after 11.8.3.6.6) — is the engine of every `3 + v₂(·)` valuation law below. Native only to `ω ≡ 1 (mod 8)`.
 - **`M(ω)`, the unified anchor** (stage2.md 11.8.5.6.1): `M(ω) = N(ω²)`, defined for every odd `ω`. This is the coordinate the rest of the program actually runs on — one number carries both lifting components.
 - **`M₃(y)`, the 3-adic mirror anchor** (reverse.md 14.2.2): `2^(M₃(y)) = -1/y`, living in `Z/2 × Z₃` — an *affine* logarithm, not linear, the source of a real (not forced) forward/backward asymmetry.
 

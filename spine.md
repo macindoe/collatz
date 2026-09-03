@@ -1,7 +1,7 @@
 ---
 status: proved
 scope: monolith sections 1-9
-updated: 2026-07-22
+updated: 2026-09-04
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -64,14 +64,14 @@ This section introduces the objects used throughout the note in the same order a
 
 ## 3.1. The Collatz Map
 
-Let `T` be the Collatz map on the positive integers, defined by
+Let `Col` be the Collatz map on the positive integers (the symbol is Tao's; the map-symbol convention against the literature is stated once, at TOUR.md's dictionary), defined by
 
 ```text
-T(x) = x/2      if x is even,
-T(x) = 3x + 1   if x is odd.
+Col(x) = x/2      if x is even,
+Col(x) = 3x + 1   if x is odd.
 ```
 
-The ordinary dynamics of the conjecture are obtained by iterating `T` step-by-step.
+The ordinary dynamics of the conjecture are obtained by iterating `Col` step-by-step.
 
 ## 3.2. Extended Valuation Blocks
 
@@ -153,7 +153,7 @@ This section collects the main symbols used throughout the note for quick refere
 
 ## 4.1. Layer 1: Raw Collatz Iteration
 
-- `T`: the Collatz map on the positive integers.
+- `Col`: the Collatz map on the positive integers (the odd-to-odd map `T` is the object of Section 9.8).
 - `x`: an integer in the raw Collatz dynamics; when discussing a block entry, typically an odd value of the form `x = 2^m u - 1`.
 
 ## 4.2. Layer 2: Extended Valuation Blocks
@@ -1444,7 +1444,7 @@ The note repeatedly disclaims resolving the Collatz conjecture. This section rec
 
 One caution against misreading, before the statements. The theorems below are equivalences. They prove that the conjecture and its reduced reformulation stand or fall together; they do not prove that either holds. After this section, "every `F`-orbit reaches `(1,1)`" is exactly as open as the Collatz conjecture — that is the point. What the equivalence buys is bidirectional transfer (a proof or a counterexample at either layer settles the other) and the assurance that the reduction, despite being many-to-one, loses nothing that the conjecture depends on.
 
-Throughout, `T` denotes the odd-to-odd Collatz map `x ↦ (3x+1)/2^(v_2(3x+1))` on positive odd integers, and the trivial cycle is the fixed point `T(1) = 1`.
+Throughout, `T` denotes the odd-to-odd Collatz map `x ↦ (3x+1)/2^(v_2(3x+1))` on positive odd integers — Tao's `Syr`; the map-symbol convention against the literature is stated once, at TOUR.md's dictionary — and the trivial cycle is the fixed point `T(1) = 1`.
 
 **Proposition 9.8.1 (the trivial state).** The state `(ω, d) = (1, 1)` is a fixed point of `F`, and its fiber under the projection `R` is exactly `{1}`.
 
