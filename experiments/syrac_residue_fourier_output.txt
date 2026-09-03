@@ -1,0 +1,57 @@
+syrac_residue_fourier.py -- assessment date 2026-09-04
+
+PART 1 -- the law Syrac(Z/3^j), exactly, j = 1..5
+  [PASS] j=1: chain pushforward (1 steps from a point mass) = Tao's Lemma 1.12 recursion, exactly
+  [PASS] j=1: the law is stationary under one more step, exactly
+  [PASS] j=2: chain pushforward (2 steps from a point mass) = Tao's Lemma 1.12 recursion, exactly
+  [PASS] j=2: the law is stationary under one more step, exactly
+  [PASS] j=2: projection to Z/3^1 is Syrac(Z/3^1), exactly (eq. 1.23)
+  [PASS] j=3: chain pushforward (3 steps from a point mass) = Tao's Lemma 1.12 recursion, exactly
+  [PASS] j=3: the law is stationary under one more step, exactly
+  [PASS] j=3: projection to Z/3^2 is Syrac(Z/3^2), exactly (eq. 1.23)
+  [PASS] j=4: chain pushforward (4 steps from a point mass) = Tao's Lemma 1.12 recursion, exactly
+  [PASS] j=4: the law is stationary under one more step, exactly
+  [PASS] j=4: projection to Z/3^3 is Syrac(Z/3^3), exactly (eq. 1.23)
+  [PASS] j=5: chain pushforward (5 steps from a point mass) = Tao's Lemma 1.12 recursion, exactly
+  [PASS] j=5: the law is stationary under one more step, exactly
+  [PASS] j=5: projection to Z/3^4 is Syrac(Z/3^4), exactly (eq. 1.23)
+  [PASS] Syrac(Z/9) = (0, 8, 16, 0, 11, 4, 0, 2, 22)/63 as printed by Tao (p.10)  (computed 0, 8/63, 16/63, 0, 11/63, 4/63, 0, 2/63, 22/63)
+  total variation from uniform on the units of Z/3^j (the law is supported on the units and is not uniform):
+    j=1: TV(Syrac(Z/3^1), Unif(units)) = 0.1667
+    j=2: TV(Syrac(Z/3^2), Unif(units)) = 0.2778
+    j=3: TV(Syrac(Z/3^3), Unif(units)) = 0.3460
+    j=4: TV(Syrac(Z/3^4), Unif(units)) = 0.3705
+    j=5: TV(Syrac(Z/3^5), Unif(units)) = 0.3889
+
+PART 2 -- Fourier coefficients |pi^(xi)| of Syrac(Z/3^j), grouped by f = j - v_3(xi) (fine digits seen by xi)
+  max |pi^(xi)| over the group:
+    f \ j         1        2        3        4        5
+      1      0.5774   0.5774   0.5774   0.5774   0.5774
+      2               0.3779   0.3779   0.3779   0.3779
+      3                        0.2522   0.2522   0.2522
+      4                                 0.1770   0.1770
+      5                                          0.1293
+  mean |pi^(xi)| over the group:
+    f \ j         1        2        3        4        5
+      1      0.5774   0.5774   0.5774   0.5774   0.5774
+      2               0.2715   0.2715   0.2715   0.2715
+      3                        0.1526   0.1526   0.1526
+      4                                 0.0854   0.0854
+      5                                          0.0483
+  group sizes at j=5: f=1: 2, f=2: 6, f=3: 18, f=4: 54, f=5: 162
+  [PASS] the coefficient statistics depend on f = j - v_3(xi) alone: spread across j < 1e-9 (float; exact by the projection identity above)  (spread 5.3e-15)
+  the unit frequencies (v_3(xi) = 0, f = j) carry the fine-scale content of Prop 1.17: mean |pi^(xi)| at j = 3, 4, 5 = 0.1526, 0.0854, 0.0483
+  top digit given the lower j-1 digits (Prop 1.14 in one-digit form): TV of the conditional law from (1/3, 1/3, 1/3),
+  mass-weighted mean and worst class
+    j=2: mean TV 0.2381, worst 0.2381
+    j=3: mean TV 0.2029, worst 0.2189
+    j=4: mean TV 0.1713, worst 0.2138
+    j=5: mean TV 0.1486, worst 0.2108
+
+PART 3 -- real orbits far past the digit budget
+  64-bit odd starts, 4000 per level; Syracuse steps 35..120 sampled (budget ~ b/2 = 32 steps); visits below 2^20 dropped (kept bulk)
+    j=3 (mod 27): n=260657 visits (dropped 79343 low): TV(empirical, Syrac law) = 0.0125, TV(empirical, uniform on units) = 0.3577  [sampling noise ~ 0.0051]
+    j=4 (mod 81): n=257993 visits (dropped 82007 low): TV(empirical, Syrac law) = 0.0182, TV(empirical, uniform on units) = 0.3845  [sampling noise ~ 0.0089]
+  (descriptive; the orbit statistics carry no pass/fail)
+
+SUMMARY: 16 checks, 0 failures
