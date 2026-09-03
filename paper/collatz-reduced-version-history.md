@@ -64,6 +64,11 @@ version-specific DOI on the title page is reserved and this version is not yet p
 frozen at upload into the immutable file. The Zenodo record's publication date, 2026-08-03, is
 authoritative. Found in the post-publication reconciliation, ours.)*
 
+*(Zenodo metadata, 2026-09-04): the v3 Zenodo record's additional-notes field was updated to
+explain the frozen "not yet published" Version-note self-description (the defect itself recorded
+above, 2026-08-03); no change to the PDF file, which remains hash-identical to
+`paper/collatz-reduced-v3.pdf`.)*
+
 ### The staircase (Section 4)
 
 * The gap the v2 note named is closed, and closed by replacing the route rather than by completing

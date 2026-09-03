@@ -643,10 +643,20 @@ items.)*
 > acceptance sentence but the diff only touches L-A9 — the L-A8 `(d-bis)`
 > block still reads "0 of 200 reaching 306" rather than the census line. A
 > one-line fix, your own already-agreed text; happy to see it in this PR or
-> carried to the next round, your call. (ii) `[THE AUTHOR'S: the §96
-> answer]` — whether it earns a place in the note is still open on our
-> side; this review's reconstruction is offered as input to that decision,
-> not a vote either way.
+> carried to the next round, your call. (ii) §96 — yes, it's useful to
+> discourage those who would try the same approach, but attention is scarce
+> so put it as the appendix witness of the 2-adic face rather than a body
+> section. The principle it instantiates (every finite model of ℤ inherits
+> cycles ℤ does not, so a finite-state descent certificate answers
+> constraints the integers never pose) is worth one sentence in the body's
+> 2-adic paragraph; the theorem itself belongs in the marked apparatus
+> section, at the note's own grading standard. So: seed it as a ledger
+> entry with the artifacts committed, we key it, and it enters v2 at two
+> keys like everything else there. The p=3 small-`k` behaviour in our
+> reconstruction (findings §6.1 — no faulty cycles until `k=10`, vanishing
+> again at 14, 16) is the first thing the keying round should settle;
+> likely our simplified graph, but that's exactly what the artifacts will
+> show.
 >
 > Diff is three files, mostly additions. Approving.
 
