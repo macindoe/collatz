@@ -1,0 +1,138 @@
+==============================================================================
+merle_r14_check.py -- round-14 review: L-A10 keyed with fresh code
+==============================================================================
+Python 3.10.6
+
+==============================================================================
+PART 0 -- canaries (expected values written down before the code ran)
+==============================================================================
+  [PASS] C1  r_3 at k=8 is 511 = 2^9 - 1, u_3 = 255 = 2^8 - 1 (PR body, L-A10)  (r=511, u=255)
+  [PASS] C2  T(511) = 767, T(767) = 1151, 1151 mod 256 = 127 (the retracted 'climbs forever' formulation: the class is left at step 2)
+  [PASS] C3  the trivial cycle at p=3: T(1) = 2, T(2) = 1
+  [PASS] C4  the section-95 fixed point: T(-1) = -1 at p=3
+  [PASS] C5  p=1 control by hand: T(511) = 256, T(511) - 511 = -255 (the 'ascending' branch descends at p=1)
+  [PASS] C6  the accelerated map at p=3 sends 255 to 383 (v=1), and 383 mod 256 = 127 -- the edge our round-13 graph has at 255  (v=1, odd part=383)
+  [PASS] C7  his P1 examples at k=8 (run_050_output.txt): u = 255, 85, 51, 73, 199 for p = 3, 5, 7, 9, 11  ({3: 255, 5: 85, 7: 51, 9: 73, 11: 199})
+  [PASS] C8  at p=3, u_3 = 2^k - 1 and r_3 = 2^{k+1} - 1 for every k = 1..40 (the ledger's 'plainest object in the problem')
+
+==============================================================================
+PART 1 -- L-A10, the two-line theorem, keyed (p = 3..201 odd, k = 1..40)
+==============================================================================
+
+  THE ARGUMENT, in our own words (checked below at every step, exactly):
+  (p-2) is odd, so invertible mod 2^{k+1}; r_p := -(p-2)^{-1} mod 2^{k+1}
+  satisfies (p-2)*r_p = -1 (mod 2^{k+1}), and is odd (an odd number's
+  inverse mod a power of 2 is odd; its negative mod 2^{k+1} is odd).
+  For any positive x = r_p (mod 2^{k+1}):
+    (i)   x is odd, so T(x) = (px+1)/2, and (p-2)x + 1 = (p-2)r_p + 1 = 0
+          (mod 2^{k+1}); hence T(x) - x = ((p-2)x + 1)/2 is an integer
+          divisible by 2^k, i.e. T(x) = x (mod 2^k), both = u_p.
+    (ii)  (p-2)x + 1 > 0 since p >= 3 and x >= 1, so T(x) > x.
+  Same residue mod 2^k => same value f(u_p) > 0 => V(T(x)) = T(x) f(u_p)
+  > x f(u_p) = V(x). One edge, exhibited; nothing about f used beyond
+  'depends on x mod 2^k' and 'positive'.
+
+  [PASS] defining congruence (p-2)*r_p + 1 = 0 (mod 2^(k+1)) on all 4000 (p,k) pairs  (failures: none)
+  [PASS] r_p is odd on all 4000 pairs  (failures: none)
+  [PASS] x = T(x) = u_p (mod 2^k) on all 24000 witnesses (6 per pair: m = 0, 1, 2 and three random m of 200/400/600 bits; largest witness 641 bits)  (failures: none)
+  [PASS] T(x) > x on all 24000 witnesses (strict ascent, exact integers)  (failures: none)
+  [PASS] T(x) - x = ((p-2)x + 1)/2 exactly, numerator even, on all 24000 witnesses  (failures: none)
+  pairs: 4000 (p = 3..201 odd = 100 values, k = 1..40); witnesses: 24000; seed 20260904 for the random m
+
+==============================================================================
+PART 2 -- the concrete instances, and the 'both lifts' bookkeeping
+==============================================================================
+  p=3, k=8, the witness chain under T with residues mod 256:
+    511 [255] -> 767 [255] -> 1151 [127] -> 1727 [191] -> 2591 [31] -> 3887 [47] -> 5831 [199]
+  [PASS] 511 -> 767 -> 1151 -> 1727 -> 2591 -> 3887 -> 5831 (his P5 trajectory, run_050_output.txt), residues 255, 255, 127, 191, 31, 47, 199
+  [PASS] the class is left at step 2 exactly (first index with residue != 255 is 2) -- the retracted formulation is indeed false, as he says
+  [PASS] T(511)/511 = 767/511 = 1.5010 to four places (his printed ratio)
+  half map, residue 255 on Z/256: lift 255 -> T = 383 -> edge (255, 127); lift 511 -> T = 767 -> edge (255, 255)
+  [PASS] the half-map relation on Z/256 carries BOTH edges 255 -> 127 (lift 255) and 255 -> 255 (lift 511) -- so 'ours has 255 -> 255' is right and 'ours ALSO has 255 -> 127' is the full statement (the review's wording point, not a defect in the claim)
+  [PASS] the accelerated map x -> (3x+1)/2^v at the canonical representative 255 sends it to 383 = 127 (mod 256): the SAME edge as the half map's m=0 lift, and the only one the single-successor graph keeps
+  [PASS] for odd u, the two half-map successors of u on Z/2^k (from lifts u and u + 2^k) differ by exactly 2^(k-1) mod 2^k, for p = 3..11 odd, k = 1..12 (127 and 255 at (3,8): 128 apart)
+  [PASS] p=1 at the same class: T(511) = 256 < 511, difference -255 -- the argument's inequality fails to hold, so it concludes nothing at p=1
+
+==============================================================================
+PART 3 -- the divergence diagnosis, reconstructed on both objects
+==============================================================================
+
+  OBJECT A (ours, round 13 -- merle_r13_check.py PART 7, re-implemented here
+  from its recorded definition, not imported): the ACCELERATED map
+  x -> (px+1)/2^v on the odd residues mod 2^k, ONE successor per residue,
+  computed at the canonical representative u in [1, 2^k):
+  u -> oddpart(p*u+1) mod 2^k, with valuation v = v_2(p*u+1). A functional
+  graph, so its cycles are enumerated exactly; a cycle (L, K = sum of the v)
+  is FAULTY iff p^L >= 2^K (exact integer comparison). Round 13 counted
+  faulty cycles with L > 1 only; both counts are printed here.
+
+  OBJECT B (his, sections 95-96 -- 'run_049 line 33' in his words,
+  re-implemented here from the definition alone): the Terras HALF map T on
+  Z/2^k carrying BOTH lifts from Z/2^{k+1}: for every r in [0, 2^{k+1}) one
+  edge (r mod 2^k) -> (T(r) mod 2^k). This is well defined on Z/2^{k+1}
+  (T(r + 2^{k+1}) = T(r) mod 2^k on both branches), gives two out-edges per
+  node, and every edge is realised by the whole progression r + 2^{k+1}*Z --
+  which is why his run_049 P1 ('20,000 edges, all realised') can only pass.
+
+  (3,8) OBJECT A: succ[255] = 127 (v = 1)
+  (3,8) OBJECT B: edge (255,255) lifts = [511], edge (255,127) lifts = [255]
+  [PASS] (3,8): the edge 255 -> 255 is PRESENT in the half-map relation, realised by the lift 511 (and by every x = 511 mod 512)
+  [PASS] (3,8): the edge 255 -> 127 is ALSO present in the relation, realised by the lift 255 -- the relation carries both edges from 255
+  [PASS] (3,8): the edge 255 -> 255 is ABSENT from the accelerated single-successor graph, whose one edge from 255 goes to 127
+  [PASS] (3,8): the relation has exactly 512 = 2^9 distinct edges, two out of every node, each realised by exactly one lift class mod 512
+  [PASS] (3,8): every edge of the relation is realised by random positive lifts x = r + 512*m (3 per edge, 1536 in all) -- his run_049 P1 reconstructed; TRUE BY CONSTRUCTION (an edge IS a lift class), so a consistency check of the graph, not a finding
+
+  regression on OBJECT A (round-13 committed figures; his run_050 P4 table reproduces the same):
+    p=3 k= 4: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 5: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 6: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 7: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 8: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 9: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k=10: cycle lengths [1, 26], faulty (all) [(26, 37)], faulty (L>1) [(26, 37)]
+    p=3 k=11: cycle lengths [1, 25], faulty (all) [(25, 37)], faulty (L>1) [(25, 37)]
+    p=3 k=12: cycle lengths [1, 6, 7], faulty (all) [(6, 7), (7, 9)], faulty (L>1) [(6, 7), (7, 9)]
+    p=3 k=13: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k=14: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k=15: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k=16: cycle lengths [1], faulty (all) [], faulty (L>1) []
+  [PASS] p=3, k = 4..12, 14, 16: faulty cycles (L > 1) and their (L,K) match our round-13 committed output exactly -- none at k=4..9; (26,37) at k=10; (25,37) at k=11; (6,7),(7,9) at k=12; none at k=14, 16
+  [PASS] p=3, k = 4..16: faulty counts match his run_050 P4 table exactly (0,0,0,0,0,0,1,1,2,0,0,0,0) -- including k = 13 and 15, which our round-13 run did not measure and his table added
+  [PASS] p=3, k = 4..16: the L=1 exclusion of round 13 changes no count (the fixed point u=1 has v=2 and 3 < 4, never faulty), so our L>1 figures and his all-cycles figures agree for a reason
+    p=7 k= 8: cycle lengths [1, 3, 4, 31], faulty (all) [(3, 4), (4, 8), (31, 67)], faulty (L>1) [(3, 4), (4, 8), (31, 67)]
+  [PASS] p=7, k=8: 4 residue cycles, lengths [1, 3, 4, 31], 3 faulty at (L,K) = (3,4), (4,8), (31,67) -- our round-13 figures and his P4 table, identical
+
+  which lift of u_p carries the loop u_p -> u_p, over all 4000 pairs:
+    loop on the m=1 lift (r_p >= 2^k): 1837 pairs; on the m=0 lift (r_p < 2^k): 2163 pairs
+  [PASS] p=3: the loop sits on the m=1 lift at EVERY k = 1..40 (r_3 = 2^(k+1)-1 >= 2^k), so for p=3 the witness edge is never in OBJECT A at k >= 2 -- his diagnosis is exactly right for the case at issue
+  [PASS] p=7, k=8: r_7 = 307 >= 256, the m=1 lift again -- the loop is absent from OBJECT A there too (u = 51 -> 179 in A)
+  [PASS] for k = 2..16 and every odd p = 3..201: the loop u_p -> u_p is in OBJECT A exactly when r_p < 2^k (the m=0 lift), where it appears as an L=1 self-loop with v=1 -- faulty, and excluded by round 13's L>1 convention; so 'the witness edge lives on the other lift' is true of p=3 and of (7,8), not of every (p,k)
+  [PASS] example of the other case: p=9, k=8 has r_9 = 73 < 256, and OBJECT A contains 73 -> 73 (v=1) as a faulty L=1 self-loop (9 >= 2)  (r=73, succ[73]=73, v=1)
+  [PASS] k=1 is degenerate: Z/2 has one odd residue and OBJECT A is the single self-loop 1 -> 1 for every p (recorded, excluded from the equivalence)
+
+==============================================================================
+PART 4 -- the p = 1 negative control; the quantifier over f; scope
+==============================================================================
+  [PASS] p=1: r_1 = 1 and u_1 = 1 at every k = 1..40 (-(1-2)^{-1} = 1 mod 2^(k+1)); the 'ascending' branch is x -> (x+1)/2
+  [PASS] p=1, k=8, x = 1 + 512m (m = 0..99): the identity T(x) - x = ((p-2)x+1)/2 = (1-x)/2 still holds, but its sign is <= 0 -- T(1) = 1 and T(x) < x for every other witness; the inequality the argument needs (T(x) > x) fails, so it concludes nothing at p=1
+  [PASS] p=1: V(x) = x itself (f = 1) strictly decreases under T at every x = 2..100000 (T(1) = 1 is the lone fixed point) -- the family the theorem closes at p >= 3 is non-empty at p = 1, as a control should show
+  [PASS] V(T(x)) > V(x) exactly (Fractions) at 10 witnesses x = 511 + 512m for each of 23 altitudes f -- constant, 2^(-u), 2^u, and 20 random rational f with values spanning 10^-30..10^30 (230 evaluations); only f(255) = f(255) and f(255) > 0 are used
+  [PASS] if f read x mod 512 instead (k = 9), 511 and T(511) = 767 = 255 mod 512 would NOT share a residue -- the level-8 witness does not serve; but the level-9 witness r_3 = 1023 does: T(1023) = 1535 = 511 = 1023 (mod 512), T(1023) > 1023 -- 'every fixed k' means exactly this
+  the T-orbit of the witness 511 (p=3) reaches 1 after 41 half-map steps
+  [PASS] the witness 511 lies on no cycle: its T-orbit reaches 1 (a single trajectory, not a search) -- the argument constrains the one edge x -> T(x) and nothing beyond it; it excludes no cycle, as the entry says
+
+==============================================================================
+PART 5 -- the smaller letter items: theta = 1, f'(0), the drift, h4
+==============================================================================
+  [PASS] f(1) = (p/2) + (1/2) - 2 = 0 EXACTLY at p=3 as a Fraction, and equals 1 and 2 at p=5, 7 (positive)
+  f'(0) = ln(p/2) + ln(1/2) = ln(p/4): p=3 -0.287682, p=5 0.223144, p=7 0.559616
+  [PASS] f'(0) = ln(p/4) agrees at dps 30 and 50; rounds to +0.2231 at p=5 and +0.5596 at p=7 (his adopted figures), and is negative at p=3
+  [PASS] p=5, 7: f(theta) > 0 at every theta = 0.001, 0.002, ..., 50.000 -- no sign change, no positive root at all on (0, 50] (his scan, repeated at dps 50)
+  [PASS] p=3: bisection on the dip finds the positive root theta = 1 to 40 digits (f(1) = 0 exactly, above)  (theta = 1.000000000000)
+  mean log-step drift (ln(p/2) + ln(1/2))/2: p=3 -0.143841, p=5 0.111572
+  [PASS] the drift is -0.1438 at p=3 and +0.1116 at p=5 (his adopted figures), and equals f'(0)/2 identically
+  [PASS] h4's three numbers -- chord 0.5001 to 2^2000, 30-bit floor 0.3229, 400-bit floor 0.4867 (hence mu > 1/0.4867 = 2.05) -- are literally present in experiments/merle_la9_check_output.txt (PART 3), our own committed output, as his letter now records
+
+==============================================================================
+TOTAL: 46 checks, 0 failures
+==============================================================================

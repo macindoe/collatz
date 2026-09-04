@@ -1,7 +1,7 @@
 ---
 status: open / calibrated
 scope: monolith sections 11-11.7 (section 10 was absorbed into index.md); 11.8 added post-monolith (citation-debt record); 11.10 added post-monolith (per-letter window height laws, itinerary.md 14.15.9; recorded as 11.9 in pre-2026-07-23 briefs); 11.11 added post-monolith (what AEH's budget clause supplies, aeh.md 13.2.3); 11.12 added post-monolith (which door-letter indexing the record standardizes on, aeh.md 13.2 and 13.6.3(i))
-updated: 2026-08-03
+updated: 2026-09-04
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -144,6 +144,8 @@ The first question is answered, and the answer calibrates the others. Off the li
 The strongest possible outcome would be a finite residue mechanism that controls large regions of the reduced state space. Even a weaker coarse-state model would already be significant.
 
 **Calibration (2026-07-16, itinerary.md 14.15.2).** For the door/exit seam's own stratum word — the sequence `(m_i,r_i)` that stage4.md `11.8.7.3.1`'s finite-state remark leaves unresolved "at unbounded depth" — the question above is now answered sharply and negatively at every *finite* depth, not merely left open at the infinite one: the itinerary language is proved to be the **full shift** on `{(m,r):m,r≥1}` (itinerary.md `14.15.1`–`14.15.2`), meaning every finite word is realized and no finite collection of forbidden transitions exists to find. So no finite-state approximation of any kind — bounded residue system, coarse-direction predictor, or otherwise — can organize the stratum word beyond what is already known (`11.8.1.3.1`'s bounded system off the lifting branch); the search is closed by proof, not left for further testing.
+
+**Calibration (2026-09-04, shared ledger L-A10).** No altitude of the form `x·f(x mod 2^k)` — `k` fixed, `f` any positive function on `ℤ/2^k` — descends at every step of the Terras half map on the positive integers, for any odd multiplier `p ≥ 3`: Eric Merle's shared-ledger entry L-A10 (correspondence 2026-09-03; his artifact `experiments/run_050.py` at `ericmerle3789/one-obstruction-three-faces-lean` `db0e89d`; `github.com/macindoe/one-obstruction-three-faces`, `LEDGER.md`), one key his and two keys once the round-14 review is posted — verified here with fresh code (`experiments/merle_r14_check.py`, 46 checks, 0 failures, 2026-09-04); it excludes no cycle and closes nothing on this page beyond naming one more finite-state shadow that cannot carry a descent certificate.
 
 ## 11.7. Relationship to Classical Collatz Formulations
 
