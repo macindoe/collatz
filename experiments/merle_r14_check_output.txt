@@ -1,0 +1,58 @@
+==============================================================================
+merle_r14_check.py -- round-14 review: L-A10 keyed with fresh code
+==============================================================================
+Python 3.10.6
+
+==============================================================================
+PART 0 -- canaries (expected values written down before the code ran)
+==============================================================================
+  [PASS] C1  r_3 at k=8 is 511 = 2^9 - 1, u_3 = 255 = 2^8 - 1 (PR body, L-A10)  (r=511, u=255)
+  [PASS] C2  T(511) = 767, T(767) = 1151, 1151 mod 256 = 127 (the retracted 'climbs forever' formulation: the class is left at step 2)
+  [PASS] C3  the trivial cycle at p=3: T(1) = 2, T(2) = 1
+  [PASS] C4  the section-95 fixed point: T(-1) = -1 at p=3
+  [PASS] C5  p=1 control by hand: T(511) = 256, T(511) - 511 = -255 (the 'ascending' branch descends at p=1)
+  [PASS] C6  the accelerated map at p=3 sends 255 to 383 (v=1), and 383 mod 256 = 127 -- the edge our round-13 graph has at 255  (v=1, odd part=383)
+  [PASS] C7  his P1 examples at k=8 (run_050_output.txt): u = 255, 85, 51, 73, 199 for p = 3, 5, 7, 9, 11  ({3: 255, 5: 85, 7: 51, 9: 73, 11: 199})
+  [PASS] C8  at p=3, u_3 = 2^k - 1 and r_3 = 2^{k+1} - 1 for every k = 1..40 (the ledger's 'plainest object in the problem')
+
+==============================================================================
+PART 1 -- L-A10, the two-line theorem, keyed (p = 3..201 odd, k = 1..40)
+==============================================================================
+
+  THE ARGUMENT, in our own words (checked below at every step, exactly):
+  (p-2) is odd, so invertible mod 2^{k+1}; r_p := -(p-2)^{-1} mod 2^{k+1}
+  satisfies (p-2)*r_p = -1 (mod 2^{k+1}), and is odd (an odd number's
+  inverse mod a power of 2 is odd; its negative mod 2^{k+1} is odd).
+  For any positive x = r_p (mod 2^{k+1}):
+    (i)   x is odd, so T(x) = (px+1)/2, and (p-2)x + 1 = (p-2)r_p + 1 = 0
+          (mod 2^{k+1}); hence T(x) - x = ((p-2)x + 1)/2 is an integer
+          divisible by 2^k, i.e. T(x) = x (mod 2^k), both = u_p.
+    (ii)  (p-2)x + 1 > 0 since p >= 3 and x >= 1, so T(x) > x.
+  Same residue mod 2^k => same value f(u_p) > 0 => V(T(x)) = T(x) f(u_p)
+  > x f(u_p) = V(x). One edge, exhibited; nothing about f used beyond
+  'depends on x mod 2^k' and 'positive'.
+
+  [PASS] defining congruence (p-2)*r_p + 1 = 0 (mod 2^(k+1)) on all 4000 (p,k) pairs  (failures: none)
+  [PASS] r_p is odd on all 4000 pairs  (failures: none)
+  [PASS] x = T(x) = u_p (mod 2^k) on all 24000 witnesses (6 per pair: m = 0, 1, 2 and three random m of 200/400/600 bits; largest witness 641 bits)  (failures: none)
+  [PASS] T(x) > x on all 24000 witnesses (strict ascent, exact integers)  (failures: none)
+  [PASS] T(x) - x = ((p-2)x + 1)/2 exactly, numerator even, on all 24000 witnesses  (failures: none)
+  pairs: 4000 (p = 3..201 odd = 100 values, k = 1..40); witnesses: 24000; seed 20260904 for the random m
+
+==============================================================================
+PART 2 -- the concrete instances, and the 'both lifts' bookkeeping
+==============================================================================
+  p=3, k=8, the witness chain under T with residues mod 256:
+    511 [255] -> 767 [255] -> 1151 [127] -> 1727 [191] -> 2591 [31] -> 3887 [47] -> 5831 [199]
+  [PASS] 511 -> 767 -> 1151 -> 1727 -> 2591 -> 3887 -> 5831 (his P5 trajectory, run_050_output.txt), residues 255, 255, 127, 191, 31, 47, 199
+  [PASS] the class is left at step 2 exactly (first index with residue != 255 is 2) -- the retracted formulation is indeed false, as he says
+  [PASS] T(511)/511 = 767/511 = 1.5010 to four places (his printed ratio)
+  half map, residue 255 on Z/256: lift 255 -> T = 383 -> edge (255, 127); lift 511 -> T = 767 -> edge (255, 255)
+  [PASS] the half-map relation on Z/256 carries BOTH edges 255 -> 127 (lift 255) and 255 -> 255 (lift 511) -- so 'ours has 255 -> 255' is right and 'ours ALSO has 255 -> 127' is the full statement (the review's wording point, not a defect in the claim)
+  [PASS] the accelerated map x -> (3x+1)/2^v at the canonical representative 255 sends it to 383 = 127 (mod 256): the SAME edge as the half map's m=0 lift, and the only one the single-successor graph keeps
+  [PASS] for odd u, the two half-map successors of u on Z/2^k (from lifts u and u + 2^k) differ by exactly 2^(k-1) mod 2^k, for p = 3..11 odd, k = 1..12 (127 and 255 at (3,8): 128 apart)
+  [PASS] p=1 at the same class: T(511) = 256 < 511, difference -255 -- the argument's inequality fails to hold, so it concludes nothing at p=1
+
+==============================================================================
+TOTAL: 20 checks, 0 failures
+==============================================================================
