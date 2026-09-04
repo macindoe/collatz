@@ -54,5 +54,62 @@ PART 2 -- the concrete instances, and the 'both lifts' bookkeeping
   [PASS] p=1 at the same class: T(511) = 256 < 511, difference -255 -- the argument's inequality fails to hold, so it concludes nothing at p=1
 
 ==============================================================================
-TOTAL: 20 checks, 0 failures
+PART 3 -- the divergence diagnosis, reconstructed on both objects
+==============================================================================
+
+  OBJECT A (ours, round 13 -- merle_r13_check.py PART 7, re-implemented here
+  from its recorded definition, not imported): the ACCELERATED map
+  x -> (px+1)/2^v on the odd residues mod 2^k, ONE successor per residue,
+  computed at the canonical representative u in [1, 2^k):
+  u -> oddpart(p*u+1) mod 2^k, with valuation v = v_2(p*u+1). A functional
+  graph, so its cycles are enumerated exactly; a cycle (L, K = sum of the v)
+  is FAULTY iff p^L >= 2^K (exact integer comparison). Round 13 counted
+  faulty cycles with L > 1 only; both counts are printed here.
+
+  OBJECT B (his, sections 95-96 -- 'run_049 line 33' in his words,
+  re-implemented here from the definition alone): the Terras HALF map T on
+  Z/2^k carrying BOTH lifts from Z/2^{k+1}: for every r in [0, 2^{k+1}) one
+  edge (r mod 2^k) -> (T(r) mod 2^k). This is well defined on Z/2^{k+1}
+  (T(r + 2^{k+1}) = T(r) mod 2^k on both branches), gives two out-edges per
+  node, and every edge is realised by the whole progression r + 2^{k+1}*Z --
+  which is why his run_049 P1 ('20,000 edges, all realised') can only pass.
+
+  (3,8) OBJECT A: succ[255] = 127 (v = 1)
+  (3,8) OBJECT B: edge (255,255) lifts = [511], edge (255,127) lifts = [255]
+  [PASS] (3,8): the edge 255 -> 255 is PRESENT in the half-map relation, realised by the lift 511 (and by every x = 511 mod 512)
+  [PASS] (3,8): the edge 255 -> 127 is ALSO present in the relation, realised by the lift 255 -- the relation carries both edges from 255
+  [PASS] (3,8): the edge 255 -> 255 is ABSENT from the accelerated single-successor graph, whose one edge from 255 goes to 127
+  [PASS] (3,8): the relation has exactly 512 = 2^9 distinct edges, two out of every node, each realised by exactly one lift class mod 512
+  [PASS] (3,8): every edge of the relation is realised by random positive lifts x = r + 512*m (3 per edge, 1536 in all) -- his run_049 P1 reconstructed; TRUE BY CONSTRUCTION (an edge IS a lift class), so a consistency check of the graph, not a finding
+
+  regression on OBJECT A (round-13 committed figures; his run_050 P4 table reproduces the same):
+    p=3 k= 4: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 5: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 6: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 7: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 8: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k= 9: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k=10: cycle lengths [1, 26], faulty (all) [(26, 37)], faulty (L>1) [(26, 37)]
+    p=3 k=11: cycle lengths [1, 25], faulty (all) [(25, 37)], faulty (L>1) [(25, 37)]
+    p=3 k=12: cycle lengths [1, 6, 7], faulty (all) [(6, 7), (7, 9)], faulty (L>1) [(6, 7), (7, 9)]
+    p=3 k=13: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k=14: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k=15: cycle lengths [1], faulty (all) [], faulty (L>1) []
+    p=3 k=16: cycle lengths [1], faulty (all) [], faulty (L>1) []
+  [PASS] p=3, k = 4..12, 14, 16: faulty cycles (L > 1) and their (L,K) match our round-13 committed output exactly -- none at k=4..9; (26,37) at k=10; (25,37) at k=11; (6,7),(7,9) at k=12; none at k=14, 16
+  [PASS] p=3, k = 4..16: faulty counts match his run_050 P4 table exactly (0,0,0,0,0,0,1,1,2,0,0,0,0) -- including k = 13 and 15, which our round-13 run did not measure and his table added
+  [PASS] p=3, k = 4..16: the L=1 exclusion of round 13 changes no count (the fixed point u=1 has v=2 and 3 < 4, never faulty), so our L>1 figures and his all-cycles figures agree for a reason
+    p=7 k= 8: cycle lengths [1, 3, 4, 31], faulty (all) [(3, 4), (4, 8), (31, 67)], faulty (L>1) [(3, 4), (4, 8), (31, 67)]
+  [PASS] p=7, k=8: 4 residue cycles, lengths [1, 3, 4, 31], 3 faulty at (L,K) = (3,4), (4,8), (31,67) -- our round-13 figures and his P4 table, identical
+
+  which lift of u_p carries the loop u_p -> u_p, over all 4000 pairs:
+    loop on the m=1 lift (r_p >= 2^k): 1837 pairs; on the m=0 lift (r_p < 2^k): 2163 pairs
+  [PASS] p=3: the loop sits on the m=1 lift at EVERY k = 1..40 (r_3 = 2^(k+1)-1 >= 2^k), so for p=3 the witness edge is never in OBJECT A at k >= 2 -- his diagnosis is exactly right for the case at issue
+  [PASS] p=7, k=8: r_7 = 307 >= 256, the m=1 lift again -- the loop is absent from OBJECT A there too (u = 51 -> 179 in A)
+  [PASS] for k = 2..16 and every odd p = 3..201: the loop u_p -> u_p is in OBJECT A exactly when r_p < 2^k (the m=0 lift), where it appears as an L=1 self-loop with v=1 -- faulty, and excluded by round 13's L>1 convention; so 'the witness edge lives on the other lift' is true of p=3 and of (7,8), not of every (p,k)
+  [PASS] example of the other case: p=9, k=8 has r_9 = 73 < 256, and OBJECT A contains 73 -> 73 (v=1) as a faulty L=1 self-loop (9 >= 2)  (r=73, succ[73]=73, v=1)
+  [PASS] k=1 is degenerate: Z/2 has one odd residue and OBJECT A is the single self-loop 1 -> 1 for every p (recorded, excluded from the equivalence)
+
+==============================================================================
+TOTAL: 34 checks, 0 failures
 ==============================================================================

@@ -287,6 +287,208 @@ check("p=1 at the same class: T(511) = 256 < 511, difference -255 -- the "
 # ---------------------------------------------------------------------------
 print()
 print("=" * 78)
+print("PART 3 -- the divergence diagnosis, reconstructed on both objects")
+print("=" * 78)
+print("""
+  OBJECT A (ours, round 13 -- merle_r13_check.py PART 7, re-implemented here
+  from its recorded definition, not imported): the ACCELERATED map
+  x -> (px+1)/2^v on the odd residues mod 2^k, ONE successor per residue,
+  computed at the canonical representative u in [1, 2^k):
+  u -> oddpart(p*u+1) mod 2^k, with valuation v = v_2(p*u+1). A functional
+  graph, so its cycles are enumerated exactly; a cycle (L, K = sum of the v)
+  is FAULTY iff p^L >= 2^K (exact integer comparison). Round 13 counted
+  faulty cycles with L > 1 only; both counts are printed here.
+
+  OBJECT B (his, sections 95-96 -- 'run_049 line 33' in his words,
+  re-implemented here from the definition alone): the Terras HALF map T on
+  Z/2^k carrying BOTH lifts from Z/2^{k+1}: for every r in [0, 2^{k+1}) one
+  edge (r mod 2^k) -> (T(r) mod 2^k). This is well defined on Z/2^{k+1}
+  (T(r + 2^{k+1}) = T(r) mod 2^k on both branches), gives two out-edges per
+  node, and every edge is realised by the whole progression r + 2^{k+1}*Z --
+  which is why his run_049 P1 ('20,000 edges, all realised') can only pass.
+""")
+
+
+def accelerated_graph(p, k):
+    """OBJECT A: one successor per odd residue, at the canonical lift."""
+    M = 1 << k
+    succ, val = {}, {}
+    for u in range(1, M, 2):
+        v, odd = v2(p * u + 1)
+        succ[u], val[u] = odd % M, v
+    return succ, val
+
+
+def functional_cycles(succ):
+    """Every distinct cycle of a functional graph, exactly once."""
+    seen = set()
+    cycles = []
+    for start in succ:
+        if start in seen:
+            continue
+        path, pos, cur = [], {}, start
+        while cur not in seen and cur not in pos:
+            pos[cur] = len(path)
+            path.append(cur)
+            cur = succ[cur]
+        if cur in pos:
+            cycles.append(path[pos[cur]:])
+        seen.update(path)
+    return cycles
+
+
+def faulty_cycles(p, k):
+    """(L, K) of every faulty cycle of OBJECT A at (p, k), and the list of all
+    cycle lengths. Returns (all_lengths, faulty_all, faulty_L_gt_1)."""
+    succ, val = accelerated_graph(p, k)
+    cycles = functional_cycles(succ)
+    lengths = sorted(len(c) for c in cycles)
+    faulty = []
+    for c in cycles:
+        L, K = len(c), sum(val[u] for u in c)
+        if p ** L >= (1 << K):
+            faulty.append((L, K))
+    faulty.sort()
+    return lengths, faulty, [lk for lk in faulty if lk[0] > 1]
+
+
+def half_map_relation(p, k):
+    """OBJECT B: edges (u, v) -> list of lifts r in [0, 2^{k+1}) realising it."""
+    M = 1 << k
+    edges = {}
+    for r in range(1 << (k + 1)):
+        edges.setdefault((r % M, T(r, p) % M), []).append(r)
+    return edges
+
+
+# --- (a) the witness edge on each object at p = 3, k = 8 --------------------
+succA, valA = accelerated_graph(3, 8)
+relB = half_map_relation(3, 8)
+print(f"  (3,8) OBJECT A: succ[255] = {succA[255]} (v = {valA[255]})")
+print(f"  (3,8) OBJECT B: edge (255,255) lifts = {relB.get((255, 255))}, "
+      f"edge (255,127) lifts = {relB.get((255, 127))}")
+check("(3,8): the edge 255 -> 255 is PRESENT in the half-map relation, "
+      "realised by the lift 511 (and by every x = 511 mod 512)",
+      relB.get((255, 255)) == [511])
+check("(3,8): the edge 255 -> 127 is ALSO present in the relation, realised "
+      "by the lift 255 -- the relation carries both edges from 255",
+      relB.get((255, 127)) == [255])
+check("(3,8): the edge 255 -> 255 is ABSENT from the accelerated "
+      "single-successor graph, whose one edge from 255 goes to 127",
+      succA[255] == 127 and succA[255] != 255)
+out_degree = {}
+for (u, v_) in relB:
+    out_degree[u] = out_degree.get(u, 0) + 1
+check("(3,8): the relation has exactly 512 = 2^9 distinct edges, two out of "
+      "every node, each realised by exactly one lift class mod 512",
+      len(relB) == 512 and set(out_degree.values()) == {2}
+      and all(len(ls) == 1 for ls in relB.values()))
+# his P1, reconstructed: realisability is automatic, so this can only pass.
+rngB = random.Random(20260904)
+ok_real = True
+for (u, v_), lifts in relB.items():
+    for _ in range(3):
+        x = lifts[0] + 512 * rngB.randrange(1, 10 ** 6)
+        if x % 256 != u or T(x) % 256 != v_:
+            ok_real = False
+check("(3,8): every edge of the relation is realised by random positive lifts "
+      "x = r + 512*m (3 per edge, 1536 in all) -- his run_049 P1 "
+      "reconstructed; TRUE BY CONSTRUCTION (an edge IS a lift class), so a "
+      "consistency check of the graph, not a finding", ok_real)
+
+# --- (b) regression: our round-13 figures on OBJECT A -----------------------
+print()
+print("  regression on OBJECT A (round-13 committed figures; his run_050 P4 "
+      "table reproduces the same):")
+expected_p3 = {  # k: (faulty with L > 1) -- merle_r13_check_output.txt, PART 7
+    4: [], 5: [], 6: [], 7: [], 8: [], 9: [],
+    10: [(26, 37)], 11: [(25, 37)], 12: [(6, 7), (7, 9)],
+    14: [], 16: [],
+}
+his_p4_p3 = {  # k: faulty count -- run_050_output.txt P4 (no L=1 exclusion)
+    4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 1, 11: 1, 12: 2,
+    13: 0, 14: 0, 15: 0, 16: 0,
+}
+p3_rows = {}
+for k in range(4, 17):
+    lengths, fa, fa1 = faulty_cycles(3, k)
+    p3_rows[k] = (lengths, fa, fa1)
+    print(f"    p=3 k={k:>2}: cycle lengths {lengths}, faulty (all) {fa}, "
+          f"faulty (L>1) {fa1}")
+check("p=3, k = 4..12, 14, 16: faulty cycles (L > 1) and their (L,K) match "
+      "our round-13 committed output exactly -- none at k=4..9; (26,37) at "
+      "k=10; (25,37) at k=11; (6,7),(7,9) at k=12; none at k=14, 16",
+      all(p3_rows[k][2] == expected_p3[k] for k in expected_p3))
+check("p=3, k = 4..16: faulty counts match his run_050 P4 table exactly "
+      "(0,0,0,0,0,0,1,1,2,0,0,0,0) -- including k = 13 and 15, which our "
+      "round-13 run did not measure and his table added",
+      all(len(p3_rows[k][1]) == his_p4_p3[k] for k in his_p4_p3))
+check("p=3, k = 4..16: the L=1 exclusion of round 13 changes no count "
+      "(the fixed point u=1 has v=2 and 3 < 4, never faulty), so our "
+      "L>1 figures and his all-cycles figures agree for a reason",
+      all(p3_rows[k][1] == p3_rows[k][2] for k in p3_rows))
+lengths78, fa78, fa78_1 = faulty_cycles(7, 8)
+print(f"    p=7 k= 8: cycle lengths {lengths78}, faulty (all) {fa78}, "
+      f"faulty (L>1) {fa78_1}")
+check("p=7, k=8: 4 residue cycles, lengths [1, 3, 4, 31], 3 faulty at "
+      "(L,K) = (3,4), (4,8), (31,67) -- our round-13 figures and his P4 "
+      "table, identical",
+      lengths78 == [1, 3, 4, 31] and fa78_1 == [(3, 4), (4, 8), (31, 67)]
+      and fa78 == fa78_1)
+
+# --- (c) which lift carries the loop, over all 4000 pairs -------------------
+print()
+print("  which lift of u_p carries the loop u_p -> u_p, over all 4000 pairs:")
+m1 = m0 = 0
+p3_all_m1 = True
+equiv_ok = True   # for k >= 2: loop in OBJECT A  <=>  r_p < 2^k
+k1_note = []
+for p in range(3, 202, 2):
+    for k in range(1, 41):
+        M = 1 << k
+        r, u = witness_residues(p, k)
+        on_m1 = r >= M
+        if on_m1:
+            m1 += 1
+        else:
+            m0 += 1
+        if p == 3 and not on_m1:
+            p3_all_m1 = False
+        if k <= 16:   # OBJECT A built explicitly where it is cheap
+            sA, _ = accelerated_graph(p, k)
+            loop_in_A = (sA[u] == u)
+            if k >= 2 and loop_in_A != (not on_m1):
+                equiv_ok = False
+            if k == 1:
+                k1_note.append(loop_in_A)
+print(f"    loop on the m=1 lift (r_p >= 2^k): {m1} pairs; on the m=0 lift "
+      f"(r_p < 2^k): {m0} pairs")
+check("p=3: the loop sits on the m=1 lift at EVERY k = 1..40 (r_3 = 2^(k+1)-1 "
+      ">= 2^k), so for p=3 the witness edge is never in OBJECT A at k >= 2 "
+      "-- his diagnosis is exactly right for the case at issue", p3_all_m1)
+r78, u78 = witness_residues(7, 8)
+check("p=7, k=8: r_7 = 307 >= 256, the m=1 lift again -- the loop is absent "
+      "from OBJECT A there too (u = 51 -> {} in A)".format(
+          accelerated_graph(7, 8)[0][51]),
+      r78 == 307 and accelerated_graph(7, 8)[0][51] != 51)
+check("for k = 2..16 and every odd p = 3..201: the loop u_p -> u_p is in "
+      "OBJECT A exactly when r_p < 2^k (the m=0 lift), where it appears as an "
+      "L=1 self-loop with v=1 -- faulty, and excluded by round 13's L>1 "
+      "convention; so 'the witness edge lives on the other lift' is true of "
+      "p=3 and of (7,8), not of every (p,k)", equiv_ok)
+r98, u98 = witness_residues(9, 8)
+sA98, vA98 = accelerated_graph(9, 8)
+check("example of the other case: p=9, k=8 has r_9 = 73 < 256, and OBJECT A "
+      "contains 73 -> 73 (v=1) as a faulty L=1 self-loop (9 >= 2)",
+      r98 == 73 and sA98[73] == 73 and vA98[73] == 1 and 9 >= 2,
+      f"r={r98}, succ[73]={sA98[73]}, v={vA98[73]}")
+check("k=1 is degenerate: Z/2 has one odd residue and OBJECT A is the single "
+      "self-loop 1 -> 1 for every p (recorded, excluded from the equivalence)",
+      all(k1_note) and len(k1_note) == 100)
+
+# ---------------------------------------------------------------------------
+print()
+print("=" * 78)
 print(f"TOTAL: {CHECKS} checks, {len(FAILS)} failures")
 if FAILS:
     print("FAILURES:")
