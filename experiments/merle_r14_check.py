@@ -489,6 +489,167 @@ check("k=1 is degenerate: Z/2 has one odd residue and OBJECT A is the single "
 # ---------------------------------------------------------------------------
 print()
 print("=" * 78)
+print("PART 4 -- the p = 1 negative control; the quantifier over f; scope")
+print("=" * 78)
+
+# --- (d) p = 1: the same two lines must NOT conclude -------------------------
+check("p=1: r_1 = 1 and u_1 = 1 at every k = 1..40 (-(1-2)^{-1} = 1 mod "
+      "2^(k+1)); the 'ascending' branch is x -> (x+1)/2",
+      all(witness_residues(1, k) == (1, 1) for k in range(1, 41)))
+p1_ok = True
+for m in range(0, 100):
+    x = 1 + m * 512
+    y = T(x, 1)
+    if y - x != (1 - x) // 2 or (1 - x) % 2 != 0:
+        p1_ok = False
+    if m == 0 and y != x:
+        p1_ok = False
+    if m >= 1 and not y < x:
+        p1_ok = False
+check("p=1, k=8, x = 1 + 512m (m = 0..99): the identity T(x) - x = "
+      "((p-2)x+1)/2 = (1-x)/2 still holds, but its sign is <= 0 -- T(1) = 1 "
+      "and T(x) < x for every other witness; the inequality the argument "
+      "needs (T(x) > x) fails, so it concludes nothing at p=1", p1_ok)
+# The family is genuinely non-empty at p = 1, so the conclusion at p >= 3 is
+# about p, not an artefact of the argument's form.
+desc = all(T(x, 1) < x for x in range(2, 100001))
+check("p=1: V(x) = x itself (f = 1) strictly decreases under T at every x = "
+      "2..100000 (T(1) = 1 is the lone fixed point) -- the family the theorem "
+      "closes at p >= 3 is non-empty at p = 1, as a control should show", desc)
+
+# --- (e) the 'for every f' quantifier ---------------------------------------
+# The argument uses two properties of f and nothing else: f is a function of
+# x mod 2^k (so f(x mod 2^k) = f(T(x) mod 2^k) at the witness), and f > 0 (so
+# T(x) > x multiplies through). Tested with pathological f, in exact rationals.
+rngF = random.Random(20260904)
+fs = []
+fs.append(("constant 1", {u: Fraction(1) for u in range(256)}))
+fs.append(("f(u) = 2^(-u), tiny at 255",
+           {u: Fraction(1, 1 << u) for u in range(256)}))
+fs.append(("f(u) = 2^u, huge at 255",
+           {u: Fraction(1 << u) for u in range(256)}))
+for i in range(20):
+    fs.append((f"random rational f #{i+1}, values spanning 10^-30..10^30",
+               {u: Fraction(rngF.randrange(1, 10 ** 30),
+                            rngF.randrange(1, 10 ** 30)) for u in range(256)}))
+quant_ok = True
+n_q = 0
+for name, f in fs:
+    for m in range(0, 10):
+        x = 511 + 512 * m
+        y = T(x)
+        Vx = x * f[x % 256]
+        Vy = y * f[y % 256]
+        n_q += 1
+        if not (Vy > Vx and f[x % 256] == f[y % 256] and f[x % 256] > 0):
+            quant_ok = False
+check(f"V(T(x)) > V(x) exactly (Fractions) at 10 witnesses x = 511 + 512m for "
+      f"each of {len(fs)} altitudes f -- constant, 2^(-u), 2^u, and 20 random "
+      f"rational f with values spanning 10^-30..10^30 ({n_q} evaluations); "
+      "only f(255) = f(255) and f(255) > 0 are used", quant_ok)
+# What the argument does NOT survive, and how L-A10 covers it anyway: an f
+# reading one more bit (x mod 2^{k+1}) is a different k, and the same two
+# lines apply one level up.
+check("if f read x mod 512 instead (k = 9), 511 and T(511) = 767 = 255 mod "
+      "512 would NOT share a residue -- the level-8 witness does not serve; "
+      "but the level-9 witness r_3 = 1023 does: T(1023) = 1535 = 511 = 1023 "
+      "(mod 512), T(1023) > 1023 -- 'every fixed k' means exactly this",
+      767 % 512 != 511 % 512 and witness_residues(3, 9) == (1023, 511)
+      and T(1023) == 1535 and 1535 % 512 == 1023 % 512 == 511)
+
+# --- (f) scope: one edge, no cycle, no orbit ---------------------------------
+x, steps = 511, 0
+while x != 1 and steps < 10 ** 6:
+    x = T(x)
+    steps += 1
+print(f"  the T-orbit of the witness 511 (p=3) reaches 1 after {steps} "
+      "half-map steps")
+check("the witness 511 lies on no cycle: its T-orbit reaches 1 (a single "
+      "trajectory, not a search) -- the argument constrains the one edge "
+      "x -> T(x) and nothing beyond it; it excludes no cycle, as the entry says",
+      x == 1)
+
+# ---------------------------------------------------------------------------
+print()
+print("=" * 78)
+print("PART 5 -- the smaller letter items: theta = 1, f'(0), the drift, h4")
+print("=" * 78)
+
+from mpmath import mp, mpf, log as mlog  # noqa: E402  (only here)
+
+
+def f_theta(p, t):
+    return (mpf(p) / 2) ** t + (mpf(1) / 2) ** t - 2
+
+
+check("f(1) = (p/2) + (1/2) - 2 = 0 EXACTLY at p=3 as a Fraction, and equals "
+      "1 and 2 at p=5, 7 (positive)",
+      Fraction(3, 2) + Fraction(1, 2) - 2 == 0
+      and Fraction(5, 2) + Fraction(1, 2) - 2 == 1
+      and Fraction(7, 2) + Fraction(1, 2) - 2 == 2)
+vals = {}
+for dps in (30, 50):
+    mp.dps = dps
+    vals[dps] = {p: mlog(mpf(p) / 4) for p in (3, 5, 7)}
+agree = all(abs(vals[30][p] - vals[50][p]) < mpf(10) ** -25 for p in (3, 5, 7))
+mp.dps = 50
+fp0 = {p: float(vals[50][p]) for p in (3, 5, 7)}
+print(f"  f'(0) = ln(p/2) + ln(1/2) = ln(p/4): p=3 {fp0[3]:.6f}, "
+      f"p=5 {fp0[5]:.6f}, p=7 {fp0[7]:.6f}")
+check("f'(0) = ln(p/4) agrees at dps 30 and 50; rounds to +0.2231 at p=5 and "
+      "+0.5596 at p=7 (his adopted figures), and is negative at p=3",
+      agree and round(fp0[5], 4) == 0.2231 and round(fp0[7], 4) == 0.5596
+      and fp0[3] < 0)
+# scan (0, 50] for a sign change at p = 5, 7: none expected
+scan_ok = True
+for p in (5, 7):
+    for i in range(1, 50001):
+        t = mpf(i) / 1000
+        if f_theta(p, t) <= 0:
+            scan_ok = False
+            break
+check("p=5, 7: f(theta) > 0 at every theta = 0.001, 0.002, ..., 50.000 -- "
+      "no sign change, no positive root at all on (0, 50] (his scan, "
+      "repeated at dps 50)", scan_ok)
+# p = 3: the unique positive root is 1, by bisection on the dip
+lo, hi = mpf('1e-6'), mpf(20)
+assert f_theta(3, lo) < 0 and f_theta(3, hi) > 0
+for _ in range(200):
+    mid = (lo + hi) / 2
+    if f_theta(3, mid) < 0:
+        lo = mid
+    else:
+        hi = mid
+theta3 = (lo + hi) / 2
+check("p=3: bisection on the dip finds the positive root theta = 1 to 40 "
+      "digits (f(1) = 0 exactly, above)", abs(theta3 - 1) < mpf(10) ** -40,
+      f"theta = {float(theta3):.12f}")
+drift = {p: float((mlog(mpf(p) / 2) + mlog(mpf(1) / 2)) / 2) for p in (3, 5)}
+print(f"  mean log-step drift (ln(p/2) + ln(1/2))/2: p=3 {drift[3]:.6f}, "
+      f"p=5 {drift[5]:.6f}")
+check("the drift is -0.1438 at p=3 and +0.1116 at p=5 (his adopted figures), "
+      "and equals f'(0)/2 identically",
+      round(drift[3], 4) == -0.1438 and round(drift[5], 4) == 0.1116
+      and abs(drift[3] - fp0[3] / 2) < 1e-12 and abs(drift[5] - fp0[5] / 2) < 1e-12)
+
+# --- h4: the three numbers are merle_la9_check.py's own PART 3 output -------
+la9_path = os.path.join(HERE, "merle_la9_check_output.txt")
+with open(la9_path, encoding="utf-8") as fh:
+    la9 = fh.read()
+needles = [
+    "full chord alpha over [2^71, 2^2000] = 0.5001",
+    "width   30 bits: min 0.3229",
+    "width  400 bits: min 0.4867",
+]
+check("h4's three numbers -- chord 0.5001 to 2^2000, 30-bit floor 0.3229, "
+      "400-bit floor 0.4867 (hence mu > 1/0.4867 = 2.05) -- are literally "
+      "present in experiments/merle_la9_check_output.txt (PART 3), our own "
+      "committed output, as his letter now records",
+      all(n in la9 for n in needles) and round(1 / 0.4867, 2) == 2.05)
+
+# ---------------------------------------------------------------------------
+print()
+print("=" * 78)
 print(f"TOTAL: {CHECKS} checks, {len(FAILS)} failures")
 if FAILS:
     print("FAILURES:")

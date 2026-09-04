@@ -111,5 +111,28 @@ PART 3 -- the divergence diagnosis, reconstructed on both objects
   [PASS] k=1 is degenerate: Z/2 has one odd residue and OBJECT A is the single self-loop 1 -> 1 for every p (recorded, excluded from the equivalence)
 
 ==============================================================================
-TOTAL: 34 checks, 0 failures
+PART 4 -- the p = 1 negative control; the quantifier over f; scope
+==============================================================================
+  [PASS] p=1: r_1 = 1 and u_1 = 1 at every k = 1..40 (-(1-2)^{-1} = 1 mod 2^(k+1)); the 'ascending' branch is x -> (x+1)/2
+  [PASS] p=1, k=8, x = 1 + 512m (m = 0..99): the identity T(x) - x = ((p-2)x+1)/2 = (1-x)/2 still holds, but its sign is <= 0 -- T(1) = 1 and T(x) < x for every other witness; the inequality the argument needs (T(x) > x) fails, so it concludes nothing at p=1
+  [PASS] p=1: V(x) = x itself (f = 1) strictly decreases under T at every x = 2..100000 (T(1) = 1 is the lone fixed point) -- the family the theorem closes at p >= 3 is non-empty at p = 1, as a control should show
+  [PASS] V(T(x)) > V(x) exactly (Fractions) at 10 witnesses x = 511 + 512m for each of 23 altitudes f -- constant, 2^(-u), 2^u, and 20 random rational f with values spanning 10^-30..10^30 (230 evaluations); only f(255) = f(255) and f(255) > 0 are used
+  [PASS] if f read x mod 512 instead (k = 9), 511 and T(511) = 767 = 255 mod 512 would NOT share a residue -- the level-8 witness does not serve; but the level-9 witness r_3 = 1023 does: T(1023) = 1535 = 511 = 1023 (mod 512), T(1023) > 1023 -- 'every fixed k' means exactly this
+  the T-orbit of the witness 511 (p=3) reaches 1 after 41 half-map steps
+  [PASS] the witness 511 lies on no cycle: its T-orbit reaches 1 (a single trajectory, not a search) -- the argument constrains the one edge x -> T(x) and nothing beyond it; it excludes no cycle, as the entry says
+
+==============================================================================
+PART 5 -- the smaller letter items: theta = 1, f'(0), the drift, h4
+==============================================================================
+  [PASS] f(1) = (p/2) + (1/2) - 2 = 0 EXACTLY at p=3 as a Fraction, and equals 1 and 2 at p=5, 7 (positive)
+  f'(0) = ln(p/2) + ln(1/2) = ln(p/4): p=3 -0.287682, p=5 0.223144, p=7 0.559616
+  [PASS] f'(0) = ln(p/4) agrees at dps 30 and 50; rounds to +0.2231 at p=5 and +0.5596 at p=7 (his adopted figures), and is negative at p=3
+  [PASS] p=5, 7: f(theta) > 0 at every theta = 0.001, 0.002, ..., 50.000 -- no sign change, no positive root at all on (0, 50] (his scan, repeated at dps 50)
+  [PASS] p=3: bisection on the dip finds the positive root theta = 1 to 40 digits (f(1) = 0 exactly, above)  (theta = 1.000000000000)
+  mean log-step drift (ln(p/2) + ln(1/2))/2: p=3 -0.143841, p=5 0.111572
+  [PASS] the drift is -0.1438 at p=3 and +0.1116 at p=5 (his adopted figures), and equals f'(0)/2 identically
+  [PASS] h4's three numbers -- chord 0.5001 to 2^2000, 30-bit floor 0.3229, 400-bit floor 0.4867 (hence mu > 1/0.4867 = 2.05) -- are literally present in experiments/merle_la9_check_output.txt (PART 3), our own committed output, as his letter now records
+
+==============================================================================
+TOTAL: 46 checks, 0 failures
 ==============================================================================
