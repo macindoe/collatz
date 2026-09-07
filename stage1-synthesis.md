@@ -1452,7 +1452,7 @@ s = v_2(ω·3^d - 1) = v_2(n·log 9 + log ω),
 
 so `s` is the `2`-adic valuation of a linear form in two `2`-adic logarithms of fixed integers, with integer coefficients `(n, 1)`. Equivalently, in exponential form, `s = v_2(9^n·ω - 1)` measures the `2`-adic distance of a two-term power product from `1`. Effective upper bounds for exactly such quantities are the subject of `p`-adic Baker theory: linear forms in `p`-adic logarithms (Yu), with sharper two-logarithm bounds by Bugeaud–Laurent via Padé approximation.
 
-**Pinned (2026-07-12).** Y. Bugeaud, M. Laurent, *Minoration effective de la distance p-adique entre puissances de nombres algébriques*, J. Number Theory 61 (1996), 311–342, Corollaire 2 — the case `g = 1`, which is *automatic* here: for `p = 2` the residue field is `F_2`, so every odd number is already a principal unit (`U_v = U_v^1`), and `9 ≡ 1 (mod 8)` confirms it directly. Their `D = [Q(α_1,α_2):Q]/f = 1` too, since `α_1 = 9` and `α_2 = ω^(-1)` are both rational. Taking `α_1 = 9, b_1 = n, α_2 = ω^(-1), b_2 = 1` (multiplicatively independent whenever `3 ∤ ω`, which holds for every valid odd core by definition) gives `Λ = 9^n - ω^(-1)`, and `v_2(9^n·ω - 1) = v_2(Λ)` exactly (`ω` odd). Their Corollaire 2, specialized to `D = 1, p = 2`:
+**Pinned (2026-07-12).** Y. Bugeaud, M. Laurent, *Minoration effective de la distance p-adique entre puissances de nombres algébriques*, J. Number Theory 61 (1996), 311–342, Corollaire 2 — the case `g = 1`, which is *automatic* here: for `p = 2` the residue field is `F_2`, so every odd number is already a principal unit (`U_v = U_v^1`), and `9 ≡ 1 (mod 8)` confirms it directly. Their `D = [Q(α_1,α_2):Q]/f = 1` too, since `α_1 = 9` and `α_2 = ω^(-1)` are both rational. Taking `α_1 = 9, b_1 = n, α_2 = ω^(-1), b_2 = 1` (multiplicatively independent whenever `3 ∤ ω` and `ω ≠ 1` — at `ω = 1`, `α_2 = 1` is trivially dependent on `α_1`, and the isometry `v_2(9^n - 1) = 3 + v_2(n)` of Lemma `11.8.3.6.5` gives `s` exactly there, sharper than any cap; every valid odd core other than `1` satisfies both conditions by definition) gives `Λ = 9^n - ω^(-1)`, and `v_2(9^n·ω - 1) = v_2(Λ)` exactly (`ω` odd). Their Corollaire 2, specialized to `D = 1, p = 2`:
 
 ```text
 v_2(9^n·ω - 1) <= 208 · log 9 · log ω · (max{log b' + log(log 2) + 0.4, 10·log 2, 10})^2,
@@ -1461,13 +1461,13 @@ v_2(9^n·ω - 1) <= 208 · log 9 · log ω · (max{log b' + log(log 2) + 0.4, 10
 
 This is fully explicit and unconditional (no asymptotic threshold, unlike their Théorème 2) — a genuine `C(ω) = 208·log 9·log ω` and a genuine exponent of exactly `2`, confirming the wiki's existing choice over the hedge ("particular variants... yield `log n`"): the `log n`-exponent variants in the literature are for *large-coefficient* asymptotic regimes (their Théorème 2), not the small-fixed-`α`, one-growing-exponent case here, where the interpolation-determinant method gives `(log n)^2` cleanly. Sanity-checked numerically (`python`, this session): for `ω = 5`, the bound is `~73,555` for `n` up to `~34,000` (dominated by the theorem's own floor of `10` in the max), then grows as `(log n)^2` beyond that — e.g. `~131,500` at `n = 10^6`, `~302,500` at `n = 10^9` — large but finite and slow-growing, exactly the qualitative picture already claimed.
 
-**Imported bound (now with a pinned constant).** For each fixed odd `ω` coprime to `3`, there is an effectively computable constant `C(ω) = 208·log 9·log ω` (up to the floor described above) such that for all `n >= 2`,
+**Imported bound (now with a pinned constant).** For each fixed odd `ω` coprime to `3` with `ω ≠ 1`, there is an effectively computable constant `C(ω) = 208·log 9·log ω` (up to the floor described above) such that for all `n >= 2`,
 
 ```text
 v_2(9^n·ω - 1) <= C(ω) · (log n)^2.
 ```
 
-The exponent is exactly `2`, pinned above via Bugeaud–Laurent's Corollaire 2; the `log n`-exponent variants in the literature are large-coefficient asymptotic regimes (their Théorème 2), not the small-fixed-`α`, one-growing-exponent case here. Every use below survives with either exponent regardless.
+At `ω = 1` the displayed constant vanishes and the bound would read `s <= 0`, which is false — `s = v_2(9^n - 1) = 3 + v_2(n)` there, unbounded along `n = 2^j` — so `ω = 1` is excluded and covered by the exact isometry instead, linearly in `log n` (the same pattern as the rational-anchor point of cycles.md 12.6.1.3(b) and the excluded `y = ±1` of reverse.md 14.2.5). The exponent is exactly `2`, pinned above via Bugeaud–Laurent's Corollaire 2; the `log n`-exponent variants in the literature are large-coefficient asymptotic regimes (their Théorème 2), not the small-fixed-`α`, one-growing-exponent case here. Every use below survives with either exponent regardless.
 
 **Corollary 11.8.3.11.1 (unconditional spike-height bound).** On both lifting components, spike heights grow at most polylogarithmically in depth: there is an effective `C(ω)` with
 
@@ -1477,15 +1477,15 @@ s(ω, d) <= C(ω) · (log d)^2      for all d >= 2,
 
 hence `max_(d <= D) s = O((log D)^2)` for each family, unconditionally.
 
-**Proof.** On the even component `d = 2n` this is the imported bound directly. On the odd component `d = 2n + 1`, Proposition `11.8.1.6.2` gives `s = v_2(9^n·(3ω) - 1)`, and the imported bound applies to the companion parameter `3ω`. ∎
+**Proof.** On the even component `d = 2n` this is the imported bound directly for `ω ≠ 1`, and at `ω = 1` the isometry gives `s = 3 + v_2(n) <= 3 + log_2 n`. On the odd component `d = 2n + 1`, Proposition `11.8.1.6.2` gives `s = v_2(9^n·(3ω) - 1)`, and the imported bound applies to the companion parameter `3ω`, which is never `1`. ∎
 
-**Corollary 11.8.3.11.2 (effective irrationality measure for the anchor).** For every integer `n >= 2`,
+**Corollary 11.8.3.11.2 (effective irrationality measure for the anchor).** For every valid odd core `ω ≠ 1` and every integer `n >= 2`,
 
 ```text
 v_2(n - N(ω)) <= C(ω) · (log n)^2 - 3.
 ```
 
-Equivalently: an integer of size `n` can match at most `O((log n)^2)` leading `2`-adic digits of `N(ω)`. This is the first unconditional statement about the anchor digits in this note — an effective `2`-adic irrationality measure for `-log ω / log 9`.
+Equivalently: an integer of size `n` can match at most `O((log n)^2)` leading `2`-adic digits of `N(ω)`. (At `ω = 1`, `N(1) = 0` and `v_2(n - N(1)) = v_2(n) <= log_2 n` directly.) This is the first unconditional statement about the anchor digits in this note — an effective `2`-adic irrationality measure for `-log ω / log 9`.
 
 **Proof.** Immediate from the imported bound and `s = 3 + v_2(n - N(ω))`. ∎
 
