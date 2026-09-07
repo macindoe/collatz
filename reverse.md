@@ -1,11 +1,11 @@
 ---
 status: ACTIVE — forward/backward duality complete (14.1–14.12; density bound c* = 0.3304, 14.6); door/exit seam relocates the core-extraction deficit onto the forward digit budget (14.14); the itinerary-language arc (§14.15) lives at itinerary.md — Bridge status unchanged throughout
 scope: sections 14.1–14.14 (post-monolith); §14.15 split to itinerary.md 2026-07-23
-updated: 2026-08-12
+updated: 2026-09-08
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
 ---
 
-> **Current state.** The reduced map run backward. Proved: the complete predecessor characterization and the backward valuation law `d = 1 + v₃(s − M₃(y))` governed by the 3-adic anchor `M₃` — the exact mirror of the forward 2-adic law, duality table at 14.3 (14.1–14.3); a rigorous density bound `π̃(X) ≥ 2^(−3.6)·X^(0.3)` with critical exponent `c* ≈ 0.3304`, lifted to `0.33515` by multi-door renewal, the stages-2–3 obstruction precisely recorded (14.6, 14.6.5, 14.13); the dual per-step theorem queue closed, each genuine forward/backward asymmetry identified (14.7–14.10); the door/exit seam — the exit map `G` semiconjugate to `F`, an exact per-stratum 3-adic contraction with a constant-offset graded law, the block-map identity `G(y) = T^(v₂(y+1))(y)`, and composition along fixed itineraries — with the reconciliation that the seam relocates, not evades, the core-extraction deficit (14.14). The itinerary-language arc (§14.15) — the full-shift calibration, the two-sided coding and its signed three-way diagonal characterization, and the whole-period height laws — now lives at `itinerary.md`; the accounting owner 14.14.6 stays on this page, and the Bridge (bridge.md §16) is unchanged throughout that arc.
+> **Current state.** The reduced map run backward. Proved: the complete predecessor characterization and the backward valuation law `d = 1 + v₃(s − M₃(y))` governed by the 3-adic anchor `M₃` — the exact mirror of the forward 2-adic law, duality table at 14.3 (14.1–14.3), with an unconditional Baker-effective cap on entry depth mirroring stage1-synthesis.md 11.8.3.11 (14.2.5); a rigorous density bound `π̃(X) ≥ 2^(−3.6)·X^(0.3)` with critical exponent `c* ≈ 0.3304`, lifted to `0.33515` by multi-door renewal, the stages-2–3 obstruction precisely recorded (14.6, 14.6.5, 14.13); the dual per-step theorem queue closed, each genuine forward/backward asymmetry identified (14.7–14.10); the door/exit seam — the exit map `G` semiconjugate to `F`, an exact per-stratum 3-adic contraction with a constant-offset graded law, the block-map identity `G(y) = T^(v₂(y+1))(y)`, and composition along fixed itineraries — with the reconciliation that the seam relocates, not evades, the core-extraction deficit (14.14). The itinerary-language arc (§14.15) — the full-shift calibration, the two-sided coding and its signed three-way diagonal characterization, and the whole-period height laws — now lives at `itinerary.md`; the accounting owner 14.14.6 stays on this page, and the Bridge (bridge.md §16) is unchanged throughout that arc.
 
 # 14. The Reverse Dynamics: a 3-adic Mirror
 
@@ -47,6 +47,65 @@ d = v₃(2^s y + 1) = 1 + v₃(s − M₃(y)).
 
 **Verification.** `4,265` random `(y, s)` checks at anchor depth `3^8`, zero failures. The **backward ledger** follows: over branches, `P(d = j) = 2·3^(−j)` — measured `0.6664, 0.2230, 0.0736, 0.0245, 0.0082` against `2/3, 2/9, 2/27, 2/81, 2/243`.
 
+**Remark 14.2.5 (effective bound: contact with 3-adic Baker theory).** The backward valuation law is complete but relative: it expresses `d` through `v₃(s − M₃(y))` without bounding that quantity as a function of `s`. This is the exact mirror of stage1-synthesis.md 11.8.3.11's gap on the forward side, flagged by Brett Rubin (correspondence 2026-09-05): "the analogue of Theorem 3.3's unconditional clause has to bound the constant rather than the growth."
+
+**Reduction to a two-logarithm form.** For a door `y` (odd, `3∤y`) and `s` of the admissible parity (14.1.1), `v₃(2^s y + 1) ≥ 1` by 14.2.4, hence `v₃(2^s y − 1) = 0` (the two differ by `2`, a 3-adic unit). So
+
+```text
+d = v₃(2^s y + 1) = v₃(4^s·y² − 1) = v₃(α₁^b₁ − α₂^b₂),   α₁ = 4, α₂ = y^(−2), b₁ = s, b₂ = 1,
+```
+
+mirroring the squaring step paper 1's Lemma 3.2 supplies on the 2-adic side (11.8.3.11's "`g = 1`, automatic at `p = 2`"): `α₁ = 4 ≡ 1 (mod 3)` and `α₂ = y^(−2) ≡ 1 (mod 3)` (`y² ≡ 1 (mod 3)` by Fermat, `y` coprime to `3` by definition of a live door) are both principal units — `g = 1`, automatic at `p = 3` too — and both rational (`D = 1` in the source's notation). They are multiplicatively independent exactly when `|y| ≠ 1`: `α₁ = 2²` carries only the prime `2`, while `α₂ = y^(−2)` carries none of it (for `|y| ≥ 5`, coprime to `6`), so `α₁^a = α₂^b` forces `a = b = 0`.
+
+**Excluded case `y = ±1`.** This is Rubin's `e = 1` degeneration (his `D = −1/2`); the doors `14.1.1` literally constructs are always positive, so only `y = 1` is realized as a tree door, but the law's proof and Rubin's own `e`-indexed formulation carry no sign restriction, and `y² = 1` at both signs, so `|y| ≠ 1` is the complete degenerate locus of the two-logarithm reduction. Lemma 14.2.1 settles it exactly, no Baker input needed: `d = 1 + v₃(s)` (`y = 1`: `2^s + 1^s`, `s` odd; `y = −1`: `2^s − 1`, `s` even — both lifting-the-exponent, matching `M₃(1)`, `M₃(−1)` being the two elements of `E₃` with vanishing `Z₃`-part). This is in fact *sharper* than the general cap below — linear in `log s`, not quadratic — the same pattern as cycles.md 12.6.1.3(b)'s rational-anchor point.
+
+**Pinned (2026-09-08).** Y. Bugeaud, M. Laurent, *Minoration effective de la distance p-adique entre puissances de nombres algébriques*, J. Number Theory 61 (1996), 311–342, Corollaire 2 — the case `g = 1`, mirroring 11.8.3.11's own reading. Their `D = 1` here too, since `α₁ = 4` and `α₂ = y^(−2)` are both rational. Taking `α₁ = 4, b₁ = s, α₂ = y^(−2), b₂ = 1` gives `Λ = 4^s − y^(−2)`, and `v₃(4^s·y² − 1) = v₃(Λ)` exactly (`y` coprime to `3`). Corollaire 2, specialized to `D = 1, p = 3` (general-`p` statement quoted verbatim in the findings, from the restatement in full generality by one of the two original authors, M. A. Bennett and Y. Bugeaud, *Effective results for restricted rational approximation to quadratic irrationals* (2011), Theorem 2.1):
+
+```text
+v₃(4^s·y² − 1) <= [36 / (log 3)^4] · log 4 · log(y²) · (max{log b' + log(log 3) + 0.4, 10·log 3, 10})^2,
+   where b' = s / log(y²) + 1 / log 4.
+```
+
+**Control.** The same general formula, specialized instead to `p = 2, D = 1, g = 1, A₁ = 9, A₂ = ω, b₁ = n, b₂ = 1` — 11.8.3.11's own case — reproduces its pinned prefactor (`24·2·1/((2−1)·log(2)^4) = 207.94…`, the wiki's displayed `208`) and its three worked values for `ω = 5` (`~73,534` against the published `~73,555` at the `n ≈ 34,000` floor; `~131,508` against `~131,500` at `n = 10^6`; `~302,455` against `~302,500` at `n = 10^9` — agreement to `< 0.03%` throughout, the residual being 11.8.3.11's own rounding of `207.94…` to `208`). Verified, `experiments/mirror_baker_cap.py` PART G.
+
+**Imported bound (now with a pinned constant).** For each fixed odd `y` with `3∤y`, `|y| ≠ 1`, there is an effectively computable constant
+
+```text
+C₃(y) = 144·log 2·log|y| / (log 3)^4      (≈ 68.52·log|y|)
+```
+
+(up to the floor described above) such that for all `s ≥ 1` of the admissible parity,
+
+```text
+d = v₃(2^s y + 1) <= C₃(y) · (log s)^2.
+```
+
+The exponent is exactly `2`, pinned above via the same Corollaire 2 that fixes 11.8.3.11's; every use below survives with either exponent regardless. Sanity-checked numerically (`experiments/mirror_baker_cap.py` PART F): for `y = 5`, the bound is `~13,310` for `s` up to `~116,000` (dominated by the theorem's own floor of `10·log 3 ≈ 10.99` in the max), then grows as `(log s)^2` beyond that — `~19,042` at `s = 10^6`, `~44,324` at `s = 10^9` — large but finite and slow-growing, matching the pattern already established on the forward side.
+
+**Corollary 14.2.5.1 (unconditional cap on entry depth).** For every door `y` with `|y| ≠ 1`, entry depths grow at most polylogarithmically in the branch: there is an effective `C₃(y)` with
+
+```text
+d(y, s) <= C₃(y) · (log s)^2      for all s >= 1 of the admissible parity,
+```
+
+hence `max_(s <= S) d = O((log S)^2)`, unconditionally. At `y = ±1` the sharper exact law `d = 1 + v₃(s)` of Lemma 14.2.1 applies instead — excluded, not omitted.
+
+**Corollary 14.2.5.2 (effective 3-adic irrationality measure for `M₃(y)`).** For every `s ≥ 1` of the admissible parity,
+
+```text
+v₃(s − M₃(y)) <= C₃(y) · (log s)^2 − 1.
+```
+
+Equivalently: an integer of size `s` can match at most `O((log s)^2)` leading 3-adic digits of the anchor `M₃(y)` — the exact mirror of Corollary 11.8.3.11.2.
+
+**Proof (both corollaries).** Immediate from the imported bound and `d = 1 + v₃(s − M₃(y))` (14.2.4). ∎
+
+**Remark (what the constants are and are not good for).** As on the forward side (11.8.3.11): `C₃(y)` is effectively computable but astronomically large, useful for unconditional asymptotic statements and useless for window computations. Rubin's own observation is exactly this remark's content read from the small-`s` end: for fixed `y`, a small `s` can carry a deep entry depth whenever the anchor's leading 3-adic digits happen to vanish — `y = 5` reaches `d = 4` at `s = 4` (his `k = 1`), `y = 41` reaches `d = 6` at `s = 28` (his `k = 13`) — and the cap is nowhere near binding at either instance (`13,310` and `30,711` respectively against the observed `4` and `6`; verified, `experiments/mirror_baker_cap.py` PART F). The cap excludes nothing; it bounds how long a run of vanishing digits can persist, not how often one occurs.
+
+**Verification.** `experiments/mirror_baker_cap.py`, fresh code, 2026-09-08: the squaring reduction on `202` values of `y` (random plus the two excluded) at every admissible `s <= 80` (`24,240` checks); the law `14.2.4` against a freshly built discrete-log table for `M₃` at depth `3^10`, `3,000` random `(y,s)` pairs; Rubin's parametrization identity `v₃(k − D) = v₃(s − M₃(e))` on `2,000` random `(e,k)` pairs, `k <= 500`; his two quoted valuations exactly (`e=5,k=1 → d=4`; `e=41,k=13 → d=6`); the `y = ±1` exact law on `2,000` values of `s <= 2000`; the bounded texture record for `7` values of `y` against the cap at `S = 4000`, plus the sanity-check narrative above; the `p = 2` control against 11.8.3.11's three worked values. `33,260` checks total, `0` failures.
+
+Credit: flagged by Brett Rubin (correspondence 2026-09-05).
+
 ## 14.3. The duality
 
 | forward (§3 of the paper) | backward (this section) |
@@ -60,6 +119,7 @@ d = v₃(2^s y + 1) = 1 + v₃(s − M₃(y)).
 | residue classes mod 8 gate the law | residue class mod 3 gates the parity |
 | deterministic forward orbit | infinitely-branching backward tree |
 | AEH: ensemble equidistribution (§13) | density of the tree in ℕ (14.4) |
+| cap `s ≤ C(ω)(log d)²` (11.8.3.11) | cap `d ≤ C₃(y)(log s)²` (14.2.5) |
 
 The conjecture, in this language: the deterministic 2-adic forward flow and the 3-adic backward tree rooted at `(1,1)` describe the same object — every state lies on both.
 
