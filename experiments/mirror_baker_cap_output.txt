@@ -1,0 +1,83 @@
+======================================================================
+PART 0: canaries
+======================================================================
+  C1 e=5,k=1: s=4, N=2^s*5+1=81, v3(N)=4  (expect s=4, N=81, d=4)
+  C2 e=41,k=13: s=28, v3(N)=6  (expect s=28, d=6)
+  C3 y=1,s=1: N=3, v3(N)=1  (expect 3, d=1+v3(1)=1)
+  C4 y=-1,s=2: N=-3, v3(N)=1  (expect -3, d=1)
+  C5 M3(1) mod 54 = 27  (expect 27 = 27)
+  C6 M3(-1) mod 54 = 0  (expect 0)
+
+======================================================================
+PART A: squaring reduction on a grid of (y, s)
+======================================================================
+  202 values of y, s in [1,80] at admissible parity: 24240 checks
+
+======================================================================
+PART B: d = 1 + v3(s - M3(y)), fresh discrete-log table mod 3^10
+======================================================================
+  3000 random (y,s) pairs, table depth 3^10: 3000 certified checks, 0 skipped at the precision guard
+
+======================================================================
+PART C: Rubin's parametrization and v3(k-D) = v3(s-M3(e))
+======================================================================
+  2000 random (e,k) pairs, k <= 500, table depth 3^10: 4000 certified checks, 0 skipped at the precision guard
+
+======================================================================
+PART D: Rubin's two quoted deep instances (direct integer check)
+======================================================================
+  e=5 k=1: s=4, N=81, d=v3(N)=4  (expected d=4)
+  e=41 k=13: s=28, N=11005853697, d=v3(N)=6  (expected d=6)
+  2 checks
+
+======================================================================
+PART E: y = +-1, exact law d = 1 + v3(s), lifting-the-exponent
+======================================================================
+  y=1 (s odd) and y=-1 (s even), s <= 2000: 2000 checks
+
+======================================================================
+PART F: C3(y), and observed max d(y,s) against the cap (texture)
+======================================================================
+  C3 coefficient 144*log2/(log3)^4 = 68.518862
+  C3(5) = 110.2769
+  C3(7) = 133.3315
+  C3(11) = 164.3011
+  C3(13) = 175.7474
+  C3(41) = 254.4497
+
+  Bounded texture: max_(s<=S, admissible parity) d(y,s), fresh integer scan,
+  against the cap p3_bound(S,y) at the same S:
+    y=   5: max d =  7 at s =  1192   (cap at S=4000: 13,309.9)
+    y=   7: max d =  8 at s =   335   (cap at S=4000: 16,092.4)
+    y=  11: max d = 10 at s =  2876   (cap at S=4000: 19,830.3)
+    y=  13: max d =  8 at s =  3799   (cap at S=4000: 21,211.8)
+    y=  41: max d =  8 at s =  2458   (cap at S=4000: 30,710.8)
+    y=  -5: max d =  8 at s =  1921   (cap at S=4000: 13,309.9)
+    y=  -7: max d =  8 at s =  2522   (cap at S=4000: 16,092.4)
+
+    Rubin instance e=5,k=1: s=4, d=4, cap(s,e)=13,309.9 -- cap nowhere near binding
+    Rubin instance e=41,k=13: s=28, d=6, cap(s,e)=30,710.8 -- cap nowhere near binding
+  9 checks (measurement: the cap is a ceiling, not a target)
+
+  Sanity check (y=5), mirroring 11.8.3.11's own numeric paragraph:
+    s=           1: bound =     13,309.9
+    s=         100: bound =     13,309.9
+    s=      34,000: bound =     13,309.9
+    s=     100,000: bound =     13,309.9
+    s=   1,000,000: bound =     19,041.9
+    s=1,000,000,000: bound =     44,324.0
+    floor/log(b') crossover (y=5): s ~ 115,970
+
+======================================================================
+PART G: p=2 control against stage1-synthesis.md 11.8.3.11
+======================================================================
+  prefactor 24*2*1/((2-1)*log(2)^4)*1^4 = 207.940648  (11.8.3.11 quotes 208; ratio 0.999715)
+  n=      34,000 omega=5: bound=      73,534.0  published~    73,555  rel.err=0.0286%
+  n=   1,000,000 omega=5: bound=     131,508.3  published~   131,500  rel.err=0.0063%
+  n=1,000,000,000 omega=5: bound=     302,455.3  published~   302,500  rel.err=0.0148%
+  3 checks: the general-p formula, at p=2, reproduces 11.8.3.11's own pinned constant and worked values to <0.5%
+
+======================================================================
+TOTAL: 33260 checks, 0 failures
+RESULT: PASS - 0 failures
+======================================================================

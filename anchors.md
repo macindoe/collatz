@@ -1,7 +1,7 @@
 ---
 status: REFERENCE (pointers only); the single-sequence digit-structure search it formerly carried (§17.7–17.10) is executed and clean at every endpoint — see anchor-digit-search.md
 scope: sections 17.1–17.6 (post-monolith); cross-cutting reference — owned by no single stage/reverse/cycles/aeh page; §17.7–17.10 split to anchor-digit-search.md 2026-07-23
-updated: 2026-09-04
+updated: 2026-09-08
 source: consolidation of stage1-synthesis.md 11.8.3.6/11.8.3.11, stage1.md 11.8.4.2, stage2.md 11.8.5.6, stage4.md 11.8.7, reverse.md 14.2/14.12–14.13, ladder.md §15, cycles.md 12.3/9.8.4, aeh.md §13, bridge.md §16, archive/appendix-a.md A.4.6–A.6; the author's request to centralize anchor exploration in one place (2026-07-12)
 ---
 
@@ -45,6 +45,7 @@ Pointers only, in dependency order:
 
 - stage1-synthesis.md 11.8.3.11: Bugeaud–Laurent (1996), Corollaire 2 — `C(ω) = 208·log9·logω`, exponent exactly `2`. Pinned and numerically checked 2026-07-12.
 - Corollary 11.8.3.11.2: the same bound read as a digit-match cap — an integer of size `n` matches at most `O((log n)²)` leading anchor digits. This is an unconditional ceiling on how long an agreement can last; it says nothing about how often agreements of a given length actually occur (that's §17.6/17.7's territory — §17.7 at `anchor-digit-search.md`); the ceiling's rational-anchor instance is the spent `|q| = 1` stock (cycles.md 12.6.1.3).
+- The 3-adic twin, roles of `2` and `3` exchanged: reverse.md 14.2.5 — `C₃(y) = 144·log2·logy / (log3)⁴`, same exponent `2`, flagged by Brett Rubin (correspondence 2026-09-05).
 
 ## 17.5. Cycles: the anchor walk
 

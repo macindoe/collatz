@@ -1,7 +1,7 @@
 ---
 status: REFERENCE (lookup and collision visibility only; no fact lives here)
 scope: wiki-wide symbol registry — one row per symbol per frame, defining pointers by section number, closing collision index; subsumes spine.md §4 by reference
-updated: 2026-09-04
+updated: 2026-09-08
 source: the signed-layer containment audit (2026-08-15); briefs/symbols-registry-brief.md
 ---
 
@@ -52,6 +52,7 @@ Digit-cost decomposition on stage3.md/stage4.md; the anchors' consolidated map i
 | `ΔM` | the anchor increment `ΔM = M(ω₊) − M(ω) = N((ω₊/ω)²)` — the Bridge's object | stage2.md 11.8.5.6 (low-order law stage4.md 11.8.7.3.1) | bridge.md §16 |
 | `C(ω)` | effective Baker constant, `C(ω) = 208·log9·logω` (digit-match ceiling) | stage1-synthesis.md 11.8.3.11 | anchors.md 17.4 |
 | `M₃(y)` | the 3-adic mirror anchor: `2^{M₃(y)} = −1/y`, valued in `Z/2 × Z₃`; law `d = 1 + v₃(s − M₃(y))` | reverse.md Definition 14.2.2 (law 14.2.4) | anchors.md 17.1 |
+| `C₃(y)` | effective Baker constant, `C₃(y) = 144·log2·logy / (log3)⁴` (3-adic digit-match ceiling; the twin of `C(ω)`) | reverse.md 14.2.5 | anchors.md 17.4 |
 | `E₃` | the mirror exponent group `lim Z/(2·3^{k−1}) ≅ Z/2 × Z₃` | reverse.md Proposition 14.2.3 | |
 | `ΔM₃` | mirror anchor increment along `G`: `ΔM₃(y) = M₃(G(y)) − M₃(y)`, total on live doors | reverse.md Definition 14.14.5.1 (graded law 14.14.5.3; partial top-door form 14.8.2) | |
 | `J(n)` | the door anchor `J(n) = M(n/3^{v₃(n)}) = M(n) + v₃(n)`, every odd `n` | reverse.md Definition 14.14.2.1, Corollary 14.14.2.3 | |

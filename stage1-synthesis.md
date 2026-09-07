@@ -1,7 +1,7 @@
 ---
 status: closed (proved + imported bounds)
 scope: monolith 11.8.3
-updated: 2026-07-12
+updated: 2026-09-08
 source: split out of stage1.md (was monolith 11.8.1-11.8.4); section content byte-identical
 ---
 
@@ -1494,6 +1494,8 @@ Equivalently: an integer of size `n` can match at most `O((log n)^2)` leading `2
 **Remark (what the constants are and are not good for).** The constants `C(ω)` are effectively computable but astronomically large. They are useful for unconditional asymptotic statements — spike heights cannot grow like a power of `d`, digit matches cannot persist — and useless for window computations, where the exact law plus direct series computation of `N(ω)` (Remark after Theorem `11.8.3.6.6`) is strictly better.
 
 **Remark (Stage 3 relevance).** The valuation `s` enters the depth evolution through `d_+ = v_2(C) - s + v_3(C)`. An unconditional cap on `s` at given depth therefore bounds one term of the depth-evolution law before Stage 3 begins; this is recorded here for later use.
+
+**Remark (the 3-adic twin).** The backward valuation law carries the same gap and the same fix, roles of `2` and `3` exchanged: reverse.md 14.2.5.
 
 Section `11.8.4` separates what this synthesis has genuinely reduced from what remains open.
 
