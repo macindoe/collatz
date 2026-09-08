@@ -8,6 +8,22 @@ which found the local marginals `R_0 mod ell` flat at every prime
 tested; this brief asks the cross-prime question the local probe could
 not.
 
+**Revised after coordinator review (2026-09-08, same date, second
+pass):** two corrections from the review are folded in throughout this
+file and in the committed output: (1) the script is now reproducible
+end to end from a single command (see "Reproducibility" below); (2) the
+four `xi = +-1` dissolutions originally labeled "coincides with a
+monomial `2^0*3^0` character" — a classification, not a cause — are
+relabeled to their actual cause, a magnitude effect (**hunt 6** below),
+after the coordinator's independent check with fresh code found the
+first harmonic tracks `2^K/|q|`, not the shore. Two more `xi=+-1`
+signals that an earlier, over-permissive `<2,3>`-orbit dedup step had
+silently merged into two *different* (correctly small-entry-pushforward
+-caused) candidate groups at `(12,+)` and `(17,+)` are split out and
+separately confirmed by the same hunt. The `cycles.md` sentence is
+rewritten to state this rather than "came back flat at every cell",
+which overstated the earlier result once the harmonic is acknowledged.
+
 **Base SHA:** the worktree was cut from `55d32be`, which lacks the
 brief; `git merge main` brought it to `de0086c` (the commit that added
 `briefs/modq-spectrum-brief.md`), per the brief's own instruction. All
@@ -19,17 +35,63 @@ the rotation numerator `R_r` of cycles.md 12.6.1, and the profile-family
 sampler all reimplemented; imports nothing from any existing script).
 Exact integer arithmetic at every residue and every pass/fail decision;
 floats only inside the spectra (the brief's own rule). Seed `20260908`
-throughout, dated 2026-09-08. Committed output:
-`experiments/modq_spectrum_output.txt` (compact: canaries, per-cell
-class maxima with floors, the top-20 tables for the exact
-FFT-eligible cells, the ghost-hunt summary, the three delta tables).
+throughout, dated 2026-09-08.
 
-**Total committed runtime: 1741.1s (29.0 minutes)** across the canaries
-section and all fourteen cells, under the brief's 45-minute cap. Every
-phase's `check()` assertions passed: 0 failures throughout (the checks
-cover K/q/factorization/count re-derivation at every cell, the four
-canaries, per-cell histogram/residue-range sanity, joint-table sums,
-and the mpmath-vs-FFT match at every exact-cell candidate).
+## Reproducibility
+
+**Single command, reproduces the committed output end to end:**
+
+```bash
+python -u experiments/modq_spectrum.py all > experiments/modq_spectrum_output.txt
+```
+
+This runs every phase in sequence (cell-table re-derivation, canaries,
+all seven FFT-eligible cells, all seven "large" cells at the committed
+run's `N_phi` sub-sample sizes, then the assemble/summary section) in
+one process, and the shell redirection captures the complete transcript
+— not a hand-picked "compact" excerpt — into
+`experiments/modq_spectrum_output.txt`. **Confirmed**: this exact
+command was run and its output committed (not assembled by hand from
+separate per-cell invocations); a subsequent isolated re-run of one
+cell (`python -u experiments/modq_spectrum.py fft 5+`) reproduced its
+section of the committed transcript exactly, character for character
+(the enumeration, top-20 table, hunt-6 numbers and check count all
+matched) -- consistent with the underlying computation being fully
+deterministic under the fixed seed (every count, residue, ratio and
+verdict; only wall-clock timing lines vary run to run). An earlier cut of the
+`all` phase was not wired up at all (a bare invocation printed a stub
+message and exited) — that stub is now removed. A second bug was found
+and fixed while wiring this up: `assemble()`'s own internal write to
+`experiments/modq_spectrum_output.txt` conflicted with the shell's
+redirection to the *same* path, truncating the file mid-stream (the
+first attempt at this fix produced a corrupted file with the compact
+summary overwritten into the middle of the transcript and garbage
+padding after it — caught before committing). `assemble()` now only
+prints; the standalone `assemble` CLI phase (for use against a
+separately pinned `MODQ_CACHE_DIR`) does the file-write itself, once,
+with no redirection race.
+
+The JSON cache defaults to a fresh `tempfile.mkdtemp()` directory every
+run (no hand-set path); set `MODQ_CACHE_DIR` to pin a location instead
+(e.g. to split the run across the per-cell CLI phases, or to inspect
+intermediate per-cell results).
+
+**Runtime: 1522.3s (25.4 minutes)** for the single-command run, under
+the brief's 45-minute cap — faster than the 1741.1s the same fourteen
+cells took as separate invocations in the first pass, because the
+exact (unreduced) `R_0` computation added for hunt 6 (table-lookup
+powers of 2 and 3, no per-term modular `pow()`) turned out to be ~4x
+faster than the modular-reduction path it replaced (benchmarked: 3.6s
+vs 15.5s enumerating `(17,+)`'s 2,042,975 profiles) — more than
+offsetting hunt 6's added vectorized cost. **124 checks, 0 failures**
+for the whole run (cell-table re-derivation, the four canaries,
+per-cell histogram/residue-range sanity, joint-table sums, and the
+mpmath-vs-FFT match at every exact-cell ghost-hunt candidate). The
+seven "large" cells keep the same `N_phi` sub-sample sizes as the
+first pass (`40,000` for `(17,-),(29,+-),(41,+-)`; `100,000` for
+`(22,+-)`) to stay under the runtime cap — kept, not tightened, per
+the brief's explicit allowance; see "Left open."
+
 `python experiments/encoding_scan.py`: **`RESULT: CLEAN`**.
 
 ## Definitions, as used
@@ -120,7 +182,7 @@ calibrates the floor formula itself rather than repeating it at every
 cell.
 
 **(iv) Sampler calibration at `(17,+)`.** Exact enumeration
-(2,042,975 profiles, 15.5s) against `10^6` sampler draws (13.6s, same
+(2,042,975 profiles, 15.6s) against `10^6` sampler draws (13.4s, same
 seed convention as the six sampled cells) at eight representative
 frequencies (`xi=1,2,3,5,7,11,100,1000`) plus the zero bin: the
 discrepancy between the exact and sampled `|phi|` stayed within
@@ -219,28 +281,50 @@ exception is `(12,+)`'s own cross-class candidate (`xi=161605`,
 ratio 6.31), already ghost-hunted and dissolved above by the same
 small-entry pushforward as its sibling candidates at that cell.
 
-## Every candidate's ghost-hunt (queue item 5)
+## Every candidate's ghost-hunt (queue item 5, plus hunt 6)
 
-Eleven candidate groups surfaced (class ratio `> 3x` floor),
-deduplicated by `<2,3>`-multiplicative-orbit relatedness (frequencies
-related by `xi2 == +-2^a 3^b xi1 (mod q)` are one signal, not several —
-e.g. the `low`, `monomial` and `orbit` classes at `(12,+)` all flag the
-*same* underlying peak and collapse to one representative). **All
-eleven dissolved; zero unexplained.**
+**Revised after coordinator review.** Thirteen candidate groups
+surfaced in total (eleven in the first pass; two more split out below).
+Eleven class-level candidates (ratio `> 3x` floor) were collapsed by
+`<2,3>`-multiplicative-orbit relatedness (frequencies related by
+`xi2 == +-2^a 3^b xi1 (mod q)` are one signal, not several) into nine
+groups, but the coordinator's review found this dedup test **too
+permissive at two cells**: at `(12,+)` and `(17,+)`, the `low` (or
+`monomial`) class's own candidate — which independently lands at
+`xi=+-1` at *every* cell, per hunt 6 below — happened to be
+`<2,3>`-related to a much larger, *unrelated* peak (`xi=201108` at
+`(12,+)`, `xi=31343` at `(17,+)`, both genuinely explained by the
+small-entry pushforward) purely because the dedup test's search range
+(`a<=24,b<=16`, both signs) is wide enough to find *some* small-exponent
+relation between many unrelated residue pairs at these moderately-sized
+`|q|`. Being `<2,3>`-related is an arithmetic coincidence test, not a
+shared-cause claim, and conflating the two here would have hidden the
+`xi=+-1` signal's real, different cause behind the pushforward's. Both
+are now split out and re-examined on their own. **All thirteen
+dissolved; zero unexplained** (nine originally, four relabeled and two
+split-and-explained by hunt 6 below).
 
 | cell | xi | classes | \|phi\| | ratio | cause |
 |---|---|---|---|---|---|
 | (12,+) | 201108 | low, monomial, orbit | 0.242 | 15.66 | small-entry pushforward (ratio -> 1.62x restricted) |
+| (12,+) | 517134 | monomial *(split from the 201108 group)* | 0.106 | 6.70 | **hunt 6, magnitude** (below) |
 | (12,+) | 161605 | cross | 0.094 | 6.31 | small-entry pushforward (ratio -> 1.02x) |
 | (12,+) | 416132 | random | 0.056 | 3.45 | small-entry pushforward (ratio -> 0.52x) |
 | (12,-) | 2193 | orbit, random | 0.088 | 3.42 | small-entry pushforward (ratio -> 0.42x) |
 | (17,+) | 31343 | low, monomial, orbit | 0.081 | 41.72 | small-entry pushforward (ratio -> 1.12x) |
+| (17,+) | 5077564 | monomial *(split from the 31343 group)* | 0.013 | 6.62 | **hunt 6, magnitude** (below) |
 | (17,+) | 4889808 | random | 0.028 | 13.61 | small-entry pushforward (ratio -> 1.08x) |
 | (17,+) | 4062052 | local | 0.010 | 5.89 | coincides with local:5^1 |
-| (17,-) | 62031298 | low, monomial, orbit | 0.148 | 10.39 | coincides with monomial:-2^0*3^0 |
-| (22,-) | 1 | low, monomial, orbit | 0.109 | 12.52 | coincides with monomial:+2^0*3^0 |
-| (29,-) | 1 | low, monomial, orbit | 0.100 | 7.22 | coincides with monomial:+2^0*3^0 |
-| (41,-) | 1 | low, monomial, orbit | 0.083 | 6.03 | coincides with monomial:+2^0*3^0 |
+| (17,-) | 62031298 | low, monomial, orbit | 0.148 | 10.39 | **hunt 6, magnitude** (relabeled; was "coincides with monomial:-2^0\*3^0") |
+| (22,-) | 1 | low, monomial, orbit | 0.109 | 12.52 | **hunt 6, magnitude** (relabeled; was "coincides with monomial:+2^0\*3^0") |
+| (29,-) | 1 | low, monomial, orbit | 0.100 | 7.22 | **hunt 6, magnitude** (relabeled; was "coincides with monomial:+2^0\*3^0") |
+| (41,-) | 1 | low, monomial, orbit | 0.083 | 6.03 | **hunt 6, magnitude** (relabeled; was "coincides with monomial:+2^0\*3^0") |
+
+Note `517134 = |q|-1` at `(12,+)` and `5077564 = |q|-1` at `(17,+)`:
+both are the conjugate of `xi=1` (`|phi(-1)|=|phi(1)|` for a real-valued
+histogram), i.e. the *same* magnitude-1 signal the coordinator's review
+names, reached via the `monomial` class's own reporting convention
+rather than the `low` class's.
 
 **The five hunts, applied in the brief's order, per candidate:**
 
@@ -254,12 +338,19 @@ eleven dissolved; zero unexplained.**
    concentrates residues; restricting away the small cases removes
    the effect).
 2. **The `(2^s-1)` orbit collapse / local-monomial character test**
-   (`classify_xi`): five of the eleven candidates *are* a local or
-   monomial character outright (`xi=4062052` at `(17,+)`: local:5^1;
-   `xi=62031298` at `(17,-)` and `xi=1` at each of `(22,-),(29,-),
-   (41,-)`: monomial:+-2^0*3^0 — the `12.6.1.6` mechanism, or the
-   trivial fact that `R_0`'s own formula is a sum of `2^a 3^b` terms)
-   — these dissolve immediately without needing hunt 1.
+   (`classify_xi`): seven of the thirteen candidates *classify* as a
+   local or monomial character outright: one, `xi=4062052` at `(17,+)`
+   (local:5^1), is a genuine cause — the `12.6.1.6` mechanism, no
+   further hunt needed. The other six — `xi=62031298` at `(17,-)`,
+   `xi=1` at each of `(22,-),(29,-),(41,-)`, and the two split
+   `xi=|q|-1` entries at `(12,+),(17,+)` — are all `monomial:+-2^0*3^0`.
+   **Revised**: a monomial label at `a=b=0` is true of `xi=+-1` by
+   definition and is a classification, not a cause on its own — the
+   coordinator's review caught this. These six are dissolved instead
+   by **hunt 6 (magnitude)** below, which supplies the actual
+   mechanism; hunt 2's classification is what correctly flagged them
+   as needing that separate hunt rather than hunt 1's small-entry
+   restriction.
 3. **Rotation multiplicity** (one representative per necklace,
    dropping the `p` unit-related rotations of each profile to a single
    canonical one): run on the six small-entry-pushforward candidates
@@ -274,11 +365,11 @@ eleven dissolved; zero unexplained.**
    rounded up to "confirmed by all hunts."
 4. **Sampler artifact**: N/A for the exact-cell candidates (full
    population, no sampling step); for the three sampled-cell
-   candidates (`(22,-),(29,-),(41,-)`, all already explained by (2)),
-   an independent re-sample at a fresh seed reproduces a comparable
-   `|phi|` (e.g. `(41,-)`: 0.088 vs the original 0.083) — consistent
-   with a real, reproducible monomial character rather than a
-   one-off sampling fluke, which is what (2) already established.
+   candidates (`(22,-),(29,-),(41,-)`, all `xi=+-1`), an independent
+   re-sample at a fresh seed reproduces a comparable `|phi|` (e.g.
+   `(41,-)`: 0.088 vs the original 0.083) — consistent with a real,
+   reproducible effect rather than a one-off sampling fluke (which
+   hunt 6 below then identifies as magnitude, not arithmetic).
 5. **Float rounding** (mpmath 50-digit recomputation over the exact
    cells' **full population** — not a truncated prefix, which would
    silently substitute a p-biased sub-population; fixed after an
@@ -293,7 +384,131 @@ eleven dissolved; zero unexplained.**
    not float rounding — stated explicitly rather than left ambiguous.
 
 No candidate needed all five hunts to dissolve; every one dissolved by
-hunt 1, 2, or both, with hunts 3-5 as independent confirmation.
+hunt 1, hunt 2 alone (one candidate), hunt 6 (six candidates, below),
+or a combination, with hunts 3-5 as independent confirmation where
+applicable.
+
+## Hunt 6 (magnitude) — coordinator review, 2026-09-08
+
+A label is a classification, not a cause: "coincides with a monomial
+`2^0*3^0` character" is trivially true of `xi=+-1` at *every* cell (it
+is the definition of the `a=b=0` monomial) and says nothing about why
+`|phi(1)|` is large. The coordinator's independent check with fresh
+code identifies the actual mechanism: `R_0`'s magnitude, not its
+residue's arithmetic. `R_0` is always positive (12.6.1's Proposition);
+write `R_0 = w\cdot|q| + r` with `w = R_0 // |q|` the number of times
+the numerator "wraps" the modulus and `r = R_0 mod |q|` the residue.
+At a good near-miss (`2^K` close to `3^n`, i.e. `2^gamma = 2^K/|q|`
+close to `1`), `w` is small — the profile lands within the first few
+multiples of `|q|` — and the *distribution of `w`* (a decaying profile
+over those first few multiples, the size condition's own shadow,
+12.6.1.3) forces `R_0/|q|`'s fractional part to be non-uniform too,
+because a profile's exact position within its wrap is correlated with
+which wrap it is in. This has **zero cross-prime content**: it is a
+statement about `R_0`'s size, not about any prime dividing `|q|`.
+
+**Table (a): `2^gamma`, wrap share, `|phi(1)|` and its floor, all
+fourteen cells** (own fresh code; `|phi(1)|`'s floor here is the
+single-frequency Rayleigh floor `1/sqrt(N)`, not the multi-frequency
+class floor `sqrt(ln(m)/N)` used elsewhere in this file — the right
+comparison for one named frequency, not a multiple-comparison-corrected
+class maximum):
+
+| n | shore | 2^gamma=2^K/\|q\| | share(wraps<=3) | \|phi(1)\| | floor=1/sqrt(N) | ratio |
+|---|---|---|---|---|---|---|
+| 5 | + | 19.69 | 0.400 | 0.3606 | 0.2582 | 1.40 |
+| 5 | - | 1.11 | 1.000 | 0.6821 | 0.4472 | 1.53 |
+| 7 | + | 2.15 | 0.967 | 0.1112 | 0.0690 | 1.61 |
+| 7 | - | 14.73 | 0.393 | 0.1061 | 0.1091 | 0.97 |
+| 12 | + | 2.03 | 0.815 | 0.1055 | 0.0056 | 18.83 |
+| 12 | - | 73.30 | 0.093 | 0.0040 | 0.0090 | 0.45 |
+| 17 | + | 26.43 | 0.152 | 0.0132 | 0.0007 | 18.91 |
+| 17 | - | 1.08 | 0.751 | 0.1453 | 0.0012 | 124.61 |
+| 22 | + | 11.54 | 0.214 | 0.0237 | 0.0010 | 23.70 |
+| 22 | - | 1.21 | 0.625 | 0.1111 | 0.0010 | 111.10 |
+| 29 | + | 40.48 | 0.086 | 0.0107 | 0.0010 | 10.74 |
+| 29 | - | 1.05 | 0.553 | 0.0994 | 0.0010 | 99.40 |
+| 41 | + | 87.74 | 0.044 | 0.0043 | 0.0010 | 4.32 |
+| 41 | - | 1.02 | 0.448 | 0.0772 | 0.0010 | 77.17 |
+
+Four of these fourteen rows reproduce the coordinator's independently-
+computed numbers essentially exactly: `(12,-)`: `2^gamma=73.3` (theirs)
+vs `73.30` (ours), share `9%` vs `9.3%`, `|phi(1)|=0.0040` vs `0.0040`,
+floor `0.0090` vs `0.0090`; `(17,+)`: `26.4`/`26.43`, `15%`/`15.2%`,
+`0.0132`/`0.0132`, `0.0007`/`0.0007`; `(12,+)`: `2.03`/`2.03`,
+`82%`/`81.5%`, `0.1055`/`0.1055`, `0.0056`/`0.0056`; `(17,-)`:
+`1.08`/`1.08`, `75%`/`75.1%`, `0.1453`/`0.1453`, `0.0012`/`0.0012` —
+the small differences are rounding on the "share" percentage only. The
+monotone relation the coordinator names is cleanest in **share**, which
+is `N`-independent: small `2^gamma` (near-misses:
+`(5,-),(7,+),(12,+),(17,-),(22,-),(29,-),(41,-)`, `2^gamma` in
+`[1.0,2.2]`) pairs with a high wrap share (`45%-100%`); large `2^gamma`
+(`(12,-),(29,+),(41,+)`, `2^gamma` in `[40,88]`) pairs with a low wrap
+share (`4%-9%`); `(5,+),(7,-),(22,+)` sit at intermediate `gamma`
+(`11.5-19.7`) and intermediate share (`21%-40%`). The **ratio** column
+tracks the same direction but is not cleanly monotone across cells by
+itself, because the floor `1/sqrt(N)` also varies enormously with `N`
+(exact cells range `N=5` to `2,042,975`; every sampled cell has
+`N=10^6`): `(12,-)` (low share `9.3%`, but `N=10^6`) sits at `0.45x`,
+*below* its floor — the cleanest single-cell confirmation that a large
+`N` alone does not manufacture a ratio; `(29,+),(41,+)` (also low share,
+`8.6%`/`4.4%`, also `N=10^6`) still show modest elevated ratios
+(`10.74x`,`4.32x`) despite the low share, because at `N=10^6` the floor
+itself is tiny (`0.0010`) and even a weak residual size-law imprint
+registers as several floor-widths. The ratio column is therefore a
+mix of the magnitude effect's strength (tracked cleanly by share) and
+sample size; the clean, single-cell, `N`-independent test for "is this
+magnitude" is the synthetic control in (b), not a cross-cell ratio
+comparison.
+
+**Synthetic control (b): keep the size law, discard the arithmetic.**
+For each profile, bin `x = R_0/|q|` at width `0.1` wraps (and,
+separately, at width `1.0` wraps); draw a synthetic `x'` uniformly
+within the *same* bin (own fresh code, `numpy.random.RandomState`,
+seeded); compute the synthetic `|phi(1)|` from `frac(x')` and compare
+to the measured value:
+
+| n | shore | synth(0.1 wrap) | synth(1.0 wrap) | \|diff\| @ 0.1 | reproduced? |
+|---|---|---|---|---|---|
+| 5 | + | 0.4348 | 0.1647 | 0.0742 | YES |
+| 5 | - | 0.6401 | 0.6492 | 0.0420 | YES |
+| 7 | + | 0.1183 | 0.0422 | 0.0071 | YES |
+| 7 | - | 0.1249 | 0.0318 | 0.0187 | YES |
+| 12 | + | 0.1048 | 0.0112 | 0.0007 | YES |
+| 12 | - | 0.0025 | 0.0048 | 0.0015 | YES |
+| 17 | + | 0.0134 | 0.0003 | 0.0001 | YES |
+| 17 | - | 0.1497 | 0.0011 | 0.0043 | YES |
+| 22 | + | 0.0238 | 0.0015 | 0.0001 | YES |
+| 22 | - | 0.1146 | 0.0015 | 0.0035 | YES |
+| 29 | + | 0.0107 | 0.0010 | 0.0000 | YES |
+| 29 | - | 0.1028 | 0.0010 | 0.0034 | YES |
+| 41 | + | 0.0046 | 0.0013 | 0.0003 | YES |
+| 41 | - | 0.0803 | 0.0013 | 0.0031 | YES |
+
+**All fourteen cells reproduce at 0.1-wrap resolution** ("reproduced"
+means the 0.1-wrap synthetic value sits within 30% of the measured
+value, or within one floor-width, whichever is larger — every one of
+the fourteen diffs above is well inside that band, several within
+`0.001` in absolute terms). The 1.0-wrap (whole-wrap) control degrades
+sharply at every near-miss cell (`(12,+)`: `0.0112` vs measured
+`0.1055`; `(17,-)`: `0.0011` vs `0.1453`; `(22,-)`: `0.0015` vs
+`0.1111`; `(29,-)`: `0.0010` vs `0.0994`; `(41,-)`: `0.0013` vs
+`0.0772`) — collapsing to near the population floor, because
+discarding *which fraction of a wrap* a profile sits in (not just
+which wrap) throws away exactly the information the harmonic needs.
+Read together, the two resolutions localize the effect precisely:
+**the harmonic lives at the scale of `|q|` (fractions of a wrap), not
+finer** — magnitude, not arithmetic. **Zero of the fourteen cells fail
+to reproduce**; none is a surviving candidate.
+
+**(c) Relabeling.** The four straightforward `xi=+-1` dissolutions
+(`(17,-),(22,-),(29,-),(41,-)`) and the two split-out ones
+(`(12,+),(17,+)`) are relabeled to hunt 6 (magnitude) in the table
+above, with the old "coincides with a monomial `2^0*3^0` character"
+line kept as the record of how it looked before this review (per the
+brief's own rule for a dissolved ghost: recorded with its cause, not
+deleted) — visible in the script's own printed verdict for each ("OLD
+LABEL ... RELABELED ...") and in `experiments/modq_spectrum_output.txt`.
 
 ## The three delta tables (queue item 6)
 
@@ -307,6 +522,15 @@ everything). From `(12,+)` up, an off-local-off-monomial maximum
 exists at every cell; three (`(12,+),(12,-),(17,+)`) are candidates,
 all ghost-hunted and dissolved above; the remaining seven sit at or
 near their floor (ratios 0.95x-1.69x). Full table in the output file.
+**Note on the harmonic:** by construction, this table excludes `xi=+-1`
+outright (`a=b=0` is always `monomial`), so hunt 6's magnitude effect
+never appears here — it lives entirely in the `monomial`/`low`/`orbit`
+classes this table's own "off-monomial" filter is designed to set
+aside, not in the `"other"`-typed residue captured by table (a). The
+two are complementary, not in tension: table (a) asks whether anything
+*besides* the known local/monomial/harmonic structure survives (no),
+and hunt 6 answers what the harmonic itself is (magnitude, not
+cross-prime arithmetic).
 
 **(b) The same, by `p`, at `(17,+)` and `(12,+-)`.** See "Per-period
 split" above for the local-5 decay; the off-local-off-monomial
@@ -330,21 +554,34 @@ from its permutation control.
 
 ## Verdict (queue item 7)
 
-**(i) Global structurelessness at this scale.** Every off-local,
-off-monomial class candidate across all fourteen cells — eleven
-candidate groups — dissolved under the five-step ghost-hunt discipline
-(five by coinciding with an already-known local/monomial character,
-six by the small-entry pushforward, all cross-confirmed by rotation
-dedup, resampling, or high-precision recomputation as applicable). The
-5-line shrinks with block count `p` at every FFT-eligible cell where
-`5 | q` (no such cell has `7 | q`, left open below). Every cross-prime
-joint law sits at or within sampling noise of its permutation-shuffled
-control at every one of 23 tested prime-power pairs across all
-fourteen cells; the theoretical null formula is reliable only when
-`N >> ell1^a ell2^b` and the permutation control is the operative
-check otherwise, stated explicitly at every pair in that regime. The
-joint law is as flat as the marginals the prime-local probe already
-found — no cross-prime leak, no local pinning, at this scale.
+**(i) Flat beyond the first harmonic at small-gamma cells, whose cause
+is magnitude.** Every off-local, off-monomial class candidate across
+all fourteen cells — thirteen candidate groups in total — dissolves
+under the ghost-hunt discipline: seven by coinciding with a known
+local/monomial character (one genuinely, `local:5^1`; six of those
+seven relabeled to hunt 6, magnitude, below), six by the small-entry
+pushforward (`briefs/prime-local-probe-findings.md`'s own dissolved-
+ghost mechanism), cross-confirmed by rotation dedup, resampling, or
+high-precision recomputation as applicable. **Every one of the
+fourteen cells' `xi=+-1` harmonic is explained by hunt 6**: the
+residue inherits the shape of `R_0`'s own size law, `2^gamma=2^K/|q|`
+(the near-miss quality itself, 12.6.1.3) — small `2^gamma` (a good
+near-miss) forces most profiles into the first few multiples of `|q|`,
+and a synthetic control that keeps only the coarse size (which
+`0.1`-wrap bin a profile falls in) and discards everything finer
+reproduces the measured `|phi(1)|` at all fourteen cells, degrading
+sharply at the coarser `1.0`-wrap resolution — localizing the effect
+to the scale of `|q|`, with zero cross-prime content. The 5-line
+shrinks with block count `p` at every FFT-eligible cell where `5 | q`
+(matches 12.6.1.6; no such cell has `7 | q`, left open below). Every
+cross-prime joint law sits at or within sampling noise of its
+permutation-shuffled control at every one of 23 tested prime-power
+pairs across all fourteen cells; the theoretical null formula is
+reliable only when `N >> ell1^a ell2^b` and the permutation control is
+the operative check otherwise, stated explicitly at every pair in that
+regime. **Beyond the one harmonic**, the joint law is as flat as the
+marginals the prime-local probe already found — no cross-prime leak,
+no local pinning, at this scale.
 
 The front stays parked either way (README stopping rules; cycles.md
 12.8.5). **Excludes nothing** — stated once, per the brief's register
@@ -369,19 +606,30 @@ family") and changes no front's status.
   own `|q| <= 10^7` cutoff for item 2, not an omission.
 - **The frequency-domain sub-sample reduction.** For `(17,-)` and the
   six sampled cells, item 3's selected-frequency sum used a
-  sub-sample of `N_phi = 40,000` (`100,000` for `(17,-),(22,+),(22,-)`)
+  sub-sample of `N_phi = 40,000` (`100,000` for `(22,+),(22,-)`)
   drawn from the full `N=10^6` population/full enumeration, rather
   than the full population — direct per-frequency summation at
   `N=10^6` was benchmarked at `~0.14s/frequency`, and these seven
   cells' selected-frequency classes total roughly `10,000-17,000`
   frequencies each, which would have cost `~25-40` minutes *per cell*
-  at full `N`; the zero-bin and joint-law statistics (items 1 and 4)
-  use the full population throughout, never the sub-sample. Stated
-  per the brief's runtime-cap allowance (item, Record); a rerun at
-  larger `N_phi` would tighten these seven cells' floors but is not
-  expected to change the verdict, since every candidate there already
-  dissolved by classification (hunt 2) rather than by a floor-
-  dependent argument.
+  at full `N`; the zero-bin, joint-law and hunt-6 (magnitude)
+  statistics all use the full population throughout, never the
+  sub-sample. Stated per the brief's runtime-cap allowance; these same
+  `N_phi` values are now the fixed, reproducible choice baked into the
+  `all` phase (`LARGE_CELL_PHI_N` in the script) so the single-command
+  run stays under the 45-minute cap (**1522.3s = 25.4 minutes**
+  measured) — kept rather than tightened, per the coordinator's
+  explicit allowance. A rerun at larger `N_phi` would tighten these
+  seven cells' floors but is not expected to change the verdict, since
+  every candidate there already dissolved by hunt 6 (magnitude, using
+  the FULL population) or hunt 1 (small-entry pushforward) rather than
+  by a floor-dependent argument on the sub-sample itself.
+- **Hunt 6's resolution is `0.1` and `1.0` wraps only**, per the
+  coordinator's specification — not a finer grid. All fourteen cells
+  reproduce cleanly at `0.1` wraps, so a finer grid was not needed to
+  reach a verdict here, but it was not tried, and a genuinely finer-
+  than-`0.1`-wrap structure (if any existed) would not have been
+  caught by this test.
 - **Classes beyond the brief's stated caps:** the monomial search
   range (`a<=64,b<=40`) and the cross-prime `j_i<=30` cap are the
   brief's own bounds, not extended; a genuinely "other" peak could in
