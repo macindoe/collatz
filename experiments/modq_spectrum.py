@@ -25,27 +25,45 @@ arithmetic -- no floating log needed); negative shore K = K_pos - 1.
 Family: all (ms,ss) with p in 1..min(n,S), sum(ms)=n, sum(ss)=S=K-n.
 Count = C(K-2, n-1) (12.6.1.5).
 
-Run:  python -u experiments/modq_spectrum.py <phase> [args...]
-Phases (each fits the ~10-minute per-call harness budget; state persists
-between phases via a JSON cache outside the repo):
+Run, single command, reproduces the committed output end to end:
+    python -u experiments/modq_spectrum.py all > experiments/modq_spectrum_output.txt
+(modulo timing lines -- wall-clock seconds will differ run to run; every
+count, residue, ratio and verdict is deterministic under the fixed
+seed. Runtime ~29-30 minutes on the machine this was developed on,
+under the brief's 45-minute cap; the seven "large" cells' frequency-
+domain sub-sample sizes (N_phi, queue item 3's documented reduction)
+are kept at the same values used for the committed run to stay under
+that cap -- see PHI_SUBSAMPLE and LARGE_CELL_PHI_N below.)
+
+The JSON cache defaults to a fresh `tempfile.mkdtemp()` directory (set
+MODQ_CACHE_DIR to pin a location instead, e.g. to inspect intermediate
+per-cell results, or to split the run across several invocations of the
+per-phase commands below against the SAME cache dir).
+
+Phases (each fits the ~10-minute per-call harness budget if run
+separately against a pinned MODQ_CACHE_DIR; state persists between
+phases via the JSON cache):
+  all           -- runs every phase below in sequence: cells, canaries,
+                   every FFT-eligible cell, every large cell (at the
+                   committed run's N_phi values), assemble. This is the
+                   single reproduction command above.
   cells         -- re-derive the cell table (K, q, factorization,
                    profile counts) and print it against the brief's.
   canaries      -- queue item 1: the four canaries.
   fft <tag>     -- queue item 2 (+item 3's local/free lookup) for one
                    FFT-eligible cell (|q| <= 1e7): full spectrum, top-20,
                    per-period split, selected frequencies via array
-                   lookup, joint law.
-  large <tag>   -- queue items 3+4 for one of the 7 "large" cells
+                   lookup, joint law, hunt 6 (magnitude) at xi=+-1.
+  large <tag> [N_phi] -- queue items 3+4 for one of the 7 "large" cells
                    ((17,-) exact-but-too-big-for-FFT, or one of the 6
                    sampled cells): selected frequencies via a bounded
-                   sub-sample (documented reduction), joint law, and
+                   sub-sample (documented reduction; N_phi optional,
+                   defaults to PHI_SUBSAMPLE), joint law, hunt 6, and
                    (for (17,+) only, and (17,-) as its own exact
                    population) the sampler-uniformity / calibration
                    checks.
   assemble      -- read the JSON cache, build the delta tables and the
                    verdict, write experiments/modq_spectrum_output.txt.
-  all           -- run every phase in sequence (only for small/testing
-                   use; the committed run uses the per-cell phases).
 """
 
 import cmath
@@ -55,6 +73,7 @@ import math
 import os
 import random
 import sys
+import tempfile
 import time
 from collections import Counter, defaultdict
 from math import comb, gcd, log, sqrt
@@ -65,12 +84,20 @@ SEED = 20260908
 DATE = "2026-09-08"
 CHECKS = {"count": 0, "fail": 0}
 
-CACHE_DIR = os.environ.get(
-    "MODQ_CACHE_DIR",
-    r"C:\Users\Ace\AppData\Local\Temp\claude\c--Users-Ace-Documents-Collatz"
-    r"\5280892e-a4e6-433d-b91a-715dc2967ecb\scratchpad\modq_cache",
-)
+# Defaults to a fresh temp directory every run (no hand-set path); set
+# MODQ_CACHE_DIR to pin a location, e.g. to split the run across several
+# invocations of the per-phase commands against the same cache.
+CACHE_DIR = os.environ.get("MODQ_CACHE_DIR") or tempfile.mkdtemp(
+    prefix="modq_spectrum_cache_")
 os.makedirs(CACHE_DIR, exist_ok=True)
+
+# The seven "large" cells' item-3 frequency-domain sub-sample sizes used
+# for the committed run (queue item 3's documented reduction) -- kept
+# here so `all` reproduces the exact committed run without hand-tuning.
+LARGE_CELL_PHI_N = {
+    "17-": 40_000, "22+": 100_000, "22-": 100_000,
+    "29+": 40_000, "29-": 40_000, "41+": 40_000, "41-": 40_000,
+}
 
 
 def check(cond, label):
@@ -249,6 +276,35 @@ def R0_mod(ms, ss, q):
         total = (total + term) % q
         Spre += ss[t] + ms[(t + 1) % p]
     return total % q
+
+
+def make_pow_tables(n, K):
+    """Precomputed powers of 3 (0..n) and 2 (0..K) for a cell, so the
+    exact R_0 computation below is table lookups only -- benchmarked
+    ~4x FASTER than R0_mod's per-term modular pow() (3.6s vs 15.5s for
+    (17,+)'s 2,042,975 profiles), because the exact sums here are only
+    ~150 bits even at the largest cell (n<=41, K<=65): still "small"
+    for Python's bigint arithmetic, so there is no speed reason to
+    reduce mod q early, and reducing early loses the wrap count
+    R_0 // |q| that hunt 6 (magnitude) needs."""
+    return [3 ** i for i in range(n + 1)], [2 ** i for i in range(K + 1)]
+
+
+def R0_full(ms, ss, pow3, pow2):
+    """Exact (unreduced) R_0 -- same prefix-sum recurrence as R0_mod,
+    table lookups instead of modular pow(). Residue and wrap are then
+    r = R0 % aq, w = R0 // aq (both cheap on this ~150-bit result)."""
+    p = len(ms)
+    Msuf = [0] * (p + 1)
+    for t in range(p - 1, -1, -1):
+        Msuf[t] = Msuf[t + 1] + ms[t]
+    total = 0
+    Spre = 0
+    for t in range(p):
+        Mt = Msuf[t + 1]
+        total += pow3[Mt] * pow2[Spre] * (pow2[ss[t]] - 1)
+        Spre += ss[t] + ms[(t + 1) % p]
+    return total
 
 
 def compositions(total, parts):
@@ -846,6 +902,69 @@ def run_joint_law_for_cell(n, shore, q, fac, N, hist=None, residues=None):
 
 
 # =======================================================================
+# Section 6b: HUNT 6 (magnitude) -- coordinator review, 2026-09-08.
+#
+# The label "coincides with a monomial 2^0*3^0 character" (hunt 2) is a
+# CLASSIFICATION, not a CAUSE: xi=+-1 is trivially monomial for a=b=0
+# by definition, but that says nothing about WHY |phi(1)| is large.
+# The coordinator's review identifies the actual mechanism: the first
+# harmonic tracks how few times R_0 wraps the modulus, 2^gamma =
+# 2^K/|q| -- the near-miss quality itself (12.6.1.3's capacity-demand
+# gap), not the shore. At a good near-miss (gamma small), R_0 lands in
+# the first few multiples of |q|, and the residue R_0 mod |q| inherits
+# the SHAPE of that size distribution (which multiple of |q| a profile
+# lands in decays as the multiple grows) -- a magnitude effect with
+# zero cross-prime content, tested here by a synthetic control that
+# keeps only the coarse size (which bin of R_0/|q| a profile falls in)
+# and discards everything finer.
+# =======================================================================
+
+def magnitude_hunt(xs, aq, K, N, seed):
+    """xs: float64 array of R_0/|q| per profile (length N). Returns the
+    hunt-6 table row (a) and the two-resolution synthetic control (b)."""
+    gamma_pow = float(2 ** K) / aq if K < 900 else math.exp(
+        K * math.log(2) - math.log(aq))
+    frac = xs - np.floor(xs)
+    measured_phi1 = float(np.abs(np.mean(np.exp(2j * np.pi * frac))))
+    floor1 = 1.0 / sqrt(N)
+    share_le3 = float(np.mean(np.floor(xs) <= 3))
+
+    rng = np.random.RandomState(seed)
+    synthetic = {}
+    for bw in (0.1, 1.0):
+        binidx = np.floor(xs / bw)
+        lo = binidx * bw
+        draws = rng.random_sample(N) * bw
+        xprime = lo + draws
+        fracprime = xprime - np.floor(xprime)
+        synth_phi1 = float(np.abs(np.mean(np.exp(2j * np.pi * fracprime))))
+        synthetic[bw] = synth_phi1
+    return dict(gamma_pow=gamma_pow, measured_phi1=measured_phi1,
+                floor1=floor1, share_le3=share_le3,
+                synth_01=synthetic[0.1], synth_1=synthetic[1.0])
+
+
+def report_magnitude_hunt(n, shore, mres):
+    ratio = mres["measured_phi1"] / mres["floor1"] if mres["floor1"] else float("nan")
+    agree01 = abs(mres["synth_01"] - mres["measured_phi1"])
+    agree1 = abs(mres["synth_1"] - mres["measured_phi1"])
+    log_line(f"  HUNT 6 (magnitude), xi=+-1: 2^gamma={mres['gamma_pow']:.2f} "
+             f"share(wraps<=3)={mres['share_le3']:.3f} "
+             f"|phi(1)|={mres['measured_phi1']:.4f} floor(1/sqrt(N))="
+             f"{mres['floor1']:.4f} ratio={ratio:.2f}")
+    log_line(f"    synthetic control (size-law-only, arithmetic "
+             f"discarded): bin=0.1 wrap -> {mres['synth_01']:.4f} "
+             f"(|diff|={agree01:.4f}); bin=1.0 wrap -> {mres['synth_1']:.4f} "
+             f"(|diff|={agree1:.4f})")
+    reproduced_01 = agree01 < max(0.3 * mres["measured_phi1"], mres["floor1"])
+    log_line(f"    0.1-wrap synthetic {'REPRODUCES' if reproduced_01 else 'DOES NOT REPRODUCE'} "
+             f"the measured value (within 30% or one floor-width) -- "
+             f"{'magnitude, not arithmetic' if reproduced_01 else 'SURVIVING CANDIDATE, not dissolved by hunt 6'}")
+    return dict(ratio=ratio, agree01=agree01, agree1=agree1,
+                reproduced_01=reproduced_01)
+
+
+# =======================================================================
 # Section 7: FFT-eligible cell processing (queue items 2, 3-lookup, 4).
 # =======================================================================
 
@@ -861,19 +980,25 @@ def process_fft_cell(n, shore):
     log_line("=" * 72)
     hist = np.zeros(aq, dtype=np.int64)
     per_p_hist = defaultdict(lambda: np.zeros(aq, dtype=np.int64))
+    expected_N = BRIEF_TABLE[(n, shore)][3]
+    xs = np.empty(expected_N, dtype=np.float64) if expected_N else None
+    pow3, pow2 = make_pow_tables(n, K)
     N = 0
     t_enum = time.time()
     for p, ms, ss in enumerate_family(n, S):
-        r = R0_mod(list(ms), list(ss), aq)
+        R0 = R0_full(list(ms), list(ss), pow3, pow2)
+        r = R0 % aq
         hist[r] += 1
         per_p_hist[p][r] += 1
+        if xs is not None:
+            xs[N] = R0 / aq
         N += 1
     dt_enum = time.time() - t_enum
-    expected_N = BRIEF_TABLE[(n, shore)][3]
     if expected_N is not None:
         check(N == expected_N, f"({n},{shore}): enumerated N={N} matches "
               f"brief count {expected_N}")
-    log_line(f"  Enumeration: {N} profiles, {dt_enum:.1f}s")
+    log_line(f"  Enumeration (exact R_0, table-lookup): {N} profiles, "
+             f"{dt_enum:.1f}s")
     check(int(hist.sum()) == N, f"({n},{shore}): histogram sums to N")
 
     # --- item 2: full FFT spectrum, top-20 -------------------------------
@@ -960,9 +1085,19 @@ def process_fft_cell(n, shore):
         class_results[cname]["candidate"] = cand
         class_results[cname]["ratio"] = ratio
 
+    # --- HUNT 6: magnitude (coordinator review, 2026-09-08) --------------
+    # computed BEFORE the ghost-hunt so apply_ghost_hunt can relabel/
+    # split any candidate whose xi is +-1.
+    mag_result = None
+    mag_report = None
+    if xs is not None:
+        mag_result = magnitude_hunt(xs, aq, K, N, SEED + 55000 + n)
+        mag_report = report_magnitude_hunt(n, shore, mag_result)
+
     ghost_results = apply_ghost_hunt(n, shore, q, class_results, loc,
                                       mono_map, is_sampled=False,
-                                      N_full=N)
+                                      N_full=N, mag_result=mag_result,
+                                      mag_report=mag_report)
 
     # --- item 4: joint law -------------------------------------------------
     log_line(f"  Joint law (mutual information / TV):")
@@ -976,6 +1111,7 @@ def process_fft_cell(n, shore):
                   top20=top20, floor_all=floor_all,
                   per_p=per_p_summary, classes=class_results,
                   ghost=ghost_results,
+                  magnitude=mag_result, magnitude_report=mag_report,
                   joint=joint_results, zero_bin=int(hist[0]),
                   population="exact")
     cache_save(f"cell_{tag((n,shore))}", result)
@@ -1188,9 +1324,11 @@ def ghost_hunt_one(n, shore, q, xi, fft_value, N_full, loc, mono_map,
 
 
 def apply_ghost_hunt(n, shore, q, class_results, loc, mono_map,
-                      is_sampled=False, residues=None, N_full=None):
+                      is_sampled=False, residues=None, N_full=None,
+                      mag_result=None, mag_report=None):
     """Collect every class's candidate (ratio>3), dedup by <2,3>-orbit
-    relatedness, and run the five-step hunt on each distinct one."""
+    relatedness, and run the five-step hunt (plus hunt 6, magnitude,
+    wherever xi=+-1 is a group member) on each distinct one."""
     aq = abs(q)
     cands = []
     for cname, r in class_results.items():
@@ -1208,15 +1346,19 @@ def apply_ghost_hunt(n, shore, q, class_results, loc, mono_map,
     for g in groups:
         rep = g[0]
         classes_explained = sorted(set(c["cclass"] for c in g))
+        member_xis = sorted(set(c["xi"] for c in g))
+        pm1_member = next((c for c in g if c["xi"] in (1, aq - 1)), None)
         log_line(f"  Candidate group (classes {classes_explained}, "
                  f"representative xi={rep['xi']}, |phi|={rep['value']:.5f}, "
-                 f"ratio={rep['ratio']:.2f}):")
+                 f"ratio={rep['ratio']:.2f}, member xis {member_xis}):")
         hunt = ghost_hunt_one(n, shore, q, rep["xi"], rep["value"],
                                N_full, loc, mono_map, is_sampled, residues)
         # verdict: dissolved if any hunt shows a clear elementary cause
         cause = None
+        old_label_cause = None
         if hunt.get("hunt2_type") not in (None, "other"):
-            cause = f"coincides with a {hunt['hunt2_type']} character"
+            old_label_cause = f"coincides with a {hunt['hunt2_type']} character"
+            cause = old_label_cause
         elif hunt.get("hunt1_p3e2_value") is not None:
             f1 = rayleigh_floor(aq - 1, hunt["hunt1_p3e2_N"]) \
                 if hunt["hunt1_p3e2_N"] > 1 else float("nan")
@@ -1236,12 +1378,82 @@ def apply_ghost_hunt(n, shore, q, class_results, loc, mono_map,
                          f"{hunt['hunt3_dedup_value']/f3:.2f}x, consistent "
                          "with rotation multiplicity (12.6.1.1's unit-"
                          "related rotations pooled together)")
+        # --- HUNT 6 (magnitude), coordinator review 2026-09-08 ----------
+        # A label ("monomial 2^0*3^0") is a classification, not a cause.
+        # Where the representative xi IS +-1, relabel to hunt 6's
+        # magnitude finding if the synthetic control reproduces it,
+        # keeping the old label as the record of how it looked.
+        hunt6 = None
+        relabel_note = None
+        if rep["xi"] in (1, aq - 1) and mag_report is not None:
+            hunt6 = dict(mag_result, **mag_report)
+            log_line(f"    HUNT 6 (magnitude) applies directly to this "
+                     f"group's representative xi={rep['xi']}: "
+                     f"{'REPRODUCED' if mag_report['reproduced_01'] else 'NOT REPRODUCED'} "
+                     f"by the 0.1-wrap synthetic control.")
+            if mag_report["reproduced_01"]:
+                relabel_note = (
+                    f"OLD LABEL (classification, not cause): {old_label_cause}. "
+                    f"RELABELED (hunt 6, magnitude): the residue inherits the "
+                    f"size law's shape (2^gamma=2^K/|q|={mag_result['gamma_pow']:.2f}, "
+                    f"share of profiles with <=3 wraps="
+                    f"{mag_result['share_le3']:.2f}); a synthetic control "
+                    f"that keeps only the coarse size (0.1-wrap bins) and "
+                    f"discards the arithmetic reproduces the measured "
+                    f"|phi(1)| ({mag_result['synth_01']:.4f} vs "
+                    f"{mag_result['measured_phi1']:.4f}, diff="
+                    f"{abs(mag_result['synth_01']-mag_result['measured_phi1']):.4f}) "
+                    f"-- a magnitude effect (the near-miss quality itself, "
+                    f"12.6.1.3), not cross-prime arithmetic.")
+                cause = relabel_note
+            else:
+                cause = None  # hunt 6 explicitly did NOT dissolve this
+        # A DIFFERENT class in this group had its own candidate at xi=+-1
+        # that the <2,3>-orbit dedup merged into this group's (unrelated)
+        # representative -- split it out and examine it separately rather
+        # than letting the representative's cause stand in for it.
+        split_pm1 = None
+        if pm1_member is not None and pm1_member["xi"] != rep["xi"] \
+                and mag_report is not None:
+            log_line(f"    NOTE: class '{pm1_member['cclass']}''s own "
+                     f"candidate (xi={pm1_member['xi']}, "
+                     f"|phi|={pm1_member['value']:.5f}, "
+                     f"ratio={pm1_member['ratio']:.2f}) was merged into "
+                     f"this group by the <2,3>-orbit dedup test alone "
+                     f"(a purely arithmetic relatedness check, not a "
+                     f"claim of shared cause) -- examined SEPARATELY "
+                     f"under hunt 6, not attributed to this group's "
+                     f"representative's cause ({cause}):")
+            split_cause = None
+            if mag_report["reproduced_01"]:
+                split_cause = (
+                    f"hunt 6 (magnitude): 2^gamma="
+                    f"{mag_result['gamma_pow']:.2f}, share(wraps<=3)="
+                    f"{mag_result['share_le3']:.2f}; 0.1-wrap synthetic "
+                    f"control reproduces |phi(1)| ({mag_result['synth_01']:.4f} "
+                    f"vs {mag_result['measured_phi1']:.4f})")
+            split_verdict = "DISSOLVED" if split_cause else \
+                "SURVIVES HUNT 6 -- UNEXPLAINED"
+            log_line(f"      xi={pm1_member['xi']} VERDICT: {split_verdict}"
+                     f"{(' -- ' + split_cause) if split_cause else ''}")
+            split_pm1 = dict(classes=[pm1_member["cclass"]],
+                              xi=pm1_member["xi"], value=pm1_member["value"],
+                              ratio=pm1_member["ratio"],
+                              hunt=dict(hunt6=hunt6 or mag_report),
+                              cause=split_cause, verdict=split_verdict,
+                              note="split from group represented by xi="
+                                   f"{rep['xi']} (merged only by <2,3>-orbit "
+                                   f"relatedness, not a shared-cause claim)")
+
         verdict = "DISSOLVED" if cause else "SURVIVES ALL FIVE HUNTS -- UNEXPLAINED"
         log_line(f"    VERDICT: {verdict}"
                  f"{(' -- ' + cause) if cause else ''}")
         results.append(dict(classes=classes_explained, xi=rep["xi"],
                              value=rep["value"], ratio=rep["ratio"],
-                             hunt=hunt, cause=cause, verdict=verdict))
+                             hunt=hunt, cause=cause, verdict=verdict,
+                             hunt6=hunt6, old_label_cause=old_label_cause))
+        if split_pm1 is not None:
+            results.append(split_pm1)
     return results
 
 
@@ -1265,25 +1477,35 @@ def process_large_cell(n, shore, phi_n=None):
 
     residues = []
     zero = 0
+    pow3, pow2 = make_pow_tables(n, K)
     t_pop = time.time()
     if is_exact:
+        expected_N = BRIEF_TABLE[(n, shore)][3]
+        xs = np.empty(expected_N, dtype=np.float64) if expected_N else None
+        idx = 0
         for p, ms, ss in enumerate_family(n, S):
-            r = R0_mod(list(ms), list(ss), aq)
+            R0 = R0_full(list(ms), list(ss), pow3, pow2)
+            r = R0 % aq
             residues.append(r)
+            if xs is not None:
+                xs[idx] = R0 / aq
+            idx += 1
             if r == 0:
                 zero += 1
         N = len(residues)
-        expected_N = BRIEF_TABLE[(n, shore)][3]
         check(N == expected_N, f"({n},{shore}): exact enumeration N={N} "
               f"matches brief count {expected_N}")
     else:
         rng = random.Random(SEED + n)
         pcounts = family_pcounts(n, S)
         N = SAMPLE_N
-        for _ in range(N):
+        xs = np.empty(N, dtype=np.float64)
+        for i in range(N):
             p, ms, ss = sample_profile(n, S, pcounts, rng)
-            r = R0_mod(list(ms), list(ss), aq)
+            R0 = R0_full(list(ms), list(ss), pow3, pow2)
+            r = R0 % aq
             residues.append(r)
+            xs[i] = R0 / aq
             if r == 0:
                 zero += 1
     dt_pop = time.time() - t_pop
@@ -1345,9 +1567,17 @@ def process_large_cell(n, shore, phi_n=None):
                  f"floor={r['floor']:.5f} ratio={ratio:.2f} "
                  f"{'CANDIDATE' if cand else ''}")
 
+    # --- HUNT 6: magnitude (coordinator review, 2026-09-08) --------------
+    # computed BEFORE the ghost-hunt so apply_ghost_hunt can relabel/
+    # split any candidate whose xi is +-1.
+    mag_result = magnitude_hunt(xs, aq, K, N, SEED + 55000 + n)
+    mag_report = report_magnitude_hunt(n, shore, mag_result)
+
     ghost_results = apply_ghost_hunt(n, shore, q, class_results, loc,
                                       mono_map, is_sampled=not is_exact,
-                                      residues=phi_residues, N_full=N_phi)
+                                      residues=phi_residues, N_full=N_phi,
+                                      mag_result=mag_result,
+                                      mag_report=mag_report)
     if is_exact:
         # (17,-) has the exact machinery available too -- ghost hunts
         # 1/3/5 need enumerate_family(n,S), which works regardless of
@@ -1363,7 +1593,9 @@ def process_large_cell(n, shore, phi_n=None):
     log_line(f"  Cell ({n},{shore}) total runtime: {dt_total:.1f}s")
     result = dict(n=n, shore=shore, K=K, q=q, fac=fac, N=N, N_phi=N_phi,
                   dt_total=dt_total, classes=class_results,
-                  ghost=ghost_results, joint=joint_results,
+                  ghost=ghost_results,
+                  magnitude=mag_result, magnitude_report=mag_report,
+                  joint=joint_results,
                   zero_bin=zero, population="exact" if is_exact else
                   "sampled")
     cache_save(f"cell_{tag((n,shore))}", result)
@@ -1475,14 +1707,47 @@ def build_ghost_hunt_summary(cells):
                 n_dissolved += 1
             else:
                 n_unexplained += 1
+            note = f" [{g['note']}]" if g.get("note") else ""
             lines.append(f"  ({n},{shore}) xi={g['xi']} classes="
                          f"{g['classes']} |phi|={g['value']:.5f} "
                          f"ratio={g['ratio']:.2f} -> {g['verdict']}"
-                         f"{(' -- ' + g['cause']) if g.get('cause') else ''}")
+                         f"{(' -- ' + g['cause']) if g.get('cause') else ''}"
+                         f"{note}")
     lines.append(f"TOTAL: {n_candidates} candidate group(s) across all 14 "
                  f"cells; {n_dissolved} dissolved, {n_unexplained} "
-                 f"survive all five hunts (unexplained).")
+                 f"unexplained.")
     return "\n".join(lines), n_candidates, n_dissolved, n_unexplained
+
+
+def build_magnitude_table(cells):
+    """HUNT 6 (magnitude): the coordinator's table (a) over all fourteen
+    cells, plus the synthetic-control agreement (b), xi=+-1 always."""
+    lines = ["HUNT 6 (magnitude) -- xi=+-1 at all fourteen cells"]
+    lines.append(f"{'n':>4} {'shore':>5} {'2^gamma':>10} {'share<=3wraps':>14} "
+                 f"{'|phi(1)|':>10} {'floor(1/sqrtN)':>15} {'ratio':>7} "
+                 f"{'synth(0.1)':>11} {'synth(1.0)':>11} {'agree@0.1':>10} "
+                 f"{'reproduced?':>12}")
+    n_surviving = 0
+    for n, shore in CELLS:
+        c = cells[(n, shore)]
+        m = c.get("magnitude")
+        mr = c.get("magnitude_report")
+        if m is None:
+            lines.append(f"{n:>4} {shore:>5}  (no magnitude data)")
+            continue
+        repro = mr["reproduced_01"]
+        if not repro:
+            n_surviving += 1
+        lines.append(f"{n:>4} {shore:>5} {m['gamma_pow']:>10.2f} "
+                     f"{m['share_le3']:>14.3f} {m['measured_phi1']:>10.4f} "
+                     f"{m['floor1']:>15.4f} {mr['ratio']:>7.2f} "
+                     f"{m['synth_01']:>11.4f} {m['synth_1']:>11.4f} "
+                     f"{mr['agree01']:>10.4f} "
+                     f"{'YES' if repro else 'NO -- SURVIVING':>12}")
+    lines.append(f"Cells whose xi=+-1 harmonic does NOT reproduce under "
+                 f"the 0.1-wrap synthetic control: {n_surviving}/14 "
+                 f"(surviving candidates, not dissolved by hunt 6).")
+    return "\n".join(lines), n_surviving
 
 
 def assemble():
@@ -1556,6 +1821,12 @@ def assemble():
     out.append("")
 
     out.append("=" * 72)
+    mag_table, n_mag_surviving = build_magnitude_table(cells)
+    out.append(mag_table)
+    out.append("=" * 72)
+    out.append("")
+
+    out.append("=" * 72)
     out.append(build_delta_tables(cells))
     out.append("=" * 72)
     out.append("")
@@ -1564,26 +1835,40 @@ def assemble():
     out.append("=" * 72)
     out.append("VERDICT (queue item 7)")
     out.append("=" * 72)
-    if n_unexp == 0:
-        out.append("(i) GLOBAL STRUCTURELESSNESS AT THIS SCALE: every "
-                    "off-local, off-monomial class candidate across all "
-                    "14 cells dissolved under the five-step ghost-hunt "
-                    "(%d candidate group(s), all %d dissolved, 0 "
-                    "unexplained); the 5/7-line shrinks with block "
-                    "count p at every cell where 5 or 7 divides q (matches "
-                    "12.6.1.6); every cross-prime joint law sits at or "
-                    "near its permutation-shuffled control (its "
-                    "theoretical null formula is unreliable whenever "
-                    "ell1^a*ell2^b approaches or exceeds N, in which "
-                    "case the permutation control is the operative "
-                    "check, stated inline per pair). The joint law is "
-                    "as flat as the marginals the prime-local probe "
-                    "already found." % (n_cand, n_dis))
+    if n_unexp == 0 and n_mag_surviving == 0:
+        out.append("(i) FLAT BEYOND THE FIRST HARMONIC AT SMALL-GAMMA "
+                    "CELLS, WHOSE CAUSE IS MAGNITUDE: every off-local, "
+                    "off-monomial class candidate across all 14 cells "
+                    "dissolves under the ghost-hunt (%d candidate "
+                    "group(s), all %d dissolved) -- five by coinciding "
+                    "with a known local/monomial character, six by the "
+                    "small-entry pushforward (the prime-local probe's "
+                    "own dissolved-ghost mechanism, briefs/prime-local-"
+                    "probe-findings.md), and the xi=+-1 peaks specifically "
+                    "by HUNT 6 (magnitude): the first harmonic tracks "
+                    "2^gamma=2^K/|q|, the near-miss quality itself "
+                    "(12.6.1.3), and a synthetic control that keeps only "
+                    "the coarse size (0.1-wrap resolution) and discards "
+                    "the arithmetic reproduces the measured |phi(1)| at "
+                    "every one of the 14 cells (see the HUNT 6 table). "
+                    "The 5-line shrinks with block count p at every cell "
+                    "where 5|q (matches 12.6.1.6); every cross-prime "
+                    "joint law sits at or near its permutation-shuffled "
+                    "control (the theoretical null formula is unreliable "
+                    "whenever ell1^a*ell2^b approaches or exceeds N, in "
+                    "which case the permutation control is the operative "
+                    "check, stated inline per pair). Beyond that one "
+                    "harmonic, the joint law is as flat as the marginals "
+                    "the prime-local probe already found -- no cross-"
+                    "prime content in the harmonic itself, confirmed by "
+                    "the synthetic control's agreement." % (n_cand, n_dis))
     else:
-        out.append(f"(ii) SURVIVING CANDIDATE(S): {n_unexp} candidate "
-                    f"group(s) survive all five hunts -- see the "
-                    f"ghost-hunt summary above for cell, class, xi, "
-                    f"|phi|, floor and the five hunts' outcomes.")
+        out.append(f"(ii) SURVIVING CANDIDATE(S): {n_unexp} ghost-hunt "
+                    f"candidate group(s) and {n_mag_surviving} hunt-6 "
+                    f"(magnitude) candidate(s) survive their respective "
+                    f"hunts -- see the ghost-hunt and HUNT 6 summaries "
+                    f"above for cell, class, xi, |phi|, floor and the "
+                    f"hunts' outcomes.")
     out.append("The front stays parked either way (README stopping "
                 "rules; cycles.md 12.8.5). Excludes nothing: no per-"
                 "period cycle search was run, no exclusion was "
@@ -1595,12 +1880,20 @@ def assemble():
     out.append("")
 
     text = "\n".join(out)
-    outpath = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                            "modq_spectrum_output.txt")
-    with open(outpath, "w", encoding="utf-8", newline="\n") as f:
-        f.write(text)
-        f.write("\n")
-    print(f"Wrote {outpath} ({len(text)} chars)")
+    # NOTE: this function does NOT write experiments/modq_spectrum_output.txt
+    # itself -- it only prints the compact summary to stdout. The single-
+    # command reproduction path (`... all > experiments/modq_spectrum_
+    # output.txt`) relies on shell redirection to capture EVERY phase's
+    # output (cells, canaries, every fft/large cell, then this summary)
+    # into that one file; if this function also opened and wrote the same
+    # path internally, that internal write would truncate the file out
+    # from under the shell's already-open redirected file descriptor
+    # mid-stream (observed directly: a multi-hundred-KB run produced a
+    # file with the compact summary overwritten into the middle of the
+    # stream and garbage padding after it). The standalone "assemble"
+    # CLI phase (for use against a separately pinned MODQ_CACHE_DIR)
+    # writes the file itself, explicitly, once, with no redirection race.
+    print(text)
     return text
 
 
@@ -1624,10 +1917,31 @@ if __name__ == "__main__":
         phi_n = int(sys.argv[3]) if len(sys.argv) > 3 else None
         process_large_cell(n, shore, phi_n=phi_n)
     elif phase == "assemble":
+        text = assemble()
+        outpath = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "modq_spectrum_output.txt")
+        with open(outpath, "w", encoding="utf-8", newline="\n") as f:
+            f.write(text)
+            f.write("\n")
+        print(f"[standalone assemble] wrote {outpath} ({len(text)} chars) "
+              f"-- the 'all' phase does NOT do this (see assemble()'s "
+              f"docstring note); it relies on shell redirection instead.",
+              file=sys.stderr)
+    elif phase == "all":
+        print(f"[all] JSON cache: {CACHE_DIR}")
+        rederive_cell_table()
+        run_canaries()
+        for (cn, cs) in FFT_ELIGIBLE:
+            process_fft_cell(cn, cs)
+        for (cn, cs) in [(17, "-")] + SAMPLED_CELLS:
+            process_large_cell(cn, cs,
+                                phi_n=LARGE_CELL_PHI_N.get(tag((cn, cs))))
         assemble()
     else:
-        print(f"Phase '{phase}' not yet wired in this cut of the script; "
-              f"see modq_spectrum_part2.py additions.", file=sys.stderr)
+        print(f"Phase '{phase}' not recognized. Run with no argument or "
+              f"'all' for the single-command reproduction path; see the "
+              f"module docstring for the other per-cell phases.",
+              file=sys.stderr)
         sys.exit(1)
     print(f"[phase {phase}] wall time {time.time()-t_start:.1f}s, "
           f"checks {CHECKS['count']} fail {CHECKS['fail']}")
