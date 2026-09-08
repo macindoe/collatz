@@ -401,8 +401,8 @@ the numerator "wraps" the modulus and `r = R_0 mod |q|` the residue.
 At a good near-miss (`2^K` close to `3^n`, i.e. `2^gamma = 2^K/|q|`
 close to `1`), `w` is small — the profile lands within the first few
 multiples of `|q|` — and the *distribution of `w`* (a decaying profile
-over those first few multiples, the size condition's own shadow,
-12.6.1.3) forces `R_0/|q|`'s fractional part to be non-uniform too,
+over those first few multiples, the shadow of the size conditions
+`q <= R_r` of cycles.md 12.6.1) forces `R_0/|q|`'s fractional part to be non-uniform too,
 because a profile's exact position within its wrap is correlated with
 which wrap it is in. This has **zero cross-prime content**: it is a
 statement about `R_0`'s size, not about any prime dividing `|q|`.
@@ -565,7 +565,7 @@ ghost mechanism), cross-confirmed by rotation dedup, resampling, or
 high-precision recomputation as applicable. **Every one of the
 fourteen cells' `xi=+-1` harmonic is explained by hunt 6**: the
 residue inherits the shape of `R_0`'s own size law, `2^gamma=2^K/|q|`
-(the near-miss quality itself, 12.6.1.3) — small `2^gamma` (a good
+(the near-miss quality itself, `gamma` as in cycles.md 12.8) — small `2^gamma` (a good
 near-miss) forces most profiles into the first few multiples of `|q|`,
 and a synthetic control that keeps only the coarse size (which
 `0.1`-wrap bin a profile falls in) and discards everything finer
