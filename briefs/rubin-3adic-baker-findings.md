@@ -179,6 +179,17 @@ did not obtain the 1996 French text itself to confirm the numbering matches
 name-for-name; the identification rests entirely on the content and the
 numerical control below, not on the label. See §6.
 
+*Closed at review (2026-09-13).* The author supplied Corollaire 2 from the
+1996 text: "Avec les hypothèses et notations du Théorème 3, supposons de
+plus que α₁ et α₂ appartiennent à U_v^1. Alors v(Λ) ≤ 24p/((p−1)(log p)^4)
+D^4 (max{log b' + log log p + 0.4, 10 log p / D, 10})^2 log A₁ log A₂ ≤
+208 D^4 (max{…})^2 log A₁ log A₂." So Corollaire 2 is exactly the `g = 1`
+case of Théorème 3 that both pins use; 11.8.3.11's label was right, the
+Bennett–Bugeaud restatement is Théorème 3 in general `g`, and the two
+agree at `g = 1`. The second inequality is the source of 11.8.3.11's
+`208`: the paper's own uniform constant, `24p/((p−1)(log p)^4) ≤ 208` for
+every prime `p`, attained at `p = 2` (`207.94…`). No label changes anywhere.
+
 **The `p = 2` control (required before trusting the `p = 3` reading).**
 Specializing Theorem 2.1 at `p = 2, D = 1, g = 1` (`9 ≡ 1 (mod 8)`),
 `A₁ = 9, A₂ = ω, b₁ = n, b₂ = 1` — 11.8.3.11's own setup — gives:
