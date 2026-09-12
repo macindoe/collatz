@@ -1,0 +1,35 @@
+ladder_afterlife.py  seed=20260913  anchor precision B=96 bits
+
+=== Canaries ===
+  ladder law 15.1.1: 161 off-spike + 172 spike states, 0 failures
+  canaries: 336 checks, 0 failures
+
+=== Item 1: the torn state ===
+  8000 spikes tested (3933 with s>=3, 4067 boundary s=2), 0 failures
+
+=== Item 2: the opening run ===
+  6000 spikes (s>=3) tested, 0 failures
+
+=== Item 3: the torn core's anchor ===
+  anchor valuation v2(M(Omega'))=s-4: 400 spikes (s>=5), 0 failures
+  column coincidence (v2(d') < s-4): 105383 (state,d') pairs, 0 failures
+  boundary (v2(d') == s-4, not covered by the proposition): 27288 pairs, 0 still coincided (0/27288 = 0.0000) -- measured, not claimed
+
+=== Item 4: the mirror tear (reverse.md 14.10.1) ===
+  1339 (y,s) trials (886 in d=1/T3 branch, 453 in d>=2/affine branch), 0 failures
+
+=== Item 6: measured, not proved ===
+  sign lemma (T(e)<e', T(T(e))<e', exact inequality): 4000 cases, 0 failures
+  non-return (e' never in orbit of e, 200 steps): 4000 cases, 0 counterexamples found
+  reverse (e downstream of e', 200 steps): 0 in drainage basin, 1 elsewhere
+  merge point: found for 3998/4000; strictly below both sisters in 3984/3998
+  ** correction to the pre-check: 1 generic (non-basin) reverse hit(s) found -- 'only in the drainage basin' does not hold at this sample size; recorded as measured, not enforced as a failure (see findings) **
+
+=== Item 7: tear-lines as level sets ===
+  level-set identity: 10046 (w,d,k) triples, 0 failures
+  k=8: 40000 starts on the tear-line, one-step TV from uniform = 0.02299, noise floor (same-size uniform draw) = 0.02115
+  k=12: 40000 starts on the tear-line, one-step TV from uniform = 0.09196, noise floor (same-size uniform draw) = 0.09074
+  k=16: 40000 starts on the tear-line, one-step TV from uniform = 0.35909, noise floor (same-size uniform draw) = 0.35940
+
+TOTAL: 139504 checks, 0 failures
+ALL CHECKS PASSED
