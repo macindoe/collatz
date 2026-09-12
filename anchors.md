@@ -1,7 +1,7 @@
 ---
 status: REFERENCE (pointers only); the single-sequence digit-structure search it formerly carried (§17.7–17.10) is executed and clean at every endpoint — see anchor-digit-search.md
 scope: sections 17.1–17.6 (post-monolith); cross-cutting reference — owned by no single stage/reverse/cycles/aeh page; §17.7–17.10 split to anchor-digit-search.md 2026-07-23
-updated: 2026-09-08
+updated: 2026-09-13
 source: consolidation of stage1-synthesis.md 11.8.3.6/11.8.3.11, stage1.md 11.8.4.2, stage2.md 11.8.5.6, stage4.md 11.8.7, reverse.md 14.2/14.12–14.13, ladder.md §15, cycles.md 12.3/9.8.4, aeh.md §13, bridge.md §16, archive/appendix-a.md A.4.6–A.6; the author's request to centralize anchor exploration in one place (2026-07-12)
 ---
 
@@ -38,6 +38,7 @@ Pointers only, in dependency order:
 - Backward valuation law `d = 1 + v₃(s - M₃(y))` (reverse.md 14.2.4) — the exact mirror.
 - Steering laws (reverse.md 14.12) and the one-identity synthesis (14.12.3): the anchor is *placeable* backward to bounded modulus — literally the forward law read from the other end.
 - Ladder law (ladder.md 15.1–15.3): at fixed anchor, adjacent depths are one Collatz step apart except at anchor digit-matches ("spikes"), where an affine kick tears them apart. Spikes = anchor digit matches, made fully explicit.
+- The tear afterlife (ladder.md 15.6): the ladder composed with the step law — the torn state's anchor agrees with the fixed point's for as many bits as the tear itself consumed, and a bounded run back to it; the 3-adic mirror; the tear-lines' one-step total variation at the noise floor.
 - Door/exit seam (reverse.md 14.14): `ΔM` as one fixed operation's mismatch across the live door, with the door-anchor extension `J(n) = M(n) + v₃(n)` (closed form, reverse.md 14.14.2.3).
 - Whole-period realization-height laws along fixed periodic words (itinerary.md 14.15.9) — the anchor's height bookkeeping over a full period, both sectors, one unified law.
 
