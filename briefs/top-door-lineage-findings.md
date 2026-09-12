@@ -160,3 +160,7 @@ Breakdown: canaries (trivial fixed point; 5 instances of the fake-trivial-cycle 
 - `briefs/top-door-lineage-findings.md` (this file)
 
 No other files touched. `HANDOFF.md`, `ladder.md`, `anchors.md`, `aeh.md`, `README.md`, `publication.md`, `paper/`, `sources/`, `index.md`, `symbols.md` are all untouched, per the brief's rules.
+
+## Review resolution (main session, 2026-09-13)
+
+Item 5's table compares the survival function `P(len ≥ n)` with `(2/3)^n`, and the flat reading above ("a `1.3`–`2×` band") follows from that reference. The reference is one index off: a run counted from its first letter has that letter for free, so under independence `P(len ≥ n) = (2/3)^(n−1)`. Against that column the measured values sit at `0.995, 0.980, 0.965, 0.965, 0.959, 0.946, 0.928, 0.918, 0.915` of the prediction for `n = 2..10` — within `1 %` at `n = 2` and `9 %` at `n = 10`, the shortfall growing slowly as runs are truncated at the orbit's end and the sample thins. cycles.md 12.6.1.8 carries the corrected reading; the script and its committed output are left as run, with the column label as it prints.
