@@ -1,0 +1,97 @@
+top_door_lineage.py -- seed=20260913 -- 2026-09-13
+
+======================================================================
+CANARIES
+======================================================================
+canary A  F(1,1) -> s=1 a_plus=0 (Omega,D)=(1,1)  OK
+canary B  fake trivial period-p cycle: R_0 == q == 4^p - 3^p
+    p= 1  R0=           1  q=           1  4^p-3^p=           1  OK
+    p= 2  R0=           7  q=           7  4^p-3^p=           7  OK
+    p= 3  R0=          37  q=          37  4^p-3^p=          37  OK
+    p= 4  R0=         175  q=         175  4^p-3^p=         175  OK
+    p= 7  R0=       14197  q=       14197  4^p-3^p=       14197  OK
+canary C  known cycles reconstructed from odd-stratum profiles
+    (1,1) [trivial cycle, x=1]   omega0=   1 d0=1  x0=   1  closes=OK
+    (2,1) [x=-5]                 omega0=  -1 d0=2  x0=  -5  closes=OK
+    ((4,1),(3,3)) [x=-17]        omega0=  -1 d0=4  x0= -17  closes=OK
+
+======================================================================
+ITEM (a): aliveness and parity; s odd <=> a_plus == 0
+======================================================================
+(i)  N=60000  failures=0  resonant(h(s)==d) cases hit: s-odd=0 s-even=91
+(ii) explicit resonance construction (s even, h(s) == d):
+     resonance instances constructed: 26, failures: 0
+(iii) N=30000  alive=15016  dead=14984  failures=0  (measured alive rate: 0.5005, cf. 1/2)
+
+======================================================================
+ITEM (b): bounded census p<=4, entries<=6, q|R0 -- CANARY ONLY, not extended
+======================================================================
+profiles examined: p in 1..4, entries in 1..6 each -> 1727604 total
+profiles with q | R0: 12
+    p=1 ms=(1,) ss=(1,)  n=1 K=2 q=     1  omega0=   1  x0=   1
+    p=1 ms=(2,) ss=(1,)  n=2 K=3 q=    -1  omega0=  -1  x0=  -5
+    p=2 ms=(1, 1) ss=(1, 1)  n=2 K=4 q=     7  omega0=   1  x0=   1
+    p=2 ms=(2, 2) ss=(1, 1)  n=4 K=6 q=   -17  omega0=  -1  x0=  -5
+    p=2 ms=(3, 4) ss=(3, 1)  n=7 K=11 q=  -139  omega0=  -5  x0= -41
+    p=2 ms=(4, 3) ss=(1, 3)  n=7 K=11 q=  -139  omega0=  -1  x0= -17
+    p=3 ms=(1, 1, 1) ss=(1, 1, 1)  n=3 K=6 q=    37  omega0=   1  x0=   1
+    p=3 ms=(2, 2, 2) ss=(1, 1, 1)  n=6 K=9 q=  -217  omega0=  -1  x0=  -5
+    p=4 ms=(1, 1, 1, 1) ss=(1, 1, 1, 1)  n=4 K=8 q=   175  omega0=   1  x0=   1
+    p=4 ms=(2, 2, 2, 2) ss=(1, 1, 1, 1)  n=8 K=12 q= -2465  omega0=  -1  x0=  -5
+    p=4 ms=(3, 4, 3, 4) ss=(3, 1, 3, 1)  n=14 K=22 q=-588665  omega0=  -5  x0= -41
+    p=4 ms=(4, 3, 4, 3) ss=(1, 3, 1, 3)  n=14 K=22 q=-588665  omega0=  -1  x0= -17
+
+======================================================================
+ITEM (c): odd-stratum cycle equation omega_r*q = R_r vs. the general omega_r*3^a*q = R_r
+======================================================================
+(i)  N=4000 general profiles, transport-recurrence failures=0
+(ii) N=4000 odd-stratum profiles, transport-recurrence failures=0
+(iii) all 12 census hits: odd stratum, and omega_r*q=R_r closes
+      hits checked: 12  failures=0
+(iv) N=2000 random 20-step orbits; chains with >=3 consecutive odd-s steps observed: 3338; failures=0
+
+======================================================================
+ITEM (d): realized top-door run lengths vs (2/3)^n
+======================================================================
+orbits=4000  steps/orbit=120  seed=20260916  start range=[2^200,2^260)
+measured P(s odd) over all steps: 319756/480000 = 0.6662 (cf. 2/3 = 0.6667)
+interior (uncensored) runs collected: 103126
+  n    #runs>=n (meas.)   P(len>=n) meas.     (2/3)^n
+  1              103126            1.0000      0.6667
+  2               68435            0.6636      0.4444
+  3               44899            0.4354      0.2963
+  4               29493            0.2860      0.1975
+  5               19659            0.1906      0.1317
+  6               13021            0.1263      0.0878
+  7                8568            0.0831      0.0585
+  8                5598            0.0543      0.0390
+  9                3692            0.0358      0.0260
+ 10                2458            0.0238      0.0173
+ 11                1648            0.0160      0.0116
+ 12                1089            0.0106      0.0077
+ 13                 700            0.0068      0.0051
+ 14                 454            0.0044      0.0034
+ 15                 293            0.0028      0.0023
+ 16                 201            0.0019      0.0015
+ 17                 143            0.0014      0.0010
+ 18                  89            0.0009      0.0007
+ 19                  62            0.0006      0.0005
+ 20                  39            0.0004      0.0003
+ 21                  25            0.0002      0.0002
+ 22                  12            0.0001      0.0001
+ 23                   8            0.0001      0.0001
+ 24                   5            0.0000      0.0001
+ 25                   5            0.0000      0.0000
+ 26                   2            0.0000      0.0000
+ 27                   2            0.0000      0.0000
+ 28                   0            0.0000      0.0000
+
+======================================================================
+ITEM (e): 1 + 2^s = 3^k forces s odd (item 7's flat note)
+======================================================================
+solutions with k in 1..59: [(1, 1), (3, 2)]
+extended search k in 1..1999: no further solutions, even-s failures=0
+
+======================================================================
+TOTAL: checks=15091 failures=0 time=7.2s
+======================================================================

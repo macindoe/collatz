@@ -37,6 +37,7 @@ The wiki pages (`spine.md`, `stage1.md`–`stage4.md`, `cycles.md`, `aeh.md`, `r
 | digit-match ceiling | Baker-type `p`-adic bounds: Bugeaud–Laurent 1996, Yu | stage1-synthesis.md 11.8.3.11; anchors.md 17.4 |
 | the density bound of the door tree | the Krasikov–Lagarias program (2002/03), after Crandall 1978 and Krasikov 1989 | reverse.md 14.6 |
 | exit map `G`; block map; door; live and dead doors; Gardens of Eden | `G` is Tao's `Syr` observed at the renewal times above (the variable-return-time block map); "door" is this record's; Gardens of Eden is a cellular-automata term for states with no preimage, used here for the reduced map | reverse.md 14.14.3, 14.14.7; 14.14.1; 14.5 |
+| top door; side doors; top-door lineage | no literature name pinned in this record; the nearest object is the `a = 0` branch of the Syracuse preimage tree, read as its own coordinate (the author's proposal, 2026-09-10) | reverse.md 14.8.4 |
 | capped window `W_{k,D}`; the law `π_{k,D}` | the cylinder measure of the parity-vector coding in Bernoulli form (aeh.md 13.6.2); no literature name for the capped window | aeh.md 13.2 |
 | uniform trim; staircase; seam; Bridge; core-extraction deficit; ladder, spike, braid | no literature name (this record's) | cycles.md 12.8.1, 12.8.3; reverse.md 14.14; bridge.md §16, 16.2; ladder.md §15 |
 | transport recurrence; spent stock; margin; capacity–demand | no literature name; joint with Eric Merle where the shared ledger says so (L-A1, L-A3) | cycles.md 12.6.1.1–12.6.1.5 |

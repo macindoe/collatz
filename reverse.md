@@ -1,7 +1,7 @@
 ---
 status: ACTIVE — forward/backward duality complete (14.1–14.12; density bound c* = 0.3304, 14.6); door/exit seam relocates the core-extraction deficit onto the forward digit budget (14.14); the itinerary-language arc (§14.15) lives at itinerary.md — Bridge status unchanged throughout
 scope: sections 14.1–14.14 (post-monolith); §14.15 split to itinerary.md 2026-07-23
-updated: 2026-09-08
+updated: 2026-09-13
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
 ---
 
@@ -243,6 +243,14 @@ Paper Theorem 3.5 also gives `ΔM = M(ω_next) − M(ω)`, the 2-adic anchor inc
 **Theorem 14.8.3 (the freeze, identified).** `ΔM` is total — Theorem 3.5 never fails, because `ω_next` always exists. `ΔM₃` is *partial*: it is undefined exactly when `y'` is dead, i.e. (Theorem 14.5.1) `2^d ω ≡ 1 (mod 3)`. **This is the mirror the brief asked to identify:** the forward low-order law has no failure mode; the backward one has a hard, discrete, exactly-characterized failure mode — door mortality — occurring on exactly half of all top-door lineages. Forward orbits under `F` never die; backward top-door lineages sometimes do, and the increment law inherits that asymmetry exactly, rather than the "frozen digit" phenomenon of the ladder (15.3) or the trichotomy (14.9) that were the brief's other candidates — both of those turn out to be soft (more window resolves them); mortality is hard (no window helps; the branch is simply absent).
 
 **Verification.** 6,000 random `(Ω,D,s)` trials: 965 alive / 988 dead, freeze rate `0.5059` (vs. Theorem 14.5.1's exact `1/2`, consistent); window-only recovery of `ΔM₃ mod 3^5` on all 965 alive cases, zero failures. Code: `experiments/mirror_dual.py`.
+
+**Remark 14.8.4 (top door, side doors, the top-door lineage).** Definitions (the author's terminology, 2026-09-10): for a state `(Ω,D)`, the `a=0` representative `y₀ = 2^D Ω − 1` of `14.8.1` is the **top door**; the representatives `y_a`, `a ≥ 1`, are the **side doors**; a **top-door lineage** is a backward path through top doors only — at every backward step, the door used is that step's own top door.
+
+The top door is alive iff `y₀ ≡ 1 (mod 3)` (Theorem `14.5.1` read at `y₀ = 2^D Ω − 1`: dead iff `2^D Ω ≡ 1 (mod 3)`, i.e. alive iff `y₀ ≡ 1 (mod 3)`), and then every admissible branch `s` is odd (`14.1.1`'s parity constraint, since `y₀ ≡ 1 (mod 3)` forces `s` odd). Forward, the exit of a step is the `a`-th door of the successor state exactly when the step's `3`-gain is `a` (`14.14.1.1`'s dictionary, `a_+ = a`), so a step exiting through the successor's top door has `a_+ = 0`; and `s` odd `⟺ a_+ = 0` **unconditionally**, not merely off the resonant comparison `h(s) = d` of stage3.md's trichotomy (`11.8.6.2.1`): `h(s) = 0` exactly when `s` is odd (stage3.md), and `d ≥ 1` always, so the resonance `h(s) = d` is impossible whenever `s` is odd, while `h(s) ≥ 1` whenever `s` is even, forcing `a_+ ≥ 1` in every one of the trichotomy's three cases (`a_+ = h(s) ≥ 1`, `a_+ = d ≥ 1`, or the resonant `a_+ = d + v_3(ω+β) ≥ d ≥ 1`). So a top-door orbit — forward, no `3`-gain at any step — has `d_t = m_t` at every state, with no `3^a` factor anywhere; the resonant case is real (it sets the *value* of `a_+` when `s` is even and `h(s)=d`) but never manufactures an exception to the `s`-odd-iff-`a_+=0` biconditional.
+
+Standing in the record, pointers only: the mortal lineage of `14.5.1` and `14.8.3` — half of all top doors are dead, so a top-door lineage dies backward at rate `1/2` per step; the rigorous density tree of `14.6` is built on the *opposite* door (`m = 1`, never dead), with the side doors `a = 1, …, D−2` credited only as the `14.6.5` lift, so the proved density lives on the side doors, not the top; the odd-step stratum of cycles.md `12.6.1.5` is the top-door stratum by another name (margin `0.267` per step against the general `0.079`).
+
+**Verified** — `experiments/top_door_lineage.py`, fresh code, 2026-09-13: the forward biconditional `s` odd `⟺ a_+ = 0` on `60,000` random states, zero failures, with the resonant comparison `h(s)=d` sampled `91` times among them — always at `s` even, never at `s` odd, matching the unconditional reading above; the resonance boundary constructed explicitly at `26` instances across `19` even values of `s`, `a_+` matching the trichotomy's resonant formula and never `0`; the backward round-trip — an alive top door's predecessor, built via `14.1.1` at branch `a = 0`, stepped forward again — on `30,000` random states (`15,016` alive, measured rate `0.5005`, consistent with `14.5.1`'s exact `1/2`), zero failures. `15,091` checks total in the full script run, `0` failures.
 
 ## 14.9. The one-step dichotomy (not a trichotomy)
 
