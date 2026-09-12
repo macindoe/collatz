@@ -533,3 +533,7 @@ RESULT: CLEAN
   brief's instruction nothing is added.
 - **symbols.md**: not edited — no new symbol was introduced; every
   quantity used (`Ω, D, m₊, a₊, C, σ, y`) is already in the registry.
+
+## Review resolution (main session, 2026-09-13)
+
+The second "correction" above is a definitional mismatch, not a correction. The pre-check's partial rates `0.253` at `(2,3,3)` and `0.063` at `(3,1,1)` were *grandchild*-core rates — the rate at which `F(ω,d+k)` shares its core with `F²(ω,d)` — as HANDOFF's own wording ("grandchild rate") said; this branch measured child-core rates, which are exactly `0.000` on those strata, also correctly. Fresh code in review reproduces both: grandchild-core `0.249` (`4,186` cases) and `0.063` (`66,919` cases), child-core `0.000` on both. ladder.md 15.7's census sentence carries the resolved form; the box-census correction (794/789/5) stands.
