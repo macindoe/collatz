@@ -1,0 +1,22 @@
+tree_language_families.py -- seed 20260913, 2026-09-13
+--- Canaries ---
+  canaries: 33 checks so far, 0 failures
+--- Item A(a): covering of Z/3^k by f(i)=(4^i-1)/3, k=1..7 ---
+  running totals: 61 checks, 0 failures
+--- Item A(b): cylinder = arithmetic progression at modulus 2^(S+1) ---
+  exhaustive cylinder check: 25 small words, 86 checks so far, 0 failures
+  random cylinder checks: 250 words, 1000 sub-checks, 1336 checks so far, 0 failures
+--- Item A(b): constructive witness reaching 1 (Lemma 14.15.2.1's own proof) ---
+  constructive witnesses built: 150 words (length<=3, letters<=2, M<=6), 2686 checks so far, 0 failures
+--- Item B(c): the s=2 no-anchor classes (w=5,7 mod 8) ---
+  200 cores, depths 1..60: 12000 s-value checks, 5800 recurrence checks; 20486 checks so far, 0 failures
+--- Item B(d): the 4X+1 identity Theta(4X+1)=Theta(X), and its corrected scope ---
+  3000 general-X checks, 3000 kick-family checks, 1 counter-instance; 35492 checks so far, 0 failures
+--- Item B(e): the x vs 3x orbit-merge measurement ---
+  1300 odd x < 2000000, coprime to 3: merged above 1 within 400 steps in 1212 cases, only at 1 in 88 cases (1212/1300 = 0.9323)
+  35494 checks so far, 0 failures
+--- Item B(f): e(1,d) == odd part of 3^d - 1 ---
+  d=1..29 checked; 35530 checks so far, 0 failures
+
+TOTAL: checks=35530, failures=0
+time=0.30s
