@@ -1,7 +1,7 @@
 ---
 status: closed (3-gain law proved on both lifting components); fiber-versus-orbit bridge OPEN
 scope: monolith 11.8.5
-updated: 2026-07-22
+updated: 2026-09-13
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
@@ -245,4 +245,6 @@ A positive answer at any of the three levels would convert the Stage 1–2 stati
 **Status.** Sub-question `1` is answered in the affirmative: `ΔM mod 2^k` obeys an exact law in the state's residues modulo `σ`-graded powers of `2`, with modulus fixed in advance per `(s, m_+)` stratum — Theorem `11.8.7.3.1` (stage4.md), verified independently (`11.8.7.4`). Sub-question `2` is answered in its bounded-depth form: one-step propagation (Theorem `11.8.7.6.1`) decides the next `3`-gain from the window in an error-free trichotomy, undecided only at rate `≈ 2^(-(k+1))`; the digit-budget accounting (`11.8.7.7`) marks this as the complete deterministic content, with the impossibility-of-infinite-horizon reading recorded there as the organizing heuristic. The unbounded-depth residue of the bridge is therefore exactly sub-question `3` for typical orbits (anchor equidistribution, now the precise missing hypothesis) and rigidity for cycles.
 
 **Remark (relation to the trivial cycle).** The fixed point of the reduced dynamics is `(ω, d) = (1, 1)` with `M(1) = 0`, and by the convergence translation (Theorem `9.8.3`) the conjecture is exactly the statement that every orbit drives the pair `(d - M(ω), M(ω))` to `(1, 0)`. The reformulation in anchor coordinates fixes the language in which the increment question above would have to be answered; nothing beyond the translation is claimed.
+
+This bridge's weakest global form — does every family (a fixed `ω`, ranging over `d`) reach the trivial family, rather than every depth — is stated as an open entry at open-problems.md `11.14`; pointer only, nothing restated here.
 
