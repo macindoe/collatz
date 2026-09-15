@@ -125,13 +125,13 @@ The conjecture, in this language: the deterministic 2-adic forward flow and the 
 
 ## 14.4. The backward tree and the density program
 
-Because branching is exact, the tree from `(1,1)` can be enumerated *completely* up to any `ω`-cutoff by expanding states in increasing `ω` (predecessor sizes grow like `2^s y / 3^d`, so the frontier is finite). Counts:
+Because branching is exact, the tree from `(1,1)` can be enumerated exactly within any `ω`-cutoff by expanding states in increasing `ω`: the count at cutoff `X` is the number of states reachable backward from `(1,1)` *through* states with `ω ≤ X` — a tree state inside the box whose `F`-orbit leaves it is not among them (comb.md 18.5 counts those separately) — and on every door the scan over `s` runs to the script's branch cap (`s ≤ 420`; predecessor sizes grow like `2^s y / 3^d`, so past the first few branches only a deep `3`-adic hit returns inside the box; the cap is the script's convention, not a proved bound). Counts (`experiments/reverse_tree.py`, part D, exact integers, 2026-09-15; the `2^10` and `2^13` rows re-enumerated with fresh code in `experiments/peak_comb.py`, section (f), and equal):
 
 ```text
-ω ≤ 2^10 :    833 states   (exponent ≈ 0.970)
-ω ≤ 2^13 :  6,261           (≈ 0.970)
-ω ≤ 2^16 : 51,259           (≈ 0.978)
-ω ≤ 2^19 : 408,302          (≈ 0.981)
+ω ≤ 2^10 :    834 states   (exponent ≈ 0.970)
+ω ≤ 2^13 :  6,280           (≈ 0.971)
+ω ≤ 2^16 : 51,410           (≈ 0.978)
+ω ≤ 2^19 : 409,470          (≈ 0.981)
 ```
 
 The exponent rises with the cutoff, consistent with the tree having full density (exponent 1) — which is what the conjecture predicts and what no counting can prove. The rigorous frontier here is the Krasikov–Lagarias-type lower bounds (`≥ x^0.84`-flavor), which were derived *without* an exact local branching law. The front's concrete target: derive the exact renewal/functional equation for the tree from Theorem 14.2.4 plus the door structure of 14.1.1, and test whether it sharpens those exponents. **Recorded failure:** the first attempt at that equation (single-type branching, geometric depth) was wrong — it ignored the representative multiplicity (each state has `D` doors) and door-leaf structure; the correct equation is a multi-type renewal over `(door class, depth)` and is the open item. The same tree indexed by peak level instead of core size — each door's infinite fan over `s` replaced by a chain of cascade edges, every level finite with no size cutoff — is comb.md §18.

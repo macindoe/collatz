@@ -801,15 +801,15 @@ def box_tree(X, early_break, scap=420):
     return seen
 
 
-for X, recorded in ((2 ** 10, 833), (2 ** 13, 6261)):
+for X, recorded, early_count in ((2 ** 10, 834, 833), (2 ** 13, 6280, 6261)):
     t_x = time.time()
     with_break = box_tree(X, True)
     full = box_tree(X, False)
-    check(len(with_break) == recorded, "14.4's count %d at w <= %d reproduced with its scan's early break (%d)" % (recorded, X, len(with_break)))
+    check(len(full) == recorded and len(with_break) == early_count, "14.4's count %d at w <= %d reproduced by the full scan to the branch cap (%d); the early-stop variant gives %d (%d)" % (recorded, X, len(full), early_count, len(with_break)))
     check(with_break <= full, "the early-break tree is a subset of the full box tree at w <= %d" % X)
     extra = sorted(full - with_break)
-    print("  w <= %d: %d states with the record's early break (14.4 prints %d); %d without it; %d states missed by the break: %s"
-          % (X, len(with_break), recorded, len(full), len(extra), extra if len(extra) <= 3 else extra[:3] + ["..."]))
+    print("  w <= %d: %d states by the full scan to the branch cap (14.4's count); %d with an early stop on the scan (first branch past s0+6 whose core exceeds X); %d states dropped by the stop: %s"
+          % (X, len(full), len(with_break), len(extra), extra if len(extra) <= 3 else extra[:3] + ["..."]))
     for st in extra:
         A, s, y = exit_data(*st)
         img = F(*st)

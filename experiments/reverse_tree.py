@@ -65,7 +65,6 @@ def tree_counts(X):
             while True:
                 N=(1<<s)*y+1
                 dd=v3(N); ww=N//3**dd
-                if ww>X and s>s0+6: break
                 if dd>=1 and ww<=X and (ww,dd) not in seen:
                     seen.add((ww,dd)); heapq.heappush(pq,(ww,dd,0))
                 s+=2
@@ -79,7 +78,7 @@ if __name__=="__main__":
         assert brute==rule,(W,D)
     print("A: predecessor rule exact")
     c,b=mirror_law_check(); print(f"mirror law: {c} checks, {b} failures")
-    for X in (2**10,2**16,2**19):
+    for X in (2**10,2**13,2**16,2**19):
         n=len(tree_counts(X)); print(f"D: N({X}) = {n}, exponent {math.log(n)/math.log(X):.3f}")
 
 # ---- 14.5 additions: door mortality, Gardens of Eden, renewal mass ----
