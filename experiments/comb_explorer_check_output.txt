@@ -1,0 +1,22 @@
+comb_explorer_check.py -- seed 20260915, 2026-09-15
+core block: 150 lines between the markers, no DOM access
+node v20.10.0; 14902 requests answered
+--- the page's selfTest() under node ---
+  self-test: 13239 checks, 0 failures
+--- canaries (brief's list; JS and Python each against the expected values) ---
+  canaries: 35 checks so far, 0 failures
+--- 2,000 random states (w < 10^6, 3 does not divide w, d <= 40) plus 13 canary states, every function ---
+  exitData     2013 states compared
+  F            2013 states compared
+  stateOfOdd   2013 states compared
+  doors        2013 states compared
+  parent       2013 states compared
+  children     2013 states compared
+  pathToRoot   2013 states compared
+  largest lambda among the random states: 194; every path reached (1,1)
+--- 300 random odd x < 10^12: stateOfOdd(x) and the path to the root (eta, lambda, full path) ---
+  300 x compared; largest lambda 140, largest eta 119; no cap hit
+--- 200 random representatives (state as above, a in 0..d-1): the raw descent by iterating Col ---
+  200 descents compared, 4658 points, 64 lower-sibling peaks named
+
+TOTAL: checks = 15291, failures = 0

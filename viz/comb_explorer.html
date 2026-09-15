@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comb explorer — the peak comb, one node at a time</title>
+<style>
+:root{--surface-1:#f4f4f2;--surface-2:#fff;--text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;--border:#d9dce3;--border-strong:#b8bdc9;--bg-accent:#e8f0fb;--text-accent:#2f5fb3;--bg-cascade:#e9f3ec;--bg-door:#f3ecfa;--bg-select:#fff3d6;}
+@media (prefers-color-scheme: dark){:root{--surface-1:#22252c;--surface-2:#1a1c22;--text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;--border:#3a3e48;--border-strong:#565c6a;--bg-accent:#243350;--text-accent:#8fb0e8;--bg-cascade:#1f3328;--bg-door:#2e2440;--bg-select:#3d3418;}
+body{background:#14161b;}}
+body{font-family:system-ui,sans-serif;max-width:1180px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);}
+h1{font-size:20px;font-weight:500;}
+h2{font-size:13px;font-weight:600;margin:14px 0 6px;color:var(--text-secondary);}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+input,button,select{font:inherit;padding:6px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2);color:var(--text-primary);}
+button{cursor:pointer;}
+code{font-family:ui-monospace,monospace;font-size:13px;}
+sup{font-size:9px;}
+.layout{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
+.treecol{flex:1 1 560px;min-width:0;}
+.detail{flex:1 1 400px;min-width:0;background:var(--surface-1);border-radius:12px;padding:10px 14px 14px;font-size:13px;line-height:1.55;position:sticky;top:8px;max-height:calc(100vh - 16px);overflow:auto;}
+ul.tree,ul.tree ul{list-style:none;margin:0;padding:0;}
+ul.tree ul{margin-left:20px;border-left:1px solid var(--border);padding-left:8px;}
+li{margin:4px 0;}
+.card{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:6px 10px;font-size:13px;cursor:pointer;min-width:0;}
+.card.sel{background:var(--bg-select);border-color:var(--border-strong);}
+.disc{width:26px;height:26px;padding:0;border-radius:6px;font-family:ui-monospace,monospace;line-height:1;}
+.edge{font-family:ui-monospace,monospace;font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid var(--border-strong);white-space:nowrap;}
+.edge-cascade{background:var(--bg-cascade);}
+.edge-door{background:var(--bg-door);}
+.edge-root{background:var(--surface-1);}
+.st{font-weight:600;white-space:nowrap;}
+.meta{color:var(--text-secondary);}
+.grey{opacity:.65;font-size:12px;padding:3px 10px;color:var(--text-secondary);}
+.abbr{cursor:pointer;border-bottom:1px dotted var(--text-muted);}
+.full{word-break:break-all;}
+.list{font-family:ui-monospace,monospace;font-size:12px;line-height:1.75;word-break:break-all;}
+.crumb{line-height:2;word-break:break-all;}
+a.go{color:var(--text-accent);text-decoration:none;cursor:pointer;border-bottom:1px dotted var(--text-accent);white-space:nowrap;}
+.tag{font-family:system-ui,sans-serif;font-size:11px;padding:0 5px;border-radius:4px;border:1px solid var(--border);color:var(--text-secondary);margin-left:6px;}
+.tag-peak,.tag-sibpeak{background:var(--bg-cascade);color:var(--text-primary);}
+.tag-door{background:var(--bg-door);}
+.msg{font-size:13px;color:var(--text-secondary);margin:6px 0 10px;min-height:1.2em;}
+.note{font-size:12px;color:var(--text-muted);margin-top:10px;}
+footer{margin-top:18px;font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace;}
+table{border-collapse:collapse;font-size:12px;font-family:ui-monospace,monospace;}
+td,th{padding:2px 8px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;}
+tr.here td{background:var(--bg-select);}
+</style>
+</head>
+<body>
+<h1>Comb explorer</h1>
+<p>The peak comb (comb.md §18) is the backward tree of reduced states (&omega;, d), each node placed by its <strong>peak</strong> A = 3<sup>d</sup>&omega; &minus; 1 = 2<sup>s</sup>&middot;y, read as <em>branch s on the door y</em> (18.1). A node at branch s &ge; 3 hangs from the node at branch s &minus; 2 on the same door by a <strong>cascade edge</strong> (the peak divided by 4; 18.2.1, Lemma 18.2.5); the node at the lowest admissible branch hangs from the door's own state, one step of F, by a <strong>door edge</strong>. Read upward, every node has one cascade child and one door child per live door (Proposition 18.2.3): the <strong>top door</strong> 2<sup>d</sup>&omega; &minus; 1 is dead when it is a multiple of 3, the <strong>side doors</strong> never are (reverse.md 14.5.1). &lambda; is the level, the number of edges to (1,1); &eta; is the number of F-steps, and &eta; = 1 + the door edges on the path (Proposition 18.3.2). The tree starts at the root (1,1), whose only child is (1,2). The <code>+</code> control expands a node by one level, and nothing is computed before it is shown; clicking a card opens it in the panel: its path to the root, the raw descent from any of its representatives through the peaks of the lower siblings on its door (18.4), and the chain of siblings. Every integer on this page is exact; integers longer than 24 digits are abbreviated and show in full when clicked.</p>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+<label style="font-size:13px;color:var(--text-secondary);">go to a state &omega;,d or an odd integer x
+<input id="goto" type="text" value="" placeholder="e.g. 107,1 or 213" style="width:200px;margin-left:6px;"></label>
+<button id="goBtn">go</button>
+<button id="resetBtn">reset tree</button>
+</div>
+<div id="msg" class="msg"></div>
+<div class="layout">
+<div class="treecol">
+<ul id="tree" class="tree"></ul>
+<div class="note">Levels double from about level 17 (18.5; census counts to level 27 shown beside each &lambda;); the largest peak at level &lambda; is 2<sup>2&lambda;+1</sup>, on door 1 (Lemma 18.5.1).</div>
+</div>
+<div id="detail" class="detail"></div>
+</div>
+<footer id="selftest">self-test: running</footer>
+<script>
+// === COMB CORE BEGIN ===
+// The arithmetic of comb.md section 18. Every integer is a BigInt; states are [w, d] arrays of
+// BigInt (w the odd part prime to 3, d >= 1). No DOM access in this block: it is extracted and run
+// under node by experiments/comb_explorer_check.py.
+function v2(n){ let v = 0n; while ((n & 1n) === 0n) { n >>= 1n; v++; } return v; }
+function v3(n){ let v = 0n; while (n % 3n === 0n) { n /= 3n; v++; } return v; }
+function isValidState(w, d){ return w > 0n && (w & 1n) === 1n && w % 3n !== 0n && d >= 1n; }
+function isRoot(w, d){ return w === 1n && d === 1n; }
+// The peak A = 3^d w - 1, the branch s = v2(A), the door y = A / 2^s (Definition 18.1.1).
+function exitData(w, d){ const A = 3n ** d * w - 1n; const s = v2(A); return { A: A, s: s, y: A >> s }; }
+// Door recovery (reverse.md 14.6.5.1): y + 1 = 2^m 3^a W gives the state (W, m + a) whose a-th door y is.
+function stateOfOdd(y){ const n = y + 1n; const m = v2(n); const u = n >> m; const a = v3(u); return [u / 3n ** a, m + a]; }
+function F(w, d){ return stateOfOdd(exitData(w, d).y); }
+// The state at branch s on door y: 2^s y + 1 = 3^d w (Lemma 18.1.2(iii); requires 2^s y = 2 mod 3).
+function nodeAt(y, s){ const N = (y << s) + 1n; const d = v3(N); return [N / 3n ** d, d]; }
+// The lowest admissible branch on a live door (reverse.md 14.1.1's parity rule).
+function lowestBranch(y){ return y % 3n === 1n ? 1n : 2n; }
+// The doors y_a = 2^(D-a) 3^a W - 1, a = 0..D-1; alive iff 3 does not divide y_a (Theorem 14.5.1).
+function doors(W, D){
+  const out = [];
+  for (let a = 0n; a < D; a++) { const y = (W << (D - a)) * 3n ** a - 1n; out.push({ a: a, y: y, alive: y % 3n !== 0n }); }
+  return out;
+}
+// The comb parent (Definition 18.2.1): s >= 3 the cascade parent at branch s - 2 on the same door;
+// s <= 2 the door parent state(y) = F(w, d); the root has none.
+function parent(w, d){
+  if (isRoot(w, d)) return null;
+  const e = exitData(w, d);
+  if (e.s >= 3n) return { state: nodeAt(e.y, e.s - 2n), type: 'cascade' };
+  return { state: stateOfOdd(e.y), type: 'door' };
+}
+// The children (Proposition 18.2.3): the cascade child at branch s + 2 on the node's own door, then one
+// door child per live door at its lowest branch, in door order. Dead doors are returned apart; the root's
+// door child on door 1 is the root itself and is returned under `excluded` (the self-loop, 18.2.1).
+function children(W, D){
+  const e = exitData(W, D);
+  const list = [{ state: nodeAt(e.y, e.s + 2n), type: 'cascade', s: e.s + 2n, door: { a: v3(e.y + 1n), y: e.y } }];
+  const dead = [], excluded = [];
+  for (const dr of doors(W, D)) {
+    if (!dr.alive) { dead.push({ a: dr.a, y: dr.y, dead: true }); continue; }
+    const s = lowestBranch(dr.y); const st = nodeAt(dr.y, s);
+    if (st[0] === W && st[1] === D) { excluded.push({ a: dr.a, y: dr.y, s: s, state: st, self: true }); continue; }
+    list.push({ state: st, type: 'door', s: s, door: { a: dr.a, y: dr.y } });
+  }
+  return { list: list, dead: dead, excluded: excluded };
+}
+// The block's raw trajectory from the representative x_a = 2^(d-a) 3^a w - 1 down to the door y
+// (Remark 18.1.3): x_a, 2x_(a+1), x_(a+1), ..., x_(d-1), 2A, A, A/2, ..., 2y, y. Tags: odd (an odd point of
+// the block), rise (a rising-run even 2x_b), max (2A, the raw maximum), peak (A), sibpeak (a cascade even
+// 2^j y with j < s that is a peak: the peak of the sibling at branch j, Proposition 18.4.1), cascade (a
+// cascade even that is not a peak), door (y).
+function rawDescent(w, d, a){
+  const e = exitData(w, d); const out = [];
+  const x = b => (w << (d - b)) * 3n ** b - 1n;
+  out.push({ x: x(a), tag: 'odd', sib: null });
+  for (let b = a + 1n; b < d; b++) { out.push({ x: 2n * x(b), tag: 'rise', sib: null }); out.push({ x: x(b), tag: 'odd', sib: null }); }
+  out.push({ x: 2n * e.A, tag: 'max', sib: null });
+  out.push({ x: e.A, tag: 'peak', sib: null });
+  for (let j = e.s - 1n; j >= 1n; j--) {
+    const z = e.y << j;
+    if (z % 3n === 2n) out.push({ x: z, tag: 'sibpeak', sib: nodeAt(e.y, j) }); else out.push({ x: z, tag: 'cascade', sib: null });
+  }
+  out.push({ x: e.y, tag: 'door', sib: null });
+  return out;
+}
+// The parent chain to the root with a step cap. eta = 1 + door edges and lambda = edges (Proposition
+// 18.3.2(b)); at the root eta = lambda = 0. When the cap is hit the path is what was reached and the
+// distances are null.
+function pathToRoot(w, d, cap){
+  const path = []; let cur = [w, d]; let doorEdges = 0n, cascadeEdges = 0n, steps = 0n, capHit = false;
+  for (;;) {
+    const e = exitData(cur[0], cur[1]); const p = parent(cur[0], cur[1]);
+    path.push({ state: cur, A: e.A, s: e.s, y: e.y, edge: p ? p.type : null });
+    if (!p) break;
+    if (steps >= cap) { capHit = true; break; }
+    if (p.type === 'door') doorEdges++; else cascadeEdges++;
+    cur = p.state; steps++;
+  }
+  const edges = doorEdges + cascadeEdges;
+  return { path: path, capHit: capHit, doorEdges: doorEdges, cascadeEdges: cascadeEdges,
+    lambda: capHit ? null : edges, eta: capHit ? null : (edges === 0n ? 0n : 1n + doorEdges) };
+}
+// The census of comb.md 18.5: node counts at levels 0..27.
+const CENSUS = [1n, 1n, 2n, 3n, 10n, 17n, 30n, 61n, 124n, 239n, 478n, 961n, 1978n, 3823n, 7748n, 15597n, 30844n,
+  61947n, 124068n, 247507n, 495986n, 991393n, 1982520n, 3966341n, 7931430n, 15864465n, 31732224n, 63457557n];
+const CENSUS_TOTAL = 126917355n;
+// Self-test: the canaries of comb.md section 18 and briefs/peak-comb-findings.md, then parent(child) = node
+// for every child of 300 states from a fixed linear-congruential sequence.
+function selfTest(){
+  let checks = 0n; const failures = [];
+  const sEq = (p, q) => p[0] === q[0] && p[1] === q[1];
+  const sS = p => '(' + p[0] + ',' + p[1] + ')';
+  const check = (ok, what) => { checks++; if (!ok) failures.push(what); };
+  const S = (w, d) => [BigInt(w), BigInt(d)];
+  // the root's only child is (1,2); its door 1 is live and its door child is the excluded self-loop
+  const rc = children(1n, 1n);
+  check(rc.list.length === 1 && rc.list[0].type === 'cascade' && sEq(rc.list[0].state, S(1, 2)), 'root child');
+  check(rc.excluded.length === 1 && rc.excluded[0].y === 1n && rc.excluded[0].a === 0n && sEq(rc.excluded[0].state, S(1, 1)), 'root self-loop');
+  check(rc.dead.length === 0, 'root dead doors');
+  check(parent(1n, 1n) === null, 'root has no parent');
+  // door 1's chain at branches 1, 3, 5, 7, 9
+  const chain1 = [[1n, S(1, 1)], [3n, S(1, 2)], [5n, S(11, 1)], [7n, S(43, 1)], [9n, S(19, 3)]];
+  for (const [s, st] of chain1) { check(sEq(nodeAt(1n, s), st), 'door 1 branch ' + s); check(exitData(st[0], st[1]).s === s && exitData(st[0], st[1]).y === 1n, 'door 1 exit ' + sS(st)); }
+  for (let i = 1; i < chain1.length; i++) { const p = parent(chain1[i][1][0], chain1[i][1][1]); check(p !== null && p.type === 'cascade' && sEq(p.state, chain1[i - 1][1]), 'door 1 cascade parent ' + sS(chain1[i][1])); }
+  // door 5's states (7,1), (1,4), (107,1) at s = 2, 4, 6 with peaks 20, 80, 320
+  const chain5 = [[2n, S(7, 1), 20n], [4n, S(1, 4), 80n], [6n, S(107, 1), 320n]];
+  for (const [s, st, A] of chain5) { check(sEq(nodeAt(5n, s), st), 'door 5 branch ' + s); const e = exitData(st[0], st[1]); check(e.A === A && e.s === s && e.y === 5n, 'door 5 peak ' + sS(st)); }
+  check(sEq(F(7n, 1n), S(1, 2)) && sEq(stateOfOdd(5n), S(1, 2)), 'state(5) = (1,2)');
+  // (7,3)'s children: (251,1) cascade with peak 752; (37,1) through the top door 55 at s = 1;
+  // (37,2) through side door 83 at s = 2; (167,1) through side door 125 at s = 2
+  const c73 = children(7n, 3n);
+  check(c73.list.length === 4 && c73.dead.length === 0 && c73.excluded.length === 0, '(7,3) child count');
+  const exp73 = [[S(251, 1), 'cascade', 4n, null, null, 752n], [S(37, 1), 'door', 1n, 0n, 55n, null], [S(37, 2), 'door', 2n, 1n, 83n, null], [S(167, 1), 'door', 2n, 2n, 125n, null]];
+  exp73.forEach((ex, i) => {
+    const ch = c73.list[i]; if (!ch) { check(false, '(7,3) child ' + i + ' missing'); return; }
+    check(sEq(ch.state, ex[0]) && ch.type === ex[1] && ch.s === ex[2], '(7,3) child ' + sS(ex[0]));
+    if (ex[3] !== null) check(ch.door.a === ex[3] && ch.door.y === ex[4], '(7,3) door of ' + sS(ex[0]));
+    if (ex[5] !== null) check(exitData(ch.state[0], ch.state[1]).A === ex[5], '(7,3) cascade child peak');
+  });
+  // (1,2)'s top door 3 is dead; its side door 5 is live
+  const d12 = doors(1n, 2n);
+  check(d12.length === 2 && d12[0].a === 0n && d12[0].y === 3n && d12[0].alive === false && d12[1].y === 5n && d12[1].alive === true, '(1,2) doors');
+  check(children(1n, 2n).dead.length === 1 && children(1n, 2n).dead[0].y === 3n, '(1,2) dead top door');
+  // distances
+  const dist = [[S(1, 2), 1n, 1n], [S(11, 1), 1n, 2n], [S(7, 1), 2n, 2n], [S(107, 1), 2n, 4n], [S(1, 1), 0n, 0n]];
+  for (const [st, eta, lam] of dist) { const r = pathToRoot(st[0], st[1], 10000n); check(!r.capHit && r.eta === eta && r.lambda === lam, 'distances ' + sS(st)); }
+  check(pathToRoot(107n, 1n, 2n).capHit === true, 'cap hit reported');
+  // the raw descent of (107,1) from its entry 213
+  const rd = rawDescent(107n, 1n, 0n);
+  const expRd = [[213n, 'odd', null], [640n, 'max', null], [320n, 'peak', null], [160n, 'cascade', null], [80n, 'sibpeak', S(1, 4)], [40n, 'cascade', null], [20n, 'sibpeak', S(7, 1)], [10n, 'cascade', null], [5n, 'door', null]];
+  check(rd.length === expRd.length, 'descent of 213 length');
+  expRd.forEach((ex, i) => { const r = rd[i]; check(r && r.x === ex[0] && r.tag === ex[1] && (ex[2] === null ? r.sib === null : (r.sib !== null && sEq(r.sib, ex[2]))), 'descent of 213 point ' + ex[0]); });
+  // the census constants sum to the recorded total
+  check(CENSUS.length === 28 && CENSUS.reduce((p, q) => p + q, 0n) === CENSUS_TOTAL, 'census total');
+  // parent(child) = node for every child of 300 pseudo-random states (fixed LCG, seed 20260915)
+  let seed = 20260915n; const M = (1n << 64n) - 1n;
+  const next = () => { seed = (seed * 6364136223846793005n + 1442695040888963407n) & M; return seed; };
+  for (let i = 0; i < 300; i++) {
+    let w = 2n * ((next() >> 16n) % 500000n) + 1n; if (w % 3n === 0n) w += 2n;
+    const d = 1n + ((next() >> 40n) % 40n);
+    const cs = children(w, d);
+    check(BigInt(cs.list.length) === 1n + BigInt(doors(w, d).filter(o => o.alive).length) - BigInt(cs.excluded.length), 'degree ' + sS([w, d]));
+    for (const ch of cs.list) {
+      const p = parent(ch.state[0], ch.state[1]);
+      check(p !== null && p.type === ch.type && sEq(p.state, [w, d]), 'parent of child ' + sS(ch.state) + ' of ' + sS([w, d]));
+      if (ch.type === 'door') check(sEq(F(ch.state[0], ch.state[1]), [w, d]) && exitData(ch.state[0], ch.state[1]).y === ch.door.y, 'door child F ' + sS(ch.state));
+      else check(exitData(ch.state[0], ch.state[1]).A === 4n * exitData(w, d).A, 'cascade child 4A ' + sS(ch.state));
+    }
+  }
+  return { checks: checks, failures: failures };
+}
+// === COMB CORE END ===
+</script>
+<script>
+(function(){
+const CAP = 10000n;
+const nodes = new Map();
+let sel = null, repA = 0n;
+const key = st => st[0].toString() + ',' + st[1].toString();
+function grp(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function fmt(n){
+  const s = n.toString();
+  if (s.length <= 24) return s;
+  return '<span class="abbr" data-full="' + s + '" title="click to show all ' + s.length + ' digits">' + s.slice(0, 8) + '…' + s.slice(-4) + ' <small>(' + s.length + ' digits)</small></span>';
+}
+function census(level){ return level <= 27n ? 'level ' + level + ' has ' + grp(CENSUS[Number(level)]) + (level === 0n ? ' node' : ' nodes') : 'level ' + level + ' is beyond the census'; }
+const stLink = st => '<a class="go" data-w="' + st[0] + '" data-d="' + st[1] + '">(' + fmt(st[0]) + ', ' + st[1] + ')</a>';
+function mk(st, parentKey, edge, via){
+  const k = key(st); if (nodes.has(k)) return nodes.get(k);
+  const e = exitData(st[0], st[1]);
+  let level = 0n, doorEdges = 0n;
+  if (parentKey !== null) { const p = nodes.get(parentKey); level = p.level + 1n; doorEdges = p.doorEdges + (edge === 'door' ? 1n : 0n); }
+  const n = { key: k, state: st, A: e.A, s: e.s, y: e.y, level: level, doorEdges: doorEdges, eta: parentKey === null ? 0n : 1n + doorEdges,
+    parentKey: parentKey, edge: edge, via: via, expanded: false, kids: null, dead: [], excluded: [] };
+  nodes.set(k, n); return n;
+}
+function ensureKids(n){
+  if (n.kids !== null) return;
+  const c = children(n.state[0], n.state[1]);
+  n.kids = c.list.map(ch => mk(ch.state, n.key, ch.type, ch.door).key);
+  n.dead = c.dead; n.excluded = c.excluded;
+}
+function edgeBadge(t){ return t === null ? '<span class="edge edge-root">root</span>' : '<span class="edge edge-' + t + '">' + t + '</span>'; }
+function doorName(a){ return a === 0n ? 'the top door' : 'side door a = ' + a; }
+function cardHTML(n){
+  const st = n.state;
+  let via = '';
+  if (n.edge === 'door') via = '<span class="meta">through ' + doorName(n.via.a) + '</span>';
+  else if (n.edge === 'cascade') via = '<span class="meta">cascade child, same door</span>';
+  return '<div class="card' + (sel === n.key ? ' sel' : '') + '" data-k="' + n.key + '">'
+    + '<button class="disc" data-k="' + n.key + '" title="expand or collapse">' + (n.expanded ? '−' : '+') + '</button>'
+    + edgeBadge(n.edge)
+    + '<span class="st">(' + fmt(st[0]) + ', ' + st[1] + ')</span>'
+    + '<span class="meta">peak ' + fmt(n.A) + ' = 2<sup>' + n.s + '</sup>·' + fmt(n.y) + ', branch ' + n.s + ' on door ' + fmt(n.y) + '</span>'
+    + '<span class="meta">λ = ' + n.level + ' (' + census(n.level) + ') · η = ' + n.eta + '</span>'
+    + via + '</div>';
+}
+function renderNode(n){
+  let h = '<li>' + cardHTML(n);
+  if (n.expanded) {
+    h += '<ul>';
+    for (const k of n.kids) h += renderNode(nodes.get(k));
+    for (const ex of n.excluded) h += '<li class="grey">door ' + fmt(ex.y) + ' (' + doorName(ex.a) + ', live): its lowest-branch child, at branch ' + ex.s + ', is the root itself, the excluded self-loop (18.2.1)</li>';
+    for (const dd of n.dead) h += '<li class="grey">' + doorName(dd.a) + ' ' + fmt(dd.y) + ' is dead (a multiple of 3): no door child (reverse.md 14.5.1)</li>';
+    h += '</ul>';
+  }
+  return h + '</li>';
+}
+function tagLabel(r){
+  switch (r.tag) {
+    case 'odd': return 'odd point of the block';
+    case 'rise': return 'rising-run even, 2x';
+    case 'max': return 'raw maximum 2A';
+    case 'peak': return 'the peak A';
+    case 'sibpeak': return 'peak of ' + stLink(r.sib) + ', the sibling at branch ' + v2(r.x);
+    case 'cascade': return '2<sup>' + v2(r.x) + '</sup>·y, not a peak';
+    case 'door': return 'the door y, the exit';
+  }
+  return r.tag;
+}
+function renderDetail(){
+  const el = document.getElementById('detail');
+  if (sel === null) { el.innerHTML = '<p>Click a card to open its node here: the path to the root, the raw descent, and the siblings on its door.</p>'; return; }
+  const n = nodes.get(sel); const w = n.state[0], d = n.state[1];
+  const Fst = F(w, d);
+  let h = '<h2>Node (' + fmt(w) + ', ' + d + ')</h2>';
+  h += '<div>peak A = ' + fmt(n.A) + ' = 2<sup>' + n.s + '</sup>·' + fmt(n.y) + ': branch ' + n.s + ' on door ' + fmt(n.y) + '; F(' + fmt(w) + ', ' + d + ') = state(' + fmt(n.y) + ') = ' + stLink(Fst) + '. Level λ = ' + n.level + ' (' + census(n.level) + ').</div>';
+  // (a) the path to the root
+  const pr = pathToRoot(w, d, CAP);
+  h += '<h2>(a) Path to the root</h2><div class="crumb">';
+  pr.path.forEach(p => { h += stLink(p.state); if (p.edge !== null) h += ' ' + edgeBadge(p.edge) + ' → '; });
+  if (pr.capHit) h += ' … (the cap of 10,000 steps was hit; the chain shown is incomplete)';
+  h += '</div>';
+  if (pr.capHit) h += '<div class="meta">λ and η are not computed: the parent chain did not reach (1,1) within 10,000 steps.</div>';
+  else if (pr.lambda === 0n) h += '<div class="meta">The root: λ = η = 0.</div>';
+  else h += '<div class="meta">λ = ' + pr.lambda + ' edges = ' + pr.doorEdges + ' door + ' + pr.cascadeEdges + ' cascade; η = 1 + ' + pr.doorEdges + ' = ' + pr.eta + ' (Proposition 18.3.2(b): the path enters the root by the cascade edge (1,2) → (1,1), so the last F-step is no door edge).</div>';
+  // (b) the raw descent
+  if (repA >= d) repA = 0n;
+  h += '<h2>(b) Raw descent</h2><div>from representative <select id="rep">';
+  for (let a = 0n; a < d; a++) { const xa = (w << (d - a)) * 3n ** a - 1n; h += '<option value="' + a + '"' + (a === repA ? ' selected' : '') + '>' + (a === 0n ? 'top door' : 'side door a = ' + a) + ', x = ' + (xa.toString().length > 24 ? xa.toString().slice(0, 8) + '…' + xa.toString().slice(-4) : xa) + '</option>'; }
+  h += '</select> down to the door ' + fmt(n.y) + '</div><div class="list">';
+  const rd = rawDescent(w, d, repA);
+  rd.forEach(r => { h += fmt(r.x) + '<span class="tag tag-' + r.tag + '">' + tagLabel(r) + '</span><br>'; });
+  h += '</div><div class="note">Proposition 18.4.1: below the peak the trajectory passes exactly the peaks of the lower siblings on door ' + fmt(n.y) + ' (the cascade evens 2<sup>j</sup>·y with j &lt; ' + n.s + ' and 2<sup>j</sup>·y ≡ 2 mod 3) and none of their odd points; the rising-run evens have the block\'s own side doors as their odd predecessors.</div>';
+  // (c) the siblings on this door
+  const s0 = lowestBranch(n.y);
+  h += '<h2>(c) Siblings on door ' + fmt(n.y) + '</h2><table><tr><th>branch</th><th>state</th><th>peak 2<sup>j</sup>·y</th></tr>';
+  for (let j = s0; j <= n.s + 4n; j += 2n) {
+    const st = nodeAt(n.y, j);
+    h += '<tr' + (j === n.s ? ' class="here"' : '') + '><td>' + j + '</td><td>' + stLink(st) + (j === n.s ? ' (this node)' : '') + '</td><td>' + fmt(n.y << j) + '</td></tr>';
+  }
+  h += '</table><div class="note">Branches s₀ = ' + s0 + ', s₀ + 2, … on door ' + fmt(n.y) + ' (door ' + fmt(n.y) + ' ≡ ' + (n.y % 3n) + ' mod 3, so its branches are ' + (s0 === 1n ? 'odd' : 'even') + '); each is the cascade child of the one below, with peaks A, 4A, 16A, … (Lemma 18.2.5). All siblings share η = ' + n.eta + ' and the node at branch j sits (j − s₀)/2 levels above the lowest sibling (Proposition 18.3.2(c)).' + (n.y === 1n ? ' Door 1\'s lowest sibling is the root, whose door edge is the excluded self-loop.' : '') + '</div>';
+  el.innerHTML = h;
+  const rep = document.getElementById('rep');
+  if (rep) rep.addEventListener('change', ev => { repA = BigInt(ev.target.value); renderDetail(); });
+}
+function render(){
+  document.getElementById('tree').innerHTML = renderNode(nodes.get('1,1'));
+  renderDetail();
+}
+function msg(t){ document.getElementById('msg').textContent = t; }
+function msgHTML(t){ document.getElementById('msg').innerHTML = t; }
+function parseInput(str){
+  const t = str.trim().replace(/[()\s]/g, '');
+  if (t === '') return { err: 'Enter a state ω,d or a positive odd integer x.' };
+  if (t.indexOf(',') >= 0) {
+    const parts = t.split(',');
+    if (parts.length !== 2 || !/^\d+$/.test(parts[0]) || !/^\d+$/.test(parts[1])) return { err: 'A state is two positive integers, ω,d.' };
+    const w = BigInt(parts[0]), d = BigInt(parts[1]);
+    if (!isValidState(w, d)) return { err: 'Not a valid state: ω must be odd and not a multiple of 3, and d ≥ 1.' };
+    return { state: [w, d], note: '' };
+  }
+  if (!/^\d+$/.test(t)) return { err: 'Enter digits only: a state ω,d or a positive odd integer x.' };
+  const x = BigInt(t);
+  if (x < 1n || (x & 1n) === 0n) return { err: 'x must be a positive odd integer.' };
+  const st = stateOfOdd(x); const a = v3(x + 1n);
+  return { state: st, note: 'x = ' + fmt(x) + ' is the door y<sub>' + a + '</sub> of exactly one state (reverse.md 14.6.5.1): x + 1 = 2<sup>' + v2(x + 1n) + '</sup>·3<sup>' + a + '</sup>·' + fmt(st[0]) + ', the state (' + fmt(st[0]) + ', ' + st[1] + ')' + (a === 0n ? ', its top door' : ', its side door a = ' + a) + '. ' };
+}
+function gotoState(st, note){
+  const pr = pathToRoot(st[0], st[1], CAP);
+  if (pr.capHit) { msgHTML(note + 'The parent chain from (' + fmt(st[0]) + ', ' + st[1] + ') did not reach (1,1) within 10,000 steps; the node is not placed.'); return; }
+  for (let i = pr.path.length - 1; i >= 1; i--) {
+    const anc = nodes.get(key(pr.path[i].state));
+    if (!anc) { msg('Internal error: an ancestor is missing from the tree.'); return; }
+    ensureKids(anc); anc.expanded = true;
+    if (!nodes.has(key(pr.path[i - 1].state))) { msg('Internal error: a path node is not a child of its parent.'); return; }
+  }
+  sel = key(st); repA = 0n;
+  msgHTML(note + 'Placed (' + fmt(st[0]) + ', ' + st[1] + ') at level ' + pr.lambda + ' with η = ' + pr.eta + '; the tree is expanded along its path to the root.');
+  render();
+  const c = document.querySelector('.card.sel'); if (c) c.scrollIntoView({ block: 'center' });
+}
+function reset(){
+  nodes.clear(); sel = null; repA = 0n;
+  const root = mk([1n, 1n], null, null, null);
+  ensureKids(root); root.expanded = true;
+  msg(''); render();
+}
+document.getElementById('tree').addEventListener('click', ev => {
+  const ab = ev.target.closest('.abbr'); if (ab) { toggleAbbr(ab); ev.stopPropagation(); return; }
+  const disc = ev.target.closest('.disc');
+  if (disc) { const n = nodes.get(disc.dataset.k); if (!n.expanded) ensureKids(n); n.expanded = !n.expanded; render(); ev.stopPropagation(); return; }
+  const card = ev.target.closest('.card');
+  if (card) { sel = card.dataset.k; repA = 0n; render(); }
+});
+document.getElementById('detail').addEventListener('click', ev => {
+  const ab = ev.target.closest('.abbr'); if (ab) { toggleAbbr(ab); return; }
+  const a = ev.target.closest('a.go'); if (a) { gotoState([BigInt(a.dataset.w), BigInt(a.dataset.d)], ''); }
+});
+document.getElementById('msg').addEventListener('click', ev => { const ab = ev.target.closest('.abbr'); if (ab) toggleAbbr(ab); });
+function toggleAbbr(el){
+  if (el.classList.contains('full')) { const s = el.dataset.full; el.innerHTML = s.slice(0, 8) + '…' + s.slice(-4) + ' <small>(' + s.length + ' digits)</small>'; el.classList.remove('full'); }
+  else { el.textContent = el.dataset.full; el.classList.add('full'); }
+}
+function go(){ const r = parseInput(document.getElementById('goto').value); if (r.err) { msg(r.err); return; } gotoState(r.state, r.note); }
+document.getElementById('goBtn').addEventListener('click', go);
+document.getElementById('goto').addEventListener('keydown', ev => { if (ev.key === 'Enter') go(); });
+document.getElementById('resetBtn').addEventListener('click', reset);
+reset();
+try {
+  const t = selfTest();
+  document.getElementById('selftest').textContent = 'self-test: ' + t.checks + ' checks, ' + t.failures.length + ' failures' + (t.failures.length ? ' — ' + t.failures.join('; ') : '');
+} catch (e) { document.getElementById('selftest').textContent = 'self-test: error — ' + e; }
+})();
+</script>
+</body>
+</html>
