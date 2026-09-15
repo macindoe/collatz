@@ -1,6 +1,6 @@
 ---
 status: index
-updated: 2026-08-12
+updated: 2026-09-15
 ---
 
 # Collatz Reduction — Wiki Index
@@ -25,6 +25,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 | `publication.md` | Novelty assessment (claim-by-claim verdicts), pinned citations for all #TODOs, 2024–26 landscape, framing recommendation | novelty assessment (dated snapshot); papers published at v3 |
 | `aeh.md` | §13: the Anchor Equidistribution Hypothesis — precise ensemble formulation (13.2), unconditional base case (13.2.4), conditional theorems (13.3), calibration record (13.4), anomaly resolved with routing lemma (13.5), the genericity form (13.6) | formalized; calibration clean; symbolic form named and proved |
 | `ladder.md` | §15: the depth ladder — exact dichotomy relating (ω,d) and (ω,d+1): one Collatz step off-spike, an affine kick at spikes; the divergence question answered | closed as local law |
+| `comb.md` | §18: the peak comb — the backward tree of reduced states with the even peak `A = 3^d ω − 1` as each node's coordinate, every door's infinite fan over `s` replaced by a chain of cascade edges, two distances (reduced `η`, peak `λ`), completeness against the raw map, a census by level with no size cutoff | FORMULATION (a construction; no front moves) |
 | `bridge.md` | §16: the terminal open object — the anchor increment at unbounded depth; the core-extraction deficit (two-sided digit budget) as its observed mechanism; consolidates 11.8.5.6 / 11.8.7.7 / 14.13 | OPEN (consolidation) |
 | `anchors.md` | §17.1–17.6: consolidated reference for the anchor across the wiki (pointers only) | REFERENCE |
 | `anchor-digit-search.md` | §17.7–17.10: the single-sequence digit-structure search program, executed clean on two statistical axes — breadth (17.7.1) and a 32×-deeper single-anchor probe (17.7.2) — plus a structural automaticity screen (17.7.3, M(ω) not 2-automatic), three operation lenses (17.7.4), and PractRand to 1 GB (17.7.5), all clean; plans (17.8–17.9) and standing (17.10) | executed search (clean; not 2-automatic) |
@@ -40,7 +41,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 
 Monolith section numbers remain the citation anchors throughout (`11.8.6.3` etc.). To find one:
 
-§1–9 → `spine.md` · §10 → this page (below) · §11.1–11.7 → `open-problems.md` · §11.8 intro/guardrail/Stage-1 prospectus → `program.md` · §11.8.1–11.8.2 → `stage1.md` · §11.8.3 → `stage1-synthesis.md` · §11.8.4 → `stage1.md` · §11.8.5 → `stage2.md` · §11.8.6 → `stage3.md` · §11.8.7 → `stage4.md` · §11.8.8, §11.9 → `program.md` · §11.10 (post-monolith; recorded as 11.9 in pre-2026-07-23 briefs) → `open-problems.md` · §12 (post-monolith) → `cycles.md` · §13 (post-monolith) → `aeh.md` · §14.1–14.14 (post-monolith) → `reverse.md` · §14.15 → `itinerary.md` · §15 (post-monolith) → `ladder.md` · §16 (post-monolith) → `bridge.md` · §17.1–17.6 (post-monolith) → `anchors.md` · §17.7–17.10 → `anchor-digit-search.md` · Appendix A → `archive/appendix-a.md` · verification code → `experiments/`
+§1–9 → `spine.md` · §10 → this page (below) · §11.1–11.7 → `open-problems.md` · §11.8 intro/guardrail/Stage-1 prospectus → `program.md` · §11.8.1–11.8.2 → `stage1.md` · §11.8.3 → `stage1-synthesis.md` · §11.8.4 → `stage1.md` · §11.8.5 → `stage2.md` · §11.8.6 → `stage3.md` · §11.8.7 → `stage4.md` · §11.8.8, §11.9 → `program.md` · §11.10 (post-monolith; recorded as 11.9 in pre-2026-07-23 briefs) → `open-problems.md` · §12 (post-monolith) → `cycles.md` · §13 (post-monolith) → `aeh.md` · §14.1–14.14 (post-monolith) → `reverse.md` · §14.15 → `itinerary.md` · §15 (post-monolith) → `ladder.md` · §16 (post-monolith) → `bridge.md` · §17.1–17.6 (post-monolith) → `anchors.md` · §17.7–17.10 → `anchor-digit-search.md` · §18 (post-monolith) → `comb.md` · Appendix A → `archive/appendix-a.md` · verification code → `experiments/`
 
 ## Current status (one paragraph)
 

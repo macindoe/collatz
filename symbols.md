@@ -1,7 +1,7 @@
 ---
 status: REFERENCE (lookup and collision visibility only; no fact lives here)
 scope: wiki-wide symbol registry — one row per symbol per frame, defining pointers by section number, closing collision index; subsumes spine.md §4 by reference
-updated: 2026-09-08
+updated: 2026-09-15
 source: the signed-layer containment audit (2026-08-15); briefs/symbols-registry-brief.md
 ---
 
@@ -30,7 +30,7 @@ Defined in spine.md §3 (definitions) and §4 (the note's dictionary); transform
 | `(ω,d)` | the reduced structural state | spine.md §3.5, §4.4 | |
 | `R` | projection `R(u,m) = (ω,d)` | spine.md §3.6, §4.4 | ≠ `R_r`, `R_{p,q}` — index |
 | `F` | the reduced self-map, `F(ω,d) = R(x_exit(ω,d))` | spine.md §3.7, §4.4 | ≠ `F_i` — index |
-| `A` | structural-step numerator `A = 3^d ω − 1` | spine.md §4.5 | ≠ `A_n`, `A_P`, arc `A` — index |
+| `A` | structural-step numerator `A = 3^d ω − 1` | spine.md §4.5 | the same integer read as a coordinate is the **peak** of the state, `A = 2^s y` at branch `s` on the door `y` (comb.md 18.1) — §4; ≠ `A_n`, `A_P`, arc `A` — index |
 | `s` | exit valuation `s = v₂(A)` | spine.md §4.5 | per-step `s_t` (§3); a door's `r` is the *next* step's `s` (§4) |
 | `x_exit` | the deterministic odd exit, `x_exit = A/2^s` | spine.md §3.7, §4.5 | = the door `y` (§4; reverse.md 14.14.1) |
 | `m₊ u₊ a₊ ω₊ d₊` | the next block's quantities; `₊` marks the next entry/state | spine.md §4.5 | `m₊ = v₂(C) − s`, `a₊ = v₃(C)` (§2) |
@@ -122,6 +122,11 @@ The seam (reverse.md §14.14) and the itinerary language (itinerary.md §14.15).
 | `t_n`, `t(j)` | the mod-3 door datum `t_n = (a + 2j_n)·q^{−1} mod 3`; the dead class is `κ ≡ t_n (mod 3)` | itinerary.md Theorem 14.15.9.6(2)–(3); `t(j)` at 14.15.9(d) | |
 | `k₀` | escape index of the integer-fixed-point (capped) case, `k₀ ∈ {1,2}` by the first-viable rule | itinerary.md 14.15.7 (owner Corollary 14.15.9.7) | |
 | `F_i` | the composed affine map of the rotation `P^{(i)}`, fixed point `y*_i` | itinerary.md Lemma 14.15.9.2 | ≠ the reduced map `F` — index |
+| **peak** | of a state `(ω,d)`: the even integer `A = 3^d ω − 1 = 2^s y`, counted as the node's coordinate; peaks and valid states are in bijection (`d = v₃(A+1)`); an even `A` is a peak iff `3 \| A + 1` | comb.md Definition 18.1.1, Lemma 18.1.2 | the symbol is frame 1's `A`; the block's raw maximum is `2A`, never itself a peak (Remark 18.1.3) |
+| **comb** | the backward tree of reduced states with each door's infinite fan over `s` replaced by a chain: every node other than `(1,1)` has one comb parent — the state at branch `s − 2` on its own door when `s ≥ 3`, else `state(y) = F(ω,d)` | comb.md Definition 18.2.1 (tree property 18.2.2, children and degree 18.2.3) | node set = the backward tree of reverse.md 14.4; the root's single child is `(1,2)` |
+| **cascade edge**, **door edge** | the two comb edge types: `s ≥ 3 → s − 2` on a fixed door (14.10.1's `s → s+2` step read downward; peaks `A, 4A, 16A, …`), and the lowest-branch node on a live door `→ state(y)` (one `F`-step) | comb.md Definition 18.2.1, Lemma 18.2.5 | every `F`-edge of 14.1.1 is one door edge plus a cascade run (18.4) |
+| `λ(v)` | the **peak distance** of a comb node — its level, the number of comb edges to the root | comb.md Definition 18.3.1 | bare `λ` is a bound variable elsewhere (a Chernoff tilt and a scale ratio in aeh.md 13.2.4–13.2.5, the Baker `λ`-form in cycles.md 12.7), not a row |
+| `η(v)` | the **reduced distance** of a comb node — `F`-steps to `(1,1)`; `η = 1 +` (door edges on the path), cascade edges `= λ − η + 1 ≥ 1` | comb.md Definition 18.3.1, Proposition 18.3.2 | bare `η` is a bound variable in aeh.md 13.2.4 (a margin), not a row; the brief's provisional `r`, `ℓ` were not adopted (both collide — `r` in frames 3–4, `ℓ_n` in frame 6) |
 
 ## 5. Signed layer
 
@@ -185,7 +190,7 @@ Every glyph with two or more registry rows, all meanings side by side. Frame num
 | `Col` | one meaning in this record — the raw Collatz map (spine.md §3.1) — entered for the literature-side collision: Tao's `Col` is this map, while the literature's `T` (Terras, Lagarias) is not it but `T₁`; this record's `T` is neither. |
 | `F` | **(1)** the reduced map (spine.md §3.7) · **(4)** rotation-composed affine maps `F_i` (itinerary.md 14.15.9.2). |
 | `G` | **(4)** the exit map on doors (reverse.md 14.14.3.1) · **(3)** repetition factor `G_k` (cycles.md 12.6.1.4). Lowercase `g_j`/`g_P` (§4) are the letter maps and the composed unit. |
-| `A` | **(1)** step numerator `A = 3^d ω − 1` (spine.md §4.5) · **(4)** composed multipliers `A_n`, `A_P` (reverse.md 14.14.8.2; itinerary.md 14.15.9) · **(3)** an arc of blocks in `w(A)` (cycles.md §12.8). |
+| `A` | **(1)** step numerator `A = 3^d ω − 1` (spine.md §4.5) — the same integer is the **peak** of the state when read as a comb coordinate (comb.md 18.1; §4), one quantity in two frames · **(4)** composed multipliers `A_n`, `A_P` (reverse.md 14.14.8.2; itinerary.md 14.15.9) · **(3)** an arc of blocks in `w(A)` (cycles.md §12.8). |
 | `B` | **(4)** composed offsets `B_n`, `B_P` (reverse.md 14.14.8.2) · **(6)** the Bernoulli measure `B`, `B̂` (aeh.md 13.2/13.6.2). |
 | `C` | **(2)** the carry `C = A + 2^s` (stage3.md 11.8.6) · **(2)** Baker constant `C(ω)` (stage1-synthesis.md 11.8.3.11) · **(5)** the signature coset `C = −a·2^{−1}·⟨g_P⟩` (itinerary.md 14.15.9.11). |
 | `D` | **(4)** state depth in `state(y) = (Ω, D)` (reverse.md 14.14.1/14.6.5.1) · **(4)** unreduced fixed-point denominator `D = 2^{S_P} − 3^{M_P}` (itinerary.md 14.15.9.1) · **(6)** the cap in `W_{k,D}` (aeh.md 13.2). |
