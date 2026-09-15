@@ -19,9 +19,7 @@ sup{font-size:9px;}
 .layout{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
 .treecol{flex:1 1 560px;min-width:0;}
 .detail{flex:1 1 400px;min-width:0;background:var(--surface-1);border-radius:12px;padding:10px 14px 14px;font-size:13px;line-height:1.55;position:sticky;top:8px;max-height:calc(100vh - 16px);overflow:auto;}
-ul.tree,ul.tree ul{list-style:none;margin:0;padding:0;}
-ul.tree ul{margin-left:20px;border-left:1px solid var(--border);padding-left:8px;}
-li{margin:4px 0;}
+.tree{display:flex;flex-direction:column;gap:4px;min-width:0;}
 .card{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:6px 10px;font-size:13px;cursor:pointer;min-width:0;}
 .card.sel{background:var(--bg-select);border-color:var(--border-strong);}
 .disc{width:26px;height:26px;padding:0;border-radius:6px;font-family:ui-monospace,monospace;line-height:1;}
@@ -32,6 +30,8 @@ li{margin:4px 0;}
 .st{font-weight:600;white-space:nowrap;}
 .meta{color:var(--text-secondary);}
 .grey{opacity:.65;font-size:12px;padding:3px 10px;color:var(--text-secondary);}
+.stub{font-size:12px;padding:2px 10px;color:var(--text-secondary);}
+.stub button{font-size:12px;padding:2px 8px;opacity:.8;}
 .abbr{cursor:pointer;border-bottom:1px dotted var(--text-muted);}
 .full{word-break:break-all;}
 .list{font-family:ui-monospace,monospace;font-size:12px;line-height:1.75;word-break:break-all;}
@@ -40,7 +40,7 @@ a.go{color:var(--text-accent);text-decoration:none;cursor:pointer;border-bottom:
 .tag{font-family:system-ui,sans-serif;font-size:11px;padding:0 5px;border-radius:4px;border:1px solid var(--border);color:var(--text-secondary);margin-left:6px;}
 .tag-peak,.tag-sibpeak{background:var(--bg-cascade);color:var(--text-primary);}
 .tag-door{background:var(--bg-door);}
-.msg{font-size:13px;color:var(--text-secondary);margin:6px 0 10px;min-height:1.2em;}
+.msg{font-size:13px;color:var(--text-secondary);margin:6px 0 10px;min-height:1.2em;line-height:1.5;}
 .note{font-size:12px;color:var(--text-muted);margin-top:10px;}
 footer{margin-top:18px;font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace;}
 table{border-collapse:collapse;font-size:12px;font-family:ui-monospace,monospace;}
@@ -50,7 +50,7 @@ tr.here td{background:var(--bg-select);}
 </head>
 <body>
 <h1>Comb explorer</h1>
-<p>The peak comb (comb.md §18) is the backward tree of reduced states (&omega;, d), each node placed by its <strong>peak</strong> A = 3<sup>d</sup>&omega; &minus; 1 = 2<sup>s</sup>&middot;y, read as <em>branch s on the door y</em> (18.1). A node at branch s &ge; 3 hangs from the node at branch s &minus; 2 on the same door by a <strong>cascade edge</strong> (the peak divided by 4; 18.2.1, Lemma 18.2.5); the node at the lowest admissible branch hangs from the door's own state, one step of F, by a <strong>door edge</strong>. Read upward, every node has one cascade child and one door child per live door (Proposition 18.2.3): the <strong>top door</strong> 2<sup>d</sup>&omega; &minus; 1 is dead when it is a multiple of 3, the <strong>side doors</strong> never are (reverse.md 14.5.1). &lambda; is the level, the number of edges to (1,1); &eta; is the number of F-steps, and &eta; = 1 + the door edges on the path (Proposition 18.3.2). The tree starts at the root (1,1), whose only child is (1,2). The <code>+</code> control expands a node by one level, and nothing is computed before it is shown; clicking a card opens it in the panel: its path to the root, the raw descent from any of its representatives through the peaks of the lower siblings on its door (18.4), and the chain of siblings. Every integer on this page is exact; integers longer than 24 digits are abbreviated and show in full when clicked.</p>
+<p>The peak comb (comb.md §18) is the backward tree of reduced states (&omega;, d), each node placed by its <strong>peak</strong> A = 3<sup>d</sup>&omega; &minus; 1 = 2<sup>s</sup>&middot;y, read as <em>branch s on the door y</em> (18.1). A node at branch s &ge; 3 hangs from the node at branch s &minus; 2 on the same door by a <strong>cascade edge</strong> (the peak divided by 4; 18.2.1, Lemma 18.2.5); the node at the lowest admissible branch hangs from the door's own state, one step of F, by a <strong>door edge</strong>. Read upward, every node has one cascade child and one door child per live door (Proposition 18.2.3): the <strong>top door</strong> 2<sup>d</sup>&omega; &minus; 1 is dead when it is a multiple of 3, the <strong>side doors</strong> never are (reverse.md 14.5.1). &lambda; is the level, the number of edges to (1,1); &eta; is the number of F-steps, and &eta; = 1 + the door edges on the path (Proposition 18.3.2). The tree starts at the root (1,1), whose only child is (1,2). The <code>+</code> control expands a node by one level, and nothing is computed before it is shown; clicking a card opens it in the panel: its path to the root, the raw descent from any of its representatives through the peaks of the lower siblings on its door (18.4), and the chain of siblings. Rows are indented by level up to level 24 and flat beyond (the level is printed on every card). Every integer on this page is exact; integers longer than 24 digits are abbreviated and show in full when clicked.</p>
 <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
 <label style="font-size:13px;color:var(--text-secondary);">go to a state &omega;,d or an odd integer x
 <input id="goto" type="text" value="" placeholder="e.g. 107,1 or 213" style="width:200px;margin-left:6px;"></label>
@@ -60,7 +60,7 @@ tr.here td{background:var(--bg-select);}
 <div id="msg" class="msg"></div>
 <div class="layout">
 <div class="treecol">
-<ul id="tree" class="tree"></ul>
+<div id="tree" class="tree"></div>
 <div class="note">Levels double from about level 17 (18.5; census counts to level 27 shown beside each &lambda;); the largest peak at level &lambda; is 2<sup>2&lambda;+1</sup>, on door 1 (Lemma 18.5.1).</div>
 </div>
 <div id="detail" class="detail"></div>
@@ -153,8 +153,9 @@ function pathToRoot(w, d, cap){
 const CENSUS = [1n, 1n, 2n, 3n, 10n, 17n, 30n, 61n, 124n, 239n, 478n, 961n, 1978n, 3823n, 7748n, 15597n, 30844n,
   61947n, 124068n, 247507n, 495986n, 991393n, 1982520n, 3966341n, 7931430n, 15864465n, 31732224n, 63457557n];
 const CENSUS_TOTAL = 126917355n;
-// Self-test: the canaries of comb.md section 18 and briefs/peak-comb-findings.md, then parent(child) = node
-// for every child of 300 states from a fixed linear-congruential sequence.
+// Self-test: the canaries of comb.md section 18 and briefs/peak-comb-findings.md, the (137,517) path of the
+// author's report (briefs/comb-explorer-fix-brief.md), then parent(child) = node for every child of 300 states
+// from a fixed linear-congruential sequence.
 function selfTest(){
   let checks = 0n; const failures = [];
   const sEq = (p, q) => p[0] === q[0] && p[1] === q[1];
@@ -194,6 +195,10 @@ function selfTest(){
   const dist = [[S(1, 2), 1n, 1n], [S(11, 1), 1n, 2n], [S(7, 1), 2n, 2n], [S(107, 1), 2n, 4n], [S(1, 1), 0n, 0n]];
   for (const [st, eta, lam] of dist) { const r = pathToRoot(st[0], st[1], 10000n); check(!r.capHit && r.eta === eta && r.lambda === lam, 'distances ' + sS(st)); }
   check(pathToRoot(107n, 1n, 2n).capHit === true, 'cap hit reported');
+  // the path of (137,517): 1,365 nodes, lambda = 1364, eta = 1056, the largest peak of 249 digits
+  const p137 = pathToRoot(137n, 517n, 10000n);
+  check(!p137.capHit && p137.path.length === 1365 && p137.lambda === 1364n && p137.eta === 1056n, '(137,517) path');
+  check(p137.path.reduce((m, q) => q.A.toString().length > m ? q.A.toString().length : m, 0) === 249, '(137,517) largest peak digits');
   // the raw descent of (107,1) from its entry 213
   const rd = rawDescent(107n, 1n, 0n);
   const expRd = [[213n, 'odd', null], [640n, 'max', null], [320n, 'peak', null], [160n, 'cascade', null], [80n, 'sibpeak', S(1, 4)], [40n, 'cascade', null], [20n, 'sibpeak', S(7, 1)], [10n, 'cascade', null], [5n, 'door', null]];
@@ -222,25 +227,31 @@ function selfTest(){
 </script>
 <script>
 (function(){
-const CAP = 10000n;
+const CAP = 10000n;          // the cap on pathToRoot
+const RENDER_CAP = 5000;     // paths longer than this render only the last ANC_SHOWN ancestors below the root
+const ANC_SHOWN = 200;
+const INDENT_CAP = 24n, INDENT_STEP = 18;
 const nodes = new Map();
-let sel = null, repA = 0n;
+let sel = null, repA = 0n, hidden = null;
 const key = st => st[0].toString() + ',' + st[1].toString();
 function grp(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 function fmt(n){
   const s = n.toString();
   if (s.length <= 24) return s;
-  return '<span class="abbr" data-full="' + s + '" title="click to show all ' + s.length + ' digits">' + s.slice(0, 8) + '…' + s.slice(-4) + ' <small>(' + s.length + ' digits)</small></span>';
+  return '<span class="abbr" data-full="' + s + '" title="click to show all ' + s.length + ' digits">' + s.slice(0, 8) + '…' + s.slice(-4) + ' (' + s.length + ' digits)</span>';
 }
 function census(level){ return level <= 27n ? 'level ' + level + ' has ' + grp(CENSUS[Number(level)]) + (level === 0n ? ' node' : ' nodes') : 'level ' + level + ' is beyond the census'; }
 const stLink = st => '<a class="go" data-w="' + st[0] + '" data-d="' + st[1] + '">(' + fmt(st[0]) + ', ' + st[1] + ')</a>';
+const indent = level => 'margin-left:' + (Number(level < INDENT_CAP ? level : INDENT_CAP) * INDENT_STEP) + 'px';
+// The tree model. A node's `shown` is null when all its children are displayed, or the set of child keys
+// displayed (path-only expansion after a go-to; the rest sit behind a stub row).
 function mk(st, parentKey, edge, via){
   const k = key(st); if (nodes.has(k)) return nodes.get(k);
   const e = exitData(st[0], st[1]);
   let level = 0n, doorEdges = 0n;
   if (parentKey !== null) { const p = nodes.get(parentKey); level = p.level + 1n; doorEdges = p.doorEdges + (edge === 'door' ? 1n : 0n); }
   const n = { key: k, state: st, A: e.A, s: e.s, y: e.y, level: level, doorEdges: doorEdges, eta: parentKey === null ? 0n : 1n + doorEdges,
-    parentKey: parentKey, edge: edge, via: via, expanded: false, kids: null, dead: [], excluded: [] };
+    parentKey: parentKey, edge: edge, via: via, expanded: false, shown: null, kids: null, dead: [], excluded: [] };
   nodes.set(k, n); return n;
 }
 function ensureKids(n){
@@ -256,7 +267,7 @@ function cardHTML(n){
   let via = '';
   if (n.edge === 'door') via = '<span class="meta">through ' + doorName(n.via.a) + '</span>';
   else if (n.edge === 'cascade') via = '<span class="meta">cascade child, same door</span>';
-  return '<div class="card' + (sel === n.key ? ' sel' : '') + '" data-k="' + n.key + '">'
+  return '<div class="card' + (sel === n.key ? ' sel' : '') + '" data-k="' + n.key + '" style="' + indent(n.level) + '">'
     + '<button class="disc" data-k="' + n.key + '" title="expand or collapse">' + (n.expanded ? '−' : '+') + '</button>'
     + edgeBadge(n.edge)
     + '<span class="st">(' + fmt(st[0]) + ', ' + st[1] + ')</span>'
@@ -264,16 +275,46 @@ function cardHTML(n){
     + '<span class="meta">λ = ' + n.level + ' (' + census(n.level) + ') · η = ' + n.eta + '</span>'
     + via + '</div>';
 }
-function renderNode(n){
-  let h = '<li>' + cardHTML(n);
-  if (n.expanded) {
-    h += '<ul>';
-    for (const k of n.kids) h += renderNode(nodes.get(k));
-    for (const ex of n.excluded) h += '<li class="grey">door ' + fmt(ex.y) + ' (' + doorName(ex.a) + ', live): its lowest-branch child, at branch ' + ex.s + ', is the root itself, the excluded self-loop (18.2.1)</li>';
-    for (const dd of n.dead) h += '<li class="grey">' + doorName(dd.a) + ' ' + fmt(dd.y) + ' is dead (a multiple of 3): no door child (reverse.md 14.5.1)</li>';
-    h += '</ul>';
+function greyRows(n){
+  let h = '';
+  for (const ex of n.excluded) h += '<div class="grey" style="' + indent(n.level + 1n) + '">door ' + fmt(ex.y) + ' (' + doorName(ex.a) + ', live): its lowest-branch child, at branch ' + ex.s + ', is the root itself, the excluded self-loop (18.2.1)</div>';
+  for (const dd of n.dead) h += '<div class="grey" style="' + indent(n.level + 1n) + '">' + doorName(dd.a) + ' ' + fmt(dd.y) + ' is dead (a multiple of 3): no door child (reverse.md 14.5.1)</div>';
+  return h;
+}
+// Flat rendering: one row per visible node in depth-first order, indented by min(level, 24) steps; no
+// nesting per level, so the DOM depth under #tree is bounded whatever the path length. The walk keeps
+// its own stack (no recursion), so a path of thousands of levels does not exhaust the call stack either.
+function render(){
+  const rows = []; let placed = false;
+  const stack = [{ node: nodes.get('1,1') }];
+  while (stack.length > 0) {
+    const item = stack.pop();
+    if (item.after) {
+      const n = item.after;
+      if (n.shown === null) { rows.push(greyRows(n)); continue; }
+      const remaining = item.remaining, folded = n.excluded.length + n.dead.length;
+      if (remaining + folded > 0) {
+        let label = remaining > 0 ? '+ ' + remaining + ' more ' + (remaining === 1 ? 'child' : 'children') : '';
+        if (folded > 0) label += (remaining > 0 ? ' and ' : '+ ') + folded + (n.dead.length > 0 ? (folded === 1 ? ' dead door' : ' door notes') : ' door note');
+        rows.push('<div class="stub" style="' + indent(n.level + 1n) + '"><button class="stubBtn" data-k="' + n.key + '">' + label + ' (expand)</button></div>');
+      }
+      continue;
+    }
+    const n = item.node;
+    const isHidden = hidden !== null && hidden.keys.has(n.key);
+    if (isHidden) {
+      if (!placed) { rows.push('<div class="grey" style="' + indent(1n) + '">… ' + grp(hidden.count) + ' ancestors not shown (levels ' + hidden.from + '..' + hidden.to + ')</div>'); placed = true; }
+    } else {
+      rows.push(cardHTML(n));
+      if (!n.expanded) continue;
+    }
+    const shownKids = []; let remaining = 0;
+    for (const k of n.kids) { if (n.shown === null || n.shown.has(k)) shownKids.push(k); else remaining++; }
+    if (!isHidden) stack.push({ after: n, remaining: remaining });
+    for (let i = shownKids.length - 1; i >= 0; i--) stack.push({ node: nodes.get(shownKids[i]) });
   }
-  return h + '</li>';
+  document.getElementById('tree').innerHTML = rows.join('');
+  renderDetail();
 }
 function tagLabel(r){
   switch (r.tag) {
@@ -323,12 +364,16 @@ function renderDetail(){
   const rep = document.getElementById('rep');
   if (rep) rep.addEventListener('change', ev => { repA = BigInt(ev.target.value); renderDetail(); });
 }
-function render(){
-  document.getElementById('tree').innerHTML = renderNode(nodes.get('1,1'));
-  renderDetail();
-}
 function msg(t){ document.getElementById('msg').textContent = t; }
 function msgHTML(t){ document.getElementById('msg').innerHTML = t; }
+// The recovery note for an odd integer x: which door of which state it is (reverse.md 14.6.5.1).
+function oddNote(x){
+  const st = stateOfOdd(x); const a = v3(x + 1n);
+  return 'x = ' + fmt(x) + ' is the door y<sub>' + a + '</sub> of exactly one state (reverse.md 14.6.5.1): x + 1 = 2<sup>' + v2(x + 1n) + '</sup>·3<sup>' + a + '</sup>·' + fmt(st[0]) + ', the state (' + fmt(st[0]) + ', ' + st[1] + ')' + (a === 0n ? ', its top door' : ', its side door a = ' + a) + '. ';
+}
+const intLink = (digits, text) => '<a class="go" data-x="' + digits + '">' + text + '</a>';
+// Input: "w,d" is read as a state (the comma reading is stated and reversible: the digits joined are
+// offered as the odd-integer reading when they are odd); digits alone are an odd integer x.
 function parseInput(str){
   const t = str.trim().replace(/[()\s]/g, '');
   if (t === '') return { err: 'Enter a state ω,d or a positive odd integer x.' };
@@ -336,52 +381,84 @@ function parseInput(str){
     const parts = t.split(',');
     if (parts.length !== 2 || !/^\d+$/.test(parts[0]) || !/^\d+$/.test(parts[1])) return { err: 'A state is two positive integers, ω,d.' };
     const w = BigInt(parts[0]), d = BigInt(parts[1]);
-    if (!isValidState(w, d)) return { err: 'Not a valid state: ω must be odd and not a multiple of 3, and d ≥ 1.' };
-    return { state: [w, d], note: '' };
+    const joined = BigInt(parts[0] + parts[1]); const jOdd = joined >= 1n && (joined & 1n) === 1n;
+    if (!isValidState(w, d)) {
+      if (jOdd) return { errHTML: '(' + fmt(w) + ', ' + d + ') is not a valid state (ω must be odd and not a multiple of 3, and d ≥ 1); the digits joined give the odd integer ' + fmt(joined) + ' — ' + intLink(joined.toString(), 'go to it as an integer') + '.' };
+      return { err: 'Not a valid state: ω must be odd and not a multiple of 3, and d ≥ 1.' };
+    }
+    const alt = jOdd ? ' — for the odd integer ' + fmt(joined) + ', ' + intLink(joined.toString(), 'type it without the comma') + '. ' : ' (the digits joined, ' + fmt(joined) + ', are even, so there is no odd-integer reading). ';
+    return { state: [w, d], note: 'read as the state (' + fmt(w) + ', ' + d + ')' + alt };
   }
   if (!/^\d+$/.test(t)) return { err: 'Enter digits only: a state ω,d or a positive odd integer x.' };
   const x = BigInt(t);
   if (x < 1n || (x & 1n) === 0n) return { err: 'x must be a positive odd integer.' };
-  const st = stateOfOdd(x); const a = v3(x + 1n);
-  return { state: st, note: 'x = ' + fmt(x) + ' is the door y<sub>' + a + '</sub> of exactly one state (reverse.md 14.6.5.1): x + 1 = 2<sup>' + v2(x + 1n) + '</sup>·3<sup>' + a + '</sup>·' + fmt(st[0]) + ', the state (' + fmt(st[0]) + ', ' + st[1] + ')' + (a === 0n ? ', its top door' : ', its side door a = ' + a) + '. ' };
+  return { state: stateOfOdd(x), note: oddNote(x) };
 }
+// Go-to: the path to the root under the cap; each ancestor expanded to its path child only (the rest behind a
+// stub), the node selected. Past RENDER_CAP path nodes only the last ANC_SHOWN ancestors are rendered.
 function gotoState(st, note){
   const pr = pathToRoot(st[0], st[1], CAP);
   if (pr.capHit) { msgHTML(note + 'The parent chain from (' + fmt(st[0]) + ', ' + st[1] + ') did not reach (1,1) within 10,000 steps; the node is not placed.'); return; }
-  for (let i = pr.path.length - 1; i >= 1; i--) {
+  hidden = null;
+  const L = pr.path.length;
+  for (let i = L - 1; i >= 1; i--) {
     const anc = nodes.get(key(pr.path[i].state));
     if (!anc) { msg('Internal error: an ancestor is missing from the tree.'); return; }
-    ensureKids(anc); anc.expanded = true;
-    if (!nodes.has(key(pr.path[i - 1].state))) { msg('Internal error: a path node is not a child of its parent.'); return; }
+    ensureKids(anc);
+    const ck = key(pr.path[i - 1].state);
+    if (!nodes.has(ck)) { msg('Internal error: a path node is not a child of its parent.'); return; }
+    if (!anc.expanded) { anc.expanded = true; anc.shown = new Set([ck]); }
+    else if (anc.shown !== null) anc.shown.add(ck);
+  }
+  let guard = '';
+  if (L > RENDER_CAP) {
+    const keys = new Set(); let from = null, to = null;
+    for (let i = L - 2; i > ANC_SHOWN; i--) {
+      const anc = nodes.get(key(pr.path[i].state)); keys.add(anc.key); anc.shown = new Set([key(pr.path[i - 1].state)]);
+      if (from === null) from = anc.level; to = anc.level;
+    }
+    hidden = { keys: keys, count: keys.size, from: from, to: to };
+    guard = ' The path has ' + grp(L) + ' nodes, more than ' + grp(RENDER_CAP) + ', so only the last ' + ANC_SHOWN + ' ancestors are rendered below the root; ' + grp(keys.size) + ' ancestors (levels ' + from + '..' + to + ') are folded into one row.';
   }
   sel = key(st); repA = 0n;
-  msgHTML(note + 'Placed (' + fmt(st[0]) + ', ' + st[1] + ') at level ' + pr.lambda + ' with η = ' + pr.eta + '; the tree is expanded along its path to the root.');
+  msgHTML(note + 'Placed (' + fmt(st[0]) + ', ' + st[1] + ') at level ' + grp(pr.lambda) + ' with η = ' + grp(pr.eta) + '; ' + grp(L - 1) + ' ancestors on the path shown, each with the rest of its children behind a stub.' + guard);
   render();
   const c = document.querySelector('.card.sel'); if (c) c.scrollIntoView({ block: 'center' });
 }
+function gotoOdd(x){ gotoState(stateOfOdd(x), oddNote(x)); }
 function reset(){
-  nodes.clear(); sel = null; repA = 0n;
+  nodes.clear(); sel = null; repA = 0n; hidden = null;
   const root = mk([1n, 1n], null, null, null);
-  ensureKids(root); root.expanded = true;
+  ensureKids(root); root.expanded = true; root.shown = null;
   msg(''); render();
 }
+function onGoLink(a){ if (a.dataset.x !== undefined) gotoOdd(BigInt(a.dataset.x)); else gotoState([BigInt(a.dataset.w), BigInt(a.dataset.d)], ''); }
 document.getElementById('tree').addEventListener('click', ev => {
   const ab = ev.target.closest('.abbr'); if (ab) { toggleAbbr(ab); ev.stopPropagation(); return; }
+  const stub = ev.target.closest('.stubBtn'); if (stub) { nodes.get(stub.dataset.k).shown = null; render(); return; }
   const disc = ev.target.closest('.disc');
-  if (disc) { const n = nodes.get(disc.dataset.k); if (!n.expanded) ensureKids(n); n.expanded = !n.expanded; render(); ev.stopPropagation(); return; }
+  if (disc) { const n = nodes.get(disc.dataset.k); if (!n.expanded) { ensureKids(n); n.shown = null; } n.expanded = !n.expanded; render(); ev.stopPropagation(); return; }
   const card = ev.target.closest('.card');
   if (card) { sel = card.dataset.k; repA = 0n; render(); }
 });
 document.getElementById('detail').addEventListener('click', ev => {
   const ab = ev.target.closest('.abbr'); if (ab) { toggleAbbr(ab); return; }
-  const a = ev.target.closest('a.go'); if (a) { gotoState([BigInt(a.dataset.w), BigInt(a.dataset.d)], ''); }
+  const a = ev.target.closest('a.go'); if (a) onGoLink(a);
 });
-document.getElementById('msg').addEventListener('click', ev => { const ab = ev.target.closest('.abbr'); if (ab) toggleAbbr(ab); });
+document.getElementById('msg').addEventListener('click', ev => {
+  const ab = ev.target.closest('.abbr'); if (ab) { toggleAbbr(ab); return; }
+  const a = ev.target.closest('a.go'); if (a) onGoLink(a);
+});
 function toggleAbbr(el){
-  if (el.classList.contains('full')) { const s = el.dataset.full; el.innerHTML = s.slice(0, 8) + '…' + s.slice(-4) + ' <small>(' + s.length + ' digits)</small>'; el.classList.remove('full'); }
+  if (el.classList.contains('full')) { const s = el.dataset.full; el.textContent = s.slice(0, 8) + '…' + s.slice(-4) + ' (' + s.length + ' digits)'; el.classList.remove('full'); }
   else { el.textContent = el.dataset.full; el.classList.add('full'); }
 }
-function go(){ const r = parseInput(document.getElementById('goto').value); if (r.err) { msg(r.err); return; } gotoState(r.state, r.note); }
+function go(){
+  const r = parseInput(document.getElementById('goto').value);
+  if (r.err) { msg(r.err); return; }
+  if (r.errHTML) { msgHTML(r.errHTML); return; }
+  gotoState(r.state, r.note);
+}
 document.getElementById('goBtn').addEventListener('click', go);
 document.getElementById('goto').addEventListener('keydown', ev => { if (ev.key === 'Enter') go(); });
 document.getElementById('resetBtn').addEventListener('click', reset);
