@@ -1,8 +1,8 @@
 comb_explorer_check.py -- seed 20260915, 2026-09-15
-core block: 150 lines between the markers, no DOM access
+core block: 155 lines between the markers, no DOM access
 node v20.10.0; 14902 requests answered
 --- the page's selfTest() under node ---
-  self-test: 13239 checks, 0 failures
+  self-test: 13241 checks, 0 failures
 --- canaries (brief's list; JS and Python each against the expected values) ---
   canaries: 35 checks so far, 0 failures
 --- 2,000 random states (w < 10^6, 3 does not divide w, d <= 40) plus 13 canary states, every function ---
@@ -18,5 +18,13 @@ node v20.10.0; 14902 requests answered
   300 x compared; largest lambda 140, largest eta 119; no cap hit
 --- 200 random representatives (state as above, a in 0..d-1): the raw descent by iterating Col ---
   200 descents compared, 4658 points, 64 lower-sibling peaks named
+--- rendering under a stubbed document: go-to (137,517), 213, a random 300-digit odd x, and a path past the render cap ---
+  page load under the stub, footer: self-test: 13241 checks, 0 failures
+  depth bound stated: 3 (tree container > row > span > abbreviation or exponent)
+  (137,517)    path 1365 nodes (lambda 1364, eta 1056): max nesting depth 3, rendered rows 2729 (cards 1365, stubs 1363, note rows 1), no exception; a full expansion of the ancestors would render 4206 rows
+  213          path 5 nodes (lambda 4, eta 2): max nesting depth 3, rendered rows 9 (cards 5, stubs 3, note rows 1), no exception; a full expansion of the ancestors would render 13 rows
+  300-digit x  path 1794 nodes (lambda 1793, eta 1383): max nesting depth 3, rendered rows 3587 (cards 1794, stubs 1792, note rows 1), no exception; a full expansion of the ancestors would render 5437 rows
+  render cap   path 5002 nodes (lambda 5001, eta 1): max nesting depth 3, rendered rows 404 (cards 202, stubs 200, note rows 2), no exception; a full expansion of the ancestors would render 12504 rows; 4800 ancestors folded
+  9,1 (not a state): refused, the odd integer 91 offered as a link
 
-TOTAL: checks = 15291, failures = 0
+TOTAL: checks = 15329, failures = 0
