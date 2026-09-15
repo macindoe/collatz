@@ -34,7 +34,19 @@ What it does:
      divide w, d <= 40) for every function, on 300 random odd x < 10^12 for the go-to
      path (eta, lambda, the full path), and on 200 random representatives for the raw
      descent; it also runs the page's own selfTest() under node and reports its line.
-  4. Prints per-function counts and `TOTAL: checks = N, failures = 0`.
+  4. Rendering test (revision 1, briefs/comb-explorer-fix-brief.md): loads both of the
+     page's script blocks under node with a stubbed `document` (elements are plain
+     objects holding innerHTML and click listeners), drives the go-to box for
+     (137, 517), for 213, for the state of a random 300-digit odd integer, and for a
+     state whose path exceeds the page's render cap of 5,000 nodes, and measures on
+     the produced tree HTML with Python's own html.parser: (a) the maximum element
+     nesting depth under the tree container, which must be at most DEPTH_BOUND = 3;
+     (b) the number of rendered rows, which must equal the visible nodes computed
+     here from the Python children rule (the path nodes, one stub per ancestor with
+     children left unshown, the root's own note rows, and the fold row under the
+     render cap) and be far below the count of all the ancestors' children; (c) no
+     exception. The go-to message is checked for the comma reading and the counts.
+  5. Prints per-function counts and `TOTAL: checks = N, failures = 0`.
 
 Fresh code: imports nothing from any other file in this repository. Exact integers at
 every pass/fail decision. Seed 20260915. Single reproducing command:
@@ -53,6 +65,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from html.parser import HTMLParser
 
 SEED = 20260915
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -330,6 +343,149 @@ def run_node(core, reqs):
 
 
 # ----------------------------------------------------------------------------
+# The rendering test: the page's two script blocks under a stubbed document
+# ----------------------------------------------------------------------------
+
+DEPTH_BOUND = 3      # the largest element nesting depth allowed under the tree container
+RENDER_CAP = 5000    # the page's own cap on rendered path length (nodes)
+ANC_SHOWN = 200      # ancestors rendered below the root when the cap is exceeded
+
+RENDER_HARNESS = r"""
+const __fs = require('fs');
+const __html = __fs.readFileSync(process.argv[2], 'utf8');
+const __blocks = [...__html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
+if (__blocks.length !== 2) { process.stdout.write(JSON.stringify({ error: 'expected 2 script blocks, found ' + __blocks.length })); process.exit(0); }
+const __els = {}, __listeners = {};
+function __el(id){
+  if (!__els[id]) __els[id] = { id, innerHTML: '', textContent: '', value: '', addEventListener: (t, f) => { (__listeners[id] = __listeners[id] || {})[t] = f; }, scrollIntoView: () => {} };
+  return __els[id];
+}
+global.document = { getElementById: id => __el(id), querySelector: () => ({ scrollIntoView: () => {} }) };
+global.window = {};
+const __chunks = [];
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', c => __chunks.push(c));
+process.stdin.on('end', () => {
+  const cases = JSON.parse(__chunks.join(''));
+  const out = { selftest: null, cases: [] };
+  try { new Function(__blocks[0] + '\n' + __blocks[1])(); out.selftest = __els.selftest.textContent; }
+  catch (e) { out.error = 'load: ' + e; process.stdout.write(JSON.stringify(out)); return; }
+  for (const c of cases) {
+    const r = { name: c.name };
+    try {
+      __listeners.resetBtn.click();
+      __els.goto.value = c.input;
+      __listeners.goBtn.click();
+      r.tree = __els.tree.innerHTML;
+      r.msg = __els.msg.innerHTML;
+      r.detailLen = __els.detail.innerHTML.length;
+    } catch (e) { r.error = String(e && e.stack ? e.stack : e); }
+    out.cases.push(r);
+  }
+  process.stdout.write(JSON.stringify(out));
+});
+"""
+
+
+class TreeMeasure(HTMLParser):
+    """Depth and row statistics of the tree container's innerHTML."""
+
+    VOID = {"br", "img", "input", "hr", "meta", "link"}
+
+    def __init__(self):
+        super().__init__()
+        self.depth = 0
+        self.max_depth = 0
+        self.rows = 0
+        self.cards = 0
+        self.stubs = 0
+        self.greys = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in self.VOID:
+            return
+        self.depth += 1
+        self.max_depth = max(self.max_depth, self.depth)
+        if self.depth == 1:
+            self.rows += 1
+            cls = dict(attrs).get("class", "")
+            if "card" in cls.split():
+                self.cards += 1
+            elif "stub" in cls.split():
+                self.stubs += 1
+            elif "grey" in cls.split():
+                self.greys += 1
+
+    def handle_endtag(self, tag):
+        if tag in self.VOID:
+            return
+        self.depth -= 1
+
+
+def expected_rows(path):
+    """Visible rows after a go-to from a freshly reset tree, from the Python children rule.
+
+    path: the list of states from the node to the root. The root is displayed in full
+    (its card plus one note row for the excluded self-loop, as reset leaves it); every
+    other ancestor shows its card, its path child, and one stub row when children or
+    door notes remain unshown; the node shows its card. Past RENDER_CAP path nodes the
+    ancestors other than the last ANC_SHOWN are replaced by one fold row.
+    Returns (rows, cards, stubs, greys, full_rows, hidden_count), where full_rows is what
+    expanding every ancestor in full would render: the root, all the ancestors' children,
+    and all their note rows.
+    """
+    L = len(path)
+    hidden = set()
+    if L > RENDER_CAP:
+        hidden = set(range(ANC_SHOWN + 1, L - 1))
+    rows = cards = stubs = greys = 0
+    full_rows = 1
+    for i in range(L - 1, -1, -1):
+        st = path[i]
+        if i == L - 1:                      # the root, shown in full
+            lst, dead, exc = children(*st)
+            full_rows += len(lst) + len(dead) + len(exc)
+            rows += 1 + len(dead) + len(exc)
+            cards += 1
+            greys += len(dead) + len(exc)
+            continue
+        if i == 0:                          # the node itself, collapsed
+            rows += 1
+            cards += 1
+            continue
+        lst, dead, exc = children(*st)
+        full_rows += len(lst) + len(dead) + len(exc)
+        if i in hidden:
+            continue
+        rows += 1
+        cards += 1
+        if (len(lst) - 1) + len(dead) + len(exc) > 0:
+            rows += 1
+            stubs += 1
+    if hidden:
+        rows += 1
+        greys += 1
+    return rows, cards, stubs, greys, full_rows, len(hidden)
+
+
+def run_render(cases):
+    node = shutil.which("node")
+    if node is None:
+        out("ERROR: node is not on the PATH; the rendering test cannot run.")
+        sys.exit(2)
+    with tempfile.TemporaryDirectory() as td:
+        js = os.path.join(td, "comb_render_run.js")
+        with open(js, "w", encoding="utf-8") as f:
+            f.write(RENDER_HARNESS)
+        proc = subprocess.run([node, js, PAGE], input=json.dumps(cases), capture_output=True, text=True, encoding="utf-8")
+    if proc.returncode != 0:
+        out("ERROR: node exited with status %d in the rendering test" % proc.returncode)
+        out(proc.stderr[:4000])
+        sys.exit(2)
+    return json.loads(proc.stdout)
+
+
+# ----------------------------------------------------------------------------
 # Main
 # ----------------------------------------------------------------------------
 
@@ -410,6 +566,7 @@ def main():
     out("--- the page's selfTest() under node ---")
     out("  self-test: %s checks, %d failures" % (st["checks"], len(st["failures"])))
     check(int(st["checks"]) > 0 and len(st["failures"]) == 0, "page selfTest: " + "; ".join(st["failures"][:5]))
+    page_checks = st["checks"]
 
     # --- canaries against hard-coded expectations, on BOTH implementations
     out("--- canaries (brief's list; JS and Python each against the expected values) ---")
@@ -522,6 +679,62 @@ def main():
                 A2, s2, y2 = exit_data(sw, sd)
                 check(y2 == y and s2 < s and A2 == int(p["x"]), "sibling peak %s in the descent of (%d,%d,%d)" % (p["x"], w, d, a))
     out("  200 descents compared, %d points, %d lower-sibling peaks named" % (npts, nsib))
+
+    # --- the rendering test (revision 1)
+    out("--- rendering under a stubbed document: go-to (137,517), 213, a random 300-digit odd x, and a path past the render cap ---")
+    x300 = rng.randrange(10 ** 299, 10 ** 300) | 1
+    big_w = (2 ** 10003 + 1) // 3          # door 1's chain at branch 10003: level 5001, path 5002 nodes
+    assert big_w % 3 != 0 and node_at(1, 10003) == (big_w, 1)
+    cases = [
+        {"name": "(137,517)", "input": "137,517", "state": (137, 517), "comma": True},
+        {"name": "213", "input": "213", "state": state_of_odd(213), "comma": False},
+        {"name": "300-digit x", "input": str(x300), "state": state_of_odd(x300), "comma": False},
+        {"name": "render cap", "input": "%d,1" % big_w, "state": (big_w, 1), "comma": True},
+    ]
+    res_r = run_render([{"name": c["name"], "input": c["input"]} for c in cases])
+    check("error" not in res_r, "rendering harness: " + str(res_r.get("error"))[:300])
+    out("  page load under the stub, footer: %s" % res_r.get("selftest"))
+    check(res_r.get("selftest") == "self-test: %s checks, 0 failures" % page_checks, "footer line matches selfTest() under node")
+    out("  depth bound stated: %d (tree container > row > span > abbreviation or exponent)" % DEPTH_BOUND)
+    for c, r in zip(cases, res_r.get("cases", [])):
+        w, d = c["state"]
+        path, cap_hit, de, ce, lam = path_to_root(w, d, 10000)
+        eta = eta_by_F(w, d)
+        exp_rows, exp_cards, exp_stubs, exp_greys, full_rows, hid = expected_rows([p[0] for p in path])
+        if "error" in r:
+            check(False, "%s: exception %s" % (c["name"], r["error"][:300]))
+            out("  %-12s EXCEPTION: %s" % (c["name"], r["error"][:200]))
+            continue
+        m = TreeMeasure()
+        m.feed(r["tree"])
+        out("  %-12s path %d nodes (lambda %d, eta %d): max nesting depth %d, rendered rows %d (cards %d, stubs %d, note rows %d), no exception; a full expansion of the ancestors would render %d rows%s"
+            % (c["name"], len(path), lam, eta, m.max_depth, m.rows, m.cards, m.stubs, m.greys, full_rows,
+               ("; %d ancestors folded" % hid) if hid else ""))
+        check(m.max_depth <= DEPTH_BOUND, "%s: nesting depth %d > %d" % (c["name"], m.max_depth, DEPTH_BOUND))
+        check(m.rows == exp_rows and m.cards == exp_cards and m.stubs == exp_stubs and m.greys == exp_greys,
+              "%s: rows %d/%d cards %d/%d stubs %d/%d notes %d/%d (page/expected)" % (c["name"], m.rows, exp_rows, m.cards, exp_cards, m.stubs, exp_stubs, m.greys, exp_greys))
+        check(m.cards == len(path) - hid, "%s: cards %d, visible path nodes %d" % (c["name"], m.cards, len(path) - hid))
+        check(m.rows < full_rows, "%s: rows %d not below a full expansion's %d" % (c["name"], m.rows, full_rows))
+        check(True, "%s: no exception" % c["name"])
+        text = r["msg"]
+        check(("Placed (%d, %d)" % (w, d) if len(str(w)) <= 24 else "Placed (") in text and ("level %s" % format(lam, ",")) in text, "%s: message places the node at level %d" % (c["name"], lam))
+        check(("%s ancestors on the path shown" % format(len(path) - 1, ",")) in text, "%s: message states the ancestor count" % c["name"])
+        if c["comma"]:
+            joined = c["input"].replace(",", "")
+            lead = "read as the state ("
+            check(text.startswith(lead), "%s: message begins with the comma reading" % c["name"])
+            if int(joined) % 2 == 1:
+                check(('data-x="%s"' % joined) in text and "type it without the comma" in text, "%s: the odd-integer alternative is offered as a link" % c["name"])
+        if c["name"] == "(137,517)":
+            check(len(path) == 1365 and lam == 1364 and eta == 1056, "(137,517): path 1365, lambda 1364, eta 1056")
+            check(text.startswith("read as the state (137, 517) — for the odd integer 137517, "), "(137,517): the message's opening")
+        if c["name"] == "render cap":
+            check(hid > 0 and "ancestors not shown" in r["tree"] and "folded into one row" in text, "render cap: the fold row and the message")
+    # the comma reading that is not a state but whose digits joined are odd: the integer reading is offered
+    res_c = run_render([{"name": "9,1", "input": "9,1"}])
+    rc = res_c.get("cases", [{}])[0]
+    check("error" not in rc and "not a valid state" in rc.get("msg", "") and 'data-x="91"' in rc.get("msg", ""), "9,1: invalid state, integer 91 offered")
+    out("  9,1 (not a state): refused, the odd integer 91 offered as a link")
 
     out("")
     for l in FAIL_LINES:
