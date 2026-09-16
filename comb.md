@@ -1,11 +1,11 @@
 ---
-status: FORMULATION — a construction (the backward tree of reduced states re-indexed by peak level), its elementary structural properties proved with fresh code, and a census; no front moves
+status: FORMULATION — a construction (the backward tree of reduced states re-indexed by peak level), its elementary structural properties proved with fresh code, and a census; the dictionary with the itinerary word and the digit-transfer law across a door edge (18.7); no front moves
 scope: new section 18 (post-monolith)
-updated: 2026-09-15
-source: the author's session of 2026-09-15; briefs/peak-comb-brief.md
+updated: 2026-09-16
+source: the author's sessions of 2026-09-15 and 2026-09-16; briefs/peak-comb-brief.md, briefs/comb-dictionary-brief.md
 ---
 
-> **Current state.** The backward tree of reduced states (reverse.md 14.4), with the even integer `A = 3^d ω − 1` — the structural-step numerator — counted as the coordinate of its node (the **peak**), and each door's infinite fan over the exit valuation `s` replaced by a chain: a node at branch `s ≥ 3` hangs from the node at branch `s − 2` on the same door (a **cascade edge**, reverse.md 14.10.1's step read downward), and the node at the lowest admissible branch hangs from the door's own state (a **door edge**, one `F`-step). Proved: peaks and states are in bijection; the parent rule is well defined and its graph on the states whose `F`-orbit reaches `(1,1)` is a tree rooted at `(1,1)` with exactly the node set of 14.4; every node has finite degree — one cascade child plus one door child per live door — so every level is finite with no size cutoff, and no node is a leaf; the root has exactly one child; the two distances (reduced `η` = `F`-steps, peak `λ` = level) obey `η = 1 +` door edges and `λ − η + 1 =` cascade edges `≥ 1`, the `+1` being the root's own self-loop; the comb re-indexes 14.1.1's completeness against the raw map exactly; the largest peak at level `λ` is `2^{2λ+1}`, on door `1`. A census to level `27` (`126,917,355` nodes, doubling per level) and one exploratory table, reported flat. The comb moves no front: the conjecture is the statement that it spans every state (Theorem 9.8.3), unchanged.
+> **Current state.** The backward tree of reduced states (reverse.md 14.4), with the even integer `A = 3^d ω − 1` — the structural-step numerator — counted as the coordinate of its node (the **peak**), and each door's infinite fan over the exit valuation `s` replaced by a chain: a node at branch `s ≥ 3` hangs from the node at branch `s − 2` on the same door (a **cascade edge**, reverse.md 14.10.1's step read downward), and the node at the lowest admissible branch hangs from the door's own state (a **door edge**, one `F`-step). Proved: peaks and states are in bijection; the parent rule is well defined and its graph on the states whose `F`-orbit reaches `(1,1)` is a tree rooted at `(1,1)` with exactly the node set of 14.4; every node has finite degree — one cascade child plus one door child per live door — so every level is finite with no size cutoff, and no node is a leaf; the root has exactly one child; the two distances (reduced `η` = `F`-steps, peak `λ` = level) obey `η = 1 +` door edges and `λ − η + 1 =` cascade edges `≥ 1`, the `+1` being the root's own self-loop; the comb re-indexes 14.1.1's completeness against the raw map exactly; the largest peak at level `λ` is `2^{2λ+1}`, on door `1`; the comb path is the node's itinerary word (`η` its length, `λ` its length plus its cascade runs), the level ratio is the mean degree exactly (`2` under the measured depth ledger), and the 3-adic precision lost across a door edge into door `a` of a depth-`d` child is exactly `d − a` digits, 14.14.4.1 read backward (18.7). A census to level `27` (`126,917,355` nodes, doubling per level) and one exploratory table, reported flat. The comb moves no front: the conjecture is the statement that it spans every state (Theorem 9.8.3), unchanged.
 
 # 18. The peak comb
 
@@ -166,3 +166,87 @@ What the comb is: the classical Collatz inverse tree — Lagarias 1985's Collatz
 What it is not: no front moves. Nothing in this section constrains which states the comb reaches; the node set is the backward tree of 14.4 by definition, and the conjecture is the statement that the comb spans every valid state (Theorem 9.8.3, unchanged). The census is a count, the exploratory table a calibration line, and the family frame (grouping states by core, ladder.md §15's column relations) is not used here except for the one orbit-level law of 15.6.2. Grade: **formulation**.
 
 The comb can be walked node by node in `viz/comb_explorer.html`, which expands the tree one node at a time from `(1,1)` and shows, for any node, its peak, branch and door, `η` and `λ`, its path to the root, its raw descent through the lower siblings' peaks, and the siblings on its door, every integer exact (its arithmetic core is checked against an independent implementation by `experiments/comb_explorer_check.py`).
+
+## 18.7. The comb as the word: the dictionary, the mean degree, the two determinacies, and the digit-transfer law
+
+The author's question (2026-09-16): how to look for inter-state determinism along `λ` and `η`, and whether the doors need an enumeration of their own, like the letter system of itinerary.md 14.15.1. No new alphabet is needed: the comb's edges are the letter system in door coordinates, and `η` and `λ` are statistics of the itinerary word (18.7.1). What the comb adds is one tree on which the forward, 2-adic determinacy (along door edges) and the backward, 3-adic one (along cascade chains) sit together, one identity for its level growth (18.7.2), and one exact count at the seam between the two determinacies (18.7.3). Nothing here is new dynamics, and the family frame is not used.
+
+### 18.7.1. The path is the word
+
+**Lemma 18.7.1.** Let `v ≠ (1,1)` be a comb node with `F`-orbit `v = v₀, v₁, …, v_η = (1,1)`, `η = η(v)`, and for `i < η` let `s_i = s(v_i)` be the exit valuation, `y^{(i)}` the exit (a door of `v_{i+1}`) and `a_i = v₃(y^{(i)} + 1)` its door index in `v_{i+1}` (`a_i = a₊` of the step, 14.14.1.1). Then:
+
+- (a) the comb path from `v` to the root is, for `i = 0, …, η − 2`, `⌊(s_i − 1)/2⌋` cascade edges on door `y^{(i)}` followed by the door edge into `v_{i+1}` through its door `a_i`; and for `i = η − 1`, `(s_{η−1} − 1)/2 ≥ 1` cascade edges on door `1` ending at the root, with no door edge. Hence
+
+```text
+η(v) = number of F-steps,        λ(v) = Σ_{i<η} ⌊(s_i − 1)/2⌋ + (η − 1),
+```
+
+Proposition 18.3.2(b) with the cascade count written out;
+
+- (b) in itinerary terms, let `W = ((m_0,r_0), …, (m_{η−1},r_{η−1}))` be the itinerary word of the exit `y^{(0)}` (Definition 14.14.8.1: `y^{(i+1)} = G(y^{(i)})`). Then `m_i = D_{i+1} − a_i` and `r_i = s_{i+1}` (14.14.6; `s_η = s(1,1) = 1`), the last letter is door `1`'s `(1,1)`, and
+
+```text
+η(v) = |W|,        λ(v) = ⌊(s_0 − 1)/2⌋ + Σ_{i<η} ⌊(r_i − 1)/2⌋ + (η − 1),
+```
+
+where `s_0` is the `r`-component of the letter of any door of `v` (all doors of one state share `r = s` of that state, 14.14.4). Letter `i ≤ η − 2` is the door edge into `v_{i+1}` through door `a_i = D_{i+1} − m_i` followed by `v_{i+1}`'s own cascade run of `⌊(r_i − 1)/2⌋` edges; the last letter contributes nothing — its door edge would be the root's excluded self-loop and its run is empty; the run of `v` itself precedes the word.
+
+**Proof.** (a) From `v_i`, at branch `s_i` on door `y^{(i)}`, Proposition 18.2.2(b) gives `⌊(s_i − 1)/2⌋` cascade edges to the lowest sibling on that door; if it is not the root, its parent edge is the door edge to `state(y^{(i)}) = F(v_i) = v_{i+1}`, entering through the door `y^{(i)} = y_{a_i}(v_{i+1})` (door recovery). The lowest sibling is the root iff `y^{(i)} = 1` (the root is the branch-`1` node of door `1`, and a node on a door `y ≠ 1` is not on door `1`), iff `v_{i+1} = state(1) = (1,1)` (the only door of `(1,1)` is `1`), iff `i + 1 = η`. At `i = η − 1` the door is `1 ≡ 1 (mod 3)`, so `s_{η−1}` is odd, and `v_{η−1} ≠ (1,1)` sits at branch `≥ 3`. (b) `G(y)` is the exit of `state(y)` (14.14.3.2's proof), so the `G`-iterates of `y^{(0)}` are the orbit's exits; `m_i = v₂(y^{(i)} + 1) = D_{i+1} − a_i` by door recovery; `r_i = v₂(3^{D_{i+1}} Ω_{i+1} − 1) = s(v_{i+1})`; door `1` has `m = 1`, `r = v₂(3 − 1) = 1`. Substituting `r_i = s_{i+1}` in (a) gives the second formula. ∎
+
+**Worked instance.** `(107,1)`: `A = 320 = 2^6·5`, `s_0 = 6`, exit `5`, `5 + 1 = 2·3`, so `a_0 = 1` — the side door of `state(5) = (1,2)`, whose doors are `3` (dead) and `5`; then `(1,2)` has `A = 8 = 2^3`, `s_1 = 3`, exit `1`. The path is two cascade edges `(107,1) → (1,4) → (7,1)` (branches `6, 4, 2` on door `5`), the door edge `(7,1) → (1,2)`, and the cascade edge `(1,2) → (1,1)`: `η = 2`, `λ = 2 + 1 + 1 = 4`. The word of the exit `5` is `((1,3), (1,1))` — door `5` has `m = 1`, `q = 3`, `r = v₂(9 − 1) = 3 = s_1` — and `λ = ⌊5/2⌋ + ⌊2/2⌋ + ⌊0/2⌋ + 1 = 4`.
+
+**Grade.** A dictionary lemma; nothing is computed. Its content is that `λ` and `η` are word statistics — `η` the length of the word, `λ` a function of its `r`-components — so determinism "along `λ` and `η`" is determinism of the letter word: at every finite length the cylinder theorem (14.15.1.5), beyond it the Bridge. The doors need no enumeration of their own: the door index `a_i` is the letter's `m_i` read against the depth of the state entered.
+
+**Verified** — `experiments/comb_dictionary.py`, fresh code (imports nothing from any other script; exact integers at every decision; seed `20260916`; 2026-09-16), section (a): on `3,000` random states (`ω < 10^6`, `d ≤ 40`; largest `η = 159`, `λ = 206`) the comb path by the parent rule equals the edge sequence predicted from the `F`-orbit's `(s_i, a_i)` edge for edge, each door edge enters `F(v_i)` through its door `a_i`, the last step ends in door `1`'s cascade run with no door edge, `η = 1 +` door edges, `λ` by the path and by both formulas, the `G`-iterates of the exit are the orbit's exits, `r_i = s_{i+1}` and `m_i = D_{i+1} − a_i` at every letter, the last letter is `(1,1)`, and every door of `v` has `r = s_0`; the `(107,1)` instance and door `1`'s chain as canaries; `0` failures.
+
+### 18.7.2. The mean degree is 2
+
+**Proposition 18.7.2.** (a) For every level `λ ≥ 1` the number of nodes at level `λ + 1` is the sum of the degrees at level `λ`, so, with Proposition 18.2.3's `deg = 1 + D − [top door dead]`,
+
+```text
+n_{λ+1} / n_λ = 1 + (mean D at level λ) − (dead-top-door fraction at level λ),
+```
+
+exactly. (b) If the depths at a level follow the backward depth ledger `P(D = j) = 2·3^{−j}` and the top door is dead on half the nodes, then the mean depth is `Σ_j 2j·3^{−j} = 3/2`, the mean number of door children is `1`, and the mean degree — the level ratio — is `2`.
+
+**Proof.** (a) Every child of a level-`λ` node is at level `λ + 1`, and every level-`(λ+1)` node is the child of exactly one level-`λ` node; the root's degree is `1` and every other node's is `1 + D − [dead]`. (b) `Σ_{j≥1} j x^j = x/(1 − x)²` at `x = 1/3` is `3/4`, twice which is `3/2`; `3/2 − 1/2 = 1`. ∎
+
+The two inputs of (b) are measured laws on the comb's levels, not theorems about them: the depth ledger is 14.2.4's measured law over the branches of a door (exact only per window of `3^k` consecutive branches on one door, 14.6.5.2 — a comb level is not such a window), and the `1/2` is 14.5.1's density over residue classes. So (b) says that given those inputs the level growth is exactly `2`; the census's ratio `2.000` from level `22` and its `0.9998` door children per node into level `27` (18.5) are the statement that the inputs hold on the levels. Measured per level on a fresh enumeration to level `20` (the full table is in the committed output):
+
+```text
+level    nodes  mean D  dead-top  door children  mean degree  next/this   P(D=1..4)
+   16    30844  1.5027    0.4943         1.0084       2.0084     2.0084   0.6652 0.2230 0.0742 0.0251
+   17    61947  1.5049    0.5021         1.0028       2.0028     2.0028   0.6640 0.2236 0.0748 0.0250
+   18   124068  1.4956    0.5007         0.9949       1.9949     1.9949   0.6690 0.2212 0.0732 0.0244
+   19   247507  1.5027    0.4987         1.0039       2.0039     2.0039   0.6657 0.2219 0.0747 0.0253
+   20   495986  1.4998    0.5010         0.9988       1.9988        -     0.6668 0.2222 0.0738 0.0249
+ledger 2/3^j                                                              0.6667 0.2222 0.0741 0.0247
+```
+
+**Verified** — section (b): a fresh level-by-level enumeration to level `20` (`991,425` nodes, `8.3 s`), counts equal to 18.5's table row for row; at every level `Σ deg = n_{λ+1}` and `Σ deg = n_λ + Σ D − #dead` as integer identities, every child valid, distinct and regenerating its parent under the parent rule, the degree formula at every node; `0` failures.
+
+### 18.7.3. The two determinacies, and the digit-transfer law across a door edge
+
+**The two determinacies, placed.** Along door edges toward the root, the next `k` letters of a node's word are fixed by its door modulo `2^N` — the cylinder theorem 14.15.1.5, which is the digit budget of stage4.md 11.8.7.7: finite prefixes are cheap, unbounded ones are the Bridge. Along a cascade chain on a fixed door everything is exact: the sibling at branch `s + 2` from the sibling at `s` by 14.10.1, and the depth sequence `d = 1 + v₃(s − M₃(y))` (14.2.4) with the exact ternary ledger 14.6.5.2. So on the comb, 2-adic determinacy runs along door edges and 3-adic determinacy along cascade chains, and the one seam between them is the door edge seen from the 3-adic side. The following counts it.
+
+**Theorem 18.7.3 (digit transfer across a door edge).** Let a door edge have parent door `y` (odd, `3 ∤ y`), branch `s₀ ∈ {1,2}` (`s₀ = 1` iff `y ≡ 1 (mod 3)`) and child `(ω, d)`, `2^{s₀} y + 1 = 3^d ω`, whose doors are `y'_a = 2^{d−a} 3^a ω − 1`, `0 ≤ a ≤ d − 1`. Write `ỹ ↦ (ω̃, d̃)` for a second door edge.
+
+1. `s₀` is a function of `y mod 3`, and `d` of `y mod 3^{d+1}`: `d ≥ k` iff `y ≡ −2^{−s₀} (mod 3^k)`. `d` is not a function of `y mod 3^d`: of the three lifts `y + 2t·3^d`, `t mod 3`, exactly one has `d̃ ≥ d + 1`.
+2. For two door edges with the same `s₀` and the same `d`, and any `0 ≤ a < d`,
+
+```text
+v₃(y − ỹ) ≥ d        and        v₃(y'_a − ỹ'_a) = v₃(y − ỹ) − (d − a).
+```
+
+3. (Top door.) For `j ≥ 1`, `y'_0 mod 3^j` is a function of `(y mod 3^{j+d}, s₀)` — agreement mod `3^{j+d}` already forces `d̃ = d` — and not of `y mod 3^{j+d−1}`: two edges of the same `d` whose doors agree to exactly `j + d − 1` digits have top doors differing mod `3^j`, with `v₃(y'_0 − ỹ'_0) = j − 1`. So `j` output digits consume `j + d` input digits, and the map from the `(j+d)`-th digit of `y` to the `j`-th of `y'_0`, lower digits fixed, is a bijection of `Z/3`. The same-`d` hypothesis of the sharpness clause is needed only at `j = 1`, where agreement mod `3^d` does not fix `d` (clause 1).
+4. (Side doors.) `v₃(y'_a + 1) = a` exactly, so `y'_a ≡ −1 (mod 3^a)` and `≢ −1 (mod 3^{a+1})`: the low `a` digits are fixed by the door index alone — ladder.md 15.7.6's gained digits, read on the mirror side. For `j > a`, `y'_a mod 3^j` is a function of `(y mod 3^{j−a+d}, s₀)` and not of `y mod 3^{j−a+d−1}` (same `d`; the hypothesis needed only at `j − a = 1`). For `j ≤ a` the residue is `−1`, a function of no digit of `y`.
+
+**Proof.** (1) `v₃(2^{s₀}y + 1) ≥ k` iff `2^{s₀}y ≡ −1 (mod 3^k)`, a condition on `y mod 3^k`; `d` itself is "`≥ d` and not `≥ d + 1`", which needs `d + 1` digits; and `2^{s₀}(y + 2t·3^d) + 1 = 3^d(ω + 2^{s₀+1}t)`, which is `≡ 0 (mod 3^{d+1})` for exactly one `t mod 3`. (2) `2^{s₀}y + 1` and `2^{s₀}ỹ + 1` are both `≡ 0 (mod 3^d)`, so their difference `2^{s₀}(y − ỹ)` is, and `v₃(y − ỹ) ≥ d`; then `ω − ω̃ = 2^{s₀}(y − ỹ)/3^d` has `v₃ = v₃(y − ỹ) − d` (`2^{s₀}` a unit) and `y'_a − ỹ'_a = 2^{d−a}3^a(ω − ω̃)` has `v₃ = v₃(y − ỹ) − d + a`. (3), (4) are (2) at `a = 0` and `a ≥ 1`, with `v₃(y'_a + 1) = v₃(2^{d−a}3^a ω) = a`: agreement mod `3^{j−a+d}` with `j > a` gives `v₃(y − ỹ) ≥ d + 1`, hence `d̃ = d` by (1), hence `v₃(y'_a − ỹ'_a) ≥ j`; agreement to exactly `j − a + d − 1` digits with `d̃ = d` gives exactly `j − 1`. ∎
+
+**What the theorem is.** The child door `y'_a` has stratum `(m, r) = (d − a, s₀)` — `m = v₂(y'_a + 1) = d − a`, and `r` is the exit valuation of its state, the child — and `G(y'_a) = y`, the child's exit. So clause 2 is Theorem 14.14.4.1, `v₃(G(y') − G(z')) = v₃(y' − z') + m` on a fixed stratum, read backward along the door edge with `m = d − a`; nothing new is computed. Its content in comb coordinates: **across a door edge into door `a` of the child, the 3-adic precision budget moves by exactly `−(d − a)` digits** — `d` lost to the exact division by `3^d`, `a` regained from the forced `−1` — and `d − a = m(y'_a)` is the 2-adic entry depth of the door entered, the letter's `m` (14.14.6's `m₊`); no door edge is free, since `a ≤ d − 1`. Along a cascade edge the door is unchanged and no digit of it is consumed: clause 2 holds with any admissible branch `s` in place of `s₀` (same proof, `d = d(y,s)`), so a cascade run only changes which `d` the next door edge is charged. Under the depth ledger (a measured law, 18.7.2) the mean loss at the top door is `E[d] = 3/2` digits per door edge. This is 14.13's per-generation precision loss counted per comb edge, and the count reconciles the record's two figures: at 14.6's designated door (`a = 0` when `d = 1`, `a = d − 1` when `d ≥ 2` — the collapse identity 14.6.1) the loss is exactly one digit at every edge, which is 14.6.5's "one digit of precision loss per generation"; at the top door it is `d`, which is 14.13's "exactly `d` digits". The theorem does not make `M₃` propagate: `M₃(y'_a) mod 3^k` is a function of `y'_a mod 3^{k+1}` (14.7.1) and hence of `y mod 3^{k+1+d−a}`, a function of finitely many digits of the parent door only because the child door itself is one; 14.6.5's affine obstruction stands, with its price written down.
+
+**Boundary cases.** `y = 1`: `s₀ = 1`, `d = 1`, `ω = 1`, the child is the root and `y'_0 = 1` — the excluded self-loop; no door edge of the comb has parent door `1`. `j = 0`: the clauses are vacuous, and `j + d = d` digits do not fix `d` (doors `5` and `11` agree mod `3` with `d = 1` and `d = 2`). The dead top door: `y'_0 ≡ 0 (mod 3)` iff `2^d ω ≡ 1 (mod 3)` (14.5.1); clause 2 does not see liveness — `y'_0` is an integer either way — and at `j = 1` it says that whether the child's top door is dead is a function of `y mod 3^{d+1}` and `s₀`; a dead `y'_0` carries no door edge, so `d − 0` is then the cost of a door that is not taken.
+
+**Verified** — section (c): the top-door law on `5,000` random `(y, s₀, j ≤ 6)` (`y` of up to `60` bits): agreement mod `3^{j+d}` gave `d̃ = d` and equal `y'_0 mod 3^j` in all `5,000`, with clause 2 exact; agreement to exactly `j + d − 1` digits with `d̃ = d` gave unequal `y'_0 mod 3^j` and `v₃(y'_0 − ỹ'_0) = j − 1` in all `4,584` such draws (`416` draws, all at `j = 1`, changed `d` and were filtered, as clause 1 predicts); `2,464` child top doors dead, each by 14.5.1's criterion; at every edge a lift agreeing mod `3^d` with a larger `d`; the designated door's loss exactly one digit. The side-door law on `3,000` random edges with `d ≥ 2` (largest `d = 10`), every `a < d`, `j = a + 1, …, a + 5`: `v₃(y'_a + 1) = a`, the stratum `(d − a, s₀)` and `G(y'_a) = y`, agreement at `j − a + d` digits and disagreement at one fewer (`34,198` sharp pairs), clause 2 at every pair, and `y'_a ≡ −1 (mod 3^j)` for `j ≤ a` against an unrelated edge; clause 2 with `d(y,s)` at `2,000` edges at branches `s ≤ 30`; the two hand-checked edges (parent doors `5` and `13`) and the boundary cases as canaries. Whole script: `8,034,120` checks, `0` failures; single reproducing command `python experiments/comb_dictionary.py`, `10 s`.
+
+**Standing of 18.7.** Grade: formulation, plus one law (18.7.3) that is 14.14.4.1 in comb coordinates. Nothing is proposed; no front moves. What the section settles is the author's question: determinism along `η` and `λ` is determinism of the itinerary word, the doors need no alphabet of their own, and the one place the comb's two determinacies meet has an exact price — `d − a` ternary digits per door edge, none per cascade edge.
