@@ -1,7 +1,7 @@
 ---
 status: ACTIVE — forward/backward duality complete (14.1–14.12; density bound c* = 0.3304, 14.6); door/exit seam relocates the core-extraction deficit onto the forward digit budget (14.14); the itinerary-language arc (§14.15) lives at itinerary.md — Bridge status unchanged throughout
 scope: sections 14.1–14.14 (post-monolith); §14.15 split to itinerary.md 2026-07-23
-updated: 2026-09-16
+updated: 2026-09-17
 source: new material; the author's reversal question; builds on 9.8 (spine.md), 11.5 (open-problems.md), §3 anchor machinery
 ---
 
@@ -231,6 +231,8 @@ Paper Theorem 3.5 (`thm:deltaM`) is proved by chaining three digit-determinacy f
 **Finding — the missing cross-prime step (this *is* the honest mirror, not a gap).** Forward's fact (c) needs the order of `3` mod `2^r` because `ω_next` is obtained by dividing a *2-adically analyzed* quantity `C` by a `3`-power — a genuine cross-prime removal. Backward's (c') needs no such fact: `N = 2^s y + 1` is odd by construction (`y` odd, `2^s y` even), so there is never a `2`-power to strip; the only removal, `3^d`, is same-prime relative to the `3`-adic residue being computed. The backward digit flow has one fewer cross-prime step than the forward one — a real structural asymmetry, not a forced analogy.
 
 **Verification.** Facts (a'), (b'), (c'): 3,000 random checks each, zero failures. Theorem 14.7.2, window-only (generous `W = d+r+2`): `r ∈ {1,3,6}`, ≈2,670 checks each, zero failures. Code: `experiments/mirror_dual.py`.
+
+The per-node digit budget of the backward branching, in comb coordinates — how many digits of a state's core fix its subtree shape to a given depth, composed edge by edge from (c')'s exact-division fact — is comb.md 18.9.2.2.
 
 ## 14.8. The top-door anchor increment law, and the frozen case identified
 
