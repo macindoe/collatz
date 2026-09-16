@@ -1,8 +1,8 @@
 ---
 status: REFERENCE (lookup and collision visibility only; no fact lives here)
 scope: wiki-wide symbol registry — one row per symbol per frame, defining pointers by section number, closing collision index; subsumes spine.md §4 by reference
-updated: 2026-09-15
-source: the signed-layer containment audit (2026-08-15); briefs/symbols-registry-brief.md
+updated: 2026-09-17
+source: the signed-layer containment audit (2026-08-15); briefs/symbols-registry-brief.md; briefs/comb-signatures-brief.md
 ---
 
 # Symbols: the wiki-wide registry
@@ -127,6 +127,9 @@ The seam (reverse.md §14.14) and the itinerary language (itinerary.md §14.15).
 | **cascade edge**, **door edge** | the two comb edge types: `s ≥ 3 → s − 2` on a fixed door (14.10.1's `s → s+2` step read downward; peaks `A, 4A, 16A, …`), and the lowest-branch node on a live door `→ state(y)` (one `F`-step) | comb.md Definition 18.2.1, Lemma 18.2.5 | every `F`-edge of 14.1.1 is one door edge plus a cascade run (18.4) |
 | `λ(v)` | the **peak distance** of a comb node — its level, the number of comb edges to the root | comb.md Definition 18.3.1 | bare `λ` is a bound variable elsewhere (a Chernoff tilt and a scale ratio in aeh.md 13.2.4–13.2.5, the Baker `λ`-form in cycles.md 12.7), not a row |
 | `η(v)` | the **reduced distance** of a comb node — `F`-steps to `(1,1)`; `η = 1 +` (door edges on the path), cascade edges `= λ − η + 1 ≥ 1` | comb.md Definition 18.3.1, Proposition 18.3.2 | bare `η` is a bound variable in aeh.md 13.2.4 (a margin), not a row; the brief's provisional `r`, `ℓ` were not adopted (both collide — `r` in frames 3–4, `ℓ_n` in frame 6) |
+| `ζ_k^J(v)` | the **signature** of a comb node to depth `k` with cap `J`: its rooted subtree to `k` levels, every edge typed and every child's depth capped at `J`; cores are not part of it | comb.md Definition 18.9.2.1 | glyph chosen unused elsewhere in this registry (checked against the whole wiki, not only this page); the brief's provisional `sig_k^J(v)` was not adopted — `sig(W)` already names itinerary.md 14.15.9.11's spectrum invariant (frame 5), a different object |
+| `χ(v,k)` | the **sufficient digit budget**: `Ω(v) mod 3^{χ(v,k)}` (with `D(v)`) determines `ζ_k^J(v)`, composed edge by edge (`cost = d′ − a` door, `d′ − D` cascade) | comb.md Proposition 18.9.2.2 | glyph chosen unused elsewhere in this registry; the brief's provisional `B(v,k)` was not adopted — `B`, `B_n`, `B_P` already carry frame 4's composed-offset rows and frame 6's Bernoulli measure |
+| `ψ(v,k)` | the **exact signature modulus**: the least `M` with `Ω(v) mod 3^M` alone already determining `ζ_k^J(v)`; `ψ(v,k) ≤ χ(v,k)`, measured not proved sharp | comb.md Definition 18.9.3 | glyph chosen unused elsewhere in this registry; the brief's provisional `M(v,k)` was not adopted — `M(ω)`, `M(W)`, `M_t`, `M_P`, `M₃` already crowd frames 2–4 |
 
 ## 5. Signed layer
 
