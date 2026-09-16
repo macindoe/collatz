@@ -1,0 +1,114 @@
+==============================================================================
+comb_signatures.py -- verification for briefs/comb-signatures-brief.md
+seed=20260917 date=2026-09-17
+==============================================================================
+
+-- canaries --
+  (7,3): cascade child (251, 1) depth 1; door children {0: (37, 1), 1: (37, 2), 2: (167, 1)}
+  (1,2): cascade child (11, 1) depth 1; door children {0: None, 1: (7, 1)}
+  (5,2): cascade child (59, 1) depth 1; door children {0: (13, 1), 1: (13, 2)}
+  sig((1,2), k=2, J=3) = (('C', 1, (('C', 1, ('LEAF',)), (('Ddead', 0),))), (('Ddead', 0), ('D', 1, 2, 1, (('C', 3, ('LEAF',)), (('D', 0, 1, 3, ('LEAF',)),)))))  (B=3)
+  hand-worked depth-2 descendants: (11,1)->(43,1); (7,1)->(1,4),(1,3)
+  canaries: 17 checks so far, 0 failures
+
+-- (a) Item A: the four level-1 laws --
+  (a) four laws, 5000 states: 82843 checks so far, 0 failures
+  a>=2 door children (D uniform in [1,30], NOT ledger-weighted, structural only): 67989 / 75338 = 0.9025
+  (the ledger-weighted share -- the reconciliation with 18.5's depth distribution -- is
+   measured on the level-18 census below: 1/6 predicted under P(D=j)=2.3^-j.)
+  corollary: level-1 signature vs (D, Omega mod 3^J)
+    J=2: sufficiency 2000/2000; one-digit-short differed 642/2000
+    J=3: sufficiency 2000/2000; one-digit-short differed 241/2000
+    J=4: sufficiency 2000/2000; one-digit-short differed 73/2000
+  (a) corollary: 82846 checks so far, 0 failures
+
+-- (b) Item B: signature budget --
+    k=1: sufficiency 1500/1500; mean B=3.00 max B=3; one-digit-short differed 185/1500
+    k=2: sufficiency 1500/1500; mean B=3.75 max B=8; one-digit-short differed 305/1500
+    k=3: sufficiency 1500/1500; mean B=5.26 max B=13; one-digit-short differed 347/1500
+    k=4: sufficiency 1500/1500; mean B=6.86 max B=14; one-digit-short differed 373/1500
+  (b) budget sufficiency: 82850 checks so far, 0 failures
+  exact modulus M(v,k) vs B(v,k), sampled per level
+  census built to level 18 in 0.3s (level sizes: [478, 1978, 7748, 30844, 124068])
+  ledger-weighted a>=2 share (level-18 census, 124068 nodes): 20431 / 123439 = 0.1655 (predicted 1/6 = 0.1667)
+    level 10: sampled 478 nodes (k=2), 0 search-capped (excluded from stats)
+    level 12: sampled 1978 nodes (k=2), 0 search-capped (excluded from stats)
+    level 14: sampled 2000 nodes (k=2), 0 search-capped (excluded from stats)
+    level 16: sampled 2000 nodes (k=2), 0 search-capped (excluded from stats)
+    level 18: sampled 2000 nodes (k=2), 0 search-capped (excluded from stats)
+  (b) exact modulus: 339238 checks so far, 0 failures
+  B - M distribution, per level (n, mean, max, #exact(B=M)):
+    level 10: n= 478 mean(B-M)=0.678 max(B-M)=1 exact=154 (0.322)
+    level 12: n=1978 mean(B-M)=0.624 max(B-M)=1 exact=743 (0.376)
+    level 14: n=2000 mean(B-M)=0.627 max(B-M)=1 exact=745 (0.372)
+    level 16: n=2000 mean(B-M)=0.633 max(B-M)=1 exact=733 (0.366)
+    level 18: n=2000 mean(B-M)=0.625 max(B-M)=1 exact=749 (0.374)
+  overall: n=8456 mean(B-M)=0.631 max(B-M)=1 exact-match fraction=0.369
+
+-- (c) Item C: search for a grouping finer than residues --
+  C.1 coincidences (independence baseline from observed class frequencies)
+    level 10 (D=1, k=2): 311 nodes -> 37 distinct exact classes, 23 distinct signatures
+              observed different-class same-signature pairs = 17; independence baseline = 34.54
+              at or below the independence baseline: no grouping finer than residues visible
+    level 12 (D=1, k=2): 1358 nodes -> 50 distinct exact classes, 30 distinct signatures
+              observed different-class same-signature pairs = 23; independence baseline = 47.04
+              at or below the independence baseline: no grouping finer than residues visible
+    level 14 (D=1, k=2): 1500 nodes -> 48 distinct exact classes, 30 distinct signatures
+              observed different-class same-signature pairs = 21; independence baseline = 44.06
+              at or below the independence baseline: no grouping finer than residues visible
+    level 16 (D=1, k=2): 1500 nodes -> 54 distinct exact classes, 34 distinct signatures
+              observed different-class same-signature pairs = 23; independence baseline = 49.07
+              at or below the independence baseline: no grouping finer than residues visible
+    level 18 (D=1, k=2): 1500 nodes -> 52 distinct exact classes, 32 distinct signatures
+              observed different-class same-signature pairs = 23; independence baseline = 48.06
+              at or below the independence baseline: no grouping finer than residues visible
+  C.2 the 2-adic probe (contingency test, largest standardized residual)
+    level 10 (k=1, m=4): 5 groups (n>=20), 38 cells; largest |resid|=1.18 (r=15); Bonferroni@0.01=4.23 -- within
+    level 10 (k=1, m=6): 5 groups (n>=20), 107 cells; largest |resid|=2.36 (r=15); Bonferroni@0.01=4.47 -- within
+    level 10 (k=1, m=8): 5 groups (n>=20), 209 cells; largest |resid|=3.00 (r=137); Bonferroni@0.01=4.61 -- within
+    level 12 (k=1, m=4): 10 groups (n>=20), 78 cells; largest |resid|=2.01 (r=5); Bonferroni@0.01=4.39 -- within
+    level 12 (k=1, m=6): 10 groups (n>=20), 251 cells; largest |resid|=3.93 (r=7); Bonferroni@0.01=4.65 -- within
+    level 12 (k=1, m=8): 10 groups (n>=20), 581 cells; largest |resid|=3.93 (r=71); Bonferroni@0.01=4.83 -- within
+    level 14 (k=1, m=4): 16 groups (n>=20), 123 cells; largest |resid|=2.66 (r=5); Bonferroni@0.01=4.50 -- within
+    level 14 (k=1, m=6): 16 groups (n>=20), 417 cells; largest |resid|=2.92 (r=41); Bonferroni@0.01=4.76 -- within
+    level 14 (k=1, m=8): 16 groups (n>=20), 1117 cells; largest |resid|=5.83 (r=133); Bonferroni@0.01=4.96 -- EXCEEDS
+    level 16 (k=1, m=4): 21 groups (n>=20), 165 cells; largest |resid|=2.23 (r=7); Bonferroni@0.01=4.56 -- within
+    level 16 (k=1, m=6): 21 groups (n>=20), 582 cells; largest |resid|=3.43 (r=7); Bonferroni@0.01=4.83 -- within
+    level 16 (k=1, m=8): 21 groups (n>=20), 1730 cells; largest |resid|=4.21 (r=111); Bonferroni@0.01=5.05 -- within
+    level 18 (k=1, m=4): 25 groups (n>=20), 199 cells; largest |resid|=2.24 (r=9); Bonferroni@0.01=4.60 -- within
+    level 18 (k=1, m=6): 25 groups (n>=20), 726 cells; largest |resid|=-3.13 (r=19); Bonferroni@0.01=4.88 -- within
+    level 18 (k=1, m=8): 25 groups (n>=20), 2372 cells; largest |resid|=5.18 (r=153); Bonferroni@0.01=5.11 -- EXCEEDS
+  summary: 2 / 15 (level,m) tests exceeded the Bonferroni-corrected threshold
+  C.3 signature ledgers
+    level 10: 478 nodes, 19 distinct signatures, 66 distinct (D, Omega mod 3^B) classes
+    level 12: 1978 nodes, 20 distinct signatures, 85 distinct (D, Omega mod 3^B) classes
+    level 14: 7748 nodes, 28 distinct signatures, 112 distinct (D, Omega mod 3^B) classes
+    level 16: 30844 nodes, 34 distinct signatures, 135 distinct (D, Omega mod 3^B) classes
+    level 18: 124068 nodes, 40 distinct signatures, 157 distinct (D, Omega mod 3^B) classes
+  C.3(b) depth-1 signature frequency vs the predicted product law
+    level 18: 124068 nodes, 40 distinct depth-1 signatures; top 8 by census frequency
+    (census vs predicted product law vs the uniform box, 18.5's own comparison population):
+      census=0.33425  pred=0.22222  box=0.01642  box/pred=0.074  shape=(('C', 1, ('LEAF',)), (('Ddead', 0),))
+      census=0.22269  pred=0.02469  box=0.01170  box/pred=0.474  shape=(('C', 2, ('LEAF',)), (('D', 0, 1, 1, ('LEAF',)),))
+      census=0.11173  pred=0.07407  box=0.01663  box/pred=0.225  shape=(('C', 1, ('LEAF',)), (('Ddead', 0), ('D', 1, 2, 1, ('LEAF',))))
+      census=0.07423  pred=0.00412  box=0.00408  box/pred=0.992  shape=(('C', 3, ('LEAF',)), (('D', 0, 1, 2, ('LEAF',)),))
+      census=0.07189  pred=0.00823  box=0.01052  box/pred=1.278  shape=(('C', 1, ('LEAF',)), (('D', 0, 1, 1, ('LEAF',)), ('D', 1, 2, 2, ('LEAF',))))
+      census=0.03787  pred=0.00206  box=0.00163  box/pred=0.794  shape=(('C', 3, ('LEAF',)), (('D', 0, 1, 3, ('LEAF',)),))
+      census=0.03656  pred=0.02469  box=0.01627  box/pred=0.659  shape=(('C', 1, ('LEAF',)), (('Ddead', 0), ('D', 1, 2, 1, ('LEAF',)), ('D', 2, 2, 1, ('LEAF',))))
+      census=0.02522  pred=0.00137  box=0.00390  box/pred=2.843  shape=(('C', 1, ('LEAF',)), (('D', 0, 1, 2, ('LEAF',)), ('D', 1, 2, 3, ('LEAF',))))
+    top-8 coverage: census mass 0.9144, predicted mass 0.3615, box mass 0.0811
+    reading: the box (18.5's own uniform comparison population) is expected to track the
+    predicted product law; the census is expected to deviate, structurally, the same way
+    18.5's own run-length table deviates from its ledger -- see findings for the reading.
+    sanity (all a>=2 doors alive with depth exactly 1, per Item A): 124068 / 124068 = 1.0000 (must be 1.0000)
+  C.3(c) the window ledger: does a fixed door's window of 3^k branches
+         carry an EXACT signature multiset, or only a statistical one?
+    k=2 (window width 9): depth-label multiset identical across 8 random doors? True
+    k=2: full depth-1 SIGNATURE multiset identical across the 8 doors? False (7 distinct multisets observed)
+    k=3 (window width 27): depth-label multiset identical across 8 random doors? True
+    k=3: full depth-1 SIGNATURE multiset identical across the 8 doors? False (5 distinct multisets observed)
+  (c) Item C: 345169 checks so far, 0 failures
+
+==============================================================================
+TOTAL: checks = 345169, failures = 0, wall clock = 5.1s
+==============================================================================
