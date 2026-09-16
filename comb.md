@@ -1,11 +1,11 @@
 ---
-status: FORMULATION — a construction (the backward tree of reduced states re-indexed by peak level), its elementary structural properties proved with fresh code, and a census; the dictionary with the itinerary word and the digit-transfer law across a door edge (18.7); no front moves
+status: FORMULATION — a construction (the backward tree of reduced states re-indexed by peak level), its elementary structural properties proved with fresh code, and a census; the dictionary with the itinerary word and the digit-transfer law across a door edge (18.7); the signed comb, the three negative components as a control (18.8); no front moves
 scope: new section 18 (post-monolith)
 updated: 2026-09-16
-source: the author's sessions of 2026-09-15 and 2026-09-16; briefs/peak-comb-brief.md, briefs/comb-dictionary-brief.md
+source: the author's sessions of 2026-09-15 and 2026-09-16; briefs/peak-comb-brief.md, briefs/comb-dictionary-brief.md, briefs/signed-comb-brief.md
 ---
 
-> **Current state.** The backward tree of reduced states (reverse.md 14.4), with the even integer `A = 3^d ω − 1` — the structural-step numerator — counted as the coordinate of its node (the **peak**), and each door's infinite fan over the exit valuation `s` replaced by a chain: a node at branch `s ≥ 3` hangs from the node at branch `s − 2` on the same door (a **cascade edge**, reverse.md 14.10.1's step read downward), and the node at the lowest admissible branch hangs from the door's own state (a **door edge**, one `F`-step). Proved: peaks and states are in bijection; the parent rule is well defined and its graph on the states whose `F`-orbit reaches `(1,1)` is a tree rooted at `(1,1)` with exactly the node set of 14.4; every node has finite degree — one cascade child plus one door child per live door — so every level is finite with no size cutoff, and no node is a leaf; the root has exactly one child; the two distances (reduced `η` = `F`-steps, peak `λ` = level) obey `η = 1 +` door edges and `λ − η + 1 =` cascade edges `≥ 1`, the `+1` being the root's own self-loop; the comb re-indexes 14.1.1's completeness against the raw map exactly; the largest peak at level `λ` is `2^{2λ+1}`, on door `1`; the comb path is the node's itinerary word (`η` its length, `λ` its length plus its cascade runs), the level ratio is the mean degree exactly (`2` under the measured depth ledger), and the 3-adic precision lost across a door edge into door `a` of a depth-`d` child is exactly `d − a` digits, 14.14.4.1 read backward (18.7). A census to level `27` (`126,917,355` nodes, doubling per level) and one exploratory table, reported flat. The comb moves no front: the conjecture is the statement that it spans every state (Theorem 9.8.3), unchanged.
+> **Current state.** The backward tree of reduced states (reverse.md 14.4), with the even integer `A = 3^d ω − 1` — the structural-step numerator — counted as the coordinate of its node (the **peak**), and each door's infinite fan over the exit valuation `s` replaced by a chain: a node at branch `s ≥ 3` hangs from the node at branch `s − 2` on the same door (a **cascade edge**, reverse.md 14.10.1's step read downward), and the node at the lowest admissible branch hangs from the door's own state (a **door edge**, one `F`-step). Proved: peaks and states are in bijection; the parent rule is well defined and its graph on the states whose `F`-orbit reaches `(1,1)` is a tree rooted at `(1,1)` with exactly the node set of 14.4; every node has finite degree — one cascade child plus one door child per live door — so every level is finite with no size cutoff, and no node is a leaf; the root has exactly one child; the two distances (reduced `η` = `F`-steps, peak `λ` = level) obey `η = 1 +` door edges and `λ − η + 1 =` cascade edges `≥ 1`, the `+1` being the root's own self-loop; the comb re-indexes 14.1.1's completeness against the raw map exactly; the largest peak at level `λ` is `2^{2λ+1}`, on door `1`; the comb path is the node's itinerary word (`η` its length, `λ` its length plus its cascade runs), the level ratio is the mean degree exactly (`2` under the measured depth ledger), and the 3-adic precision lost across a door edge into door `a` of a depth-`d` child is exactly `d − a` digits, 14.14.4.1 read backward (18.7); the same construction on the negative odd integers gives three components, one per classical negative cycle, whose census is the positive comb's statistic for statistic, the sign entering only at the root's equation (18.8). A census to level `27` (`126,917,355` nodes, doubling per level) and one exploratory table, reported flat. The comb moves no front: the conjecture is the statement that it spans every state (Theorem 9.8.3), unchanged.
 
 # 18. The peak comb
 
@@ -165,7 +165,7 @@ What the comb is: the classical Collatz inverse tree — Lagarias 1985's Collatz
 
 What it is not: no front moves. Nothing in this section constrains which states the comb reaches; the node set is the backward tree of 14.4 by definition, and the conjecture is the statement that the comb spans every valid state (Theorem 9.8.3, unchanged). The census is a count, the exploratory table a calibration line, and the family frame (grouping states by core, ladder.md §15's column relations) is not used here except for the one orbit-level law of 15.6.2. Grade: **formulation**.
 
-The comb can be walked node by node in `viz/comb_explorer.html`, which expands the tree one node at a time from `(1,1)` and shows, for any node, its peak, branch and door, `η` and `λ`, its path to the root, its raw descent through the lower siblings' peaks, and the siblings on its door, every integer exact (its arithmetic core is checked against an independent implementation by `experiments/comb_explorer_check.py`).
+The comb can be walked node by node in `viz/comb_explorer.html`, which expands the tree one node at a time from `(1,1)` — or from any of the four roots, the three negative components of 18.8 included — and shows, for any node, its peak, branch and door, `η` and `λ`, its path to the root, its raw descent through the lower siblings' peaks, and the siblings on its door, every integer exact (its arithmetic core is checked against an independent implementation by `experiments/comb_explorer_check.py`).
 
 ## 18.7. The comb as the word: the dictionary, the mean degree, the two determinacies, and the digit-transfer law
 
@@ -250,3 +250,154 @@ v₃(y − ỹ) ≥ d        and        v₃(y'_a − ỹ'_a) = v₃(y − ỹ) 
 **Verified** — section (c): the top-door law on `5,000` random `(y, s₀, j ≤ 6)` (`y` of up to `60` bits): agreement mod `3^{j+d}` gave `d̃ = d` and equal `y'_0 mod 3^j` in all `5,000`, with clause 2 exact; agreement to exactly `j + d − 1` digits with `d̃ = d` gave unequal `y'_0 mod 3^j` and `v₃(y'_0 − ỹ'_0) = j − 1` in all `4,584` such draws (`416` draws, all at `j = 1`, changed `d` and were filtered, as clause 1 predicts); `2,464` child top doors dead, each by 14.5.1's criterion; at every edge a lift agreeing mod `3^d` with a larger `d`; the designated door's loss exactly one digit. The side-door law on `3,000` random edges with `d ≥ 2` (largest `d = 10`), every `a < d`, `j = a + 1, …, a + 5`: `v₃(y'_a + 1) = a`, the stratum `(d − a, s₀)` and `G(y'_a) = y`, agreement at `j − a + d` digits and disagreement at one fewer (`34,198` sharp pairs), clause 2 at every pair, and `y'_a ≡ −1 (mod 3^j)` for `j ≤ a` against an unrelated edge; clause 2 with `d(y,s)` at `2,000` edges at branches `s ≤ 30`; the two hand-checked edges (parent doors `5` and `13`) and the boundary cases as canaries. Whole script: `8,034,120` checks, `0` failures; single reproducing command `python experiments/comb_dictionary.py`, `10 s`.
 
 **Standing of 18.7.** Grade: formulation, plus one law (18.7.3) that is 14.14.4.1 in comb coordinates. Nothing is proposed; no front moves. What the section settles is the author's question: determinism along `η` and `λ` is determinism of the itinerary word, the doors need no alphabet of their own, and the one place the comb's two determinacies meet has an exact price — `d − a` ternary digits per door edge, none per cascade edge.
+
+## 18.8. The signed comb: the three negative components as a control
+
+The author's observation (2026-09-16): every per-step law of this record is sign-blind — the algebra never reads the sign of `y` — so an argument that used only those laws would exclude cycles on the negative odd integers too, where three cycles exist (cycles.md 12.6.1.2; itinerary.md 14.15.6(d)). The negatives are therefore not part of the problem but a **control**: they show what a cycle-rooted component of the reduced map looks like under the comb's own parent rule, and they pin the sign to the one place it enters. This section builds that control. Nothing is searched for on either sign: the three cycles are the classical ones, and the comb is hung from them.
+
+### 18.8.1. The signed rules
+
+**Definition 18.8.1.1 (signed states).** For a nonzero odd integer `x ≠ −1` write `x + 1 = 2^m 3^a Ω` with `Ω` odd, `3 ∤ Ω`, and `Ω` of the sign of `x + 1`; the state of `x` is `(Ω, m + a)`, so odd `x < −1` have states with `Ω < 0` (itinerary.md 14.15.6.1, in state coordinates). The peak `A = 3^d ω − 1`, the exit valuation `s = v₂(A)`, the exit `y = A/2^s` by exact division, and `F(ω,d) = state(y)` are spine.md §5.6's formulas unchanged. The singular point: `x = −1` has `x + 1 = 0` and no state, so a state whose exit is `−1` has no `F`-image.
+
+**Lemma 18.8.1.2 (the rules are sign-blind).** For states of either sign: (a) `A` is a nonzero even integer of the sign of `ω`, `s` is finite, `y` is odd of the sign of `ω`, and `y = −1` iff `(ω,d)` is the node at an even branch `s` on door `−1`, `(ω,d) = ((1 − 2^s)/3^{1+v₃(s)}, 1 + v₃(s))` — the chain `(−1,1), (−5,1), (−7,2), (−85,1), (−341,1), …` at `s = 2, 4, 6, 8, 10, …`; among nodes with `s ≤ 2` only `(−1,1)`. (b) Door recovery is a bijection between odd integers `≠ −1` and pairs (state, door index): `a = v₃(y+1)`, `m = v₂(y+1)`, `Ω = (y+1)/(2^m 3^a)`; `−1` is the door of no state. (c) `F` preserves sign (Theorem 14.15.6.2(3) in state coordinates), and is undefined exactly on the chain of (a). (d) With residues mod `3` taken in `{0,1,2}` (`−5 ≡ 1`, `−7 ≡ 2`), the branch `s` on a door `y` is admissible iff `2^s y ≡ 2 (mod 3)` iff `s` is odd for `y ≡ 1` and even for `y ≡ 2`; the predecessor rule 14.1.1 (the predecessors of `(Ω,D)` are `node(y_a, s)` over its live doors and admissible `s`), door mortality 14.5.1 (side doors `≡ 2 (mod 3)` never dead; the top door dead iff `2^D Ω ≡ 1 (mod 3)`), the Gardens of Eden 14.5.2, the cascade step 14.10.1 (`N(y, s+2) = 4N(y,s) − 3`), the parent rule 18.2.1 and the children rule 18.2.3 hold verbatim.
+
+**Proof.** (a) `3^d ω` is odd and `≠ 1` when `ω < 0`, so `A = 3^d ω − 1` is even, nonzero, and of the sign of `ω` (`|A| = 3^d|ω| + 1` for `ω < 0`); `y = A/2^s` is the odd part of `A` with its sign — the exact division of an integer by a power of `2` dividing it, on either sign. `y = −1` iff `3^d ω = 1 − 2^s` iff `3 | 2^s − 1` (so `s` even) with `d = v₃(2^s − 1) = 1 + v₃(s)` (Lemma 14.2.1, the `y = −1` case 14.2 already treats) and `ω = −(2^s − 1)/3^d`; that is the node at branch `s` on door `−1`, whose numerator is `2^s·(−1)`. (b) `y + 1 ≠ 0` has a `2`-adic and a `3`-adic valuation and an odd cofactor prime to `3` of its own sign; conversely `y_a = 2^{D−a} 3^a Ω − 1` has `v₂(y_a + 1) = D − a`, `v₃(y_a + 1) = a`, and `y_a = −1` would need `2^{D−a} 3^a Ω = 0`. (c) For `ω < 0`, `y < 0`, so `y + 1 ≤ 0` and, when `y ≠ −1`, `Ω < 0`; for `ω > 0` everything is positive as before. (d) Admissibility is a congruence, and the proof of 14.1.1 is the factorization `2^s y + 1 = 3^d ω` with `d = v₃`, which reads no sign; `y_a ≡ −1 (mod 3)` for `a ≥ 1` and `2^D Ω − 1 ≡ 0` iff `2^D Ω ≡ 1` are congruences; 14.10.1 is an identity; 18.2.1's cascade parent is valid because `4 ≡ 1 (mod 3)`; 18.2.3's children are the inverse of the parent rule. The three places a sign could enter — the exact division by `2^s`, the recovery of `Ω`, and the residue convention — are (a), (b), and (d): in each the operation is an integer identity or a congruence, and the sign is carried by `|·|` and `Ω`'s own sign. ∎
+
+**The three classical negative cycles in reduced states.** The classical `3x+1` map on the negative odd integers has three known cycles (Lagarias 1985, pinned at itinerary.md 14.15.6(d)(iv)); in reduced coordinates:
+
+```text
+classical cycle                                     reduced states                                 under F
+-1 -> -2 -> -1                                      none: -1 is the singular door; (-1,1) exits to it  (-1,1) has no image
+-5 -> -14 -> -7 -> -20 -> -10 -> -5                 (-1,2): -5 and -7 are its two doors               fixed state
+-17 -> ... -> -25 -> ... -> -37, -55, -41, -61, -91 (-1,4): doors -17,-25,-37,-55; (-5,3): -41,-61,-91  a 2-cycle of states
+```
+
+`(−1,2)` has `A = −10 = 2·(−5)`, exit `−5`, `state(−5) = (−1,2)`; `(−1,4)` has `A = −82 = 2·(−41)`, `state(−41) = (−5,3)`; `(−5,3)` has `A = −136 = 2^3·(−17)`, `state(−17) = (−1,4)`.
+
+**Verified** — `experiments/signed_comb.py`, fresh code (imports nothing from any other script; every division asserted exact; residues by Python's `%`, which is in `{0,1,2}` on either sign; seed `20260916`; 2026-09-16), canaries and section (a): the table above and the three cycles under `Col`; on `3,000` random negative states (`|ω| < 10^6`, `d ≤ 40`) the peak, exit and branch parity, `F` by door recovery against spine.md §5.6's `C`-formula, sign preservation (and `1,000` positive states staying positive), the exit as door `a = v₃(y+1)` of `F(v)`, the parent regenerated once by the children rule, 14.10.1, every child valid and negative with the node as its parent, the degree `1 + D − [dead]`; on the box `|ω| < 10^5`, `d ≤ 30` the states with exit `−1` are exactly door `−1`'s chain in the box (`9` states, branches `2..18`, only `(−1,1)` at `s ≤ 2`); the 14.1.1 rule against a forward scan of `(−3000 ≤ ω ≤ −1, d ≤ 12)` at eight negative targets (`(−1,1)` has none: a Garden of Eden, `D = 1`, `Ω ≡ 2`). `0` failures.
+
+### 18.8.2. The components and their rings
+
+The parent rule 18.2.1 is defined at every negative state except `(−1,1)`, whose door parent `state(−1)` does not exist. Its graph has cycles: the **ring** of an `F`-cycle is the set of nodes whose parent chain never leaves it.
+
+**Lemma 18.8.2.1 (the ring of an `F`-cycle).** Let `v_0 → v_1 → … → v_{p−1} → v_0` be an `F`-cycle with exit valuations `s_i = s(v_i)` and exits `y^{(i)}`. (a) The parent chain from `v_i` runs `⌊(s_i − 1)/2⌋` cascade edges down door `y^{(i)}` to its lowest sibling, then one door edge to `state(y^{(i)}) = v_{i+1}`; so the parent map cycles through the nodes `v_i` and the lower siblings of each `v_i` on its exit door, which are pairwise distinct, and the ring has exactly
+
+```text
+Σ_{i<p} ( 1 + ⌊(s_i − 1)/2⌋ )
+```
+
+nodes — one per comb edge of the period (Lemma 18.7.1's count over one period). (b) When `p = 1` and `s_0 = 1` the one door edge is the self-loop of the fixed state and is excluded; the ring is the single node, a root. (c) Every cycle of the parent map is the ring of an `F`-cycle: along a parent cycle the door edges' targets `t_1, t_2, …` satisfy `t_{k+1} = F(t_k)` (all siblings on a door share `F`), so they form an `F`-cycle, and the parent cycle is its ring.
+
+**Proof.** (a) is Proposition 18.2.2(b) at each `v_i`, with the door parent `state(y^{(i)})` defined since `v_{i+1}` exists. Distinctness: nodes on different doors differ; nodes on one door differ by branch; and a cycle node `v_j` cannot be a lower sibling of `v_i` (`i ≠ j`), since it would then have exit `y^{(i)}` and `v_{j+1} = state(y^{(i)}) = v_{i+1}`, forcing `j = i`. The count is `1 + ⌊(s_i − 1)/2⌋` nodes per `i`. (b) The lowest sibling on `y^{(0)}` is `node(y^{(0)}, s_0)` with `s_0 = 1`, which is `v_0` itself; its door edge goes to `F(v_0) = v_0`. (c) A parent cycle has a door edge (cascade edges strictly lower the branch); from a door edge's target `t_k` the chain cascades to the lowest sibling on `t_k`'s exit door and leaves by the door edge to `F(t_k) = t_{k+1}`; so the `t_k` are `F`-periodic and the cycle consists of them and the siblings passed, which is (a)'s ring. ∎
+
+Applied: `(1,1)` has `s = 1`, ring `{(1,1)}` (the positive root); `(−1,2)` has `s = 1`, ring `{(−1,2)}`; the 2-cycle has `s(−1,4) = 1` and `s(−5,3) = 3`, so the ring has `(1 + 0) + (1 + 1) = 3` nodes: `(−1,4)`, `(−5,3)`, and `(−5,3)`'s lower sibling on door `−17`, `node(−17, 1) = (−11,1)`. The parent map cycles `(−1,4) → (−5,3)` (door edge, `s = 1`), `(−5,3) → (−11,1)` (cascade edge, branch `3` to branch `1` on door `−17`), `(−11,1) → (−1,4)` (door edge: `A(−11,1) = −34 = 2·(−17)`, `state(−17) = (−1,4)`).
+
+**Proposition 18.8.2.2 (the three negative components).** Call a negative state's component the ring its parent chain reaches, or the singular root `(−1,1)` when the chain reaches that. In each case the parent map on the non-ring nodes of the component is a tree onto the ring — every non-ring node has one parent, and its chain reaches the ring without repeating a node — and the **level** `λ` is the number of parent edges to the ring. The parent chain from `v` reaches the ring iff the `F`-orbit of `v` reaches the `F`-cycle (or, in the singular case, reaches a state with exit `−1`).
+
+1. **The singular component.** Root `(−1,1)`: the branch-`2` node on the singular door `−1` (`−1 ≡ 2 (mod 3)`, even branches), whose door parent does not exist — the missing edge plays the role of the positive root's excluded self-loop. Door `−1`'s chain is `(−1,1), (−5,1), (−7,2), (−85,1), (−341,1), …` at branches `2, 4, 6, 8, 10, …`, with `d = 1 + v₃(s)`; every node on it has exit `−1` and no `F`-image, and hangs by cascade edges from `(−1,1)`. `(−1,1)` has one door, `−3`, dead, so **the root has exactly one child**, `(−5,1)`, by a cascade edge — the mirror of the positive root's single child `(1,2)`.
+2. **The fixed-state component.** Root `(−1,2)`, `A = −10`, `s = 1`, exit `−5`; its doors are `−5` (`a = 0`, `≡ 1`, branch `1`) and `−7` (`a = 1`, `≡ 2`, branch `2`). Door `−5` at branch `1` gives `2·(−5) + 1 = −9 = 3^2·(−1)`, `(−1,2)` itself — the excluded self-loop; door `−7` at branch `2` gives `−27 = 3^3·(−1)`, `(−1,3)`; the cascade child is branch `3` on door `−5`, `−39 = 3·(−13)`, `(−13,1)`. **The root has two children.**
+3. **The 2-cycle component.** The ring `(−1,4), (−5,3), (−11,1)` is level `0`. Children of ring nodes that are not ring nodes are level `1`: below `(−1,4)`, the cascade child `(−109,1)` (branch `3` on door `−41`) and the door children `(−11,2)`, `(−49,1)`, `(−73,1)` through `−25`, `−37`, `−55` (its door `−17` gives the ring node `(−11,1)`); below `(−5,3)`, `(−181,1)` (branch `5` on `−17`), `(−1,5)` and `(−121,1)` through `−61`, `−91` (its door `−41` gives `(−1,4)`); below `(−11,1)`, `(−5,2)` through its one door `−23` (its cascade child is `(−5,3)`).
+
+**Proof.** The rules are 18.8.1.2's. Uniqueness of the parent and the chain lemma 18.2.2(b) hold at every non-ring node, with `(−1,1)` the only node without a parent. By Lemma 18.8.2.1(c) the parent map's only cycles are the rings, so a chain that starts outside a ring repeats no node until it enters one, and a chain that reaches `(−1,1)` stops; the restriction to a component is therefore a tree onto its ring. The chain visits `F(v), F²(v), …` in order, interleaved with the cascade siblings (18.2.2(c)'s argument); it enters the ring at a cycle node or at a lower sibling of one (whose `F`-image is then a cycle node), and it reaches `(−1,1)` iff some `F^i(v)` is on door `−1`, i.e. has exit `−1`. The children in 1–3 are the children rule 18.2.3 computed at the roots; the root degrees are `1 + 1 − 1` (door `−3` dead), `1 + 2 − 1` (the self-loop excluded), and `5, 4, 2` with one ring child each. ∎
+
+**The two distances.** Let `η(v)` be the number of `F`-steps from `v` to the `F`-cycle (to `(1,1)` on the positive comb; to the first state with exit `−1` on the singular component) and `λ(v)` the level. Then `η = (door edges on the path) + ε` with `ε ∈ {0, 1}`: on the positive comb `ε = 1` always (Proposition 18.3.2(b), the root's self-loop); on the singular component `ε = 0` always (the cascade run down door `−1` that ends every path stands for no `F`-step); in general `ε = 0` iff the path's last edge is a door edge into an `F`-periodic ring node, and `ε = 1` otherwise — the path enters by a cascade edge (from a higher sibling of a ring node, whose `F`-step into the cycle is not an edge of the path) or by a door edge into a ring node that is not `F`-periodic (`(−11,1)`, one `F`-step short), or through the excluded self-loop (`(−1,2)` entered through door `−5`). Each `F`-step `v_i → v_{i+1}` of the orbit is represented by the door edge into `v_{i+1}` unless the chain stopped before it, and it stops only at the ring; the cases are the ways it can stop.
+
+**Verified** — section (b): the three `F`-cycles by iteration; each ring by the sibling rule of 18.8.2.1(a) equals the set the parent map cycles through, of the stated length, and on `(1,1)` and `(−1,2)` the parent is the excluded self-loop; on the box `|ω| < 10^5`, `d ≤ 30` (`999,990` states) every parent chain reaches exactly one of the three targets — singular `326,882`, fixed `323,299`, 2-cycle `349,809`, `5` ring nodes in the box — and the `F`-orbit reaches the same one (largest `λ = 202`, `η = 168`); `λ = door + cascade` and `η − door edges ∈ {0,1}` with the stated rule at every state (`ε = 0` at `893,136`, `1` at `106,849`). `0` failures.
+
+### 18.8.3. The control census
+
+**Lemma 18.8.3.1 (the largest `|peak|` per root).** For a negative state, `|A| = 3^d|ω| + 1` and the largest door is `|y_{D−1}| = (2|A| + 1)/3`, so a door child's `|peak|` is at most `(8|A| + 4)/3 < 4|A|` while the cascade child's is `4|A|`; hence the largest `|peak|` at level `λ + 1` is four times that at level `λ`, attained only by the cascade child of the previous maximum (a ring node's cascade child is at level `1` unless it is a ring node, which for the maximum it is not). From the roots: `2^{2λ+1}` on door `1` (Lemma 18.5.1); `2^{2λ+2}` on door `−1` at branch `2λ + 2` (singular); `5·2^{2λ+1}` on door `−5` at branch `2λ + 1` (fixed state); `17·2^{2λ+3}` on door `−17` at branch `2λ + 3` (2-cycle, whose level-`0` maximum is `|A(−5,3)| = 136`). ∎
+
+**The level table.** Section (c) enumerates each component level by level from its ring, no size cutoff, to level `20`, beside a fresh enumeration of the positive comb (which reproduces 18.5's counts row for row). The per-level tables in 18.5's format (node count, cascade-in, door-in, depth distribution, largest `|peak|`) are in the committed output; the counts side by side:
+
+```text
+level      pos     sing      fix      two     sing/pos  fix/pos  two/pos
+    0        1        1        1        3
+    1        1        1        2        8
+    2        2        2        4       14
+    3        3        4        6       22
+    4       10        7       12       46
+    5       17       17       28      100
+    6       30       28       52      184
+    7       61       68      110      394
+    8      124      123      224      764
+    9      239      243      432     1504
+   10      478      490      904     3054
+   11      961      982     1758     6108
+   12     1978     1971     3542    12304
+   13     3823     3903     7076    24336
+   14     7748     7816    14166    49070
+   15    15597    15608    28306    97878     1.0007   1.8148   6.2754
+   16    30844    31343    56916   195922     1.0162   1.8453   6.3520
+   17    61947    62621   113578   391744     1.0109   1.8335   6.3239
+   18   124068   125070   226832   783394     1.0081   1.8283   6.3142
+   19   247507   250848   454562  1568148     1.0135   1.8366   6.3358
+   20   495986   501425   908088  3134064     1.0110   1.8309   6.3189
+```
+
+`991,425 / 1,002,571 / 1,816,599 / 6,269,061` nodes over levels `0..20`. Every component doubles per level; the constant between them is set by the first levels (the root degrees `1, 1, 2` and the ring of three with `8` level-`1` children) and settles by level `15`. The identities of Proposition 18.7.2 hold at every level of every component as integer identities (`Σ deg = n_{λ+1}`; `Σ deg = n_λ + Σ D − #dead` at `λ ≥ 1`; cascade-in `= n_{λ−1}`), and the measured inputs are the positive comb's:
+
+```text
+component  level    nodes  mean D  dead-top  door children  mean degree  next/this   P(D=1..4)
+sing          16    31343  1.5000    0.5020         0.9979       1.9979     1.9979   0.6675 0.2218 0.0738 0.0242
+sing          18   125070  1.5050    0.4993         1.0057       2.0057     2.0057   0.6654 0.2222 0.0742 0.0251
+sing          20   501425  1.4976    0.4997         0.9979       1.9979        -     0.6675 0.2220 0.0740 0.0245
+fix           16    56916  1.4982    0.5027         0.9955       1.9955     1.9955   0.6685 0.2215 0.0731 0.0239
+fix           18   226832  1.5032    0.4993         1.0040       2.0040     2.0040   0.6650 0.2229 0.0746 0.0249
+fix           20   908088  1.4989    0.4994         0.9995       1.9995        -     0.6668 0.2222 0.0742 0.0246
+two           16   195922  1.4999    0.5004         0.9995       1.9995     1.9995   0.6667 0.2228 0.0734 0.0244
+two           18   783394  1.5017    0.4999         1.0017       2.0017     2.0017   0.6666 0.2220 0.0737 0.0249
+two           20  3134064  1.5002    0.4996         1.0005       2.0005        -     0.6666 0.2222 0.0741 0.0247
+pos           20   495986  1.4998    0.5010         0.9988       1.9988        -     0.6668 0.2222 0.0738 0.0249
+ledger 2/3^j                                                                         0.6667 0.2222 0.0741 0.0247
+```
+
+**The run-length table** of 18.5, per component, with the uniform negative box `|ω| < 10^5`, `d ≤ 30` beside the ledger:
+
+```text
+own cascade run k = floor((s-1)/2), fraction over the census nodes at levels 1..20
+   k      pos      sing      fix      two     box (neg)   ledger (3/4)4^-k
+   0   0.50028  0.50014  0.49988  0.49993    0.74999      0.75000
+   1   0.24965  0.25020  0.25023  0.25014    0.18751      0.18750
+   2   0.12514  0.12475  0.12487  0.12496    0.04688      0.04688
+   3   0.06248  0.06246  0.06252  0.06249    0.01172      0.01172
+   4   0.03111  0.03126  0.03133  0.03125    0.00293      0.00293
+   5   0.01573  0.01557  0.01558  0.01561    0.00073      0.00073
+door run n, fraction over the census door children; box states with s <= 2, forward
+   n      pos      sing      fix      two     box (neg)   ledger (1/4)(3/4)^(n-1)
+   1   0.50000  0.49979  0.50024  0.50011    0.25001      0.25000
+   2   0.24975  0.25091  0.25013  0.25019    0.18754      0.18750
+   3   0.12491  0.12414  0.12477  0.12495    0.14063      0.14062
+   4   0.06272  0.06195  0.06262  0.06257    0.10514      0.10547
+   5   0.03091  0.03123  0.03094  0.03102    0.07932      0.07910
+   6   0.01581  0.01575  0.01565  0.01555    0.05889      0.05933
+mean own cascade run: pos 0.9998, sing 0.9994, fix 0.9998, two 0.9999; box 0.3333; ledger 0.3333
+mean door run: pos 2.001, sing 2.002, fix 1.999, two 1.999; box 3.997; ledger 4.000
+door edges at s=1 : s=2 -- pos 0.4999:0.5001, sing 0.4992:0.5008, fix 0.4999:0.5001, two 0.4999:0.5001; box 0.6667:0.3333; ledger 0.6667:0.3333
+```
+
+**The prediction, tested.** Every statistic of the three negative components agrees with the positive comb's within sampling error — the level ratio, the mean depth, the dead-top fraction, the mean degree, the depth distribution against `2·3^{−j}`, both run-length distributions, the `s = 1 : s = 2` split, and the negative box against the ledger exactly as the positive box in 18.5 — and the census-versus-ledger deviation of 18.5 recurs unchanged on each (the same population artifact: one cascade child per node). The only differences are at the ring (root degree `1`, `2`, and the ring of three) and in the first few levels, after which the ratio to the positive count is a constant (`1.01`, `1.83`, `6.32` at level `20`). Reported flat: this is what sign-blindness predicts, and nothing else is read from it.
+
+**The digit-transfer law** (Theorem 18.7.3) is stated for a door `y` with `3 ∤ y` and no sign, and its proof reads none; on negative door edges (section (c), `5,000` random negative `y` of up to `60` bits, `j ≤ 6`): agreement mod `3^{j+d}` forced the same `d` and the identity `v₃(y'_a − ỹ'_a) = v₃(y − ỹ) − (d − a)` at every `a < d` (`5,000` edges; `2,479` child top doors dead); at `j + d − 1` digits with the same `d` the top doors disagreed with `v₃ = j − 1` exactly (`4,597` sharp pairs; `403` lifts changed `d`, every one at `j = 1`, as clause 1 predicts); `v₃(y'_a + 1) = a` at every side door; largest `d = 9`. `0` failures.
+
+**The size census** (a measurement, not a claim). Among the `499,999` odd `x` with `−10^6 ≤ x ≤ −3` (`x = −1` is the singular door itself), the `F`-orbit of `state(x)` reaches the singular exit for `163,485` (`0.3270`), the fixed state `(−1,2)` for `162,122` (`0.3242`), and the 2-cycle for `174,392` (`0.3488`); none elsewhere. Among the `999,990` states of the box `|ω| < 10^5`, `d ≤ 30`: `0.3269`, `0.3233`, `0.3498`. The conjecture that every negative odd integer reaches one of the three classical cycles is open; the census is consistent with it to `10^6` and says nothing beyond that.
+
+**Verified** — section (c), as quoted, plus the largest-`|peak|` law at every level of every component (the maximum equal to the stated constant times `4^λ`, attained by the root chain's node at branch `s₀ + 2λ` and by no other node), and the positive enumeration equal to 18.5's table. Whole script: `5,092,074` checks, `0` failures; **wall clock** `142 s` on the author's machine (census `6 + 5 + 10 + 52 s`); the single reproducing command is `python experiments/signed_comb.py`.
+
+### 18.8.4. Where the sign enters
+
+Every fact used in 18.8.1–18.8.3 is an integer identity, a valuation or a congruence, and none reads the sign of a state: the parent and children rules, the ring lemma, the tree property, the degree formula, the mean-degree identity, the run-length structure, the digit-transfer law, and the largest-`|peak|` law all hold on both signs with the same proofs. The complete list of what is not sign-blind is one item: **which root a component has** — which states are `F`-periodic, or exit to the singular door. Everything that differs between the positive comb and its three negative controls (the root degrees, the ring of three, the constants `2, 4, 10, 136` of Lemma 18.8.3.1, the first levels, the singular door's one-sidedness of Theorem 14.15.6.2(4)) is a consequence of the root, not a second place where the sign enters.
+
+**Lemma 18.8.4.1 (the fixed-state equation at `s = 1`).** A state is `F`-fixed iff its exit is one of its own doors. For a state with `s = 1` the exit is `y = A/2`, and `y = y_a` iff
+
+```text
+ω · 3^a · (2^{d−a+1} − 3^{d−a}) = 1,
+```
+
+since `2y_a − A = ω·3^a·(2^{d−a+1} − 3^{d−a}) − 1`. At `a ≥ 1` the left side is a multiple of `3`, so there is no solution; at `a = 0` it is `ω = 1/(2^{d+1} − 3^d)`, whose integer solutions are `d = 1`, `ω = 1` (`4 − 3 = 1`: `(1,1)`) and `d = 2`, `ω = −1` (`8 − 9 = −1`: `(−1,2)`) — the two near-misses of the spent `|q| = 1` stock, `|2^a − 3^b| = 1` at `(a,b) = (2,1), (3,2)` (cycles.md 12.6.1.2–12.6.1.3; Gersonides), the third solution `(1,1)` being `d = 0`. **The sign of the state is the sign of `2^{d+1} − 3^d`.** ∎
+
+That is the whole content of the sign, at the one place this section looks: the comb's structure is identical on both signs; the sign lives in the root's equation and nowhere else. Fixed states with `s ≥ 2` and longer periods are not examined here — period `1` over the positives is cycles.md 12.2's, longer periods are the parked front, and the negative side is not searched.
+
+**Verified** — section (d): the identity `2y_a − A = ω·3^a·(2^{d−a+1} − 3^{d−a}) − 1` and "`F`-fixed iff the exit is an own door" on `2,000` random states of either sign; for `d ≤ 60`, `2^{d+1} − 3^d = ±1` exactly at `d = 1, 2`, giving `(1,1)` and `(−1,2)` (each `F`-fixed with `s = 1` through its top door), and the `a ≥ 1` product a multiple of `3` at every `(d, a)`. `0` failures.
+
+**Standing of 18.8.** Grade: formulation — a construction and a census, on a control. Nothing is proposed and no front moves: the negative conjecture is stated as open, the size census is a measurement, and no cycle of either sign is searched for. The explorer (18.6) opens at any of the four roots; its arithmetic core is checked signed by `experiments/comb_explorer_check.py`.

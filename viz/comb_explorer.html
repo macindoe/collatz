@@ -26,7 +26,7 @@ sup{font-size:9px;}
 .edge{font-family:ui-monospace,monospace;font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid var(--border-strong);white-space:nowrap;}
 .edge-cascade{background:var(--bg-cascade);}
 .edge-door{background:var(--bg-door);}
-.edge-root{background:var(--surface-1);}
+.edge-root,.edge-ring{background:var(--surface-1);}
 .st{font-weight:600;white-space:nowrap;}
 .meta{color:var(--text-secondary);}
 .grey{opacity:.65;font-size:12px;padding:3px 10px;color:var(--text-secondary);}
@@ -50,10 +50,17 @@ tr.here td{background:var(--bg-select);}
 </head>
 <body>
 <h1>Comb explorer</h1>
-<p>The peak comb (comb.md §18) is the backward tree of reduced states (&omega;, d), each node placed by its <strong>peak</strong> A = 3<sup>d</sup>&omega; &minus; 1 = 2<sup>s</sup>&middot;y, read as <em>branch s on the door y</em> (18.1). A node at branch s &ge; 3 hangs from the node at branch s &minus; 2 on the same door by a <strong>cascade edge</strong> (the peak divided by 4; 18.2.1, Lemma 18.2.5); the node at the lowest admissible branch hangs from the door's own state, one step of F, by a <strong>door edge</strong>. Read upward, every node has one cascade child and one door child per live door (Proposition 18.2.3): the <strong>top door</strong> 2<sup>d</sup>&omega; &minus; 1 is dead when it is a multiple of 3, the <strong>side doors</strong> never are (reverse.md 14.5.1). &lambda; is the level, the number of edges to (1,1); &eta; is the number of F-steps, and &eta; = 1 + the door edges on the path (Proposition 18.3.2). The tree starts at the root (1,1), whose only child is (1,2). The <code>+</code> control expands a node by one level, and nothing is computed before it is shown; clicking a card opens it in the panel: its path to the root, the raw descent from any of its representatives through the peaks of the lower siblings on its door (18.4), and the chain of siblings. Rows are indented by level up to level 24 and flat beyond (the level is printed on every card). Every integer on this page is exact; integers longer than 24 digits are abbreviated and show in full when clicked.</p>
+<p>The peak comb (comb.md §18) is the backward tree of reduced states (&omega;, d), each node placed by its <strong>peak</strong> A = 3<sup>d</sup>&omega; &minus; 1 = 2<sup>s</sup>&middot;y, read as <em>branch s on the door y</em> (18.1). A node at branch s &ge; 3 hangs from the node at branch s &minus; 2 on the same door by a <strong>cascade edge</strong> (the peak divided by 4; 18.2.1, Lemma 18.2.5); the node at the lowest admissible branch hangs from the door's own state, one step of F, by a <strong>door edge</strong>. Read upward, every node has one cascade child and one door child per live door (Proposition 18.2.3): the <strong>top door</strong> 2<sup>d</sup>&omega; &minus; 1 is dead when it is a multiple of 3, the <strong>side doors</strong> never are (reverse.md 14.5.1). &lambda; is the level, the number of edges to the root; &eta; is the number of F-steps. The tree starts at the root (1,1), whose only child is (1,2), and &eta; = 1 + the door edges on the path (Proposition 18.3.2). The <strong>root selector</strong> opens the same construction on the negative odd integers (18.8), where the reduced map has three components, one per classical negative cycle: the singular root (&minus;1,1), whose door parent state(&minus;1) does not exist; the fixed state (&minus;1,2); and the 2-cycle (&minus;1,4) &harr; (&minus;5,3), whose comb ring has three nodes. Every rule is the same; &lambda; counts edges to the ring, &eta; counts F-steps to the F-cycle (or to the singular door), and &eta; &minus; (door edges) is 0 or 1 (18.8.2). The <code>+</code> control expands a node by one level, and nothing is computed before it is shown; clicking a card opens it in the panel: its path to the ring, the raw descent from any of its representatives through the peaks of the lower siblings on its door (18.4), and the chain of siblings. Rows are indented by level up to level 24 and flat beyond (the level is printed on every card). Every integer on this page is exact; integers longer than 24 digits are abbreviated and show in full when clicked.</p>
 <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+<label style="font-size:13px;color:var(--text-secondary);">root
+<select id="root" style="margin-left:6px;">
+<option value="pos" selected>(1,1) — the positive root</option>
+<option value="sing">(−1,1) — the singular root</option>
+<option value="fix">(−1,2) — the fixed state</option>
+<option value="two">(−1,4), (−5,3), (−11,1) — the 2-cycle's ring</option>
+</select></label>
 <label style="font-size:13px;color:var(--text-secondary);">go to a state &omega;,d or an odd integer x
-<input id="goto" type="text" value="" placeholder="e.g. 107,1 or 213" style="width:200px;margin-left:6px;"></label>
+<input id="goto" type="text" value="" placeholder="e.g. 107,1 or 213 or -17" style="width:200px;margin-left:6px;"></label>
 <button id="goBtn">go</button>
 <button id="resetBtn">reset tree</button>
 </div>
@@ -61,37 +68,55 @@ tr.here td{background:var(--bg-select);}
 <div class="layout">
 <div class="treecol">
 <div id="tree" class="tree"></div>
-<div class="note">Levels double from about level 17 (18.5; census counts to level 27 shown beside each &lambda;); the largest peak at level &lambda; is 2<sup>2&lambda;+1</sup>, on door 1 (Lemma 18.5.1).</div>
+<div class="note" id="treenote"></div>
 </div>
 <div id="detail" class="detail"></div>
 </div>
 <footer id="selftest">self-test: running</footer>
 <script>
 // === COMB CORE BEGIN ===
-// The arithmetic of comb.md section 18. Every integer is a BigInt; states are [w, d] arrays of
-// BigInt (w the odd part prime to 3, d >= 1). No DOM access in this block: it is extracted and run
-// under node by experiments/comb_explorer_check.py.
-function v2(n){ let v = 0n; while ((n & 1n) === 0n) { n >>= 1n; v++; } return v; }
-function v3(n){ let v = 0n; while (n % 3n === 0n) { n /= 3n; v++; } return v; }
-function isValidState(w, d){ return w > 0n && (w & 1n) === 1n && w % 3n !== 0n && d >= 1n; }
-function isRoot(w, d){ return w === 1n && d === 1n; }
+// The arithmetic of comb.md section 18, on either sign (18.8). Every integer is a BigInt; states are [w, d]
+// arrays of BigInt (w a nonzero odd integer prime to 3, d >= 1; w < 0 for the states of negative odd
+// integers). No DOM access in this block: it is extracted and run under node by
+// experiments/comb_explorer_check.py.
+// Signed division: BigInt `/` truncates toward zero and `>>` floors; both are exact when the divisor divides
+// the dividend, and every division here is one of those. exactDiv asserts it. Residues mod 3 are taken in
+// {0,1,2} by mod3 (BigInt `%` keeps the sign of the dividend: -5n % 3n is -2n, and -5 = 1 mod 3).
+function exactDiv(a, b){ if (b === 0n || a % b !== 0n) throw new Error('inexact division ' + a + ' / ' + b); return a / b; }
+function mod3(n){ return ((n % 3n) + 3n) % 3n; }
+function v2(n){ if (n === 0n) throw new Error('v2(0)'); let v = 0n; while ((n & 1n) === 0n) { n >>= 1n; v++; } return v; }
+function v3(n){ if (n === 0n) throw new Error('v3(0)'); let v = 0n; while (n % 3n === 0n) { n /= 3n; v++; } return v; }
+function isValidState(w, d){ return w !== 0n && (w & 1n) === 1n && w % 3n !== 0n && d >= 1n; }
+// The rings (18.8.2): the nodes whose parent chain never leaves them. The positive root; the singular root
+// (-1,1), whose door parent state(-1) does not exist; the fixed state (-1,2); the comb ring of the 2-cycle
+// (-1,4) <-> (-5,3), which adds (-5,3)'s lower sibling (-11,1) on door -17. FCYCLE lists the F-periodic
+// ring nodes (eta is counted to them); the singular root has none (eta is counted to the exit -1).
+const RINGS = { pos: [[1n, 1n]], sing: [[-1n, 1n]], fix: [[-1n, 2n]], two: [[-1n, 4n], [-5n, 3n], [-11n, 1n]] };
+const FCYCLE = { pos: [[1n, 1n]], sing: [], fix: [[-1n, 2n]], two: [[-1n, 4n], [-5n, 3n]] };
+function ringOf(w, d){ for (const k in RINGS) for (const r of RINGS[k]) if (r[0] === w && r[1] === d) return k; return null; }
+function inFcycle(w, d, k){ return FCYCLE[k].some(r => r[0] === w && r[1] === d); }
+function isRoot(w, d){ return ringOf(w, d) !== null; }
 // The peak A = 3^d w - 1, the branch s = v2(A), the door y = A / 2^s (Definition 18.1.1).
-function exitData(w, d){ const A = 3n ** d * w - 1n; const s = v2(A); return { A: A, s: s, y: A >> s }; }
-// Door recovery (reverse.md 14.6.5.1): y + 1 = 2^m 3^a W gives the state (W, m + a) whose a-th door y is.
-function stateOfOdd(y){ const n = y + 1n; const m = v2(n); const u = n >> m; const a = v3(u); return [u / 3n ** a, m + a]; }
+function exitData(w, d){ const A = 3n ** d * w - 1n; const s = v2(A); return { A: A, s: s, y: exactDiv(A, 1n << s) }; }
+// Door recovery (reverse.md 14.6.5.1): y + 1 = 2^m 3^a W gives the state (W, m + a) whose a-th door y is;
+// W has the sign of y + 1. The singular door -1 (y + 1 = 0) is the door of no state: null.
+function stateOfOdd(y){ if (y === -1n) return null; const n = y + 1n; const m = v2(n); const u = exactDiv(n, 1n << m); const a = v3(u); return [exactDiv(u, 3n ** a), m + a]; }
+// F(w,d) = state(exit); null exactly when the exit is -1, i.e. on door -1's chain (18.8.1).
 function F(w, d){ return stateOfOdd(exitData(w, d).y); }
 // The state at branch s on door y: 2^s y + 1 = 3^d w (Lemma 18.1.2(iii); requires 2^s y = 2 mod 3).
-function nodeAt(y, s){ const N = (y << s) + 1n; const d = v3(N); return [N / 3n ** d, d]; }
-// The lowest admissible branch on a live door (reverse.md 14.1.1's parity rule).
-function lowestBranch(y){ return y % 3n === 1n ? 1n : 2n; }
+function nodeAt(y, s){ const N = (y << s) + 1n; const d = v3(N); return [exactDiv(N, 3n ** d), d]; }
+// The lowest admissible branch on a live door (reverse.md 14.1.1's parity rule, residues in {0,1,2}).
+function lowestBranch(y){ return mod3(y) === 1n ? 1n : 2n; }
 // The doors y_a = 2^(D-a) 3^a W - 1, a = 0..D-1; alive iff 3 does not divide y_a (Theorem 14.5.1).
 function doors(W, D){
   const out = [];
-  for (let a = 0n; a < D; a++) { const y = (W << (D - a)) * 3n ** a - 1n; out.push({ a: a, y: y, alive: y % 3n !== 0n }); }
+  for (let a = 0n; a < D; a++) { const y = (W << (D - a)) * 3n ** a - 1n; out.push({ a: a, y: y, alive: mod3(y) !== 0n }); }
   return out;
 }
 // The comb parent (Definition 18.2.1): s >= 3 the cascade parent at branch s - 2 on the same door;
-// s <= 2 the door parent state(y) = F(w, d); the root has none.
+// s <= 2 the door parent state(y) = F(w, d). Ring nodes have none here: they are the roots of their
+// components (the positive root's self-loop, the singular root's missing parent, and the 2-cycle's ring,
+// whose own parent map (-1,4) -> (-5,3) -> (-11,1) -> (-1,4) is the ring itself, 18.8.2).
 function parent(w, d){
   if (isRoot(w, d)) return null;
   const e = exitData(w, d);
@@ -99,16 +124,21 @@ function parent(w, d){
   return { state: stateOfOdd(e.y), type: 'door' };
 }
 // The children (Proposition 18.2.3): the cascade child at branch s + 2 on the node's own door, then one
-// door child per live door at its lowest branch, in door order. Dead doors are returned apart; the root's
-// door child on door 1 is the root itself and is returned under `excluded` (the self-loop, 18.2.1).
+// door child per live door at its lowest branch, in door order. Dead doors are returned apart; a child that
+// is a ring node is returned under `excluded` -- the self-loop of (1,1) and (-1,2) (`self`), and the ring
+// children of the 2-cycle's ring nodes (`ring`).
 function children(W, D){
   const e = exitData(W, D);
-  const list = [{ state: nodeAt(e.y, e.s + 2n), type: 'cascade', s: e.s + 2n, door: { a: v3(e.y + 1n), y: e.y } }];
-  const dead = [], excluded = [];
+  const list = [], dead = [], excluded = [];
+  const casc = nodeAt(e.y, e.s + 2n);
+  const cd = { a: e.y === -1n ? null : v3(e.y + 1n), y: e.y };
+  if (isRoot(casc[0], casc[1])) excluded.push({ a: cd.a, y: cd.y, s: e.s + 2n, state: casc, self: false, ring: true, type: 'cascade' });
+  else list.push({ state: casc, type: 'cascade', s: e.s + 2n, door: cd });
   for (const dr of doors(W, D)) {
     if (!dr.alive) { dead.push({ a: dr.a, y: dr.y, dead: true }); continue; }
     const s = lowestBranch(dr.y); const st = nodeAt(dr.y, s);
-    if (st[0] === W && st[1] === D) { excluded.push({ a: dr.a, y: dr.y, s: s, state: st, self: true }); continue; }
+    if (st[0] === W && st[1] === D) { excluded.push({ a: dr.a, y: dr.y, s: s, state: st, self: true, ring: true, type: 'door' }); continue; }
+    if (isRoot(st[0], st[1])) { excluded.push({ a: dr.a, y: dr.y, s: s, state: st, self: false, ring: true, type: 'door' }); continue; }
     list.push({ state: st, type: 'door', s: s, door: { a: dr.a, y: dr.y } });
   }
   return { list: list, dead: dead, excluded: excluded };
@@ -127,14 +157,28 @@ function rawDescent(w, d, a){
   out.push({ x: e.A, tag: 'peak', sib: null });
   for (let j = e.s - 1n; j >= 1n; j--) {
     const z = e.y << j;
-    if (z % 3n === 2n) out.push({ x: z, tag: 'sibpeak', sib: nodeAt(e.y, j) }); else out.push({ x: z, tag: 'cascade', sib: null });
+    if (mod3(z) === 2n) out.push({ x: z, tag: 'sibpeak', sib: nodeAt(e.y, j) }); else out.push({ x: z, tag: 'cascade', sib: null });
   }
   out.push({ x: e.y, tag: 'door', sib: null });
   return out;
 }
-// The parent chain to the root with a step cap. eta = 1 + door edges and lambda = edges (Proposition
-// 18.3.2(b)); at the root eta = lambda = 0. When the cap is hit the path is what was reached and the
-// distances are null.
+// eta by its definition: F-steps from (w,d) to an F-periodic node of the ring k, or to the singular exit
+// (the first state with exit -1) when k is 'sing'. null when the cap is hit.
+function etaOf(w, d, k, cap){
+  let cur = [w, d], n = 0n;
+  while (!inFcycle(cur[0], cur[1], k)) {
+    const e = exitData(cur[0], cur[1]);
+    if (e.y === -1n) return k === 'sing' ? n : null;
+    cur = stateOfOdd(e.y); n++;
+    if (n > cap) return null;
+  }
+  return n;
+}
+// The parent chain to the ring with a step cap. lambda = edges; eta by etaOf. On the positive comb
+// eta = 1 + door edges (Proposition 18.3.2(b)); in general eta = door edges + eps with eps in {0, 1}
+// (18.8.2: eps = 0 iff the last edge into the ring is a door edge into an F-periodic ring node, and eps = 0
+// throughout the singular component). When the cap is hit the path is what was reached and the distances
+// are null; when the chain stops outside every ring (it cannot, once it reaches (-1,1)) `ring` is null.
 function pathToRoot(w, d, cap){
   const path = []; let cur = [w, d]; let doorEdges = 0n, cascadeEdges = 0n, steps = 0n, capHit = false;
   for (;;) {
@@ -145,17 +189,25 @@ function pathToRoot(w, d, cap){
     if (p.type === 'door') doorEdges++; else cascadeEdges++;
     cur = p.state; steps++;
   }
+  const last = path[path.length - 1].state;
+  const ring = capHit ? null : ringOf(last[0], last[1]);
   const edges = doorEdges + cascadeEdges;
-  return { path: path, capHit: capHit, doorEdges: doorEdges, cascadeEdges: cascadeEdges,
-    lambda: capHit ? null : edges, eta: capHit ? null : (edges === 0n ? 0n : 1n + doorEdges) };
+  const eta = ring === null ? null : etaOf(w, d, ring, cap);
+  return { path: path, capHit: capHit, doorEdges: doorEdges, cascadeEdges: cascadeEdges, ring: ring,
+    lambda: capHit ? null : edges, eta: eta };
 }
-// The census of comb.md 18.5: node counts at levels 0..27.
+// eps of a level-1 node from the type of its edge into the ring node [rw, rd] of ring k (18.8.2); every node
+// below it on the same path has the same eps.
+function epsOf(edgeType, rw, rd, k){ if (k === 'sing') return 0n; return (edgeType === 'door' && inFcycle(rw, rd, k)) ? 0n : 1n; }
+// The census of comb.md 18.5 (the positive comb): node counts at levels 0..27.
 const CENSUS = [1n, 1n, 2n, 3n, 10n, 17n, 30n, 61n, 124n, 239n, 478n, 961n, 1978n, 3823n, 7748n, 15597n, 30844n,
   61947n, 124068n, 247507n, 495986n, 991393n, 1982520n, 3966341n, 7931430n, 15864465n, 31732224n, 63457557n];
 const CENSUS_TOTAL = 126917355n;
 // Self-test: the canaries of comb.md section 18 and briefs/peak-comb-findings.md, the (137,517) path of the
-// author's report (briefs/comb-explorer-fix-brief.md), then parent(child) = node for every child of 300 states
-// from a fixed linear-congruential sequence.
+// author's report (briefs/comb-explorer-fix-brief.md), the negative canaries of 18.8 (the three rings, the
+// singular root's single child, (-1,2)'s two children, door -1's chain, a path in each component), then
+// parent(child) = node and eta = door edges + eps for every child of 300 states of either sign from a fixed
+// linear-congruential sequence.
 function selfTest(){
   let checks = 0n; const failures = [];
   const sEq = (p, q) => p[0] === q[0] && p[1] === q[1];
@@ -165,7 +217,7 @@ function selfTest(){
   // the root's only child is (1,2); its door 1 is live and its door child is the excluded self-loop
   const rc = children(1n, 1n);
   check(rc.list.length === 1 && rc.list[0].type === 'cascade' && sEq(rc.list[0].state, S(1, 2)), 'root child');
-  check(rc.excluded.length === 1 && rc.excluded[0].y === 1n && rc.excluded[0].a === 0n && sEq(rc.excluded[0].state, S(1, 1)), 'root self-loop');
+  check(rc.excluded.length === 1 && rc.excluded[0].y === 1n && rc.excluded[0].a === 0n && rc.excluded[0].self && sEq(rc.excluded[0].state, S(1, 1)), 'root self-loop');
   check(rc.dead.length === 0, 'root dead doors');
   check(parent(1n, 1n) === null, 'root has no parent');
   // door 1's chain at branches 1, 3, 5, 7, 9
@@ -193,11 +245,11 @@ function selfTest(){
   check(children(1n, 2n).dead.length === 1 && children(1n, 2n).dead[0].y === 3n, '(1,2) dead top door');
   // distances
   const dist = [[S(1, 2), 1n, 1n], [S(11, 1), 1n, 2n], [S(7, 1), 2n, 2n], [S(107, 1), 2n, 4n], [S(1, 1), 0n, 0n]];
-  for (const [st, eta, lam] of dist) { const r = pathToRoot(st[0], st[1], 10000n); check(!r.capHit && r.eta === eta && r.lambda === lam, 'distances ' + sS(st)); }
+  for (const [st, eta, lam] of dist) { const r = pathToRoot(st[0], st[1], 10000n); check(!r.capHit && r.ring === 'pos' && r.eta === eta && r.lambda === lam, 'distances ' + sS(st)); }
   check(pathToRoot(107n, 1n, 2n).capHit === true, 'cap hit reported');
   // the path of (137,517): 1,365 nodes, lambda = 1364, eta = 1056, the largest peak of 249 digits
   const p137 = pathToRoot(137n, 517n, 10000n);
-  check(!p137.capHit && p137.path.length === 1365 && p137.lambda === 1364n && p137.eta === 1056n, '(137,517) path');
+  check(!p137.capHit && p137.path.length === 1365 && p137.lambda === 1364n && p137.eta === 1056n && p137.eta === 1n + p137.doorEdges, '(137,517) path');
   check(p137.path.reduce((m, q) => q.A.toString().length > m ? q.A.toString().length : m, 0) === 249, '(137,517) largest peak digits');
   // the raw descent of (107,1) from its entry 213
   const rd = rawDescent(107n, 1n, 0n);
@@ -206,19 +258,62 @@ function selfTest(){
   expRd.forEach((ex, i) => { const r = rd[i]; check(r && r.x === ex[0] && r.tag === ex[1] && (ex[2] === null ? r.sib === null : (r.sib !== null && sEq(r.sib, ex[2]))), 'descent of 213 point ' + ex[0]); });
   // the census constants sum to the recorded total
   check(CENSUS.length === 28 && CENSUS.reduce((p, q) => p + q, 0n) === CENSUS_TOTAL, 'census total');
-  // parent(child) = node for every child of 300 pseudo-random states (fixed LCG, seed 20260915)
+  // --- the negative canaries (18.8) ---
+  check(mod3(-5n) === 1n && mod3(-7n) === 2n && mod3(-17n) === 1n && mod3(-25n) === 2n && mod3(-9n) === 0n, 'residues in {0,1,2}');
+  check(exactDiv(-16n, 4n) === -4n && exactDiv(-27n, -9n) === 3n && v2(-16n) === 4n && v3(-27n) === 3n, 'signed division and valuations');
+  check(stateOfOdd(-1n) === null && sEq(stateOfOdd(-3n), S(-1, 1)) && F(-1n, 1n) === null, '-1 is the singular door; state(-3) = (-1,1)');
+  const e11 = exitData(-1n, 1n); check(e11.A === -4n && e11.s === 2n && e11.y === -1n, '(-1,1): peak -4, s = 2, exit -1');
+  check(sEq(stateOfOdd(-5n), S(-1, 2)) && sEq(stateOfOdd(-7n), S(-1, 2)) && sEq(F(-1n, 2n), S(-1, 2)), '(-1,2) is F-fixed, doors -5 and -7');
+  check(sEq(F(-1n, 4n), S(-5, 3)) && sEq(F(-5n, 3n), S(-1, 4)), 'the 2-cycle (-1,4) <-> (-5,3)');
+  check(doors(-1n, 4n).map(o => o.y).join() === '-17,-25,-37,-55' && doors(-5n, 3n).map(o => o.y).join() === '-41,-61,-91', 'doors of the 2-cycle');
+  // the comb ring: (-1,4) -> (-5,3) by the door rule, (-5,3) -> (-11,1) by the cascade rule, (-11,1) -> (-1,4)
+  check(sEq(stateOfOdd(-41n), S(-5, 3)) && exitData(-1n, 4n).s === 1n && exitData(-5n, 3n).s === 3n && sEq(nodeAt(-17n, 1n), S(-11, 1)) && sEq(stateOfOdd(-17n), S(-1, 4)) && exitData(-11n, 1n).s === 1n, 'the ring of three');
+  for (const k in RINGS) for (const r of RINGS[k]) check(parent(r[0], r[1]) === null && ringOf(r[0], r[1]) === k, 'ring node ' + sS(r) + ' has no parent');
+  check(ringOf(-5n, 1n) === null && ringOf(-1n, 3n) === null, 'non-ring nodes');
+  // door -1's chain at branches 2, 4, 6, 8, 10 with d = 1 + v3(s)
+  const chainM1 = [[2n, S(-1, 1)], [4n, S(-5, 1)], [6n, S(-7, 2)], [8n, S(-85, 1)], [10n, S(-341, 1)]];
+  for (const [s, st] of chainM1) { const e = exitData(st[0], st[1]); check(sEq(nodeAt(-1n, s), st) && e.s === s && e.y === -1n && st[1] === 1n + v3(s) && F(st[0], st[1]) === null, 'door -1 branch ' + s); }
+  for (let i = 1; i < chainM1.length; i++) { const p = parent(chainM1[i][1][0], chainM1[i][1][1]); check(p !== null && p.type === 'cascade' && sEq(p.state, chainM1[i - 1][1]), 'door -1 cascade parent ' + sS(chainM1[i][1])); }
+  // the singular root's single child (-5,1); door -3 dead
+  const cs = children(-1n, 1n);
+  check(cs.list.length === 1 && cs.list[0].type === 'cascade' && sEq(cs.list[0].state, S(-5, 1)) && cs.dead.length === 1 && cs.dead[0].y === -3n && cs.excluded.length === 0, '(-1,1): one child (-5,1), door -3 dead');
+  // (-1,2)'s two children (-13,1) and (-1,3); door -5's child is the excluded self-loop
+  const cf = children(-1n, 2n);
+  check(cf.list.length === 2 && sEq(cf.list[0].state, S(-13, 1)) && cf.list[0].type === 'cascade' && sEq(cf.list[1].state, S(-1, 3)) && cf.list[1].type === 'door' && cf.list[1].door.y === -7n && cf.dead.length === 0, '(-1,2): children (-13,1) and (-1,3)');
+  check(cf.excluded.length === 1 && cf.excluded[0].self && cf.excluded[0].y === -5n && cf.excluded[0].s === 1n, '(-1,2): door -5 excluded');
+  // the ring nodes' children: ring children excluded
+  const c14 = children(-1n, 4n), c53 = children(-5n, 3n), c111 = children(-11n, 1n);
+  check(c14.list.map(c => sS(c.state)).join(' ') === '(-109,1) (-11,2) (-49,1) (-73,1)' && c14.excluded.length === 1 && sEq(c14.excluded[0].state, S(-11, 1)) && c14.excluded[0].ring && !c14.excluded[0].self && c14.excluded[0].type === 'door', '(-1,4) children');
+  check(c53.list.map(c => sS(c.state)).join(' ') === '(-181,1) (-1,5) (-121,1)' && c53.excluded.length === 1 && sEq(c53.excluded[0].state, S(-1, 4)) && c53.excluded[0].type === 'door', '(-5,3) children');
+  check(c111.list.map(c => sS(c.state)).join(' ') === '(-5,2)' && c111.excluded.length === 1 && sEq(c111.excluded[0].state, S(-5, 3)) && c111.excluded[0].type === 'cascade', '(-11,1) children');
+  // a path in each component with its eta and lambda (eta = door edges + eps)
+  const negDist = [[S(-7, 1), 'sing', 1n, 2n], [S(-5, 1), 'sing', 0n, 1n], [S(-341, 1), 'sing', 0n, 4n], [S(-7, 3), 'sing', 5n, 7n], [S(-1, 1), 'sing', 0n, 0n],
+    [S(-1, 3), 'fix', 1n, 1n], [S(-13, 1), 'fix', 1n, 1n], [S(-17, 1), 'fix', 2n, 2n], [S(-31, 1), 'fix', 4n, 4n], [S(-1, 2), 'fix', 0n, 0n],
+    [S(-5, 2), 'two', 2n, 1n], [S(-181, 1), 'two', 1n, 1n], [S(-109, 1), 'two', 1n, 1n], [S(-11, 2), 'two', 1n, 1n], [S(-1543, 3), 'two', 14n, 17n], [S(-11, 1), 'two', 1n, 0n], [S(-1, 4), 'two', 0n, 0n]];
+  for (const [st, k, eta, lam] of negDist) { const r = pathToRoot(st[0], st[1], 10000n); check(!r.capHit && r.ring === k && r.eta === eta && r.lambda === lam && (r.eta - r.doorEdges === 0n || r.eta - r.doorEdges === 1n), 'negative distances ' + sS(st)); }
+  check(pathToRoot(-7n, 1n, 10000n).path.map(p => sS(p.state) + (p.edge ? ':' + p.edge : '')).join(' ') === '(-7,1):door (-5,1):cascade (-1,1)', 'path of (-7,1)');
+  check(pathToRoot(-5n, 2n, 10000n).path.map(p => sS(p.state)).join(' ') === '(-5,2) (-11,1)', 'path of (-5,2) ends at the ring node (-11,1)');
+  // parent(child) = node, and eta = door edges + eps, for every child of 300 pseudo-random states of either sign
   let seed = 20260915n; const M = (1n << 64n) - 1n;
   const next = () => { seed = (seed * 6364136223846793005n + 1442695040888963407n) & M; return seed; };
   for (let i = 0; i < 300; i++) {
     let w = 2n * ((next() >> 16n) % 500000n) + 1n; if (w % 3n === 0n) w += 2n;
+    if (i % 2 === 1) w = -w;
     const d = 1n + ((next() >> 40n) % 40n);
     const cs = children(w, d);
     check(BigInt(cs.list.length) === 1n + BigInt(doors(w, d).filter(o => o.alive).length) - BigInt(cs.excluded.length), 'degree ' + sS([w, d]));
     for (const ch of cs.list) {
       const p = parent(ch.state[0], ch.state[1]);
-      check(p !== null && p.type === ch.type && sEq(p.state, [w, d]), 'parent of child ' + sS(ch.state) + ' of ' + sS([w, d]));
-      if (ch.type === 'door') check(sEq(F(ch.state[0], ch.state[1]), [w, d]) && exitData(ch.state[0], ch.state[1]).y === ch.door.y, 'door child F ' + sS(ch.state));
+      check(p !== null && p.type === ch.type && sEq(p.state, [w, d]) && (ch.state[0] < 0n) === (w < 0n), 'parent of child ' + sS(ch.state) + ' of ' + sS([w, d]));
+      if (ch.type === 'door') { const f = F(ch.state[0], ch.state[1]); check(f !== null && sEq(f, [w, d]) && exitData(ch.state[0], ch.state[1]).y === ch.door.y, 'door child F ' + sS(ch.state)); }
       else check(exitData(ch.state[0], ch.state[1]).A === 4n * exitData(w, d).A, 'cascade child 4A ' + sS(ch.state));
+    }
+    if (i < 60) {
+      const r = pathToRoot(w, d, 10000n);
+      if (r.capHit || r.ring === null) { check(false, 'path from ' + sS([w, d]) + ' reached no ring'); continue; }
+      const eps = r.eta - r.doorEdges;
+      const last = r.path[r.path.length - 2], ringNode = r.path[r.path.length - 1].state;
+      check((w > 0n ? r.ring === 'pos' : r.ring !== 'pos') && (eps === 0n || eps === 1n) && eps === epsOf(last.edge, ringNode[0], ringNode[1], r.ring), 'eta = door edges + eps at ' + sS([w, d]));
     }
   }
   return { checks: checks, failures: failures };
@@ -228,11 +323,13 @@ function selfTest(){
 <script>
 (function(){
 const CAP = 10000n;          // the cap on pathToRoot
-const RENDER_CAP = 5000;     // paths longer than this render only the last ANC_SHOWN ancestors below the root
+const RENDER_CAP = 5000;     // paths longer than this render only the last ANC_SHOWN ancestors below the ring
 const ANC_SHOWN = 200;
 const INDENT_CAP = 24n, INDENT_STEP = 18;
+const ROOT_NAME = { pos: '(1,1)', sing: '(−1,1)', fix: '(−1,2)', two: '(−1,4), (−5,3), (−11,1)' };
+const ROOT_WORD = { pos: 'the positive root', sing: 'the singular root', fix: 'the fixed state', two: 'the 2-cycle\'s ring' };
 const nodes = new Map();
-let sel = null, repA = 0n, hidden = null;
+let root = 'pos', sel = null, repA = 0n, hidden = null;
 const key = st => st[0].toString() + ',' + st[1].toString();
 function grp(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 function fmt(n){
@@ -240,17 +337,26 @@ function fmt(n){
   if (s.length <= 24) return s;
   return '<span class="abbr" data-full="' + s + '" title="click to show all ' + s.length + ' digits">' + s.slice(0, 8) + '…' + s.slice(-4) + ' (' + s.length + ' digits)</span>';
 }
-function census(level){ return level <= 27n ? 'level ' + level + ' has ' + grp(CENSUS[Number(level)]) + (level === 0n ? ' node' : ' nodes') : 'level ' + level + ' is beyond the census'; }
+function census(level){
+  if (root !== 'pos') return 'census: see comb.md 18.8';
+  return level <= 27n ? 'level ' + level + ' has ' + grp(CENSUS[Number(level)]) + (level === 0n ? ' node' : ' nodes') : 'level ' + level + ' is beyond the census';
+}
 const stLink = st => '<a class="go" data-w="' + st[0] + '" data-d="' + st[1] + '">(' + fmt(st[0]) + ', ' + st[1] + ')</a>';
 const indent = level => 'margin-left:' + (Number(level < INDENT_CAP ? level : INDENT_CAP) * INDENT_STEP) + 'px';
+const ringKeys = () => RINGS[root].map(key);
 // The tree model. A node's `shown` is null when all its children are displayed, or the set of child keys
-// displayed (path-only expansion after a go-to; the rest sit behind a stub row).
+// displayed (path-only expansion after a go-to; the rest sit behind a stub row). eta is door edges + eps,
+// eps fixed at the level-1 node by epsOf (18.8.2); ring nodes carry eta by etaOf.
 function mk(st, parentKey, edge, via){
   const k = key(st); if (nodes.has(k)) return nodes.get(k);
   const e = exitData(st[0], st[1]);
-  let level = 0n, doorEdges = 0n;
-  if (parentKey !== null) { const p = nodes.get(parentKey); level = p.level + 1n; doorEdges = p.doorEdges + (edge === 'door' ? 1n : 0n); }
-  const n = { key: k, state: st, A: e.A, s: e.s, y: e.y, level: level, doorEdges: doorEdges, eta: parentKey === null ? 0n : 1n + doorEdges,
+  let level = 0n, doorEdges = 0n, eps = 0n, eta;
+  if (parentKey !== null) {
+    const p = nodes.get(parentKey); level = p.level + 1n; doorEdges = p.doorEdges + (edge === 'door' ? 1n : 0n);
+    eps = level === 1n ? epsOf(edge, p.state[0], p.state[1], root) : p.eps;
+    eta = doorEdges + eps;
+  } else eta = etaOf(st[0], st[1], root, CAP);
+  const n = { key: k, state: st, A: e.A, s: e.s, y: e.y, level: level, doorEdges: doorEdges, eps: eps, eta: eta,
     parentKey: parentKey, edge: edge, via: via, expanded: false, shown: null, kids: null, dead: [], excluded: [] };
   nodes.set(k, n); return n;
 }
@@ -260,8 +366,8 @@ function ensureKids(n){
   n.kids = c.list.map(ch => mk(ch.state, n.key, ch.type, ch.door).key);
   n.dead = c.dead; n.excluded = c.excluded;
 }
-function edgeBadge(t){ return t === null ? '<span class="edge edge-root">root</span>' : '<span class="edge edge-' + t + '">' + t + '</span>'; }
-function doorName(a){ return a === 0n ? 'the top door' : 'side door a = ' + a; }
+function edgeBadge(t){ return t === null ? '<span class="edge edge-root">' + (RINGS[root].length > 1 ? 'ring' : 'root') + '</span>' : '<span class="edge edge-' + t + '">' + t + '</span>'; }
+function doorName(a){ return a === null ? 'the singular door' : (a === 0n ? 'the top door' : 'side door a = ' + a); }
 function cardHTML(n){
   const st = n.state;
   let via = '';
@@ -277,7 +383,12 @@ function cardHTML(n){
 }
 function greyRows(n){
   let h = '';
-  for (const ex of n.excluded) h += '<div class="grey" style="' + indent(n.level + 1n) + '">door ' + fmt(ex.y) + ' (' + doorName(ex.a) + ', live): its lowest-branch child, at branch ' + ex.s + ', is the root itself, the excluded self-loop (18.2.1)</div>';
+  if (n.state[0] === -1n && n.state[1] === 1n) h += '<div class="grey" style="' + indent(1n) + '">(−1, 1) sits at branch 2 on the singular door −1; its door parent would be state(−1), which does not exist (−1 + 1 = 0), and the missing edge plays the role of the positive root\'s excluded self-loop (18.8.2)</div>';
+  for (const ex of n.excluded) {
+    if (ex.self) h += '<div class="grey" style="' + indent(n.level + 1n) + '">door ' + fmt(ex.y) + ' (' + doorName(ex.a) + ', live): its lowest-branch child, at branch ' + ex.s + ', is this node itself, the excluded self-loop (18.2.1; 18.8.2)</div>';
+    else if (ex.type === 'cascade') h += '<div class="grey" style="' + indent(n.level + 1n) + '">the cascade child at branch ' + ex.s + ' on door ' + fmt(ex.y) + ' is the ring node ' + stLink(ex.state) + ' (level 0)</div>';
+    else h += '<div class="grey" style="' + indent(n.level + 1n) + '">door ' + fmt(ex.y) + ' (' + doorName(ex.a) + ', live): its lowest-branch child, at branch ' + ex.s + ', is the ring node ' + stLink(ex.state) + ' (level 0)</div>';
+  }
   for (const dd of n.dead) h += '<div class="grey" style="' + indent(n.level + 1n) + '">' + doorName(dd.a) + ' ' + fmt(dd.y) + ' is dead (a multiple of 3): no door child (reverse.md 14.5.1)</div>';
   return h;
 }
@@ -286,13 +397,13 @@ function greyRows(n){
 // its own stack (no recursion), so a path of thousands of levels does not exhaust the call stack either.
 function render(){
   const rows = []; let placed = false;
-  const stack = [{ node: nodes.get('1,1') }];
+  const stack = ringKeys().reverse().map(k => ({ node: nodes.get(k) }));
   while (stack.length > 0) {
     const item = stack.pop();
     if (item.after) {
       const n = item.after;
       if (n.shown === null) { rows.push(greyRows(n)); continue; }
-      const remaining = item.remaining, folded = n.excluded.length + n.dead.length;
+      const remaining = item.remaining, folded = n.excluded.length + n.dead.length + ((n.state[0] === -1n && n.state[1] === 1n) ? 1 : 0);
       if (remaining + folded > 0) {
         let label = remaining > 0 ? '+ ' + remaining + ' more ' + (remaining === 1 ? 'child' : 'children') : '';
         if (folded > 0) label += (remaining > 0 ? ' and ' : '+ ') + folded + (n.dead.length > 0 ? (folded === 1 ? ' dead door' : ' door notes') : ' door note');
@@ -314,36 +425,54 @@ function render(){
     for (let i = shownKids.length - 1; i >= 0; i--) stack.push({ node: nodes.get(shownKids[i]) });
   }
   document.getElementById('tree').innerHTML = rows.join('');
+  document.getElementById('treenote').innerHTML = root === 'pos'
+    ? 'Levels double from about level 17 (18.5; census counts to level 27 shown beside each λ); the largest peak at level λ is 2<sup>2λ+1</sup>, on door 1 (Lemma 18.5.1).'
+    : 'The census of this component is in comb.md 18.8.3, beside the positive comb\'s; the largest |peak| at level λ is ' + ({ sing: '2<sup>2λ+2</sup>, on door −1', fix: '5·2<sup>2λ+1</sup>, on door −5', two: '17·2<sup>2λ+3</sup>, on door −17' })[root] + ' (18.8.3).';
   renderDetail();
 }
 function tagLabel(r){
   switch (r.tag) {
     case 'odd': return 'odd point of the block';
     case 'rise': return 'rising-run even, 2x';
-    case 'max': return 'raw maximum 2A';
+    case 'max': return 'raw maximum 2A' + (r.x < 0n ? ' (the largest |x|)' : '');
     case 'peak': return 'the peak A';
     case 'sibpeak': return 'peak of ' + stLink(r.sib) + ', the sibling at branch ' + v2(r.x);
     case 'cascade': return '2<sup>' + v2(r.x) + '</sup>·y, not a peak';
-    case 'door': return 'the door y, the exit';
+    case 'door': return 'the door y, the exit' + (r.x === -1n ? ' — the singular door: F is undefined here' : '');
   }
   return r.tag;
 }
+function etaNote(pr){
+  const eps = pr.eta - pr.doorEdges;
+  if (root === 'pos') return 'η = 1 + ' + pr.doorEdges + ' = ' + pr.eta + ' (Proposition 18.3.2(b): the path enters the root by the cascade edge (1,2) → (1,1), so the last F-step is no door edge).';
+  if (root === 'sing') return 'η = ' + pr.doorEdges + ' door edges + 0 = ' + pr.eta + ': η counts the F-steps until the exit is −1, and the cascade run on door −1 that ends the path stands for no F-step (18.8.2).';
+  const last = pr.path[pr.path.length - 2], ringNode = pr.path[pr.path.length - 1].state;
+  const why = eps === 0n ? 'the path enters the F-periodic ring node ' + stLink(ringNode) + ' by a door edge, which is the orbit\'s last F-step'
+    : (last.edge === 'cascade' ? 'the path enters the ring by a cascade edge from ' + stLink(last.state) + ', whose F-step into the F-cycle is not an edge of the path' : 'the path enters ' + stLink(ringNode) + ', which is a ring node but not F-periodic, so one F-step remains');
+  return 'η = ' + pr.doorEdges + ' door edges + ' + eps + ' = ' + pr.eta + ' (18.8.2: ' + why + ').';
+}
 function renderDetail(){
   const el = document.getElementById('detail');
-  if (sel === null) { el.innerHTML = '<p>Click a card to open its node here: the path to the root, the raw descent, and the siblings on its door.</p>'; return; }
+  if (sel === null) { el.innerHTML = '<p>Click a card to open its node here: the path to the ring, the raw descent, and the siblings on its door.</p>'; return; }
   const n = nodes.get(sel); const w = n.state[0], d = n.state[1];
   const Fst = F(w, d);
   let h = '<h2>Node (' + fmt(w) + ', ' + d + ')</h2>';
-  h += '<div>peak A = ' + fmt(n.A) + ' = 2<sup>' + n.s + '</sup>·' + fmt(n.y) + ': branch ' + n.s + ' on door ' + fmt(n.y) + '; F(' + fmt(w) + ', ' + d + ') = state(' + fmt(n.y) + ') = ' + stLink(Fst) + '. Level λ = ' + n.level + ' (' + census(n.level) + ').</div>';
-  // (a) the path to the root
+  h += '<div>peak A = ' + fmt(n.A) + ' = 2<sup>' + n.s + '</sup>·' + fmt(n.y) + ': branch ' + n.s + ' on door ' + fmt(n.y) + '; '
+    + (Fst === null ? 'F(' + fmt(w) + ', ' + d + ') is undefined: the exit −1 is the singular door (18.8.1)' : 'F(' + fmt(w) + ', ' + d + ') = state(' + fmt(n.y) + ') = ' + stLink(Fst))
+    + '. Level λ = ' + n.level + ' (' + census(n.level) + ').</div>';
+  // (a) the path to the ring
   const pr = pathToRoot(w, d, CAP);
-  h += '<h2>(a) Path to the root</h2><div class="crumb">';
+  h += '<h2>(a) Path to ' + (RINGS[root].length > 1 ? 'the ring' : 'the root') + '</h2><div class="crumb">';
   pr.path.forEach(p => { h += stLink(p.state); if (p.edge !== null) h += ' ' + edgeBadge(p.edge) + ' → '; });
   if (pr.capHit) h += ' … (the cap of 10,000 steps was hit; the chain shown is incomplete)';
   h += '</div>';
-  if (pr.capHit) h += '<div class="meta">λ and η are not computed: the parent chain did not reach (1,1) within 10,000 steps.</div>';
-  else if (pr.lambda === 0n) h += '<div class="meta">The root: λ = η = 0.</div>';
-  else h += '<div class="meta">λ = ' + pr.lambda + ' edges = ' + pr.doorEdges + ' door + ' + pr.cascadeEdges + ' cascade; η = 1 + ' + pr.doorEdges + ' = ' + pr.eta + ' (Proposition 18.3.2(b): the path enters the root by the cascade edge (1,2) → (1,1), so the last F-step is no door edge).</div>';
+  if (pr.capHit) h += '<div class="meta">λ and η are not computed: the parent chain did not reach a ring within 10,000 steps.</div>';
+  else if (pr.lambda === 0n) {
+    if (root === 'two') h += '<div class="meta">A ring node: λ = 0; η = ' + pr.eta + '. The parent rule on the ring cycles (−1,4) → (−5,3) → (−11,1) → (−1,4) — a door edge, a cascade edge, a door edge, one node per comb edge of the period (18.8.2) — and the comb takes the ring as its level 0.</div>';
+    else if (root === 'sing') h += '<div class="meta">The singular root: λ = η = 0. Its exit is −1, the door of no state, so it has no door parent and no F-image.</div>';
+    else h += '<div class="meta">The ' + (root === 'pos' ? 'root' : 'fixed state') + ': λ = η = 0.</div>';
+  }
+  else h += '<div class="meta">λ = ' + pr.lambda + ' edges = ' + pr.doorEdges + ' door + ' + pr.cascadeEdges + ' cascade; ' + etaNote(pr) + '</div>';
   // (b) the raw descent
   if (repA >= d) repA = 0n;
   h += '<h2>(b) Raw descent</h2><div>from representative <select id="rep">';
@@ -351,54 +480,63 @@ function renderDetail(){
   h += '</select> down to the door ' + fmt(n.y) + '</div><div class="list">';
   const rd = rawDescent(w, d, repA);
   rd.forEach(r => { h += fmt(r.x) + '<span class="tag tag-' + r.tag + '">' + tagLabel(r) + '</span><br>'; });
-  h += '</div><div class="note">Proposition 18.4.1: below the peak the trajectory passes exactly the peaks of the lower siblings on door ' + fmt(n.y) + ' (the cascade evens 2<sup>j</sup>·y with j &lt; ' + n.s + ' and 2<sup>j</sup>·y ≡ 2 mod 3) and none of their odd points; the rising-run evens have the block\'s own side doors as their odd predecessors.</div>';
+  h += '</div><div class="note">Proposition 18.4.1: below the peak the trajectory passes exactly the peaks of the lower siblings on door ' + fmt(n.y) + ' (the cascade evens 2<sup>j</sup>·y with j &lt; ' + n.s + ' and 2<sup>j</sup>·y ≡ 2 mod 3) and none of their odd points; the rising-run evens have the block\'s own side doors as their odd predecessors.' + (w < 0n ? ' The same bookkeeping on the negative side: the raw map 3x + 1, x/2 is the same, and every congruence is a congruence (18.8.1).' : '') + '</div>';
   // (c) the siblings on this door
   const s0 = lowestBranch(n.y);
   h += '<h2>(c) Siblings on door ' + fmt(n.y) + '</h2><table><tr><th>branch</th><th>state</th><th>peak 2<sup>j</sup>·y</th></tr>';
   for (let j = s0; j <= n.s + 4n; j += 2n) {
     const st = nodeAt(n.y, j);
-    h += '<tr' + (j === n.s ? ' class="here"' : '') + '><td>' + j + '</td><td>' + stLink(st) + (j === n.s ? ' (this node)' : '') + '</td><td>' + fmt(n.y << j) + '</td></tr>';
+    h += '<tr' + (j === n.s ? ' class="here"' : '') + '><td>' + j + '</td><td>' + stLink(st) + (j === n.s ? ' (this node)' : '') + (isRoot(st[0], st[1]) ? ' (ring, level 0)' : '') + '</td><td>' + fmt(n.y << j) + '</td></tr>';
   }
-  h += '</table><div class="note">Branches s₀ = ' + s0 + ', s₀ + 2, … on door ' + fmt(n.y) + ' (door ' + fmt(n.y) + ' ≡ ' + (n.y % 3n) + ' mod 3, so its branches are ' + (s0 === 1n ? 'odd' : 'even') + '); each is the cascade child of the one below, with peaks A, 4A, 16A, … (Lemma 18.2.5). All siblings share η = ' + n.eta + ' and the node at branch j sits (j − s₀)/2 levels above the lowest sibling (Proposition 18.3.2(c)).' + (n.y === 1n ? ' Door 1\'s lowest sibling is the root, whose door edge is the excluded self-loop.' : '') + '</div>';
+  h += '</table><div class="note">Branches s₀ = ' + s0 + ', s₀ + 2, … on door ' + fmt(n.y) + ' (door ' + fmt(n.y) + ' ≡ ' + mod3(n.y) + ' mod 3, so its branches are ' + (s0 === 1n ? 'odd' : 'even') + '); each is the cascade child of the one below, with peaks A, 4A, 16A, … (Lemma 18.2.5). All siblings share F' + (n.y === -1n ? ' (undefined: the exit is the singular door)' : '') + ' and the node at branch j sits (j − s₀)/2 levels above the lowest sibling (Proposition 18.3.2(c)).' + (n.y === 1n ? ' Door 1\'s lowest sibling is the root, whose door edge is the excluded self-loop.' : '') + (n.y === -5n ? ' Door −5\'s lowest sibling is the fixed state (−1,2) itself, whose door edge is the excluded self-loop.' : '') + (n.y === -1n ? ' Door −1\'s lowest sibling is the singular root (−1,1), whose door parent does not exist.' : '') + '</div>';
   el.innerHTML = h;
   const rep = document.getElementById('rep');
   if (rep) rep.addEventListener('change', ev => { repA = BigInt(ev.target.value); renderDetail(); });
 }
 function msg(t){ document.getElementById('msg').textContent = t; }
 function msgHTML(t){ document.getElementById('msg').innerHTML = t; }
-// The recovery note for an odd integer x: which door of which state it is (reverse.md 14.6.5.1).
+// The recovery note for an odd integer x != -1: which door of which state it is (reverse.md 14.6.5.1; signed, 18.8.1).
 function oddNote(x){
   const st = stateOfOdd(x); const a = v3(x + 1n);
-  return 'x = ' + fmt(x) + ' is the door y<sub>' + a + '</sub> of exactly one state (reverse.md 14.6.5.1): x + 1 = 2<sup>' + v2(x + 1n) + '</sup>·3<sup>' + a + '</sup>·' + fmt(st[0]) + ', the state (' + fmt(st[0]) + ', ' + st[1] + ')' + (a === 0n ? ', its top door' : ', its side door a = ' + a) + '. ';
+  return 'x = ' + fmt(x) + ' is the door y<sub>' + a + '</sub> of exactly one state (reverse.md 14.6.5.1): x + 1 = 2<sup>' + v2(x + 1n) + '</sup>·3<sup>' + a + '</sup>·' + (st[0] < 0n ? '(' + fmt(st[0]) + ')' : fmt(st[0])) + ', the state (' + fmt(st[0]) + ', ' + st[1] + ')' + (a === 0n ? ', its top door' : ', its side door a = ' + a) + '. ';
 }
 const intLink = (digits, text) => '<a class="go" data-x="' + digits + '">' + text + '</a>';
 // Input: "w,d" is read as a state (the comma reading is stated and reversible: the digits joined are
-// offered as the odd-integer reading when they are odd); digits alone are an odd integer x.
+// offered as the odd-integer reading when they are odd); digits alone are an odd integer x. Either may
+// carry a leading minus sign; the singular door -1 is refused.
 function parseInput(str){
-  const t = str.trim().replace(/[()\s]/g, '');
-  if (t === '') return { err: 'Enter a state ω,d or a positive odd integer x.' };
+  const t = str.trim().replace(/[()\s]/g, '').replace(/[−–]/g, '-');
+  if (t === '') return { err: 'Enter a state ω,d or an odd integer x (either sign).' };
   if (t.indexOf(',') >= 0) {
     const parts = t.split(',');
-    if (parts.length !== 2 || !/^\d+$/.test(parts[0]) || !/^\d+$/.test(parts[1])) return { err: 'A state is two positive integers, ω,d.' };
+    if (parts.length !== 2 || !/^-?\d+$/.test(parts[0]) || !/^\d+$/.test(parts[1])) return { err: 'A state is two integers, ω,d, with d positive.' };
     const w = BigInt(parts[0]), d = BigInt(parts[1]);
-    const joined = BigInt(parts[0] + parts[1]); const jOdd = joined >= 1n && (joined & 1n) === 1n;
+    const joined = BigInt(parts[0] + parts[1]); const jOdd = (joined & 1n) === 1n && joined !== -1n;
     if (!isValidState(w, d)) {
       if (jOdd) return { errHTML: '(' + fmt(w) + ', ' + d + ') is not a valid state (ω must be odd and not a multiple of 3, and d ≥ 1); the digits joined give the odd integer ' + fmt(joined) + ' — ' + intLink(joined.toString(), 'go to it as an integer') + '.' };
       return { err: 'Not a valid state: ω must be odd and not a multiple of 3, and d ≥ 1.' };
     }
-    const alt = jOdd ? ' — for the odd integer ' + fmt(joined) + ', ' + intLink(joined.toString(), 'type it without the comma') + '. ' : ' (the digits joined, ' + fmt(joined) + ', are even, so there is no odd-integer reading). ';
+    const alt = jOdd ? ' — for the odd integer ' + fmt(joined) + ', ' + intLink(joined.toString(), 'type it without the comma') + '. ' : ' (the digits joined, ' + fmt(joined) + ', are ' + (joined === -1n ? 'the singular door' : 'even') + ', so there is no odd-integer reading). ';
     return { state: [w, d], note: 'read as the state (' + fmt(w) + ', ' + d + ')' + alt };
   }
-  if (!/^\d+$/.test(t)) return { err: 'Enter digits only: a state ω,d or a positive odd integer x.' };
+  if (!/^-?\d+$/.test(t)) return { err: 'Enter digits only: a state ω,d or an odd integer x (either sign).' };
   const x = BigInt(t);
-  if (x < 1n || (x & 1n) === 0n) return { err: 'x must be a positive odd integer.' };
+  if (x === -1n) return { err: '−1 is the singular door: −1 + 1 = 0, so it is the door of no state and has no reduced coordinates (itinerary.md 14.15.6.1; comb.md 18.8.1). Its classical orbit is the cycle −1 → −2 → −1; the state (−1,1), whose exit is −1, is the singular root.' };
+  if (x === 0n || (x & 1n) === 0n) return { err: 'x must be an odd integer (either sign).' };
   return { state: stateOfOdd(x), note: oddNote(x) };
 }
-// Go-to: the path to the root under the cap; each ancestor expanded to its path child only (the rest behind a
-// stub), the node selected. Past RENDER_CAP path nodes only the last ANC_SHOWN ancestors are rendered.
+// Go-to: the path to the ring under the cap; the node placed in whichever component it belongs to (the root
+// selector switched when that is not the current one); each ancestor expanded to its path child only (the
+// rest behind a stub), the node selected. Past RENDER_CAP path nodes only the last ANC_SHOWN ancestors are
+// rendered.
 function gotoState(st, note){
   const pr = pathToRoot(st[0], st[1], CAP);
-  if (pr.capHit) { msgHTML(note + 'The parent chain from (' + fmt(st[0]) + ', ' + st[1] + ') did not reach (1,1) within 10,000 steps; the node is not placed.'); return; }
+  if (pr.capHit || pr.ring === null) { msgHTML(note + 'The parent chain from (' + fmt(st[0]) + ', ' + st[1] + ') reached none of the four rings within 10,000 steps; the node is not placed.'); return; }
+  let switched = '';
+  if (pr.ring !== root) {
+    root = pr.ring; document.getElementById('root').value = root; rebuild();
+    switched = '(' + fmt(st[0]) + ', ' + st[1] + ') belongs to the component of ' + ROOT_WORD[root] + ' ' + ROOT_NAME[root] + '; the root selector switched to it. ';
+  }
   hidden = null;
   const L = pr.path.length;
   for (let i = L - 1; i >= 1; i--) {
@@ -418,23 +556,24 @@ function gotoState(st, note){
       if (from === null) from = anc.level; to = anc.level;
     }
     hidden = { keys: keys, count: keys.size, from: from, to: to };
-    guard = ' The path has ' + grp(L) + ' nodes, more than ' + grp(RENDER_CAP) + ', so only the last ' + ANC_SHOWN + ' ancestors are rendered below the root; ' + grp(keys.size) + ' ancestors (levels ' + from + '..' + to + ') are folded into one row.';
+    guard = ' The path has ' + grp(L) + ' nodes, more than ' + grp(RENDER_CAP) + ', so only the last ' + ANC_SHOWN + ' ancestors are rendered below the ring; ' + grp(keys.size) + ' ancestors (levels ' + from + '..' + to + ') are folded into one row.';
   }
   sel = key(st); repA = 0n;
-  msgHTML(note + 'Placed (' + fmt(st[0]) + ', ' + st[1] + ') at level ' + grp(pr.lambda) + ' with η = ' + grp(pr.eta) + '; ' + grp(L - 1) + ' ancestors on the path shown, each with the rest of its children behind a stub.' + guard);
+  msgHTML(note + switched + 'Placed (' + fmt(st[0]) + ', ' + st[1] + ') at level ' + grp(pr.lambda) + ' with η = ' + grp(pr.eta) + '; ' + grp(L - 1) + ' ancestors on the path shown, each with the rest of its children behind a stub.' + guard);
   render();
   const c = document.querySelector('.card.sel'); if (c) c.scrollIntoView({ block: 'center' });
 }
 function gotoOdd(x){ gotoState(stateOfOdd(x), oddNote(x)); }
-function reset(){
+// The tree from the current root's ring: every ring node at level 0, expanded to its non-ring children.
+function rebuild(){
   nodes.clear(); sel = null; repA = 0n; hidden = null;
-  const root = mk([1n, 1n], null, null, null);
-  ensureKids(root); root.expanded = true; root.shown = null;
-  msg(''); render();
+  for (const r of RINGS[root]) { const n = mk(r, null, null, null); ensureKids(n); n.expanded = true; n.shown = null; }
 }
+function reset(){ rebuild(); msg(''); render(); }
 function onGoLink(a){ if (a.dataset.x !== undefined) gotoOdd(BigInt(a.dataset.x)); else gotoState([BigInt(a.dataset.w), BigInt(a.dataset.d)], ''); }
 document.getElementById('tree').addEventListener('click', ev => {
   const ab = ev.target.closest('.abbr'); if (ab) { toggleAbbr(ab); ev.stopPropagation(); return; }
+  const a = ev.target.closest('a.go'); if (a) { onGoLink(a); ev.stopPropagation(); return; }
   const stub = ev.target.closest('.stubBtn'); if (stub) { nodes.get(stub.dataset.k).shown = null; render(); return; }
   const disc = ev.target.closest('.disc');
   if (disc) { const n = nodes.get(disc.dataset.k); if (!n.expanded) { ensureKids(n); n.shown = null; } n.expanded = !n.expanded; render(); ev.stopPropagation(); return; }
@@ -462,6 +601,7 @@ function go(){
 document.getElementById('goBtn').addEventListener('click', go);
 document.getElementById('goto').addEventListener('keydown', ev => { if (ev.key === 'Enter') go(); });
 document.getElementById('resetBtn').addEventListener('click', reset);
+document.getElementById('root').addEventListener('change', ev => { root = ev.target.value; reset(); });
 reset();
 try {
   const t = selfTest();
