@@ -540,12 +540,78 @@ def main():
               (len(all_BM), sum(all_BM) / len(all_BM), max(all_BM),
                sum(1 for x in all_BM if x == 0) / len(all_BM)))
 
+    # Revision 1, point 1: extend the slack measurement off the census (mostly
+    # D=1) to random states with D in 2..6, k in {2,3}; and re-check the seven
+    # flagged cases explicitly under THIS file's own chi (Proposition 18.9.2.2:
+    # real child depth at k>=2, the capped label only at the base case k=1).
+    print("  extended slack measurement: random states, D in 2..6, k in {2,3}")
+    ext_summary = []
+    for D_ext in range(2, 7):
+        for k_ext in (2, 3):
+            slacks = []
+            capped_ct = 0
+            for _ in range(300):
+                Omega_e = 2 * rng.randrange(1, 500000) + 1
+                while Omega_e % 3 == 0:
+                    Omega_e = 2 * rng.randrange(1, 500000) + 1
+                sig_e, B_e = sig_and_B(Omega_e, D_ext, k_ext, J)
+                M_e, capped_e = exact_M(Omega_e, D_ext, k_ext, J, sig_e, B_e, cap_tests=50000)
+                check(M_e <= B_e, "M<=B, D=%d k=%d extended sample" % (D_ext, k_ext))
+                if capped_e:
+                    capped_ct += 1
+                else:
+                    slacks.append(B_e - M_e)
+            dist = {}
+            for x in slacks:
+                dist[x] = dist.get(x, 0) + 1
+            ext_summary.append((D_ext, k_ext, len(slacks), capped_ct, dist,
+                                 max(slacks) if slacks else None,
+                                 sum(slacks) / len(slacks) if slacks else None))
+    print("  slack distribution by (D, k) -- n, capped, {slack: count}, max, mean:")
+    for (D_e, k_e, n_e, cap_e, dist_e, max_e, mean_e) in ext_summary:
+        print("    D=%d k=%d: n=%d capped=%d dist=%s max=%s mean=%s" %
+              (D_e, k_e, n_e, cap_e, dist_e, max_e,
+               ("%.3f" % mean_e) if mean_e is not None else None))
+    overall_max_slack = max(m for (_, _, _, _, _, m, _) in ext_summary if m is not None)
+    print("  overall max slack across the extended sample (2,700 states, D in 2..6, k in {2,3}): %d" %
+          overall_max_slack)
+
+    print("  the seven cases named at review, recomputed under this file's chi (Prop. 18.9.2.2):")
+    flagged_cases = [
+        (936467, 3, 3), (391241, 3, 3), (64247, 3, 2), (804383, 5, 3),
+        (943957, 6, 3), (635323, 5, 3), (355715, 5, 2),
+    ]
+    for (Omega_f, D_f, k_f) in flagged_cases:
+        sig_f, B_f = sig_and_B(Omega_f, D_f, k_f, J)
+        M_f, capped_f = exact_M(Omega_f, D_f, k_f, J, sig_f, B_f, cap_tests=200000)
+        print("    (%d,%d) k=%d: chi=%d psi=%d slack=%d (capped=%s)" %
+              (Omega_f, D_f, k_f, B_f, M_f, B_f - M_f, capped_f))
+
     # ---------------------------------------------------------------- (c)
 
     print("\n-- (c) Item C: search for a grouping finer than residues --")
 
-    # C.1 coincidences: independence baseline computed from the data
-    print("  C.1 coincidences (independence baseline from observed class frequencies)")
+    # C.1, Revision 1: descriptive counts only. The earlier "independence
+    # baseline" C(C-1)/2 * sum(q_s^2), with q_s the observed class-level
+    # signature frequency drawn from the SAME C classes and Cn distinct
+    # signatures being counted, is algebraically close to the observed
+    # same-signature pair count itself (both are computed from one fixed
+    # multiset of class-signature labels): writing f_s for the number of
+    # classes with signature s, observed = sum C(f_s,2) = (sum f_s^2 - C)/2
+    # exactly, and the "baseline" plug-in q_s = f_s/C gives C(C-1)/2 *
+    # sum(f_s/C)^2 ~ (sum f_s^2)/2 for large C -- the two differ by ~C/2
+    # deterministically, not by anything the data could have shown
+    # otherwise. It is not an independence test and is not reported as one.
+    # No permutation test rescues this: permuting which class carries which
+    # signature label permutes a FIXED multiset of labels among positions,
+    # and sum C(f_s,2) is a function of the multiset {f_s} alone -- every
+    # permutation of the same multiset gives the identical count, so a
+    # permutation null cannot move away from the observed value at all.
+    # Testing "any grouping finer than residues" needs a candidate
+    # predictor to test the signature against; C.2 supplies one (Omega mod
+    # 2^m) and is where an actual test lives.
+    print("  C.1 signature/class counts (descriptive only -- see 'Revision 1' in the findings")
+    print("      for why no baseline or independence test is reported here)")
     for lam in LEVELS_FOR_C:
         pop = census_levels[lam]
         pop_D1 = [(w, d) for (w, d) in pop if d == 1]
@@ -560,7 +626,6 @@ def main():
             if capped:
                 continue
             node_data.append((Omega, D, sig, M))
-        # form classes: key = (M, Omega mod 3^M)
         class_of = {}
         class_sig = {}
         for (Omega, D, sig, M) in node_data:
@@ -576,36 +641,37 @@ def main():
         for key in classes:
             s = class_sig[key]
             freq[s] = freq.get(s, 0) + 1
-        observed_pairs = sum(f * (f - 1) // 2 for f in freq.values())
-        q = {s: f / Cn for s, f in freq.items()} if Cn else {}
-        predicted_pairs = (Cn * (Cn - 1) / 2) * sum(qs * qs for qs in q.values()) if Cn > 1 else 0.0
-        print("    level %2d (D=1, k=%d): %d nodes -> %d distinct exact classes, %d distinct signatures" %
-              (lam, k, len(node_data), Cn, len(freq)))
-        print("              observed different-class same-signature pairs = %d; independence baseline = %.2f" %
-              (observed_pairs, predicted_pairs))
-        if observed_pairs <= predicted_pairs * 1.5 + 2:
-            print("              at or below the independence baseline: no grouping finer than residues visible")
-        else:
-            print("              above the independence baseline by more than 50%%: characterise (see findings)")
+        multi_class_signatures = sum(1 for f in freq.values() if f >= 2)
+        largest_class_group = max(freq.values()) if freq else 0
+        print("    level %2d (D=1, k=%d): %d nodes -> %d distinct exact classes, %d distinct signatures "
+              "(%d signatures shared by >=2 classes, largest such group %d classes)" %
+              (lam, k, len(node_data), Cn, len(freq), multi_class_signatures, largest_class_group))
 
-    # C.2 the 2-adic probe
-    print("  C.2 the 2-adic probe (contingency test, largest standardized residual)")
+    # C.2 the 2-adic probe, Revision 1: only cells with expected count >= 5
+    # are admitted to the residual test (a group of ~20 nodes over 2^7 odd
+    # residues at m=8 gives expected counts near 0.1 per cell, where a
+    # standardized residual is meaningless -- one observed node already
+    # gives a residual near 3, two gives near 7, regardless of any real
+    # structure). For each (D, sig) group of size n, only cells with
+    # expected = n * (D-matched marginal fraction) >= 5 are tested, at every
+    # m in a wide sweep; the m range actually covered (i.e. that produced at
+    # least one valid cell) is tracked and reported per level, and the
+    # largest deviation is taken only over valid cells.
+    print("  C.2 the 2-adic probe (largest standardized residual, cells with expected count >= 5 only)")
     import math
-    total_exceed = 0
-    total_tests = 0
+    MIN_EXPECTED = 5.0
+    m_sweep = (2, 3, 4, 5, 6, 7, 8, 9, 10)
     for lam in LEVELS_FOR_C:
         pop = census_levels[lam]
         k = 1
-        for m_probe in (4, 6, 8):
-            # group by (D, signature-to-depth-k); within each group with
-            # >= 20 members, test Omega mod 2^m_probe against the D-matched
-            # marginal (D is already part of the group key, so pooling
-            # across D would just detect "D correlates with Omega mod 2^m",
-            # not a residual dependency past (D, signature)).
-            group = {}
-            for (Omega, D) in pop:
-                sig = sig_only(Omega, D, k, J)
-                group.setdefault((D, sig), []).append(Omega)
+        group = {}
+        for (Omega, D) in pop:
+            sig = sig_only(Omega, D, k, J)
+            group.setdefault((D, sig), []).append(Omega)
+        worst = (0.0, None, None, None)
+        n_cells_tested = 0
+        m_covered = set()
+        for m_probe in m_sweep:
             pooled_by_D = {}
             N_by_D = {}
             for (Omega, D) in pop:
@@ -613,8 +679,6 @@ def main():
                 pooled_by_D.setdefault(D, {})
                 pooled_by_D[D][r] = pooled_by_D[D].get(r, 0) + 1
                 N_by_D[D] = N_by_D.get(D, 0) + 1
-            worst = (0.0, None, None)
-            n_cells_tested = 0
             for (D, sig), members in group.items():
                 n = len(members)
                 if n < 20:
@@ -628,22 +692,24 @@ def main():
                 for r, cnt in local.items():
                     p = pooled.get(r, 0) / N_pool
                     expected = n * p
-                    if expected <= 0:
+                    if expected < MIN_EXPECTED:
                         continue
                     resid = (cnt - expected) / (expected ** 0.5)
                     n_cells_tested += 1
+                    m_covered.add(m_probe)
                     if abs(resid) > abs(worst[0]):
-                        worst = (resid, (D, sig), r)
-            thresh = math.sqrt(2 * math.log(2 * max(n_cells_tested, 1) / 0.01)) if n_cells_tested else 0.0
-            verdict = "within" if abs(worst[0]) <= thresh else "EXCEEDS"
-            total_tests += 1
-            if verdict == "EXCEEDS":
-                total_exceed += 1
-            print("    level %2d (k=%d, m=%d): %d groups (n>=20), %d cells; largest |resid|=%.2f (r=%s); Bonferroni@0.01=%.2f -- %s" %
-                  (lam, k, m_probe, sum(1 for _, mm in group.items() if len(mm) >= 20),
-                   n_cells_tested, worst[0], worst[2], thresh, verdict))
-    print("  summary: %d / %d (level,m) tests exceeded the Bonferroni-corrected threshold" %
-          (total_exceed, total_tests))
+                        worst = (resid, (D, sig), r, m_probe)
+        if n_cells_tested == 0:
+            print("    level %2d: no cell reached expected count >= %.0f at any m in %s" %
+                  (lam, MIN_EXPECTED, m_sweep))
+            continue
+        thresh = math.sqrt(2 * math.log(2 * n_cells_tested / 0.01))
+        verdict = "within" if abs(worst[0]) <= thresh else "EXCEEDS"
+        m_lo, m_hi = min(m_covered), max(m_covered)
+        print("    level %2d: m covered = [%d, %d] (%d valid cells, expected>=%.0f); "
+              "largest |resid|=%.2f (D=%s, m=%s, r=%s); Bonferroni@0.01=%.2f -- %s" %
+              (lam, m_lo, m_hi, n_cells_tested, MIN_EXPECTED, worst[0], worst[1][0] if worst[1] else None,
+               worst[3], worst[2], thresh, verdict))
 
     # C.3 signature ledgers
     print("  C.3 signature ledgers")
@@ -664,7 +730,6 @@ def main():
     print("  C.3(b) depth-1 signature frequency vs the predicted product law")
     lam = 18
     pop = census_levels[lam]
-    ledger = {j: 2 * (3.0 ** -j) for j in range(1, 12)}
 
     def geom3(t):
         # canonical "valuation of a generic 3-adic quantity" law: P(v3 = t) = 2/3 * 3^-t
@@ -679,25 +744,24 @@ def main():
             return geom3(label - 1)
         return 3.0 ** -(J - 1)
 
-    def predicted_prob(sig):
-        """Predicted probability of a depth-1 signature shape, under: D per
-        the ledger; the top door alive with probability 1/2 (14.5.1), and
-        (conditional on alive) s0 = 1 or 2 with probability 1/2 each -- the
-        CENSUS's own unweighted 1:1 split (18.5's census column), not the
-        forward-visit-weighted ledger's 2:1; every other live door's depth
-        (the a=1 side door, the cascade child at D=1) an independent
-        geom3-distributed valuation; every a>=2 door deterministically alive
-        at depth 1 (Item A), contributing probability 1 once D is fixed."""
+    def predicted_prob_given_D(sig, D_fixed):
+        """Predicted probability of a depth-1 signature shape CONDITIONAL ON
+        D = D_fixed (no ledger factor: D is given, not drawn): the top door
+        alive with probability 1/2 (14.5.1), and (conditional on alive)
+        s0 = 1 or 2 with probability 1/2 each -- the census's own unweighted
+        1:1 split (18.5's census column), not the forward-visit-weighted
+        ledger's 2:1; every other live door's depth (the a=1 side door, the
+        cascade child at D=1) an independent geom3-distributed valuation;
+        every a>=2 door deterministically alive at depth 1 (Item A)."""
         cascade_entry, door_entries = sig
-        D_here = len(door_entries)
-        p = ledger.get(D_here, 2.0 * 3.0 ** -D_here)
-        # cascade
-        if D_here >= 2:
+        if len(door_entries) != D_fixed:
+            return 0.0
+        p = 1.0
+        if D_fixed >= 2:
             if cascade_entry[1] != 1:
                 return 0.0
         else:
             p *= geom3_label_prob(cascade_entry[1])
-        # doors
         for entry in door_entries:
             a = entry[1]
             if a >= 2:
@@ -715,54 +779,52 @@ def main():
                     p *= 0.5 * 0.5 * geom3_label_prob(entry[3])
         return p
 
-    obs = {}
-    for (Omega, D) in pop:
-        sig = sig_only(Omega, D, 1, J)
-        obs[sig] = obs.get(sig, 0) + 1
-    N = len(pop)
+    # Revision 1, point 4: D-conditional comparison. The box population
+    # (Omega < 5*10^4, D uniform in 1..30) and the census (D per the depth
+    # ledger, 18.5) have different D-mixes, so comparing their overall shape
+    # frequencies compared depth mixes, not shapes -- withdrawn. Fixed D=1
+    # and D=2 separately: predicted (conditional product law, no ledger
+    # factor) vs census nodes AT THAT D vs box nodes drawn with THAT D fixed
+    # (not uniform D).
+    print("    D-conditional comparison (predicted | D  vs  census | D  vs  box | D, D fixed each time):")
+    for D_fix in (1, 2):
+        pop_D = [(w, d) for (w, d) in pop if d == D_fix]
+        obs_D = {}
+        for (Omega, D) in pop_D:
+            sig = sig_only(Omega, D, 1, J)
+            obs_D[sig] = obs_D.get(sig, 0) + 1
+        N_D = len(pop_D)
 
-    # the uniform BOX population (18.5's own comparison population: Omega <
-    # 10^5, D <= 30, uniform, NOT the comb tree) -- 18.5's own finding is that
-    # the box matches ledger-style predictions and the census does not, for a
-    # structural reason (every node has exactly one cascade child, so the
-    # census systematically over-represents cascade-reached shapes); tested
-    # here for signatures the same way.
-    box_obs = {}
-    N_box = 60000
-    for _ in range(N_box):
-        Omega_b = 2 * rng.randrange(1, 50001) - 1
-        while Omega_b % 3 == 0:
+        box_obs_D = {}
+        N_box_D = 30000
+        for _ in range(N_box_D):
             Omega_b = 2 * rng.randrange(1, 50001) - 1
-        D_b = rng.randrange(1, 31)
-        sig_b = sig_only(Omega_b, D_b, 1, J)
-        box_obs[sig_b] = box_obs.get(sig_b, 0) + 1
+            while Omega_b % 3 == 0:
+                Omega_b = 2 * rng.randrange(1, 50001) - 1
+            sig_b = sig_only(Omega_b, D_fix, 1, J)
+            box_obs_D[sig_b] = box_obs_D.get(sig_b, 0) + 1
 
-    print("    level %d: %d nodes, %d distinct depth-1 signatures; top 8 by census frequency" %
-          (lam, N, len(obs)))
-    print("    (census vs predicted product law vs the uniform box, 18.5's own comparison population):")
-    ranked = sorted(obs.items(), key=lambda kv: -kv[1])[:8]
-    covered = 0.0
-    pred_covered = 0.0
-    box_covered = 0.0
-    for sig, cnt in ranked:
-        f_obs = cnt / N
-        f_pred = predicted_prob(sig)
-        f_box = box_obs.get(sig, 0) / N_box
-        covered += f_obs
-        pred_covered += f_pred
-        box_covered += f_box
-        print("      census=%.5f  pred=%.5f  box=%.5f  box/pred=%.3f  shape=%r" %
-              (f_obs, f_pred, f_box, (f_box / f_pred if f_pred > 0 else float('nan')), sig))
-    print("    top-8 coverage: census mass %.4f, predicted mass %.4f, box mass %.4f" %
-          (covered, pred_covered, box_covered))
-    print("    reading: the box (18.5's own uniform comparison population) is expected to track the")
-    print("    predicted product law; the census is expected to deviate, structurally, the same way")
-    print("    18.5's own run-length table deviates from its ledger -- see findings for the reading.")
+        print("    D = %d: %d census nodes, %d distinct signatures; %d box draws, %d distinct signatures" %
+              (D_fix, N_D, len(obs_D), N_box_D, len(box_obs_D)))
+        ranked_D = sorted(obs_D.items(), key=lambda kv: -kv[1])[:6]
+        for sig, cnt in ranked_D:
+            f_census = cnt / N_D
+            f_pred = predicted_prob_given_D(sig, D_fix)
+            f_box = box_obs_D.get(sig, 0) / N_box_D
+            print("      census=%.5f  pred=%.5f  box=%.5f  census/pred=%.3f  box/pred=%.3f  shape=%r" %
+                  (f_census, f_pred, f_box,
+                   (f_census / f_pred if f_pred > 0 else float('nan')),
+                   (f_box / f_pred if f_pred > 0 else float('nan')), sig))
+    print("    reading: the D-conditional product law is tested for D=1,2 above; whether it holds is")
+    print("    read from the box/pred column (box shares the census's D exactly, so this is the fair")
+    print("    test of the independent-valuation model alone); the census/pred column, still mixing in")
+    print("    18.5's own cascade-child over-representation, is reported beside it, not conflated with it.")
 
     # Whole-census sanity: every a>=2 door is alive with depth exactly 1
     # (Item A), a DETERMINISTIC sub-event with no randomness at all -- the
     # predicted-frequency model above treats it as certain (probability 1
     # given D), and this is the exhaustive check that it really is.
+    N = len(pop)
     obs_a_ge2_ok = 0
     for (Omega, D) in pop:
         ok = True
