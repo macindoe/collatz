@@ -20,19 +20,28 @@ independent check.
 Per the brief: on 2026-09-05 Brett Rubin, an independent worker on the
 problem since 2022, wrote to the author after reading paper 1 at v3. Point 3
 of his letter, paraphrased: for fixed `e`, a small `k` can carry a deep
-valuation whenever his reparametrized anchor `D` opens with a run of zero
-digits, so "the analogue of Theorem 3.3's unconditional clause has to bound
-the constant rather than the growth" — he named this a real gap and said he
-does not hold the Yu / Bugeaud–Laurent references. The main session's
-2026-09-05 pre-check already identified his law as Theorem 14.2.4 exactly
-(under `s = (e mod 3) + 2k`, `D` an affine reparametrization of `M₃`) and his
+valuation whenever his reparametrized anchor `diagonalCenter` opens with a run
+of zero digits, so the 3-adic analogue of the unconditional clause has to cap
+the size of the constant rather than slow the rate of growth — he named this
+a real gap and said he does not hold the Yu / Bugeaud–Laurent references. The
+main session's 2026-09-05 pre-check already identified his law as Theorem
+14.2.4 exactly (under `s = (e mod 3) + 2k`, `diagonalCenter` an affine
+reparametrization of `M₃`) and his
 `e = 1` degeneration as Lemma 14.2.1 / Proposition 14.2.3. This session's job
 is Point 3's gap: a cap on `d` as a function of `s`, transplanting
 stage1-synthesis.md 11.8.3.11.
 
 Credit clause used throughout: "flagged by Brett Rubin (correspondence
-2026-09-05)". No verbatim quotation of his letter and no email address appear
-in any tracked file (checked by re-reading every edit before committing).
+2026-09-05)". No email address appears in any tracked file.
+
+**Correction (2026-09-16).** This section originally also claimed no verbatim
+quotation of his letter appeared in any tracked file. That claim was wrong:
+the sentence rendered here and in reverse.md 14.2.5 was within a word of his
+own wording ("so the analogue of your Theorem 3.3's unconditional clause has
+to bound the constant rather than the growth"), and his reply of 2026-09-16
+caught it — the delegate that wrote it was working only from the main
+session's paraphrase and had nothing to compare against. Both occurrences are
+now reworded to a genuine paraphrase (above, and reverse.md 14.2.5); see §8.
 
 ---
 
@@ -120,7 +129,7 @@ being the two elements of `E₃` with vanishing `Z₃`-component (`M₃(−1) = 
 exactly, since `2^0 = 1 = −1/(−1)`; `M₃(1)`'s `Z₃`-part is `0` too, by
 Proposition 14.2.3's own computation, mod `2·3^(k−1)` the value `3^(k−1)`,
 which is `0` in the `Z₃`-component and `1` (odd) in the `Z/2`-component).
-This is Rubin's `e = 1` degeneration, his `D = −1/2`. It is *sharper* than
+This is Rubin's `e = 1` degeneration, his `diagonalCenter = −1/2`. It is *sharper* than
 the general cap, not just an exception to it: `d = 1+v₃(s) ≤ 1 + log₃ s`,
 linear in `log s`, the same phenomenon as cycles.md 12.6.1.3(b)'s rational
 anchor point (`ω = 1` there, elementary and logarithmic against the general
@@ -245,10 +254,10 @@ His two named instances, checked by direct integer computation
   = 3^6 · 15,097,193` (the cofactor `≡ 2 (mod 3)`, confirming `v₃ = 6`
   exactly).
 
-Both reproduce exactly. His `D`'s two named runs of zero digits (his own
-symbol; not entered into the wiki's registry — see §5) are the mechanism:
-`D` opens with two zero base-`3` digits at `e = 5` before the digit that
-delivers `d = 4` at `k = 1`, and with a longer such run at `e = 41` before
+Both reproduce exactly. His `diagonalCenter`'s two named runs of zero digits
+(his own symbol; not entered into the wiki's registry — see §5) are the
+mechanism: `diagonalCenter` opens with two zero base-`3` digits at `e = 5`
+before the digit that delivers `d = 4` at `k = 1`, and with a longer such run at `e = 41` before
 the digit delivering `d = 6` at `k = 13`.
 
 **Texture, against the cap** (PART F, `S = 4,000`, fresh integer scan):
@@ -283,12 +292,13 @@ large but finite and slow-growing, the same qualitative picture as
 `symbols.md`'s existing `D` collision index (frame 4, "Door / itinerary
 frame") already carries three meanings: state depth in `state(y)=(Ω,D)`
 (14.14.1), the unreduced fixed-point denominator (itinerary.md 14.15.9.1),
-and the AEH window cap `W_{k,D}` (aeh.md 13.2). Rubin's own `D` (his affine
-reparametrization of `M₃`, `e·2^((e mod 3)+2D) = −1`) is a **fourth**, purely
-personal notation — checked, and **not added** to the registry, per the
-brief: it is his name for an object the wiki already has a name for
-(`M₃`, via the affine identity `s − M₃(e) = 2(k−D)` the main session's
-pre-check already established). `C₃` was checked for collisions across the
+and the AEH window cap `W_{k,D}` (aeh.md 13.2). Rubin's own `diagonalCenter`
+(his affine reparametrization of `M₃`, `e·2^((e mod 3)+2·diagonalCenter) =
+−1`) is a **fourth** possible meaning — checked, and **not added** to the
+registry, per the brief: it is his name for an object the wiki already has a
+name for
+(`M₃`, via the affine identity `s − M₃(e) = 2(k − diagonalCenter)` the main
+session's pre-check already established). `C₃` was checked for collisions across the
 whole tree (`grep`) and found unused before this session — no collision-index
 entry was needed for it, only the new row alongside `C(ω)`.
 
@@ -346,3 +356,121 @@ over:
 `python experiments/encoding_scan.py` — see the top-level session report for
 the exact `RESULT:` line (run once, immediately before the final commit, per
 the brief).
+
+---
+
+## 8. Follow-up: the author's reply of 2026-09-16 (paraphrased; no verbatim letter, no address; main session, not a delegate)
+
+Brett Rubin replied to the 2026-09-12 letter. Paraphrased throughout, per the
+standing convention for every correspondent (HANDOFF.md):
+
+1. **Authorship disclosed.** He works this material with Claude sessions of
+   his own, the same division of labour this project's own README and the
+   mirror paper's appendix state. He said the substantive content of his
+   2026-09-05 letter — the identification of `M(ω)` with his `columnCenter`,
+   the 3-adic law, the judgment calls about what did and didn't overlap our
+   work, and the sentence quoted (now paraphrased) in reverse.md 14.2.5 — came
+   from that session work; what was his was the decision to flag the gap and
+   insist it be filled properly rather than filed as a hand-wave. He raised,
+   without instructing us either way, that a named credit line for drafted
+   prose should be accurate rather than flattering. **This is recorded here
+   as a fact of provenance; the wiki's credit line at reverse.md 14.2.5 is
+   unchanged pending the author's decision — see "Open" below.**
+
+2. **One claim withdrawn.** His 2026-09-05 statement that the mirror
+   construction "didn't overlap anything" we had was an overreach — he had
+   read only Remark 7.2 of paper 1, not the mirror preprint our 2026-09-08
+   reply named. He now acknowledges the correction; no wiki change follows
+   (the credit line already reflected only the constant, never the
+   construction).
+
+3. **Both original arithmetic results confirmed, independently rerun on his
+   side.** No change to our record; this is corroboration, not new content.
+
+4. **The `diagonalCenter`-to-`M₃` relation confirmed exactly**, on his own
+   terms: with `σ = (e mod 3)` and `s = σ + 2k`, he gives
+   `M₃(e) = σ + 2·diagonalCenter(e)`, matching `s − M₃(e) = 2(k −
+   diagonalCenter(e))` derived here. He confirms the `e = 1` case exactly
+   (`diagonalCenter(1) = −1/2`, `M₃(1) = 0`) and attributes the sign-degenerate
+   half of our excluded locus (`y = −1`) to Definition 14.2.2's `E₃ = Z/2 ×
+   Z₃` structure, which his own working definition had collapsed to the `Z₃`
+   part alone — an error on his side, in his own glossary's prose only, not
+   in his defining equation; no correction needed here since this session
+   worked from the equation throughout. He asked that the object be named
+   `diagonalCenter` rather than `D` in any surviving credit line, since `D`
+   already names a different object (a diagonal index) in his own library.
+   **Applied throughout this file and reverse.md 14.2.5 (this session).**
+
+5. **The phrasing question answered.** He confirms the cap's own sentence in
+   14.2.5 ("it bounds how long a run of vanishing digits can persist, not how
+   often one occurs") is ours, not a rendering of anything he wrote — no
+   compliance issue there. He adds a further observation, in his own
+   framework's terms: depth and frequency are governed separately, since deep
+   runs recur at every scale (`siblingIndex ≡ diagonalCenter mod 3^N` forces
+   `d ≥ N + 1`, infinitely often) while the cap bounds only how deep any *one*
+   instance reaches. On our side this is the frequency half of Lemma 14.6.5.2
+   (`P(d = j) = 2·3^{-j}` per branch, and the exact ternary ledger of
+   14.6.5.2 mirror-side) read together with the depth cap of 14.2.5 — the two
+   statements were already both in the record, stated separately, and his
+   remark is that they answer complementary questions about the same object.
+   **No wiki edit made**: this is a cross-reading, not a new claim, and adding
+   it as a page cross-reference is left to the author (see "Open").
+
+6. **A compliance defect he caught, corrected.** The sentence rendered in
+   quotes in reverse.md 14.2.5 and in §1 above was, in his words, "within a
+   word" of his actual sentence — a near-verbatim rendering, not the paraphrase
+   this file's own header claimed. **Fixed this session**: both occurrences
+   reworded to a genuine paraphrase (reverse.md 14.2.5; §1 above), and §1's
+   false compliance claim corrected in place with a dated note. He raised no
+   objection to being quoted verbatim (he calls it "your rule, not mine"), so
+   the choice to paraphrase rather than now quote him explicitly is this
+   session's continuation of the standing house convention ("letters
+   paraphrased, never quoted", applied uniformly to every correspondent), not
+   a reading of his preference — flagged for the author in case a different
+   choice is wanted.
+
+7. **An independent confirmation of two existing results, offered as a
+   negative.** He had drafted an observation that our backward theory "lives
+   at door resolution" and cannot be restated at the state level; a script he
+   wrote to check it before sending refuted his own draft — a door value
+   determines its state and index uniquely, so a door carries nothing a state
+   lacks. He connects this to Theorem 6.1 (state-resolution criterion),
+   Theorem 7.1, Remark 8.9, and Lemma 14.6.5.1 (the state-recovery formula) —
+   all already in the record. **No wiki change**: this confirms existing
+   claims from an independent implementation; it adds no new one. Recorded
+   here as an external verification, in the sense the record already grants
+   Merle's independent checks.
+
+8. **A question left open, addressed to the author.** He asks for a sharper
+   statement of what backward controllability of the anchor walk (Remark 7.4
+   / reverse.md 14.12.3) would have to yield to say something about the
+   forward, unsolved direction — even the shape of an implication, not a
+   route to one. **Not answered here**: this calls for the author's own
+   judgment on a genuinely open question, not a verification task.
+
+9. **Scripts attached, not yet run.** Three self-contained Python 3 scripts
+   (`verify_anchor_identity.py`, `verify_3adic_mirror.py`,
+   `verify_door_vs_state_resolution.py`), cited to paper 1 v3, each stating
+   its checked propositions in its own docstring. The Gmail tools available
+   to this session expose attachment names and MIME types only, not content
+   bytes — there is no tool call that retrieves the script text. **They have
+   not been read or run.** Per the standing convention (HANDOFF.md: "his
+   scripts, if sent, run as reproduction, not verification"), running them
+   once obtained confirms nothing beyond what this file's own independent
+   code (`experiments/mirror_baker_cap.py`) already establishes; they are
+   evidence of his own reproduction, not new verification.
+
+**Open, all the author's:**
+
+- Whether the credit line at reverse.md 14.2.5 / HANDOFF.md should reflect
+  the authorship disclosure of item 1, and how — the record already credits
+  external correspondents by name (Merle throughout the shared ledger)
+  without a parallel disclosure of their own tooling, so there is precedent
+  either way; his own letter states explicitly that the choice is ours.
+- Whether to add the depth-vs-frequency cross-reference of item 5 to
+  reverse.md 14.2.5 / 14.6.5.2 — a small, low-risk addition if wanted, but not
+  made unilaterally given the front's current low-priority standing and the
+  author's recent redirection of effort toward the peak comb (comb.md §18).
+- The three scripts (item 9) — need to be obtained as files or pasted text
+  before they can be read or run.
+- The Remark 7.4 question (item 8) — the author's to answer or decline.
