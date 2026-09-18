@@ -364,18 +364,24 @@ the brief).
 Brett Rubin replied to the 2026-09-12 letter. Paraphrased throughout, per the
 standing convention for every correspondent (HANDOFF.md):
 
-1. **Authorship disclosed.** He works this material with Claude sessions of
-   his own, the same division of labour this project's own README and the
-   mirror paper's appendix state. He said the substantive content of his
-   2026-09-05 letter — the identification of `M(ω)` with his `columnCenter`,
-   the 3-adic law, the judgment calls about what did and didn't overlap our
-   work, and the sentence quoted (now paraphrased) in reverse.md 14.2.5 — came
-   from that session work; what was his was the decision to flag the gap and
-   insist it be filled properly rather than filed as a hand-wave. He raised,
-   without instructing us either way, that a named credit line for drafted
-   prose should be accurate rather than flattering. **This is recorded here
-   as a fact of provenance; the wiki's credit line at reverse.md 14.2.5 is
-   unchanged pending the author's decision — see "Open" below.**
+1. **Authorship disclosed, and the record's own policy decided (2026-09-16).**
+   He works this material with Claude sessions of his own, the same division
+   of labour this project's own README and the mirror paper's appendix state.
+   He said the substantive content of his 2026-09-05 letter — the
+   identification of `M(ω)` with his `columnCenter`, the 3-adic law, the
+   judgment calls about what did and didn't overlap our work, and the
+   sentence (now paraphrased) at reverse.md 14.2.5 — came from that session
+   work; what was his was the decision to flag the gap and insist it be
+   filled properly rather than filed as a hand-wave. He raised, without
+   instructing us either way, that a named credit line for drafted prose
+   should be accurate rather than flattering. **The author's decision:** this
+   record discloses only its own use of Claude, per its own established
+   convention (README; the mirror paper's appendix); it does not record or
+   editorialize on a correspondent's tooling, since doing so would single out
+   AI assistance as something to be confessed rather than a normal way of
+   working. The credit line at reverse.md 14.2.5, "flagged by Brett Rubin
+   (correspondence 2026-09-05)", stands unchanged — it already credited only
+   the judgment call (the insistence that the gap be filled), which was his.
 
 2. **One claim withdrawn.** His 2026-09-05 statement that the mirror
    construction "didn't overlap anything" we had was an overreach — he had
@@ -448,29 +454,39 @@ standing convention for every correspondent (HANDOFF.md):
    route to one. **Not answered here**: this calls for the author's own
    judgment on a genuinely open question, not a verification task.
 
-9. **Scripts attached, not yet run.** Three self-contained Python 3 scripts
-   (`verify_anchor_identity.py`, `verify_3adic_mirror.py`,
+9. **Scripts run, as reproduction, not verification.** Three self-contained
+   Python 3 scripts (`verify_anchor_identity.py`, `verify_3adic_mirror.py`,
    `verify_door_vs_state_resolution.py`), cited to paper 1 v3, each stating
-   its checked propositions in its own docstring. The Gmail tools available
-   to this session expose attachment names and MIME types only, not content
-   bytes — there is no tool call that retrieves the script text. **They have
-   not been read or run.** Per the standing convention (HANDOFF.md: "his
-   scripts, if sent, run as reproduction, not verification"), running them
-   once obtained confirms nothing beyond what this file's own independent
-   code (`experiments/mirror_baker_cap.py`) already establishes; they are
-   evidence of his own reproduction, not new verification.
+   its checked propositions in its own docstring rather than in comments.
+   The Gmail tools available to this session exposed attachment names and
+   MIME types only, not content bytes; the author supplied the text directly
+   (2026-09-16), saved to the scratchpad, read in full, and run unmodified —
+   read first for safety (pure integer/fraction arithmetic and `print`
+   statements throughout; no filesystem, network, or subprocess calls). All
+   three exit `0` with every stated proposition passing, matching his own
+   reported counts exactly: `verify_anchor_identity.py` (P1–P2, `50` bases,
+   `749` law cases); `verify_3adic_mirror.py` (Q1–Q5, `133` exit values,
+   `19,950` law cases, `diagonalCenter(1) = −1/2` to nine base-`3` digits,
+   the `e=5,k=1` and `e=41,k=13` instances reproduced); `verify_door_vs_state_
+   resolution.py` (P1–P7, `5,985` doors with zero collisions, `19,704` branch
+   checks, the ledger `2·3^{−j}` measured at four doors of one state to
+   `<0.001` of predicted). Per the standing convention (HANDOFF.md: "his
+   scripts, if sent, run as reproduction, not verification"), this confirms
+   his own reproduction of results already independently verified here by
+   `experiments/mirror_baker_cap.py`; it is not new verification, and no
+   wiki page changes as a result. Scripts are not committed to this
+   repository (external code, read-not-built, per the convention already
+   used for Merle's artifacts).
 
-**Open, all the author's:**
+**Closed, 2026-09-16:** the credit-line question (item 1, decided as above)
+and the three scripts (item 9, run and reproduced above).
 
-- Whether the credit line at reverse.md 14.2.5 / HANDOFF.md should reflect
-  the authorship disclosure of item 1, and how — the record already credits
-  external correspondents by name (Merle throughout the shared ledger)
-  without a parallel disclosure of their own tooling, so there is precedent
-  either way; his own letter states explicitly that the choice is ours.
+**Open, the author's:**
+
 - Whether to add the depth-vs-frequency cross-reference of item 5 to
   reverse.md 14.2.5 / 14.6.5.2 — a small, low-risk addition if wanted, but not
   made unilaterally given the front's current low-priority standing and the
   author's recent redirection of effort toward the peak comb (comb.md §18).
-- The three scripts (item 9) — need to be obtained as files or pasted text
-  before they can be read or run.
-- The Remark 7.4 question (item 8) — the author's to answer or decline.
+- The Remark 7.4 question (item 8) — the author's to answer or decline; a
+  draft answer and a significance assessment of item 7's door/state-resolution
+  finding are being worked through with the author directly, outside this file.
