@@ -1,7 +1,7 @@
 ---
 status: FORMULATION — the first abstraction layer above reduced states: the classification of comb nodes by depth and residue (abdomens, forks, links), the hair chains, the partition of the comb into spiders, the hair-length law, and the spider tree with its census; no front moves
 scope: new section 19
-updated: 2026-09-22
+updated: 2026-09-23
 source: the author's direction of 2026-09-22 (build the next deterministic abstraction up from reduced states, one layer at a time); briefs/spider-layer-brief.md
 ---
 
@@ -140,4 +140,4 @@ overall (all `82,491` pieces): mean size `3.006`, mean legs (= hairs) per spider
 
 ## 19.4. Standing
 
-What the layer is: a residue-based coarse-graining of the comb by depth (`D ≥ 2` vs `= 1`) and, within depth `1`, by `Ω mod 3` (fork vs link), `Ω mod 8` (whether the parent is an abdomen), and `Ω mod 9` (a fork's continuation class) — sitting entirely inside 18.9's own horizon: a spider's shape is a signature in that section's sense, and the digit budget that fixes it (19.3) is 18.9.2's own cost composition applied along a hair. What it is not: no front moves, nothing about which states the comb reaches is touched, and no cycle is searched. The author's north star — that the layers built this way may eventually be raised until the whole map is one object — is recorded here as the stated direction of the work, not as a claim: nothing beyond the construction, the partition, the hair-length law and the spider tree's census is asserted in this section. Grade: **formulation plus measurements**.
+What the layer is: a residue-based coarse-graining of the comb by depth (`D ≥ 2` vs `= 1`) and, within depth `1`, by `Ω mod 3` (fork vs link), `Ω mod 8` (whether the parent is an abdomen), and `Ω mod 9` (a fork's continuation class) — sitting entirely inside 18.9's own horizon: a spider's shape is a signature in that section's sense, and the digit budget that fixes it (19.3) is 18.9.2's own cost composition applied along a hair. What it is not: no front moves, nothing about which states the comb reaches is touched, and no cycle is searched. The author's north star — that the layers built this way may eventually be raised until the whole map is one object — is recorded here as the stated direction of the work, not as a claim: nothing beyond the construction, the partition, the hair-length law and the spider tree's census is asserted in this section. Grade: **formulation plus measurements**. A single spider can be walked node by node, with the rule cited at every step, in `viz/spider_explorer.html`.
