@@ -232,7 +232,7 @@ No deeper reading asked; citation existence and a one-line characterization matc
 >
 > **Two items raised, neither blocking.** (i) The López–Stoll citation in the campaign map needs its volume/year corrected (*Integers* 9 (2009), not 13 (2013)). (ii) §167's `corrsum` has no operational definition in the archived text; if the diagnostic is to carry weight in any future write-up, it would need one.
 >
-> Diff is three files, entirely additions to LEDGER.md and mostly additions to the campaign map. My key is on L-A11 as above, pending the author's decision.
+> Diff is three files, entirely additions to LEDGER.md and mostly additions to the campaign map. [THE AUTHOR'S: the closing line — "Approving." if the L-A11 key turns; otherwise the hold stated in one sentence.]
 
 ### 7.2 Wiki-side consequences, listed (none applied)
 
