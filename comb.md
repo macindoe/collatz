@@ -1,7 +1,7 @@
 ---
 status: FORMULATION — a construction (the backward tree of reduced states re-indexed by peak level), its elementary structural properties proved with fresh code, and a census; the dictionary with the itinerary word and the digit-transfer law across a door edge (18.7); the signed comb, the three negative components as a control (18.8); branching signatures — the level-1 laws, the digit budget that fixes a node's subtree shape, and a search for any grouping finer than residue classes, closed negative to the tested depth (18.9); no front moves
 scope: new section 18 (post-monolith)
-updated: 2026-09-17
+updated: 2026-09-22
 source: the author's sessions of 2026-09-15, 2026-09-16 and 2026-09-17; briefs/peak-comb-brief.md, briefs/comb-dictionary-brief.md, briefs/signed-comb-brief.md, briefs/comb-signatures-brief.md
 ---
 
@@ -468,3 +468,5 @@ For levels `λ ∈ {10,12,14,16,18}` of the positive comb (18.5) and `k ∈ {1,2
 ### 18.9.5. Standing
 
 What is now known about grouping states by branching: exactly the residue classes `(D, Ω mod 3^{χ(v,k)})` sufficient by construction (18.9.2), refined at the cost of an exact but expensive search to `(D, Ω mod 3^{ψ(v,k)})` (18.9.3), and nothing finer over the range 18.9.4 actually tested for it (C.2, `m ∈ [2,10]`; C.3(c), the window ledger) — C.1 is descriptive and settles nothing either way, and C.3(b) characterises a model failure, not a new grouping. The level-1 branching laws (18.9.1) are exact and proved; the budget composition (18.9.2) is exact and proved, with the cost taken at the real depth past the base case; the exact modulus (18.9.3) is a measurement, not a theorem, and its slack (`χ − ψ ∈ {0,1}`, confirmed over an extended sample spanning `D ∈ {1,…,6}` and `k ∈ {2,3}`) is reported, not explained. Grade: **formulation plus measurements**; nothing proposed; no cycle search; no front moves; the family frame is not used — grouping is by residue class (18.9.1–18.9.3) and by signature (18.9.4), kept apart throughout.
+
+The first coarse-graining of the comb above the residue classes of this section is spiders.md §19 — nodes classified as abdomens, forks and links, the depth-1 material organized into hairs and spiders, with its own census and digit-budget measurement.
