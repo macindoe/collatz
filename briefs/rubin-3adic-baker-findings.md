@@ -419,8 +419,11 @@ standing convention for every correspondent (HANDOFF.md):
    14.6.5.2 mirror-side) read together with the depth cap of 14.2.5 — the two
    statements were already both in the record, stated separately, and his
    remark is that they answer complementary questions about the same object.
-   **No wiki edit made**: this is a cross-reading, not a new claim, and adding
-   it as a page cross-reference is left to the author (see "Open").
+   The separation sentence itself was already the page's own (14.2.5's
+   closing line, which he confirms is ours); only the pointer from it to
+   14.6.5.2 was missing. **Cross-reference added at 14.2.5 (2026-09-22)** —
+   our two theorems read together, no new claim, nothing to cite outside the
+   record.
 
 6. **A compliance defect he caught, corrected.** The sentence rendered in
    quotes in reverse.md 14.2.5 and in §1 above was, in his words, "within a
@@ -481,12 +484,19 @@ standing convention for every correspondent (HANDOFF.md):
 **Closed, 2026-09-16:** the credit-line question (item 1, decided as above)
 and the three scripts (item 9, run and reproduced above).
 
-**Open, the author's:**
+**Closed, 2026-09-22:** the depth-vs-frequency cross-reference (item 5,
+added at 14.2.5). The door/state observation (item 7) assessed against the
+record: it is a corollary of §14's founding premise — "the forward map `F` is
+deterministic; run backward it is a tree" (the section's first sentence; the
+duality table's first row; `state` many-to-one at 14.14) — so it confirms
+that the published theorems respect that premise and adds no content beyond
+it; it is not a standalone result and no write-up is asked of him. Neither
+item 5 nor item 7 carries material outside this record, so there is nothing
+here for him to publish separately and nothing the record needs to cite.
 
-- Whether to add the depth-vs-frequency cross-reference of item 5 to
-  reverse.md 14.2.5 / 14.6.5.2 — a small, low-risk addition if wanted, but not
-  made unilaterally given the front's current low-priority standing and the
-  author's recent redirection of effort toward the peak comb (comb.md §18).
-- The Remark 7.4 question (item 8) — the author's to answer or decline; a
-  draft answer and a significance assessment of item 7's door/state-resolution
-  finding are being worked through with the author directly, outside this file.
+**Open, the author's:** the reply to his 2026-09-16 letter (drafted
+2026-09-22 with the Remark 7.4 answer in the shape-of-the-implication form:
+per-step placement is exact, composition along a path loses `d` digits per
+step by 14.13's diagnosis, and covering — every state on the backward tree
+from `(1,1)`, which is the conjecture by Theorem 9.8.3 — is what
+controllability would have to become to say anything forward).
