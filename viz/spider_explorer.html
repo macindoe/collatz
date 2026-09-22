@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spider explorer — one spider at a time</title>
+<style>
+:root{--surface-1:#f4f4f2;--surface-2:#fff;--text-primary:#141821;--text-secondary:#555c6b;--text-muted:#8a93a5;--border:#d9dce3;--border-strong:#b8bdc9;--bg-accent:#e8f0fb;--text-accent:#2f5fb3;--bg-cascade:#e9f3ec;--bg-door:#f3ecfa;--bg-select:#fff3d6;}
+@media (prefers-color-scheme: dark){:root{--surface-1:#22252c;--surface-2:#1a1c22;--text-primary:#eceef2;--text-secondary:#a8afc0;--text-muted:#7c8496;--border:#3a3e48;--border-strong:#565c6a;--bg-accent:#243350;--text-accent:#8fb0e8;--bg-cascade:#1f3328;--bg-door:#2e2440;--bg-select:#3d3418;}
+body{background:#14161b;}}
+body{font-family:system-ui,sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:var(--text-primary);background:var(--surface-1);}
+h1{font-size:20px;font-weight:500;}
+h2{font-size:13px;font-weight:600;margin:14px 0 6px;color:var(--text-secondary);}
+p{font-size:14px;color:var(--text-secondary);line-height:1.6;}
+input,button{font:inherit;padding:6px 10px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2);color:var(--text-primary);}
+button{cursor:pointer;}
+code{font-family:ui-monospace,monospace;font-size:13px;}
+sup{font-size:9px;}
+.row{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:6px 10px;font-size:13px;margin-bottom:4px;}
+.row.abdomen{background:var(--bg-accent);}
+.row.leghead{background:var(--bg-door);font-size:12px;}
+.row.rule{background:transparent;border:none;padding:2px 10px;font-size:12px;color:var(--text-muted);box-shadow:none;}
+.row.border{background:var(--bg-cascade);}
+.row.parentrow{background:var(--surface-1);}
+.st{font-weight:600;white-space:nowrap;}
+.meta{color:var(--text-secondary);}
+.badge{font-family:system-ui,sans-serif;font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid var(--border-strong);background:var(--bg-accent);color:var(--text-accent);white-space:nowrap;}
+.abbr{cursor:pointer;border-bottom:1px dotted var(--text-muted);}
+.full{word-break:break-all;}
+a.go{color:var(--text-accent);text-decoration:none;cursor:pointer;border-bottom:1px dotted var(--text-accent);white-space:nowrap;}
+.msg{font-size:13px;color:var(--text-secondary);margin:6px 0 10px;min-height:1.2em;line-height:1.5;}
+footer{margin-top:18px;font-size:12px;color:var(--text-muted);font-family:ui-monospace,monospace;}
+</style>
+</head>
+<body>
+<h1>Spider explorer</h1>
+<p>A <strong>spider</strong> (spiders.md &sect;19) is an <strong>abdomen</strong> (a comb node of depth &ge; 2, comb.md &sect;18) together with every <strong>hair</strong> growing from one of its <strong>legs</strong> — the depth-1 children of the abdomen. A hair is a chain of depth-1 nodes: a <strong>link</strong> (core &equiv; 2 mod 3) always continues to a <strong>fork</strong> (core &equiv; 1 mod 3, Lemma 19.1.2); a fork continues, to a fork or a link by its core mod 9, exactly when its own <code>t = v&#8323;(4&Omega;&minus;1)</code> equals 1, and ends the hair when <code>t &ge; 2</code> (Lemma 19.1.3). Every comb node belongs to exactly one spider or to the root's own piece, <code>{(1,1)}</code> (Theorem 19.2.2, the <strong>owner</strong> map). A spider's <strong>child spiders</strong> are the abdomens reached by one more comb edge from any of its nodes: the abdomen's own <code>a = 1</code> door child and top-door child when they are not legs, and every hair fork's cascade child (always an abdomen) and, when it ends the hair (<code>t &ge; 2</code>), its top-door child too (Definition 19.3.1). Type a state or a positive odd integer and click <strong>go</strong> to open the spider that owns it; click a <strong>parent spider</strong> or <strong>child spider</strong> link to move one spider at a time. The vocabulary is spiders.md's own: abdomen, leg, hair, fork, link, orphan link, hair fork, spider, spider tree.</p>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+<label style="font-size:13px;color:var(--text-secondary);">go to a state &Omega;,D or a positive odd integer x
+<input id="goto" type="text" value="" placeholder="e.g. 5,2 or 17" style="width:200px;margin-left:6px;"></label>
+<button id="goBtn">go</button>
+</div>
+<div id="msg" class="msg"></div>
+<div id="content"></div>
+<footer id="selftest">self-test: running</footer>
+<script>
+// === SPIDER CORE BEGIN ===
+// The arithmetic of comb.md section 18 (positive comb only) and spiders.md section 19.
+// Every integer is a BigInt; states are [Omega, D] arrays of BigInt. No DOM access in
+// this block: it is extracted and run under node by experiments/spider_explorer_check.py.
+function exactDiv(a, b){ if (b === 0n || a % b !== 0n) throw new Error('inexact division ' + a + ' / ' + b); return a / b; }
+function mod3(n){ return ((n % 3n) + 3n) % 3n; }
+function modN(n, k){ return ((n % k) + k) % k; }
+function v2(n){ if (n === 0n) throw new Error('v2(0)'); let v = 0n; while ((n & 1n) === 0n) { n >>= 1n; v++; } return v; }
+function v3(n){ if (n === 0n) throw new Error('v3(0)'); let v = 0n; while (n % 3n === 0n) { n /= 3n; v++; } return v; }
+function isValidState(w, d){ return w !== 0n && (w & 1n) === 1n && w % 3n !== 0n && d >= 1n; }
+function isRoot(w, d){ return w === 1n && d === 1n; }
+// The peak A = 3^d w - 1, branch s = v2(A), door y = A / 2^s (comb.md Definition 18.1.1).
+function exitData(w, d){ const A = 3n ** d * w - 1n; const s = v2(A); return { A: A, s: s, y: exactDiv(A, 1n << s) }; }
+// Door recovery (reverse.md 14.6.5.1): y + 1 = 2^m 3^a W gives the state (W, m + a).
+function stateOfOdd(y){ if (y === -1n) return null; const n = y + 1n; const m = v2(n); const u = exactDiv(n, 1n << m); const a = v3(u); return [exactDiv(u, 3n ** a), m + a]; }
+// F(w,d) = state(exit) (comb.md 18.2.2).
+function F(w, d){ return stateOfOdd(exitData(w, d).y); }
+// The state at branch s on door y: 2^s y + 1 = 3^d w.
+function nodeAt(y, s){ const N = (y << s) + 1n; const d = v3(N); return [exactDiv(N, 3n ** d), d]; }
+// The lowest admissible branch on a live door.
+function lowestBranch(y){ return mod3(y) === 1n ? 1n : 2n; }
+// The doors y_a = 2^(D-a) 3^a W - 1, a = 0..D-1; alive iff 3 does not divide y_a (comb.md Theorem 14.5.1 cited).
+function doors(W, D){
+  const out = [];
+  for (let a = 0n; a < D; a++) { const y = (W << (D - a)) * 3n ** a - 1n; out.push({ a: a, y: y, alive: mod3(y) !== 0n }); }
+  return out;
+}
+// The comb parent (comb.md Definition 18.2.1): s >= 3 the cascade parent at branch s - 2
+// on the same door; s <= 2 the door parent state(y) = F(w, d). The root has none.
+function parent(w, d){
+  if (isRoot(w, d)) return null;
+  const e = exitData(w, d);
+  if (e.s >= 3n) return { state: nodeAt(e.y, e.s - 2n), type: 'cascade' };
+  return { state: stateOfOdd(e.y), type: 'door' };
+}
+// The children (comb.md Proposition 18.2.3): the cascade child at branch s + 2 on the
+// node's own door, then one door child per live door at its lowest branch, in door
+// order. Dead doors are returned apart; a child that is the root is `excluded` (the
+// self-loop of (1,1), the only ring node on the positive comb).
+function children(W, D){
+  const e = exitData(W, D);
+  const list = [], dead = [], excluded = [];
+  const casc = nodeAt(e.y, e.s + 2n);
+  const cd = { a: v3(e.y + 1n), y: e.y };
+  if (isRoot(casc[0], casc[1])) excluded.push({ a: cd.a, y: cd.y, s: e.s + 2n, state: casc, self: false, type: 'cascade' });
+  else list.push({ state: casc, type: 'cascade', s: e.s + 2n, door: cd });
+  for (const dr of doors(W, D)) {
+    if (!dr.alive) { dead.push({ a: dr.a, y: dr.y, dead: true }); continue; }
+    const s = lowestBranch(dr.y); const st = nodeAt(dr.y, s);
+    if (st[0] === W && st[1] === D) { excluded.push({ a: dr.a, y: dr.y, s: s, state: st, self: true, type: 'door' }); continue; }
+    if (isRoot(st[0], st[1])) { excluded.push({ a: dr.a, y: dr.y, s: s, state: st, self: false, type: 'door' }); continue; }
+    list.push({ state: st, type: 'door', s: s, door: { a: dr.a, y: dr.y } });
+  }
+  return { list: list, dead: dead, excluded: excluded };
+}
+// nodeClass(state, parentDepth) -> root | abdomen | leg | orphan link | hair fork
+// (spiders.md Definition 19.1.1, Definition 19.2.1). parentDepth is the D of the
+// node's own comb parent; it is read only for a depth-1 node (abdomens and the root
+// decide their class from (Omega, D) alone, matching comb_explorer.html's nodeClass).
+// The symmetric class "hair link" (a link preceded by a link) is provably empty
+// (Lemma 19.1.2: a link's only child is always a fork) and is never returned.
+function nodeClass(state, parentDepth){
+  const w = state[0], d = state[1];
+  if (isRoot(w, d)) return 'root';
+  if (d >= 2n) return 'abdomen';
+  const ownLink = mod3(w) === 2n;
+  if (parentDepth !== null && parentDepth >= 2n) return 'leg';
+  return ownLink ? 'orphan link' : 'hair fork';
+}
+// owner(state) -> the spider (an abdomen state) or the root that owns a node:
+// ascend through comb parents while the class stays depth-1, per Theorem 19.2.2.
+function owner(state){
+  let cur = state;
+  for (;;) {
+    if (isRoot(cur[0], cur[1]) || cur[1] >= 2n) return cur;
+    cur = parent(cur[0], cur[1]).state;
+  }
+}
+// legs(abdomen) -> the depth-1 children of an abdomen, with the rule that produced
+// each (cascade, or door a) and the leg's own class (Lemma 19.1.6, Definition 19.2.1).
+function legs(abdomen){
+  const [W, D] = abdomen;
+  const c = children(W, D);
+  const out = [];
+  for (const ch of c.list) {
+    if (ch.state[1] === 1n) {
+      const rule = ch.type === 'cascade' ? { kind: 'cascade' } : { kind: 'door', a: ch.door.a };
+      out.push({ state: ch.state, rule: rule, class: nodeClass(ch.state, D) });
+    }
+  }
+  return out;
+}
+// hair(legState) -> { nodes: [h1, h2, ...], spawned: [...] }. Each node carries its
+// state, class, residues mod 3/8/9/24, t = v3(4*Omega - 1) at a fork (null at a
+// link), and the rule that decided the next step in words (Lemma 19.1.2, 19.1.3).
+// `spawned` lists the child spiders a hair fork spawns: its cascade child, always an
+// abdomen, and (only when t >= 2, ending the hair) its top-door child too, per
+// Definition 19.3.1. Links spawn nothing.
+function hair(legState){
+  const nodes = [];
+  const spawned = [];
+  let cur = legState;
+  let first = true;
+  // Every node carries a structured `ruleKind` (never prose): 'link' (Lemma
+  // 19.1.2, always continues to a fork), 'fork-continue' (Lemma 19.1.3, t = 1;
+  // `ruleNext` is 'fork' or 'link' by the core's residue mod 9), or 'fork-end'
+  // (Lemma 19.1.3, t >= 2, the hair stops here). The UI composes the words and
+  // the lemma citation from this data; nothing here is a sentence.
+  for (;;) {
+    const w = cur[0];
+    const cls = first ? 'leg' : nodeClass(cur, 1n);
+    const rec = { state: cur, class: cls, mod3: mod3(w), mod8: modN(w, 8n), mod9: modN(w, 9n), mod24: modN(w, 24n), t: null, ruleKind: null, ruleNext: null };
+    first = false;
+    if (mod3(w) === 2n) {
+      const child = 4n * w - 1n;
+      rec.ruleKind = 'link';
+      nodes.push(rec);
+      cur = [child, 1n];
+      continue;
+    }
+    const t = v3(4n * w - 1n);
+    rec.t = t;
+    const core = exactDiv(4n * w - 1n, 3n ** t);
+    // every fork's cascade child is always an abdomen, depth t+1 (Lemma 19.1.3),
+    // spawned whether or not the hair continues.
+    spawned.push({ from: cur, state: [core, t + 1n], ruleKind: 'cascade', t: t });
+    if (t === 1n) {
+      const nine = modN(w, 9n);
+      rec.ruleKind = 'fork-continue';
+      rec.ruleNext = nine === 1n ? 'fork' : 'link';
+      nodes.push(rec);
+      cur = [core, 1n];
+      continue;
+    }
+    // t >= 2: the hair ends here; the top-door child is also an abdomen, depth t.
+    rec.ruleKind = 'fork-end';
+    spawned.push({ from: cur, state: [core, t], ruleKind: 'top-door', t: t });
+    nodes.push(rec);
+    break;
+  }
+  return { nodes: nodes, spawned: spawned };
+}
+// rootPiece() -> the root's own piece, {(1,1)}: not a spider (19.2), but handled
+// uniformly by spider() below so a go-to that lands on it does not need special
+// handling by the caller. Its single child spider is (1,2), the root's only child
+// (comb.md Proposition 18.2.3), reached by the cascade edge the general abdomen
+// formula does not cover (an ordinary abdomen's cascade child is always a leg,
+// Lemma 19.1.6, but the root's cascade child is (1,2), an abdomen, since the root
+// is a fork by residue with t = v3(3) = 1 whose own top-door child is itself, the
+// excluded self-loop, comb.md 18.2.3).
+function rootPiece(){
+  return { abdomen: [1n, 1n], legs: [], hairs: [], size: 1n,
+    childSpiders: [{ from: [1n, 1n], state: [1n, 2n], ruleKind: 'root-child', t: null }],
+    parentSpider: null, isRoot: true };
+}
+// spider(abdomen) -> the whole piece: the abdomen, its legs, its hairs, its size,
+// the child spiders it spawns, and its parent spider owner(parent(abdomen))
+// (Definition 19.2.1, Definition 19.3.1). Refuses gracefully at the root: returns
+// rootPiece() rather than applying the (D >= 2) abdomen formula to (1,1).
+function spider(abdomen){
+  const [W, D] = abdomen;
+  if (isRoot(W, D)) return rootPiece();
+  const legList = legs(abdomen);
+  const hairs = legList.map(l => hair(l.state));
+  let size = 1n;
+  const spawned = [];
+  for (const h of hairs) { size += BigInt(h.nodes.length); for (const sp of h.spawned) spawned.push(sp); }
+  const kids = children(W, D);
+  for (const ch of kids.list) {
+    if (ch.type === 'door' && ch.door.a === 1n && ch.state[1] >= 2n) spawned.push({ from: abdomen, state: ch.state, ruleKind: 'a1', t: null });
+    if (ch.type === 'door' && ch.door.a === 0n && ch.state[1] >= 2n) spawned.push({ from: abdomen, state: ch.state, ruleKind: 'top-door-abdomen', t: null });
+  }
+  const p = parent(W, D);
+  const parentSpider = owner(p.state);
+  return { abdomen: abdomen, legs: legList, hairs: hairs, size: size, childSpiders: spawned, parentSpider: parentSpider, parentEdge: p.type, isRoot: false };
+}
+function spiderMembers(sp){
+  const out = [sp.abdomen];
+  for (const h of sp.hairs) for (const n of h.nodes) out.push(n.state);
+  return out;
+}
+// selfTest(): the canaries of spiders.md section 19 and briefs/spider-layer-findings.md.
+function selfTest(){
+  let checks = 0n; const failures = [];
+  const sEq = (p, q) => p[0] === q[0] && p[1] === q[1];
+  const sS = p => '(' + p[0] + ',' + p[1] + ')';
+  const check = (ok, what) => { checks++; if (!ok) failures.push(what); };
+  const S = (w, d) => [BigInt(w), BigInt(d)];
+
+  // the spider of (1,2): legs (11,1) link, (7,1) fork; hairs (11,1) -> (43,1)
+  // (t=2, ending it) and (7,1) alone (t=3, ending immediately); four child
+  // spiders (19,3),(19,2) from (43,1), (1,4),(1,3) from (7,1) -- the corrected
+  // hand derivation, spiders.md 19.3's Verified paragraph.
+  const sp12 = spider(S(1, 2));
+  check(sp12.legs.length === 2, 'spider(1,2) leg count, got ' + sp12.legs.length);
+  const legSet = sp12.legs.map(l => sS(l.state)).sort().join(',');
+  check(legSet === '(11,1),(7,1)', 'spider(1,2) legs, got ' + legSet);
+  check(sp12.size === 4n, 'spider(1,2) size 4, got ' + sp12.size);
+  const childSet = sp12.childSpiders.map(c => sS(c.state)).sort().join(',');
+  check(sp12.childSpiders.length === 4 && childSet === '(1,3),(1,4),(19,2),(19,3)', 'spider(1,2) four child spiders, got ' + childSet);
+  const h11 = sp12.hairs.find(h => sEq(h.nodes[0].state, S(11, 1)));
+  check(!!h11 && h11.nodes.length === 2 && sEq(h11.nodes[1].state, S(43, 1)) && h11.nodes[1].t === 2n, 'hair (11,1)->(43,1), t=2 at (43,1)');
+  const h7 = sp12.hairs.find(h => sEq(h.nodes[0].state, S(7, 1)));
+  check(!!h7 && h7.nodes.length === 1 && h7.nodes[0].t === 3n, 'hair (7,1) alone, t=3');
+  check(sEq(sp12.parentSpider, S(1, 1)), "spider(1,2)'s parent spider is the root's piece");
+
+  // the root's own piece: size 1, single child spider (1,2)
+  const spRoot = spider(S(1, 1));
+  check(spRoot.isRoot === true && spRoot.size === 1n && spRoot.childSpiders.length === 1 && sEq(spRoot.childSpiders[0].state, S(1, 2)), "spider(1,1) is the root's piece with child spider (1,2)");
+
+  // (17,1): an orphan link owned by the spider of its grandparent's owner
+  const p17 = parent(17n, 1n);
+  check(p17 !== null && sEq(p17.state, S(13, 1)), 'parent(17,1) = (13,1), got ' + (p17 && sS(p17.state)));
+  check(nodeClass(S(17, 1), p17.state[1]) === 'orphan link', 'nodeClass (17,1) orphan link');
+  const gp17 = parent(p17.state[0], p17.state[1]).state;
+  check(sEq(owner(S(17, 1)), owner(gp17)), 'owner(17,1) = owner(its grandparent)');
+  check(sEq(owner(S(17, 1)), S(5, 2)), 'owner(17,1) = (5,2), got ' + sS(owner(S(17, 1))));
+
+  // (13,1): a leg fork of (5,2)'s spider with children (17,2) and (17,1)
+  check(sEq(owner(S(13, 1)), S(5, 2)), 'owner(13,1) = (5,2)');
+  check(nodeClass(S(13, 1), 2n) === 'leg', 'nodeClass (13,1) leg');
+  const c13 = children(13n, 1n).list.map(c => sS(c.state)).sort().join(',');
+  check(c13 === '(17,1),(17,2)', '(13,1) children (17,1),(17,2), got ' + c13);
+
+  // (7,1): a leg with children (1,4) and (1,3)
+  const c7 = children(7n, 1n).list.map(c => sS(c.state)).sort().join(',');
+  check(c7 === '(1,3),(1,4)', '(7,1) children (1,3),(1,4), got ' + c7);
+  check(nodeClass(S(7, 1), 2n) === 'leg', 'nodeClass (7,1) leg');
+
+  // orphan classes 1, 17, 19 (mod 24) on 300 deterministic pseudo-random depth-1
+  // states (Lemma 19.1.5): a depth-1 node is a non-leg (parent depth 1) iff its
+  // core is 1, 17 or 19 mod 24.
+  let seed = 20260923n; const M = (1n << 64n) - 1n;
+  const next = () => { seed = (seed * 6364136223846793005n + 1442695040888963407n) & M; return seed; };
+  for (let i = 0; i < 300; i++) {
+    let w = 2n * ((next() >> 16n) % 500000n) + 1n; if (w % 3n === 0n) w += 2n;
+    const p = parent(w, 1n);
+    const nonLeg = p.state[1] === 1n;
+    const r24 = modN(w, 24n);
+    const predicted = (r24 === 1n || r24 === 17n || r24 === 19n);
+    check(nonLeg === predicted, 'Lemma 19.1.5 orphan residue at Omega=' + w + ' mod24=' + r24 + ': non-leg=' + nonLeg + ' predicted=' + predicted);
+  }
+  // the mod-9 continuation rule (Lemma 19.1.3) on 300 forks
+  for (let i = 0; i < 300; i++) {
+    const w = 6n * ((next() >> 20n) % 500000n) + 1n; // odd, w = 1 mod 3: a fork
+    const t = v3(4n * w - 1n);
+    const nine = modN(w, 9n);
+    if (t === 1n) {
+      const core = exactDiv(4n * w - 1n, 3n);
+      const expect = nine === 1n ? 1n : (nine === 4n ? 2n : null);
+      check(expect !== null, 'fork mod9 at w=' + w + ' has t=1 but w mod9=' + nine);
+      check(mod3(core) === expect, 'Lemma 19.1.3 mod9 continuation at w=' + w + ' (mod9=' + nine + ')');
+    } else {
+      check(nine === 7n, 'fork t>=2 implies w=7 mod9 at w=' + w + ', got mod9=' + nine + ' t=' + t);
+    }
+  }
+  // owner agreeing with the partition on 300 random nodes: every node's owner is
+  // an abdomen or the root, and the owner's spider (or root's piece) contains it.
+  for (let i = 0; i < 300; i++) {
+    let w = 2n * ((next() >> 8n) % 500000n) + 1n; if (w % 3n === 0n) w += 2n;
+    const d = 1n + ((next() >> 24n) % 15n);
+    const st = [w, d];
+    const own = owner(st);
+    check(nodeClass(own, null) === 'abdomen' || sEq(own, S(1, 1)), 'owner is an abdomen or the root at ' + sS(st));
+    const sp = spider(own);
+    const mem = spiderMembers(sp);
+    check(mem.some(m => sEq(m, st)), 'owner spider of ' + sS(st) + ' (owner ' + sS(own) + ') contains the node');
+  }
+  return { checks: checks, failures: failures };
+}
+// === SPIDER CORE END ===
+</script>
+<script>
+(function(){
+function grp(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function fmt(n){
+  const s = n.toString();
+  if (s.length <= 24) return s;
+  return '<span class="abbr" data-full="' + s + '" title="click to show all ' + s.length + ' digits">' + s.slice(0, 8) + '…' + s.slice(-4) + ' (' + s.length + ' digits)</span>';
+}
+const sS = st => '(' + fmt(st[0]) + ', ' + st[1] + ')';
+const stLink = (st, cls) => '<a class="go' + (cls ? ' ' + cls : '') + '" data-w="' + st[0] + '" data-d="' + st[1] + '">(' + fmt(st[0]) + ', ' + st[1] + ')</a>';
+function residues(w){ return 'mod 3 = ' + mod3(w) + ', mod 8 = ' + modN(w, 8n) + ', mod 9 = ' + modN(w, 9n) + ', mod 24 = ' + modN(w, 24n); }
+function classBadge(cls){ return '<span class="badge">' + cls + '</span>'; }
+
+function ruleWord(l){
+  return l.rule.kind === 'cascade' ? "cascade child (Lemma 19.1.6)" : "door a = " + l.rule.a + " child (Lemma 19.1.6)";
+}
+// The words for a hair node's ruleKind (Lemma 19.1.2, Lemma 19.1.3), composed here
+// in the UI layer from the core's structured data -- the core itself states no
+// sentences.
+function nodeRuleText(n){
+  if (n.ruleKind === 'link') return "link → fork, always (Lemma 19.1.2)";
+  if (n.ruleKind === 'fork-continue') return "fork continues (t = 1), to a " + n.ruleNext + " since Ω ≡ " + n.mod9 + " (mod 9) (Lemma 19.1.3)";
+  return "fork ends the hair (t = " + n.t + " ≥ 2, Lemma 19.1.3)";
+}
+// The words for a spawned child spider's ruleKind (Definition 19.3.1, Lemma 19.1.3).
+function spawnRuleText(c){
+  if (c.ruleKind === 'cascade') return "hair fork's cascade child";
+  if (c.ruleKind === 'top-door') return "hair fork's top-door child, t = " + c.t;
+  if (c.ruleKind === 'a1') return "abdomen's a = 1 child";
+  if (c.ruleKind === 'top-door-abdomen') return "abdomen's top-door child";
+  return "the root's only child (comb.md 18.2.3)";
+}
+
+// The flat renderer: one row (a single <div>, no nested lists) per abdomen, per
+// leg-head, per hair node, per rule between two hair nodes, and per border-table
+// entry (spiders.md's own lesson from briefs/comb-explorer-findings.md: a spider
+// is finite but hairs can be long, so nothing beyond the current spider and its
+// immediate stubs is computed or rendered).
+function renderSpider(sp, requested){
+  const rows = [];
+  const W = sp.abdomen[0], D = sp.abdomen[1];
+  if (sp.isRoot) {
+    rows.push('<div class="row abdomen"><span class="badge">root</span><span class="st">(1, 1)</span><span class="meta">the root\'s own piece, {(1,1)} (spiders.md 19.2) &mdash; not a spider</span></div>');
+  } else {
+    const e = exitData(W, D);
+    const legInfo = legs(sp.abdomen);
+    const a1 = legInfo.find(l => l.rule.kind === 'door' && l.rule.a === 1n);
+    const kids = children(W, D);
+    const a1kid = kids.list.find(c => c.type === 'door' && c.door.a === 1n);
+    const topkid = kids.list.find(c => c.type === 'door' && c.door.a === 0n);
+    const a1isLeg = a1kid ? (a1kid.state[1] === 1n ? 1 : 0) : 0;
+    const topisLeg = topkid ? (topkid.state[1] === 1n ? 1 : 0) : 0;
+    rows.push('<div class="row abdomen"><span class="badge">abdomen</span><span class="st">' + sS(sp.abdomen) + '</span>'
+      + '<span class="meta">peak A = ' + fmt(e.A) + '; depth D = ' + D + '</span>'
+      + '<span class="meta">' + residues(W) + '</span>'
+      + '<span class="meta">legs = (D&minus;1) + [a=1 leg] + [top-door leg] = (' + (D - 1n) + ') + ' + a1isLeg + ' + ' + topisLeg + ' = ' + sp.legs.length + ' (Lemma 19.1.6)</span>'
+      + '<span class="meta">size ' + sp.size + '; ' + sp.hairs.length + ' hair' + (sp.hairs.length === 1 ? '' : 's') + '; ' + sp.childSpiders.length + ' child spider' + (sp.childSpiders.length === 1 ? '' : 's') + '</span></div>');
+  }
+  for (let hi = 0; hi < sp.hairs.length; hi++) {
+    const h = sp.hairs[hi];
+    const l = sp.legs[hi];
+    rows.push('<div class="row leghead">leg via ' + ruleWord(l) + ' — hair ' + (hi + 1) + ' of ' + sp.hairs.length + ', ' + h.nodes.length + ' node' + (h.nodes.length === 1 ? '' : 's') + '</div>');
+    for (let ni = 0; ni < h.nodes.length; ni++) {
+      const n = h.nodes[ni];
+      rows.push('<div class="row">' + classBadge(n.class) + stLink(n.state, 'st')
+        + '<span class="meta">' + residues(n.state[0]) + '</span>'
+        + (n.t !== null ? '<span class="meta">t = ' + n.t + '</span>' : '') + '</div>');
+      rows.push('<div class="row rule">' + nodeRuleText(n) + '</div>');
+    }
+  }
+  if (sp.childSpiders.length > 0 || (!sp.isRoot && sp.parentSpider)) {
+    rows.push('<div class="row leghead">the borders</div>');
+    for (const c of sp.childSpiders) {
+      rows.push('<div class="row border">child spider ' + stLink(c.state) + '<span class="meta">spawned by ' + sS(c.from) + '’s ' + spawnRuleText(c) + '</span><span class="meta">depth ' + c.state[1] + '</span></div>');
+    }
+    if (!sp.isRoot) {
+      rows.push('<div class="row parentrow">parent spider ' + stLink(sp.parentSpider) + '<span class="meta">connected by ' + sS(sp.abdomen) + '’s own comb parent, a ' + sp.parentEdge + ' edge (comb.md 18.2.1)</span></div>');
+    }
+  }
+  document.getElementById('content').innerHTML = rows.join('');
+}
+
+function msg(t){ document.getElementById('msg').textContent = t; }
+
+function parseInput(str){
+  const t = str.trim().replace(/[()\s]/g, '');
+  if (t === '') return { err: 'Enter a state Ω,D or a positive odd integer x.' };
+  if (t.indexOf(',') >= 0) {
+    const parts = t.split(',');
+    if (parts.length !== 2 || !/^\d+$/.test(parts[0]) || !/^\d+$/.test(parts[1])) return { err: 'A state is two positive integers, Ω,D.' };
+    const w = BigInt(parts[0]), d = BigInt(parts[1]);
+    if (!isValidState(w, d)) return { err: 'Not a valid state: Ω must be odd and not a multiple of 3, and D ≥ 1.' };
+    return { state: [w, d] };
+  }
+  if (!/^\d+$/.test(t)) return { err: 'Enter digits only: a state Ω,D or a positive odd integer x.' };
+  const x = BigInt(t);
+  if (x === 0n || (x & 1n) === 0n) return { err: 'x must be a positive odd integer.' };
+  return { state: stateOfOdd(x) };
+}
+
+function openState(st){
+  const own = owner(st);
+  const sp = spider(own);
+  renderSpider(sp, st);
+  if (sp.isRoot) msg('(' + st[0] + ', ' + st[1] + ') is owned by the root’s own piece {(1,1)}, not a spider (Definition 19.2.1); its single child spider is (1,2).');
+  else msg('(' + st[0] + ', ' + st[1] + ') is owned by the spider of ' + sS(own) + ' (Theorem 19.2.2): size ' + sp.size + ', ' + sp.hairs.length + ' hair' + (sp.hairs.length === 1 ? '' : 's') + ', ' + sp.childSpiders.length + ' child spider' + (sp.childSpiders.length === 1 ? '' : 's') + '.');
+}
+
+function go(){
+  const r = parseInput(document.getElementById('goto').value);
+  if (r.err) { msg(r.err); return; }
+  openState(r.state);
+}
+document.getElementById('goBtn').addEventListener('click', go);
+document.getElementById('goto').addEventListener('keydown', ev => { if (ev.key === 'Enter') go(); });
+document.getElementById('content').addEventListener('click', ev => {
+  const ab = ev.target.closest('.abbr');
+  if (ab) {
+    if (ab.classList.contains('full')) { const s = ab.dataset.full; ab.textContent = s.slice(0, 8) + '…' + s.slice(-4) + ' (' + s.length + ' digits)'; ab.classList.remove('full'); }
+    else { ab.textContent = ab.dataset.full; ab.classList.add('full'); }
+    ev.stopPropagation();
+    return;
+  }
+  const a = ev.target.closest('a.go');
+  if (a) { openState([BigInt(a.dataset.w), BigInt(a.dataset.d)]); }
+});
+// The default on load: the spider of (1,2).
+document.getElementById('goto').value = '1,2';
+openState([1n, 2n]);
+try {
+  const t = selfTest();
+  document.getElementById('selftest').textContent = 'self-test: ' + t.checks + ' checks, ' + t.failures.length + ' failures' + (t.failures.length ? ' — ' + t.failures.join('; ') : '');
+} catch (e) { document.getElementById('selftest').textContent = 'self-test: error — ' + e; }
+})();
+</script>
+</body>
+</html>
