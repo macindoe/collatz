@@ -21,17 +21,17 @@ Every rule in this section is sign-blind, exactly as in 18.8: no algebraic step 
 
 The root `(1,1)` is a fork by this residue rule, but is treated as its own piece throughout (19.2): its only child is the abdomen `(1,2)` (comb.md 18.2.3).
 
-**Lemma 19.1.2 (Item A.1 — a link's one child).** A link `(Ω, 1)` has exactly one child: its cascade child `(4Ω − 1, 1)`, of depth `1`, which is always a fork; its top door is dead.
+**Lemma 19.1.2 (a link's one child).** A link `(Ω, 1)` has exactly one child: its cascade child `(4Ω − 1, 1)`, of depth `1`, which is always a fork; its top door is dead.
 
 **Proof.** The top door of `(Ω,1)` is `y₀ = 2Ω − 1`; it is dead iff `2Ω ≡ 1 (mod 3)` (comb.md 18.2.3/reverse.md 14.5.1), and `2Ω ≡ 2·2 ≡ 1 (mod 3)` since `Ω ≡ 2`. With `D = 1` there is no side door (`a` ranges over `∅`), so the cascade child is the only child. By comb.md 18.9.1's cascade-child law at `D = 1`, its depth is `1 + v₃(4Ω − 1)`; and `4Ω − 1 ≡ Ω − 1 ≡ 2 − 1 ≡ 1 (mod 3)` (using `4 ≡ 1 mod 3`), so `v₃(4Ω − 1) = 0` and the depth is exactly `1`. Its core `4Ω − 1` is itself `≡ 1 (mod 3)`, a fork. ∎
 
-**Lemma 19.1.3 (Item A.2 — a fork's two children, and the exact class split at `t = 1`).** A fork `(Ω, 1)` has exactly two children: a cascade child of depth `t + 1 ≥ 2` (an abdomen) and a top-door child of depth `t`, where `t = v₃(4Ω − 1) ≥ 1`; both children share the same core, `(4Ω − 1)/3ᵗ`. The top-door child has depth `1` iff `t = 1` iff `Ω ≢ 7 (mod 9)`, and then its class is exact: a **fork** iff `Ω ≡ 1 (mod 9)`, a **link** iff `Ω ≡ 4 (mod 9)`.
+**Lemma 19.1.3 (a fork's two children, and the exact class split at `t = 1`).** A fork `(Ω, 1)` has exactly two children: a cascade child of depth `t + 1 ≥ 2` (an abdomen) and a top-door child of depth `t`, where `t = v₃(4Ω − 1) ≥ 1`; both children share the same core, `(4Ω − 1)/3ᵗ`. The top-door child has depth `1` iff `t = 1` iff `Ω ≢ 7 (mod 9)`, and then its class is exact: a **fork** iff `Ω ≡ 1 (mod 9)`, a **link** iff `Ω ≡ 4 (mod 9)`.
 
 **Proof.** The top door is `y₀ = 2Ω − 1 ≡ 2 − 1 ≡ 1 (mod 3)` (`Ω ≡ 1`), hence alive (`2·1 ≢ 1 mod 3`... concretely `2Ω ≡ 2 ≢ 1 mod 3`) and at the lowest branch `s₀ = 1` (`y₀ ≡ 1 mod 3`). By comb.md 18.9.1 at `D = 1`: the cascade child has depth `1 + v₃(4Ω − 1) = t + 1`, and the top-door child's numerator is `2y₀ + 1 = 4Ω − 1`, the same integer, so its depth is `v₃(4Ω − 1) = t` and its core is `(4Ω − 1)/3ᵗ` — the same core as the cascade child's, reached by one fewer factor of `3` removed. Since `Ω ≡ 1 (mod 3)`, `4Ω − 1 ≡ 0 (mod 3)`, so `t ≥ 1` always; writing `Ω mod 9 ∈ {1, 4, 7}`: `4·1 − 1 = 3` (`v₃ = 1`), `4·4 − 1 = 15` (`v₃ = 1`), `4·7 − 1 = 27` (`v₃ = 3 ≥ 2`) — so `t = 1` iff `Ω ≡ 1` or `4 (mod 9)`, i.e. iff `Ω ≢ 7 (mod 9)`. When `t = 1` the core is `(4Ω − 1)/3`: at `Ω ≡ 1 (mod 9)` this is `1` (mod 3, from `3/3 = 1`, and in general `(4Ω−1)/3 mod 3` is fixed by `Ω mod 9`, exact); at `Ω ≡ 4 (mod 9)` it is `5/3 = ` … concretely for `Ω = 4`: `(16−1)/3 = 5 ≡ 2 (mod 3)`, a link; for `Ω = 1`: `(4−1)/3 = 1 ≡ 1 (mod 3)`, a fork. Since the map `Ω ↦ (4Ω−1)/3 mod 3` is an affine function of `Ω mod 9` on each of the two admissible residues, it is constant on each: `Ω ≡ 1 (mod 9)` always gives a fork, `Ω ≡ 4 (mod 9)` always gives a link. ∎
 
-**Corollary 19.1.4 (Item A.3 — at most one depth-`1` child).** A depth-`1` node has at most one depth-`1` child: a link has exactly one (forced, Lemma 19.1.2); a fork has one iff `t = 1`, else none (Lemma 19.1.3). Consequently the depth-`1` material lying above an abdomen is a union of simple chains — the hairs of 19.2 — never a bush.
+**Corollary 19.1.4 (at most one depth-`1` child).** A depth-`1` node has at most one depth-`1` child: a link has exactly one (forced, Lemma 19.1.2); a fork has one iff `t = 1`, else none (Lemma 19.1.3). Consequently the depth-`1` material lying above an abdomen is a union of simple chains — the hairs of 19.2 — never a bush.
 
-**Lemma 19.1.5 (Item A.4 — the complete parent-is-abdomen table).** For a depth-`1` node `(Ω, 1)`, whether its comb parent is an abdomen is a function of `(Ω mod 3, Ω mod 8)`, given by:
+**Lemma 19.1.5 (the complete parent-is-abdomen table).** For a depth-`1` node `(Ω, 1)`, whether its comb parent is an abdomen is a function of `(Ω mod 3, Ω mod 8)`, given by:
 
 ```text
                 Omega mod 8 = 1   3          5      7
@@ -51,7 +51,7 @@ Equivalently, by CRT to modulus `24`: the **non-legs** (a depth-`1` node whose p
 
 Collecting the three cases into the table, and taking CRT with `Ω mod 3` to modulus `24`, gives the stated residues; each of the `8` valid classes mod `24` (`Ω` odd, `3 ∤ Ω`) was checked non-empty. ∎
 
-**Lemma 19.1.6 (Item A.5 — the abdomen leg count).** An abdomen `(Ω, D)` has
+**Lemma 19.1.6 (the abdomen leg count).** An abdomen `(Ω, D)` has
 
 ```text
 legs = (D − 1) + [3 ∤ 2^{D+1}Ω − 1] + [top door alive and its child of depth 1]
@@ -87,7 +87,7 @@ f(n|L) = f(n−1|F)                          (n ≥ 2).
 
 Given the measured leg-type mix (fork legs `27,542`, `28.51%`; link legs `69,078`, `71.49%`, over the level-`18` census), the predicted length distribution is `P(n) = p_F·f(n|F) + p_L·f(n|L)`.
 
-**The level-`18` census window is not the law.** Measured directly within the window, the length distribution (`53,145` at length `1`, `28,290` at `2`, `8,818` at `3`, …, matching the brief's own pre-check exactly) disagrees badly with the prediction — e.g. `55.0%` of hairs measured length `1` against a predicted `9.5%`. The discrepancy is a boundary artifact, not a failure of the law: a hair node discovered exactly at level `18` has no census-recorded child, so a chain that reaches the boundary is cut off there whether or not it truly continues — and by Lemma 19.1.2 a link **always** continues, so every link leg sitting exactly at level `18` (`34,743` of the `69,078` link legs) is wrongly recorded as a length-`1` hair. Recomputing every hair's length by ground-truth arithmetic alone (`comb_children`, unbounded, independent of the census) rather than by the census neighbour list shows `69,099` of the `96,620` hairs (`71.5%`) are affected. The **true** distribution matches the predicted one closely at every tested length:
+**The level-`18` census window is not the law.** Measured directly within the window, the length distribution (`53,145` at length `1`, `28,290` at `2`, `8,818` at `3`, …) disagrees badly with the prediction — e.g. `55.0%` of hairs measured length `1` against a predicted `9.5%`. The discrepancy is a boundary artifact, not a failure of the law: a hair node discovered exactly at level `18` has no census-recorded child, so a chain that reaches the boundary is cut off there whether or not it truly continues — and by Lemma 19.1.2 a link **always** continues, so every link leg sitting exactly at level `18` (`34,743` of the `69,078` link legs) is wrongly recorded as a length-`1` hair. Recomputing every hair's length by ground-truth arithmetic alone (`comb_children`, unbounded, independent of the census) rather than by the census neighbour list shows `69,099` of the `96,620` hairs (`71.5%`) are affected. The **true** distribution matches the predicted one closely at every tested length:
 
 ```text
  len   predicted   measured (true)   ratio
@@ -101,7 +101,7 @@ Given the measured leg-type mix (fork legs `27,542`, `28.51%`; link legs `69,078
    8    0.04114     0.04190          1.0184
 ```
 
-The true maximum hair length observed in this census is `55` (against `15` within the truncated window). The census-window figures are retained above only because they reproduce the brief's own pre-check exactly and are the ones a reader following the pre-check would compute; the true, boundary-corrected figures are the ones that test the law.
+The true maximum hair length observed in this census is `55` (against `15` within the truncated window). The census-window figures are shown so that the truncation is visible; the boundary-corrected figures are the ones that test the law.
 
 **Spider size.** The fraction of abdomens among nodes is `1 − P(D = 1) = 1/3` under the depth ledger, so the mean spider size is `3` given the ledger, a measured law (comb.md 18.7.2's own posture); the census's `3.006` is the calibration.
 
