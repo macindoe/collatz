@@ -226,13 +226,13 @@ No deeper reading asked; citation existence and a one-line characterization matc
 >
 > **Reproduction.** Both artifacts (`run_123.py`, `run_124.py`) run as committed from a fresh clone, exit 0, byte-identical to their committed outputs, under one environment fix neither your file nor mine needed changing for: `PYTHONIOENCODING=utf-8`, a Windows console-codec issue with the files' own `⊂`/`—` characters, not a defect in either script.
 >
-> **L-A11's key: [THE AUTHOR'S: the L-A11 key decision].** Recommendation: **turn.** Every computational claim in the entry reproduces exactly under independent code at every value checked, including the amendment (Knight, the circular-equality list, the reduction). The one sourcing note above (L-A8 does not itself define `R`) is a wording point, not a mathematical defect, and does not touch the entry's substance.
+> **L-A11's key: turned.** Every computational claim in the entry reproduces exactly under independent code at every value checked, including the amendment (Knight, the circular-equality list, the reduction). The one sourcing note above (L-A8 does not itself define `R`) is a wording point, not a mathematical defect, and does not touch the entry's substance. L-A11 reads two keys with this review.
 >
 > **The L-A2 reduction: adjudicated above as a corollary of L-A2's own proof, correctly drawn — not a new claim, not a literal restatement.**
 >
 > **Two items raised, neither blocking.** (i) The López–Stoll citation in the campaign map needs its volume/year corrected (*Integers* 9 (2009), not 13 (2013)). (ii) §167's `corrsum` has no operational definition in the archived text; if the diagnostic is to carry weight in any future write-up, it would need one.
 >
-> Diff is three files, entirely additions to LEDGER.md and mostly additions to the campaign map. [THE AUTHOR'S: the closing line — "Approving." if the L-A11 key turns; otherwise the hold stated in one sentence.]
+> Diff is three files, entirely additions to LEDGER.md and mostly additions to the campaign map. Approving.
 
 ### 7.2 Wiki-side consequences, listed (none applied)
 
