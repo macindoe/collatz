@@ -1,0 +1,232 @@
+====================================================================================================
+PART 0 -- CANARIES (before any computation the checks depend on)
+====================================================================================================
+  [PASS] log2(3) stable to 38 digits between dps=40 and dps=80   L(dps=40)-L(dps=80) = -1.094e-41
+  [PASS] ceil(j*L) at j=1,2,3 is 2,4,5 (independently, not his C1)
+  [PASS] C(9,5) = 126 (stars-and-bars sanity)
+  [PASS] 1/(2 ln 2) = 0.721348... to 6dp
+
+====================================================================================================
+PART 1 -- L-A8's seam mechanism vs the letter's 'R := sum x_min/x_i <= n'
+====================================================================================================
+
+  L-A8's own record (briefs/merle-la8-t1-check-findings.md, item 2(c)) derives
+  the seam bound by a DIFFERENT explicit route than the letter's R-sum: the
+  ceiling+survivor+two-bound chain gives, for a cycle of n odd elements all
+  >= X = x_min,
+
+      seam:      q * 3X < 2n * 3^n              (q = 2^K - 3^n)
+      log gap:   0 < K - n*log2(3) < 2n / (3X ln 2)     [[in log2 units]]
+
+  i.e. the entry's own words never write "R := sum x_min/x_i" -- that symbol
+  is the correspondence's own compression of the mechanism, not a quotation.
+  It IS however an equivalent restatement of the same fact, checked here from
+  the per-factor identity his letter's chain also uses:
+
+      log2(1 + 1/(3x_i)) = log2((3x_i+1)/(3x_i))
+
+  and sum_i log2(1+1/(3x_i)) = K - n*log2(3) exactly whenever 3x_i+1 = 2^v_i x_{i+1}
+  telescopes around a cycle (L-A8 item 2(a), the product identity). Trivial
+  bound: log2(1+u) <= u/ln2, so
+
+      K - n*log2(3) <= (1/(3 ln2)) * sum_i 1/x_i
+                      = (1/(3 X ln2)) * sum_i (X/x_i)
+                      = R / (3 X ln 2),     R := sum_i X/x_i <= n   (each term <= 1).
+
+  This route's constant (1/(3 ln2)) is HALF of L-A8's own chain constant
+  (2/(3 ln2)) -- the two-bound step in the ceiling/survivor route spends an
+  extra factor 2 that the direct log-sum route does not need. Both give a
+  window n = O(sqrt(X)) via Legendre (delta ~ 1/X, n <= sqrt(1/(2 delta))),
+  differing by a constant factor sqrt(2) exactly where L-A8's own two figures
+  (exact 3.5035e10 vs integral 3.5032e10, and the withdrawn 4.955e10 = sqrt(2)
+  times the corrected window) already record a factor-sqrt(2) family of
+  equally-legitimate window definitions.
+
+  [PASS] 400 synthetic multisets: R=sum(X/x_i)<=n trivially, and sum log2(1+1/(3x_i)) <= R/(3X ln2) exactly   loosest ratio (bound/actual) observed = 1.000
+
+  Adjudication (Queue 3, first sentence): L-A8's ledger entry does not itself
+  contain the symbol "R := sum x_min/x_i"; its own derivation reaches the same
+  O(n/X) mechanism through ceiling+survivor+two-bound, with a log-gap constant
+  twice the size of the one the R-sum route gives directly from the product
+  identity. The letter's "the whole sqrt(X) window rests on the trivial R <= n"
+  is therefore not a literal quotation of the record but IS a faithful
+  restatement of the mechanism, verified independently above: the sqrt(X)
+  order, and the fact that no cleverness beyond x_i >= x_min enters either
+  route, both hold. The finding delivered kindly: the premise sentence should
+  read "the seam chain's window is controlled by a bound of exactly this
+  shape" rather than naming R as if it were the entry's own object -- L-A8
+  never defines R.
+
+====================================================================================================
+PART 2 -- THE STURMIAN WORD: R, R/k -> 1/(2 ln2), rise-blocks, Hercher m<=91
+====================================================================================================
+        k  gaps subset {1,2}        S  blocks            R       R/k  R>=k/2
+       10               True       16       6         7.54   0.75397    True
+  [PASS] k=10: gaps subset of {1,2}
+  [PASS] k=10: R >= k/2 exactly
+  [PASS] k=10: blocks (=count of gap-2) = ceil(kL)-k
+      100               True      159      59        72.02   0.72024    True
+  [PASS] k=100: gaps subset of {1,2}
+  [PASS] k=100: R >= k/2 exactly
+  [PASS] k=100: blocks (=count of gap-2) = ceil(kL)-k
+     1000               True     1585     585       721.50   0.72150    True
+  [PASS] k=1000: gaps subset of {1,2}
+  [PASS] k=1000: R >= k/2 exactly
+  [PASS] k=1000: blocks (=count of gap-2) = ceil(kL)-k
+  [PASS] k=1000: |R/k - 1/(2 ln2)| < 0.002   R/k=0.72150
+     5000               True     7925    2925      3607.98   0.72160    True
+  [PASS] k=5000: gaps subset of {1,2}
+  [PASS] k=5000: R >= k/2 exactly
+  [PASS] k=5000: blocks (=count of gap-2) = ceil(kL)-k
+  [PASS] k=5000: |R/k - 1/(2 ln2)| < 0.002   R/k=0.72160
+    10000               True    15850    5850      7215.20   0.72152    True
+  [PASS] k=10000: gaps subset of {1,2}
+  [PASS] k=10000: R >= k/2 exactly
+  [PASS] k=10000: blocks (=count of gap-2) = ceil(kL)-k
+  [PASS] k=10000: |R/k - 1/(2 ln2)| < 0.002   R/k=0.72152
+    50000               True    79249   29249     36068.23   0.72136    True
+  [PASS] k=50000: gaps subset of {1,2}
+  [PASS] k=50000: R >= k/2 exactly
+  [PASS] k=50000: blocks (=count of gap-2) = ceil(kL)-k
+  [PASS] k=50000: |R/k - 1/(2 ln2)| < 0.002   R/k=0.72136
+   100000               True   158497   58497     72136.05   0.72136    True
+  [PASS] k=100000: gaps subset of {1,2}
+  [PASS] k=100000: R >= k/2 exactly
+  [PASS] k=100000: blocks (=count of gap-2) = ceil(kL)-k
+  [PASS] k=100000: |R/k - 1/(2 ln2)| < 0.002   R/k=0.72136
+  [PASS] R >= k/2 at EVERY k = 2..300 individually   min R/k over k<=300 = 0.71772
+  [PASS] Hercher's m<=91 is exceeded at k=156 (blocks(156) > 91)   blocks(156) = 92
+  blocks(156) = 92; first k with blocks(k) > 91 is k = 156
+  one-block control k=100: R = 6.821
+  one-block control k=1000: R = 6.079
+  one-block control k=10000: R = 6.890
+  one-block control k=100000: R = 6.379
+  [PASS] one-block (negative-control) word: R stays under 10 while k grows 1000x (100 -> 100000)
+
+====================================================================================================
+PART 3 -- REPRODUCTION (not verification): his run_123.py, run as committed
+====================================================================================================
+  Run separately (not imported): see the findings file for the exact
+  transcript, exit code, and diff against his committed run_123_output.txt.
+  This script's own PART 2 above is the independent verification; the
+  reproduction step touches no file this script writes.
+
+
+====================================================================================================
+PART 4 -- COLLATZ OVER F2[x]: EXHAUSTIVE MAXIMAL STOPPING TIMES AT d=4..16
+====================================================================================================
+
+  Map convention, from the papers' own statement (Hicks-Mullen-Yucas-Zavislak
+  2008; Alon-Behajaina-Paran arXiv 2401.03210), independently coded: a
+  polynomial f in F2[x] is an integer bitmask (bit i = coefficient of x^i,
+  addition = XOR). T(f) = f/x when x | f (bit 0 is 0, i.e. f even: shift
+  right); T(f) = ((x+1)f + 1)/x otherwise. Multiplication by (x+1) over F2[x]
+  is (f<<1) XOR f (distributing x*f XOR 1*f, no carries in char 2); adding
+  the constant 1 is XOR 1; the result is divisible by x exactly when f(0)=1,
+  i.e. f odd, which the map's domain guarantees -- checked below, not assumed.
+
+  [PASS] T2(x^2+1 = 0b101) = x^2+x+1 = 0b111
+  [PASS] T2(x^2 = 0b100) = x = 0b10
+    d   #polys  max stop  d^2+2d  max deg along orbit   journal(corrected)
+    4       16         9      24                    4
+  [PASS] d=4: exhaustive max stopping time = 9, <= d^2+2d, degree never exceeds d along the orbit
+    6       64        15      48                    6
+  [PASS] d=6: exhaustive max stopping time = 15, <= d^2+2d, degree never exceeds d along the orbit
+    8      256        21      80                    8
+  [PASS] d=8: exhaustive max stopping time = 21, <= d^2+2d, degree never exceeds d along the orbit
+   10     1024        29     120                   10
+  [PASS] d=10: exhaustive max stopping time = 29, <= d^2+2d, degree never exceeds d along the orbit
+   12     4096        35     168                   12
+  [PASS] d=12: exhaustive max stopping time = 35, <= d^2+2d, degree never exceeds d along the orbit
+   14    16384        43     224                   14  (37, wrong sample)
+  [PASS] d=14: exhaustive max stopping time = 43, <= d^2+2d, degree never exceeds d along the orbit
+   16    65536        51     288                   16  (39, wrong sample)
+  [PASS] d=16: exhaustive max stopping time = 51, <= d^2+2d, degree never exceeds d along the orbit
+
+====================================================================================================
+PART 5 -- SEC 169: EXACT MOBIUS COUNTS OF IMPRIMITIVE WORDS AT k=20,24 (AND 6,12,16)
+====================================================================================================
+
+  From L-A2's own record (briefs/merle-round5-check-findings.md): the
+  admissible words at length k are gap-compositions of the seam sum
+  S = ceil(k*log2(3)) into k positive parts (C(S-1,k-1) of them, stars-and-
+  bars); a word is imprimitive (= "repeated", L-A2's B^j, j>1) iff it has a
+  period k/j for some divisor j of gcd(k,S) (only common divisors of k and S
+  can be periods, since a period-d block must itself sum to a value S/(k/d)
+  that is an integer). Standard Moebius inversion over the divisors of
+  g = gcd(k,S) counts the PRIMITIVE compositions; imprimitive = total - primitive.
+  This is re-derived here from that definition, not copied from run_123.py.
+
+    k    S  gcd    total words  imprimitive   fraction
+    6   10    2            126            6   4.76e-02
+  [PASS] k=6: imprimitive words = 6
+   12   20    4         75,582          126   1.67e-03
+  [PASS] k=12: imprimitive words = 126
+   16   26    2      3,268,760          792   2.42e-04
+  [PASS] k=16: imprimitive words = 792
+   20   32    4    141,120,525        5,005   3.55e-05
+  [PASS] k=20: imprimitive words = 5005
+   24   39    3 15,471,286,560          792   5.12e-08
+  [PASS] k=24: imprimitive words = 792
+  [PASS] fraction at k=24 is 5.1e-8 (2 sig figs)
+  [PASS] k=3: gcd(k,S)=1=1, so imprimitive count = 0
+  [PASS] k=4: gcd(k,S)=1=1, so imprimitive count = 0
+  [PASS] k=5: gcd(k,S)=1=1, so imprimitive count = 0
+  [PASS] k=7: gcd(k,S)=1=1, so imprimitive count = 0
+  [PASS] k=8: gcd(k,S)=1=1, so imprimitive count = 0
+  [PASS] k=11: gcd(k,S)=1=1, so imprimitive count = 0
+  [PASS] k=13: gcd(k,S)=1=1, so imprimitive count = 0
+  [PASS] k=14: gcd(k,S)=1=1, so imprimitive count = 0
+  [PASS] k=17: gcd(k,S)=1=1, so imprimitive count = 0
+
+  SEC 167 (corrsum mod d, Poisson(C/d)): the letter and the campaign map do
+  not define 'corrsum' operationally beyond naming d = 2^S - 3^k and the
+  Poisson comparison; per the brief's own instruction this is recorded as a
+  GAP, not guessed at -- no computation attempted here for Sec 167.
+
+====================================================================================================
+PART 6 -- KNIGHT 2025: THE 518 COPRIME PAIRS, THE CIRCULAR-EQUALITY LIST, L-A2's REDUCTION
+====================================================================================================
+  P1 -- re-verification of Knight's theorem by brute force, all coprime (S,k), k<=60, S>k*log2(3):
+  [PASS] 518 coprime (S,k) pairs tested: only integral member is the trivial cycle (2,1) -> 1   integral members found: [(2, 1, Fraction(1, 1))]
+  [PASS] 518 coprime (S,k) pairs at k<=60 (Merle's count)   counted 518
+
+  P2 -- circular equality of the Sturmian word (irrational slope) and Knight's word (rational slope):
+  [PASS] circular-equality list matches the letter exactly: equal={2,3,4,5,8,10,13,15,17,22,27,29,200}, differ={7,11,14,100,156,1000}   equal=[2, 3, 4, 5, 8, 10, 13, 15, 17, 22, 27, 29, 200] differ=[7, 11, 14, 100, 156, 1000]
+
+  P3 -- R on Knight's (Christoffel) word: R >= k/4 exact, R >= k/2 measured to k=300:
+  [PASS] R >= k/4 exactly on Knight's word, k=2..300
+  [PASS] R >= k/2 measured on Knight's word, every k=2..300   min R/k = 0.5489 at k=159
+
+  P4 -- gcd(S,k)=g>1: Christoffel(S,k) = Christoffel(S/g,k/g)^g and S/g = ceil((k/g)*L):
+  [PASS] for every k<=300 with gcd(S,k)>1: repeated word = base^g, and S/g = ceil((k/g)L)   failures: []
+
+  P5 -- the fixed-point mechanism behind the reduction (Queue 6's adjudication):
+        if w has fixed point m, does w^g (g literal repetitions) have the SAME fixed point?
+  [PASS] 813 (word, repeat-count) pairs: cycle_member(w^g) == cycle_member(w) exactly   failures: []
+
+  Adjudication, Queue 6 (b) vs (c): the composite affine map for w^g is the
+  g-fold FUNCTIONAL COMPOSITION of the affine map for w, and an affine map's
+  fixed point is preserved under taking a power of itself (m = A(m) implies
+  m = A^g(m), and generically A^g's fixed point is unique and therefore
+  equals A's) -- verified exactly above on 300 random words. This is exactly
+  L-A2's own mechanism ("fixed-point invariance under repetition + the seam
+  identity", briefs/merle-round5-check-findings.md's L-A2 text) applied to
+  cycle_member/integrality directly rather than to the gcd(q_P,R_0(P))
+  divisibility form L-A2 is phrased in. So: "every non-coprime (S,k) reduces
+  to the coprime case" is (b) -- a COROLLARY that follows from L-A2's own
+  proof method applied to the Christoffel-word family, not a literal restatement
+  of L-A2's own sentence (which is phrased in gcd/R_0 language, not integrality
+  of a fixed point directly) and not a new claim needing independent proof:
+  the reduction is exactly what "repeated word divisible iff its base is"
+  becomes when specialised to Knight's word family, and the specialisation
+  (P4 above) is itself verified computationally, independent of run_124.py.
+
+====================================================================================================
+PART 7 -- THE CITED WITNESS: T^k(2^k*m - 1) = 3^k*m - 1, ALL STEPS ODD (L-A10 residue)
+====================================================================================================
+  [PASS] T^k(2^k*m-1) = 3^k*m-1 with every intermediate step odd, k=1..40, five m per k
+
+====================================================================================================
+TOTAL: ALL CHECKS PASS
+====================================================================================================
