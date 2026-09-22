@@ -2,7 +2,8 @@
 Python implementation of comb.md section 18, on either sign (18.8).
 
 Supports: briefs/comb-explorer-brief.md (the comb explorer); briefs/signed-comb-brief.md
-(the explorer opened at any of the four roots); comb.md section 18.
+(the explorer opened at any of the four roots); comb.md section 18; briefs/spider-layer-brief.md
+(the class badge, spiders.md Definition 19.1.1).
 
 What it does:
   1. Reads viz/comb_explorer.html, extracts the text between the two marker lines
@@ -37,7 +38,11 @@ What it does:
        the two distances (18.3.1, 18.8.2): eta by iterating F to an F-periodic ring
          node, or to the first state with exit -1 in the singular component -- the
          definition, not the page's door-edge count -- and lambda by counting parent
-         edges to the ring.
+         edges to the ring;
+       nodeClass (spiders.md Definition 19.1.1): root (a ring node), abdomen (D>=2),
+         leg (depth 1, parent an abdomen), orphan link / hair fork (depth 1, a
+         depth-1 parent, by the node's own type), hair link (a link preceded by a
+         link -- provably empty, since a link's only child is always a fork).
   3. Compares the two on the canaries of both briefs (hard-coded expectations here,
      checked against BOTH implementations), on 2,000 random positive and 2,000 random
      negative states (|w| < 10^6, 3 does not divide w, d <= 40) for every function,
@@ -220,6 +225,23 @@ def children(W, D):
     return lst, dead, excluded
 
 
+def node_class(w, d):
+    """The spider-layer class (spiders.md Definition 19.1.1): abdomen (D >= 2), leg
+    (depth 1, parent an abdomen), orphan link / hair fork (depth 1, a depth-1 parent,
+    by the node's own type -- a link's only child is always a fork, spiders.md Item
+    A.1, so a link is never preceded by a link), hair link (a link preceded by a link
+    -- provably empty on either sign), root (any ring node)."""
+    if (w, d) in RING_OF:
+        return "root"
+    if d >= 2:
+        return "abdomen"
+    p, _ = parent(w, d)
+    own_link = (mod3(w) == 2)
+    if p[1] >= 2:
+        return "leg"
+    return "orphan link" if own_link else "hair fork"
+
+
 def raw_descent(w, d, a):
     """Iterate the raw map from x_a to the door y; tag from position and 18.1.2(iii)."""
     A, s, y = exit_data(w, d)
@@ -354,7 +376,7 @@ process.stdin.setEncoding('utf8');
 process.stdin.on('data', c => __chunks.push(c));
 process.stdin.on('end', () => {
   const reqs = JSON.parse(__chunks.join(''));
-  const fns = { v2, v3, mod3, exactDiv, isValidState, ringOf, exitData, stateOfOdd, F, nodeAt, lowestBranch, doors, parent, children, rawDescent, etaOf, pathToRoot, selfTest };
+  const fns = { v2, v3, mod3, exactDiv, isValidState, ringOf, exitData, stateOfOdd, F, nodeAt, lowestBranch, doors, parent, children, rawDescent, etaOf, pathToRoot, nodeClass, selfTest };
   const res = reqs.map(r => fns[r.fn](...r.args.map(a => (typeof a === 'string' && /^-?\d+$/.test(a)) ? BigInt(a) : a)));
   process.stdout.write(JSON.stringify(res, (k, v) => typeof v === 'bigint' ? v.toString() : v));
 });
@@ -600,7 +622,7 @@ def main():
         w, d = rand_state(1 if i < 200 else -1)
         reps.append((w, d, rng.randrange(0, d)))
 
-    canary_states = [(1, 1), (1, 2), (11, 1), (43, 1), (19, 3), (7, 1), (1, 4), (107, 1), (7, 3), (37, 1), (37, 2), (167, 1), (251, 1),
+    canary_states = [(1, 1), (1, 2), (11, 1), (43, 1), (19, 3), (7, 1), (1, 4), (107, 1), (7, 3), (37, 1), (37, 2), (167, 1), (251, 1), (17, 1), (67, 1), (13, 1),
                      (-1, 1), (-5, 1), (-7, 2), (-85, 1), (-341, 1), (-7, 1), (-7, 3), (-1, 2), (-13, 1), (-1, 3), (-17, 1), (-31, 1),
                      (-1, 4), (-5, 3), (-11, 1), (-5, 2), (-181, 1), (-109, 1), (-11, 2), (-49, 1), (-73, 1), (-1, 5), (-121, 1), (-1543, 3)]
     all_states = canary_states + states
@@ -621,6 +643,7 @@ def main():
         req("parent", w, d)
         req("children", w, d)
         req("pathToRoot", w, d, 10000)
+        req("nodeClass", w, d)
     for w, d in all_states:
         req("stateOfOdd", exit_data(w, d)[2])
     for x in xs:
@@ -729,6 +752,13 @@ def main():
         check(int(p["eta"]) - int(p["doorEdges"]) in (0, 1), "PY eta - door edges in {0,1} at %s" % (stt,))
     exp15 = [("-15", "odd", None), ("-44", "max", None), ("-22", "peak", None), ("-11", "door", None)]
     check(n_descent(-7, 1, 0) == [{"x": x, "tag": t, "sib": s} for x, t, s in exp15], "PY descent of -15")
+    # nodeClass canaries (spiders.md Item D): (1,2) abdomen, (7,1) leg (a fork), (17,1)
+    # orphan link, (13,1) leg (a fork), (67,1) hair fork -- and root at every ring node
+    class_canaries = {(1, 2): "abdomen", (7, 1): "leg", (17, 1): "orphan link", (13, 1): "leg", (67, 1): "hair fork"}
+    for stt, exp in class_canaries.items():
+        check(node_class(*stt) == exp, "PY nodeClass%s got %s expected %s" % (stt, node_class(*stt), exp))
+    for stt in ((1, 1), (-1, 1), (-1, 2), (-1, 4), (-5, 3), (-11, 1)):
+        check(node_class(*stt) == "root", "PY nodeClass%s should be root" % (stt,))
     # the same expectations on the JS side (these requests were issued above)
     canary("nodeAt", (1, 1), ["1", "1"], "nodeAt(1,1)")
     for s in (3, 5, 7, 9):
@@ -750,6 +780,12 @@ def main():
     check(js_73 == exp73, "JS (7,3) children")
     js_12d = res[idx["doors"][canary_states.index((1, 2))]]
     check(js_12d == [{"a": "0", "y": "3", "alive": False}, {"a": "1", "y": "5", "alive": True}], "JS (1,2) doors")
+    for stt, exp in class_canaries.items():
+        js_cls = res[idx["nodeClass"][canary_states.index(stt)]]
+        check(js_cls == exp, "JS nodeClass%s got %s expected %s" % (stt, js_cls, exp))
+    for stt in ((1, 1), (-1, 1), (-1, 2), (-1, 4), (-5, 3), (-11, 1)):
+        js_cls = res[idx["nodeClass"][canary_states.index(stt)]]
+        check(js_cls == "root", "JS nodeClass%s should be root, got %s" % (stt, js_cls))
     for stt, (eta, lam) in dist.items():
         p = res[idx["pathToRoot"][canary_states.index(stt)]]
         check(p["eta"] == str(eta) and p["lambda"] == str(lam) and not p["capHit"] and p["ring"] == "pos", "JS distances %s" % (stt,))
@@ -769,13 +805,17 @@ def main():
     out("--- 2,000 random positive and 2,000 random negative states (|w| < 10^6, 3 does not divide w, d <= 40) plus %d canary states, every function ---" % len(canary_states))
     counts = {}
     ring_counts = {}
+    class_tally = {}
     for k, (w, d) in enumerate(all_states):
         pairs = [("exitData", n_exit(w, d)), ("F", n_state(F(w, d))), ("doors", n_doors(w, d)), ("parent", n_parent(w, d)),
-                 ("children", n_children(w, d)), ("pathToRoot", n_path(w, d, 10000))]
+                 ("children", n_children(w, d)), ("pathToRoot", n_path(w, d, 10000)), ("nodeClass", node_class(w, d))]
         for fn, py in pairs:
             js = res[idx[fn][k]]
             check(js == py, "%s(%d,%d): JS %s vs PY %s" % (fn, w, d, json.dumps(js)[:160], json.dumps(py)[:160]))
             counts[fn] = counts.get(fn, 0) + 1
+        cls = node_class(w, d)
+        class_tally[cls] = class_tally.get(cls, 0) + 1
+        check(cls in ("root", "abdomen", "leg", "orphan link", "hair fork", "hair link"), "nodeClass(%d,%d) unexpected value %s" % (w, d, cls))
         y = exit_data(w, d)[2]
         js = res[idx["stateOfOdd"][k]]
         check(js == n_state(state_of_odd(y)) and js == n_state(F(w, d)), "stateOfOdd(%d) on the exit of (%d,%d)" % (y, w, d))
@@ -783,11 +823,13 @@ def main():
         r = pairs[5][1]["ring"]
         check((r == "pos") == (w > 0), "sign of the component at (%d,%d)" % (w, d))
         ring_counts[r] = ring_counts.get(r, 0) + 1
-    for fn in ("exitData", "F", "stateOfOdd", "doors", "parent", "children", "pathToRoot"):
+    for fn in ("exitData", "F", "stateOfOdd", "doors", "parent", "children", "pathToRoot", "nodeClass"):
         out("  %-11s %5d states compared" % (fn, counts[fn]))
     lam_max = max(int(n_path(w, d, 10000)["lambda"]) for w, d in states)
     out("  largest lambda among the random states: %d; every path reached its ring (positive %d; singular %d, fixed %d, 2-cycle %d among all states)"
         % (lam_max, ring_counts.get("pos", 0), ring_counts.get("sing", 0), ring_counts.get("fix", 0), ring_counts.get("two", 0)))
+    out("  nodeClass tally over all %d states compared (both signs): %s" % (len(all_states), class_tally))
+    check(class_tally.get("hair link", 0) == 0, "hair link occurs %d times among %d states, expected 0 (provably empty, spiders.md 19.1.1)" % (class_tally.get("hair link", 0), len(all_states)))
 
     # --- go-to on random odd x
     out("--- 300 random odd x of each sign, |x| < 10^12: stateOfOdd(x) and the path to the ring (eta, lambda, full path) ---")

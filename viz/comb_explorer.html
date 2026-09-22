@@ -39,6 +39,7 @@ sup{font-size:9px;}
 a.go{color:var(--text-accent);text-decoration:none;cursor:pointer;border-bottom:1px dotted var(--text-accent);white-space:nowrap;}
 .tag{font-family:system-ui,sans-serif;font-size:11px;padding:0 5px;border-radius:4px;border:1px solid var(--border);color:var(--text-secondary);margin-left:6px;}
 .tag-peak,.tag-sibpeak{background:var(--bg-cascade);color:var(--text-primary);}
+.badge{font-family:system-ui,sans-serif;font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid var(--border-strong);background:var(--bg-accent);color:var(--text-accent);white-space:nowrap;}
 .tag-door{background:var(--bg-door);}
 .msg{font-size:13px;color:var(--text-secondary);margin:6px 0 10px;min-height:1.2em;line-height:1.5;}
 .note{font-size:12px;color:var(--text-muted);margin-top:10px;}
@@ -51,6 +52,7 @@ tr.here td{background:var(--bg-select);}
 <body>
 <h1>Comb explorer</h1>
 <p>The peak comb (comb.md §18) is the backward tree of reduced states (&omega;, d), each node placed by its <strong>peak</strong> A = 3<sup>d</sup>&omega; &minus; 1 = 2<sup>s</sup>&middot;y, read as <em>branch s on the door y</em> (18.1). A node at branch s &ge; 3 hangs from the node at branch s &minus; 2 on the same door by a <strong>cascade edge</strong> (the peak divided by 4; 18.2.1, Lemma 18.2.5); the node at the lowest admissible branch hangs from the door's own state, one step of F, by a <strong>door edge</strong>. Read upward, every node has one cascade child and one door child per live door (Proposition 18.2.3): the <strong>top door</strong> 2<sup>d</sup>&omega; &minus; 1 is dead when it is a multiple of 3, the <strong>side doors</strong> never are (reverse.md 14.5.1). &lambda; is the level, the number of edges to the root; &eta; is the number of F-steps. The tree starts at the root (1,1), whose only child is (1,2), and &eta; = 1 + the door edges on the path (Proposition 18.3.2). The <strong>root selector</strong> opens the same construction on the negative odd integers (18.8), where the reduced map has three components, one per classical negative cycle: the singular root (&minus;1,1), whose door parent state(&minus;1) does not exist; the fixed state (&minus;1,2); and the 2-cycle (&minus;1,4) &harr; (&minus;5,3), whose comb ring has three nodes. Every rule is the same; &lambda; counts edges to the ring, &eta; counts F-steps to the F-cycle (or to the singular door), and &eta; &minus; (door edges) is 0 or 1 (18.8.2). The <code>+</code> control expands a node by one level, and nothing is computed before it is shown; clicking a card opens it in the panel: its path to the ring, the raw descent from any of its representatives through the peaks of the lower siblings on its door (18.4), and the chain of siblings. Rows are indented by level up to level 24 and flat beyond (the level is printed on every card). Every integer on this page is exact; integers longer than 24 digits are abbreviated and show in full when clicked.</p>
+<p style="font-size:12px;">Each card also carries a <span class="badge">class</span> badge (spiders.md §19, Definition 19.1.1): <strong>abdomen</strong> (depth &ge; 2), <strong>leg</strong> (depth 1, the first node of a hair, its parent an abdomen), <strong>orphan link</strong> or <strong>hair fork</strong> (a later node of a hair, by its own type), <strong>hair link</strong> (a link preceded by a link &mdash; provably empty), <strong>root</strong> (any ring node).</p>
 <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
 <label style="font-size:13px;color:var(--text-secondary);">root
 <select id="root" style="margin-left:6px;">
@@ -142,6 +144,21 @@ function children(W, D){
     list.push({ state: st, type: 'door', s: s, door: { a: dr.a, y: dr.y } });
   }
   return { list: list, dead: dead, excluded: excluded };
+}
+// nodeClass (spiders.md Definition 19.1.1, Item D): abdomen (D >= 2), leg (depth 1,
+// parent an abdomen -- the first node of a hair), orphan link (a non-leg link; a link's
+// only child is always a fork, spiders.md 19.1.1 Item A.1, so a link is never preceded
+// by a link), hair fork (a non-leg fork), hair link (a link preceded by a link --
+// provably empty, since no link ever has a link child; experiments/comb_explorer_check.py
+// confirms 0 occurrences), root (any ring node, either sign). Sign-blind: mod3 already
+// keeps residues in {0,1,2} for either sign (18.8).
+function nodeClass(w, d){
+  if (isRoot(w, d)) return 'root';
+  if (d >= 2n) return 'abdomen';
+  const p = parent(w, d).state;
+  const ownLink = mod3(w) === 2n;
+  if (p[1] >= 2n) return 'leg';
+  return ownLink ? 'orphan link' : 'hair fork';
 }
 // The block's raw trajectory from the representative x_a = 2^(d-a) 3^a w - 1 down to the door y
 // (Remark 18.1.3): x_a, 2x_(a+1), x_(a+1), ..., x_(d-1), 2A, A, A/2, ..., 2y, y. Tags: odd (an odd point of
@@ -258,6 +275,14 @@ function selfTest(){
   expRd.forEach((ex, i) => { const r = rd[i]; check(r && r.x === ex[0] && r.tag === ex[1] && (ex[2] === null ? r.sib === null : (r.sib !== null && sEq(r.sib, ex[2]))), 'descent of 213 point ' + ex[0]); });
   // the census constants sum to the recorded total
   check(CENSUS.length === 28 && CENSUS.reduce((p, q) => p + q, 0n) === CENSUS_TOTAL, 'census total');
+  // nodeClass canaries (spiders.md Item D): (1,2) abdomen, (7,1) leg (a fork), (17,1)
+  // orphan link, (13,1) leg (a fork), (67,1) hair fork
+  check(nodeClass(1n, 2n) === 'abdomen', 'nodeClass (1,2) abdomen');
+  check(nodeClass(7n, 1n) === 'leg', 'nodeClass (7,1) leg');
+  check(nodeClass(17n, 1n) === 'orphan link', 'nodeClass (17,1) orphan link');
+  check(nodeClass(13n, 1n) === 'leg', 'nodeClass (13,1) leg');
+  check(nodeClass(67n, 1n) === 'hair fork', 'nodeClass (67,1) hair fork');
+  check(nodeClass(1n, 1n) === 'root' && nodeClass(-1n, 1n) === 'root' && nodeClass(-1n, 2n) === 'root' && nodeClass(-1n, 4n) === 'root', 'nodeClass root at every ring node');
   // --- the negative canaries (18.8) ---
   check(mod3(-5n) === 1n && mod3(-7n) === 2n && mod3(-17n) === 1n && mod3(-25n) === 2n && mod3(-9n) === 0n, 'residues in {0,1,2}');
   check(exactDiv(-16n, 4n) === -4n && exactDiv(-27n, -9n) === 3n && v2(-16n) === 4n && v3(-27n) === 3n, 'signed division and valuations');
@@ -368,6 +393,7 @@ function ensureKids(n){
 }
 function edgeBadge(t){ return t === null ? '<span class="edge edge-root">' + (RINGS[root].length > 1 ? 'ring' : 'root') + '</span>' : '<span class="edge edge-' + t + '">' + t + '</span>'; }
 function doorName(a){ return a === null ? 'the singular door' : (a === 0n ? 'the top door' : 'side door a = ' + a); }
+function classBadge(w, d){ return '<span class="badge" title="the spider-layer class, spiders.md 19.1.1">' + nodeClass(w, d) + '</span>'; }
 function cardHTML(n){
   const st = n.state;
   let via = '';
@@ -376,6 +402,7 @@ function cardHTML(n){
   return '<div class="card' + (sel === n.key ? ' sel' : '') + '" data-k="' + n.key + '" style="' + indent(n.level) + '">'
     + '<button class="disc" data-k="' + n.key + '" title="expand or collapse">' + (n.expanded ? '−' : '+') + '</button>'
     + edgeBadge(n.edge)
+    + classBadge(st[0], st[1])
     + '<span class="st">(' + fmt(st[0]) + ', ' + st[1] + ')</span>'
     + '<span class="meta">peak ' + fmt(n.A) + ' = 2<sup>' + n.s + '</sup>·' + fmt(n.y) + ', branch ' + n.s + ' on door ' + fmt(n.y) + '</span>'
     + '<span class="meta">λ = ' + n.level + ' (' + census(n.level) + ') · η = ' + n.eta + '</span>'

@@ -1,25 +1,27 @@
 comb_explorer_check.py -- seed 20260915, 2026-09-16 (signed revision)
-core block: 243 lines between the markers, no DOM access
-node v20.10.0; 29891 requests answered
+core block: 266 lines between the markers, no DOM access
+node v20.10.0; 33952 requests answered
 --- the page's selfTest() under node ---
-  self-test: 13330 checks, 0 failures
+  self-test: 13336 checks, 0 failures
 --- canaries (both briefs' lists; JS and Python each against the expected values) ---
-  canaries: 133 checks so far, 0 failures
---- 2,000 random positive and 2,000 random negative states (|w| < 10^6, 3 does not divide w, d <= 40) plus 37 canary states, every function ---
-  exitData     4037 states compared
-  F            4037 states compared
-  stateOfOdd   4037 states compared
-  doors        4037 states compared
-  parent       4037 states compared
-  children     4037 states compared
-  pathToRoot   4037 states compared
-  largest lambda among the random states: 199; every path reached its ring (positive 2013; singular 649, fixed 646, 2-cycle 729 among all states)
+  canaries: 155 checks so far, 0 failures
+--- 2,000 random positive and 2,000 random negative states (|w| < 10^6, 3 does not divide w, d <= 40) plus 40 canary states, every function ---
+  exitData     4040 states compared
+  F            4040 states compared
+  stateOfOdd   4040 states compared
+  doors        4040 states compared
+  parent       4040 states compared
+  children     4040 states compared
+  pathToRoot   4040 states compared
+  nodeClass    4040 states compared
+  largest lambda among the random states: 199; every path reached its ring (positive 2016; singular 649, fixed 646, 2-cycle 729 among all states)
+  nodeClass tally over all 4040 states compared (both signs): {'root': 6, 'abdomen': 3913, 'leg': 77, 'hair fork': 26, 'orphan link': 18}
 --- 300 random odd x of each sign, |x| < 10^12: stateOfOdd(x) and the path to the ring (eta, lambda, full path) ---
   600 x compared; largest lambda 108, largest eta 89; no cap hit
 --- 200 random representatives of each sign (state as above, a in 0..d-1): the raw descent by iterating Col ---
   400 descents compared, 9654 points, 135 lower-sibling peaks named
 --- rendering under a stubbed document: go-to (137,517), 213, a random 300-digit odd x, a path past the render cap, -17, a random negative 100-digit odd x, -13,1 ---
-  page load under the stub, footer: self-test: 13330 checks, 0 failures
+  page load under the stub, footer: self-test: 13336 checks, 0 failures
   depth bound stated: 3 (tree container > row > span > abbreviation or exponent)
   (137,517)    pos; path 1365 nodes (lambda 1364, eta 1056): max nesting depth 3, rendered rows 2729 (cards 1365, stubs 1363, note rows 1), no exception; a full expansion of the ancestors would render 4206 rows
   213          pos; path 5 nodes (lambda 4, eta 2): max nesting depth 3, rendered rows 9 (cards 5, stubs 3, note rows 1), no exception; a full expansion of the ancestors would render 13 rows
@@ -31,4 +33,4 @@ node v20.10.0; 29891 requests answered
   9,1 (not a state): refused, the odd integer 91 offered as a link
   -1: refused in one line (the singular door; the door of no state)
 
-TOTAL: checks = 34844, failures = 0
+TOTAL: checks = 42971, failures = 0
