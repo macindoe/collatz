@@ -596,6 +596,10 @@ def walk_spider(W, D, census_members=None):
             k += 1
         STATS["hairs"] += 1
         STATS["maxlen"] = max(STATS["maxlen"], hair_len)
+        if census_members is not None:
+            tkey = "top" if kind == "top" else ("b>=3" if b >= 3 else f"b={b}")
+            tab = census_members.setdefault(tkey, {})
+            tab[hair_len] = tab.get(hair_len, 0) + 1
         # the forced hairs of the deep lower legs (19.5.3, corollary)
         if kind == "low" and b >= 3:
             check(tuple(word) == (0, 1, 0), f"C b>=3 hair is 010 at {(W, D, b)}")
@@ -649,11 +653,30 @@ def partC(rng, census_abdomens):
     out("=" * 78)
     c0 = CHECKS[0]
     t0 = time.time()
+    len_by_type = {}
     for (W, D) in census_abdomens:
-        walk_spider(W, D)
+        walk_spider(W, D, len_by_type)
     out(f"  every census abdomen, every leg (inside or past the level-18 boundary) walked to the true end of "
         f"its hair: {len(census_abdomens)} spiders, {STATS['hairs']} hairs, {STATS['members']} depth-1 members, "
         f"longest hair {STATS['maxlen']} nodes ({time.time() - t0:.1f}s)")
+    out("  true hair length (nodes) by leg type over the census abdomens -- shares of lengths 1..6:")
+    allc = {}
+    for key in ("b=0", "b=1", "b=2", "b>=3", "top"):
+        tab = len_by_type.get(key, {})
+        n = sum(tab.values())
+        for L_, c_ in tab.items():
+            allc[L_] = allc.get(L_, 0) + c_
+        out(f"    {key:5s} legs {n:6d}: " + ", ".join(f"{L_}: {tab.get(L_, 0) / n:.4f}" for L_ in range(1, 7)))
+    n = sum(allc.values())
+    out(f"    all   legs {n:6d}: " + ", ".join(f"{L_}: {allc.get(L_, 0) / n:.5f}" for L_ in range(1, 9)))
+    # 19.2's two-state chain, started from a link and from a fork (exact rationals)
+    from fractions import Fraction as Fr
+    fF, fL = {1: Fr(1, 3)}, {1: Fr(0)}
+    for L_ in range(2, 9):
+        fF[L_] = Fr(1, 3) * fF[L_ - 1] + Fr(1, 3) * fL[L_ - 1]
+        fL[L_] = fF[L_ - 1]
+    out("    19.2 chain from a link: " + ", ".join(f"{L_}: {float(fL[L_]):.4f}" for L_ in range(1, 7)))
+    out("    19.2 chain from a fork: " + ", ".join(f"{L_}: {float(fF[L_]):.4f}" for L_ in range(1, 7)))
     m0, h0 = STATS["members"], STATS["hairs"]
     for _ in range(2000):
         D = rng.randint(2, 14)
