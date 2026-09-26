@@ -1,8 +1,8 @@
 ---
 status: REFERENCE (lookup and collision visibility only; no fact lives here)
 scope: wiki-wide symbol registry — one row per symbol per frame, defining pointers by section number, closing collision index; subsumes spine.md §4 by reference
-updated: 2026-09-17
-source: the signed-layer containment audit (2026-08-15); briefs/symbols-registry-brief.md; briefs/comb-signatures-brief.md
+updated: 2026-09-26
+source: the signed-layer containment audit (2026-08-15); briefs/symbols-registry-brief.md; briefs/comb-signatures-brief.md; briefs/spider-coordinates-brief.md
 ---
 
 # Symbols: the wiki-wide registry
@@ -137,6 +137,10 @@ The seam (reverse.md §14.14) and the itinerary language (itinerary.md §14.15).
 | **hair** | a maximal chain of depth-1 nodes starting at a leg | spiders.md Definition 19.2.1 | |
 | **spider** | an abdomen together with every hair whose first node is one of its legs; the root's own piece, `{(1,1)}`, is not a spider | spiders.md Definition 19.2.1 (partition: Theorem 19.2.2) | |
 | **spider tree** | the tree whose nodes are the spiders and the root's piece, edges the comb's own edges from a spider's nodes to abdomens outside it | spiders.md Definition 19.3.1 (proved a tree: Proposition 19.3.2) | "spider level" (bound variable: comb edges of the spider tree to the root's piece) is not a row |
+| **lower leg**, **top leg**; leg index `b` | the legs of an abdomen `(Ω, D)`: a lower leg has core `y_b(Ω, D+1)`, the door `b` of the state one depth up (`b = 1, …, D−1`, and `b = 0` when `t = v₃(2^{D+1}Ω − 1) = 0`); the top leg, present iff `t = 1`, has core `y_0(Ω, D+1)/3` | spiders.md Lemma 19.5.1 | `b` — index; bare `t` there is a bound variable, as in 19.1.3 |
+| `desc` | the **hair descent** on depth-1 cores: `desc(x) = (3x+1)/4` at `x ≡ 1 (mod 8)`, `(x+1)/4` at `x ≡ 3 (mod 8)`, the comb parent while `x mod 24 ∈ {1, 17, 19}`; on `n = 2x − 1` a two-halving step of `T` or the sibling move `n ↦ (n−1)/4` | spiders.md Lemma 19.5.2 | the brief's provisional `P` was not adopted: `P` is the period (row above); "hair position" (the number of `desc`-steps to the leg) is a bound variable, not a row |
+| `w`, `ε_j`; `k`, `f`; `c_w` | the **hair word** `w = ε₁…ε_k` of a member (`ε = 0` a link step `x ↦ 4x − 1`, `1` a fork step `x ↦ (4x − 1)/3`), its length `k` and fork count `f = f(w)`; the constant `c_w = Σ 4^{k−i}3^{f_{i−1}}` of the member formula `3^f x + c_w = 4^k x_0` | spiders.md Definition 19.5.3, Proposition 19.5.3(a) | `w`, `ε`, `c` — index; `f(w)` is not 19.2's in-page `f(n \| ·)` |
+| **position** `(b, w)`; **lens** `lens_{b,w}` | a spider member's address: its leg index and hair word; the lens is the affine map `3^f x + c_w + 4^k` (top leg: `3^{f+1}x + 3c_w + 4^k`) whose `2,3`-free part is the abdomen's core `Ω`, with `b` and `D` read from its valuations | spiders.md Definition 19.5.3, Proposition 19.5.3(b) | "lens" is unrelated to the "operation lenses" of anchor-digit-search.md 17.7.4 (an ordinary word there) |
 
 ## 5. Signed layer
 
@@ -210,8 +214,10 @@ Every glyph with two or more registry rows, all meanings side by side. Frame num
 | `L` | **(3, odd-step)** `L = log₂3` (cycles.md 12.6.1.2) · **(6)** pattern/block length (aeh.md 13.2.1). Simons–de Weger's `L` (cycles.md 12.5) is an external pin. |
 | `Λ` | **(3)** the Baker linear form `Λ = K log 2 − n log 3` (cycles.md 12.8.2) · **(6)** the budget `Λ_N = ⌈τb⌉` (aeh.md 13.2.1). |
 | `β` | **(4)** letter affine offset `β_i` (reverse.md 14.14.4.1/14.14.8.2) · **(3)** local `β = log₂3` in the margin constants (cycles.md 12.6.1.5) · **(6)** `β = 2(2 − log₂3)`, the block-per-bit constant (aeh.md 13.2.3). |
-| `ε` | **(3)** cycle product errors `ε_t` (cycles.md 12.1.1) · **(5)** signature residue `ε = y* mod 3`, per-rotation `ε_i` (itinerary.md 14.15.9.11/14.15.9.2(3)). Generic analysis `ε` (tolerances) is prose. |
-| `c` | **(2)** the shifted valuation target family (stage3.md 11.8.6.3) · **(5)** sharp escape constant `c_σ(W)` (itinerary.md 14.15.9.9) · **(3)** margin limit constants `c_gen`, `c_strat` (cycles.md 12.6.1.5). |
+| `ε` | **(3)** cycle product errors `ε_t` (cycles.md 12.1.1) · **(5)** signature residue `ε = y* mod 3`, per-rotation `ε_i` (itinerary.md 14.15.9.11/14.15.9.2(3)) · **(4)** hair-word letters `ε_j ∈ {0,1}` (spiders.md Definition 19.5.3). Generic analysis `ε` (tolerances) is prose. |
+| `c` | **(2)** the shifted valuation target family (stage3.md 11.8.6.3) · **(5)** sharp escape constant `c_σ(W)` (itinerary.md 14.15.9.9) · **(3)** margin limit constants `c_gen`, `c_strat` (cycles.md 12.6.1.5) · **(4)** the hair-word constant `c_w` (spiders.md Proposition 19.5.3(a)). |
+| `b` | **(6)** the bit scale `b = ⌊log₂ N⌋` (aeh.md 13.2.1) · **(4)** the leg index `b` (spiders.md Lemma 19.5.1). Also the generic representative index in `x_b`, `y_b` (comb.md 18.4.1), of which the leg index is an instance. |
+| `w` | **(3)** arc weight `w(A)` (cycles.md §12.8) · **(4)** the hair word `w` (spiders.md Definition 19.5.3). Also a bound node variable in proofs (comb.md 18.2.2). |
 | `p` | **(3)** the cycle period (cycles.md §12) · **(4)** past-window length in `(p,q)` (itinerary.md 14.15.4.3). |
 
 **Numerical constants.**
