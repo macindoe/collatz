@@ -1,0 +1,192 @@
+==============================================================================
+merle_r16_check.py -- fresh verification of PR #6 (round 16)
+==============================================================================
+
+--- PART 0: canaries -- the four real cycles, product identity, both routes ---
+  +1: n=1, K=2, q=2^K-3^n=1, xs=[1]
+  -1: n=1, K=1, q=2^K-3^n=-1, xs=[-1]
+  -5: n=2, K=3, q=2^K-3^n=-1, xs=[-5, -7]
+  -17: n=7, K=11, q=2^K-3^n=-139, xs=[-17, -25, -37, -55, -41, -61, -91]
+
+--- PART 1: delta_direct and delta_chain; the two exact Legendre windows ---
+
+Derivation, direct route (this script's own words):
+  For a cycle of the odd map with n elements all >= X and K = sum_i v_2(3x_i+1),
+  the product identity prod(3x_i+1) = 2^K prod(x_i) gives, dividing by
+  prod(3x_i), the exact identity
+      2^K / 3^n = prod_i (1 + 1/(3x_i))
+  hence, taking log2 of both sides,
+      epsilon := K - n log2(3) = sum_i log2(1 + 1/(3 x_i)).
+  Using log2(1+u) = ln(1+u)/ln2 <= u/ln2 (from ln(1+u) <= u, u > 0):
+      epsilon <= (1/ln2) * sum_i 1/(3 x_i) = (1/(3 ln2)) * sum_i 1/x_i
+              <= (1/(3 ln2)) * n/X          (each x_i >= X, trivially)
+              = n / (3 X ln2).
+  So epsilon/n <= delta_direct := 1/(3 X ln2).
+
+Derivation, chain route (L-A8's own, quoted from merle-la8-t1-check-findings.md
+item (c)): via the survivor bound + ceiling + two-bound
+(a "(m+1)^n < 2m^n" loss at 2n < 3X), the chain reaches
+      0 < K ln2 - n ln3 <= q/3^n < 2n/(3X)      (q = 2^K - 3^n)
+  and dividing by n ln2:
+      0 < K/n - log2(3) < 2/(3 X ln2) =: delta_chain.
+
+delta_direct is exactly HALF of delta_chain -- the "factor 2" the round-16
+letter traces to the chain's own two-bound loss, not to a slip in the figure
+that used delta_direct's value.
+
+floor(sqrt(3*X*ln2/2)) [direct, exact window]  = 49547666543
+floor(sqrt(3*X*ln2/4)) [chain,  exact window]   = 35035491004
+
+--- PART 2: integral (rational-under-approximation) forms ---
+largest n with 2000*n^2 <= 2079*X : 49542405870
+largest n with 4000*n^2 <= 2079*X : 35031771147
+
+--- PART 3: continued fraction of log2(3), from scratch, stability-checked ---
+partial quotients (150-digit): [1, 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, 55, 1, 4, 3, 1, 1, 15, 1, 9, 2, 5, 7, 1, 1, 4, 8]
+partial quotients (280-digit): [1, 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, 55, 1, 4, 3, 1, 1, 15, 1, 9, 2, 5, 7, 1, 1, 4, 8]
+stable prefix (30 terms): [1, 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, 55, 1, 4, 3, 1, 1, 15, 1, 9, 2, 5, 7, 1, 1, 4, 8]
+convergents p_j/q_j, j = 0..29:
+  j= 0  p=1  q=1
+  j= 1  p=2  q=1
+  j= 2  p=3  q=2
+  j= 3  p=8  q=5
+  j= 4  p=19  q=12
+  j= 5  p=65  q=41
+  j= 6  p=84  q=53
+  j= 7  p=485  q=306
+  j= 8  p=1054  q=665
+  j= 9  p=24727  q=15601
+  j=10  p=50508  q=31867
+  j=11  p=125743  q=79335
+  j=12  p=176251  q=111202
+  j=13  p=301994  q=190537
+  j=14  p=16785921  q=10590737
+  j=15  p=17087915  q=10781274
+  j=16  p=85137581  q=53715833
+  j=17  p=272500658  q=171928773
+  j=18  p=357638239  q=225644606
+  j=19  p=630138897  q=397573379
+  j=20  p=9809721694  q=6189245291
+  j=21  p=10439860591  q=6586818670
+  j=22  p=103768467013  q=65470613321
+  j=23  p=217976794617  q=137528045312
+  j=24  p=1193652440098  q=753110839881
+  j=25  p=8573543875303  q=5409303924479
+  j=26  p=9767196315401  q=6162414764360
+  j=27  p=18340740190704  q=11571718688839
+  j=28  p=83130157078217  q=52449289519716
+  j=29  p=683381996816440  q=431166034846567
+convergents with q_j <= w_direct (49547666543): 22
+convergents with q_j <= w_chain  (35035491004): 22
+
+--- PART 4: theta_j and the criterion theta_j > q_j*delta, both routes ---
+
+theta_j defined per merle-la8-t1-check-findings.md item (f):
+    theta_j = |q_j * log2(3) - p_j|
+(the classical best-approximation defect of the j-th convergent).
+
+theta_21 = 1.4604582698438714366635913676...
+margin at q_21, direct route (theta_21/(q_21*delta_direct)): 10.886539491512013968189746008...
+margin at q_21, chain  route (theta_21/(q_21*delta_chain)) : 5.4432697457560069840948730042...
+theta_22 = 6.6540488863878472740183497590...
+margin at q_22, direct route: 0.4990177409158849122213492042...
+margin at q_22, chain  route: 0.2495088704579424561106746021...
+
+--- PART 5: the integer discharge criteria, both routes, all 22 + failure at q_22 ---
+
+Trivial implication, stated: if 2000*q(q+q') <= 2079*X (chain criterion holds)
+then, since 1000*q(q+q') = (1/2)*2000*q(q+q') <= (1/2)*2079*X <= 2079*X
+(the last step because 1/2 <= 1 and both sides are nonnegative), the direct
+criterion 1000*q(q+q') <= 2079*X holds automatically -- it needs no q-specific
+fact at all, only that halving a quantity known to be <= something can only
+make it <= that same something. Checked directly for all 22 convergents below
+(not merely asserted): the chain criterion holding at each j implies the
+direct criterion holds at the same j.
+
+What 'implies the direct one' means in the entry's own terms: the chain's discharge_all is the STRONGER (harder to satisfy, coefficient 2000) integer criterion; since it is exactly twice the direct criterion's coefficient, every (q_j, q_j+1) pair that clears the harder chain bar automatically clears the easier direct bar at half the margin. It is not evidence that the direct route needs no independent proof -- the direct route's own theorems (log_gap_direct, quotient_is_convergent_direct) still had to be proved -- only that, once both hold, the direct discharge is implied by the chain discharge as a matter of arithmetic, not of number theory.
+
+--- PART 6: multiples cancellation, |t*q_j*L - t*p_j| = t*theta_j, t-invariance ---
+
+Algebra: the Legendre step delivers K/n in lowest terms as p_j/q_j (a REDUCED
+convergent), so a priori n = t*q_j for some integer t >= 1 and K = t*p_j.
+Then |n*L - K| = |t*q_j*L - t*p_j| = t*|q_j*L - p_j| = t*theta_j exactly
+(L irrational, t > 0, so no cancellation surprises), and the cycle's demand
+is |n*L - K| < n*delta = t*q_j*delta. Dividing both sides by t > 0:
+theta_j < q_j*delta -- the SAME per-convergent test as at t=1. So the
+discharge, once it kills q_j, kills every multiple of q_j in the window at
+once; this is exactly why the entry's number of convergent denominators (22)
+already accounts for every in-window n, not just the 22 denominators
+themselves.
+
+
+--- PART 7: negative control (58337919180) and the 'R/n <= 0.5727' reading ---
+negative control window, floor(ln2*sqrt(3X)) = 58337919180
+
+Trying to reproduce 'reaching Hercher's bound by this route would need
+R/n <= 0.5727' -- five distinct operational readings of what 'reaching
+Hercher's bound' could mean, computed here rather than guessed at:
+
+  A. rho such that window(rho) = q_23 (the window literally reaches
+     Hercher's underlying threshold, per the L-A8 adjudication of what
+     Hercher's printed 1.375e11 corresponds to exactly):
+       rho = (w_direct / q_23)^2
+  B. rho such that the EXACT discharge criterion at q_22 is at the boundary
+     (theta_22 = q_22 * rho / (3 X ln2)):
+       rho = theta_22 * 3 X ln2 / q_22
+  C. rho such that the CONSERVATIVE (1/(q_22+q_23)) bound at q_22 is at the
+     boundary:
+       rho = 3 X ln2 / (q_22 * (q_22 + q_23))
+  D. rho such that window(rho) = q_22 (the window reaches the LAST
+     convergent before Hercher's, i.e. the point the round-16 letter's own
+     negative control is measured against):
+       rho = (w_direct / q_22)^2
+  E. rho such that window(rho) reaches Hercher's Table-1 semiconvergent
+     figure q_21+q_22 = 72057431991:
+       rho = (w_direct / (q_21+q_22))^2
+
+  reading A (window reaches q_23): rho = 0.1297967659000100150130169832...
+  reading B (exact discharge boundary at q_22): rho = 0.4990177409158849122213492042...
+  reading C (conservative-bound boundary at q_22): rho = 0.3694339728741354977087391837...
+  reading D (window reaches q_22): rho = 0.5727348282085263575772173139...
+  reading E (window reaches q_21+q_22 semiconvergent): rho = 0.4728123927653667018798809236...
+
+Result: reading D -- rho such that the direct-route Legendre window reaches
+q_22 -- gives rho = 0.5727348282085263575772173139..., which rounds to 0.5727 and is the ONLY one of the
+five readings that matches. This is reported as the operational reading, not
+asserted as definitionally certain: the archived text does not spell out
+which of A-E (or some other construction) it means by 'reaching Hercher's
+bound by this route'. The numerical match is exact to four significant
+digits, which is strong evidence for reading D, but the entry itself is not
+explicit enough to call this a closed derivation rather than a very likely
+reconstruction -- recorded as such, per the brief's instruction not to guess
+past one stated reading once a match is found, and not further chased.
+
+Under reading D, the point of the negative control is now legible: the best
+known R/n (L-A11's sup, 1/(2 ln2) =~ 0.7214) is LARGER than the 0.5727 that
+reading D says would be needed to extend the window as far as q_22 -- so
+"no admissible family provides" the tighter ratio the route would need, and
+the window cannot be stretched that far by this method with any currently
+known R bound.
+
+
+--- PART 8: the one-move observation's C(w) difference formula ---
+one-move C(w) difference formula checked on 1968 random (word, move) instances, non-wrapping single-1-across-t-zeros moves
+
+The N <= 24 class count '56 / 233,324' (the share of primitive necklaces
+whose cyclic zero-run sequence takes two values a, a+t and is balanced) is
+NOT computed here. Standard primitive (aperiodic) binary necklace counts,
+via the Mobius formula (1/n) sum_{d|n} mu(d) 2^(n/d), give 698,870 necklaces
+of length exactly 24, and 1,465,020 summed over lengths 1..24 -- neither
+matches 233,324 under any reading tried. The archived text's own definition
+("balanced blocks of 1s, every zero run equal to t" alongside "takes two
+values a, a+t") is not internally consistent as a single operational
+criterion (the first phrase describes a SINGLE zero-run length, the second
+describes exactly TWO), and no reading recovers the stated denominator.
+RECORDED AS A GAP, per the brief's own instruction, and not chased further --
+this matches the treatment given to campaign-map section 167 in the round-15
+window (merle-round15-review-findings.md Section 4).
+
+
+==============================================================================
+TOTAL: 2023 checks, 0 failures
+==============================================================================

@@ -1,0 +1,104 @@
+==============================================================================
+merle_r17_check.py -- fresh verification of PR #7 (round 17) section 1
+==============================================================================
+
+--- PART 0/1: N_w derived from scratch, cross-checked against direct affine composition ---
+
+Derivation (this script's own words): a parity word b_0..b_{L-1} describes an
+orbit x_0 -> x_1 -> ... -> x_L under T_p, x_{i+1} = (p^{b_i} x_i + b_i)/2
+(b_i in {0,1}: even step p^0=1, odd/ascending step p^1=p). Unrolling:
+    x_L = x_0 * prod_i (p^{b_i}/2) + sum_i (b_i/2) * prod_{m=i+1}^{L-1} (p^{b_m}/2)
+        = x_0 * p^j / 2^L        + (1/2^L) * sum_i b_i * p^{j_{>i}} * 2^i
+where j = sum(b_i) (total ones) and j_{>i} = number of ones strictly after
+position i. Setting x_L = x_0 (a fixed point / L-cycle) and solving:
+    x_0 * (2^L - p^j) = sum_i b_i * p^{j_{>i}} * 2^i =: N_w
+    x_0 = N_w / (2^L - p^j).
+
+
+--- PART 2: the de Bruijn identification, verified directly ---
+  p=3 k= 6: bijection=True  arc-shift-property=True
+  p=3 k= 8: bijection=True  arc-shift-property=True
+  p=3 k=10: bijection=True  arc-shift-property=True
+  p=5 k= 6: bijection=True  arc-shift-property=True
+  p=5 k= 8: bijection=True  arc-shift-property=True
+  p=5 k=10: bijection=True  arc-shift-property=True
+  p=7 k= 6: bijection=True  arc-shift-property=True
+  p=7 k= 8: bijection=True  arc-shift-property=True
+  p=7 k=10: bijection=True  arc-shift-property=True
+
+--- PART 3: own Lyndon-word generator, canary counts, total to L<=22 ---
+  Lyndon counts L=1..8: [2, 1, 2, 3, 6, 9, 18, 30]
+  total Lyndon words L=1..22, by generation: 401428
+  total Lyndon words L=1..22, by Mobius formula: 401428
+
+--- PART 4: window-set collisions ('vertex set' key merges), p-independent ---
+  k=6  merges by L: {11: 2, 12: 10, 13: 16, 14: 28, 15: 54, 16: 102, 17: 214, 18: 456, 19: 840, 20: 1553, 21: 2838, 22: 4799}
+  k=8  merges by L (<=13 checked): {}
+  k=10 merges by L (<=16 checked): {}
+  pair 1 (the L<=11 faulty merge): j=8, L=11
+  pair 2 (the extra merge, unrelated to faulty count): j=3, L=11
+
+--- PART 5: faulty/realised classification, L<=11 exhaustive, all nine (p,k) ---
+  p=3 k= 6: vertex-set-key count=  63  TRUE count=  64  realised=[-136, -10, -1]
+  p=3 k= 8: vertex-set-key count=  88  TRUE count=  88  realised=[-136, -10, -1]
+  p=3 k=10: vertex-set-key count=  97  TRUE count=  97  realised=[-136, -10, -1]
+  p=5 k= 6: vertex-set-key count= 216  TRUE count= 217  realised=[-2]
+  p=5 k= 8: vertex-set-key count= 268  TRUE count= 268  realised=[-2]
+  p=5 k=10: vertex-set-key count= 281  TRUE count= 281  realised=[-2]
+  p=7 k= 6: vertex-set-key count= 265  TRUE count= 266  realised=[]
+  p=7 k= 8: vertex-set-key count= 330  TRUE count= 330  realised=[]
+  p=7 k=10: vertex-set-key count= 345  TRUE count= 345  realised=[]
+
+--- PART 6: extension to L<=22 ---
+  p=3 k= 6: faulty(L<=22)=   3011  realised=[-136, -10, -1]  at L=[1, 3, 11]
+  p=3 k= 8: faulty(L<=22)=  27611  realised=[-136, -10, -1]  at L=[1, 3, 11]
+  p=3 k=10: faulty(L<=22)=  44980  realised=[-136, -10, -1]  at L=[1, 3, 11]
+  p=5 k= 6: faulty(L<=22)=  53944  realised=[-2]  at L=[2]
+  p=5 k= 8: faulty(L<=22)= 202398  realised=[-2]  at L=[2]
+  p=5 k=10: faulty(L<=22)= 265669  realised=[-2]  at L=[2]
+  p=7 k= 6: faulty(L<=22)=  65980  realised=[]  at L=[]
+  p=7 k= 8: faulty(L<=22)= 256606  realised=[]  at L=[]
+  p=7 k=10: faulty(L<=22)= 337849  realised=[]  at L=[]
+
+total word count enumerated (Lyndon words, L<=22): 401428 against the letter's stated 401,428 -- MATCH: True
+
+--- PART 7: the '-6' diagnosis ---
+
+Both accumulators implemented independently from their STATED recurrences
+(not copied from run_048.py or run_130.py). run_048.py itself carries TWO
+independent bugs: (1) it composes the word in reverse (the C3 canary
+failure, round-14 finding), and (2) the round-17 letter's finding, isolated
+here by processing the word FORWARD (i.e. 'with reversed removed', matching
+the round-17 letter's own phrasing exactly) to inspect bug (2) alone:
+
+  The 'missing factor p on an ascent' accumulator, word processed FORWARD:
+  num, coef start at (0,1); for each bit b (forward order): if b:
+  num = (num+1)/2, coef = coef*p/2 (WRONG -- should multiply num by p too,
+  i.e. num = (p*num+1)/2); else: num = num/2, coef = coef/2. Fixed point:
+  num / (1 - coef).
+
+  Corrected accumulator (factor p applied to BOTH num and coef on an
+  ascent): a, c start at (1, 0); for each bit b (forward order): if b:
+  a, c = a*p/2, (c*p+1)/2; else: a, c = a/2, c/2. Fixed point: c/(1-a).
+  (This is IDENTICAL to xw_direct_composition above, PART 0/1 -- the
+  correct accumulator is not a new derivation, it is the same one already
+  cross-checked against the closed form on 2000 random words.)
+
+  word '110', p=3: faulty accumulator -> -3, correct -> -5
+  word '011', p=3: faulty accumulator -> -6, correct -> -10
+  faulty accumulator, words to length 12: 17 integers total, 10 lie on no cycle of T_3: [-14, -13, -6, -3, 5, 7, 9, 11, 14, 18]
+
+--- PART 8: round-17 section 3, for information -- bridge identity and FEN on the real cycles (cheap, exact; no key, no ledger line asked) ---
+
+Bridge (section 3's own statement, standard Collatz p=3): d(w) = 2^L - 3^r,
+C(w) = N_w (PART 0/1's own closed form, specialized to p=3) -- x*d(w) = C(w)
+iff x follows w. Already exercised throughout PARTs 5-6 at p=3 (every
+'realised' word found there IS a case of this bridge). FEN (Eliahou 1993,
+positive case; section 3 states it for both signs): every nonzero integer
+cycle has L <= 2r (r = number of ones), equality only on the word (0,1),
+i.e. the cycle {1,2}.
+
+
+==============================================================================
+TOTAL: 64 checks, 0 failures
+==============================================================================
