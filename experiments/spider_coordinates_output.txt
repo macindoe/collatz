@@ -10,7 +10,7 @@ PART 0 -- canaries
   (17,1): desc(17) = 13, owner (5,2); lens at 17 = 9*17 + 3 + 4 = 160 = 2^5 * 5
   (1,4): b = 3 leg 107, hair 107 -> 427 -> 569 -> 2275, word 010, then end
 
-census to level 18 built fresh from (1,1): 247932 nodes, per level [1, 1, 2, 3, 10, 17, 30, 61, 124, 239, 478, 961, 1978, 3823, 7748, 15597, 30844, 61947, 124068] (0.4s)
+census to level 18 built fresh from (1,1): 247932 nodes, per level [1, 1, 2, 3, 10, 17, 30, 61, 124, 239, 478, 961, 1978, 3823, 7748, 15597, 30844, 61947, 124068] (0.3s)
 abdomens 82490, depth-1 nodes 165441
 
 ==============================================================================
@@ -32,7 +32,7 @@ PART B -- Item B: the hair descent map desc and its raw form  [19.5.2]
 ==============================================================================
 PART C -- Item C: member formula and lens identity  [19.5.3]; PART D -- raw dictionary [19.5.4]
 ==============================================================================
-  every census abdomen, every leg (inside or past the level-18 boundary) walked to the true end of its hair: 82490 spiders, 192282 hairs, 906149 depth-1 members, longest hair 55 nodes (9.6s)
+  every census abdomen, every leg (inside or past the level-18 boundary) walked to the true end of its hair: 82490 spiders, 192282 hairs, 906149 depth-1 members, longest hair 55 nodes (9.9s)
   true hair length (nodes) by leg type over the census abdomens -- shares of lengths 1..6:
     b=0   legs  41286: 1: 0.3315, 2: 0.1139, 3: 0.1457, 4: 0.0857, 5: 0.0795, 6: 0.0531
     b=1   legs  82490: 1: 0.0000, 2: 0.5005, 3: 0.1673, 4: 0.0555, 5: 0.0729, 6: 0.0433
@@ -91,6 +91,8 @@ PART E -- Item E: the search for a walk-free identifier  [19.5.5]
   pairs constant on at least one spider: 4; max spiders constant for any pair: 1 of 41429; max shuffled-baseline spiders: 1
     example constant spider for (1,5): members [(1, 2), (7, 1), (11, 1), (43, 1)], level 1, value 1
   max hairs constant: 22934 of 43475; max link pairs: 41312 of 41312; max fork pairs: 27509 of 27509
+  shuffled-baseline maxima over all pairs: spiders 1, hairs 1, link pairs 3
+  maxima over the pairs not equivalent to (1,-1) or (3,-1): spiders 1, hairs 2, link pairs 4, fork pairs 2
   control: g_(3,-1) = exit y on depth-1 nodes, constant on 41312/41312 link pairs; derived: g_(1,-1) constant on 27509/27509 fork pairs
   window hairs (>= 2 nodes) whose steps are all fork steps: 6408; all link steps: 22934
     g_(1,-1) constant on 6409 hairs; g_(3,-1) constant on 22934 hairs
@@ -125,7 +127,7 @@ PART E -- Item E: the search for a walk-free identifier  [19.5.5]
     ( 1,  23):     10 members -- b=0 w=empty: 2/20635; top w=empty: 2/13834
     ( 1, -11):      9 members -- b>=1 w=empty: 4/62151; b>=1 w=0: 2/30874
   pairs with any hit: 253 (110 canonical)
-  member hits at a position whose lens is not that pair (chance coincidences): 769 (against 1097430 hits in all, over 165441 depth-1 members x 550 pairs)
+  member hits at a position whose lens is not that pair (chance coincidences): 769, at most 12 for any one pair (against 1097430 hits in all, over 165441 depth-1 members x 550 pairs)
     lens at b>=1 w=empty: (alpha, beta) = (1, 1) returns Omega at 62151/62151 members
     lens at b=0  w=empty: (alpha, beta) = (1, 1) returns Omega at 20635/20635 members
     lens at top  w=empty: (alpha, beta) = (3, 1) returns Omega at 13834/13834 members
@@ -153,4 +155,4 @@ PART E -- Item E: the search for a walk-free identifier  [19.5.5]
     constructions: 336 (j = 0..6, a = 3..24 step 3, c = 1..6), each verified by descent and by comb-parent ascent
 
 ==============================================================================
-TOTAL: 15380113 checks, 0 failures; wall clock 33.8s
+TOTAL: 15380113 checks, 0 failures; wall clock 34.6s

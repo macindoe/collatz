@@ -993,6 +993,11 @@ def partE(rng, level, parent, children, census_abdomens):
                 f"level {level[ab]}, value {free23(al * ab[0] + be) if al * ab[0] + be else 0}")
     out(f"  max hairs constant: {agg['h']} of {nh}; max link pairs: {agg['lp']} of {nlp}; "
         f"max fork pairs: {agg['fp']} of {nfp}")
+    out(f"  shuffled-baseline maxima over all pairs: spiders {agg['sp0']}, hairs {agg['h0']}, link pairs {agg['lp0']}")
+    oth = {kk: max(r[kk] for al, be, r in rows if canon(al, be) not in (canon(1, -1), canon(3, -1)))
+           for kk in ("sp", "h", "lp", "fp")}
+    out(f"  maxima over the pairs not equivalent to (1,-1) or (3,-1): spiders {oth['sp']}, hairs {oth['h']}, "
+        f"link pairs {oth['lp']}, fork pairs {oth['fp']}")
     # the two exact invariants, derived: free(3x-1) under link steps, free(x-1) under fork steps
     d = {(al, be): r for al, be, r in rows}
     check(d[(3, -1)]["lp"] == nlp, "E.1 free(3x-1) constant on every link pair (control)")
@@ -1154,13 +1159,18 @@ def partE(rng, level, parent, children, census_abdomens):
                   ("b=0", (1,)): (3, 5), ("top", (0,)): (3, 7), ("top", (1,)): (9, 7), ("b>=1", (0, 1)): (1, 7),
                   ("b=0", (1, 0)): (3, 23), ("b=0", (1, 1)): (9, 23)}
     off = 0
+    off_max = 0
     for nh_, al, be, classes in hits_tab:
+        off_pair = 0
         for key, v in classes.items():
             cls_key = (key[3], key[2])
             if lens_canon.get(cls_key) != canon(al, be):
                 off += v
-    out(f"  member hits at a position whose lens is not that pair (chance coincidences): {off} "
-        f"(against {sum(h[0] for h in hits_tab)} hits in all, over {len(d1)} depth-1 members x {len(rows)} pairs)")
+                off_pair += v
+        off_max = max(off_max, off_pair)
+    out(f"  member hits at a position whose lens is not that pair (chance coincidences): {off}, at most "
+        f"{off_max} for any one pair (against {sum(h[0] for h in hits_tab)} hits in all, over {len(d1)} "
+        f"depth-1 members x {len(rows)} pairs)")
     # the lens predictions, checked exactly: lens(k <= 2) coefficient pairs give Omega at every member there
     lens_pred = {("b>=1", ()): (1, 1), ("b=0", ()): (1, 1), ("top", ()): (3, 1),
                  ("b>=1", (0,)): (1, 5), ("b=0", (1,)): (3, 5), ("top", (0,)): (3, 7), ("top", (1,)): (9, 7),
