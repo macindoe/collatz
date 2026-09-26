@@ -1,0 +1,158 @@
+spider_coordinates.py -- seed 20260926, 2026-09-26
+Fresh code; imports nothing from any other script in this repository; positive comb only.
+
+==============================================================================
+PART 0 -- canaries
+==============================================================================
+  16 canary checks, 0 failures
+  (1,2): t = 0, legs (11,1) = y_1(1,3), (7,1) = y_0(1,3)
+  (5,2): t = 1, legs (59,1) = y_1(5,3), (13,1) = y_0(5,3)/3; children (13,2), (13,1)
+  (17,1): desc(17) = 13, owner (5,2); lens at 17 = 9*17 + 3 + 4 = 160 = 2^5 * 5
+  (1,4): b = 3 leg 107, hair 107 -> 427 -> 569 -> 2275, word 010, then end
+
+census to level 18 built fresh from (1,1): 247932 nodes, per level [1, 1, 2, 3, 10, 17, 30, 61, 124, 239, 478, 961, 1978, 3823, 7748, 15597, 30844, 61947, 124068] (0.3s)
+abdomens 82490, depth-1 nodes 165441
+
+==============================================================================
+PART A -- Item A: the legs are the doors of (Omega, D+1)  [19.5.1]
+==============================================================================
+  random abdomens (Omega < 10^6, 2 <= D <= 14): 3000; t = 0 / 1 / >=2: 1487 / 1031 / 482
+  claim 1 at D = 1 (cascade child numerator 3(4 Omega - 1)): 2000 random depth-1 nodes
+  every abdomen of the level-18 census: 82490
+  Part A: 1046447 checks, failures so far 0
+
+==============================================================================
+PART B -- Item B: the hair descent map desc and its raw form  [19.5.2]
+==============================================================================
+  random depth-1 nodes (x < 10^9): 15000, all 8 cells mod 24 hit: True
+  every depth-1 node of the census: 165441
+  hair position (desc steps to the leg) over the census: [(0, 96620), (1, 43475), (2, 15185), (3, 6367), (4, 2336), (5, 894), (6, 350), (7, 128), (8, 51), (9, 21), (10, 8), (11, 2)] ... max 14
+  Part B: 1199762 checks, failures so far 0
+
+==============================================================================
+PART C -- Item C: member formula and lens identity  [19.5.3]; PART D -- raw dictionary [19.5.4]
+==============================================================================
+  every census abdomen, every leg (inside or past the level-18 boundary) walked to the true end of its hair: 82490 spiders, 192282 hairs, 906149 depth-1 members, longest hair 55 nodes (9.9s)
+  true hair length (nodes) by leg type over the census abdomens -- shares of lengths 1..6:
+    b=0   legs  41286: 1: 0.3315, 2: 0.1139, 3: 0.1457, 4: 0.0857, 5: 0.0795, 6: 0.0531
+    b=1   legs  82490: 1: 0.0000, 2: 0.5005, 3: 0.1673, 4: 0.0555, 5: 0.0729, 6: 0.0433
+    b=2   legs  27432: 1: 0.0000, 2: 0.0000, 3: 0.0000, 4: 0.0000, 5: 0.1652, 6: 0.2207
+    b>=3  legs  13721: 1: 0.0000, 2: 0.0000, 3: 0.0000, 4: 1.0000, 5: 0.0000, 6: 0.0000
+    top   legs  27353: 1: 0.1701, 2: 0.2202, 3: 0.1292, 4: 0.1147, 5: 0.0827, 6: 0.0650
+    all   legs 192282: 1: 0.09539, 2: 0.27051, 3: 0.12143, 4: 0.12987, 5: 0.08369, 6: 0.07071, 7: 0.05199, 8: 0.04173
+    19.2 chain from a link: 1: 0.0000, 2: 0.3333, 3: 0.1111, 4: 0.1481, 5: 0.0864, 6: 0.0782
+    19.2 chain from a fork: 1: 0.3333, 2: 0.1111, 3: 0.1481, 4: 0.0864, 5: 0.0782, 6: 0.0549
+  random spiders (Omega < 10^6, 2 <= D <= 14): 2000 spiders, 15761 hairs, 72089 depth-1 members; longest hair overall 55 nodes
+  raw moves checked (4n+1 / (4n-1)/3, inverted by the raw descent): 770195
+  forced hairs of the deep lower legs: b >= 3 hair = 010 exactly at 23944 legs; b = 2 prefix 0101 (fifth node's class by 2^(D-1) Omega mod 3) at 29295 legs; b = 1 hair ends at its second node iff 2^D Omega = 1 (mod 3) at 84490 legs
+  Parts C-D walk: 12779358 checks, failures so far 0
+  admissible-word residue claim, sufficiency by random lifts: 163678 lifts (327356 checks)
+  admissible-word least modulus, full-coset over Omega mod 3^7 (D = 2..6, every leg type, every word prefix with derived exponent <= 6): {'exact': 1426, 'forced': 39}
+    ('exact' = the derived exponent is the least; 'forced' = the prefix holds at every Omega of that leg type; 'smaller' = a smaller modulus already suffices)
+    forced cases by leg (b, kind): (1, 'low'): [('0', 0)]; (2, 'low'): [('0', 0), ('01', 0), ('010', 0), ('0101', 1)]; (3, 'low'): [('0', 0), ('01', 0), ('010', 0)]; (4, 'low'): [('0', 0), ('01', 0), ('010', 0)]; (5, 'low'): [('0', 0), ('01', 0), ('010', 0)]
+  Part C total: 13108179 checks, failures so far 0
+
+==============================================================================
+PART E -- Item E: the search for a walk-free identifier  [19.5.5]
+==============================================================================
+  window spiders with abdomen at level <= 17: 41429 (every one of size >= 2: True; the 41061 abdomens at level 18 are alone in the window and left out); complete within the window (every hair ends inside it): 5129
+  window hairs: 96620 (43475 with >= 2 nodes); link pairs: 41312; fork pairs: 27509
+  largest core in the window: 45812984491 (27*max + 27 < 2^62: True)
+
+  E.1 affine lenses g(x) = 2,3-free part of (alpha x + beta) on the core, alpha in [1, 2, 3, 4, 6, 8, 9, 12, 16, 27], beta in [-27, 27] (550 pairs; none skipped: alpha x + beta = 0 occurs only at core 1 with beta = -alpha, counted with the sentinel value 0 -- 25 pairs, 337 zero values)
+  groups: spiders 41429 (complete 5129), hairs(>=2 nodes) 43475, link pairs 41312, fork pairs 27509
+  columns: spiders constant [of them complete] (distinct constant values) | shuffled baseline | hairs | baseline | link pairs | baseline | fork pairs
+  (311 distinct canonical pairs after dividing out common powers of 2 and 3; one row each, largest counts first)
+    ( 3,  -1): sp      0 [    0] (    0) |   0 | h  22934 |   0 | lp  41312 |   1 | fp      0
+    ( 1,  -1): sp      0 [    0] (    0) |   0 | h   6409 |   0 | lp      1 |   0 | fp  27509
+    ( 1,  -7): sp      0 [    0] (    0) |   0 | h      2 |   1 | lp      3 |   0 | fp      1
+    ( 1,  23): sp      0 [    0] (    0) |   0 | h      1 |   1 | lp      4 |   0 | fp      1
+    ( 1, -19): sp      0 [    0] (    0) |   0 | h      1 |   0 | lp      3 |   0 | fp      1
+    ( 1, -27): sp      0 [    0] (    0) |   0 | h      1 |   0 | lp      1 |   1 | fp      1
+    ( 1, -23): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      1 |   0 | fp      2
+    ( 1, -21): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      1 |   1 | fp      2
+    ( 1, -13): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      2 |   0 | fp      1
+    ( 1, -11): sp      0 [    0] (    0) |   1 | h      0 |   0 | lp      1 |   3 | fp      2
+    ( 1,   5): sp      1 [    1] (    1) |   0 | h      1 |   1 | lp      1 |   0 | fp      0
+    ( 1,  13): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      3 |   0 | fp      0
+    ( 1, -26): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      1 |   0 | fp      1
+    ( 1, -25): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      0 |   0 | fp      2
+    ( 1,  14): sp      0 [    0] (    0) |   0 | h      1 |   0 | lp      1 |   0 | fp      0
+    ( 1,  17): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      2 |   0 | fp      0
+    ( 1,  21): sp      0 [    0] (    0) |   0 | h      1 |   0 | lp      1 |   3 | fp      0
+    ( 1, -22): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      1 |   0 | fp      0
+    ( 1, -17): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      0 |   1 | fp      1
+    ( 1, -16): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      0 |   0 | fp      1
+    ( 1,  -9): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      0 |   0 | fp      1
+    ( 1,  -5): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      0 |   0 | fp      1
+    ( 1,  -3): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      1 |   0 | fp      0
+    ( 1,   2): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      1 |   0 | fp      0
+    ( 1,   8): sp      0 [    0] (    0) |   0 | h      0 |   0 | lp      1 |   0 | fp      0
+  pairs constant on at least one spider: 4; max spiders constant for any pair: 1 of 41429; max shuffled-baseline spiders: 1
+    example constant spider for (1,5): members [(1, 2), (7, 1), (11, 1), (43, 1)], level 1, value 1
+  max hairs constant: 22934 of 43475; max link pairs: 41312 of 41312; max fork pairs: 27509 of 27509
+  shuffled-baseline maxima over all pairs: spiders 1, hairs 1, link pairs 3
+  maxima over the pairs not equivalent to (1,-1) or (3,-1): spiders 1, hairs 2, link pairs 4, fork pairs 2
+  control: g_(3,-1) = exit y on depth-1 nodes, constant on 41312/41312 link pairs; derived: g_(1,-1) constant on 27509/27509 fork pairs
+  window hairs (>= 2 nodes) whose steps are all fork steps: 6408; all link steps: 22934
+    g_(1,-1) constant on 6409 hairs; g_(3,-1) constant on 22934 hairs
+    g_(1,-1) constant on a hair outside its step type: cores [5, 19, 25], values [1, 1, 1]
+    largest hair counts among pairs not equivalent to (1,-1) or (3,-1): [(2, 3, -21), (2, 2, -14), (2, 1, -7)]
+
+  E.1 comb quantities (all members; hairs >= 2 nodes; link pairs; fork pairs; shuffled baseline on spiders):
+    exit y        : spiders   3460 [complete     0] | hairs  22934 | link pairs  41312/41312 | fork pairs      0/27509 | baseline 0
+    peak A        : spiders      0 [complete     0] | hairs      0 | link pairs      0/41312 | fork pairs      0/27509 | baseline 0
+    odd part of A : spiders   3460 [complete     0] | hairs  22934 | link pairs  41312/41312 | fork pairs      0/27509 | baseline 0
+    top door y0   : spiders      0 [complete     0] | hairs      0 | link pairs      0/41312 | fork pairs      0/27509 | baseline 0
+    F(v)          : spiders   3460 [complete     0] | hairs  22934 | link pairs  41312/41312 | fork pairs      0/27509 | baseline 0
+    F^2(v)        : spiders   3463 [complete     2] | hairs  22936 | link pairs  41312/41312 | fork pairs      3/27509 | baseline 0
+      complete spiders with F^2(v) constant: abdomens [(1, 2), (3641, 2)], common value = 3^d w of [(1, 1), (1, 1)]
+    exit-constant spiders explained as {abdomen, cascade leg, its link-step child} (a cascade chain cut by the window): 3460 of 3460; complete ones: 0
+
+  E.1 (ii): which affine lenses return the owner's core Omega at a depth-1 member, by position
+    ( 1,   1):  82789 members -- b>=1 w=empty: 62151/62151; b=0 w=empty: 20635/20635
+    ( 1,   5):  30880 members -- b>=1 w=0: 30874/30874; b=0 w=empty: 2/20635
+    ( 3,   1):  13834 members -- top w=empty: 13834/13834
+    ( 1,   7):  10275 members -- b>=1 w=01: 10266/10266; top w=empty: 3/13834
+    ( 3,   5):   6904 members -- b=0 w=1: 6904/6904
+    ( 3,   7):   3461 members -- top w=0: 3461/3461
+    ( 9,   7):   2236 members -- top w=1: 2236/2236
+    ( 3,  23):   1736 members -- b=0 w=10: 1735/1735; b>=1 w=empty: 1/62151
+    ( 9,  23):   1131 members -- b=0 w=11: 1131/1131
+    ( 1, -19):     12 members -- b>=1 w=empty: 4/62151; b>=1 w=0: 2/30874
+    ( 1, -25):     10 members -- b=0 w=empty: 3/20635; b>=1 w=0: 2/30874
+    ( 1, -23):     10 members -- b>=1 w=empty: 3/62151; top w=empty: 2/13834
+    ( 1, -17):     10 members -- b>=1 w=empty: 3/62151; b=0 w=1: 1/6904
+    ( 1,  -7):     10 members -- b>=1 w=empty: 3/62151; b>=1 w=0: 1/30874
+    ( 1,  23):     10 members -- b=0 w=empty: 2/20635; top w=empty: 2/13834
+    ( 1, -11):      9 members -- b>=1 w=empty: 4/62151; b>=1 w=0: 2/30874
+  pairs with any hit: 253 (110 canonical)
+  member hits at a position whose lens is not that pair (chance coincidences): 769, at most 12 for any one pair (against 1097430 hits in all, over 165441 depth-1 members x 550 pairs)
+    lens at b>=1 w=empty: (alpha, beta) = (1, 1) returns Omega at 62151/62151 members
+    lens at b=0  w=empty: (alpha, beta) = (1, 1) returns Omega at 20635/20635 members
+    lens at top  w=empty: (alpha, beta) = (3, 1) returns Omega at 13834/13834 members
+    lens at b>=1 w=0    : (alpha, beta) = (1, 5) returns Omega at 30874/30874 members
+    lens at b=0  w=1    : (alpha, beta) = (3, 5) returns Omega at 6904/6904 members
+    lens at top  w=0    : (alpha, beta) = (3, 7) returns Omega at 3461/3461 members
+    lens at top  w=1    : (alpha, beta) = (9, 7) returns Omega at 2236/2236 members
+    lens at b>=1 w=01   : (alpha, beta) = (3, 21) returns Omega at 10266/10266 members
+    lens at b=0  w=10   : (alpha, beta) = (3, 23) returns Omega at 1735/1735 members
+    lens at b=0  w=11   : (alpha, beta) = (9, 23) returns Omega at 1131/1131 members
+  (window spiders whose window depth-1 members are all legs -- hairs cut at the window edge -- give up to 13853 for the pair (1,1); restricted to complete spiders:)
+  complete spiders on which one pair returns Omega at every depth-1 member: max over pairs 1 of 5129 (pair (1, 5))
+
+  E.2 the hair position j (desc steps to the leg): exact least modulus by full-coset search
+    j = 0: sufficient 2^3*3 = 24; exact least modulus 24 = 2^3*3^1; minimal (a,b): [(3, 1)]; census nodes at j: 96620; census-consistent least modulus: 24
+    j = 1: sufficient 2^5*3 = 96; exact least modulus 96 = 2^5*3^1; minimal (a,b): [(5, 1)]; census nodes at j: 43475; census-consistent least modulus: 96
+    j = 2: sufficient 2^7*3 = 384; exact least modulus 384 = 2^7*3^1; minimal (a,b): [(7, 1)]; census nodes at j: 15185; census-consistent least modulus: 384
+    j = 3: sufficient 2^9*3 = 1536; exact least modulus 1536 = 2^9*3^1; minimal (a,b): [(9, 1)]; census nodes at j: 6367; census-consistent least modulus: 1536
+    j = 4: sufficient 2^11*3 = 6144; exact least modulus 6144 = 2^11*3^1; minimal (a,b): [(11, 1)]; census nodes at j: 2336; census-consistent least modulus: 6144
+    j = 5: sufficient 2^13*3 = 24576; exact least modulus 24576 = 2^13*3^1; minimal (a,b): [(13, 1)]; census nodes at j: 894; census-consistent least modulus: 24576
+    j = 6: sufficient 2^15*3 = 98304; exact least modulus 98304 = 2^15*3^1; minimal (a,b): [(15, 1)]; census nodes at j: 350; census-consistent least modulus: 98304
+    j = 7: sufficient 2^17*3 = 393216; exact least modulus 393216 = 2^17*3^1; minimal (a,b): [(17, 1)]; census nodes at j: 128; census-consistent least modulus: 393216
+
+  E.2 owner's D and Omega mod 3 at fixed position: two members congruent mod 2^a 3^c at the same position j with owners of different D and different Omega mod 3 (construction of 19.5.5, checked by ground truth)
+    constructions: 336 (j = 0..6, a = 3..24 step 3, c = 1..6), each verified by descent and by comb-parent ascent
+
+==============================================================================
+TOTAL: 15380113 checks, 0 failures; wall clock 34.6s

@@ -1,6 +1,6 @@
 ---
 status: index
-updated: 2026-09-22
+updated: 2026-09-26
 ---
 
 # Collatz Reduction — Wiki Index
@@ -26,7 +26,7 @@ This repository is a wiki, not a versioned monolith. Each page carries its curre
 | `aeh.md` | §13: the Anchor Equidistribution Hypothesis — precise ensemble formulation (13.2), unconditional base case (13.2.4), conditional theorems (13.3), calibration record (13.4), anomaly resolved with routing lemma (13.5), the genericity form (13.6) | formalized; calibration clean; symbolic form named and proved |
 | `ladder.md` | §15: the depth ladder — exact dichotomy relating (ω,d) and (ω,d+1): one Collatz step off-spike, an affine kick at spikes; the divergence question answered | closed as local law |
 | `comb.md` | §18: the peak comb — the backward tree of reduced states with the even peak `A = 3^d ω − 1` as each node's coordinate, every door's infinite fan over `s` replaced by a chain of cascade edges, two distances (reduced `η`, peak `λ`), completeness against the raw map, a census by level with no size cutoff | FORMULATION (a construction; no front moves) |
-| `spiders.md` | §19: the spider layer — comb nodes classified as abdomens, forks and links by depth and residue, the depth-1 material organized into hairs and spiders (an abdomen plus its hairs), the partition of the comb, the hair-length law, and the spider tree with its census | FORMULATION plus measurements (no front moves) |
+| `spiders.md` | §19: the spider layer — comb nodes classified as abdomens, forks and links by depth and residue, the depth-1 material organized into hairs and spiders (an abdomen plus its hairs), the partition of the comb, the hair-length law, the spider tree with its census, and the coordinates of a spider: every member a closed formula in the abdomen and a position; no walk-free identifier | FORMULATION plus measurements (no front moves) |
 | `bridge.md` | §16: the terminal open object — the anchor increment at unbounded depth; the core-extraction deficit (two-sided digit budget) as its observed mechanism; consolidates 11.8.5.6 / 11.8.7.7 / 14.13 | OPEN (consolidation) |
 | `anchors.md` | §17.1–17.6: consolidated reference for the anchor across the wiki (pointers only) | REFERENCE |
 | `anchor-digit-search.md` | §17.7–17.10: the single-sequence digit-structure search program, executed clean on two statistical axes — breadth (17.7.1) and a 32×-deeper single-anchor probe (17.7.2) — plus a structural automaticity screen (17.7.3, M(ω) not 2-automatic), three operation lenses (17.7.4), and PractRand to 1 GB (17.7.5), all clean; plans (17.8–17.9) and standing (17.10) | executed search (clean; not 2-automatic) |
