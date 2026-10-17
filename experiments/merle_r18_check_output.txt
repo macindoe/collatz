@@ -1,0 +1,247 @@
+
+==============================================================================
+PART 0 -- canaries
+==============================================================================
+  [PASS] CF of log2(3): 30 partial quotients agree at 150 and 280 digits
+  [PASS] CF canary: q_1..q_5 = 1, 2, 5, 12, 41 (1-based, q_1 = 1)   (first denominators [1, 1, 2, 5, 12, 41, 53])
+  [PASS] cycle of 1: 1 odd element(s), K = 2   (n=1, K=2, q=2^K-3^n=1)
+  [PASS] cycle of -1: 1 odd element(s), K = 1   (n=1, K=1, q=2^K-3^n=-1)
+  [PASS] cycle of -5: 2 odd element(s), K = 3   (n=2, K=3, q=2^K-3^n=-1)
+  [PASS] cycle of -17: 7 odd element(s), K = 11   (n=7, K=11, q=2^K-3^n=-139)
+
+==============================================================================
+PART 1 -- fresh clone, pinned SHAs, the L-A10 amendment (Item A.1)
+==============================================================================
+  [PASS] pinned SHA 474125d (main after #6/#7) exists as a commit
+  [PASS] pinned SHA 031c454 (PR #8 head) exists as a commit
+  [PASS] refs/pull/8/head is 031c454 (PR #8 unmoved)   (031c454)
+  [PASS] PR #8 is one commit on 474125d   (474125d)
+  numstat 474125d..031c454:
+    +3 -0  LEDGER.md
+    +72 -0  briefs/merle-site-collaboration-block.md
+    +61 -0  rounds/R18-merle.md
+  [PASS] diff is +136/-0 over exactly three files
+  [PASS] LEDGER.md is +3/-0
+  entries at 474125d: L1, L2, L3, L-A1, L4, L-A2, L-A3, L-A4, L-A5, L-A6, L-A7, L-A8, L-A9, L-A10, L-A11
+  [PASS] same 15 entries, same order, at both SHAs
+  [PASS] L-A10 at 031c454 = L-A10 at 474125d plus exactly one line, nothing removed
+  the added line: *(Amended in round 18, 2026-10-02: **two keys.** Macindoe's approving review of PR #4 (round 14, 2026-09-12) turned the second key on this entry — "The second key turns on L-A10." — and this line was not updated at merge. Nothing else in the entry changes.)*
+  [PASS] the amendment line carries the quote verbatim and reads 'two keys'
+  [PASS] the amendment sits directly beneath L-A10's Key status line
+  [PASS] every other entry byte-identical between the two SHAs
+  [PASS] the head gains exactly the reading note (plus one blank line)
+  [PASS] PR #4 carries exactly one APPROVED review by macindoe   (2026-09-12T14:45:58Z)
+  [PASS] that review contains 'The second key turns on L-A10.' verbatim
+  [PASS] the review's date matches the amendment's '2026-09-12'
+
+==============================================================================
+PART 2 -- status lines per entry (Item A.2)
+==============================================================================
+
+  --- at 474125d (main) ---
+  L1: opens: **Claim as proposed:** the `p = 22` failure of the staircase recipe is Diophantine, not co
+      no `Key status`; last `Status` (+4): Status: `corrected` (both directions), and productive — closed 2026-07-17.**
+      our record: corrected
+  L2: opens: **Claim:** the published `p = 7` staircase (`m = (4,7,9,15,23,35,1)`, `n = 94`, `K = 149`)
+      no `Key status`; last `Status` (+4): Status: `two keys` (2026-07-16).** Merle: fresh code, conventions re-derived from the published pape
+      our record: two keys
+  L3: opens: **Claim:** on the `p = 7` instance, the closure equation `ω·q = R_r` is solvable over `R`,
+      no `Key status`; last `Status` (+4): Status: `two keys` (2026-07-17), with one structural sharpening.** Macindoe re-run: distance profile
+      our record: two keys (corrected, accepted)
+  L-A1: opens: **DRAFT — for co-editing (Ben, 2026-07-18; per the reply of the same date).**
+      no `Key status`; last `Status` (+4): Status: both keys turned on the mathematics; Lean artifact pending (Merle). Cross-stack test vectors
+      our record: two keys
+  L4: opens: **DRAFT — for co-editing (Ben, 2026-07-18; per the reply of the same date).**
+      no `Key status` and no `Status:` line
+      our record: two keys (measured)
+  L-A2: opens: **DRAFT — for co-editing (Ben, 2026-07-19; per the round-5 correspondence).**
+      no `Key status`; last `Status` (+6): Status: **two keys**.
+      our record: two keys
+  L-A3: opens: **DRAFT — for co-editing (Ben, 2026-07-19; per the round-5 correspondence).**
+      no `Key status`; last `Status` (+6): Status: **two keys**. Framing clause (the note's brick): the finite-pure mechanism is a spent finite
+      our record: two keys
+  L-A4: opens: **DRAFT — one key (Merle); for co-editing.**
+      no `Key status`; last `Status` (+8): Status: **two keys**.
+      our record: two keys
+  L-A5: opens: **Two keys (Merle: Lean kernel + independent scripts; Macindoe: clean-room re-derivation, 
+      Key status x1; first (+42): Key status, honestly:** the Macindoe key turns on the invariant, the landscape, and the separation l
+      our record: two keys
+  L-A6: opens: **DRAFT — one key (Merle, measured/assessed grade); Macindoe key invited.**
+      Key status x1; first (+23): Key status:** **two keys** — the census and the realizability filter exact on both sides (his measur
+      our record: two keys
+  L-A7: opens: **DRAFT — one key (Merle; theorem-grade modulo two published ingredients); Macindoe key in
+      Key status x2; first (+18): Key status, honestly:** the Macindoe key turns on the replication (digit-exact) and on the construct
+      last  (+91): Key status (2026-07-26): two keys, scope stated.** The Macindoe key turns on the replication of all 
+      our record: two keys
+  L-A8: opens: **DRAFT — one key (Merle: Lean kernel + scripts); Macindoe key invited.**
+      Key status x2; first (+77): Key status: two keys, scoped exactly as above** — the Macindoe key turns on the mathematics of every
+      last  (+134): Key status on this block: one key (Merle); Macindoe's invited — his note is its origin.
+      our record: two keys (incl. round-16 block, review 2026-09-26)
+  L-A9: opens: **DRAFT — one key (Merle: scripts, exact arithmetic, canaries). Macindoe key invited.**
+      Key status x1; first (+43): Key status: split grade, turn-with-offer.** The **Dirichlet half** (the claim, the chain reduction, 
+      our record: two keys on the Dirichlet half (h1 accepted 2026-08-17)
+  L-A10: opens: **Seeded at one key with artifacts committed, per your round-13 review** ("seed it as a le
+      Key status x1; first (+35): Key status: one key (Merle).** Yours is invited on this entry as you proposed. Placement in the note
+      our record: two keys (review 2026-09-12)
+  L-A11: opens: **Claim.** L-A8's seam chain never writes `R`; its `√X` window is *controlled by a bound o
+      Key status x1; first (+18): Key status: two keys** — Macindoe's turned in the round-15 review (2026-09-22; `experiments/merle_r1
+      our record: two keys
+
+  --- at 031c454 (PR #8) ---
+  L1: opens: **Claim as proposed:** the `p = 22` failure of the staircase recipe is Diophantine, not co
+      no `Key status`; last `Status` (+4): Status: `corrected` (both directions), and productive — closed 2026-07-17.**
+      our record: corrected
+  L2: opens: **Claim:** the published `p = 7` staircase (`m = (4,7,9,15,23,35,1)`, `n = 94`, `K = 149`)
+      no `Key status`; last `Status` (+4): Status: `two keys` (2026-07-16).** Merle: fresh code, conventions re-derived from the published pape
+      our record: two keys
+  L3: opens: **Claim:** on the `p = 7` instance, the closure equation `ω·q = R_r` is solvable over `R`,
+      no `Key status`; last `Status` (+4): Status: `two keys` (2026-07-17), with one structural sharpening.** Macindoe re-run: distance profile
+      our record: two keys (corrected, accepted)
+  L-A1: opens: **DRAFT — for co-editing (Ben, 2026-07-18; per the reply of the same date).**
+      no `Key status`; last `Status` (+4): Status: both keys turned on the mathematics; Lean artifact pending (Merle). Cross-stack test vectors
+      our record: two keys
+  L4: opens: **DRAFT — for co-editing (Ben, 2026-07-18; per the reply of the same date).**
+      no `Key status` and no `Status:` line
+      our record: two keys (measured)
+  L-A2: opens: **DRAFT — for co-editing (Ben, 2026-07-19; per the round-5 correspondence).**
+      no `Key status`; last `Status` (+6): Status: **two keys**.
+      our record: two keys
+  L-A3: opens: **DRAFT — for co-editing (Ben, 2026-07-19; per the round-5 correspondence).**
+      no `Key status`; last `Status` (+6): Status: **two keys**. Framing clause (the note's brick): the finite-pure mechanism is a spent finite
+      our record: two keys
+  L-A4: opens: **DRAFT — one key (Merle); for co-editing.**
+      no `Key status`; last `Status` (+8): Status: **two keys**.
+      our record: two keys
+  L-A5: opens: **Two keys (Merle: Lean kernel + independent scripts; Macindoe: clean-room re-derivation, 
+      Key status x1; first (+42): Key status, honestly:** the Macindoe key turns on the invariant, the landscape, and the separation l
+      our record: two keys
+  L-A6: opens: **DRAFT — one key (Merle, measured/assessed grade); Macindoe key invited.**
+      Key status x1; first (+23): Key status:** **two keys** — the census and the realizability filter exact on both sides (his measur
+      our record: two keys
+  L-A7: opens: **DRAFT — one key (Merle; theorem-grade modulo two published ingredients); Macindoe key in
+      Key status x2; first (+18): Key status, honestly:** the Macindoe key turns on the replication (digit-exact) and on the construct
+      last  (+91): Key status (2026-07-26): two keys, scope stated.** The Macindoe key turns on the replication of all 
+      our record: two keys
+  L-A8: opens: **DRAFT — one key (Merle: Lean kernel + scripts); Macindoe key invited.**
+      Key status x2; first (+77): Key status: two keys, scoped exactly as above** — the Macindoe key turns on the mathematics of every
+      last  (+134): Key status on this block: one key (Merle); Macindoe's invited — his note is its origin.
+      our record: two keys (incl. round-16 block, review 2026-09-26)
+  L-A9: opens: **DRAFT — one key (Merle: scripts, exact arithmetic, canaries). Macindoe key invited.**
+      Key status x1; first (+43): Key status: split grade, turn-with-offer.** The **Dirichlet half** (the claim, the chain reduction, 
+      our record: two keys on the Dirichlet half (h1 accepted 2026-08-17)
+  L-A10: opens: **Seeded at one key with artifacts committed, per your round-13 review** ("seed it as a le
+      Key status x1; first (+35): Key status: one key (Merle).** Yours is invited on this entry as you proposed. Placement in the note
+      our record: two keys (review 2026-09-12)
+  L-A11: opens: **Claim.** L-A8's seam chain never writes `R`; its `√X` window is *controlled by a bound o
+      Key status x1; first (+18): Key status: two keys** — Macindoe's turned in the round-15 review (2026-09-22; `experiments/merle_r1
+      our record: two keys
+
+  entries opening `DRAFT — one key` at 031c454: ['L-A4', 'L-A6', 'L-A7', 'L-A8', 'L-A9']
+  [PASS] exactly the five he names open with `DRAFT — one key`
+  entries opening `DRAFT — for co-editing`: ['L-A1', 'L4', 'L-A2', 'L-A3']
+  [PASS] four more open with a superseded `DRAFT — for co-editing` line (L-A1, L4, L-A2, L-A3)
+  [PASS] L-A10 opens `Seeded at one key` (a one-key opener of a different wording)
+  entries with no `Key status` line at all: ['L1', 'L2', 'L3', 'L-A1', 'L4', 'L-A2', 'L-A3', 'L-A4']
+  [PASS] eight entries carry no `Key status` line (their status sits in a `Status` sentence or a key-turn line)
+  [PASS] L-A4's two-key standing is carried by 'Status: **two keys**' inside its Macindoe key-turn paragraph
+  L-A8 last `Key status`: Key status on this block: one key (Merle); Macindoe's invited — his note is its origin.
+  [PASS] L-A8's last `Key status` occurrence (the round-16 block) still reads 'one key (Merle)'
+  L-A9 last `Key status`: Key status: split grade, turn-with-offer.** The **Dirichlet half** (the claim, the chain reduction, and the floor argume
+  [PASS] L-A9's last `Key status` line says the entry stays DRAFT until h1 is accepted, with no condition-met stamp
+  [PASS] ...while h1's acceptance (2026-08-17) sits ABOVE that line, not after it
+  [PASS] ...and that acceptance names the second key: 'this round-13 pull request's review turns it'
+  [PASS] L-A10's `Key status` line itself still reads 'one key (Merle)'; the 'two keys' is the italic amendment beneath it
+  [PASS] L-A5: its last `Key status` statement records two keys ((Condition met, 2026-07-24...)
+  [PASS] L-A7: its last `Key status` statement records two keys (Key status (2026-07-26): two...)
+  [PASS] the reading note names the rule 'last `Key status` line'
+
+==============================================================================
+PART 3 -- the block's numbers (Item B)
+==============================================================================
+  [PASS] direct and chain floors agree at 150 and 280 digits
+  [PASS] T1 direct floor = 49547666543   (49547666543)
+  [PASS] chain floor = 35035491004   (35035491004)
+  [PASS] integral (kernel-canary) window = 49542405870   (49542405870)
+  [PASS] 693/1000 < ln 2 exactly (so the integral window sits inside the exact one)
+  [PASS] 'length <= 4.95e10' is a true under-statement: 49500000000 <= integral window <= exact floor
+  [PASS] 4.95e10 is the 3-significant-figure rounding of both windows
+  [PASS] 'length' in T1 is n, the number of odd elements (L-A8's round-16 block: 'a cycle of the odd map with `n` elements')
+  [PASS] the next three convergent denominators past 6.5e9: 6586818670, 65470613321, 137528045312   ([6586818670, 65470613321, 137528045312])
+  [PASS] 22 convergents lie below the direct floor (q_0 = q_1 = 1 counted as two, the record's count)   (22 convergents, 21 distinct denominators)
+  [PASS] Hercher's 1.375e11 is q_23 = 137528045312 rounded to 4 s.f.
+  [PASS] the T1 window is weaker than Hercher's bound: 49547666543 < 1.375e11
+  [PASS] Hercher's sufficiency premise (verification to 3*2^69) is met by Barina's 2^71
+  [PASS] L-A9 c* stable at 60 and 120 digits
+  c* = 0.961722, margin 1 - c* = 0.038278
+  [PASS] L-A9: c* = 0.9617 and the margin 1 - c* = 0.0383 (= 2 - mu*)
+  [PASS] 'about 0.04' is the 1-significant-figure rounding of 0.0383
+  c_gen = 0.0793186; 1/13 = 0.0769231
+  [PASS] L-A7: c_gen = 0.0793186... (the exact constant, ours)
+  [PASS] L-A7: the kernel's 1/13 is a weaker (smaller) constant than c_gen
+  [PASS] the -17 cycle: n = 7, K = 11, q = 2^11 - 3^7 = -139 (negative shore)
+  [PASS] 139 is prime and gcd(139, 3^3 - 2^3) = gcd(139, 19) = 1 (shared content 1)
+  [PASS] the -17 cycle is primitive (7 distinct odd elements in one period)
+  Crossref 10.1016/j.disc.2025.114812: 'Collatz high cycles do not exist', Discrete Mathematics, vol 349, issue 3, art. 114812, issued [2026, 3], DOI registered 2025-09-24
+  [PASS] Knight: Discrete Math. 349(3), article 114812, issued 2026-03
+  [PASS] Knight: the DOI's '2025' is its registration year (online 2025), not the volume year
+  [PASS] the block's 'Discrete Math. 349 (2026), 114812' matches the volume year (issue not given)
+  [PASS] the shared ledger's L-A11 cites '349(3) (2025)' -- the online year, a correction for the ledger
+  Zenodo versions: [('2026-07-09', '10.5281/zenodo.21273548'), ('2026-07-17', '10.5281/zenodo.21421120'), ('2026-08-03', '10.5281/zenodo.21730505')]
+  [PASS] v3 (10.5281/zenodo.21730505) is the latest released version
+  [PASS] concept DOI is 10.5281/zenodo.21273547
+  v3 title: Reduced coordinates for the Collatz map: exact per-step laws, anchor dynamics, and the limits of counting arguments for cycles
+  [PASS] the block's '*Reduced coordinates for the Collatz map*' is v3's main title exactly (subtitle omitted)
+
+==============================================================================
+PART 4 -- occurrences in our tracked files (Items C, E)
+==============================================================================
+  Gersonides with year -: 42
+  Gersonides with year 1342: 1
+      briefs/merle-round5-check-findings.md:372
+  Gersonides with year 1342/43: 19
+      HANDOFF.md:55
+      TOUR.md:35
+      briefs/jointnote-premise-external-findings.md:434
+      briefs/jointnote-premise-external-findings.md:467
+      briefs/jointnote-v1-draft-brief.md:17
+      briefs/jointnote-v1-draft-findings.md:126
+      briefs/jointnote-v1-draft-findings.md:175
+      briefs/jointnote-v1-draft-patches/0001-NOTE-v1.md-the-two-page-first-version-the-counting-d.patch:51
+      briefs/literature-dictionary-findings.md:48
+      briefs/merle-round5-check-brief.md:18
+      briefs/merle-round5-check-brief.md:24
+      briefs/merle-round5-check-brief.md:31
+      briefs/merle-round5-check-findings.md:38
+      briefs/merle-round5-check-findings.md:115
+      briefs/merle-round5-check-findings.md:562
+      briefs/merle-round5-reply-brief.md:19
+      briefs/merle-round7-check-findings.md:201
+      briefs/wiki-consolidation-3-audit-findings.md:101
+      cycles.md:138
+  Gersonides with year 1343: 5
+      briefs/cycle-gateway-viz-brief.md:24
+      briefs/merle-round5-reply-brief.md:23
+      briefs/merle-round6-record-brief.md:9
+      briefs/wiki-consolidation-sweep-brief.md:46
+      viz/cycle_anchor_gateway.html:706
+  [PASS] our tracked files give the year both ways ('1342/43' and '1343')
+  'PROTOCOL §13' occurrences (excluding this window's files): 13
+      briefs/merle-round13-review-brief.md:7
+      briefs/merle-round13-review-findings.md:45
+      briefs/merle-round13-review-findings.md:52
+      briefs/merle-round13-review-findings.md:561
+      briefs/merle-round14-review-brief.md:9
+      briefs/merle-round14-review-findings.md:207
+      briefs/merle-round14-review-findings.md:386
+      briefs/merle-round14-review-findings.md:387
+      briefs/merle-round14-review-findings.md:854
+      briefs/merle-round15-review-brief.md:7
+      briefs/merle-round15-review-findings.md:211
+      briefs/merle-round16-17-review-findings.md:161
+      briefs/merle-round16-17-review-findings.md:183
+  [PASS] 'PROTOCOL §13' occurs only in briefs/ (session records), no wiki page
+  [PASS] PROTOCOL.md at 474125d has sections 1-7 and no section 13   (1,2,3,4,5,6,7)
+
+==============================================================================
+TOTAL: 65 checks, 0 failures
+==============================================================================
