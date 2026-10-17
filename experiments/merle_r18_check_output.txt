@@ -195,7 +195,7 @@ PART 3 -- the block's numbers (Item B)
 ==============================================================================
 PART 4 -- occurrences in our tracked files (Items C, E)
 ==============================================================================
-  Gersonides with year -: 42
+  Gersonides with year -: 43
   Gersonides with year 1342: 1
       briefs/merle-round5-check-findings.md:372
   Gersonides with year 1342/43: 19
@@ -218,6 +218,8 @@ PART 4 -- occurrences in our tracked files (Items C, E)
       briefs/merle-round7-check-findings.md:201
       briefs/wiki-consolidation-3-audit-findings.md:101
       cycles.md:138
+  Gersonides with year 1342/43,1342,1343: 1
+      HANDOFF.md:32
   Gersonides with year 1343: 5
       briefs/cycle-gateway-viz-brief.md:24
       briefs/merle-round5-reply-brief.md:23

@@ -141,7 +141,7 @@ The secondary sources split (DSB/Samsó: 1342; EJ and Simonson: 1343), and none 
 - **"1343" (5):** **`viz/cycle_anchor_gateway.html:706`** (public-facing badge "sealed: Gersonides, 1343"), `briefs/cycle-gateway-viz-brief.md:24`, `briefs/merle-round5-reply-brief.md:23`, `briefs/merle-round6-record-brief.md:9`, `briefs/wiki-consolidation-sweep-brief.md:46`.
 - **"1342" (1):** `briefs/merle-round5-check-findings.md:372` ("treats Gersonides' 1342 result", describing Ribenboim).
 
-Nothing was fixed in this window. The main session should change the viz badge to "1342/43". The briefs are session records and are best left as written.
+After this window's HANDOFF commit, the committed output lists one more occurrence: `HANDOFF.md:32`, the round-18 sentence that reports this recommendation and so names all three years. Nothing was fixed in this window. The main session should change the viz badge to "1342/43". The briefs are session records and are best left as written.
 
 ---
 
@@ -273,4 +273,5 @@ Its structure:
 - His PR body's tool footer is not recorded here or in the review.
 - Files were edited with Write/Edit and Python file writes (LF, UTF-8). The script's output was redirected in Bash, never via PowerShell `Set-Content`.
 - Reproduction: `python experiments/merle_r18_check.py > experiments/merle_r18_check_output.txt` → 65 checks, 0 failures, byte-identical on re-run (2026-10-18).
-- Encoding scan before the final commit: see the commit message of the last commit on this branch.
+- Encoding scan (`python experiments/encoding_scan.py`) before the final commit: **RESULT: CLEAN**.
+- The output was regenerated once, after the HANDOFF commit, because the occurrence listing (PART 4) reads the tracked tree and HANDOFF item 1 now names Gersonides' years. The committed output is the one the documented command reproduces at this branch's head.
