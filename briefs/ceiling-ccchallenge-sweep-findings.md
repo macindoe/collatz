@@ -175,11 +175,11 @@ The implication, written out. Lemme 3 gives, at each minimum `j`, a lower bound 
 **Ceiling question:** no cycle content. It cites Knight 2026 and poses its open problem (5), relating Knight's parity vectors to skeleton paths. Nothing bears on part 1 or 2.
 
 **Coordinate question — it bears directly on paper 1's coordinate claims.**
-1. **Exact dictionary.** Williams writes every odd `n` as `n = λ·2^a·3^b − 1`, `gcd(λ, 6) = 1`, `a ≥ 1` (p. 2, Lemma 2.14). Paper 1 (v3, Def. 2.1 and Prop. 2.3) writes `x + 1 = 2^m 3^a ω`, `3 ∤ ω`, with state `(ω, d)`, `d = m + a`. So **λ = ω**, Williams' `a` = paper's `m`, Williams' `b` = paper's `a`, and Williams's **row index `k = a + b` = the paper's depth `d`**.
-   - Her skeleton row `(λ, k)` (Prop. 3.3: `b = 0..k−1`, `a = k − b`) is exactly the paper's representative list of the reduced state `(ω, d)` (Prop. 2.3(iii): `x = 2^{d−a}3^aω − 1`, `0 ≤ a ≤ d−1`).
-   - Her diagonal flow `(a, b) → (a−1, b+1)` (Thm 3.6, "row index preserved", Cor. 3.8) is Prop. 2.3(i), the block cascade.
-   - Her boundary exit (Prop. 3.10: `v₂(3n+1) = 1 + v₂(λ3^{b+1} − 1)`, next odd = the odd part of `λ3^{b+1} − 1`) is Prop. 2.3(ii): `x_exit = A/2^s`, `A = 3^dω − 1`.
-2. **Her open problem (1)**, "the map sending one skeleton to the next has no known closed form. A complete characterization of this transition map would give a description of Collatz dynamics in skeleton coordinates" (p. 18), **is answered by paper 1's reduced map `F`** (Def. 2.1), together with the equivalence theorem (Thm 2.4).
+1. **Exact dictionary.** Williams writes every odd `n` as `n = λ·2^a·3^b − 1`, `gcd(λ, 6) = 1`, `a ≥ 1` (p. 2, Lemma 2.14). Paper 1 (v3, Def. 2.1 and Prop. 2.2) writes `x + 1 = 2^m 3^a ω`, `3 ∤ ω`, with state `(ω, d)`, `d = m + a`. So **λ = ω**, Williams' `a` = paper's `m`, Williams' `b` = paper's `a`, and Williams's **row index `k = a + b` = the paper's depth `d`**.
+   - Her skeleton row `(λ, k)` (Prop. 3.3: `b = 0..k−1`, `a = k − b`) is exactly the paper's representative list of the reduced state `(ω, d)` (Prop. 2.2(iii): `x = 2^{d−a}3^aω − 1`, `0 ≤ a ≤ d−1`).
+   - Her diagonal flow `(a, b) → (a−1, b+1)` (Thm 3.6, "row index preserved", Cor. 3.8) is Prop. 2.2(i), the block cascade.
+   - Her boundary exit (Prop. 3.10: `v₂(3n+1) = 1 + v₂(λ3^{b+1} − 1)`, next odd = the odd part of `λ3^{b+1} − 1`) is Prop. 2.2(ii): `x_exit = A/2^s`, `A = 3^dω − 1`.
+2. **Her open problem (1)**, "the map sending one skeleton to the next has no known closed form. A complete characterization of this transition map would give a description of Collatz dynamics in skeleton coordinates" (p. 18), **is answered in part by paper 1** — where the trajectory lands, not which skeleton it enters (calibrated in `briefs/williams-letter-findings.md`; `F`, Def. 2.1), together with the equivalence theorem (Thm 2.3).
    - Checked by fresh code: `python experiments/williams_coordinate_check.py > experiments/williams_coordinate_check_output.txt`. Every odd `n ≤ 200,001` (100,001 values, 66,668 distinct rows) gives 0 failures on all five identities, the last being `R(next odd) = F(R(n))` at every boundary exit.
 3. **Dates.** Williams v1: **2 Jul 2026**. Paper 1 v1 (Zenodo 10.5281/zenodo.21273548): **2026-07-09** (Zenodo API `publication_date`). **Williams is public first, by seven days**, on the state space (λ, k) and its intra-row flow. Paper 1's provenance paragraph dates the coordinates to an unpublished hand-drawn note of 13 March 2023. That is not a public record. Neither paper cites the other.
 4. **What is older than both.** The cascade itself is classical:
@@ -190,7 +190,7 @@ The implication, written out. Lemme 3 gives, at each minimum `j`, a lower bound 
 
    The record's existing concession ("Block-like decompositions … are classical", v3 p. 2; publication.md) already covers this. What Williams adds against the record is the **3-split and the row index**, i.e. the state `(ω, d)` itself.
 5. **Consequence for `publication.md`'s "Reduced blocks / states `(ω, d)`" line.** It currently reads "not found in this exact form". **It is now found in this exact form**: the state, its fibre and the intra-block flow, independently, in Williams 2026, one week before paper 1 v1. Not found in Williams:
-   - the induced self-map `F` and the conjugacy/equivalence (Thm 2.4, which Williams poses as open problem (1));
+   - the induced self-map `F` and the conjugacy/equivalence (Thm 2.3, adjacent to Williams's open problem (1));
    - the anchor and every law built on it;
    - the cycle apparatus.
 
@@ -207,7 +207,7 @@ The implication, written out. Lemme 3 gives, at each minimum `j`, a lower bound 
 
 **For the author to decide:**
 1. How v4 frames the sharpness residue. The refresh's "settling Simons–de Weger's 2005 expectation" is no longer the right framing: Rozier 1991 had already given the extremal profile for the relaxed system. The residue is its integer, all-rotations, bounded-slack realization.
-2. How v4 states provenance for `(ω, d)` given Williams' one-week public priority, and whether `F` (which answers Williams's open problem (1)) is worth saying so in v4.
+2. How v4 states provenance for `(ω, d)` given Williams' one-week public priority, and whether `F` (which answers Williams's open problem (1) in part; `briefs/williams-letter-findings.md`) is worth saying so in v4.
 3. Whether to contact anyone. Rozier is active (register entries 2017–2025; the 2022 SE answer) and is the natural reader of the residue. Williams is the natural reader of `F`. Nothing outward was done.
 4. Whether to pursue the Semantic Scholar Hercher gap further (an API key would lift the 429). zbMATH and OpenAlex both return 0–1 Hercher citers, so the gap is now small.
 
