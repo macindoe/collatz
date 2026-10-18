@@ -1,0 +1,16 @@
+# Brief: re-derive cycles.md 12.4's `m`-cycle translation (the claimed undercount) — for a delegated session
+
+**Why.** `briefs/ceiling-novelty-refresh-findings.md` (merged 2026-10-18) claims that Simons–de Weger 2005 define `m` on the Terras map as the number of maximal runs of odd terms (= local minima), that every reduced block is exactly one such run so their `m = p`, and that cycles.md 12.4's translation `m = #{t : m_t ≥ 2}` undercounts (its script: the published `p = 7` staircase has 7 runs, the 12.4 formula gives 6; the formula is `< p` at every `p = 8..18`). Consequence claimed: 12.4's clause "any cycle must contain more than `M₀` deep-entry blocks" is unsupported, while "no cycle of period `p ≤ M₀`" and the `p > 91` calibration stand. A reviewer's correction is still a claim — and this one touches a proved page, and paper 1 v4 (decided 2026-10-18) will rely on `m = p`.
+
+**Context required before starting:** `README.md`, `AGENTS.md`, `spine.md` (the reduced block, its runs), `cycles.md` 12.1 and 12.4, `briefs/ceiling-novelty-refresh-findings.md` (the claim, and §3's SdW dictionary), `experiments/ceiling_novelty_check.py` (read, do not reuse). Simons–de Weger 2005 at source (Acta Arith. 117, 51–70, DOI 10.4064/aa117-1-3; open copies at IMPAN, and v1.44 at math.deweger.net) — their definition of `m`-cycle and of `k_i`, `l_i`, read yourself. Downloads into their own directory outside the repo.
+
+## Items
+
+1. From SdW's own text, state their `m` and the map it is defined on. From `spine.md`, state what a reduced block is in raw odd/even runs. Derive by hand the relation between `p` and SdW's `m` for a reduced cycle; then derive what `#{t : m_t ≥ 2}` counts and whether it can differ.
+2. Fresh code (imports nothing from the refresh's script): build raw cycles of the Terras map from reduced block data (the published `p = 7` staircase; random admissible block data at `p = 2..20`; the known negative-shore cycles −1, −5, −17 as a sanity control), count SdW's `m` directly on the raw orbit, and compare with `p` and with 12.4's formula. One documented command reproduces the committed output.
+3. Verdict: is 12.4's translation wrong, and exactly which sentences of 12.4 (and any page that repeats its consequence — grep `12.4`, `M₀`, `deep-entry`, `m-cycle` across tracked pages, `TOUR.md`, `publication.md`, `paper/collatz-reduced-v3.tex`) are affected.
+4. If confirmed: rewrite 12.4 in place on the branch, conservatively (the statement and its consequence only; no proof "improvements"), front matter `updated`, a one-line current verification record per AGENTS.md; a separate commit. Other affected pages: list in the findings for the main session, do not edit.
+
+## Rules and deliverables
+
+Nothing outward; if a command is denied, stop and report. Edit/Write only; encoding scan before the last commit. Foreground until committed. Branch `cycles-12-4-recheck` from current `main` (`git merge --ff-only main` first if behind; record the base SHA). Deliverables: `experiments/cycles_12_4_recheck.py` + output, `briefs/cycles-12-4-recheck-findings.md` (the derivation, the check, the verdict, the affected-sentence list, what paper 1 v4 must say), and — only if confirmed — the 12.4 rewrite.

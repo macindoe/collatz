@@ -1,0 +1,20 @@
+# Brief: the staircase at a size threshold `X₀` — sharpness of the uniform trim for configurations whose minima are `≥ X₀`, realizing Rozier's 1991 extremal at the threshold Simons–de Weger pose — for a delegated session
+
+**Why.** The novelty refresh and the ccchallenge sweep (merged 2026-10-18) leave this as the claimable residue of paper 1's ceiling: the trim is Rozier 1991 (*Singularité* 2(5), Lemme 4, p. 11) / Simons–de Weger 2005 (Lemma 7); Rozier calls his lemma optimal over *real* tuples `(m_i)` (p. 11); Simons–de Weger "believe Lemma 7 is almost sharp for the worst case" (2005, p. 69), posed with the minima `≥ X₀`. The record proves sharpness at threshold 1 only (`q ≤ R_r` at every rotation; `cycles.md` 12.8.6). The author decided (2026-10-18) to extend it to the threshold as they posed it, for paper 1 v4. **Stopping rules:** this is a size-only construction serving the uniform trim — not a cycle search, no divisibility test, no per-period exclusion run. Keep it that way.
+
+**Context required before starting (in order):** `README.md` (stopping rules), `AGENTS.md`, `cycles.md` 12.1, 12.8 (all of it, esp. 12.8.3, 12.8.6 and its subsections — the construction, the availability theorem from `8 − 5·log₂3`, the `γ` bracket `[3.683012, 5.140212]`), `paper/collatz-reduced-v3.tex` §4 (`thm:staircase`), `briefs/staircase-allp-*-findings.md` and `briefs/staircase-gamma-upper-findings.md` (how 12.8.6 was proved and verified), `briefs/ceiling-novelty-refresh-findings.md` §§3–4 (SdW's quantifiers, the scope-gap note), `briefs/ceiling-ccchallenge-sweep-findings.md` §3.2 (Rozier's extremal, `m_j = c·(log₂3)^{j−1}`). Sources: SdW 2005 / v1.44 (their Lemma 7 with `c_m` depending on `X₀`; their p. 69 sentence), Rozier 1991 (scan at `probleme-syracuse.fr`, pp. 8–11) — read yourself; downloads outside the repo.
+
+## The question (fix the formulation first; record it in the findings before any proof)
+
+1. **Formulate** the threshold version in the record's notation: for `X₀ ≥ 1`, configurations of `p` blocks with every rotation satisfying `X₀·q ≤ R_r` (equivalently rational cycle elements `≥ X₀`), and the slack `γ = K − log₂ q`. State precisely what "sharp" must mean to answer SdW p. 69 as they posed it (their quantifier: for given `m` and `K`, the worst case over `k_i`, `l_i` with minima `≥ X₀`), and what to answer Rozier p. 11 (integer realization of his real extremal). If the two differ, say how, and pick the statement that answers both, or state both.
+2. **Prove** (or refute) that the staircase family, suitably scaled, meets every rotation's threshold condition with `γ ≤ log₂ X₀ + C` (or whatever the correct `X₀`-dependence turns out to be — derive it; do not assume it) at every period `p`, with explicit constants; and show the `X₀`-dependence is necessary (a matching lower bound), so the result is two-sided like 12.8.6's bracket.
+3. If the threshold version fails for the staircase as built, find what does work or record the obstruction exactly. Do not force it.
+
+Grade: theorem, with an independent numerical check in fresh code (exact rational/integer arithmetic; ranges of `p` and `X₀` recorded) per AGENTS.md "Before marking anything proved". One documented command reproduces the committed output.
+
+## Rules and deliverables
+
+A label is not a cause; a reviewer's correction is still a claim. Nothing outward; if a command is denied, stop and report. Edit/Write only; encoding scan before the last commit. Foreground until committed. Branch `staircase-x0-threshold` from current `main` (`git merge --ff-only main` first if behind; record the base SHA). Deliverables, content separate from structure:
+- `experiments/staircase_x0_threshold.py` + output;
+- `briefs/staircase-x0-threshold-findings.md` (formulation, proof, verification record, relation to Rozier p. 11 and SdW p. 69 stated exactly, what paper 1 v4 can say, anything for the author);
+- if proved, a new subsection of `cycles.md` after 12.8.6 (next free number; no renumbering), with its current-state clause and one-line verification record; `open-problems.md` updated if an entry posed it. Other pages: list for the main session.
