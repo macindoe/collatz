@@ -1,0 +1,8 @@
+Williams (arXiv:2607.01718) coordinates vs paper 1 reduced states, odd n <= 200001
+  1. (lambda, a+b) == R(n) = (w, d):            100001 odd n checked
+  2. row k of L_lambda == representatives of (w, d): 66668 distinct rows (d <= 40) checked
+  3. diagonal flow (a >= 2) == Prop 2.3(i):     50000 interior positions checked
+  4. boundary (a = 1): v2 = 1 + s, next = x_exit: 50001 boundary positions checked
+  5. row-exit map == F (R(next) == F(R(n))):      50001 boundary positions checked
+failures: 0
+ALL CHECKS PASS
