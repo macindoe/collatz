@@ -1,7 +1,7 @@
 ---
 status: periods 1–3 CLOSED; uniform trim RESOLVED (12.8); all-p sharpness PROVED (12.8.6 — unconditional for p ≥ 16, finite check for 3 ≤ p ≤ 15, p ∈ {2,4} by exhibition); front PARKED per stopping rules
 scope: new section 12 (post-monolith; first page with no monolith source)
-updated: 2026-09-13
+updated: 2026-10-19
 source: new material; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md)
 ---
 
@@ -68,13 +68,15 @@ A period-`p` cycle exists only if some stratum sequence admits a solution of the
 
 ## 12.4. Translation Dividend: `m`-Cycles
 
-A block with entry depth `m_t >= 2` contributes exactly one rising phase (`m_t - 1` odd steps) and one local maximum to the `T`-trajectory; a block with `m_t = 1` is a pure fall that merges into the preceding descent. Hence under the bijection of `9.8.4`, a period-`p` reduced cycle is precisely an *`m`-cycle* in the sense of Simons–de Weger with
+Simons–de Weger count on the Terras map (`x ↦ (3x+1)/2` for `x` odd, `x/2` for `x` even): an `m`-cycle is a periodic orbit with `m` local minima, read as `m` runs each of odd terms rising, then even terms falling (their `k_i` rising and `l_i` falling steps). In that map a block with entry depth `m_t` is exactly the parity word `1^(m_t) 0^(s_t)`, `m_t, s_t >= 1` (spine.md `5.4`–`5.5`): one maximal run of `m_t` odd terms up to one local maximum, then `s_t` halvings down to the next block entry, which is a local minimum. This includes `m_t = 1`: the entry `x ≡ 1 (mod 4)` still has `2x > x < (3x+1)/2`; such a block is a pure fall only in the odd-to-odd trajectory, which is not the one Simons–de Weger count in. Hence under the bijection of `9.8.4`, a period-`p` reduced cycle is precisely an *`m`-cycle* in the sense of Simons–de Weger, with their `k_i` our `m_t`, their `l_i` our `s_t`, and
 
 ```text
-m = #{ t : m_t >= 2 }  <=  p.
+m = p.
 ```
 
-Every known `m`-cycle exclusion therefore transfers verbatim: if `m`-cycles are excluded for `m <= M_0`, then no reduced cycle has `#{t : m_t >= 2} <= M_0`; in particular no cycle of period `p <= M_0` exists, and any cycle whatsoever must contain more than `M_0` deep-entry blocks.
+Every known `m`-cycle exclusion therefore transfers verbatim: if `m`-cycles are excluded for `m <= M_0`, then no reduced cycle of period `p <= M_0` exists — any cycle whatsoever must contain more than `M_0` blocks. The exclusion says nothing about how many of those blocks have entry depth `m_t >= 2`.
+
+*Verified* (fresh code, `experiments/cycles_12_4_recheck.py`, 2026-10-19): raw Terras cycles built from block data, with parity read off the orbit — the trivial cycle, the `p = 7` staircase of `12.8.3`, `1,140` random profiles at `p = 2..20`, and `−5`, `−17` traced from their integers — have exactly `p` maximal odd runs and, on the positive shore, exactly `p` local minima, at the block entries; `#{t : m_t >= 2}` falls below `p` whenever some `m_t = 1` (`961` of the random profiles; `6` against `7` on the staircase; `0` on the trivial cycle, Simons–de Weger's own `1`-cycle `{1, 2}`); `47,498` checks, `0` failures.
 
 ## 12.5. Period 2: Complete Classification
 
