@@ -150,7 +150,7 @@ The window may sit anywhere below `n*` and above `3p + 40`, since the proof only
 ### 5.2 Proof
 
 - **The window.** On `W`, `ε_p n ≤ g − λ`. The bottom satisfies `n* − N + 1 > 1/ε_p − N ≥ 1/(2ε_p) ≥ 3p + 40`, using `g − λ ≥ 1` and `N ≤ 1/(2ε_p)`. At `n ≥ 3p + 40`, `S > (L−1)n` gives `S ≥ p`, `S − p + 1 ≥ 21` and so `η ≤ 2^{−20}`, and `(L−1)(n − p) ≥ p + 1`, so (H0) holds.
-- **The sweep.** `δ(n₀ + j) = δ(n₀) − jL mod 1`. So `N` consecutive `n` give a reflected translate of `{jL mod 1 : 0 ≤ j < N}`, with the same gaps. By the three-distance theorem in its two-length case (Sós 1958; Świerczkowski 1959), at `N = q_k + q_{k−1}` the gaps are `θ_{k−1}` (`q_k` times) and `θ_k` (`q_{k−1}` times). `q_k θ_{k−1} + q_{k−1} θ_k = 1` was checked exactly, and the structure itself was checked exactly for `k ≤ 13` (`N ≤ 301,739`). The maximal gap is `θ_{k−1} ≤ ℓ`. A closed arc of length `ℓ` that contained no point would lie inside a gap longer than `ℓ`. So some `n ∈ W` lands in the arc, i.e. `g ≤ γ(n) ≤ g + 1`.
+- **The sweep.** `δ(n₀ + j) = δ(n₀) − jL mod 1`. So `N` consecutive `n` give a reflected translate of `{jL mod 1 : 0 ≤ j < N}`, with the same gaps. By the three-distance theorem in its two-length case (Sós 1958; Świerczkowski, Fund. Math. 46, 1958), at `N = q_k + q_{k−1}` the gaps are `θ_{k−1}` (`q_k` times) and `θ_k` (`q_{k−1}` times). `q_k θ_{k−1} + q_{k−1} θ_k = 1` was checked exactly, and the structure itself was checked exactly for `k ≤ 13` (`N ≤ 301,739`). The maximal gap is `θ_{k−1} ≤ ℓ`. A closed arc of length `ℓ` that contained no point would lie inside a gap longer than `ℓ`. So some `n ∈ W` lands in the arc, i.e. `g ≤ γ(n) ≤ g + 1`.
 - **Hypotheses.** `γ ≥ g ≥ ε_p n + λ ≥ Γ′(p, n)`, since `η ≤ 2^{−20}`. Also `γ ≥ 2 + η` and `γ ≥ log₂(X₀+1) + 1`. §4 applies.
 - **Brackets.** `γ − ε_p n ≤ g + 1 − ε_p(n* − N + 1) < λ + 1 + ε_p N ≤ λ + 1.5`. Next, `m_0 = ⌊γ − η⌋ ≥ 3`. At `p ≥ 10` and `n ≥ 1/(2ε_p)`, the tail term is `≤ 2^{−30}` (checked for `p ≤ 399`; it decreases super-exponentially after that), which gives `Ψ̄`.
 
@@ -200,7 +200,7 @@ Since `log₂ p` grows without bound, at fixed `X₀` and `p → ∞` the unit-b
 python experiments/staircase_x0_threshold.py > experiments/staircase_x0_threshold_output.txt
 ```
 
-The committed output has **188 checks, 0 failures**. Exact integers and rationals decide every size condition, threshold condition and witness. Floats appear only in reported logarithms and in margin-guarded comparisons, which print UNDECIDED rather than guess; none were undecided.
+The committed output has **188 checks, 0 failures**. A second run of the same command was byte-identical modulo line endings (2026-10-19). Exact integers and rationals decide every size condition, threshold condition and witness. Floats appear only in reported logarithms and in margin-guarded comparisons, which print UNDECIDED rather than guess; none were undecided.
 
 - **A. `L`:** enclosed to width `< 2^{−1380}` by an integer `atanh` series with explicit remainder; 399 certified partial quotients; signs cross-checked against exact `3^q` vs `2^p` at all 14 convergents with `q ≤ 2·10^5`; `q_k θ_{k−1} + q_{k−1} θ_k = 1` bracketed for `k ≤ 59`.
 - **B. Algebra:** the `A_r` closed form, the crash identity, `Γ′₀(p) < L/(L−1)` (`p ≤ 159`, both ends of the `L` interval), and `Γ′`'s `n`-slope `= ε_p`, all checked in exact rationals.
