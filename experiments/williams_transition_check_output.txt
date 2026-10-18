@@ -1,0 +1,11 @@
+Williams' row-exit map vs paper 1's F and Section 3 laws
+  range: lam < 2000 coprime to 6 (667 skeletons), rows 1 <= k <= 80; 53360 (lam, k) states
+  T1 literal diagonal flow to exit (1, k-1):      53360 states, 2107720 interior odd steps
+  T2 literal exit == F in Williams notation:       53360 states
+  T3 s law (Thm 3.3): lifting 13320, non-lifting 40040; max s = 18 at (lam, k) = (385, 32)
+  T4 a' = entry-depth law (Thm 3.5):               53360 states; max a' = 17 at (1739, 55)
+  T5 b' = absorption law (Lemma 3.4):              53360 states; s even with k != h(s): 17571, boundary k = h(s): 221
+  T6 skeletons whose rows exit into more than one skeleton: 667 of 667
+  T7 control (anchor shifted by 2, 5 <= lam < 300, k < 40): 956 of 956 lifting states rejected
+failures: 0
+ALL CHECKS PASS
