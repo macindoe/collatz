@@ -1,0 +1,60 @@
+Ceiling novelty refresh - dictionary checks (fresh code)
+========================================================================
+
+Part A - the record's p = 7 staircase (cycles.md 12.8.3)
+  p=7 staircase: p = 7, n = 94, K = 149, gamma = 6.744, crash depth m_(p-1) = 1
+    record size test (all q <= R_r): True;  SdW a_t >= 1 at every block start: True
+    a_t == R_t/q exactly at every block start: True
+    SdW m (maximal odd runs) = 7;  cycles.md 12.4's #{t : m_t >= 2} = 6
+    smallest block-start element x_min = 129.7251
+    (d-1) n/(d^m-1) = 2.2791;  log2 Lambda = -6.737;  log2 Lemma-7 RHS (X0 = x_min) = -0.864;  margin = 5.873 bits
+  PASS  n = 94, K = ceil(94 log2 3) = 149
+  PASS  passes all 7 record size tests and all 7 SdW a_t >= 1
+  PASS  dictionary: SdW a_t = (x_t + 1)/2^(m_t) equals the record's R_t/q at every block start
+  PASS  gamma = 6.74 as published
+  PASS  SdW m = 7 = p, while cycles.md 12.4's formula gives 6
+  PASS  SdW Lemma 7 holds on the configuration (its hypotheses a_i >= 1 hold)
+
+Part B - one 12.8.6.2 staircase per period, p = 8..18 (first n >= L^p meeting (H1))
+  p= 8 n=     41 gamma=6.455 crash=1 size(record/SdW)=True/True exact=True m_SdW=8 12.4-formula=4 expo=0.618 log2Lam=-6.447 log2RHS=0.917 margin=7.364
+  p= 9 n=     70 gamma=4.803 crash=1 size(record/SdW)=True/True exact=True m_SdW=9 12.4-formula=6 expo=0.659 log2Lam=-4.777 log2RHS=1.056 margin=5.833
+  p=10 n=    111 gamma=4.417 crash=1 size(record/SdW)=True/True exact=True m_SdW=10 12.4-formula=8 expo=0.656 log2Lam=-4.383 log2RHS=1.202 margin=5.585
+  p=11 n=    164 gamma=4.480 crash=1 size(record/SdW)=True/True exact=True m_SdW=11 12.4-formula=9 expo=0.609 log2Lam=-4.447 log2RHS=1.351 margin=5.797
+  p=12 n=    253 gamma=8.331 crash=1 size(record/SdW)=True/True exact=True m_SdW=12 12.4-formula=7 expo=0.591 log2Lam=-8.329 log2RHS=1.344 margin=9.672
+  p=13 n=    400 gamma=6.595 crash=1 size(record/SdW)=True/True exact=True m_SdW=13 12.4-formula=9 expo=0.589 log2Lam=-6.588 log2RHS=1.472 margin=8.059
+  p=14 n=    641 gamma=5.227 crash=1 size(record/SdW)=True/True exact=True m_SdW=14 12.4-formula=11 expo=0.595 log2Lam=-5.208 log2RHS=1.617 margin=6.825
+  p=15 n=   1005 gamma=3.734 crash=1 size(record/SdW)=True/True exact=True m_SdW=15 12.4-formula=14 expo=0.588 log2Lam=-3.678 log2RHS=1.837 margin=5.515
+  p=16 n=   1588 gamma=4.220 crash=1 size(record/SdW)=True/True exact=True m_SdW=16 12.4-formula=14 expo=0.586 log2Lam=-4.181 log2RHS=1.886 margin=6.067
+  p=17 n=   2518 gamma=4.517 crash=1 size(record/SdW)=True/True exact=True m_SdW=17 12.4-formula=15 expo=0.586 log2Lam=-4.485 log2RHS=1.938 margin=6.423
+  p=18 n=   3995 gamma=4.307 crash=1 size(record/SdW)=True/True exact=True m_SdW=18 12.4-formula=16 expo=0.587 log2Lam=-4.269 log2RHS=2.040 margin=6.310
+  PASS  every Part-B staircase passes all size tests, in both dictionaries, with a_t = R_t/q exactly
+  PASS  SdW m = p for every Part-B staircase
+  PASS  cycles.md 12.4's formula #{t : m_t >= 2} undercounts SdW's m at every Part-B p
+  PASS  p >= 16: these first-found witnesses have gamma <= 5.140212 (the record's upper bracket, 12.8.6.1)
+  PASS  Lemma 7's exponent (d-1)n/(d^m-1) stays O(1) (< 1.1) along the family: the d^(-m) decay is met
+  PASS  SdW Lemma 7 holds on every Part-B staircase (Lambda below its RHS)
+
+Part C - Halbeisen-Hungerbuehler's extremal word (Lemma 5): size-passers at every length, m linear in n
+  l=   41 n=  25 m_SdW=  16 min element=     6.258  M/(2^l-3^n)=     6.258  n/d^m=1.576e-02
+  PASS  l = 41: direct rotation-minimum equals HH's Corollary 1 value
+  PASS  l = 41: a size-passer (min element >= 1) once l >= 60
+  PASS  l = 41: m grows linearly in n (m >= n/3), so n << d^m
+  l=  101 n=  63 m_SdW=  38 min element=    18.859  M/(2^l-3^n)=    18.859  n/d^m=1.580e-06
+  PASS  l = 101: direct rotation-minimum equals HH's Corollary 1 value
+  PASS  l = 101: a size-passer (min element >= 1) once l >= 60
+  PASS  l = 101: m grows linearly in n (m >= n/3), so n << d^m
+  l=  211 n= 133 m_SdW=  78 min element=   231.111  M/(2^l-3^n)=   231.111  n/d^m=3.329e-14
+  PASS  l = 211: direct rotation-minimum equals HH's Corollary 1 value
+  PASS  l = 211: a size-passer (min element >= 1) once l >= 60
+  PASS  l = 211: m grows linearly in n (m >= n/3), so n << d^m
+  l=  409 n= 258 m_SdW= 151 min element=  1124.681  M/(2^l-3^n)=  1124.681  n/d^m=1.617e-28
+  PASS  l = 409: direct rotation-minimum equals HH's Corollary 1 value
+  PASS  l = 409: a size-passer (min element >= 1) once l >= 60
+  PASS  l = 409: m grows linearly in n (m >= n/3), so n << d^m
+  l= 1009 n= 636 m_SdW= 373 min element=   228.810  M/(2^l-3^n)=   228.810  n/d^m=1.572e-72
+  PASS  l = 1009: direct rotation-minimum equals HH's Corollary 1 value
+  PASS  l = 1009: a size-passer (min element >= 1) once l >= 60
+  PASS  l = 1009: m grows linearly in n (m >= n/3), so n << d^m
+
+========================================================================
+RESULT: ALL CHECKS PASS
