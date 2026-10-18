@@ -405,3 +405,132 @@ p  ∈  {2, 3, ..., 23},        with     γ / log_2 p  ∈  [1.828, 3.643]
 
 **Scope, and what is not covered.** The all-`p` sharpness claim is **proved**, and the scope word belongs with it: unconditionally for every `p >= 16` (`12.8.6.1` → `12.8.6.2`), by finite check for `3 <= p <= 15`, and by direct exhibition at `p ∈ {2, 4}`, which lie outside `12.8.6.2`'s reach. The proof is a composition of two theorems with hypotheses, not an unconditional identity: `12.8.6.2` consumes (H0) and (H1), and what `12.8.6.1` supplies is exactly an `n` meeting them. Four limits are part of the true statement and are not softened. `Γ` is conservative by `0.6`–`0.9` bits, so the certified family is narrower than the empirical one. `p ∈ {2, 4}` have exhibited size-passers but no theorem covering them, so "at every period" here means *every period, two of them by exhibition*. The finite tail `3 <= p <= 15` is covered at a widened scale (`κ` up to `1.70`), by exhibition rather than by the window statement. And the independent verification stops at `p ≈ 32` on big-integer cost (`n ≈ 2.5·10^6`, `3^n` at `4·10^6` bits) — a limit on the check, not on the theorem, nothing in which degrades with `p`. What the published `thm:staircase` assesses at `γ = O(log p)` is reached and exceeded: the demand does not grow with `p` at all, and the constructed family's `γ` is bracketed between two absolute constants, `3.683012` and `5.140212` (`12.8.6.1`). The lower end is the method's own floor; lengthening the same sweep drives the achieved `γ` down toward `Γ* = 3.683012` at the cost of a larger `p_0` (`briefs/staircase-gamma-upper-findings.md` §8). `12.8.5`'s strategic conclusion (the cycle front stays parked; the residual content of cycle exclusion is anchor-walk rigidity) is unchanged, as recorded above: this is sharper evidence that counting cannot do better, and **no evidence at all about exclusion**.
 
+## 12.8.7. The Staircase at a Size Threshold `X₀`
+
+**Current state (12.8.7).** This subsection proves 12.8.6's sharpness at the threshold where Simons–de Weger pose it: every cycle element at least `X₀`.
+
+- The `X₀`-cost is exactly `log₂ X₀` in `γ`. It combines with the trim's `ε_p n` as a maximum (`12.8.7.1`, `12.8.7.3`).
+- 12.8.6.2's construction, run unchanged under a weaker hypothesis, lands with a **deep crash** (`12.8.7.2`). This realises Rozier's real extremal in integers.
+- At every `X₀ ≥ 1` and every period `p ≥ p₁(X₀)`, the result meets every rotation's size condition with all elements `≥ X₀`, at `γ ≤ max(log₂(X₀+1), 2.71) + 2` and `Λ ≥ 0.0541·2^{−ε_p n}` (`12.8.7.4`).
+- The unit-block staircase as built provably cannot do this at the Lemma 7 scale (`12.8.7.5`).
+
+Size-only: no cycle search was run, no divisibility test was made, and no exclusion was computed. `12.8.5` is unaffected. The question was opened by the novelty refresh and the ccchallenge sweep (`briefs/ceiling-novelty-refresh-findings.md` §4.2, `briefs/ceiling-ccchallenge-sweep-findings.md` §3.2). The full derivation is in `briefs/staircase-x0-threshold-findings.md`.
+
+**The threshold, as posed.** Throughout, `ε_p := (L−1)/(L^p − 1)`. Put `a_r := R_r/q` and `x_r := 2^{m_r} a_r − 1`, the start of block `r`, i.e. a local minimum of the rational Terras cycle. `a_r` is Simons–de Weger's `a_i` in `x_i = 2^{k_i} a_i − 1`, and `x_min := min_r x_r` is the smallest element. Their Lemma 7 uses two size facts, `a_i ≥ 1` and `x_i ≥ X₀`. So the threshold size-passer is:
+
+- **(S)** `q ≤ R_r` at every rotation;
+- **(X)** `(X₀ + 1)·q ≤ 2^{m_r} R_r` at every rotation, i.e. `x_min ≥ X₀`.
+
+The stronger condition `X₀ q ≤ R_r` (`a_r ≥ X₀`) is not theirs. It is treated at `12.8.7.6`.
+
+**Proposition 12.8.7.1 (necessity: every configuration).** Let a `p`-block configuration have `q > 0`.
+
+1. **(i)** For every `r`, `x_r + 1 = 2^γ · Σ_t 2^{w(A_t)}(1 − 2^{−s_t})`, where `A_t` runs over the arcs ending at block `r−1`, including the empty one. Hence
+
+   ```text
+   γ − 1  ≤  log₂(x_min + 1)  <  γ + log₂ p .
+   ```
+
+2. **(ii)** (the trim, `12.8.1`, whose proof uses only (S)) Under (S), `γ + log₂ p > ε_p n`.
+3. **(iii)** (unit block) Under (S), with `p ≥ 2` and some `m_t = 1`: `γ + log₂ p > (L−1)(n − L^{p−1})/(L^{p−1} − 1)`. This is `≈ L·ε_p n − (L−1)`.
+4. **(iv)** (Rozier's minimax) For positive reals in any cyclic order, `max_j (m_j − (L−1)M_{j−1}) ≥ ε_p Σ m_j`.
+
+Consequently, an (S)+(X) configuration has `γ > max(ε_p n, log₂(X₀+1)) − log₂ p`. And `γ ≥ log₂(X₀+1) + 1` forces `x_min ≥ X₀` in any configuration.
+
+**Proof.**
+
+- **(i)** `12.8.1`'s exponent identity writes term `t` of `R_r` as `2^{K − m_r + w(A_t)}(1 − 2^{−s_t})`. Multiply by `2^{m_r}/q = 2^{m_r + γ − K}`. The empty-arc term is `≥ 1/2`, which gives the lower bound. For the upper bound, take partial weights `W_0 = 0`, `W_p = nL − K < 0`, and let `j*` minimise `W_j` over `1 ≤ j ≤ p`. At `r₀ = j* mod p`, every arc ending at `r₀ − 1` has weight `≤ 0`, so all `p` terms are `< 1`.
+- **(iii)** Walk `12.8.1`'s recursion `T_j < L T_{j−1} + γ'` from the reset, with `γ' = γ + log₂ p`, but take `T_{j₁} = T_{j₁−1} + 1` at the unit block. Iterating gives `n < γ'(L^{p−1} − 1)/(L − 1) + L^{p−1}`.
+- **(iv)** If every term were `< c`, then `Σ m < c(L^p − 1)/(L − 1)`.
+
+∎
+
+**Theorem 12.8.7.2 (Construction B under a weaker hypothesis: the deep crash).** Take Construction B and all symbols exactly as in `12.8.6.2`, with (H0) unchanged. Replace (H1) by
+
+```text
+(H1′)  γ ≥ max(2 + η, Γ′(p, n)),
+       Γ′(p, n) := 1 + η + [L^p − L² − (L−1)(p−2) + (L−1)² n] / [(L−1)(L^p − 1)]  =  ε_p n + Γ′₀(p) + η,   Γ′₀(p) < L/(L−1) = 2.7095113 .
+```
+
+Then the profile has all entries `≥ 1` and `Σ m_t = n`, and crash depth `c = n − T_{p−2} ≥ 1`. It satisfies `q ≤ R_r` at **every** rotation. Its Rozier quantity from block `0` is `max_j (m_j − (L−1)T_{j−1}) = m_0 ≤ γ − η`. If moreover `γ ≥ log₂(X₀+1) + 1`, it satisfies (X).
+
+**Proof.**
+
+- **Climb rotations.** `12.8.6.2`'s steps (a) and (e) are used verbatim. (a) needs only `γ ≥ 2 + η` and (H0). By (e), for `r ≤ p−2`, `m_r ≤ cap_r` is one term of `R_r`.
+- **The crash rotation.** `R_{p−1}` contains the term `3^{T_{p−2}}(2^{s_c} − 1)` (position `0` from `p−1`). So it suffices that `L·T_{p−2} ≥ n + p − 1 − γ + η`.
+  - If the budget never binds, `T_{p−2} > A_{p−2}` by `12.8.6.2` (b). Clearing (c) gives `L·A_{p−2} − (n + p − 1 − γ + η) = [(L−1)(L^p − 1)/(L−1)²]·(γ − Γ′(p, n)) ≥ 0`.
+  - If it binds, then `T_{p−2} = n − 1`, and the inequality is `(L−1)n ≥ L + p − 1 − γ + η`, which (H0) implies.
+- **Rozier quantity.** Climb terms `r ≥ 1` are `≤ γ − r − η < ⌊γ − η⌋`. The crash term is `< γ + 1 − p − η` (or `≤ 0` if the budget binds).
+- **(X)** follows from `12.8.7.1`(i).
+
+∎
+
+**The deep crash.** (H1′)'s `n`-slope is `ε_p`, the trim's own. 12.8.6.2's (H1) has slope `(L−1)/(L^{p−1} − 1) ≈ L·ε_p`. Where `γ < Γ(p, n)`, the budget never binds and `c` is large. The last block then continues the geometric climb, which is Rozier's extremal `m_j = c·L^{j−1}` in integers. Under (H1) the crash is a unit block.
+
+**Corollary 12.8.7.3 (the sandwich at given `(p, n)`).** Fix `p`, `n` with (H0), and `K = ⌈nL⌉`.
+
+- If `γ(n) ≥ max(ε_p n + L/(L−1) + η, log₂(X₀+1) + 1)`, an (S)+(X) configuration exists: Construction B.
+- If `γ(n) ≤ max(ε_p n, log₂(X₀+1)) − log₂ p`, none exists, for any `K`.
+
+Since `Λ` depends on `n` alone, this is Simons–de Weger's "worst case for given `m` and `K`", decided to within `(−log₂ p, L/(L−1) + η]`.
+
+**Theorem 12.8.7.4 (availability at threshold `X₀`: every period `p ≥ p₁(X₀)`).**
+
+*Definitions.* For real `X₀ ≥ 1`:
+
+- `λ := L/(L−1) + 2^{−20} = 2.7095122` and `g := 1 + max(log₂(X₀+1), λ)`;
+- `δ(x) := −log₂(1 − 2^{−x})`, so that `γ(n) = δ(δ(n))`;
+- `ℓ := δ(g) − δ(g+1)`;
+- `θ_j := |q_j L − p_j|` (convergents of `L`);
+- `N := q_k + q_{k−1}` for the least `k ≥ 1` with `θ_{k−1} ≤ ℓ`;
+- `p₁(X₀)` is the least `p` with `(L^p − 1)/(2(L−1)) ≥ max(N, 3p + 40)`.
+
+*Statement.* For every `p ≥ p₁(X₀)`, the window `[n* − N + 1, n*]`, with `n* = ⌊(g − λ)/ε_p⌋`, contains an `n` at which Construction B satisfies (S) and (X), with
+
+```text
+g ≤ γ ≤ g + 1,     λ ≤ γ − ε_p n ≤ λ + 1.5,     ε_p n ≤ m_0 ≤ γ,     γ − 1 ≤ log₂(x_min + 1) ≤ γ + 1.874469 .
+```
+
+For `X₀ ≥ 5.541` this reads `log₂(X₀+1) + 1 ≤ γ ≤ log₂(X₀+1) + 2`. Moreover `Λ ≥ 2^{−γ} ≥ 2^{−(λ+1.5)}·2^{−ε_p n} = 0.0541·2^{−ε_p n}`.
+
+*Every scale.* Any level `g′ ≥ g` works the same way, and the window may sit anywhere in `[3p + 40, (g − λ)/ε_p]`.
+
+**Proof.**
+
+- **The window.** On it, `ε_p n + λ ≤ g`, so (H1′) and (X) hold wherever `γ(n) ≥ g`. Its bottom exceeds `1/(2ε_p) ≥ 3p + 40`, which gives (H0) and `η ≤ 2^{−20}`.
+- **The sweep.** `δ(n₀ + j) = δ(n₀) − jL mod 1`. By the three-distance theorem in its two-length case (Sós 1958; Świerczkowski, Fund. Math. 46, 1958), `N = q_k + q_{k−1}` consecutive points have maximal gap `θ_{k−1} ≤ ℓ`. So some `n` in the window has `δ(n) ∈ [δ(g+1), δ(g)]`, i.e. `γ ∈ [g, g+1]`.
+- **The brackets.** `γ − ε_p n < λ + 1 + ε_p N ≤ λ + 1.5`. The cap on `x_min` is `x_0 + 1 = 2^γ[(1 − 2^{−s_c}) + ½Σ_t 2^{−e_t − δ}]` with `e_t = (L−1)T_t − t − 1`. Here `e_t` grows by `≥ 2L − 3` per climb block while the budget is free, and `T_t ≥ n − p + 1` after it binds; with `m_0 ≥ 3` and `p ≥ 10` this gives `1.874469`.
+
+∎
+
+`p₁(X₀)` is explicit through the continued fraction of `L`:
+
+- `p₁ = 10` for `X₀ ≤ 16`, `22` for `2^8 ≤ X₀ ≤ 2^{12}`, `36` at `2^{20}`, `94` at `2^{60}`;
+- `p₁ = 98` at Simons–de Weger's `X₀ = 5·2^{60}`, consistent with their size-only exclusion of `m ≤ 75` there;
+- `p₁ = 110` at `2^{71}` and `309` at `2^{200}`.
+
+Over the table, `p₁ − log_L X₀ ∈ [2.92, 10.42]`. A closed form uniform in `X₀` would need a bound on `L`'s partial quotients or an effective irrationality measure, and is not claimed. Nothing is claimed below `p₁(X₀)`. A necessary period threshold would be a per-period exclusion and is not computed (README stopping rules).
+
+**Remark 12.8.7.5 (the obstruction for the staircase as built).**
+
+- **At the canonical scale.** At `n ≈ L^p`, `12.8.6.2` under (H1), with a unit crash block, carries the threshold by Diophantine quality alone. But there `γ − ε_p n ≈ log₂ X₀`: that family tests Corollary 5 (`Λ < m/X₀`), not Lemma 7.
+- **At the Lemma 7 scale** (`ε_p n ≈ log₂ X₀`), `12.8.7.1`(iii) excludes every size-passer with a unit block at every `γ ≤ ε_p n + λ + 1.5` once `(L−1)ε_p n > λ + 2.09 + log₂ p`. In the checked table that holds from `X₀ = 2^{20}` (`p = 36`) through `2^{200}`. So the deep crash is forced, not chosen.
+- **Below that scale**, the `log₂ p` slack leaves crash depth `1` undecided.
+
+**Remark 12.8.7.6 (relation to the literature, exactly; and the stronger condition).**
+
+- **Rozier 1991, p. 11.** His Lemme 4 is `12.8.7.1`(ii). His optimality remark is (iv) with the real extremal `m_j = cL^{j−1}`. This subsection adds an integer realisation under every rotation's exact size condition, with `ε_p n ≤ ρ = m_0 ≤ ε_p n + λ + 1.5`. Lemme 4's own inequality, `2^{ε_p M} − 2^p ≤ u₀`, is vacuous throughout the family's range, since `ε_p n < p` wherever `p ≥ p₁`. What is attained is the minimax value, not that inequality.
+- **Simons–de Weger 2005, p. 69** ("Lemma 7 is almost sharp for the worst case … at best … the factor `m c_m` may be improved to a constant, but the exponential dependence on `m` … seems unavoidable").
+  - *Proved for size-passers under their hypotheses:* the exponent is attained. `m c_m` cannot go below `0.0541`, measured from the crossover scale with Corollary 5 upward.
+  - *Open, as they leave it:* whether `m c_m` can be lowered *to* a constant, i.e. whether `12.8.7.1`'s `log₂ p` can be removed at the Lemma 7 scale.
+- **The stronger condition `X₀ q ≤ R_r`.** The same proofs with `q → X₀ q` give sufficiency at `γ ≥ log₂ X₀ + max(2 + η, Γ′(p, n))` and necessity `γ + log₂ p > log₂ X₀ + ε_p n`. That is a sum, not a maximum.
+
+*Verified* (2026-10-19; `experiments/staircase_x0_threshold.py`, fresh code, exact integers; one command, committed output, 188 checks, 0 failures):
+
+- `L` enclosed to `2^{−1380}`;
+- on 30,000 random configurations: the dictionary, the sandwich, the trim, the unit-block bound and Rozier's minimax;
+- the two-distance structure at `k ≤ 13`, and the sweep brute-forced over `n ≤ 3,000,000`;
+- `p₁` for `X₀ = 2^j`, `j ≤ 200`;
+- Construction B end to end at 95 `(X₀, p)` points (`X₀ ∈ {1, 10, 31, 100, 1000, 4096}`, `p ≤ 32`, `n ≤ 4,412,888`), all `p` size conditions and `x_min ≥ X₀` exact. Measured: `γ − ε_p n ∈ [2.7532, 3.8267]`, and `γ − log₂(X₀+1) ∈ [1.0439, 1.9980]` for `X₀ ≥ 6`;
+- five negative controls that bite.
+
