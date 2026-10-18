@@ -1,0 +1,356 @@
+
+============================================================================
+Part A. Enclosure of L = log2 3, continued fraction, convergents
+============================================================================
+  PASS  L enclosed in an interval of width < 2^-1380
+  L = 1.584962500721156
+  certified partial quotients: 399
+  first 20: [1, 1, 1, 2, 2, 3, 1, 5, 2, 23, 2, 2, 1, 1, 55, 1, 4, 3, 1, 1]
+  PASS  CF prefix matches SdW v1.44 p. 3: [1;1,1,2,2,3,1,5,2,23,2,2,1,1,55,...]
+  PASS  sign of q_k L - p_k agrees with exact 3^q vs 2^p at all 14 convergents with q <= 2*10^5
+  PASS  q_k theta_{k-1} + q_{k-1} theta_k = 1 bracketed exactly, k = 1..59
+  convergent denominators: [1, 1, 2, 5, 12, 41, 53, 306, 665, 15601, 31867, 79335, 111202, 190537, 10590737, 10781274] ...
+  L/(L-1) = 2.7095112914,  lam = L/(L-1) + 2^-20 = 2.7095122450
+  SdW's limiting constant c_inf = 2^(-1/(L-1)) = 0.305764
+
+============================================================================
+Part B. Algebra: closed form of A_r, the crash identity, Gamma'(p,n) < eps n + L/(L-1) + eta
+============================================================================
+  PASS  A_r recursion (A_-1 = 0, A_r = L A_{r-1} + gamma - r - beta) equals its closed form, 40 x 25 exact
+  PASS  L*A_{p-2} - (n+p-1-gamma+eta) = [(L-1)(L^p-1)/(L-1)^2](gamma - Gamma'(p,n)), 60 random exact
+  PASS  Gamma'_0(p) := Gamma'(p,n) - eps_p n - eta < L/(L-1) for p = 2..159 at both ends of the L interval
+  PASS  the n-coefficient of Gamma'(p,n) is exactly eps_p = (L-1)/(L^p-1), p = 2..39
+  p = 10: n-slope of Gamma (crash depth 1) / n-slope of Gamma' (deep crash) = 1.594379
+  p = 20: n-slope of Gamma (crash depth 1) / n-slope of Gamma' (deep crash) = 1.585055
+  p = 30: n-slope of Gamma (crash depth 1) / n-slope of Gamma' (deep crash) = 1.584963
+
+============================================================================
+Part C. Universal statements on random configurations (exact)
+============================================================================
+  random configurations: 30000 (q > 0), of which size-passers: 1429, with a unit block: 548
+  PASS  rotation recurrence 2^sigma_r R_{r+1} = 3^{m_r} R_r + (2^{s_r}-1) q holds at every rotation, all configs
+  PASS  Terras iteration from x_0 = 2^{m_0} R_0/q - 1 closes and hits every block start x_r = 2^{m_r} R_r/q - 1 (4000 configs)
+  PASS  product identity 2^K/3^n = prod over odd steps (1 + 1/(3y)), all elements > 0 (4000 configs)
+  PASS  sandwich (exact integers): gamma - 1 <= log2(x_min+1) < gamma + log2 p, all 30000 configs
+    tightness: min of log2(x_min+1) - (gamma-1) = 0.000000 ; max of log2(x_min+1) - (gamma + log2 p) = -0.001410
+  PASS  trim (12.8.1): gamma + log2 p > eps_p n at all 1429 size-passers (min margin 1.0000)
+  PASS  unit-block bound: gamma + log2 p > (L-1)(n - L^{p-1})/(L^{p-1}-1) at all 548 size-passers with some m_t = 1 (min margin 1.7776)
+  PASS  Rozier minimax: max_j (m_j - (L-1) M_{j-1}) >= eps_p n in every rotation order, all configs (min margin 0.000000)
+  repeated single block (m, s) x p: log2(x_min+1) - gamma  vs  log2 p
+    (m,s)=( 1, 1) p= 2: log2(x_min+1) - gamma =  -0.1926, log2 p =  1.000
+    (m,s)=( 1, 1) p= 8: log2(x_min+1) - gamma =   0.8478, log2 p =  3.000
+    (m,s)=( 1, 1) p=32: log2(x_min+1) - gamma =   0.9999, log2 p =  5.000
+    (m,s)=( 5, 3) p= 2: log2(x_min+1) - gamma =   0.7703, log2 p =  1.000
+    (m,s)=( 5, 3) p= 8: log2(x_min+1) - gamma =   2.5545, log2 p =  3.000
+    (m,s)=( 5, 3) p=32: log2(x_min+1) - gamma =   3.8053, log2 p =  5.000
+    (m,s)=(12, 8) p= 2: log2(x_min+1) - gamma =   0.5859, log2 p =  1.000
+    (m,s)=(12, 8) p= 8: log2(x_min+1) - gamma =   1.0079, log2 p =  3.000
+    (m,s)=(12, 8) p=32: log2(x_min+1) - gamma =   1.0142, log2 p =  5.000
+
+============================================================================
+Part D. Sweep lemma: two-distance structure at N = q_k + q_{k-1}; brute force n <= 3*10^6
+============================================================================
+  PASS  k= 1 N=q_k+q_{k-1}=     2: gaps are theta_{k-1} (x1) and theta_k (x1); maxgap = theta_{k-1} = 5.850e-01
+  PASS  k= 2 N=q_k+q_{k-1}=     3: gaps are theta_{k-1} (x2) and theta_k (x1); maxgap = theta_{k-1} = 4.150e-01
+  PASS  k= 3 N=q_k+q_{k-1}=     7: gaps are theta_{k-1} (x5) and theta_k (x2); maxgap = theta_{k-1} = 1.699e-01
+  PASS  k= 4 N=q_k+q_{k-1}=    17: gaps are theta_{k-1} (x12) and theta_k (x5); maxgap = theta_{k-1} = 7.519e-02
+  PASS  k= 5 N=q_k+q_{k-1}=    53: gaps are theta_{k-1} (x41) and theta_k (x12); maxgap = theta_{k-1} = 1.955e-02
+  PASS  k= 6 N=q_k+q_{k-1}=    94: gaps are theta_{k-1} (x53) and theta_k (x41); maxgap = theta_{k-1} = 1.654e-02
+  PASS  k= 7 N=q_k+q_{k-1}=   359: gaps are theta_{k-1} (x306) and theta_k (x53); maxgap = theta_{k-1} = 3.013e-03
+  PASS  k= 8 N=q_k+q_{k-1}=   971: gaps are theta_{k-1} (x665) and theta_k (x306); maxgap = theta_{k-1} = 1.475e-03
+  PASS  k= 9 N=q_k+q_{k-1}= 16266: gaps are theta_{k-1} (x15601) and theta_k (x665); maxgap = theta_{k-1} = 6.298e-05
+  PASS  k=10 N=q_k+q_{k-1}= 47468: gaps are theta_{k-1} (x31867) and theta_k (x15601); maxgap = theta_{k-1} = 2.625e-05
+  PASS  k=11 N=q_k+q_{k-1}=111202: gaps are theta_{k-1} (x79335) and theta_k (x31867); maxgap = theta_{k-1} = 1.048e-05
+  PASS  k=12 N=q_k+q_{k-1}=190537: gaps are theta_{k-1} (x111202) and theta_k (x79335); maxgap = theta_{k-1} = 5.287e-06
+  PASS  k=13 N=q_k+q_{k-1}=301739: gaps are theta_{k-1} (x190537) and theta_k (x111202); maxgap = theta_{k-1} = 5.194e-06
+  computing delta(n) for n = 1..3000000 ...
+  PASS  delta(n) decided at every n <= 3000000 (fixed point 2^-192)
+  PASS  X0 =     1: arc [delta(g+1), delta(g)], g = 3.7095, length 5.850e-02: longest miss run 28 <= N - 1 = 52
+  PASS     control: arc of length 0.9*theta_{k-1} = 1.760e-02 is missed by a run of 93 > N - 1
+  PASS  X0 =    10: arc [delta(g+1), delta(g)], g = 4.4594, length 3.395e-02: longest miss run 52 <= N - 1 = 52
+  PASS     control: arc of length 0.9*theta_{k-1} = 1.760e-02 is missed by a run of 93 > N - 1
+  PASS  X0 =    31: arc [delta(g+1), delta(g)], g = 6.0000, length 1.140e-02: longest miss run 199 <= N - 1 = 358
+  PASS     control: arc of length 0.9*theta_{k-1} = 2.711e-03 is missed by a run of 664 > N - 1
+  PASS  X0 =   100: arc [delta(g+1), delta(g)], g = 7.6582, length 3.584e-03: longest miss run 358 <= N - 1 = 358
+  PASS     control: arc of length 0.9*theta_{k-1} = 2.711e-03 is missed by a run of 664 > N - 1
+  PASS  X0 =  1000: arc [delta(g+1), delta(g)], g = 10.9672, length 3.604e-04: longest miss run 12940 <= N - 1 = 16265
+  PASS  X0 =  4096: arc [delta(g+1), delta(g)], g = 13.0004, length 8.804e-05: longest miss run 15600 <= N - 1 = 16265
+
+============================================================================
+Part E. Period threshold p1(X0): least p with (L^p-1)/(2(L-1)) >= max(N, 3p+40)
+============================================================================
+   j  (X0 = 2^j)   level g      N(ell)          p1   p1 - log_L(X0)
+    0              3.7095   5.30000e+01     10     10.000
+    1              3.7095   5.30000e+01     10      8.495
+    2              3.7095   5.30000e+01     10      6.990
+    3              4.1699   5.30000e+01     10      5.485
+    4              5.0875   5.30000e+01     10      3.980
+    5              6.0444   3.59000e+02     14      6.475
+    6              7.0224   3.59000e+02     14      4.970
+    7              8.0112   9.71000e+02     16      5.465
+    8              9.0056   1.62660e+04     22      9.960
+    9             10.0028   1.62660e+04     22      8.455
+   10             11.0014   1.62660e+04     22      6.950
+   11             12.0007   1.62660e+04     22      5.445
+   12             13.0004   1.62660e+04     22      3.940
+   13             14.0002   4.74680e+04     24      4.435
+   14             15.0001   1.11202e+05     26      4.930
+   15             16.0000   1.11202e+05     26      3.425
+   16             17.0000   1.90537e+05     27      2.920
+   17             18.0000   1.07813e+07     36     10.415
+   18             19.0000   1.07813e+07     36      8.910
+   19             20.0000   1.07813e+07     36      7.405
+   20             21.0000   1.07813e+07     36      5.900
+   30             31.0000   6.58682e+09     50      4.850
+   40             41.0000   6.16241e+12     65      4.800
+   50             51.0000   6.23455e+15     80      4.750
+   60             61.0000   4.64028e+18     94      3.700
+   70             71.0000   7.94196e+21    110      4.650
+   80             81.0000   3.47323e+24    124      3.599
+   90             91.0000   5.39962e+27    139      3.549
+  100            101.0000   3.74517e+31    159      8.499
+  110            111.0000   1.58321e+34    172      6.449
+  120            121.0000   7.79729e+36    185      4.399
+  130            131.0000   6.16778e+39    200      4.349
+  140            141.0000   3.32278e+43    218      7.299
+  150            151.0000   7.55757e+46    235      9.249
+  160            161.0000   3.00516e+49    248      7.199
+  170            171.0000   1.60998e+52    262      6.149
+  180            181.0000   4.24547e+55    279      8.099
+  190            191.0000   2.39504e+58    293      7.049
+  200            201.0000   4.05317e+61    309      7.999
+  PASS  the p1 condition holds at every p in [p1, p1 + 60] for every tabulated X0 (monotone)
+  SdW v1.44 X0 = 5*2^60: p1 = 98 (N = 2.7444e+19)
+  PASS  p1(5*2^60) = 98 >= 76: no conflict with SdW v1.44's 'no m-cycles for m <= 75' at that X0
+  X0 = 2^71 (the verification bound cited in paper 1): p1 = 110 (N = 7.9420e+21)
+
+============================================================================
+Part F. Construction B at threshold X0: witness, all p size conditions, x_min >= X0, brackets
+============================================================================
+  Psi_bar = log2(1 + 2^(-3(L-1))/(1 - 2^-(2L-3)) + 2^-30) = 1.874469
+  PASS  tail term (p-1) 2^(p-1-(L-1)(n-p+1)) <= 2^-30 for p = 10..399 at n >= (L^p-1)/(2(L-1))
+  PASS  X0=    1 p=10 n=     164 off=    5/53     gamma=  4.4798 eps*n= 0.9686 g-eps*n=3.5112 c=      1 bind rho0-eps*n= 3.031 min@0 L7/Lam= 222.89 g-Gamma_rec=  0.380
+  PASS  X0=    1 p=11 n=     258 off=   11/53     gamma=  4.2182 eps*n= 0.9578 g-eps*n=3.2603 c=      1 bind rho0-eps*n= 3.042 min@0 L7/Lam= 205.09 g-Gamma_rec=  0.092
+  PASS  X0=    1 p=12 n=     417 off=   10/53     gamma=  4.3874 eps*n= 0.9745 g-eps*n=3.4129 c=      1 bind rho0-eps*n= 3.026 min@0 L7/Lam= 249.46 g-Gamma_rec=  0.203
+  PASS  X0=    1 p=13 n=     670 off=    9/53     gamma=  4.3007 eps*n= 0.9864 g-eps*n=3.3144 c=      1 bind rho0-eps*n= 3.014 min@0 L7/Lam= 252.02 g-Gamma_rec=  0.076
+  PASS  X0=    1 p=14 n=    1070 off=    7/53     gamma=  4.0455 eps*n= 0.9930 g-eps*n=3.0526 c=      1 bind rho0-eps*n= 3.007 min@0 L7/Lam= 225.21 g-Gamma_rec= -0.205
+  PASS  X0=    1 p=15 n=    1694 off=   14/53     gamma=  4.3310 eps*n= 0.9913 g-eps*n=3.3398 c=      1 bind rho0-eps*n= 3.009 min@0 L7/Lam= 296.12 g-Gamma_rec=  0.073
+  PASS  X0=    1 p=16 n=    2706 off=    3/53     gamma=  4.0248 eps*n= 0.9987 g-eps*n=3.0261 c=      1 bind rho0-eps*n= 3.001 min@0 L7/Lam= 252.58 g-Gamma_rec= -0.253
+  PASS  X0=    1 p=17 n=    4289 off=    6/53     gamma=  3.9597 eps*n= 0.9985 g-eps*n=2.9613 c=      1 bind rho0-eps*n= 2.002 min@0 L7/Lam= 256.19 g-Gamma_rec= -0.322
+  PASS  X0=    1 p=18 n=    6802 off=    7/53     gamma=  4.1263 eps*n= 0.9989 g-eps*n=3.1274 c=      1 bind rho0-eps*n= 3.001 min@0 L7/Lam= 305.49 g-Gamma_rec= -0.160
+  PASS  X0=    1 p=19 n=   10792 off=    1/53     gamma=  4.1325 eps*n= 0.9999 g-eps*n=3.1327 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 323.69 g-Gamma_rec= -0.157
+  PASS  X0=    1 p=20 n=   17095 off=   13/53     gamma=  4.4820 eps*n= 0.9992 g-eps*n=3.4827 c=      1 bind rho0-eps*n= 3.001 min@0 L7/Lam= 437.08 g-Gamma_rec=  0.192
+  PASS  X0=    1 p=21 n=   27111 off=    6/53     gamma=  4.1839 eps*n= 0.9998 g-eps*n=3.1841 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 371.14 g-Gamma_rec= -0.108
+  PASS  X0=    1 p=22 n=   42977 off=    3/53     gamma=  4.4701 eps*n= 0.9999 g-eps*n=3.4702 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 476.55 g-Gamma_rec=  0.177
+  PASS  X0=    1 p=23 n=   68117 off=    6/53     gamma=  3.7762 eps*n= 0.9999 g-eps*n=2.7763 c=  10729 deep rho0-eps*n= 2.000 min@0 L7/Lam= 303.50 g-Gamma_rec= -0.517
+  PASS  X0=    1 p=24 n=  107964 off=   10/53     gamma=  3.7860 eps*n= 0.9999 g-eps*n=2.7861 c=  17025 deep rho0-eps*n= 2.000 min@0 L7/Lam= 318.93 g-Gamma_rec= -0.508
+  PASS  X0=    1 p=25 n=  171110 off=   26/53     gamma=  4.4724 eps*n= 0.9998 g-eps*n=3.4725 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 542.41 g-Gamma_rec=  0.179
+  PASS  X0=    1 p=26 n=  271236 off=    9/53     gamma=  3.7533 eps*n= 1.0000 g-eps*n=2.7534 c=  42840 deep rho0-eps*n= 2.000 min@0 L7/Lam= 337.47 g-Gamma_rec= -0.541
+  PASS  X0=    1 p=27 n=  429906 off=    9/53     gamma=  3.7532 eps*n= 1.0000 g-eps*n=2.7532 c=  67929 deep rho0-eps*n= 2.000 min@0 L7/Lam= 350.41 g-Gamma_rec= -0.541
+  PASS  X0=    1 p=28 n=  681394 off=    6/53     gamma=  4.5762 eps*n= 1.0000 g-eps*n=3.5762 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 653.83 g-Gamma_rec=  0.282
+  PASS  X0=    1 p=29 n= 1079987 off=    8/53     gamma=  3.8494 eps*n= 1.0000 g-eps*n=2.8494 c= 157745 deep rho0-eps*n= 2.000 min@0 L7/Lam= 403.33 g-Gamma_rec= -0.445
+  PASS  X0=    1 p=30 n= 1711725 off=   28/53     gamma=  4.5385 eps*n= 1.0000 g-eps*n=3.5386 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 682.10 g-Gamma_rec=  0.244
+  PASS  X0=    1 p=31 n= 2713049 off=   17/53     gamma=  4.3531 eps*n= 1.0000 g-eps*n=3.3531 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 617.89 g-Gamma_rec=  0.059
+  PASS  X0=    1 p=32 n= 4300108 off=    1/53     gamma=  4.3812 eps*n= 1.0000 g-eps*n=3.3812 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 650.70 g-Gamma_rec=  0.087
+  PASS  X0=   10 p=10 n=     282 off=   14/53     gamma=  5.1723 eps*n= 1.6655 g-eps*n=3.5068 c=      1 bind rho0-eps*n= 3.334 min@0 L7/Lam=  47.13 g-Gamma_rec= -0.038
+  PASS  X0=   10 p=11 n=     429 off=   42/53     gamma=  4.8451 eps*n= 1.5927 g-eps*n=3.2525 c=      1 bind rho0-eps*n= 2.407 min@0 L7/Lam=  42.51 g-Gamma_rec= -0.291
+  PASS  X0=   10 p=12 n=     735 off=   13/53     gamma=  4.8048 eps*n= 1.7176 g-eps*n=3.0872 c=     29 deep rho0-eps*n= 2.282 min@0 L7/Lam=  40.80 g-Gamma_rec= -0.560
+  PASS  X0=   10 p=13 n=    1188 off=    0/53     gamma=  4.5144 eps*n= 1.7490 g-eps*n=2.7654 c=    263 deep rho0-eps*n= 2.251 min@0 L7/Lam=  34.89 g-Gamma_rec= -0.921
+  PASS  X0=   10 p=14 n=    1865 off=   20/53     gamma=  5.0272 eps*n= 1.7307 g-eps*n=3.2964 c=      1 bind rho0-eps*n= 3.269 min@0 L7/Lam=  54.33 g-Gamma_rec= -0.394
+  PASS  X0=   10 p=15 n=    2983 off=    7/53     gamma=  4.6935 eps*n= 1.7455 g-eps*n=2.9480 c=    218 deep rho0-eps*n= 2.254 min@0 L7/Lam=  45.33 g-Gamma_rec= -0.761
+  PASS  X0=   10 p=16 n=    4725 off=   16/53     gamma=  4.8150 eps*n= 1.7438 g-eps*n=3.0712 c=    340 deep rho0-eps*n= 2.256 min@0 L7/Lam=  52.60 g-Gamma_rec= -0.644
+  PASS  X0=   10 p=17 n=    7491 off=   25/53     gamma=  4.9968 eps*n= 1.7439 g-eps*n=3.2529 c=    420 deep rho0-eps*n= 2.256 min@0 L7/Lam=  63.40 g-Gamma_rec= -0.467
+  PASS  X0=   10 p=18 n=   11893 off=   22/53     gamma=  5.1582 eps*n= 1.7466 g-eps*n=3.4116 c=      1 bind rho0-eps*n= 3.253 min@0 L7/Lam=  74.96 g-Gamma_rec= -0.313
+  PASS  X0=   10 p=19 n=   18849 off=   38/53     gamma=  5.1292 eps*n= 1.7463 g-eps*n=3.3828 c=      1 bind rho0-eps*n= 3.254 min@0 L7/Lam=  77.47 g-Gamma_rec= -0.344
+  PASS  X0=   10 p=20 n=   29901 off=   37/53     gamma=  5.3321 eps*n= 1.7477 g-eps*n=3.5844 c=      1 bind rho0-eps*n= 3.252 min@0 L7/Lam=  93.89 g-Gamma_rec= -0.145
+  PASS  X0=   10 p=21 n=   47444 off=    8/53     gamma=  5.2244 eps*n= 1.7496 g-eps*n=3.4748 c=      1 bind rho0-eps*n= 3.250 min@0 L7/Lam=  91.25 g-Gamma_rec= -0.256
+  PASS  X0=   10 p=22 n=   75203 off=    9/53     gamma=  4.5033 eps*n= 1.7497 g-eps*n=2.7536 c=  17818 deep rho0-eps*n= 2.250 min@0 L7/Lam=  57.46 g-Gamma_rec= -0.978
+  PASS  X0=   10 p=23 n=  119199 off=   11/53     gamma=  4.7438 eps*n= 1.7497 g-eps*n=2.9940 c=   9525 deep rho0-eps*n= 2.250 min@0 L7/Lam=  71.20 g-Gamma_rec= -0.738
+  PASS  X0=   10 p=24 n=  188930 off=   16/53     gamma=  5.3934 eps*n= 1.7498 g-eps*n=3.6436 c=      1 bind rho0-eps*n= 3.250 min@0 L7/Lam= 117.35 g-Gamma_rec= -0.089
+  PASS  X0=   10 p=25 n=  299467 off=    7/53     gamma=  5.3910 eps*n= 1.7499 g-eps*n=3.6412 c=      1 bind rho0-eps*n= 3.250 min@0 L7/Lam= 122.02 g-Gamma_rec= -0.092
+  PASS  X0=   10 p=26 n=  474656 off=    2/53     gamma=  5.2192 eps*n= 1.7499 g-eps*n=3.4693 c=      1 bind rho0-eps*n= 3.250 min@0 L7/Lam= 112.47 g-Gamma_rec= -0.264
+  PASS  X0=   10 p=27 n=  752296 off=   21/53     gamma=  4.8599 eps*n= 1.7499 g-eps*n=3.1100 c=  60343 deep rho0-eps*n= 2.250 min@0 L7/Lam=  90.69 g-Gamma_rec= -0.623
+  PASS  X0=   10 p=28 n= 1192396 off=    0/53     gamma=  4.7668 eps*n= 1.7499 g-eps*n=3.0169 c=  95698 deep rho0-eps*n= 2.250 min@0 L7/Lam=  88.06 g-Gamma_rec= -0.716
+  PASS  X0=   10 p=29 n= 1889892 off=   13/53     gamma=  4.8874 eps*n= 1.7499 g-eps*n=3.1375 c= 151689 deep rho0-eps*n= 2.250 min@0 L7/Lam=  99.31 g-Gamma_rec= -0.596
+  PASS  X0=   10 p=30 n= 2995421 off=   10/53     gamma=  5.1530 eps*n= 1.7499 g-eps*n=3.4031 c=      1 bind rho0-eps*n= 3.250 min@0 L7/Lam= 123.86 g-Gamma_rec= -0.330
+  PASS  X0=   31 p=14 n=    3419 off=  126/359    gamma=  6.7776 eps*n= 3.1729 g-eps*n=3.6047 c=    334 deep rho0-eps*n= 2.827 min@0 L7/Lam=  57.33 g-Gamma_rec= -0.931
+  PASS  X0=   31 p=15 n=    5614 off=    9/359    gamma=  6.1458 eps*n= 3.2851 g-eps*n=2.8607 c=   1233 deep rho0-eps*n= 2.715 min@0 L7/Lam=  36.41 g-Gamma_rec= -1.750
+  PASS  X0=   31 p=16 n=    8739 off=  176/359    gamma=  6.8334 eps*n= 3.2252 g-eps*n=3.6082 c=   1007 deep rho0-eps*n= 2.775 min@0 L7/Lam=  65.17 g-Gamma_rec= -0.974
+  PASS  X0=   31 p=17 n=   14059 off=   75/359    gamma=  6.8916 eps*n= 3.2729 g-eps*n=3.6187 c=   1705 deep rho0-eps*n= 2.727 min@0 L7/Lam=  69.60 g-Gamma_rec= -0.996
+  PASS  X0=   31 p=18 n=   22345 off=   61/359    gamma=  6.8093 eps*n= 3.2815 g-eps*n=3.5278 c=   2945 deep rho0-eps*n= 2.718 min@0 L7/Lam=  69.08 g-Gamma_rec= -1.095
+  PASS  X0=   31 p=19 n=   35486 off=   30/359    gamma=  6.1334 eps*n= 3.2877 g-eps*n=2.8457 c=   7925 deep rho0-eps*n= 2.712 min@0 L7/Lam=  45.28 g-Gamma_rec= -1.783
+  PASS  X0=   31 p=20 n=   56207 off=   87/359    gamma=  6.8317 eps*n= 3.2854 g-eps*n=3.5463 c=   7500 deep rho0-eps*n= 2.715 min@0 L7/Lam=  77.62 g-Gamma_rec= -1.082
+  PASS  X0=   31 p=21 n=   89045 off=  183/359    gamma=  6.6816 eps*n= 3.2837 g-eps*n=3.3979 c=  11945 deep rho0-eps*n= 2.716 min@0 L7/Lam=  73.47 g-Gamma_rec= -1.231
+  PASS  X0=   31 p=22 n=  141421 off=    6/359    gamma=  6.3189 eps*n= 3.2903 g-eps*n=3.0286 c=  29648 deep rho0-eps*n= 2.710 min@0 L7/Lam=  59.48 g-Gamma_rec= -1.604
+  PASS  X0=   31 p=23 n=  224134 off=   26/359    gamma=  6.6083 eps*n= 3.2901 g-eps*n=3.3182 c=  33720 deep rho0-eps*n= 2.710 min@0 L7/Lam=  76.08 g-Gamma_rec= -1.315
+  PASS  X0=   31 p=24 n=  355286 off=    2/359    gamma=  6.8041 eps*n= 3.2905 g-eps*n=3.5136 c=  48036 deep rho0-eps*n= 2.710 min@0 L7/Lam=  90.95 g-Gamma_rec= -1.120
+  PASS  X0=   31 p=25 n=  563113 off=    9/359    gamma=  6.9980 eps*n= 3.2904 g-eps*n=3.7075 c=  64285 deep rho0-eps*n= 2.710 min@0 L7/Lam= 108.42 g-Gamma_rec= -0.926
+  PASS  X0=   31 p=26 n=  892370 off=  160/359    gamma=  6.7753 eps*n= 3.2899 g-eps*n=3.4854 c= 120570 deep rho0-eps*n= 2.710 min@0 L7/Lam=  96.60 g-Gamma_rec= -1.148
+  PASS  X0=   31 p=27 n= 1414518 off=  113/359    gamma=  6.7566 eps*n= 3.2902 g-eps*n=3.4663 c= 191263 deep rho0-eps*n= 2.710 min@0 L7/Lam=  98.99 g-Gamma_rec= -1.168
+  PASS  X0=   31 p=28 n= 2242089 off=   52/359    gamma=  6.9494 eps*n= 3.2904 g-eps*n=3.6590 c= 256052 deep rho0-eps*n= 2.710 min@0 L7/Lam= 117.39 g-Gamma_rec= -0.975
+  PASS  X0=   31 p=29 n= 3553597 off=  115/359    gamma=  6.8772 eps*n= 3.2904 g-eps*n=3.5868 c= 480702 deep rho0-eps*n= 2.710 min@0 L7/Lam= 115.62 g-Gamma_rec= -1.047
+  PASS  X0=  100 p=14 n=    5214 off=  118/359    gamma=  8.0323 eps*n= 4.8386 g-eps*n=3.1937 c=   1096 deep rho0-eps*n= 3.161 min@0 L7/Lam=  40.77 g-Gamma_rec= -2.319
+  PASS  X0=  100 p=15 n=    8233 off=  223/359    gamma=  8.5966 eps*n= 4.8177 g-eps*n=3.7790 c=   1304 deep rho0-eps*n= 3.182 min@0 L7/Lam=  65.26 g-Gamma_rec= -1.730
+  PASS  X0=  100 p=16 n=   13194 off=  214/359    gamma=  8.2443 eps*n= 4.8694 g-eps*n=3.3749 c=   2811 deep rho0-eps*n= 3.131 min@0 L7/Lam=  52.41 g-Gamma_rec= -2.170
+  PASS  X0=  100 p=17 n=   21174 off=   83/359    gamma=  8.4930 eps*n= 4.9293 g-eps*n=3.5638 c=   3832 deep rho0-eps*n= 3.071 min@0 L7/Lam=  63.35 g-Gamma_rec= -2.020
+  PASS  X0=  100 p=18 n=   33450 off=  247/359    gamma=  8.3754 eps*n= 4.9124 g-eps*n=3.4630 c=   6187 deep rho0-eps*n= 3.088 min@0 L7/Lam=  62.45 g-Gamma_rec= -2.114
+  PASS  X0=  100 p=19 n=   53347 off=   66/359    gamma=  8.0447 eps*n= 4.9425 g-eps*n=3.1022 c=  12262 deep rho0-eps*n= 3.058 min@0 L7/Lam=  51.26 g-Gamma_rec= -2.495
+  PASS  X0=  100 p=20 n=   84549 off=  115/359    gamma=  8.0309 eps*n= 4.9420 g-eps*n=3.0890 c=  19441 deep rho0-eps*n= 3.058 min@0 L7/Lam=  53.43 g-Gamma_rec= -2.509
+  PASS  X0=  100 p=21 n=  134012 off=  182/359    gamma=  8.0768 eps*n= 4.9420 g-eps*n=3.1348 c=  30343 deep rho0-eps*n= 3.058 min@0 L7/Lam=  57.89 g-Gamma_rec= -2.464
+  PASS  X0=  100 p=22 n=  212682 off=   16/359    gamma=  8.0585 eps*n= 4.9483 g-eps*n=3.1102 c=  49155 deep rho0-eps*n= 3.052 min@0 L7/Lam=  59.60 g-Gamma_rec= -2.493
+  PASS  X0=  100 p=23 n=  336825 off=  298/359    gamma=  7.9878 eps*n= 4.9443 g-eps*n=3.0435 c=  94867 deep rho0-eps*n= 2.056 min@0 L7/Lam=  59.47 g-Gamma_rec= -2.557
+  PASS  X0=  100 p=24 n=  534318 off=   14/359    gamma=  7.7886 eps*n= 4.9486 g-eps*n=2.8400 c= 172353 deep rho0-eps*n= 2.051 min@0 L7/Lam=  53.87 g-Gamma_rec= -2.764
+  PASS  X0=  100 p=25 n=  846697 off=  205/359    gamma=  8.0308 eps*n= 4.9475 g-eps*n=3.0833 c= 195670 deep rho0-eps*n= 3.053 min@0 L7/Lam=  66.44 g-Gamma_rec= -2.520
+  PASS  X0=  100 p=26 n= 1342298 off=   15/359    gamma=  8.1167 eps*n= 4.9486 g-eps*n=3.1681 c= 305592 deep rho0-eps*n= 3.051 min@0 L7/Lam=  73.28 g-Gamma_rec= -2.436
+  PASS  X0=  100 p=27 n= 2127362 off=  160/359    gamma=  8.3139 eps*n= 4.9483 g-eps*n=3.3655 c= 483372 deep rho0-eps*n= 3.052 min@0 L7/Lam=  87.28 g-Gamma_rec= -2.238
+  PASS  X0=  100 p=28 n= 3371811 off=  236/359    gamma=  8.0429 eps*n= 4.9484 g-eps*n=3.0945 c= 779774 deep rho0-eps*n= 3.052 min@0 L7/Lam=  74.99 g-Gamma_rec= -2.509
+  PASS  X0= 1000 p=22 n=  345217 off= 9704/16266  gamma= 11.8586 eps*n= 8.0319 g-eps*n=3.8267 c=  84831 deep rho0-eps*n= 2.968 min@0 L7/Lam=  95.75 g-Gamma_rec= -3.580
+  PASS  X0= 1000 p=23 n=  551355 off=11190/16266  gamma= 11.7640 eps*n= 8.0934 g-eps*n=3.6705 c= 138663 deep rho0-eps*n= 2.907 min@0 L7/Lam=  89.81 g-Gamma_rec= -3.773
+  PASS  X0= 1000 p=24 n=  884961 off= 6660/16266  gamma= 11.8192 eps*n= 8.1960 g-eps*n=3.6232 c= 230870 deep rho0-eps*n= 2.804 min@0 L7/Lam=  90.68 g-Gamma_rec= -3.880
+  PASS  X0= 1000 p=25 n= 1409104 off= 4091/16266  gamma= 11.8763 eps*n= 8.2338 g-eps*n=3.6425 c= 372406 deep rho0-eps*n= 2.766 min@0 L7/Lam=  95.72 g-Gamma_rec= -3.883
+  PASS  X0= 1000 p=26 n= 2234986 off= 4884/16266  gamma= 11.9558 eps*n= 8.2397 g-eps*n=3.7161 c= 591004 deep rho0-eps*n= 2.760 min@0 L7/Lam= 104.76 g-Gamma_rec= -3.813
+  PASS  X0= 1000 p=27 n= 3549819 off=  299/16266  gamma= 11.1108 eps*n= 8.2570 g-eps*n=2.8538 c=1129905 deep rho0-eps*n= 2.743 min@0 L7/Lam=  59.83 g-Gamma_rec= -4.686
+  PASS  X0= 4096 p=22 n=  427212 off=15094/16266  gamma= 13.3115 eps*n= 9.9396 g-eps*n=3.3719 c= 125444 deep rho0-eps*n= 3.060 min@0 L7/Lam=  69.72 g-Gamma_rec= -5.151
+  PASS  X0= 4096 p=23 n=  697084 off= 3965/16266  gamma= 13.2579 eps*n=10.2326 g-eps*n=3.0252 c= 226395 deep rho0-eps*n= 2.767 min@0 L7/Lam=  57.31 g-Gamma_rec= -5.669
+  PASS  X0= 4096 p=24 n= 1110025 off= 1122/16266  gamma= 13.3624 eps*n=10.2804 g-eps*n=3.0819 c= 351974 deep rho0-eps*n= 2.720 min@0 L7/Lam=  62.19 g-Gamma_rec= -5.641
+  PASS  X0= 4096 p=25 n= 1760971 off=  166/16266  gamma= 13.3049 eps*n=10.2899 g-eps*n=3.0151 c= 559499 deep rho0-eps*n= 2.710 min@0 L7/Lam=  61.84 g-Gamma_rec= -5.713
+  PASS  X0= 4096 p=26 n= 2777390 off=13957/16266  gamma= 13.5289 eps*n=10.2394 g-eps*n=3.2895 c= 838611 deep rho0-eps*n= 2.761 min@0 L7/Lam=  77.79 g-Gamma_rec= -5.410
+  PASS  X0= 4096 p=27 n= 4412888 off=11302/16266  gamma= 13.5824 eps*n=10.2645 g-eps*n=3.3179 c=1340008 deep rho0-eps*n= 2.735 min@0 L7/Lam=  82.38 g-Gamma_rec= -5.396
+  -- higher levels (larger scales eps_p n) at fixed X0 --
+  PASS  [level +2] X0=    1 p=14 n=    3207 off=   25/359    gamma=  5.8484 eps*n= 2.9761 g-eps*n=2.8723 c=    909 deep rho0-eps*n= 2.024 min@0 L7/Lam= 203.23 g-Gamma_rec= -1.548
+  PASS  [level +2] X0=    1 p=18 n=   20297 off=  131/359    gamma=  6.4916 eps*n= 2.9808 g-eps*n=3.5108 c=   1543 deep rho0-eps*n= 3.019 min@0 L7/Lam= 408.07 g-Gamma_rec= -0.936
+  PASS  [level +2] X0=    1 p=22 n=  128839 off=  102/359    gamma=  6.4698 eps*n= 2.9976 g-eps*n=3.4722 c=  17016 deep rho0-eps*n= 3.002 min@0 L7/Lam= 485.53 g-Gamma_rec= -0.990
+  PASS  [level +5] X0=    1 p=18 n=   40459 off=  397/971    gamma=  9.3691 eps*n= 5.9417 g-eps*n=3.4274 c=   9727 deep rho0-eps*n= 3.058 min@0 L7/Lam= 387.02 g-Gamma_rec= -2.752
+  PASS  [level +5] X0=    1 p=22 n=  257543 off=  340/971    gamma=  9.0754 eps*n= 5.9921 g-eps*n=3.0833 c=  67135 deep rho0-eps*n= 3.008 min@0 L7/Lam= 372.58 g-Gamma_rec= -3.130
+  PASS  [level +3] X0=  100 p=24 n=  852429 off= 5827/16266  gamma= 11.5756 eps*n= 7.8947 g-eps*n=3.6809 c= 212033 deep rho0-eps*n= 3.105 min@0 L7/Lam=  96.69 g-Gamma_rec= -3.646
+  PASS  [level +3] X0=  100 p=26 n= 2154321 off= 1730/16266  gamma= 11.5420 eps*n= 7.9423 g-eps*n=3.5997 c= 577052 deep rho0-eps*n= 3.058 min@0 L7/Lam=  99.01 g-Gamma_rec= -3.756
+  PASS  [level +6] X0=   10 p=24 n=  835498 off= 1295/16266  gamma= 11.2996 eps*n= 7.7379 g-eps*n=3.5616 c= 214145 deep rho0-eps*n= 3.262 min@0 L7/Lam= 112.18 g-Gamma_rec= -3.674
+  -- the stronger condition (X'): X0 q <= R_r, construction with Q = X0 q --
+  PASS  (X') X0=  2 p=12 n=    388: X0 q <= R_r at all rotations; gamma = 5.4012 = log2 X0 + eps n + 3.4945
+  PASS  (X') X0=  2 p=16 n=   2689: X0 q <= R_r at all rotations; gamma = 5.3491 = log2 X0 + eps n + 3.3567
+  PASS  (X') X0= 16 p=14 n=    918: X0 q <= R_r at all rotations; gamma = 8.3513 = log2 X0 + eps n + 3.4994
+  PASS  (X') X0= 16 p=18 n=   6544: X0 q <= R_r at all rotations; gamma = 8.0655 = log2 X0 + eps n + 3.1045
+  PASS  (X') X0=100 p=18 n=   6291: X0 q <= R_r at all rotations; gamma = 10.6343 = log2 X0 + eps n + 3.0666
+  PASS  (X') X0=100 p=22 n=  41483: X0 q <= R_r at all rotations; gamma = 11.2743 = log2 X0 + eps n + 3.6653
+  -- canonical scale: window [ceil(L^p), ceil(L^p) + N - 1] (Corollary 5 regime, not Lemma 7) --
+  PASS  [canonical] X0=  100 p=16 n=    1889 off=   56/359    gamma=  7.9525 eps*n= 0.6972 g-eps*n=7.2553 c=      1 bind rho0-eps*n= 6.303 min@0 L7/Lam= 771.60 g-Gamma_rec=  4.153
+  PASS  [canonical] X0=  100 p=20 n=   10175 off=  192/359    gamma=  7.7852 eps*n= 0.5947 g-eps*n=7.1905 c=      1 bind rho0-eps*n= 6.405 min@0 L7/Lam= 916.80 g-Gamma_rec=  4.136
+  PASS  [canonical] X0= 1000 p=22 n=   40818 off=  591/16266  gamma= 11.1262 eps*n= 0.9497 g-eps*n=10.1766 c=      1 bind rho0-eps*n=10.050 min@0 L7/Lam=7809.07 g-Gamma_rec=  6.913
+  PASS  [canonical] X0= 1000 p=25 n=  107212 off= 9163/16266  gamma= 11.9187 eps*n= 0.6265 g-eps*n=11.2922 c=      1 bind rho0-eps*n=10.374 min@0 L7/Lam=19223.17 g-Gamma_rec=  8.217
+  PASS  [canonical] X0= 4096 p=24 n=   78005 off= 1422/16266  gamma= 13.4243 eps*n= 0.7224 g-eps*n=12.7018 c=      1 bind rho0-eps*n=12.278 min@0 L7/Lam=48933.97 g-Gamma_rec=  9.570
+  PASS  [canonical] X0= 4096 p=27 n=  252941 off=14810/16266  gamma= 13.7449 eps*n= 0.5884 g-eps*n=13.1566 c=      1 bind rho0-eps*n=12.412 min@0 L7/Lam=75434.67 g-Gamma_rec= 10.103
+    canonical runs: gamma - eps_p n in [7.190, 13.157] (grows with log2 X0: Lemma 7 not sharp here)
+
+  summary over 95 threshold runs (Qmult = 1):
+    gamma - eps_p n in [2.7532, 3.8267]   (theorem: [lam, lam + 1.5] = [2.7095, 4.2095])
+    for X0 >= 6: gamma - log2(X0+1) in [1.0439, 1.9980]   (theorem: [1, 2])
+    SdW Lemma 7 bound / actual Lambda in [34.895, 682.100]; divided by p: [2.2160, 23.3509]
+    log2(x_min+1) - eps_p n in [2.8704, 3.8925]   (theorem: [lam - 1, lam + 1.5 + Psi_bar] = [1.7095, 6.0840])
+    Psi_0 = log2(x_0+1) - gamma: max 0.5027 (Psi_bar 1.8745); Rozier rho = m_0 at 95 of 95 runs
+    deep crash (budget never binds): 66 of 95 runs; minimum element at block 0: 95 of 95
+    record's crash-depth-1 hypothesis (H1) gamma >= Gamma(p,n) fails at 83 of 95 runs
+
+============================================================================
+Part G. Negative controls
+============================================================================
+  G1. scale eps_p n ~ log2 p + 3, n with gamma(n) < eps_p n - log2 p: Construction B must not pass
+  PASS  G1: 3142 such n at p = 8..16; Construction B passes at 0 of them (theorem: 0)
+  G2. gap region eps n - log2 p < gamma < eps n + lam: Construction B passes at 2 of 455 n (informational; the hypothesis is sufficient, not necessary)
+  PASS  [G3 rebuild] X0=    1 p=10 n=     164 off=    5/53     gamma=  4.4798 eps*n= 0.9686 g-eps*n=3.5112 c=      1 bind rho0-eps*n= 3.031 min@0 L7/Lam= 222.89 g-Gamma_rec=  0.380
+  PASS  [G3 rebuild] X0=    1 p=11 n=     258 off=   11/53     gamma=  4.2182 eps*n= 0.9578 g-eps*n=3.2603 c=      1 bind rho0-eps*n= 3.042 min@0 L7/Lam= 205.09 g-Gamma_rec=  0.092
+  PASS  [G3 rebuild] X0=    1 p=12 n=     417 off=   10/53     gamma=  4.3874 eps*n= 0.9745 g-eps*n=3.4129 c=      1 bind rho0-eps*n= 3.026 min@0 L7/Lam= 249.46 g-Gamma_rec=  0.203
+  PASS  [G3 rebuild] X0=    1 p=13 n=     670 off=    9/53     gamma=  4.3007 eps*n= 0.9864 g-eps*n=3.3144 c=      1 bind rho0-eps*n= 3.014 min@0 L7/Lam= 252.02 g-Gamma_rec=  0.076
+  PASS  [G3 rebuild] X0=    1 p=14 n=    1070 off=    7/53     gamma=  4.0455 eps*n= 0.9930 g-eps*n=3.0526 c=      1 bind rho0-eps*n= 3.007 min@0 L7/Lam= 225.21 g-Gamma_rec= -0.205
+  PASS  [G3 rebuild] X0=    1 p=15 n=    1694 off=   14/53     gamma=  4.3310 eps*n= 0.9913 g-eps*n=3.3398 c=      1 bind rho0-eps*n= 3.009 min@0 L7/Lam= 296.12 g-Gamma_rec=  0.073
+  PASS  [G3 rebuild] X0=    1 p=16 n=    2706 off=    3/53     gamma=  4.0248 eps*n= 0.9987 g-eps*n=3.0261 c=      1 bind rho0-eps*n= 3.001 min@0 L7/Lam= 252.58 g-Gamma_rec= -0.253
+  PASS  [G3 rebuild] X0=    1 p=17 n=    4289 off=    6/53     gamma=  3.9597 eps*n= 0.9985 g-eps*n=2.9613 c=      1 bind rho0-eps*n= 2.002 min@0 L7/Lam= 256.19 g-Gamma_rec= -0.322
+  PASS  [G3 rebuild] X0=    1 p=18 n=    6802 off=    7/53     gamma=  4.1263 eps*n= 0.9989 g-eps*n=3.1274 c=      1 bind rho0-eps*n= 3.001 min@0 L7/Lam= 305.49 g-Gamma_rec= -0.160
+  PASS  [G3 rebuild] X0=    1 p=19 n=   10792 off=    1/53     gamma=  4.1325 eps*n= 0.9999 g-eps*n=3.1327 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 323.69 g-Gamma_rec= -0.157
+  PASS  [G3 rebuild] X0=    1 p=20 n=   17095 off=   13/53     gamma=  4.4820 eps*n= 0.9992 g-eps*n=3.4827 c=      1 bind rho0-eps*n= 3.001 min@0 L7/Lam= 437.08 g-Gamma_rec=  0.192
+  PASS  [G3 rebuild] X0=    1 p=21 n=   27111 off=    6/53     gamma=  4.1839 eps*n= 0.9998 g-eps*n=3.1841 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 371.14 g-Gamma_rec= -0.108
+  PASS  [G3 rebuild] X0=    1 p=22 n=   42977 off=    3/53     gamma=  4.4701 eps*n= 0.9999 g-eps*n=3.4702 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 476.55 g-Gamma_rec=  0.177
+  PASS  [G3 rebuild] X0=    1 p=23 n=   68117 off=    6/53     gamma=  3.7762 eps*n= 0.9999 g-eps*n=2.7763 c=  10729 deep rho0-eps*n= 2.000 min@0 L7/Lam= 303.50 g-Gamma_rec= -0.517
+  PASS  [G3 rebuild] X0=    1 p=24 n=  107964 off=   10/53     gamma=  3.7860 eps*n= 0.9999 g-eps*n=2.7861 c=  17025 deep rho0-eps*n= 2.000 min@0 L7/Lam= 318.93 g-Gamma_rec= -0.508
+  PASS  [G3 rebuild] X0=    1 p=25 n=  171110 off=   26/53     gamma=  4.4724 eps*n= 0.9998 g-eps*n=3.4725 c=      1 bind rho0-eps*n= 3.000 min@0 L7/Lam= 542.41 g-Gamma_rec=  0.179
+  PASS  G3: X0 = 1 witnesses fail x_min >= 1024 at 16 of 16 (the X0 demand is load-bearing)
+  PASS  [G4 rebuild] X0=   10 p=12 n=     735 off=   13/53     gamma=  4.8048 eps*n= 1.7176 g-eps*n=3.0872 c=     29 deep rho0-eps*n= 2.282 min@0 L7/Lam=  40.80 g-Gamma_rec= -0.560
+  PASS  [G4 rebuild] X0=   10 p=13 n=    1188 off=    0/53     gamma=  4.5144 eps*n= 1.7490 g-eps*n=2.7654 c=    263 deep rho0-eps*n= 2.251 min@0 L7/Lam=  34.89 g-Gamma_rec= -0.921
+  PASS  [G4 rebuild] X0=   10 p=15 n=    2983 off=    7/53     gamma=  4.6935 eps*n= 1.7455 g-eps*n=2.9480 c=    218 deep rho0-eps*n= 2.254 min@0 L7/Lam=  45.33 g-Gamma_rec= -0.761
+  PASS  [G4 rebuild] X0=   10 p=16 n=    4725 off=   16/53     gamma=  4.8150 eps*n= 1.7438 g-eps*n=3.0712 c=    340 deep rho0-eps*n= 2.256 min@0 L7/Lam=  52.60 g-Gamma_rec= -0.644
+  PASS  [G4 rebuild] X0=   10 p=17 n=    7491 off=   25/53     gamma=  4.9968 eps*n= 1.7439 g-eps*n=3.2529 c=    420 deep rho0-eps*n= 2.256 min@0 L7/Lam=  63.40 g-Gamma_rec= -0.467
+  PASS  [G4 rebuild] X0=   31 p=14 n=    3419 off=  126/359    gamma=  6.7776 eps*n= 3.1729 g-eps*n=3.6047 c=    334 deep rho0-eps*n= 2.827 min@0 L7/Lam=  57.33 g-Gamma_rec= -0.931
+  PASS  [G4 rebuild] X0=   31 p=15 n=    5614 off=    9/359    gamma=  6.1458 eps*n= 3.2851 g-eps*n=2.8607 c=   1233 deep rho0-eps*n= 2.715 min@0 L7/Lam=  36.41 g-Gamma_rec= -1.750
+  PASS  [G4 rebuild] X0=   31 p=16 n=    8739 off=  176/359    gamma=  6.8334 eps*n= 3.2252 g-eps*n=3.6082 c=   1007 deep rho0-eps*n= 2.775 min@0 L7/Lam=  65.17 g-Gamma_rec= -0.974
+  PASS  [G4 rebuild] X0=   31 p=17 n=   14059 off=   75/359    gamma=  6.8916 eps*n= 3.2729 g-eps*n=3.6187 c=   1705 deep rho0-eps*n= 2.727 min@0 L7/Lam=  69.60 g-Gamma_rec= -0.996
+  PASS  [G4 rebuild] X0=   31 p=18 n=   22345 off=   61/359    gamma=  6.8093 eps*n= 3.2815 g-eps*n=3.5278 c=   2945 deep rho0-eps*n= 2.718 min@0 L7/Lam=  69.08 g-Gamma_rec= -1.095
+  PASS  [G4 rebuild] X0=   31 p=19 n=   35486 off=   30/359    gamma=  6.1334 eps*n= 3.2877 g-eps*n=2.8457 c=   7925 deep rho0-eps*n= 2.712 min@0 L7/Lam=  45.28 g-Gamma_rec= -1.783
+  PASS  [G4 rebuild] X0=   31 p=20 n=   56207 off=   87/359    gamma=  6.8317 eps*n= 3.2854 g-eps*n=3.5463 c=   7500 deep rho0-eps*n= 2.715 min@0 L7/Lam=  77.62 g-Gamma_rec= -1.082
+  PASS  [G4 rebuild] X0=  100 p=14 n=    5214 off=  118/359    gamma=  8.0323 eps*n= 4.8386 g-eps*n=3.1937 c=   1096 deep rho0-eps*n= 3.161 min@0 L7/Lam=  40.77 g-Gamma_rec= -2.319
+  PASS  [G4 rebuild] X0=  100 p=15 n=    8233 off=  223/359    gamma=  8.5966 eps*n= 4.8177 g-eps*n=3.7790 c=   1304 deep rho0-eps*n= 3.182 min@0 L7/Lam=  65.26 g-Gamma_rec= -1.730
+  PASS  [G4 rebuild] X0=  100 p=16 n=   13194 off=  214/359    gamma=  8.2443 eps*n= 4.8694 g-eps*n=3.3749 c=   2811 deep rho0-eps*n= 3.131 min@0 L7/Lam=  52.41 g-Gamma_rec= -2.170
+  PASS  [G4 rebuild] X0=  100 p=17 n=   21174 off=   83/359    gamma=  8.4930 eps*n= 4.9293 g-eps*n=3.5638 c=   3832 deep rho0-eps*n= 3.071 min@0 L7/Lam=  63.35 g-Gamma_rec= -2.020
+  PASS  [G4 rebuild] X0=  100 p=18 n=   33450 off=  247/359    gamma=  8.3754 eps*n= 4.9124 g-eps*n=3.4630 c=   6187 deep rho0-eps*n= 3.088 min@0 L7/Lam=  62.45 g-Gamma_rec= -2.114
+  PASS  [G4 rebuild] X0=  100 p=19 n=   53347 off=   66/359    gamma=  8.0447 eps*n= 4.9425 g-eps*n=3.1022 c=  12262 deep rho0-eps*n= 3.058 min@0 L7/Lam=  51.26 g-Gamma_rec= -2.495
+  PASS  G4: +1 or +2 depth on any climb block (from the crash) breaks a size condition at 273 of 273
+  G5. unit-block necessity bound vs the family's gamma ceiling (window bottom), X0 = 2^j:
+      j    p   eps*n    ceiling g+1   unit-block bound   forced deep?
+      4   10    2.059       6.087           -0.633      no
+      4   30    2.378       6.087           -1.723      no
+      6   14    3.979       8.022            1.918      no
+      6   34    4.313       8.022            1.163      no
+      8   22    5.918      10.006            4.335      no
+      8   42    6.296      10.006            4.002      no
+     10   22    7.913      12.001            7.498      no
+     10   42    8.292      12.001            7.165      no
+     12   22    9.912      14.000           10.667      no
+     12   42   10.291      14.000           10.333      no
+     14   26   11.881      16.000           13.545      no
+     14   46   12.291      16.000           13.372      no
+     16   27   13.847      18.000           16.608      no
+     16   47   14.290      18.000           16.510      no
+     18   36   15.893      20.000           19.435      no
+     18   56   16.290      20.000           19.427      no
+     20   36   17.893      22.000           22.605      yes
+     20   56   18.290      22.000           22.597      yes
+     30   50   27.906      32.000           38.001      yes
+     30   70   28.290      32.000           38.125      yes
+     40   65   37.931      42.000           53.512      yes
+     40   85   38.290      42.000           53.695      yes
+     50   80   47.927      52.000           69.056      yes
+     50  100   48.290      52.000           69.310      yes
+     60   94   57.862      62.000           84.570      yes
+     60  114   58.290      62.000           84.970      yes
+     70  110   67.828      72.000          100.139      yes
+     70  130   68.290      72.000          100.630      yes
+     80  124   77.970      82.000          116.041      yes
+     80  144   78.290      82.000          116.333      yes
+     90  139   87.793      92.000          131.445      yes
+     90  159   88.290      92.000          132.039      yes
+    100  159   97.946     102.000          147.342      yes
+    100  179   98.290     102.000          147.718      yes
+    110  172  107.925     112.000          163.045      yes
+    110  192  108.290     112.000          163.466      yes
+    120  185  117.838     122.000          178.653      yes
+    120  205  118.290     122.000          179.221      yes
+    130  200  127.933     132.000          194.540      yes
+    130  220  128.290     132.000          194.969      yes
+    140  218  137.807     142.000          210.066      yes
+    140  238  138.290     142.000          210.705      yes
+    150  235  147.853     152.000          225.880      yes
+    150  255  148.290     152.000          226.455      yes
+    160  248  157.854     162.000          241.653      yes
+    160  268  158.290     162.000          242.233      yes
+    170  262  167.920     172.000          257.528      yes
+    170  282  168.290     172.000          258.010      yes
+    180  279  177.902     182.000          273.258      yes
+    180  299  178.290     182.000          273.775      yes
+    190  293  187.943     192.000          289.103      yes
+    190  313  188.290     192.000          289.558      yes
+    200  309  197.920     202.000          304.839      yes
+    200  329  198.290     202.000          305.336      yes
+  PASS  G5: wherever eps n > (lam + 2.09 + log2 p)/(L-1), the unit-block bound exceeds the family's ceiling
+  PASS  G5: crash depth 1 is excluded at the family's gamma from X0 = 2^20 (p = 36) on in this table
+
+============================================================================
+CHECKS: 188   FAILURES: 0
+RESULT: ALL CHECKS PASS
