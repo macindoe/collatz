@@ -262,7 +262,7 @@ the record's novelty refresh and register sweep (2026-10-18) and the checklist b
 * The block cascade is cited as classical (Steiner 1977; Rozier 1990; LaDue 2018). The states
   `(ω, d)` are cited as the skeleton rows `(λ, k)` of J. Williams, arXiv:2607.01718 (2 July 2026),
   posted earlier, with her Proposition 3.3, Theorem 3.6 and Proposition 3.10 matched to
-  Proposition 2.2. One sentence says that Section 3 answers her open problem (1) in part — where a
+  Proposition 2.2. One sentence says that Section 3 answers Williams's open problem (1) in part — where a
   trajectory leaving a row lands — and not which skeleton it enters.
 * Proposition 4.1 is identified as the Böhm–Sontacchi cycle equation (1978) in block coordinates,
   and in integer form as Tao's `n`-Syracuse offset.

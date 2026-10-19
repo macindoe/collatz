@@ -1,4 +1,4 @@
-From 49b2f387cf63ec9da40c4264db0010ddf6b70c7b Mon Sep 17 00:00:00 2001
+From 87285424d944fdf59ff5254993084c96f7182566 Mon Sep 17 00:00:00 2001
 From: Ben Macindoe <macindoebenjamin@gmail.com>
 Date: Mon, 19 Oct 2026 13:57:45 +1100
 Subject: [PATCH 3/3] rounds/R19-macindoe.md: the round-19 letter, business
@@ -21,7 +21,7 @@ travel by mail.
 
 diff --git a/rounds/R19-macindoe.md b/rounds/R19-macindoe.md
 new file mode 100644
-index 0000000..98b2d8a
+index 0000000..59a8067
 --- /dev/null
 +++ b/rounds/R19-macindoe.md
 @@ -0,0 +1,147 @@
@@ -123,7 +123,7 @@ index 0000000..98b2d8a
 +  under a weaker hypothesis meets every rotation's size condition with every element `≥ X₀`.
 +  Under that hypothesis its last block continues the climb instead of collapsing to a unit
 +  block. It does so at the scale where their Lemma 7, not their Corollary 5, is the operative
-+  bound, with `Λ ≥ 0.0541·2^{−ε_p·n}`.
++  bound, with `Λ ≥ 0.054·2^{−ε_p·n}`.
 +- **`p₁`.** It is explicit from the continued fraction of `log₂3`: 98 at their `X₀ = 5·2^60` and
 +  110 at `2^71`. The first is consistent with their own size-only exclusion of `m ≤ 75` there.
 +- **Unit-block staircase.** The staircase as first built, with a unit closing block, provably
@@ -131,7 +131,7 @@ index 0000000..98b2d8a
 +
 +What it settles of their p. 69 sentence:
 +- the exponential dependence on `m` is attained;
-+- `m c_m` cannot go below a constant (`0.0541`).
++- `m c_m` cannot go below a constant (`0.054`).
 +
 +What it leaves open: whether `m c_m` can be lowered *to* a constant, their own "at best". On our
 +side that is a `log₂ p` gap in the necessity, and nothing here decides it at the Lemma 7 scale.
