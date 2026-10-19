@@ -1,0 +1,581 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{hypothesis}[theorem]{Hypothesis}
+\newtheorem{heuristic}[theorem]{Heuristic}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\vt}[1]{v_2\!\left(#1\right)}
+\newcommand{\vth}[1]{v_3\!\left(#1\right)}
+\newcommand{\w}{\omega}
+\newcommand{\wnext}{\w_{+}}
+\newcommand{\dnext}{d_{+}}
+\newcommand{\LL}{\log_2 3}
+\newcommand{\kp}{\kappa_p}
+\setlength{\emergencystretch}{3em}
+% DOI: replace the placeholder below with the v4 version-specific DOI once it is minted
+% (it is used on the title page and in the Version note).
+\newcommand{\vfourdoi}{\textbf{[v4 version DOI]}}
+% PIN-AT-BUILD: replace with the commit of the public record at which every wiki section and
+% script named in this paper is cited (the record's main is not yet pushed; do not cite an
+% unreachable commit as reachable). Used in Section 4 and Appendix A.
+\newcommand{\recordcommit}{\textbf{[record commit, pinned at release]}}
+
+\title{Reduced coordinates for the Collatz map:\\ exact per-step laws, anchor dynamics,\\ and the limits of counting arguments for cycles}
+\author{Ben Macindoe\thanks{\texttt{macindoebenjamin@gmail.com}. Developed through extensive AI-assisted research, with ChatGPT (OpenAI) from December 2025 to March 2026 and with Claude (Anthropic) from March 2026; the division of labor and the verification protocol are stated in Appendix~\ref{app:method}.}}
+% PIN-AT-BUILD: the month is the month of minting.
+\date{v4, October 2026 $\;\cdot\;$ DOI: \vfourdoi{} $\;\cdot\;$ concept DOI: \href{https://doi.org/10.5281/zenodo.21273547}{10.5281/zenodo.21273547}}
+
+\hypersetup{
+  pdftitle={Reduced coordinates for the Collatz map: exact per-step laws, anchor dynamics, and the limits of counting arguments for cycles},
+  pdfauthor={Ben Macindoe}
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study the Collatz dynamics in a reduced coordinate system that compresses each deterministic valuation run into a single block, producing a self-map $F$ on states $(\w,d)$ --- an odd core prime to $3$ and a depth; the states appear independently as the skeleton rows of Williams (2026) --- whose convergence problem and cycle set are exactly those of the Collatz map. In these coordinates the local arithmetic admits exact laws, all governed by one $2$-adic quantity, the \emph{anchor} $M(\w) = -2\log\w/\log 9 \in \Z_2$: the exit valuation obeys the global law $s = 2 + \vt{d - M(\w)}$ on the lifting classes and is constant on the rest; the depth evolution closes exactly in the anchor displacement together with a stated $3$-adic absorption law; and the anchor increment obeys an exact law modulo any power of $2$, computable from graded residues of the state. A finite window of digits and stratum labels consequently decides each step in an error-free trichotomy, while a digit-budget accounting indicates that no bounded window can decide infinite horizons --- localizing the difficulty in the digit supply of the anchors. On the cycle side, a one-line elimination identity (the B\"ohm--Sontacchi cycle equation in block form) yields short rederivations of the classical exclusions at one, two and three blocks and of the classical trim uniform in the number of blocks $p$ (Rozier 1991; Simons--de~Weger 2005), whose constant degrades like $(\LL)^{-p}$. We prove that this exponential loss is intrinsic to size arguments. An explicit family of configurations (\emph{staircases}: divergent-orbit profiles bent into loops) meets every rotation's exact size condition with slack between two absolute constants at every period ($p \ge 16$ by proof, $3 \le p \le 15$ by finite check, $p \in \{2,4\}$ by exhibition), and, with every cycle element at least a threshold $X_0$, at every period $p \ge p_1(X_0)$, with slack exceeding the trim's own exponent by at most an absolute constant. The family realizes Rozier's 1991 extremal, which Simons--de~Weger expected in 2005; the analogue in the cycle-length parameter, and the conclusion that uniform cycle exclusion needs divisibility input, are Halbeisen--Hungerb\"uhler's (1997). Finally we state the equidistribution hypothesis implicit in the classical heuristics as a precise conjecture --- that the block letters of uniformly sampled large starts carry, at every finite block length, the frequencies of an exactly computable Bernoulli law --- prove its consequences conditionally, exhibit an unconditional base case inside the digit budget, and report a calibration campaign whose four apparent anomalies all dissolved under controls.
+\end{abstract}
+
+\subsection*{Version note}
+% DOI: the version-specific DOI enters through \vfourdoi (preamble).
+% PIN-AT-BUILD: the month below is the month of minting.
+v4, October 2026 (DOI \vfourdoi). It supersedes v3 (DOI 10.5281/zenodo.21730505, August 2026), v2 (10.5281/zenodo.21421120) and v1 (10.5281/zenodo.21273548, July 2026); the concept DOI 10.5281/zenodo.21273547 resolves to the latest version. v4 attributes the uniform trim (Theorem~\ref{thm:uniform}) to Rozier and to Simons--de~Weger, with finiteness at each period to Brox, and presents it as a rederivation; states the sharpness of that trim (Theorem~\ref{thm:staircase}) at every period and at every size threshold $X_0$ for $p \ge p_1(X_0)$, with its proof, in place of the assessment and status report of v3; cites the classical and contemporary sources of the reduced coordinates' objects and of the elimination identity; and corrects the attribution of Theorem~\ref{thm:vlaw}'s unconditional bound at $\w = 1$. No statement is renumbered. The history of every version, item by item, is at \texttt{paper/collatz-reduced-version-history.md} in the project record.
+
+\subsection*{Author's note}
+
+% AUTHOR: this note is in the author's voice and is left as in v3. The comments below mark
+% each sentence the v4 findings make wrong or incomplete; the rewording is the author's.
+\emph{Dear reader --- I'm no mathematician, and I learned much of this paper's terminology during the process of formalizing it ($p$-adic valuations were completely new to me as a formal concept). It all began when I got hooked on a strange recursive pattern in the prime factors of a Collatz chain, and that idea pushed me into conversation with AI.
+% AUTHOR: next sentence is accurate as written (the author's decision, 2026-10-19): the
+% coordinate was worked out by hand in December 2025 and named and formalized as (omega,d) in the
+% AI-assisted work, as Related work and Appendix A now state. No change needed.
+We cleaned my idea up into the states $(\w,d)$, with the primary goal of factoring as much deterministic behaviour as possible out of the question, in the hope of focusing attention where it matters.
+% AUTHOR: next sentence is wrong in its second item. The uniform trim is Rozier 1991 and
+% Simons--de Weger 2005 (Theorem 4.5 now carries the attribution); they obtained it without
+% these coordinates, so it is not enabled by them. What this paper adds on that side is the
+% proof that the classical cap is the true one (Theorem 4.6). One option (checklist row 1.3):
+% "...exact laws for every single step; a proof that the classical cap on what size-counting
+% can achieve against cycles is the true one; ..."
+That simplification is what enables the paper's main contributions: exact laws for every single step; a uniform trim that caps what size-counting can achieve against cycles; and an exact hypothesis pointing the remaining question toward more fundamental ``fair-coin'' mathematics. Because this work is AI-assisted and because I am not formally trained in the relevant mathematics, Appendix~\ref{app:method} describes the verification protocol used throughout the project. The complete research record is public at \url{https://github.com/macindoe/collatz}. --- Ben}
+
+\section{Introduction}
+
+Let $T(x) = (3x+1)/2^{\vt{3x+1}}$ denote the odd-to-odd Collatz map on positive odd integers (Tao's Syracuse map $\mathrm{Syr}$ \cite{tao}). The Collatz conjecture asserts that every $T$-orbit reaches $1$. This paper develops a coordinate system in which the local arithmetic of $T$ becomes exactly computable, and uses it for three purposes: to prove exact per-step laws for the induced dynamics; to determine how far counting arguments can go toward cycle exclusion (answer: classically, exponentially far in the number of blocks \cite{rozier91,sdw}; and, as we prove, no farther: at every period, and at every size threshold $X_0$ for all periods $p \ge p_1(X_0)$); and to state precisely the statistical hypothesis that the classical heuristics leave implicit.
+
+The idea is to stop watching individual steps. Writing $x + 1 = 2^m u$ with $u$ odd, the next $m-1$ odd steps of $T$ are deterministic --- each converts one factor of $2$ in $x+1$ into a factor of $3$ --- and terminate in a single cascade (Proposition~\ref{prop:block}), a classical observation (Steiner \cite{steiner}; see also Rozier \cite{rozier90} and LaDue \cite{ladue}). Compressing this \emph{block} and splitting $u = 3^a\w$ with $3\nmid\w$ yields a state $(\w, d)$ with $d = m + a$ (independently, the skeleton rows $(\lambda, k)$ of Williams \cite{williams}), and the block-to-block dynamics induce a self-map $F$ on such states. The compression loses nothing the conjecture depends on (Theorem~\ref{thm:equiv}).
+
+\paragraph{Contributions.} (i) A reduced self-map $F$ on the states $(\w,d)$ --- the skeleton rows of Williams \cite{williams}, reached independently --- with an in-paper proof of well-definedness, whose convergence problem and cycle set are exactly equivalent to those of $T$ (Section~\ref{sec:reduced}). (ii) A global anchor law for the exit valuation $s$, derived from one squaring lemma (Section~\ref{sec:anchor}). (iii) Exact residue-class formulas for the depth evolution, including an explicit $3$-adic absorption law (Theorem~\ref{thm:depth}). (iv) An exact low-order law for the anchor increment and an error-free trichotomy deciding the next step from a finite residue window together with the step's stratum labels, with a digit-budget accounting (Theorems~\ref{thm:deltaM}--\ref{thm:onestep}, Heuristic~\ref{prop:budget}). (v) A cycle elimination identity (the B\"ohm--Sontacchi cycle equation in block form), short rederivations of the classical small-cycle exclusions and of the classical uniform trim (Rozier; Simons--de~Weger), and a proof of that trim's sharpness: an explicit family realizing Rozier's extremal profile under every rotation's exact size condition, at every period and, for $p \ge p_1(X_0)$, with every element above any size threshold $X_0$, showing that the exponential loss is intrinsic to size-counting (Section~\ref{sec:cycles}). (vi) The equidistribution hypothesis stated exactly, its consequences proved conditionally, and a calibration record (Section~\ref{sec:aeh}).
+
+Section~\ref{sec:anchor} is the technical heart: every quantity above obeys an exact law in the anchor displacement $d - M(\w)$, a finite window of digits and stratum labels then decides the next step in a trichotomy that never errs, and an elementary accounting argument shows each decision \emph{consumes} digits irreversibly. In these coordinates the difficulty of the problem is not diffuse: it is the question of where the digits of the anchors come from. Section~\ref{sec:cycles} tests the one regime where finite data can beat unbounded depth --- cycles --- and, since the staircase is precisely a divergent-orbit profile closed into a loop, the cycle half and the divergence half of the residual difficulty are, in a concrete sense, one object. Section~\ref{sec:aeh} formalizes the statistical half: the folklore ``fair-coin'' heuristics (Terras \cite{terras}) become an exact statement about the block letters of typical orbits, equivalently about an explicitly computable window law $\pi_{k,D}$, whose ledger consequences are unconditional theorems \emph{about} $\pi_{k,D}$.
+
+\subsection*{Related work and provenance}
+Block-like decompositions and stochastic models are classical (Terras \cite{terras}; see Lagarias \cite{lagarias} for the literature), and the $2$-adic conjugacy of the Collatz map to the shift underlies all Haar-genericity heuristics. The unconditional density line descending from Terras is long and is not what Section~\ref{sec:aeh} adds to. Terras \cite{terras} and Everett \cite{everett} place descent below the start at natural density one; Korec \cite{korec} lowers the target to $y^{c}$ for every $c > \log_4 3 = 0.7924\ldots$, in natural density and within $O(\log y)$ steps; Inselmann \cite{inselmann} carries a two-sided trajectory law --- the orbit tracked to within $m^{\pm\varepsilon}$ of its classical drift, simultaneously at every time up to $(\log_2\tfrac43)^{-1}\log_2 m$ Syracuse steps, the full descent horizon in that unit --- at natural density one, and so reaches $m^{\varepsilon}$ for every fixed $\varepsilon>0$; and Tao \cite{tao} reaches every divergent threshold, in logarithmic density. All of these horizons are counted in steps, and their reading in the reduced blocks of Section~\ref{sec:aeh} is not free: it divides by a mean number of steps per block which is a theorem of the cylinder count inside the digit budget and, past it, neither a theorem nor a consequence of Hypothesis~\ref{hyp:aeh}. What Hypothesis~\ref{hyp:aeh} asserts is not descent but the letter statistics themselves --- equivalently the exact window law $\pi_{k,D}$ --- at horizons past the digit budget of Heuristic~\ref{prop:budget}. Tao's paper carries a footnote to two further $3$-adic studies, and neither is the object appearing here. Wirsching \cite{wirsching} completes the root of the predecessor tree $3$-adically and studies the inverse map as a Markov chain on $[0,1] \times \Z_3^{\times}$ in order to \emph{count} predecessors; his inverse branches therefore carry equal weight and his limiting $3$-adic law is Haar, whereas the law appearing in Section~\ref{sec:aeh} weights each branch by the probability $2^{-a}$ that an orbit takes it and is consequently not uniform --- $(\tfrac23,\tfrac13)$ at level one where Haar gives $(\tfrac12,\tfrac12)$. The two programmes are nonetheless siblings in shape: what Wirsching needs is that a Collatz-generated object be unbiased in $3$-adic coordinates, and Hypothesis~\ref{hyp:aeh} is that one is unbiased in $2$-adic coordinates. Thomas \cite{thomas} proves that the integers whose orbit reaches $1$ with all six frequencies over the units modulo $18$ below $\tfrac16 + 0.0215$ have counting function at most $N^{0.9999}$; he constructs no limiting measure, and the law recorded here implies his conclusion, its level-one form already forcing some class to frequency at least $\tfrac29$. Two-adic and Diophantine methods dominate the cycle literature \cite{steiner,rozier90,sdw,hercher,eliahou}; effective linear forms in logarithms \cite{yu,bl,rhin} are the engine, and the verified range of the conjecture stands at $2^{71}$ \cite{barina}. The linear cycle equation behind Proposition~\ref{prop:elim} is B\"ohm and Sontacchi's \cite{bohm}.
+
+The trim of Theorem~\ref{thm:uniform} is classical. For every number of local minima of a cycle --- which is our number of blocks $p$ (Section~\ref{sec:cycles}) --- Rozier \cite[Lemme~4]{rozier91} bounded the number of odd steps, with the exponent $(\LL-1)/((\LL)^p-1)$; Brox \cite{brox} proved finiteness for each $p$; and Simons and de~Weger \cite[Lemmas~7, 14 and Theorem~3]{sdw} made the bound explicit and computed with it. Our proof is a rederivation by another route. Rozier observed that his bound is optimal over real run-length tuples, the extremal tuple growing geometrically at ratio $\LL$ \cite[p.~11]{rozier91}; Simons and de~Weger expected the exponential dependence on the number of minima to be unavoidable \cite[p.~69]{sdw}. In the cycle-length parameter, Halbeisen and Hungerb\"uhler \cite{hh} proved the size criterion optimal, attained by explicit rational cycles of every length, and reduced the remaining question to divisibility \cite[p.~238]{hh}. Theorem~\ref{thm:staircase} realizes Rozier's extremal by integer configurations meeting every rotation's exact size condition, at every period, and, for $p \ge p_1(X_0)$, with every element at least a threshold $X_0$ --- the sharpness Simons and de~Weger expected.
+
+Two contemporary human--AI efforts are close in spirit: a documented exploration \cite{llmcollatz} develops a burst--gap decomposition and an orbit equidistribution conjecture, and a Lean~4 formalization \cite{merle} proves cycle exclusion conditionally on Baker-type and verification hypotheses, including an impossibility lemma for measure-based uniform bounds kindred to our Theorem~\ref{thm:staircase}; neither contains the anchor machinery or the exact per-step laws. A bachelor's thesis of Rackl (Klagenfurt, 2021) applies valuation methods to Syracuse cycles via the classical cycle equation; it likewise contains none of the present apparatus.
+
+The division of labor in the present work is stated precisely, because it matters for both credit and blame. The mechanism underneath the reduced coordinates --- each rising step trades a factor of $2$ for a factor of $3$ --- comes from the author's hand-drawn note of March~2023, and is classical (Steiner \cite{steiner}; see also Rozier \cite{rozier90} and LaDue \cite{ladue}). The reduced coordinate itself, the factorization $x + 1 = 2^m 3^a \w$ with its odd core $\w$, was worked out by the author by hand in December~2025, and was named and formalized as the state $(\w,d)$ in AI-assisted work: with ChatGPT (OpenAI) from December~2025, and with Claude (Anthropic) from March~2026. The same states, with their representative fibre and intra-block cascade, appear independently as the skeleton rows $(\lambda,k)$ of Williams \cite{williams}, posted earlier, with $\lambda = \w$ and $k = d$: her Proposition~3.3, Theorem~3.6 and Proposition~3.10 are our Proposition~\ref{prop:block}(iii), (i) and (ii). Her open problem~(1) \cite[p.~18]{williams} asks for the map sending one skeleton to the next, and Section~\ref{sec:anchor} answers it in part: it gives exact laws for where a trajectory leaving a row lands --- the exit valuation and the entry position, hence the row entered --- but none for which skeleton is entered, where $F$ restates her Proposition~3.10. The analytical superstructure erected on the coordinates --- the anchor formulation, the cycle apparatus, the equidistribution formalization, and the proofs --- was developed in AI-assisted research under the author's direction, drawing on the classical literature's concepts. Appendix~\ref{app:method} states the responsibility and verification protocol.
+
+\section{The reduced system}\label{sec:reduced}
+
+\begin{definition}\label{def:reduced}
+A \emph{reduced state} is a pair $(\w, d)$ with $\w$ odd and positive, $3\nmid\w$, $d \ge 1$. Set
+\[ A = 3^d\w - 1,\qquad s = \vt{A},\qquad x_{\mathrm{exit}} = A/2^s,\qquad C = A + 2^s, \]
+\[ \sigma = \vt{C},\qquad a_+ = \vth{C},\qquad m_+ = \sigma - s,\qquad \wnext = \frac{C}{2^{\sigma}3^{a_+}},\qquad \dnext = m_+ + a_+, \]
+and define the \emph{reduced map} $F(\w,d) = (\wnext, \dnext)$. The \emph{projection} $R$ sends an odd $x$ with $x + 1 = 2^m 3^a \w$ ($3\nmid\w$) to $R(x) = (\w, m + a)$.
+\end{definition}
+
+\begin{proposition}[block structure and well-definedness]\label{prop:block}
+Let $x$ be odd with $x + 1 = 2^m u$, $u = 3^a\w$ odd, $3 \nmid \w$, and let $(\w,d) = R(x)$, $d = m+a$. Then:
+\begin{enumerate}
+\item[(i)] the next $m - 1$ iterates of $T$ are $x_j$ with $x_j + 1 = 2^{m-j}\,3^j u$ for $j = 0,\dots,m-1$;
+\item[(ii)] the following iterate is $T(x_{m-1}) = A/2^s = x_{\mathrm{exit}}(\w,d)$, which depends only on $(\w,d)$;
+\item[(iii)] consequently $R(T^{m}(x)) = F(R(x))$ for every representative $x$ of $(\w,d)$, the representatives being exactly $x = 2^{d-a}3^a\w - 1$, $0 \le a \le d-1$; and the sequence of reduced states visited by any $T$-orbit is the $F$-orbit of its projection.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) If $y + 1 = 2^k v$ with $k \ge 2$, $v$ odd, then $3y + 1 = 3(y+1) - 2 = 2\left(3\cdot 2^{k-1}v - 1\right)$, an odd multiple of $2$, so $T(y) = 3\cdot2^{k-1}v - 1$ and $T(y) + 1 = 2^{k-1}(3v)$: one factor of $2$ is exchanged for one factor of $3$. Induction from $y = x$ gives (i). (ii) At $j = m-1$ we have $x_{m-1} + 1 = 2\cdot 3^{m-1}u$, so $3x_{m-1} + 1 = 3(x_{m-1}+1) - 2 = 2(3^m u - 1) = 2A$ since $3^m u = 3^{m+a}\w = 3^d \w$. Thus $T(x_{m-1}) = 2A/2^{1+s} = A/2^s$, and $A$ depends only on $(\w,d)$. (iii) $x_{\mathrm{exit}} + 1 = (A + 2^s)/2^s = C/2^s$, so $R(x_{\mathrm{exit}}) = (\wnext, (\sigma - s) + a_+) = F(\w,d)$ by Definition~\ref{def:reduced}; the representative list is immediate from $x + 1 = 2^{d-a}3^a\w$.
+\end{proof}
+
+\begin{theorem}[convergence translation]\label{thm:equiv}
+$(1,1)$ is a fixed point of $F$ whose $R$-fiber is $\{1\}$. The Collatz conjecture holds if and only if every $F$-orbit from a valid state reaches $(1,1)$, and $R$ induces a bijection between nontrivial $T$-cycles and $F$-cycles other than $\{(1,1)\}$.
+\end{theorem}
+
+\begin{proof}
+For $(1,1)$: $A = 2$, $s = 1$, $x_{\mathrm{exit}} = 1$, $C = 4$, so $F(1,1) = (1,1)$; the fiber is $\{1\}$ since the representatives are $x = 2\cdot 1 - 1 = 1$ only. If the conjecture holds and $(\w,d)$ is valid, its representative $x = 2^d\w - 1$ reaches $1$, so by Proposition~\ref{prop:block}(iii) the $F$-orbit of $(\w,d)$ reaches $R(1) = (1,1)$. Conversely if every $F$-orbit reaches $(1,1)$, then any odd $x$ has a $T$-orbit visiting the fiber of $(1,1)$, i.e.\ the value $1$. For cycles: a nontrivial $T$-cycle projects to a periodic $F$-orbit avoiding $(1,1)$ (its values avoid $1$); conversely an $F$-cycle's block entries $e_t = x_{\mathrm{exit}}(S_{t-1})$ are deterministic in the states and joined by genuine $T$-iteration, so $e_0$ is $T$-periodic and nontrivial; the two constructions are mutually inverse.
+\end{proof}
+
+\section{Anchor dynamics: the exact per-step laws}\label{sec:anchor}
+
+For $u \equiv 1 \pmod 8$ the equation $9^{t} = u^{-1}$ has a unique solution $t \in \Z_2$, since $9$ topologically generates $1 + 8\Z_2$; write $N(u)$ for it, so $N(u) = -\log u/\log 9$ in the $2$-adic logarithm. $N$ is an isomorphism $(1+8\Z_2,\times)\to(\Z_2,+)$, and
+\begin{equation}\label{eq:isometry}
+\vt{9^t - 1} = 3 + \vt{t}\qquad (t \in \Z_2\setminus\{0\}),
+\end{equation}
+the \emph{isometry}, since $9 = 1 + 8$ and $\vt{\log(1+8z)} = 3 + \vt{z}$-type estimates hold with equality here.
+
+\begin{definition}[anchor]
+For every odd $\w$ set $M(\w) = N(\w^2) = -2\log\w/\log 9 \in \Z_2$, well defined since $\w^2\equiv 1 \pmod 8$. $M(\w)$ is even iff $\w\equiv\pm1\pmod 8$.
+\end{definition}
+
+\begin{lemma}[squaring lemma]\label{lem:squaring}
+Let $\w$ be odd, $d \ge 1$, and $Y = 3^d\w$. If $Y \equiv 1 \pmod 8$, then
+\[ \vt{Y - 1} = 2 + \vt{d - M(\w)}. \]
+\end{lemma}
+
+\begin{proof}
+$Y^2 = 9^d\w^2 = 9^{d}\,9^{-M(\w)}\cdot\bigl(9^{M(\w)}\w^2\bigr) = 9^{\,d - M(\w)}$, since $9^{M(\w)} = \w^{-2}$ by definition of $N$. By \eqref{eq:isometry}, $\vt{Y^2 - 1} = 3 + \vt{d - M(\w)}$ (nonzero since $Y^2 \neq 1$ for a valid state). Since $Y \equiv 1 \pmod 8$ we have $\vt{Y+1} = 1$, and $\vt{Y-1} = \vt{Y^2-1} - \vt{Y+1}$ gives the claim.
+\end{proof}
+
+\begin{theorem}[global valuation law]\label{thm:vlaw}
+Call $(\w,d)$ \emph{lifting} if $3^d\w \equiv 1 \pmod 8$, i.e.\ $\w\equiv1\ (8)$ with $d$ even or $\w\equiv3\ (8)$ with $d$ odd. On the lifting classes
+\[ s = \vt{3^d\w - 1} = 2 + \vt{d - M(\w)} \;\ge\; 3, \]
+while on the six non-lifting residue-parity classes $s \in \{1,2\}$ is the constant determined by $(\w \bmod 8,\, d \bmod 2)$: $s = 1$ on $(1,\mathrm{odd}), (5,\mathrm{odd}), (7,\mathrm{even}), (3,\mathrm{even})$ and $s = 2$ on $(5,\mathrm{even}), (7,\mathrm{odd})$. Unconditionally $s \le C(\w)\,(1 + \log d)^2$: for $\w \ne 1$ by $p$-adic Baker theory \cite{yu}, \cite[Corollaire~2]{bl}, and at $\w = 1$ exactly, since there the lifting class is $d$ even and $s = 2 + \vt{d}$.
+\end{theorem}
+
+\begin{proof}
+The lifting case is Lemma~\ref{lem:squaring}; the parity claim ($d \equiv M(\w) \bmod 2$ on lifting classes) follows from $\vt{d - M(\w)} \ge 1$ there. Off-lifting, $3^d\w \bmod 8 \in \{3,5,7\}$ gives $\vt{3^d\w - 1} \in \{1,2\}$ by inspection of residues mod $8$. The Baker bound applies to $s = \vt{9^n\tilde\w - 1}$, a linear form in two $2$-adic logarithms, for $\tilde\w \ne 1$ (here $\tilde\w \in \{\w, 3\w\}$ according to the lifting component, so $\tilde\w = 1$ only at $\w = 1$, $d$ even); at $\tilde\w = 1$ the pair $(9,1)$ is multiplicatively dependent and the Baker input does not apply, but $M(1) = 0$ and the lifting case above gives $s = 2 + \vt{d} \le 2 + \log_2 d$ exactly, by the isometry \eqref{eq:isometry}.
+\end{proof}
+
+\begin{lemma}[$3$-adic absorption law]\label{lem:absorption}
+Let $h(s) = \vth{2^s - 1}$, so $h(s) = 0$ for $s$ odd and $h(s) = 1 + \vth{s}$ for $s$ even. Then
+\[ a_+ = \vth{C} = \begin{cases} 0, & s \text{ odd},\\[2pt] \min(d,\, h(s)), & s \text{ even},\ d \ne h(s),\\[2pt] d + \vth{\w + (2^s-1)3^{-d}}, & s \text{ even},\ d = h(s). \end{cases} \]
+In particular the next state gains a factor of $3$ exactly when $s$ is even.
+\end{lemma}
+
+\begin{proof}
+$C = 3^d\w + (2^s - 1)$ with $\vth{3^d\w} = d$ exactly and $\vth{2^s-1} = h(s)$; $h(s) = 0$ iff $s$ odd since $2^s \equiv 2 \pmod 3$ then, and for even $s$, lifting-the-exponent gives $\vth{4^{s/2}-1} = \vth{3} + \vth{s/2} = 1 + \vth{s}$. The ultrametric equality $\vth{X+Y} = \min(\vth X,\vth Y)$ holds when the valuations differ; when $d = h(s)$, factor $3^d$ and evaluate the remaining unit sum.
+\end{proof}
+
+\begin{theorem}[depth closure]\label{thm:depth}
+On every residue class the next depth is $\dnext = m_+ + a_+$ with $a_+$ given exactly by Lemma~\ref{lem:absorption} and $m_+$ by the \emph{entry-depth law}: writing $\varepsilon$ for the anchor displacement ($\varepsilon = n - N(\w)$ on the lifting class $d = 2n$, $\varepsilon = n - N(3\w)$ on $d = 2n+1$) and $\delta_s = N(1 - 2^s)$ (which satisfies $\vt{\delta_s} = s - 3$ for $s \ge 3$),
+\[ m_+ = 3 - s + \vt{\varepsilon + \delta_s} \quad\text{(lifting)},\qquad
+   m_+ = \begin{cases} 1 + \vt{d - M(\w)}, & s = 1,\\ \vt{(d-1) - M(\w)}, & s = 2. \end{cases} \]
+The forced carry $\vt{\delta_s} = s-3 = \vt{\varepsilon}$ yields $m_+ \ge 1$ structurally.
+\end{theorem}
+
+\begin{proof}
+All cases reduce to the \emph{target-shift lemma}: for $c \in 1 + 8\Z_2$ and $d = 2n$ with $\w \equiv 1\ (8)$,
+\[ \vt{3^{d}\w - c} \;=\; 3 + \vt{n - N(\w) + N(c)}, \]
+proved exactly as Lemma~\ref{lem:squaring} after writing $3^d\w - c = 9^{-N(c)}\bigl(9^{\,n - N(\w) + N(c)} - 1\bigr)$. Since $m_+ = \vt{x_{\mathrm{exit}}+1}$ and $2^s(x_{\mathrm{exit}}+1) = C = 3^d\w - (1 - 2^s)$, the lifting case is the shift $c = 1 - 2^s$ (which lies in $1+8\Z_2$ for $s \ge 3$), with $\vt{\delta_s} = s - 3$ from the isometry; the odd lifting component reduces to the even one via the companion parameter $3\w$. For $s = 1$: the shifted target is $-1$, and $\vt{X+1} = \vt{X^2-1} - \vt{X-1}$ with $X = 3^d\w$, $X^2 = 9^{\,d - M(\w)}$, gives the formula; For $s = 2$: here $C = 3^d\w + 3 = 3(X' + 1)$ with $X' = 3^{d-1}\w$, so $m_+ = \vt{C} - 2 = \vt{X'+1} - 2$. The $s=2$ classes force $3^d\w \equiv 5 \pmod 8$, hence $X' \equiv 3^{-1}\cdot 5 \equiv 7 \pmod 8$, so $\vt{X'-1} = 1$; and $X'^2 = 9^{\,(d-1) - M(\w)}$ as in Lemma~\ref{lem:squaring}, so $\vt{X'+1} = \vt{X'^2-1} - \vt{X'-1} = \bigl(3 + \vt{(d-1) - M(\w)}\bigr) - 1$, giving $m_+ = \vt{(d-1) - M(\w)}$ as claimed.
+\end{proof}
+
+\begin{remark}[verification notes]\label{rem:verify1}
+Each law above was checked by independently written code, with zero discrepancies: the valuation law on $8{,}000$ random states across both lifting components, the entry-depth law exhaustively on all $62{,}937$ valid states with $\w < 3000$, $d < 64$, and the absorption law on $327{,}980$ states ($983{,}954$ comparisons against both this Lemma and its form in the record), with the boundary branch $d = h(s)$, on which $a_+$ is a $3$-adic function of $\w$, and the shallow branch $d < h(s)$ constructed rather than sampled. The records are \texttt{stage3.md} \S11.8.6.3 and that page's status header; the code is \texttt{experiments/absorption\_law.py}.
+\end{remark}
+
+\begin{theorem}[low-order anchor-increment law]\label{thm:deltaM}
+Let $\Delta M = M(\wnext) - M(\w)$. For every $k \ge 1$, $\Delta M \bmod 2^k$ is determined by, and explicitly computable from,
+\[ \w \bmod 2^{\sigma + k + 2},\qquad d \bmod 2^{\sigma + k},\qquad a_+ \bmod 2^k, \]
+and the stratum data $(s, \sigma)$ are determined by the same residues. This last clause does not extend to $a_+$: by Lemma~\ref{lem:absorption} the absorption is a $3$-adic function of $\w$, and it enters the display only through its residue $a_+ \bmod 2^k$.
+\end{theorem}
+
+\begin{proof}
+Three digit-determinacy facts chain together. (a) For $u \equiv 1\ (8)$, $N(u) \bmod 2^k$ depends only on $u \bmod 2^{k+3}$, since $9$ has order $2^k$ mod $2^{k+3}$ and $9^t \equiv u^{-1}$ determines $t$ mod $2^k$. (b) $C \bmod 2^{q}$ is determined by $\w \bmod 2^q$, $d \bmod 2^{q-2}$, $s$, since $3$ has order $2^{q-2}$ mod $2^q$. (c) $\wnext \bmod 2^r$ is determined by $C \bmod 2^{\sigma + r}$, $\sigma$, and $a_+ \bmod 2^{r-2}$, by exact division and the order of $3$ mod $2^r$. Now $\Delta M = N\bigl((\wnext/\w)^2\bigr)$; by (a) this needs $(\wnext/\w)^2 \bmod 2^{k+3}$, hence $\wnext, \w \bmod 2^{k+2}$; by (c) with $r = k+2$ this needs $C \bmod 2^{\sigma+k+2}$ and $a_+ \bmod 2^k$; by (b) this needs the stated residues of $\w$ and $d$. Finally $s \le \sigma$ and $\sigma$ are visible in $A \bmod 2^{\sigma+1}$, $C \bmod 2^{\sigma+1}$.
+\end{proof}
+
+\begin{theorem}[one-step trichotomy]\label{thm:onestep}
+The \emph{depth-$k$ window} of a valid state $(\w,d)$ consists of the residues of Theorem~\ref{thm:deltaM} together with the stratum labels $(s, \sigma, a_+)$. From the depth-$k$ window alone, one can determine: the exact next depth $\dnext$ and next residue-parity class; the exact value $s_+ \in \{1,2\}$ if the next class is non-lifting; and, if lifting, the truncation of the next displacement mod $2^k$ --- yielding $s_+$ exactly when nonzero, and the correct report ``$s_+ \ge k+2$'' when zero. The window never outputs a wrong value; under the law $\pi_{k,D}$ of Section~\ref{sec:aeh} the undecided rate is $\approx 2^{-(k+1)}$.
+\end{theorem}
+
+\begin{proof}
+By facts (b), (c) above the window determines $\wnext \bmod 2^{k+2}$, hence the next class; $\dnext = (\sigma - s) + a_+$ is exact from the stratum data. Non-lifting $s_+$ is the class constant (Theorem~\ref{thm:vlaw}). Lifting: $M(\wnext) \bmod 2^k$ follows from fact (a) applied to $\wnext^2$, so $(\dnext - M(\wnext)) \bmod 2^k$ is computable; if nonzero its valuation is visible and Theorem~\ref{thm:vlaw} gives $s_+$; if zero then $\vt{\dnext - M(\wnext)} \ge k$, i.e.\ $s_+ \ge k + 2$.
+\end{proof}
+
+\begin{heuristic}[digit budget]\label{prop:budget}
+Deciding one step at depth $k$ consumes the state's $2$-adic data to depth $\sigma + k + 2$ (empirical mean $\sigma \approx 4.0$ along orbits), and nothing regenerates it: the anchors of later states are functions of the full initial state, not of any bounded window. A window of $W$ digits therefore supports $O(W/(k+6))$ decided steps. This strongly suggests --- and we treat it as the organizing heuristic, not a formalized theorem --- that bounded-window determinism cannot decide unbounded horizons without additional statistical or rigidity input.
+\end{heuristic}
+
+\begin{remark}[verification note]
+The trichotomy was run along real orbits for $k \in \{4,8\}$: $21{,}296$ steps, $21{,}000$ decided with zero errors, $296$ flagged deep with zero violations of the bound $s_+ \ge k+2$. Code: \texttt{experiments/one\_step\_propagation.py}; the low-order law of Theorem~\ref{thm:deltaM} is checked by \texttt{experiments/anchor\_increment.py}.
+\end{remark}
+
+Heuristic~\ref{prop:budget} is the paper's organizing negative observation: it splits the residual difficulty into a statistical question for typical starting values (Section~\ref{sec:aeh}) and a rigidity question for cycles (Section~\ref{sec:cycles}); we know of no residual content outside those two.
+
+\section{Cycles: rederivations, a uniform trim, and its sharpness}\label{sec:cycles}
+
+Fix a hypothetical $p$-block cycle of $F$ with entry depths $m_t \ge 1$, exit valuations $s_t \ge 1$ ($t \in \Z/p\Z$), and set $n = \sum m_t$, $K = \sum s_t + n$, $q = 2^K - 3^n$.
+
+\begin{proposition}[elimination identity]\label{prop:elim}
+$q > 0$, and for every rotation $r$,
+\[ \w_r\, 3^{a_{r-1}}\, q \;=\; R_r \;:=\; \sum_{t=0}^{p-1} 3^{M_t}\, 2^{S_t}\,(2^{s_t}-1), \]
+where, in rotation order starting at $r$, $M_t = \sum_{j>t} m_j$ and $S_t = \sum_{j<t}\sigma_j$, with $\sigma_j = s_j + m_{j+1}$, indices cyclic (the step's $\sigma = \vt{C}$, $m_+ = \sigma - s$, of Definition~\ref{def:reduced}; the shift is essential, $m_{j+1}$ and not $m_j$; and $M_t$, a partial sum of entry depths, is unrelated to the anchor $M(\w)$ of Section~\ref{sec:anchor} --- this is the project record's own notation, \texttt{cycles.md} \S12.6.1, kept so that paper and record read together). Hence $q \mid R_r$ and $q \le \min_r R_r$. For the trivial cycle, $R = 4^p - 3^p = q$ identically.
+\end{proposition}
+
+This is the classical cycle equation of B\"ohm and Sontacchi \cite{bohm} (see \cite[I, item~26]{lagarias}) in block coordinates; in integer form it reads $2^{m_0}R_0 = 2^K F_n(a) + q$, with $F_n$ Tao's $n$-Syracuse offset \cite[(1.5)]{tao} and $a$ the valuation word of the profile (\texttt{cycles.md} Remark~12.6.1.7).
+
+\begin{proof}
+The step identity $2^{\sigma_t}3^{a_t}\w_{t+1} = 3^{d_t}\w_t + (2^{s_t}-1)$ (Definition~\ref{def:reduced}) unrolls $p$ times; imposing closure $\w_p = \w_0$, substituting $d_j = m_j + a_{j-1}$, and cancelling the common power of $3$ yields the display. Positivity: the right side is positive.
+\end{proof}
+
+\begin{corollary}[size balance]\label{cor:size}
+$2^K = 3^n \prod_t (1 + \varepsilon_t)$ with $\varepsilon_t = (2^{s_t}-1)/(3^{d_t}\w_t)$; if every cycle element exceeds $X$ then $0 < K\log 2 - n\log 3 < p/X$. This is the classical Baker-side engine \cite{eliahou}, obtained in four lines.
+\end{corollary}
+
+\begin{lemma}[ceiling]\label{lem:ceiling}
+If $K > \lceil n\LL \rceil$ then $\prod(1+\varepsilon_t) \ge 2$, so some $\varepsilon_t \ge 2^{1/p}-1 \ge (\ln 2)/p$ and some block exit is $< p/\ln 2$. Consequently $K = \lceil n \LL\rceil$ for every nontrivial cycle with $p \le \ln 2 \cdot X_0$, $X_0$ the verified range \cite{barina} --- unconditionally for $p\le5$ by inspecting the odd values $\le 7$.
+\end{lemma}
+
+\begin{theorem}[periods $1$--$3$; rederivations]\label{thm:smallp}
+$F$ has no nontrivial cycles of $1$, $2$, or $3$ blocks. These statements are contained in the classical results \cite{steiner,rozier90,sdw,hercher}; the derivations, not the theorems, are the contribution.
+\end{theorem}
+
+\begin{proof}[Proof outline]
+$p=1$: the fixed-point equation is $\w\,3^a(2^{s+m}-3^m) = 2^s-1$; the sign and size constraints pin $2^s$ into a window of endpoint ratio $(1-3^{-m})/(1-2^{-m}) < 2$, leaving at most one candidate $s$ per $m$; exact search kills $m \le 20{,}000$ and Steiner's theorem \cite{steiner} covers all $m$ via the block--circuit correspondence. $p=2,3$: budget-trim lemmas (casework over rotations' dominant terms, using $\sum s_t = K - n$) force $0 < K\log2 - n\log3 < 2^{6-n/5}$ resp.\ $2^{3-0.115n}$; exact searches to $n = 20{,}000$ find no solutions; any effective irrationality measure for $\LL$ \cite{rhin} excludes the tail. Full details are in the project record: the three classifications at \texttt{cycles.md} \S12.2.3, \S12.5.3 and \S12.7.5, the two trim lemmas at \S12.5.2 and \S12.7.4, and the ceiling lemma that supplies $K = \lceil n\LL\rceil$ at \S12.6.2. The searches are \texttt{experiments/period1\_cycles.py}, \texttt{experiments/period2\_cycles.py} and \texttt{experiments/period3\_cycles.py}.
+\end{proof}
+
+\paragraph{The dictionary with $m$-cycles.} In the Terras map $x \mapsto (3x+1)/2$ ($x$ odd), $x \mapsto x/2$ ($x$ even), a block of entry depth $m_t$ and exit valuation $s_t$ is exactly $m_t$ odd terms followed by $s_t$ even terms: by Proposition~\ref{prop:block}(i)--(ii) each of $x_0,\dots,x_{m-1}$ is odd and maps to the next by $(3x+1)/2$, the last of them to the even number $A = 3^d\w - 1$, which halves $s = \vt{A} \ge 1$ times down to the next block entry. So a $p$-block cycle of $F$ has exactly $p$ maximal runs of odd terms, and its local minima are exactly its $p$ block entries, each lying below both its predecessor $2x$ and its successor $(3x+1)/2$ --- including the entries of depth $m_t = 1$, which look like pure falls only in the odd-to-odd orbit. Hence a $p$-block cycle is an $m$-cycle of Simons and de~Weger \cite{sdw} with $m = p$, their $k_i$ our $m_t$, their $\ell_i$ our $s_t$, their $K$ our $n$ and their $K+L$ our $K$; Rozier's number of local minima \cite{rozier91} is the same count. Every $m$-cycle exclusion therefore transfers verbatim: Hercher's theorem \cite{hercher} excludes every nontrivial cycle of $F$ with $p \le 91$ blocks, of which Theorem~\ref{thm:smallp} is a small special case. Such exclusions bound the number of blocks only, and say nothing about how many blocks have depth $m_t \ge 2$ (\texttt{cycles.md} \S12.4).
+
+\paragraph{Configurations.} The proofs below use a cycle only through its block data. A \emph{$p$-block configuration} is a tuple of integers $m_t, s_t \ge 1$ ($t \in \Z/p\Z$) with $n$, $K$, $q$ as above and $q > 0$; its rotation numerators $R_r$ are defined by the display of Proposition~\ref{prop:elim}, and $\gamma := K - \log_2 q$. It is a \emph{size-passer} if $q \le R_r$ for every $r$. Put $x_r := 2^{m_r}R_r/q - 1$ and $x_{\min} := \min_r x_r$. On a cycle, Proposition~\ref{prop:elim} gives $x_r + 1 = 2^{m_r}3^{a_{r-1}}\w_r$, so $x_r$ is the entry of block $r$ and, by the dictionary above, $x_{\min}$ is the least element of the cycle; for a configuration the same unrolling over the rationals makes the $x_r$ the block entries of the rational cycle it defines. Write $\Lambda := K\log 2 - n\log 3$; since $3^n/2^K = 1 - q/2^K = 1 - 2^{-\gamma}$, we have $\Lambda = -\log(1 - 2^{-\gamma}) > 2^{-\gamma}$. Write $\kp := (\LL - 1)/((\LL)^p - 1)$ for the trim's exponent (the record's $\varepsilon_p$) and, for an arc $A$ of consecutive blocks, $w(A) := (\LL - 1)\,m(A) - s(A)$, its $m$-mass at exchange rate $\LL - 1$ minus its $s$-mass. For each rotation $r$ and each position $t$ in rotation order from $r$, let $A_t$ be the arc of the blocks after position $t$ (it ends at block $r-1$, and is empty for $t = p-1$). Then the terms of $R_r$ are
+\begin{equation}\label{eq:term}
+3^{M_t}\,2^{S_t}\,(2^{s_t}-1) \;=\; 2^{K - m_r + w(A_t)}\,\bigl(1 - 2^{-s_t}\bigr),
+\end{equation}
+since $M_t = m(A_t)$ and $S_t + s_t = (K - n - s(A_t)) + (n - m_r - M_t)$.
+
+\begin{theorem}[uniform trim; Rozier \cite{rozier91}, Simons--de~Weger \cite{sdw}]\label{thm:uniform}
+Every nontrivial $p$-block cycle satisfies, with $\gamma := K - \log_2 q$,
+\[ \gamma + \log_2 p \;>\; \frac{(\LL - 1)\, n}{(\LL)^{\,p} - 1}. \]
+Consequently the candidate set at every period is finite and explicitly bounded. Combined with Rhin's effective bound \cite{rhin},
+\[ K\log 2 - n\log 3 \;>\; \exp\bigl(-13.3\,(0.46057 + \log n)\bigr), \]
+every nontrivial $p$-block cycle has $n \le n_0(p)$, the unique solution in $n$ of
+\[ \frac{(\LL - 1)\,n}{(\LL)^{\,p} - 1} \;=\; \log_2 p \;+\; \frac{p + 13.3\,(0.46057 + \log n)}{\log 2}, \]
+so that $n_0(p) = O(p\,(\LL)^p)$.
+\end{theorem}
+
+\begin{proof}
+For each rotation, $q \le R_r < p\,2^{\max_t e_t}$, where the exact exponent identity gives $e_t - K = (\LL-1)M_t - m_r - \sum_{j>t}s_j$. The resulting conditions $m_r < \gamma + \log_2 p + \Phi_r$ close into the cyclic recursion $\Phi_{r} = \max(0, \Phi_{r-1} + w_{r-1})$ on arc weights $w_j = (\LL-1)m_j - s_j$, whose cyclic total $(\LL-1)n - \sum s_t$ is negative because $2^K > 3^n$ forces $\sum s_t > (\LL - 1)n$. A max-plus recursion with negative cyclic total must vanish somewhere (otherwise following it once around the cycle would add the total to itself); fix such a reset index $r_0$, so $\Phi_{r_0} = 0$. Walking forward, $\Phi_{r_0+j} \le (\LL-1)T_{j-1}$ where $T_j$ is the partial sum $m_{r_0} + \cdots + m_{r_0+j}$ (drop the $-s$ terms), so the block bound gives $m_{r_0+j} < (\gamma + \log_2 p) + (\LL-1)T_{j-1}$, i.e.\ $T_j < \LL\,T_{j-1} + (\gamma + \log_2 p)$. Iterating $p$ times from $T_{-1} = 0$ yields $n = T_{p-1} < (\gamma + \log_2 p)\,\bigl(\LL^{\,p} - 1\bigr)/(\LL - 1)$, which is the display. The argument uses only $q \le R_r$ for every $r$, so the first display holds for every size-passing configuration.
+\end{proof}
+
+This is Rozier's Lemme~4 \cite[p.~11, with (5) on p.~10]{rozier91} and Simons and de~Weger's Lemma~7 \cite[p.~58]{sdw} in rotation coordinates, up to an additive constant, with their number of local minima equal to our $p$ by the dictionary above; finiteness at each $p$ is due to Brox \cite{brox}. The second display is \cite[Lemma~14 and Theorem~3(d)]{sdw}, whose $K_1(p)/(p\,(\LL)^p)$ decreases to $15.107\ldots$, with the Rhin measure used there \cite[Lemma~12]{sdw}. We rederive it by another route --- rotation numerators and a max-plus recursion, where Simons and de~Weger chain the minima --- because the recursion identifies the extremal profile that Theorem~\ref{thm:staircase} realizes.
+
+\begin{theorem}[sharpness: the staircase]\label{thm:staircase}
+Write $\phi(x) := -\log_2(1 - 2^{-x})$ for $x > 0$, a decreasing involution of $(0,\infty)$.
+\begin{enumerate}
+\item[(i)] \emph{Every period.} For every $p \ge 16$ there are an integer $n \in [(\LL)^p,\, 1.05\,(\LL)^p]$ and a $p$-block size-passer with $\sum_t m_t = n$, $K = \lceil n\LL\rceil$ and
+\[ 3.683012 \;\le\; \gamma \;\le\; 5.140212 . \]
+Size-passers in the same bracket exist at every period $3 \le p \le 15$, and size-passers exist at $p \in \{2,4\}$. Consequently, if $\gamma + \log_2 p > c_p\, n$ for every size-passer at a period $p \ge 16$, then $c_p < (5.140212 + \log_2 p)\,(\LL)^{-p}$: the exponential loss in Theorem~\ref{thm:uniform} is intrinsic to size arguments.
+\item[(ii)] \emph{Necessity at a size threshold.} Every configuration satisfies
+\[ \gamma - 1 \;\le\; \log_2(x_{\min} + 1) \;<\; \gamma + \log_2 p . \]
+Hence for real $X_0 \ge 1$, every size-passer with $x_{\min} \ge X_0$ has $\gamma > \max\bigl(\kp n,\ \log_2(X_0+1)\bigr) - \log_2 p$, and every configuration with $\gamma \ge \log_2(X_0 + 1) + 1$ has $x_{\min} \ge X_0$.
+\item[(iii)] \emph{Sufficiency at a size threshold.} Let $X_0 \ge 1$ be real, $\lambda_0 := \LL/(\LL-1) + 2^{-20} = 2.7095122\ldots$ and $g := 1 + \max\bigl(\log_2(X_0+1),\, \lambda_0\bigr)$. For every period $p \ge p_1(X_0)$, with $p_1(X_0)$ defined in the proof from the continued fraction of $\LL$, there is a $p$-block size-passer with $x_{\min} \ge X_0$ and
+\[ g \le \gamma \le g + 1, \qquad \lambda_0 \;\le\; \gamma - \kp n \;\le\; \lambda_0 + 1.5, \qquad \kp n \;\le\; \rho_0 \;\le\; \gamma , \]
+where $\rho_0 := \max_j\bigl(m_j - (\LL-1)(m_0 + \cdots + m_{j-1})\bigr)$ is Rozier's quantity in block order from block $0$. This configuration has $\kp n > g - \lambda_0 - \tfrac12$ and $\Lambda > 2^{-\gamma} > 0.054\cdot 2^{-\kp n}$.
+\item[(iv)] \emph{Instances.} At $p=7$, $n=94$, the staircase $m = (4,7,9,15,23,35,1)$ with $s = (1,\dots,1,\,S-6)$ passes all seven size tests with $\gamma = 6.74$, where the period-$3$ constant would demand $\gamma > 8.9$, and $84$ further instances occur at $p=6$ alone; these fail the divisibility conditions $q \mid R_r$.
+\end{enumerate}
+Uniform cycle exclusion therefore requires the divisibility system --- equivalently, rigidity of the closed anchor walk $\sum_t \Delta M_t = 0$ --- the conclusion Halbeisen and Hungerb\"uhler reached in the cycle-length parameter \cite[p.~238]{hh}.
+\end{theorem}
+
+\begin{proof}
+\emph{Two facts used throughout.} (a) For $K = \lceil n\LL\rceil$ put $\delta_n := K - n\LL \in (0,1)$; then $q/2^K = 1 - 2^{-\delta_n}$, so $\gamma = \phi(\delta_n)$, and $\delta_{n+j} \equiv \delta_n - j\LL \pmod 1$. (b) Multiplying \eqref{eq:term} by $2^{m_r}/q = 2^{m_r + \gamma - K}$ and summing over $t$ gives, for every rotation $r$,
+\begin{equation}\label{eq:element}
+x_r + 1 \;=\; 2^{\gamma}\sum_{t=0}^{p-1} 2^{w(A_t)}\,\bigl(1 - 2^{-s_t}\bigr).
+\end{equation}
+
+\emph{(ii).} In \eqref{eq:element} the empty arc ($t = p-1$) contributes $1 - 2^{-s_{r-1}} \ge \tfrac12$ and every term is positive, so $x_r + 1 \ge 2^{\gamma-1}$ for every $r$. For the upper bound put $W_j := \sum_{i<j}\bigl((\LL-1)m_i - s_i\bigr)$, so $W_0 = 0$ and $W_p = n\LL - K < 0$; choose $j^\ast \in \{1,\dots,p\}$ minimizing $W_j$ and put $r_0 := j^\ast \bmod p$. An arc ending at block $r_0 - 1$ either does not wrap, with weight $W_{j^\ast} - W_i \le 0$ ($0 \le i \le j^\ast$; at $i = 0$ the weight is $W_{j^\ast} \le W_p < 0$), or wraps, with weight $W_p + W_{j^\ast} - W_i < 0$; so every term of \eqref{eq:element} at $r = r_0$ is $< 1$, and $x_{r_0} + 1 < p\,2^{\gamma}$. With Theorem~\ref{thm:uniform}, whose proof uses only the size conditions, a size-passer with $x_{\min} \ge X_0$ has $\gamma + \log_2 p > \kp n$ and $\gamma + \log_2 p > \log_2(x_{\min} + 1) \ge \log_2(X_0 + 1)$; and $\gamma \ge \log_2(X_0+1) + 1$ gives $x_{\min} + 1 \ge 2^{\gamma - 1} \ge X_0 + 1$.
+
+\emph{The construction.} Given $p \ge 2$ and $n \ge 1$, let $K = \lceil n\LL\rceil$, $S = K - n$, $q = 2^K - 3^n$, $\gamma = \phi(\delta_n)$, $s_c := S - p + 1$ and $\eta := \phi(s_c)$, and assume
+\[ \text{(H0)}\quad S \ge p \ \text{ and } \ (\LL-1)(n-p) + \gamma \ge p + \eta; \qquad
+   \text{(H1)}\quad \gamma \ge \max\bigl(2 + \eta,\ \Gamma'(p,n)\bigr), \]
+where
+\[ \Gamma'(p,n) := 1 + \eta + \frac{(\LL)^p - (\LL)^2 - (\LL-1)(p-2) + (\LL-1)^2 n}{(\LL-1)\bigl((\LL)^p - 1\bigr)} \;=\; \kp n + \Gamma'_0(p) + \eta, \]
+with $\Gamma'_0(p) < \LL/(\LL-1)$, the last inequality being $(\LL)^2 + (\LL-1)(p-2) > 1$. Set $s_t := 1$ for $t \le p-2$ and $s_{p-1} := s_c$, and for $r = 0,\dots,p-2$, with $T_{-1} := 0$,
+\[ \begin{gathered} f_r := \gamma + (\LL-1)\,T_{r-1} - r - \eta, \qquad b_r := n - 1 - T_{r-1} - (p-2-r), \\ m_r := \min\bigl(\lfloor f_r \rfloor,\, b_r\bigr), \qquad T_r := T_{r-1} + m_r, \end{gathered} \]
+and $m_{p-1} := n - T_{p-2}$, the \emph{crash} block. The floor is an exact integer comparison: $\lfloor f_r\rfloor = \max\{m : q\,2^m \le X_r\}$ with $X_r := 3^{T_{r-1}}\,2^{\,n - T_{r-1} + p - 1 - r}\,(2^{s_c}-1)$, since $\log_2 X_r = K - r - \eta + (\LL-1)T_{r-1}$. We show that every $m_t \ge 1$, that $\sum_t m_t = n$ and $n + \sum_t s_t = K$, that the configuration is a size-passer, and that $\kp n \le \rho_0 \le \gamma - \eta$.
+
+\emph{Well-definedness.} From $p \le S < (\LL-1)n + 1$ we get $n > (p-1)/(\LL-1)$, hence $n \ge p$ and $b_0 = n - p + 1 \ge 1$; and $b_{r+1} = b_r - m_r + 1 \ge 1$ since $m_r \le b_r$. So every climb block has $m_r \ge 1$ as soon as $\lfloor f_r\rfloor \ge 1$, and $T_{p-2} \le n - 1$, so the crash has $m_{p-1} \ge 1$. While the budget $b_r$ has not bound, $m_r = \lfloor f_r\rfloor$: here $f_0 = \gamma - \eta \ge 2$, and $f_{r+1} - f_r = (\LL-1)m_r - 1 > 0$ whenever $m_r \ge 2$, so $\lfloor f_r\rfloor \ge 2$ throughout. Once the budget binds at some $r$, every later $b_j$ equals $1$, $T_{j-1} = n - p + j$, and $f_j = \bigl(\gamma + (\LL-1)(n-p) - \eta\bigr) - (2-\LL)\,j \ge p - (2-\LL)(p-2) \ge 2$ by (H0), so $m_j = 1$.
+
+\emph{The climb rotations $r \le p-2$.} In rotation order from $r$ the crash block sits at position $t = p-1-r$, with $M_t = T_{r-1}$ and $S_t = (p-1-r) + (n - T_r)$, so its term of $R_r$ is $3^{T_{r-1}}2^{\,n - T_r + p - 1 - r}(2^{s_c}-1) = X_r/2^{m_r} \ge q$, because $m_r \le \lfloor f_r\rfloor$. Every term is positive, so $q \le R_r$.
+
+\emph{The crash rotation $r = p-1$.} Its position-$0$ term is $3^{T_{p-2}}(2^{s_c}-1)$, and this is $\ge q$ if and only if
+\[ \text{(D)}\qquad \LL\, T_{p-2} \;\ge\; n + p - 1 - \gamma + \eta . \]
+If the budget binds somewhere, $T_{p-2} = n-1$ and (D) reads $(\LL-1)n \ge \LL + p - 1 - \gamma + \eta$, which follows from (H0) because $(\LL - 1)(p-1) \ge 0$. If it never binds, $m_r = \lfloor f_r\rfloor > f_r - 1$ gives $T_r > \LL\,T_{r-1} + \gamma - r - \beta$ with $\beta := 1 + \eta$, so by induction $T_r > A_r$ for the real recursion $A_r = \LL\,A_{r-1} + \gamma - r - \beta$, $A_{-1} = 0$, whose solution is
+\[ A_r \;=\; \frac{(\LL)^{r+1}\bigl((\gamma-\beta)(\LL-1) - 1\bigr) + (r + \beta - \gamma)(\LL-1) + \LL}{(\LL-1)^2}. \]
+Clearing denominators, $\LL\,A_{p-2} - (n + p - 1 - \gamma + \eta) = \bigl(((\LL)^p - 1)/(\LL - 1)\bigr)\,\bigl(\gamma - \Gamma'(p,n)\bigr) \ge 0$ by (H1), which gives (D). (The crash depth is $1$ exactly when the budget binds.)
+
+\emph{Rozier's quantity.} The climb terms satisfy $m_r - (\LL-1)T_{r-1} \le f_r - (\LL - 1)T_{r-1} = \gamma - r - \eta$, and the crash term is $n - \LL\,T_{p-2} \le \gamma + 1 - p - \eta$ by (D), so $\rho_0 \le \gamma - \eta$. Conversely, all terms $\le \rho_0$ give $T_j \le \LL\,T_{j-1} + \rho_0$ and $n \le \rho_0((\LL)^p - 1)/(\LL - 1)$, i.e.\ $\rho_0 \ge \kp n$; this is Rozier's minimax \cite[p.~11]{rozier91}, valid for positive reals in any cyclic order.
+
+\emph{(i).} Let $\vartheta := 8 - 5\LL = 0.0751874964\ldots$, $\Gamma^\ast := 1.05\,\LL(\LL-1) + 1/(\LL-1) + 1 = 3.6830121\ldots$, $\delta_{\mathrm{hi}} := \phi(\Gamma^\ast) = 0.1169390665\ldots$ and $\delta_{\mathrm{lo}} := 0.0415$. Since $5\LL = 8 - \vartheta$, $\delta_{n+5} \equiv \delta_n + \vartheta \pmod 1$. The fourteen points $j\vartheta \bmod 1$, $0 \le j \le 13$, are already sorted ($13\vartheta < 1$), with gaps $\vartheta$ and $1 - 13\vartheta < \vartheta$; so the fourteen closed arcs $[\delta_{\mathrm{lo}}, \delta_{\mathrm{hi}}] - j\vartheta$, of length $0.0754390665\ldots > \vartheta$, have left endpoints at mutual gaps at most $\vartheta$ and cover the circle. Hence for every $N$ one of $\delta_N, \delta_{N+5}, \dots, \delta_{N+65}$ lies in $[\delta_{\mathrm{lo}}, \delta_{\mathrm{hi}}]$: any $66$ consecutive integers contain an $n$ with $\delta_{\mathrm{lo}} \le \delta_n \le \delta_{\mathrm{hi}}$. For $p \ge 16$ the window $[(\LL)^p, 1.05\,(\LL)^p]$ contains at least $0.05\,(\LL)^p - 1 > 78$ consecutive integers, hence such an $n$, and since $\phi$ decreases, $\Gamma^\ast \le \gamma = \phi(\delta_n) \le \phi(\delta_{\mathrm{lo}}) = 5.1402114\ldots$. For this $n$, $S > (\LL-1)n \ge (\LL-1)(\LL)^p > p + 900$, so $\eta < 2^{-900}$, and $(\LL-1)(n-p) > p + 1$, which gives (H0); and $\Gamma'(p,n) < 1.05\,(\LL)^p\kp + \LL/(\LL-1) + \eta < 3.33 < \Gamma^\ast \le \gamma$ gives (H1). The construction applies. The periods $3 \le p \le 15$, at exhibited $n$ with $n/(\LL)^p \le 1.70$, and the exhibitions at $p \in \{2, 4\}$, which this argument does not reach, are finite computations, recorded at \texttt{cycles.md} \S12.8.6.1 and \S12.8.6.4. Finally $n \ge (\LL)^p$ and $\gamma \le 5.140212$ give the bound on $c_p$.
+
+\emph{(iii).} Let $P_j/Q_j$ be the convergents of $\LL$, $\Theta_j := |Q_j\LL - P_j|$ and $\Delta := \phi(g) - \phi(g+1)$; let $N_\ast := Q_k + Q_{k-1}$ for the least $k \ge 1$ with $\Theta_{k-1} \le \Delta$, and let $p_1(X_0)$ be the least $p$ with $1/(2\kp) = ((\LL)^p - 1)/(2(\LL - 1)) \ge \max(N_\ast,\, 3p + 40)$ (the condition then holds at every larger $p$). Fix $p \ge p_1(X_0)$, put $n^\ast := \lfloor (g - \lambda_0)/\kp \rfloor$ and take the window $[n^\ast - N_\ast + 1,\, n^\ast]$ of $N_\ast$ consecutive integers. By (a), the points $\delta_n$ on it form a reflected translate of $\{j\LL \bmod 1 : 0 \le j < N_\ast\}$, whose gaps, by the three-distance theorem in its two-length case \cite{sos,swierczkowski}, are $\Theta_{k-1}$ and $\Theta_k$, both at most $\Delta$. So some $n$ in the window has $\delta_n \in [\phi(g+1), \phi(g)]$, i.e.\ $g \le \gamma \le g+1$. On the window $n > (g - \lambda_0)/\kp - N_\ast \ge 1/(2\kp) \ge 3p + 40$, since $g - \lambda_0 \ge 1$; hence $S > (\LL - 1)n$ gives $s_c \ge 21$ and $\eta < 2^{-20}$, and $(\LL-1)(n-p) \ge p + 1$, so (H0) holds. Also $\kp n \le \kp n^\ast \le g - \lambda_0$, so $\Gamma'(p,n) < \kp n + \lambda_0 \le g \le \gamma$, and $\gamma \ge g \ge 1 + \lambda_0 > 2 + \eta$: (H1) holds, and the construction gives a size-passer. Since $\gamma \ge g \ge \log_2(X_0+1) + 1$, (ii) gives $x_{\min} \ge X_0$. For the brackets, $\gamma - \kp n \ge g - (g - \lambda_0) = \lambda_0$; and $\kp n > g - \lambda_0 - \kp N_\ast \ge g - \lambda_0 - \tfrac12$, whence $\gamma - \kp n < \lambda_0 + \tfrac32$. Finally $\Lambda > 2^{-\gamma} \ge 2^{-(\lambda_0 + 1.5)}\,2^{-\kp n}$, and $2^{-(\lambda_0+1.5)} = 0.05405\ldots$.
+
+\emph{(iv)} is a computation of the record: Remark~12.8.3 of \texttt{cycles.md}, by the script \texttt{experiments/\allowbreak uniform\_\allowbreak trim.py}. The closing sentence is the content of (i)--(iii): at every period, and at every threshold for $p \ge p_1(X_0)$, the size conditions are met at the scale the trim allows, so no argument from size alone excludes cycles uniformly in $p$.
+\end{proof}
+
+\paragraph{The threshold, explicitly.} $p_1(X_0)$ is explicit for each $X_0$ through the continued fraction of $\LL$: $p_1 = 10$ for $X_0 \le 16$, $22$ for $2^8 \le X_0 \le 2^{12}$, $36$ at $2^{20}$, $98$ at Simons and de~Weger's $X_0 = 5\cdot 2^{60}$ (consistent with their size-only exclusion of $m \le 75$ there), $110$ at $2^{71}$ and $309$ at $2^{200}$; over $X_0 = 2^j$, $j \le 200$, $p_1 - \log_{\LL} X_0 \in [2.92, 10.42]$ (\texttt{cycles.md} \S12.8.7.4). No closed form uniform in $X_0$ is claimed, and nothing is claimed below $p_1(X_0)$. At the threshold, Simons and de~Weger's Lemma~7 reads $\Lambda < p\,c_p\,2^{-\kp n}$ \cite[p.~58]{sdw}, against the elementary $\Lambda < p/X_0$ of Corollary~\ref{cor:size}; part~(iii) is stated at the scale $\kp n > g - \lambda_0 - \tfrac12$, at which the two cross over (\texttt{cycles.md} Remark~12.8.7.6). There it attains the exponential dependence on the number of minima, and shows that the prefactor $p\,c_p$ cannot be lowered below $0.054$. Whether it can be lowered \emph{to} a constant --- the $\log_2 p$ between parts (ii) and (iii) --- is left open, as Simons and de~Weger leave it \cite[p.~69]{sdw}. The integer profile of (iii) realizes the minimax value of Rozier's optimality remark under every rotation's exact size condition, $\kp n \le \rho_0 \le \kp n + \lambda_0 + 1.5$; what is attained is that value, not the inequality of his Lemme~4, whose additive term $2^p$ exceeds $2^{\kp n}$ throughout this range (\texttt{cycles.md} Remark~12.8.7.6). Configurations at the canonical scale $n \approx (\LL)^p$ have $\kp n$ bounded, so at a large threshold they test only the elementary bound $\Lambda < p/X_0$ and not Lemma~7; this is why (iii) is made at the scale $\kp n \approx \log_2 X_0$.
+
+\begin{remark}\label{rem:staircase}
+The staircase profile --- geometric depth growth with shallow exits --- is exactly the growth regime of divergent orbits. Size analysis cannot forbid it as a cycle for the same reason drift analysis cannot forbid divergence. The two halves of the residual difficulty meet in one configuration.
+\end{remark}
+
+\begin{remark}[the crash block]\label{rem:crash}
+The crash block of the construction has depth $1$ exactly when the budget binds, and depth at least $2$ otherwise; the record's construction at the canonical scale (\texttt{cycles.md} \S12.8.6.2) assumes a stronger hypothesis that forces depth $1$. At the scale of Theorem~\ref{thm:staircase}(iii) a unit block is excluded. If a size-passer with $p \ge 2$ has some $m_t = 1$, walking the recursion in the proof of Theorem~\ref{thm:uniform} from its reset, with $T_{j_1} = T_{j_1-1} + 1$ at the unit block $j_1$ in place of the block bound, gives $n < (\gamma + \log_2 p)\bigl((\LL)^{p-1} - 1\bigr)/(\LL - 1) + (\LL)^{p-1}$, that is,
+\[ \gamma + \log_2 p \;>\; \frac{(\LL - 1)\bigl(n - (\LL)^{p-1}\bigr)}{(\LL)^{p-1} - 1} \;\ge\; \LL\,\kp n - (\LL - 1)\,\frac{(\LL)^{p-1}}{(\LL)^{p-1} - 1} : \]
+a unit block costs a factor $\LL$ in the slope. Against $\gamma \le \kp n + \lambda_0 + 1.5$ this excludes a unit block wherever $(\LL - 1)\kp n \ge \lambda_0 + 1.5 + (\LL - 1)(\LL)^{p-1}/((\LL)^{p-1} - 1) + \log_2 p$, which at the periods $p_1(X_0)$ and $p_1(X_0) + 20$ holds from $X_0 = 2^{20}$ through $2^{200}$ (\texttt{cycles.md} Remark~12.8.7.5); below that the $\log_2 p$ slack leaves the unit crash undecided. Where the condition holds, the crash is forced to be deep: the last block continues the climb, as in Rozier's real extremal.
+\end{remark}
+
+\paragraph{Verification and record.}
+% PIN-AT-BUILD: the record commit is \recordcommit (preamble), the same as Appendix A.
+Prompted by correspondence with Eric Merle concerning the sharpness hedge of this theorem's statement in v1--v3 (his related formal work is \cite{merle}), parts (i)--(iii) were proved in the project record, \texttt{cycles.md} \S12.8.6 and \S12.8.7 at the commit of Appendix~\ref{app:method}, each checked there by independently written code with exact integer arithmetic at every size decision: part~(i) by the scripts \texttt{experiments/staircase\_gamma\_upper.py} ($45$ checks, $0$ failures), \texttt{experiments/\allowbreak staircase\_allp\_construction.py} and \texttt{experiments/\allowbreak staircase\_allp\_diophantine.py} (the sweep, the bracket, the window counts, and the construction at every period from $3$ to $32$ apart from $p = 4$, including the finite range $3 \le p \le 15$), and parts (ii)--(iii) by \texttt{experiments/staircase\_x0\_threshold.py} ($188$ checks, $0$ failures: the sandwich and the trim on $30{,}000$ random configurations, the two-distance structure, $p_1(X_0)$ for $X_0 = 2^j$, $j \le 200$, and the construction end to end at $95$ pairs $(X_0, p)$). The proof printed above composes the record's availability theorem for (i) (\S12.8.6.1) with its construction under the weaker hypothesis of \S12.8.7.2. The configurations of (i) computed in the record all fail the divisibility conditions $q \mid R_r$, as those of (iv) do; those of (iii) were not tested. Every statement here concerns the reach of size arguments, and none bears on whether cycles exist.
+
+\section{The equidistribution hypothesis, made exact}\label{sec:aeh}
+
+What is the right comparison object? By Theorem~\ref{thm:onestep} every dynamical decision at horizon one is a function of the depth-$k$ window, so the null model is a measure on windows, and the structure forces the choice: the $\w$-residues carry the anchor digits, for which Haar measure is the canonical reference (this is where the classical $2$-adic shift-conjugacy heuristics live), while the depth is \emph{dynamical} --- it is produced by Theorem~\ref{thm:depth} --- and receives instead its own exact renewal law, $\dnext = m_+ + a_+$ with $m_+$ geometric$(1/2)$ and \emph{independent} of the absorption $a_+$, so that it is the distribution of the depth, and not that of the absorption, which is the convolution of the two. The stationary $3$-adic law governing $a_+$ (\texttt{aeh.md} \S13.6.5) is not new here: it is Tao's Syracuse random variable $\mathrm{Syrac}(\Z_3)$ \cite[Lemma~1.12 and Remark~1.13]{tao}, in the present normalisation. Precisely, the $3$-adic past-limit of the block coordinate has the law of $\mathrm{Syrac}(\Z_3)/2$ --- the two differ by the $3$-adic unit $2^{-1}$ because one block here is a run of Syracuse steps terminated by the first exponent $\ge 2$, so that the block chain sees the Syracuse chain conditioned on that event --- and hence $a_+ = \vth{\mathrm{Syrac}(\Z_3) + 2}$, with $P(a_+ = 0) = \tfrac23$, $P(a_+ = 1) = \tfrac{19}{63}$ and $P(a_+ \ge 2) = \tfrac{2}{63}$ read off the nine values of $\mathrm{Syrac}(\Z/9\Z)$ that Tao computes. What the present coordinates add is the \emph{joint labelled} law (\texttt{aeh.md} \S13.6.3(v)): the $\w$-residues are Haar-uniform among odd residues and independent of the depth, the whole carried on the residues \emph{together with} the stratum labels $(s,\sigma,a_+)$ --- $a_+$ being a $3$-adic function of $\w$ (Lemma~\ref{lem:absorption}) which the finite $2$-adic residue window does not determine. Two integers fix the observable: a depth $k$ and a \emph{cap} $D$, chosen together and quantified over. The \emph{capped depth-$k$ window} at a visit is
+\[
+  W_{k,D} \;=\; \bigl(\, \w \bmod 2^{k+2},\; d \wedge D,\; s \wedge D,\;
+  \sigma \wedge D,\; a_+ \wedge D \,\bigr), \qquad u \wedge D := \min(u,D),
+\]
+a finite alphabet of at most $2^{k+1}D^3(D+1)$ letters; the cap is what bounds it, and it must cap the labels as well as the depth, since $\sigma$ and $a_+$ are unbounded. It is not the window of Theorem~\ref{thm:onestep}, whose alphabet is countably infinite and which decides the next step: $W_{k,D}$ decides nothing, and no statement in this section asks it to. Let $\pi_{k,D}$ denote the law of $W_{k,D}$ under the two-sided Bernoulli measure $\hat B = \bigotimes_{i \in \Z}(\mathrm{geom}(\tfrac12) \times \mathrm{geom}(\tfrac12))$ on the door-letter alphabet --- two-sided because the absorption $a_+$ is a function of the orbit's $3$-adic past and has no realisation on the one-sided $2$-adic side (\texttt{aeh.md} \S13.6.3(iii), \S13.6.5); reading the stationary Syracuse variable as the outcome of an iteration extending to arbitrarily large negative times is Tao's own alternative to his positive-time indexing \cite[Remark~1.13, footnote~4 of arXiv~v7]{tao}. ``Product'' names exactly two clauses of $\pi_{k,D}$ --- residue $\perp$ depth, and $m_+ \perp a_+$ --- and no others: $\pi_{k,D}$ is not a product across its coordinates ($s$ is an exact function of the full state), and the process $(W_{k,D}(n))_n$ is stationary but not independent across time (e.g.\ from $(\w \equiv 1\ (8),\ d$ odd$)$ the next depth is exactly $1$). Under $\pi_{k,D}$, unconditionally: $P(s = j) = 2^{-j}$ at every $j < D$, the mass beyond the cap sitting in one tail cell; the $3$-gain rate is $\sum_{j\,\mathrm{even}} 2^{-j} = \tfrac13$ by Lemma~\ref{lem:absorption}, exact up to that same cell, whose parity split the cap hides; and the classical negative drift is a property of $\pi_{k,D}$ --- but only of $\pi_{k,D}$: window equidistribution at each fixed $(k,D)$ does not control the means of the unbounded $m_+$ and $s$, so no drift or contraction statement about orbits follows from it (\texttt{aeh.md} \S13.3.2). The folklore ``ledger'' is thus a theorem \emph{about} $\pi_{k,D}$; the empirical question is only whether the orbits of typical starting values follow $\pi_{k,D}$.
+
+\begin{hypothesis}[AEH, ensemble form]\label{hyp:aeh}
+Fix a \emph{budget rate} $\tau > 0$ and a \emph{block horizon rate} $\theta > 0$;
+for each $N$ put $b = \lfloor\log_2 N\rfloor$, $\Lambda_N = \lceil \tau b\rceil$
+and $T_N = \lceil \theta b\rceil$. Draw $x$ uniformly from the odd integers of
+$[N, 2N)$; put $(\w_0,d_0) = R(x)$ and $(\w_{n+1},d_{n+1}) = F(\w_n,d_n)$; let the
+\emph{letter} at block $n$ be $\ell_n = (m_{+,n},\,s_{n+1})$, and let
+$S_n = \sum_{i<n}(m_i + s_i)$ be the \emph{exponent spent} before block $n$ ---
+the number of $2$'s divided out from $x$ to $x_{\mathrm{exit}}(n-1)$. Tally block
+$n$ at the symbol
+\[
+  \tilde\ell_n \;=\; \ell_n \ \text{ if } S_n < \Lambda_N, \qquad
+  \tilde\ell_n \;=\; \dagger \ \text{ otherwise.}
+\]
+For a finite word $w = (w_1,\dots,w_L)$ of letters, let $f_N(w,x)$ be the
+frequency of $w$ among the $T_N - L + 1$ blocks
+$(\tilde\ell_n,\dots,\tilde\ell_{n+L-1})$, $0 \le n \le T_N - L$: every
+block counted exactly once, at weight $1/(T_N-L+1)$ --- the same number for
+every block of every orbit, so no block is reweighted by the orbit it came from
+and no denominator is random. Then for every finite word $w$ and every
+$\varepsilon > 0$,
+\[
+  \frac{2}{N}\,\#\bigl\{\, x \text{ odd},\ N \le x < 2N \;:\;
+  \bigl| f_N(w,x) - B[w] \bigr| > \varepsilon \,\bigr\}
+  \;\longrightarrow\; 0 \qquad (N \to \infty),
+\]
+where, writing $w_i = (m_i, r_i)$ for the components of the $i$-th letter of $w$,
+$B[w] = \prod_{i} 2^{-(m_i + r_i)}$, and $B[w] = 0$ for any $w$ containing
+$\dagger$, for every admissible pair $(\tau,\theta)$ in the sense defined below.
+\end{hypothesis}
+
+Equivalently, and this is the form the calibration measures: for every $k$, $D$
+and $L$, the empirical distribution of the $L$-blocks of consecutive capped
+windows $W_{k,D}$ over the same tallied blocks, with $\dagger$ carried through
+and given mass $0$ by $\pi^{(L)}_{k,D}$, converges in total variation on the
+finite window alphabet, off a vanishing density of starts, to
+$\pi^{(L)}_{k,D}$, the $L$-block law of the stationary process under $\hat B$.
+The equivalence is Theorem 13.6.4 of \texttt{aeh.md}, a deterministic dictionary
+between letters and labelled window blocks; the case $L = 1$ recovers
+$\pi_{k,D}$, and $\pi^{(L)}_{k,D} \neq \pi_{k,D}^{\otimes L}$. A sampled segment
+has no infinite past at its first block, so the reconstruction of
+$W_{k,D}$ from letters is exact only away from the start; the
+deviation occupies $O(1)$ blocks of a horizon $T_N \to \infty$ and contributes
+$O(1/T_N)$ to every frequency above.
+
+There is one limit here, $N \to \infty$, and the sample grows because the sampling
+scale grows rather than because any one orbit is run forever. That is forced: along
+a fixed convergent orbit the unrestricted empirical distribution is false, the
+tail sitting at $(1,1)$ forever, while above a fixed cut such an orbit
+supplies only finitely many qualifying visits and none at all once the cut exceeds
+its maximum, so a limit in orbit length is empty rather than merely delicate, in
+whichever order it is taken (\texttt{aeh.md} \S13.6.6).
+
+The horizon does the job a bulk cut would do, and does it without one. A step of
+the one-division map $y \mapsto y/2$ or $(3y+1)/2$ never lowers $\log_2$ by more
+than $1$, so $\log_2 x_{\mathrm{exit}}(n-1) \ge \log_2 x - S_n$ for every start and
+every $n$, with no exceptional set; inside a budget $\tau < 1$ of the start's own
+bits every tallied exit therefore exceeds $N^{1-\tau}$, far above the
+\emph{bottom regime} of \texttt{aeh.md} \S13.1, the fixed drainage basin of small
+integers. That matters because any altitude
+threshold is a selection on the observable itself --- a cut on
+$x_{\mathrm{exit}} = (3^{d}\w - 1)/2^{s}$ censors large $s$, and a cut on the core
+$\wnext$ censors large $s$, $m_+$ and $a_+$ together --- whereas the budget clause
+$S_n < \Lambda_N$ is \emph{predictable}, decided by blocks strictly earlier than
+the one it admits, and the tally denominator is the deterministic $T_N$ that
+\texttt{aeh.md} \S13.5's standing rule was written to secure. Call $\tau$
+\emph{protected} when all but a
+vanishing density of starts keep every in-budget exit above any $X_N$ with
+$\log X_N = o(\log N)$, and $(\tau,\theta)$ \emph{consistent} when
+$\theta\,\mathbb{E}_B[m+r] < \tau$; \emph{admissible} means both. Every
+$\tau < 1$ is protected outright by the bound above, and every
+$\tau < (1-\log_2\sqrt3)^{-1} = 4.8188\ldots$ is protected at natural density one
+by Inselmann \cite[Thm.~1.1]{inselmann}, whose two-sided envelope is stated for
+the one-division map --- the same unit, nothing converted.
+Consistency is compatibility with the target law rather than a claim about
+orbits: under $B$ a block spends $\mathbb{E}_B[m+r] = 4$ of exponent, so
+$4\theta < \tau$ says exactly that $B$ itself predicts no out-of-budget block,
+which is what $\pi_{k,D}$'s giving $\dagger$ no mass requires. Where the cylinder
+count runs it is more, and unconditionally: for $\tau < 1$ no block of the horizon
+leaves the budget and the empirical exponent mean converges to $4$
+(\texttt{aeh.md} Lemma 13.2.4(g), whose two error terms are, on that range,
+precisely the two clauses of admissibility). Past that range the hypothesis
+supplies less, and only about frequencies: a vanishing frequency of $\dagger$ says
+all but $o(T_N)$ of the first $T_N$ blocks are within budget, and is not a bound on
+a sum over its complement --- the block at which the budget is exhausted is tallied
+at full weight and its letter is unbounded, and the $o(T_N)$ blocks past it are
+uncontrolled, so $T_N^{-1}\sum_{n<T_N}(m_n+r_n) \to 4$ does not follow there and
+can fail by any amount. Hence $4\theta < \tau < 1$ is $\theta < 1/4$ and
+$4\theta < \tau < 4.8188\ldots$ is $\theta < 1/\beta = 1.2047\ldots$, where
+$\beta = 2(2-\LL) = 0.8301\ldots$ is the classical per-block contraction rate and
+$4/\beta = (1-\log_2\sqrt3)^{-1}$ an identity --- arithmetic on the definition of
+consistency, with the divisor in either block reading the mean of the target law:
+a theorem about orbits below the budget, and not a consequence of the hypothesis
+above it.
+
+The hypothesis has an unconditional base case, and it is Heuristic~\ref{prop:budget}
+with a number on it. The classical coding fact --- the odd integers whose first $n$
+blocks realize a prescribed itinerary form exactly one residue class modulo
+$2^{S+1}$, $S$ the itinerary's total exponent (Terras \cite{terras}; in the present
+coordinates \texttt{itinerary.md} \S14.15.1.5) --- makes the first $n$ blocks of a
+start drawn uniformly from \emph{any} window of $2^{J}$ consecutive integers
+exactly product-distributed on the event $S + 1 \le J$: the event that the itinerary
+has not outspent the start's supply of binary digits. That fact is about the word
+beginning at $x$ itself, while $\ell_0$ is the letter of the block \emph{after} the
+start's own; it is applied here to the \emph{extended} $(n+1)$-letter word --- the
+start's own letter followed by $\ell_0,\dots,\ell_{n-1}$, of total exponent exactly
+$S_{n+1}$, the divisions from $x$ down to $x_{\mathrm{exit}}(n)$ --- of whose law
+the one displayed is a marginal. Writing
+$b = \lfloor\log_2 N\rfloor$, this gives, for every $J \ge 2$,
+\[
+  \begin{gathered}
+    \bigl\lVert \mathrm{Law}(\ell_0,\dots,\ell_{n-1}) - B^{\otimes n}
+      \bigr\rVert_{\mathrm{TV}}
+    \;\le\; \frac{2^{J+2}}{N} + P_B(S_{n+1} \ge J), \\[2pt]
+    P_B(S_{n+1} \ge J) = P\bigl(\mathrm{Bin}(J-1,\tfrac12) < 2(n+1)\bigr),
+  \end{gathered}
+\]
+the second identity because $S_{n+1}$ is the waiting time for the $2(n+1)$-th
+head in a fair coin sequence. The first term is the price of a general window
+$[N,2N)$ over a dyadic one and is negligible for $J \le (1-\eta)b$; the second
+decays at the exact rate $\log 2 - H(2\theta)$ per bit at $n = \lceil\theta b\rceil$,
+$H$ the binary entropy --- positive for every $\theta < 1/4$ and \emph{zero} at
+$\theta = 1/4$ (\texttt{aeh.md} \S13.2). The bound is on the joint law of the whole
+length-$n$ word, so it controls every finite block length at once, and with the
+concentration of empirical pattern frequencies, the removal of the segment's initial
+past-boundary and the altitude bound above --- which makes the budget its own
+protection --- it yields the hypothesis outright:
+Hypothesis~\ref{hyp:aeh} is a \emph{theorem} for every admissible $(\tau,\theta)$
+with $\tau < 1$, equivalently for every horizon rate $\theta < 1/4$, at every
+block length. The assembly is Lemma 13.2.4 of \texttt{aeh.md}.
+
+The natural clock here is total exponent, not blocks: the frontier is one unit of
+exponent per bit of start --- the start's own digit supply, with no estimate in it
+--- and it reads as $1/4$ blocks per bit only through the mean exponent per block,
+$\mathbb{E}_B[m+r] = 4$, a conversion available here precisely because the word is
+exactly $B$ here. Hypothesis~\ref{hyp:aeh} is the assertion that the law still
+describes the orbit after the start's digits have been spent; the digit budget
+locates the frontier, and this is the statistical statement on the far side of it.
+That frontier is the classical one --- the same $\theta < 1/4$ is where Terras's
+count stops, and $1 - \beta/4 = \log_4 3$ is exactly the exponent Korec
+\cite{korec} obtains by exhausting it --- and it is a frontier of this technique
+and not of the problem, Inselmann \cite{inselmann} crossing it unconditionally for
+the trajectory envelope and the first moment, in step time and by a stronger
+density notion rather than a sharper count (\texttt{aeh.md} \S13.3.2).
+
+AEH implies the ledger, in the form the hypothesis has: $s$ is a coordinate of
+the observable, so $P(s = j) = 2^{-j}$ is a marginal of $\pi_{k,D}$ rather than a
+deduction, exactly at every $j < D$ and up to the cap's single tail cell above;
+and for every $\varepsilon$ and every horizon rate, all but a vanishing density of
+the odd starting values of each size carry those frequencies along their first
+$T_N$ blocks, all but $o(T_N)$ of them within the budget --- and all of them when
+$\tau < 1$. Evaluating
+each odd $x$ once, at its own dyadic scale $2^{\lfloor \log_2 x\rfloor}$, turns
+that array of statements into a single one: the odd integers that fail at their
+own scale have natural density zero (\texttt{aeh.md} Proposition 13.2.5). The
+union over \emph{all} sampling scales is a different and larger object and is not
+controlled --- the bad sets form a triangular array, each testing a horizon and a
+budget that move with the scale, and vanishing density in every window does not
+thin their unrestricted union. The
+descent consequence is not stated here, because it is a theorem without the
+hypothesis and a stronger one: Inselmann's \cite[Cor.~1.4, Thm.~1.10]{inselmann},
+cited in Related work, are unconditional and run to $4.8188\ldots$ times the
+classical range at which this section's cylinder count stops, the two measured in
+the same units, the second two-sided and uniform in the time. His
+\cite[Thm.~1.6]{inselmann}, a density statement about odd steps, is what
+carries his own passage from one-division-map time to Syracuse time; the further passage to
+block time needs the frequency with which a Syracuse step ends a block, a
+two-letter statistic of the parity word that neither theorem supplies and that
+$\pi_{k,D}$ does, so it is not available to underwrite the hypothesis: inside the
+digit budget it is a theorem of the cylinder count (\texttt{aeh.md}
+Lemma 13.2.4(g)), and past it neither a theorem nor a consequence of the hypothesis
+(\texttt{aeh.md} \S13.2.3). What the hypothesis supplies beyond these is
+distributional and is the whole of its content: the full $2^{-j}$ marginal at every
+$j$ below the cap, the exact $\tfrac13$ rate of Lemma~\ref{lem:absorption}, and the
+depth law, at every finite depth and past the budget at which the classical count
+stops. Its exceptional set is a set of \emph{starting values} of vanishing density
+at a prescribed finite horizon --- not a null set of orbits, and not a statement
+about any orbit's infinite tail. It does not exclude individual staircase tails
+(Remark~\ref{rem:staircase}); it does not iterate --- the image of a density-one set
+of starts need not be density-one at the next scale, an obstruction Tao states in the
+same terms \cite{tao}; and by Heuristic~\ref{prop:budget} it cannot be reached by
+finite-window computation. Its content is a question about digits of $2$-adic
+logarithms, older and broader than the Collatz problem.
+
+\paragraph{Calibration.} An eight-round campaign (per-orbit statistics over each cell's own conditional counts, $1{,}600$--$2{,}600$ independent orbits per cell, under an altitude cut on the core) produced four apparent violations of $\pi_{k,D}$-uniformity, each dissolved by a sharper control: an $s{=}3$ marginal excess and pair correlations (artifacts of small starting values); digit biases (contamination by the bottom regime, where deviations reach $z=41$ but reflect particular numbers rather than a measure); and a $5\sigma$ digit bias in one cell surviving a $2^{40}$ cut. The last dissolved under fixed-horizon unweighted sampling ($0.2503\pm0.0015$ against null $0.25$ over $84{,}739$ visits) and was explained exactly:
+
+\begin{lemma}[deterministic routing]\label{lem:routing}
+For $\w \equiv 1 \pmod 8$, $d = 1$: here $s = 1$, $C = 3\w + 1$, $\vt{C} = 2$, $a_+ = 0$, so $\wnext = (3\w+1)/4$ and $\dnext = 1$; the residue $\w \bmod 32$ determines the next class exactly: $1 \mapsto (1,1)$ (immediate self-return), $9 \mapsto (7,1)$, $17 \mapsto (5,1)$, $25 \mapsto (3,1)$, the lifting class.
+\end{lemma}
+
+Ratio estimators over correlated visit sequences inherit this routing (residue $25$ leads into deep descent, hence fewer qualifying visits, hence inflated per-orbit weight), manufacturing a bias aimed at one residue of the unique class with a self-loop channel. No residual discrepancy was detected at any tested depth or cell, under the stated protocol and within three limits the campaign does not reach past: it tests block lengths $L = 1$ and $L = 2$ only and is silent above; its adjudicating runs pool per visit across orbits, so they measure the across-orbit average of the per-start frequencies --- a consequence of Hypothesis~\ref{hyp:aeh} rather than the per-start statement itself, which would be tested by the distribution across orbits of $\lVert\nu - \pi_{k,D}\rVert_{\mathrm{TV}}$ and is not among the runs reported; and its altitude guard cuts on the core $\wnext$ rather than the door, censoring $s$, $m_+$ and $a_+$ at once, and does bind at finite size, removing $2.6\%$ of visits in the adjudicating run and moving the reported statistics at the third decimal (\texttt{aeh.md} \S13.4, \S13.5). Hypothesis~\ref{hyp:aeh} carries no cut of any kind; it tallies within the exponent budget, which bounds every tallied exit from below without selecting on the letter being tallied.
+
+\section{Discussion}
+
+In reduced coordinates the Collatz problem factors cleanly. The local arithmetic is under exact control: one $2$-adic logarithm governs the step, and finite windows decide steps without error. What remains is a single question wearing two costumes: for typical starting values, whether the anchors' digits equidistribute (Hypothesis~\ref{hyp:aeh} --- statistics); for cycles, whether closed anchor walks are rigid (Theorem~\ref{thm:staircase} --- arithmetic). The staircase shows the costumes cover the same body. Three directions have defined success criteria: rigidity statements for closed anchor walks beyond the size level (the only route past Theorem~\ref{thm:staircase}); transfer-operator analysis of the chain of exact depth-$k$ windows (Theorem~\ref{thm:onestep}); and any progress on digits of $2$-adic logarithms of integers, a problem this paper inherits rather than creates.
+
+\appendix
+\section{Methodology, responsibility, and records}\label{app:method}
+This work runs from a hand-drawn origin note (13 March 2023) through seventy-nine drafts to a research wiki whose pages carry status headers, verification records, and refuted claims with their refutation data. It was developed through extensive AI-assisted research in two phases. From December 2025 to March 2026 the author worked with ChatGPT (OpenAI): exploratory definitions, the early CollatzScout drafts, and, alongside them, the author's own hand computations in spreadsheets. From March 2026 the author worked with Claude (Anthropic). The author is responsible for the published claims, the research direction, and the standards of evidence; the AI collaborators carried out the mathematical development within the author's coordinate system --- formulations, proofs, computations, and connections to the literature. Because this division of labor is unusual, correctness claims rest on the documented verification protocol rather than on authorial authority alone: every computational claim cites a runnable script; every result labeled proved was re-verified with independently written code before being so labeled; the calibration campaign's four dissolved anomalies, and two corrected search-filter errors on the cycle side, are documented rather than smoothed over. The complete record (wiki, code, draft history, origin note) is public at \url{https://github.com/macindoe/collatz}; every wiki section and script named in this paper is cited at commit \recordcommit.
+% PIN-AT-BUILD: \recordcommit (preamble) must name a commit reachable on the public repository.
+
+\begin{thebibliography}{99}
+\small
+\bibitem{terras} Riho Terras, \emph{A stopping time problem on the positive integers}, Acta Arith.\ 30 (1976), no.~3, 241--252; DOI 10.4064/aa-30-3-241-252.
+\bibitem{everett} C.~J.~Everett, \emph{Iteration of the number-theoretic function
+  $f(2n) = n$, $f(2n+1) = 3n+2$}, Adv.\ Math.\ 25 (1977), 42--45.
+\bibitem{korec} I.~Korec, \emph{A density estimate for the $3x+1$ problem},
+  Math.\ Slovaca 44 (1994), no.\ 1, 85--89.
+\bibitem{tao} T.~Tao, \emph{Almost all orbits of the Collatz map attain almost
+  bounded values}, Forum Math.\ Pi 10 (2022), Paper No.\ e12, 56 pp.;
+  arXiv:1909.03562.
+\bibitem{inselmann} M.~Inselmann, \emph{An approximation of the Collatz map and a
+  lower bound for the average total stopping time}, arXiv:2402.03276 (2024).
+\bibitem{wirsching} G.~J.~Wirsching, \emph{The Dynamical System Generated by the
+  $3n+1$ Function}, Lecture Notes in Math.\ 1681, Springer-Verlag, Berlin, 1998.
+\bibitem{thomas} A.~Thomas, \emph{A non-uniform distribution property of most
+  orbits, in case the $3x+1$ conjecture is true}, Acta Arith.\ \textbf{178}
+  (2017), no.~2, 125--134; arXiv:1512.05852.
+\bibitem{steiner} R.~P.~Steiner, \emph{A theorem on the Syracuse problem}, Proc.\ 7th Manitoba Conf.\ Numerical Math.\ and Computing (1977), Congr.\ Numer.\ 20, Utilitas Math., Winnipeg, 1978, pp.\ 553--559.
+\bibitem{rozier90} O.~Rozier, \emph{D\'emonstration de l'absence de cycles d'une certaine forme pour le probl\`eme de Syracuse}, Singularit\'e 1 (1990), no.~3, 9--10.
+\bibitem{rozier91} O.~Rozier, \emph{Probl\`eme de Syracuse: ``majorations'' \'el\'ementaires des cycles}, Singularit\'e 2 (1991), no.~5, 8--11.
+\bibitem{bohm} C.~B\"ohm, G.~Sontacchi, \emph{On the existence of cycles of given length in integer sequences like $x_{n+1} = x_n/2$ if $x_n$ even, and $x_{n+1} = 3x_n + 1$ otherwise}, Atti Accad.\ Naz.\ Lincei Rend.\ Cl.\ Sci.\ Fis.\ Mat.\ Natur.\ (8) 64 (1978), no.~3, 260--264.
+\bibitem{hh} L.~Halbeisen, N.~Hungerb\"uhler, \emph{Optimal bounds for the length of rational Collatz cycles}, Acta Arith.\ 78 (1997), no.~3, 227--239; DOI 10.4064/aa-78-3-227-239.
+\bibitem{brox} T.~Brox, \emph{Collatz cycles with few descents}, Acta Arith.\ 92 (2000), no.~2, 181--188; DOI 10.4064/aa-92-2-181-188.
+\bibitem{ladue} M.~D.~LaDue, \emph{Clusters of integers with equal total stopping times in the $3x+1$ problem}, Fibonacci Quart.\ 56 (2018), no.~2, 156--162; DOI 10.1080/00150517.2018.12427710; arXiv:1709.02979.
+\bibitem{williams} J.~Williams, \emph{A Coordinate System for Collatz Dynamics}, arXiv:2607.01718v1 (2 July 2026); DOI 10.48550/arXiv.2607.01718.
+\bibitem{sos} V.~T.~S\'os, \emph{On the distribution mod~1 of the sequence $n\alpha$}, Ann.\ Univ.\ Sci.\ Budapest.\ E\"otv\"os Sect.\ Math.\ 1 (1958), 127--134.
+\bibitem{swierczkowski} S.~\'Swierczkowski, \emph{On successive settings of an arc on the circumference of a circle}, Fund.\ Math.\ 46 (1958), 187--189; DOI 10.4064/fm-46-2-187-189.
+\bibitem{eliahou} S.~Eliahou, \emph{The 3x+1 problem: new lower bounds on nontrivial cycle lengths}, Discrete Math.\ 118 (1993), 45--56.
+\bibitem{sdw} J.~Simons, B.~de~Weger, \emph{Theoretical and computational bounds for $m$-cycles of the $3n+1$ problem}, Acta Arith.\ 117 (2005), no.~1, 51--70; DOI 10.4064/aa117-1-3.
+\bibitem{hercher} C.~Hercher, \emph{There are no Collatz $m$-cycles with $m \le 91$}, J.\ Integer Seq.\ 26 (2023), Article 23.3.5; arXiv:2201.00406; corrigendum (14 June 2026), repairing a derivation in the proof of Theorem~21 with no change to any statement.
+\bibitem{lagarias} J.~C.~Lagarias, \emph{The 3x+1 problem: an annotated bibliography}, I--II, arXiv math/0309224, math/0608208.
+\bibitem{yu} K.~Yu, \emph{Linear forms in $p$-adic logarithms}, Acta Arith.\ 53 (1989), 107--186; \emph{Linear forms in $p$-adic logarithms II}, Compositio Math.\ 74 (1990), 15--113; \emph{Linear forms in $p$-adic logarithms III}, Compositio Math.\ 91 (1994), 241--276.
+\bibitem{bl} Y.~Bugeaud, M.~Laurent, \emph{Minoration effective de la distance $p$-adique entre puissances de nombres alg\'ebriques}, J.\ Number Theory 61 (1996), 311--342.
+\bibitem{rhin} G.~Rhin, \emph{Approximants de Pad\'e et mesures effectives d'irrationalit\'e}, in: S\'eminaire de Th\'eorie des Nombres, Paris 1985--86, Progr.\ Math.\ 71, Birkh\"auser, Boston, 1987, pp.\ 155--164 (the Proposition used here is on p.~160); see also Q.~Wu, \emph{On the linear independence measure of logarithms of rational numbers}, Math.\ Comp.\ 72 (2003), no.\ 242, 901--911.
+\bibitem{barina} D.~Barina, \emph{Improved verification limit for the convergence of the Collatz conjecture}, J.\ Supercomputing 81 (2025), no.~7, article 810; DOI 10.1007/s11227-025-07337-0.
+\bibitem{merle} E.~Merle, \emph{On the non-existence of non-trivial Collatz cycles: a conditional formal proof in Lean 4 with documented structural obstructions}, preprint, Zenodo (2026), the version of 26 April 2026 cited here at its version-specific DOI 10.5281/zenodo.19790406 (concept DOI 10.5281/zenodo.19790405).
+\bibitem{llmcollatz} E.~Y.~Chang, \emph{Exploring Collatz Dynamics with Human--LLM Collaboration}, arXiv:2603.11066 (2026).
+\end{thebibliography}
+
+\end{document}
