@@ -291,6 +291,80 @@ Main text ≈ 13 pp.
 - **Content commit:** `35abcdb`.
 - **This record:** the following commit.
 
+## 7c. Readability round 3 (after the cold read, `briefs/paper1-v4-coldread-1.md`, 166 flags)
+
+Branch `paper1-v4-readable-2`, on top of `6eb5946`. The author gave the go-ahead on 2026-10-20. Presentation only; no locked claim changed. The appendices only received moved text: the technical abstract (verbatim, as the opening "Technical summary") and §8's contemporary-work paragraph (verbatim, at the end of Appendix F). One sentence of the technical abstract was dropped: "The main text tells each idea in words; …". It was my own round-1 addition, not a claim.
+
+**What changed, by the coordinator's items:**
+1. **Abstract.** It is now in plain language, with no symbols. The technical abstract is verbatim in "Technical summary" at the start of the appendices; it also serves as the Zenodo description.
+2. **Symbols at a glance.** It now sits after the Author's note and before §1, and now includes `λ`, `k`. Its claim is corrected: it lists every symbol used outside the appendices. The abstract and §1 now use no symbols. The "words used as names" paragraph is removed; each name is now defined where it is used.
+3. **Running examples.**
+   - **The orbit of 7** runs through §§2–5. §3 shows every transition: `(1,3)` exits at 13; `(7,1)` falls 40 → 5 with `s = 2`; `(1,2)` falls 16 → 1 with `s = 3`; `(1,1)` falls 4 → 1 with `s = 1`.
+   - **§4** checks each law on it: the valuation table, the lifting example `(1,2)`, the factor of 3 at `(7,1)` (`21 + 3 = 24`), and the next depth.
+   - **§5** uses two examples: the trivial cycle (`n = 1`, `K = 2`, `q = 1`, `γ = 2`, rotation number `= q`) and the `p = 7` staircase.
+   - **§6** writes the example's letters, `(3,1)`, `(1,2)`, `(1,3)`, `(1,1)`, and gives the tally example (40 digits, horizon rate 1/10, budget rate 1/2).
+4. **Gaps.** Each now has its one line of reason:
+   - why a rising step halves once;
+   - why the trade stops;
+   - why the exit depends only on `(ω, d)`: one more than the last rising number is `2 · 3^{d−1} · ω`;
+   - why exactly `d` numbers share a state;
+   - "nothing is lost", as three facts;
+   - why `s ≥ 3` on lifting kinds, and why `s` is fixed elsewhere (powers of 3 mod 8);
+   - "exactly when `s` is even" (powers of 2 mod 3);
+   - "`q` is at most each" (a positive multiple of `q` is `≥ q`);
+   - "consequently … intrinsic" (the trim applied to the staircase);
+   - the 1/3 rate (`1/4 + 1/16 + … = 1/3`);
+   - the mean of 4 halvings per block;
+   - why the averages are not controlled;
+   - budget rate below 1 ⟺ horizon rate below 1/4.
+5. **Jargon.** Each term is glossed at first use or removed from the main text. Long sentences are split into short ones and lists (§4's three outcomes, §5's history and sharpness, §6's "would not give" and the calibration).
+6. **§8.** The contemporary-work paragraph is in Appendix F. A plain paragraph before the provenance paragraph glosses its three terms (skeleton rows, representative fibre, intra-block cascade). "Her open problem" is now "Williams's open problem". The provenance paragraph is otherwise verbatim.
+7. **(d)** The staircase now reads "the exit valuations total 55; and so the halvings total `K = 94 + 55 = 149`". §5 says that a block halves `m + s` times, so `K = n + Σ s`. **(e)** §6 now has a paragraph "What is proved, and what is conjectured": the base case (budget rate below 1) is proved, assembled in the record; the rest is conjectured. §1's not-claimed bullet reads "a conjecture, apart from the range where it is proved".
+
+**Cold-read items: 157 fixed, 1 partly fixed, 8 not fixed.**
+
+| Items | Status | Note |
+|---|---|---|
+| 1–19 (abstract) | fixed | new plain abstract; the technical terms are in the Technical summary |
+| 20 (version note: theorem labels before content) | not fixed | the version note must list v3 → v4 changes, and the labels are links; its symbols are removed |
+| 21 (record sections) | fixed | "sections of the project record" |
+| 22 (pinned citation) | not fixed | the author's own wording (round 2) |
+| 23, 24, 25 (Author's note) | not fixed | verbatim, the author's voice; 24 is mitigated by Symbols at a glance directly after |
+| 26–51 (§1) | fixed | §1 rewritten without symbols; terms glossed or moved to their section |
+| 52–56 (symbols page) | fixed | moved before §1, completed, claim corrected, names paragraph removed |
+| 57–64 (§2) | fixed | reasons and worked numbers added; one-division map named |
+| 65–71 (§3) | fixed | reasons, transitions, three facts |
+| 72–76, 78–93 (§4) | fixed | |
+| 77 (no-shortcut sentence: no reason given) | not fixed | the record states it without proof (`briefs/williams-letter-findings.md`); a reason would add a claim |
+| 94–131 (§5) | fixed | 113 (55 vs 149) resolved by saying what `K` counts |
+| 132–155 (§6) | fixed | 143 resolved by "What is proved, and what is conjectured" |
+| 156–159 (§7) | fixed | 158: the costumes metaphor is kept, now glossed by the staircase sentence |
+| 160–162 (§8) | fixed | related work moved to App F |
+| 163 (mechanism "comes from … and is classical") | not fixed | verbatim provenance paragraph; §2 now separates the two |
+| 164 (skeleton rows, fibre, cascade, `λ`, `k`) | fixed | glossed in the paragraph before; `λ`, `k` in the symbols page |
+| 165 ("Her open problem …") | partly | "Williams's open problem"; the rest of the sentence is the verbatim provenance paragraph |
+| 166 (analytical superstructure) | not fixed | verbatim provenance paragraph |
+
+**New paraphrases to check against the ledger:**
+- the plain abstract, whole (C-Abs.1–18);
+- §1 "What is new" (v), "reaches the optimum Rozier identified (the minimax value of his extremal profile)" (C-Int.9);
+- §5: "a bound as strong as the three-block one would wrongly exclude this seven-block size-passer, and the requirement must weaken as the number of blocks grows" (C-4.6(iv)). The second clause is a reading of the example;
+- §5 history: Brox, "only finitely many cycles can have any given number of local minima" (C-RW.15);
+- §6: the base-case example, "among the odd numbers of any run of 1024 consecutive integers … each pattern of first blocks that uses fewer than ten halvings in all, counting the start's own block, occurs in exactly its fair-coin share" (C-5.base, `S + 1 ≤ J` with `J = 10`);
+- §6 "would not give", bullet 1 (C-5.union) and bullet 4 (C-5.exc, non-iteration);
+- §6: Inselmann's crossing, "for the range within which an orbit stays and for its average" (the trajectory envelope and first moment, C-5.Korec).
+
+**Pages (41):**
+- front matter pp. 1–2;
+- Symbols at a glance pp. 2–3;
+- §1 pp. 3–6;
+- §§2–8 pp. 6–17 (main text ≈ 16 pp);
+- Technical summary p. 17;
+- Appendices A–I pp. 17–39;
+- references pp. 39–41.
+
+**Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean. Content commit `c565330`.
+
 ## 8. Record
 
 **Commits** (branch `paper1-v4-readable`, base `46e7464`):
