@@ -34,6 +34,12 @@
 | U17 | after Lemma 5.2, L552 | "one residue of the unique class with a self-loop channel" | "one residue of the class `[1,1]`, whose residue 1 returns to it deterministically (a self-loop channel)" | Lemma 5.2. The record (`aeh.md` §13.5) also asserts uniqueness without proof; the word was dropped rather than proved. |
 | U18 | Abstract L48; Contribution (v) L81; Related work L88 | "The family realizes Rozier's 1991 extremal" (after both statements); "an explicit family realizing Rozier's extremal profile … at every period" | "At that threshold scale the family realizes the minimax value of Rozier's 1991 extremal under every rotation's exact size condition"; (v) and Related work: the realization attached to the threshold statement only | "The threshold, explicitly" (C-4.thr.6); `briefs/paper1-v4-draft-findings.md` §5 |
 | U19 | Abstract L48 | "the block letters of uniformly sampled large starts carry, at every finite block length, …" | "…large starts, tallied within an exponent budget proportional to the start's bit length and for every admissible pair of budget and horizon rates, carry, …" | Hyp 5.1. v4 has no other in-words statement of the hypothesis; the rewrite must keep both clauses in any it adds. |
+| U20 | "The threshold, explicitly" L335 | "over `X₀ = 2^j`, `j ≤ 200`, `p₁ − log_L X₀ ∈ [2.92, 10.42]`" | "… `∈ [2.784, 10.629]`" | `briefs/x0-threshold-independent-check-findings.md` §4 item 1: the old range is true only of the record's sampled rows (`j ≤ 20`, then steps of 10). `experiments/x0_threshold_independent_check_output.txt` L46 gives `[2.7840, 10.6295]` over every `j ≤ 200` (min at `j = 143`, max at `j = 74`). |
+| U21 | — | "`X₀ ≥ 5.541`" → `2^λ − 1 = 5.5411…` | no change: v4 carries no such text | same findings, item 2 (record-only: `cycles.md` 12.8.7) |
+| U22 | — | "1.874469" → "1.87447" | no change: v4 carries no such text | item 3 (record-only) |
+| U23 | — | "where `γ < Γ` the budget never binds and `c` is large" | no change: v4 carries no such text. v4's crash statements are already exact: the proof's "the crash depth is 1 exactly when the budget binds" and Remark 4.8's "depth 1 exactly when the budget binds, and depth at least 2 otherwise". Neither ties binding to `γ < Γ`. | item 4 (record-only) |
+| U24 | — | the 2.09 constant (valid for `p ≥ 12`) | no change: v4 carries no such constant. Remark 4.8 states the exact term `(L−1)L^{p−1}/(L^{p−1}−1)`, not the rounded 2.09. | item 5 (record-only) |
+| U25 | "Verification and record" L349 | parts (ii)–(iii) checked by `staircase_x0_threshold.py` only | adds "and again by an independent re-implementation, `experiments/x0_threshold_independent_check.py` (43 checks, 0 failures)" | `experiments/x0_threshold_independent_check_output.txt` L90; merged on `main` at `fcbc936` |
 
 ## 2. The author's decisions (2026-10-19)
 
@@ -94,7 +100,9 @@ No change to either entry.
 
 **Commits:**
 - `01641d5`, content: the `.tex` and the rebuilt PDF;
-- the next commit, structure: the re-cut ledger and this file.
+- `fd93635`, structure: the re-cut ledger and this file;
+- a merge of `main` (`eded178`, carrying the independent check `fcbc936` and `dff0a95`);
+- a final commit for U20–U25: the `.tex`, the PDF rebuilt (22 pp, 0 undefined references), and the ledger rows C-4.thr.1 and C-4.ver(a) with this table.
 
 **Build:** `pdflatex` ×3 in the session scratchpad (`…/scratchpad/build`). Output: 22 pages, no undefined references or citations, no multiply defined labels, 0 overfull boxes. The PDF was copied into `paper/`. The theorem-environment sequence on `pdftotext` is identical to the pre-pass PDF.
 
