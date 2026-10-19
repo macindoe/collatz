@@ -248,12 +248,20 @@ the record's novelty refresh and register sweep (2026-10-18) and the checklist b
 
 ### Coordinates and provenance
 
-* The provenance sentence is restated as a statement of authorship, not priority. The clause "any
-  overlap with contemporary work lies in that layer, not in the coordinate system" is deleted: it
-  had been false since 2 July 2026.
+* The provenance passage is restated from the author's dated evidence. v3 dated "the reduced
+  coordinate system itself" to the hand-drawn note of 13 March 2023. v4 dates only the mechanism
+  to that note (each rising step trades a factor of 2 for a factor of 3, which is classical). The
+  factorization `x + 1 = 2^m 3^a ω` was worked out by the author by hand in December 2025, and was
+  named and formalized as the state `(ω, d)` in AI-assisted work, with ChatGPT (OpenAI) from
+  December 2025 and with Claude (Anthropic) from March 2026. No priority or influence is claimed.
+  The clause "any overlap with contemporary work lies in that layer, not in the coordinate system"
+  is deleted: it had been false since 2 July 2026.
+* The title-page footnote and Appendix A name both AI phases. v1–v3 named Claude only. The
+  ChatGPT phase, December 2025 to March 2026, covered exploratory definitions and the early
+  CollatzScout drafts, alongside the author's hand computations in spreadsheets.
 * The block cascade is cited as classical (Steiner 1977; Rozier 1990; LaDue 2018). The states
   `(ω, d)` are cited as the skeleton rows `(λ, k)` of J. Williams, arXiv:2607.01718 (2 July 2026),
-  one week before v1, with her Proposition 3.3, Theorem 3.6 and Proposition 3.10 matched to
+  posted earlier, with her Proposition 3.3, Theorem 3.6 and Proposition 3.10 matched to
   Proposition 2.2. One sentence says that Section 3 answers her open problem (1) in part — where a
   trajectory leaving a row lands — and not which skeleton it enters.
 * Proposition 4.1 is identified as the Böhm–Sontacchi cycle equation (1978) in block coordinates,
@@ -285,4 +293,4 @@ the record's novelty refresh and register sweep (2026-10-18) and the checklist b
   author's to reword.
 * No statement is renumbered. Theorem 4.6 is strengthened and proved; Theorem 4.5 is attributed,
   unchanged in statement; Remark 4.8 is new and numbered after every existing statement of Section 4. The
-  document grows from 15 pages to 20, the growth being the proof of Theorem 4.6.
+  document grows from 15 pages to 21, mostly through the proof of Theorem 4.6.
