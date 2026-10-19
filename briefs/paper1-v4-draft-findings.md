@@ -1,13 +1,13 @@
 # Findings: paper 1 v4 drafted from the checklist — source, PDF, version-history section, Zenodo description
 
-**Task:** `briefs/paper1-v4-draft-brief.md`. Branch `paper1-v4-draft`, base **`85f42d3`** (the worktree was cut at `946e0d8` and fast-forwarded to `85f42d3` before any work). Drafted 2026-10-19. The author's decisions D1–D15 were applied as given. Nothing outward: no upload, no Zenodo, no ccchallenge, no push, no email. The only network use was read-only GETs: the arXiv abstract page for 2607.01718, Lagarias's annotated bibliography I (arXiv math/0309224), the Rozier 1990 scan at `probleme-syracuse.fr`, and one Crossref bibliographic query (Świerczkowski). Downloads went to the session scratchpad. No wiki page was edited.
+**Task:** `briefs/paper1-v4-draft-brief.md`. Branch `paper1-v4-draft`, base **`85f42d3`** (the worktree was cut at `946e0d8` and fast-forwarded to `85f42d3` before any work). Drafted 2026-10-19. `main` was later merged in (`e4ad005`); nothing under `paper/` conflicted. The author's decisions D1–D15 were applied as given. D5 is applied in its revised form (2026-10-19): the provenance is dated from the author's evidence, and both AI phases are disclosed. Nothing outward: no upload, no Zenodo, no ccchallenge, no push, no email. The only network use was read-only GETs: the arXiv abstract page for 2607.01718, Lagarias's annotated bibliography I (arXiv math/0309224), the Rozier 1990 scan at `probleme-syracuse.fr`, and one Crossref bibliographic query (Świerczkowski). Downloads went to the session scratchpad. No wiki page was edited.
 
 ## 1. Deliverables
 
 | File | What |
 |---|---|
 | `paper/collatz-reduced-v4.tex` | v4 source. Made by a byte copy of v3 (`cp`, checked with `cmp`), then edited with Edit only. Still ASCII. |
-| `paper/collatz-reduced-v4.pdf` | Built in a scratch directory with `pdflatex` ×3, then copied in. **20 pages. 0 undefined references, 0 LaTeX warnings, 0 overfull boxes, 1 underfull box** (the Lagarias bibliography entry, badness 1067). |
+| `paper/collatz-reduced-v4.pdf` | Built in a scratch directory with `pdflatex` ×3, then copied in. **21 pages. 0 undefined references, 0 LaTeX warnings, 0 overfull boxes, 1 underfull box** (the Lagarias bibliography entry, badness 1067). |
 | `paper/collatz-reduced-version-history.md` | New section `## v4 — [month] 2026`, marked DRAFT in an HTML comment. Month and DOI are placeholders. |
 | `briefs/paper1-v4-zenodo-description.md` | The v4 Zenodo description, as HTML: the abstract first, then "Changes in v4", then the pointer. Not uploaded. |
 | this file | Coverage table, markers, sweep, flags, and decisions left. |
@@ -38,11 +38,11 @@ v3's closing sentence follows the parts, unchanged, now attributed to HH p. 238.
 
 ## 3. Coverage of the checklist (`briefs/paper1-v4-items-findings.md`)
 
-**Counts: 92 rows — done 67, changed 10, deferred 15.** "Changed" means applied, with wording or placement different from the checklist's proposal (reason given). "Deferred" means left for the author or the main session.
+**Counts: 92 rows — done 68, changed 10, deferred 14.** "Changed" means applied, with wording or placement different from the checklist's proposal (reason given). "Deferred" means left for the author or the main session.
 
 | Item | Rows | Done | Changed | Deferred |
 |---|---|---|---|---|
-| 1 | 27 | 16 | 8 | 3 |
+| 1 | 27 | 17 | 8 | 2 |
 | 2 | 16 | 10 | 1 | 5 |
 | 3 | 16 | 14 | 0 | 2 |
 | 4 | 24 | 23 | 1 | 0 |
@@ -56,7 +56,7 @@ v3's closing sentence follows the parts, unchanged, now attributed to HH p. 238.
 | 1.1 | Abstract, cycle sentences | **changed.** Per D4 there is no "main new theorem". Both scopes are stated: all-`p` with its scope words, and `X₀` for `p ≥ p₁(X₀)`. The credit chain follows D4. |
 | 1.2 | Abstract, and the paragraph after Prop 4.1 | **changed.** The abstract also names Böhm–Sontacchi; the checklist had proposed leaving the abstract unchanged. |
 | 1.3 | Author's note | **deferred** (D6; `% AUTHOR:` marker). |
-| 1.4 | Author's note | **deferred** (D6; `% AUTHOR:` marker, flagged optional). |
+| 1.4 | Author's note | done. The author's decision: the sentence is accurate as written, and its `% AUTHOR:` comment says so. |
 | 1.5 | Intro ¶1 | done. The scope reads "at every period, and at every size threshold `X₀` for all periods `p ≥ p₁(X₀)`". |
 | 1.6 | Intro ¶2 | done (Steiner; Rozier 1990; LaDue; Williams). |
 | 1.7 | Related work, provenance ¶ | **changed.** The Williams correspondences (her Prop 3.3, Thm 3.6, Prop 3.10 ↔ Prop 2.2(iii), (i), (ii)) are placed in provenance, not after Prop 2.2's proof. The checklist left placement to the author. |
@@ -65,7 +65,7 @@ v3's closing sentence follows the parts, unchanged, now attributed to HH p. 238.
 | 1.10 | Intro ¶3 | done (unchanged). |
 | 1.11 | Related work | done. `rozier90` is in the cycle-literature list, and the trim paragraph is new. |
 | 1.12 | Related work, trim ¶ and the Merle sentence | **changed.** The optional Knight clause is omitted (D7 does not list Knight). `[[X0]]` is resolved. |
-| 1.13 | Provenance ¶ | **changed.** It reads "a statement of authorship, not of priority". The proposal's "was not published before this paper's first version" is not used, because I could not verify when the repository became public. |
+| 1.13 | Provenance ¶ | **changed**, per D5 as revised. Only the mechanism is dated to the March 2023 note, and it is cited as classical. The coordinate `x + 1 = 2^m 3^a ω` is dated to the author's hand work of December 2025. It was named and formalized as `(ω, d)` with ChatGPT (from December 2025) and Claude (from March 2026). Williams is cited as independent and posted earlier. No priority or influence is claimed. The text is in §5. |
 | 1.14 | Provenance ¶ | done (clause deleted, no replacement). |
 | 1.15 | Paragraph after Prop 4.1 | done for (a): Böhm–Sontacchi via Lagarias I item 26, and Tao (1.5). (b), the gcd rotation-invariance, is **not** added. It is optional, and it would be a new claim needing proof in the paper. |
 | 1.16 | Thm 4.4 cite list; new paragraph "The dictionary with m-cycles" | done. `m = p` is stated with its proof, the Hercher transfer to `p ≤ 91` is given, and no deep-entry claim is made (`[[12.4]]` §4). |
@@ -139,7 +139,7 @@ v3's closing sentence follows the parts, unchanged, now attributed to HH p. 238.
 
 **`% AUTHOR:`**, three comment blocks, all in the Author's note; the text itself is v3's, unchanged:
 - **L58:** header. The note is in the author's voice and the rewording is his.
-- **L61:** "We cleaned my idea up into the states (ω,d)…". True as authorship. The states are Williams's skeleton rows, one week before v1. Optional; no change needed.
+- **L61:** "We cleaned my idea up into the states (ω,d)…". Accurate as written (the author's decision, 2026-10-19). No change needed.
 - **L65:** "That simplification is what enables… a uniform trim that caps what size-counting can achieve…". **Wrong in its second item**: the trim is Rozier and SdW, obtained without these coordinates. Row 1.3's option is quoted.
 
 **`% PIN-AT-BUILD`**, five:
@@ -179,7 +179,8 @@ The two visible placeholders, **[v4 version DOI]** and **[record commit, pinned 
 - The trim paragraph attributes Lemme 4, Brox, and SdW Lemmas 7, 14 and Thm 3, and calls our proof a rederivation. ✓
 - "Theorem 4.6 realizes Rozier's extremal … the sharpness Simons and de Weger expected." ✓ (as above).
 - The Merle/Chang sentence ends "neither contains the anchor machinery or the exact per-step laws". Literally true; "the counting-limit dichotomy" is removed. ✓
-- Provenance: "is the human author's, reached independently … That is a statement of authorship, not of priority: the pieces are not new as objects." ✓ (CS §6).
+- Provenance, verbatim from the source with TeX simplified: "The mechanism underneath the reduced coordinates — each rising step trades a factor of 2 for a factor of 3 — comes from the author's hand-drawn note of March 2023, and is classical (Steiner; see also Rozier and LaDue). The reduced coordinate itself, the factorization x + 1 = 2^m 3^a ω with its odd core ω, was worked out by the author by hand in December 2025, and was named and formalized as the state (ω,d) in AI-assisted work: with ChatGPT (OpenAI) from December 2025, and with Claude (Anthropic) from March 2026. The same states, with their representative fibre and intra-block cascade, appear independently as the skeleton rows (λ,k) of Williams, posted earlier, …" Neither priority nor influence is claimed. ✓ (D5 as revised; CS §6).
+- Title-page footnote and Appendix A: both AI phases are named, and no conversation is quoted or linked. ✓
 - "any overlap … not in the coordinate system" is deleted (D5). ✓
 - "Section 3 answers it in part: … exact laws for where a trajectory leaving a row lands … but none for which skeleton is entered, where F restates her Proposition 3.10." This is the Williams calibration verbatim in substance. "In part" is kept. Neither the sweep's superseded "answers (1)" nor "answers" alone is used. ✓
 
@@ -193,33 +194,42 @@ The two visible placeholders, **[v4 version DOI]** and **[record commit, pinned 
 
 ## 6. Flags for the main session (no wiki page was edited)
 
-1. **`cycles.md` 12.8.7 rounds a constant up.** `2^{−(λ+1.5)} = 2^{−4.2095122} = 0.054052`. The record prints `Λ ≥ 0.0541·2^{−ε_p n}` (12.8.7 current state and Thm 12.8.7.4), and the findings print `0.054098` in §7.2. Neither follows from `Λ ≥ 2^{−γ}` with `γ − ε_p n ≤ λ + 1.5`, since `0.0541 > 0.05405`. v4 says `0.054`, which is safe. This is a fourth-significant-digit overstatement in the record, for the alignment window or a one-line fix.
+1. **The 12.8.7 constant.** The derivation supports `2^{−(λ+1.5)} = 0.0540518…`, with `λ = 2.7095122450` as printed by `experiments/staircase_x0_threshold.py`. `cycles.md` 12.8.7 and `briefs/staircase-x0-threshold-findings.md` now state `0.054` (commit `6642ceb`, the only wiki edit of this window, with the derivation in its message). These files outside this window still print `0.0541` and are not edited:
+   - `publication.md` L39;
+   - `briefs/ceiling-wiki-alignment-findings.md`;
+   - `briefs/merle-round19-pr-findings.md`;
+   - the round-19 patches `0002` (LEDGER L-A12) and `0003` (the R19 letter). These are prepared for an outward PR and need the same correction before posting.
 2. **Rozier 1990 pages:** 9–10 on the scan, against 9–12 in Lagarias and ccchallenge (row 4.2).
 3. **TOUR.md L22** (paper 1 "names the one-division map in words only") is now accurate for v4 §5's fixed sentence. It was inaccurate for v3 (checklist §7 item 3).
 4. **The composed proof** (12.8.6.1 + 12.8.7.2 under (H1′)) is printed in the paper but is not itself a record statement. If the record should carry it, it is one sentence in 12.8.6's Scope or 12.8.7.2.
 
 ## 7. The author's remaining decisions
 
-1. **The Author's note.** Reword the sentence marked at L65 (the uniform-trim item), and optionally the one at L61. Then delete the `% AUTHOR:` comments.
-2. **At minting:**
+1. **The Author's note.** Reword the sentence marked at L65 (the uniform-trim item). L61 stands as written. Then delete the `% AUTHOR:` comments.
+2. **Appendix A's wording.** It says "the AI collaborators carried out the mathematical development". That covers both phases. Narrow it if the ChatGPT phase should read as exploratory only.
+3. **At minting:**
    - fill `\vfourdoi` and the two months;
    - fill `\recordcommit` with a commit reachable on the public repository (push `main` first);
    - rebuild the PDF;
    - finalize the VH v4 section (month, DOI, remove its DRAFT comment) and the Zenodo description's `[month]`.
-3. **D3's ordinary-scale sentence:** keep as written (structural, at the end of "The threshold, explicitly") or cut.
-4. **Optional items left out:**
+4. **D3's ordinary-scale sentence:** keep as written (structural, at the end of "The threshold, explicitly") or cut.
+5. **Optional items left out:**
    - the gcd rotation-invariance (rows 1.15b, 3.15);
    - the Tao p. 2 / Prop 1.11 refinement (rows 1.26, 3.6);
    - the Knight clause (row 1.12; D7 omitted it).
-5. **Sós 1958:** confirm the bibliographic entry at source before release.
-6. **Length.** 15 → 20 pages, all of the growth from Theorem 4.6's proof. If shorter is preferred, the construction's well-definedness and climb steps could point to `cycles.md` §12.8.6.2 and §12.8.7.2. D2 allows condensing with pointers.
-7. **D12 and listings after minting** (unchanged): the ccchallenge request, the collatz-lab.org pin, README L3, `publication.md`, and HANDOFF's citation guidance.
+6. **Sós 1958:** confirm the bibliographic entry at source before release.
+7. **Length.** 15 → 21 pages, mostly from Theorem 4.6's proof. If shorter is preferred, the construction's well-definedness and climb steps could point to `cycles.md` §12.8.6.2 and §12.8.7.2. D2 allows condensing with pointers.
+8. **D12 and listings after minting** (unchanged): the ccchallenge request, the collatz-lab.org pin, README L3, `publication.md`, and HANDOFF's citation guidance.
 
 ## 8. Record
 
 - **Commits on the branch:**
   - `c055b6b`: v4 source and PDF.
   - `8a9211c`: the VH v4 section and the Zenodo description.
-  - The commit carrying this file.
+  - `1109f1e`: this file.
+  - `e4ad005`: merge of `main`.
+  - `6642ceb`: the 12.8.7 constant (`cycles.md`, `briefs/staircase-x0-threshold-findings.md`).
+  - `d9b9058`: provenance, the method disclosure, the L61 comment, VH brought into line, PDF rebuilt.
+  - The commit carrying this file's current state.
 - **Build:** `pdflatex -interaction=nonstopmode -halt-on-error collatz-reduced-v4.tex`, three runs in `scratchpad/build/`. The source there was checked byte-identical (`cmp`) to the committed one before the PDF was copied in.
 - **Encoding:** `python experiments/encoding_scan.py` returned CLEAN before the first commit and again before this one.
