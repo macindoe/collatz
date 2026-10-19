@@ -1,0 +1,80 @@
+paper1_v4_readable_examples_check.py -- worked examples of the readable rewrite of paper 1 v4
+(paper/collatz-reduced-v4.tex at d421851; main text Sections 2-6)
+
+A. Section 2 -- one rising run (x = 7)
+  [PASS] T-orbit of 7 starts 7, 11, 17, 13 -- [7, 11, 17, 13]
+  [PASS] table row 0: x=7 binary 111, x+1 binary 1000, x+1 = 2^3*3^0*1
+  [PASS] table row 1: x=11 binary 1011, x+1 binary 1100, x+1 = 2^2*3^1*1
+  [PASS] table row 2: x=17 binary 10001, x+1 binary 10010, x+1 = 2^1*3^2*1
+  [PASS] table row 3: x=13 binary 1101, x+1 binary 1110, x+1 = 2^1*3^0*7
+  [PASS] 7->11 and 11->17 are rising steps (3x+1 divisible by 2 exactly once)
+  [PASS] 3*17+1 = 52 = 110100 in binary, divisible by 4 (exactly), 52/4 = 13
+  [PASS] T(x)+1 = (3/2)(x+1) for every x = 3 mod 4 below 200,001 -- 0 exceptions
+  [PASS] x + 1 = 2^m u (u odd) <=> x ends in exactly m ones, odd x below 200,001
+  [PASS] Prop B.2(i)-(ii): x_j + 1 = 2^(m-j) 3^j u, then exit (3^m u - 1)/2^s, odd x below 100,001 -- 0 failures
+  [PASS] x = 7: m = 3, u = 1, 3^3 - 1 = 26 = 2*13, s = 1, exit 13
+  [PASS] one-division map: 7, 11, 17 (odd), 26 (even), then 13 -- [7, 11, 17, 26, 13]
+
+B. Section 3 -- blocks become states
+  [PASS] odd x below 200,001 with R(x) = (1,3) are exactly 7, 11, 17 -- [7, 11, 17]
+  [PASS] representative formula 2^(d-a) 3^a w - 1, 0 <= a <= d-1, gives 7, 11, 17
+  [PASS] R-fibre of (1,1) below 200,001 is {1} -- [1]
+  [PASS] F(1,1) = (1,1)
+  [PASS] block entries along the orbit of 7 are 7, 13, 5, 1 -- [7, 13, 5, 1]
+  [PASS] states along the orbit of 7 are (1,3), (7,1), (1,2), (1,1) -- [(1, 3), (7, 1), (1, 2), (1, 1)]
+  [PASS] the same chain from the formulas of Definition B.1 -- [(1, 3), (7, 1), (1, 2), (1, 1)]
+  [PASS] R(T^m(x)) = F(R(x)) for odd x below 50,001 (Prop B.2(iii)) -- 0 failures
+
+C. Section 4 -- the exact laws (anchor, eight-class table, (1,2))
+  [PASS] M(1) = 0 (mod 2^64)
+  [PASS] M(w) even iff w = +-1 mod 8, odd w below 4001 -- 0 exceptions
+  [PASS] eight-class table of Section 4 (s = 1/2 constants; lifting s >= 3), w < 3001, 3 !| w, d <= 40
+  [PASS] lifting <=> (w = 1 mod 8, d even) or (w = 3 mod 8, d odd); s = 2 + v2(d - M(w)) there -- 10000 lifting states, 0 failures
+  [PASS] (1,2): s = 3; 3*5+1 = 16 halves 1 + s = 4 times, down to 1
+  [PASS] Theorem C.5's displacement xi equals (d - M(w))/2 on both lifting components (mod 2^64) -- 10000 lifting states, 0 failures
+  [PASS] undecided rate at k = 4: sum_(j >= k+2) 2^-j = 2^-(k+1) = 0.031250, printed 0.03125
+  [PASS] undecided rate at k = 8: sum_(j >= k+2) 2^-j = 2^-(k+1) = 0.001953, printed 0.00195
+
+D. Section 5 -- the p = 7 staircase and the quoted constants
+  [PASS] n = sum m = 94
+  [PASS] K = ceil(94 log2 3) = 149 (exact: 2^148 < 3^94 < 2^149)
+  [PASS] last exit valuation s_tot - 6 = 49, so s = (1,1,1,1,1,1,49) and n + sum s = K
+  [PASS] gamma = K - log2 q = 6.7438... (printed 6.74) -- 6.7437584
+  [PASS] all seven size tests q <= R_r hold (exact integers) -- min R_r / q = 1.42063
+  [PASS] divisibility q | R_r fails (the configuration is not a cycle) -- q divides 0 of the 7 R_r
+  [PASS] period-3 constant 0.1157 n - 2 at n = 94 is 8.8758 (printed 8.9) and exceeds gamma -- 8.8758
+  [PASS] climb ratios m_{i+1}/m_i over the first six blocks lie in [1.28, 1.75] (log2 3 = 1.585) -- 1.750, 1.286, 1.667, 1.533, 1.522
+  [PASS] x_r = 2^{m_r} R_r / q - 1 are positive rationals (rational-cycle block entries)
+  [PASS] Theorem D.6(ii) sandwich: gamma - 1 <= log2(x_min + 1) < gamma + log2 7 -- 7.03039
+  [PASS] Theorem D.5 trim holds for this size-passer: gamma + log2 7 > kappa_7 * 94 -- 9.55111 > 2.27909
+  [PASS] Gamma* = 1.05 L(L-1) + 1/(L-1) + 1 = 3.6830121..., printed lower bound 3.683012 <= Gamma* -- 3.683012101
+  [PASS] phi(0.0415) = 5.1402114..., printed upper bound 5.140212 >= it -- 5.140211486
+  [PASS] lambda_0 = L/(L-1) + 2^-20 = 2.7095122... -- 2.709512245
+  [PASS] 2^-(lambda_0 + 1.5) = 0.05405... > 0.054 -- 0.0540518
+  [PASS] convergents of log2 3 begin 1/1, 2/1, 3/2, 8/5, 19/12, 65/41
+  [PASS] p1(X0 = 1) = 10 -- computed 10
+  [PASS] p1(X0 = 16) = 10 -- computed 10
+  [PASS] p1(X0 = 2^8) = 22 -- computed 22
+  [PASS] p1(X0 = 2^12) = 22 -- computed 22
+  [PASS] p1(X0 = 2^20) = 36 -- computed 36
+  [PASS] p1(X0 = 5*2^60) = 98 -- computed 98
+  [PASS] p1(X0 = 2^71) = 110 -- computed 110
+  [PASS] p1(X0 = 2^200) = 309 -- computed 309
+  [PASS] over X0 = 2^j, 0 <= j <= 200: p1 - log_L X0 in [2.783, 10.630] (Appendix D prints [2.784, 10.629]) -- min 2.7839895 at j = 143, max 10.6294771 at j = 74
+  [PASS] the printed endpoints 2.784 and 10.629 are the extremes rounded to nearest (3 decimals) -- both extremes lie just outside the printed closed interval: 2.7839895 < 2.784, 10.6294771 > 10.629
+
+E. Section 6 -- the model law
+  [PASS] E[geom(1/2)] = 2, so E_B[m + r] = 4
+  [PASS] 3-gain rate sum_(j even) 2^-j = 1/3
+  [PASS] a tau with 4 theta < tau < 1 exists iff theta < 1/4 (theta on a 1/1000 grid; tau = (4 theta + 1)/2)
+
+F. Negative controls (each must be rejected)
+  [REJECTED (good)] control: eight-class table with s = 2 at (w = 3 mod 8, d even)
+  [REJECTED (good)] control: state chain (1,3) -> (7,1) -> (1,1) -> (1,1)
+  [REJECTED (good)] control: last exit 48 instead of 49 (n + sum s != K = 149)
+  [REJECTED (good)] control: flat profile m = (1,...,1,88) with the same s passes all size tests -- min R_r < q
+  [REJECTED (good)] control: p1(2^20) = 35
+  [REJECTED (good)] control: K = 150 instead of 149 gives gamma = 6.74 -- 0.986601
+  [REJECTED (good)] control: xi = d - M(w) (without the factor 1/2) on the lifting class
+
+TOTAL: 57 checks passed, 0 failed; 7 negative controls rejected, 0 not rejected
