@@ -2,7 +2,7 @@
 
 Supports: briefs/ceiling-ccchallenge-sweep-findings.md, Item C (the Williams verdict).
 It checks the dictionary between the record's reduced coordinates (paper 1 v3,
-Definition 2.1 and Proposition 2.3 = the projection R(x) = (w, m + a) for an odd x
+Definition 2.1 and Proposition 2.2 = the projection R(x) = (w, m + a) for an odd x
 with x + 1 = 2^m 3^a w, 3 not dividing w, and the reduced map F) and the
 coordinates of
 
@@ -22,9 +22,13 @@ Checks, over every odd n in [1, N]:
   2. Williams' row k of L_lambda (b = 0..k-1, a = k-b) is exactly paper 1's
      representative list of (w, d) (x = 2^(d-a) 3^a w - 1, 0 <= a <= d-1).
   3. Diagonal flow: for a >= 2 the next odd iterate under C (= T odd-to-odd) is
-     lambda 2^(a-1) 3^(b+1) - 1, i.e. Proposition 2.3(i).
+     lambda 2^(a-1) 3^(b+1) - 1, i.e. Proposition 2.2(i).
   4. Boundary: at a = 1, v2(3n + 1) = 1 + s(w, d) and the next odd number is
-     x_exit(w, d) (Definition 2.1 / Proposition 2.3(ii)).
+     x_exit(w, d) (Definition 2.1 / Proposition 2.2(ii)).
+
+Statement numbers are those of the published v3 PDF (Definition 2.1, Proposition 2.2
+block structure, Theorem 2.3 convergence translation). The printed label of check 3
+still reads "Prop 2.3(i)", kept so that the committed output stays byte-identical.
   5. Hence "the skeleton/row entered after the boundary exit" (Williams' open
      problem (1), the row-exit map) is F(w, d): R(next odd) = F(R(n)).
 
