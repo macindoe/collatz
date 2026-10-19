@@ -1,6 +1,6 @@
-From 17205e134637c2594d9607d2c1bfba5d8809a345 Mon Sep 17 00:00:00 2001
+From 4b6acce3fcf079a7b71e752221798bfc33b80606 Mon Sep 17 00:00:00 2001
 From: Ben Macindoe <macindoebenjamin@gmail.com>
-Date: Mon, 19 Oct 2026 13:57:45 +1100
+Date: Mon, 19 Oct 2026 16:25:16 +1100
 Subject: [PATCH 3/3] rounds/R19-macindoe.md: the round-19 letter, business
  paragraphs only
 
@@ -23,7 +23,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 
 diff --git a/rounds/R19-macindoe.md b/rounds/R19-macindoe.md
 new file mode 100644
-index 0000000..59a8067
+index 0000000..4e8293f
 --- /dev/null
 +++ b/rounds/R19-macindoe.md
 @@ -0,0 +1,147 @@
@@ -166,7 +166,7 @@ index 0000000..59a8067
 +
 +## 4. Where everything lives.
 +
-+All in `macindoe/collatz` at `85f42d3`:
++All in `macindoe/collatz` at `dff0a95`:
 +- the record: `cycles.md` §12.4, §12.8.6, §12.8.7;
 +- the two literature checks: `briefs/ceiling-novelty-refresh-findings.md` (with
 +  `experiments/ceiling_novelty_check.py`) and `briefs/ceiling-ccchallenge-sweep-findings.md`;
