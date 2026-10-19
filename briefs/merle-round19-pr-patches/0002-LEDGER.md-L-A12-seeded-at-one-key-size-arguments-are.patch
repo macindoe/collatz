@@ -1,4 +1,4 @@
-From a23746130fe6c2c7c6ce74af58af784b5723b551 Mon Sep 17 00:00:00 2001
+From 36feb37625757db965028fb269a222d174dcc72a Mon Sep 17 00:00:00 2001
 From: Ben Macindoe <macindoebenjamin@gmail.com>
 Date: Mon, 19 Oct 2026 13:56:33 +1100
 Subject: [PATCH 2/3] LEDGER.md: L-A12 seeded at one key -- size arguments are
@@ -20,6 +20,8 @@ exactly, including what stays open (the log2 p gap; SdW's "at best a
 constant"). Regime column filled. Artifact: experiments/
 staircase_x0_threshold.py at macindoe/collatz 85f42d3, 188 checks, 0
 failures. Pure addition after L-A11; no other line of the ledger moves.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 ---
  LEDGER.md | 28 ++++++++++++++++++++++++++++
  1 file changed, 28 insertions(+)

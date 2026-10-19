@@ -1,4 +1,4 @@
-From 87285424d944fdf59ff5254993084c96f7182566 Mon Sep 17 00:00:00 2001
+From 17205e134637c2594d9607d2c1bfba5d8809a345 Mon Sep 17 00:00:00 2001
 From: Ben Macindoe <macindoebenjamin@gmail.com>
 Date: Mon, 19 Oct 2026 13:57:45 +1100
 Subject: [PATCH 3/3] rounds/R19-macindoe.md: the round-19 letter, business
@@ -14,6 +14,8 @@ L-A12 offered at one key. Section 3: paper 1 v4 announced, not minted, no
 DOI, with its credit chain; the note's [1] stays v3 until then. Section 4:
 where everything lives, at macindoe/collatz 85f42d3. Personal paragraphs
 travel by mail.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 ---
  rounds/R19-macindoe.md | 147 +++++++++++++++++++++++++++++++++++++++++
  1 file changed, 147 insertions(+)

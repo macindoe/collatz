@@ -19,3 +19,5 @@ What needs your key:
 - **L-A12**, if you choose to turn it now. Otherwise it stays at one key, as L-A10 and L-A11 did at seeding.
 
 Your prose is untouched everywhere. Every changed line of `NOTE-v1.md` came in on our side, in PR #2; everything else is a new block.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
