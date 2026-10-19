@@ -1,0 +1,177 @@
+From 49b2f387cf63ec9da40c4264db0010ddf6b70c7b Mon Sep 17 00:00:00 2001
+From: Ben Macindoe <macindoebenjamin@gmail.com>
+Date: Mon, 19 Oct 2026 13:57:45 +1100
+Subject: [PATCH 3/3] rounds/R19-macindoe.md: the round-19 letter, business
+ paragraphs only
+
+Section 1: the joint note's credit for the counting dichotomy corrected,
+ours to make -- the upper half is Rozier 1991 / Simons-de Weger 2005 /
+Brox 2000, the lower half anticipated in part (Rozier p. 11, SdW p. 69,
+Halbeisen-Hungerbuhler 1997 Lemma 5 and p. 238), with the two literature
+checks' sources and pages; the m = p identification and our own record's
+corrected 12.4; what is [1]'s; the patch offered for his key. Section 2:
+L-A12 offered at one key. Section 3: paper 1 v4 announced, not minted, no
+DOI, with its credit chain; the note's [1] stays v3 until then. Section 4:
+where everything lives, at macindoe/collatz 85f42d3. Personal paragraphs
+travel by mail.
+---
+ rounds/R19-macindoe.md | 147 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 147 insertions(+)
+ create mode 100644 rounds/R19-macindoe.md
+
+diff --git a/rounds/R19-macindoe.md b/rounds/R19-macindoe.md
+new file mode 100644
+index 0000000..98b2d8a
+--- /dev/null
++++ b/rounds/R19-macindoe.md
+@@ -0,0 +1,147 @@
++# Round 19 — Macindoe to Merle
++
++*A correction to the joint note's credit, ours to make; one ledger entry offered. Business
++paragraphs only; this round is a pull request, and the second key is the approving review, as
++agreed in R11 §13. It is based on `main` at `474125d` and touches no line that PR #8 touches. The
++personal half of the reply travels by mail.*
++
++---
++
++## 1. The note's credit for the counting dichotomy is wrong, and the sentence is ours.
++
++`NOTE-v1.md` says "The dichotomy is Macindoe's, published in [1]", and cites its upper half to
++Theorem 4.5 of [1] and its lower half to Theorem 4.6, with no prior literature. We held the pen
++on that page, and the claim came from [1] itself, whose abstract calls the dichotomy its "main
++new theorem". Two literature checks on our side (2026-10-18) found that the claim does not
++survive. Each source below was read at source except Brox, as marked. Our side found the error,
++not you, and it is ours to correct.
++
++**The upper half is classical.**
++- O. Rozier, *Problème de Syracuse : « majorations » élémentaires des cycles*, Singularité 2,
++  no. 5 (1991), 8–11. Théorème, p. 8: « Pour chaque entier n, il n'y a qu'un nombre fini de
++  cycles alternant n séquences d'entiers impairs avec n séquences d'entiers pairs ». Lemme 4,
++  p. 11, carries the same exponent `(α − 1)/(α^n − 1)`, `α = log₂3`, as [1]'s Theorem 4.5. With
++  his effective measure (p. 10, (5)) it bounds the number of odd steps for every number of
++  local minima.
++- J. Simons, B. de Weger, Acta Arith. 117 (2005), 51–70, made it explicit: Lemma 7 (p. 58),
++  `0 < Λ < m·c_m·2^{−((δ−1)/(δ^m−1))K}`; Lemma 14 (p. 61) and Theorem 3(d) (pp. 55–56), with
++  `K₁(m)/(m·δ^m)` decreasing to `15.107…`. That is [1]'s `n₀(p) = O(p·(log₂3)^p)`, from the same
++  Rhin measure.
++- T. Brox, Acta Arith. 92 (2000), 181–188: finiteness for each `m`. Not held on our side (the
++  publisher's server refused); characterized only as Simons–de Weger (p. 54) and Lagarias's
++  bibliography characterize it.
++
++Their `m`, the number of local minima of the Terras orbit, is [1]'s `p` exactly. Every block,
++including a block of entry depth 1, is one maximal odd run. Our own record had the
++identification wrong (`m = #{t : m_t ≥ 2}`); it is corrected and re-checked with fresh code
++(`cycles.md` §12.4, 47,498 checks, 0 failures). So [1]'s Theorem 4.5 is a rederivation of
++Rozier's and Simons–de Weger's trim by another route (rotation numerators and a max-plus
++recursion), in the same parameter. It is not a stronger statement and not a new one.
++
++**The lower half was anticipated in part.**
++- Rozier, p. 11, right after Lemme 4: « L'on voit ainsi que ce lemme est optimal si l'on part du
++  lemme 3 et si l'on ne prend pas en compte d'autres propriétés éventuelles des (m_i). » His
++  argument is a minimax over positive real run-length tuples of fixed sum. Its extremal tuple
++  grows geometrically at ratio `log₂3`, which is the staircase's profile.
++- Simons–de Weger, p. 69: "We believe that Lemma 7 is almost sharp for the worst case, in the
++  sense that at best we expect that the factor `m c_m` may be improved to a constant, but the
++  exponential dependence on `m` in the term `2^{−((δ−1)/(δ^m−1))K}` seems unavoidable." This is
++  stated as a belief; no configuration is given.
++- L. Halbeisen, N. Hungerbühler, *Optimal bounds for the length of rational Collatz cycles*, Acta
++  Arith. 78 (1997), 227–239, proved the analogue in the cycle-length parameter. Lemma 5 (p. 230)
++  gives the explicit word that attains their size functional at every length, which makes their
++  size criterion optimal (§4.4, p. 236). On p. 238 they draw the
++  moral: such an approach "*cannot* be successful", and further progress "would hence involve
++  number theoretical arguments", the rest reducing to the gcd condition over all rotations,
++  which is `q | R_r`. Their extremal words have about `0.59·n` odd runs, so they sit far inside
++  the trim and say nothing about the parameter `m`.
++
++What is [1]'s is the realization: integer configurations, in the block parameter, meeting every
++rotation's exact size condition at bounded slack `γ ∈ [3.683012, 5.140212]`, at every period
++(`cycles.md` §12.8.6). Our two checks did not find this in the literature. §2 adds its form at
++Simons–de Weger's own threshold.
++
++**The located obstruction.** The note's obstruction is the closing sentence of Theorem 4.6 of
++[1]. It stands as a statement, and the note keeps the quotation. Its moral is Halbeisen–Hungerbühler's
++in the length parameter, and Simons–de Weger expected it in `m`. [1] carries it into the block
++parameter. The note now says so.
++
++**The patch** (commit 1 of this PR, `NOTE-v1.md` only, `+13/−3`):
++- the credit sentence of "The counting dichotomy";
++- one attribution sentence added to each half;
++- one credit paragraph under the quoted obstruction;
++- four references, [5]–[8].
++
++Nothing in the note's argument changes. The note is co-authored, so this is a **proposed change
++for your key**, not a fait accompli. Strike or reword it freely, and the approving review is
++your key on it.
++
++We grepped `NOTE.md`, `LEDGER.md` and the breach map for the same credit and found nothing to
++change:
++- `NOTE.md` §1 already lists Halbeisen–Hungerbühler and Simons–de Weger in its provenance line.
++- L-A9's "Macindoe's round-11 proof of the all-`p` half" credits the integer construction, which
++  is ours.
++- The map does not state the dichotomy.
++
++## 2. An offer: L-A12, the sharpness at Simons–de Weger's own threshold.
++
++The refresh in §1 left one scope gap on our side. [1]'s sharpness is at threshold 1 (every
++`a_i ≥ 1`), while Simons–de Weger pose theirs for cycles whose minima are all `≥ X₀`. That gap is
++now closed in our record (`cycles.md` §12.8.7, 2026-10-19), and we offer it as **L-A12** at one
++key, ours, with yours invited. It is in the ledger's format, with the regime column filled. In
++short:
++- **Necessity.** Every configuration has `γ − 1 ≤ log₂(x_min + 1) < γ + log₂ p`. So the
++  threshold costs `log₂ X₀` and combines with the trim's `ε_p·n` as a maximum.
++- **Sufficiency.** For every `X₀ ≥ 1` and every `p ≥ p₁(X₀)`, the staircase construction run
++  under a weaker hypothesis meets every rotation's size condition with every element `≥ X₀`.
++  Under that hypothesis its last block continues the climb instead of collapsing to a unit
++  block. It does so at the scale where their Lemma 7, not their Corollary 5, is the operative
++  bound, with `Λ ≥ 0.0541·2^{−ε_p·n}`.
++- **`p₁`.** It is explicit from the continued fraction of `log₂3`: 98 at their `X₀ = 5·2^60` and
++  110 at `2^71`. The first is consistent with their own size-only exclusion of `m ≤ 75` there.
++- **Unit-block staircase.** The staircase as first built, with a unit closing block, provably
++  cannot do this at that scale.
++
++What it settles of their p. 69 sentence:
++- the exponential dependence on `m` is attained;
++- `m c_m` cannot go below a constant (`0.0541`).
++
++What it leaves open: whether `m c_m` can be lowered *to* a constant, their own "at best". On our
++side that is a `log₂ p` gap in the necessity, and nothing here decides it at the Lemma 7 scale.
++
++Grade: a size-only theorem. There is no divisibility test and no exclusion, and nothing is
++formalised. Against Rozier the entry is exact: his minimax value is realized in integers, but his
++Lemme 4 inequality itself is vacuous on the whole family, and the entry says so.
++
++Artifact: `experiments/staircase_x0_threshold.py`, 188 checks, 0 failures, re-run byte-identical
++modulo line endings.
++
++Why it belongs to the note, if you agree: it puts the staircase, the constructive face of the
++one wall, at the same threshold your L-A8 and L-A9 work at. Placement is yours to propose.
++
++## 3. Paper 1 v4: announced, not yet minted.
++
++The correction in §1 goes into [1] itself. A v4 is in preparation; it has no DOI yet. It will
++carry the same credit chain:
++- Theorem 4.5 attributed in its header to Rozier 1991 and Simons–de Weger 2005 (Brox 2000 for
++  finiteness for each `m`), with ours called a rederivation by another route, with `m = p`.
++- The abstract's "main new theorem" sentence dropped.
++- The sharpness stated with its proof and its credit: it realizes Rozier's 1991 extremal, which
++  Simons–de Weger expected in 2005, and the length-parameter analogue and the divisibility moral
++  are Halbeisen–Hungerbühler's 1997.
++- The threshold form of §2 included.
++
++The theorem numbers the note cites are kept. Until v4 is minted, [1] in the note stays v3 (DOI
++10.5281/zenodo.21730505). When it is minted, the reference update will come as a round of its
++own, with the version DOI.
++
++## 4. Where everything lives.
++
++All in `macindoe/collatz` at `85f42d3`:
++- the record: `cycles.md` §12.4, §12.8.6, §12.8.7;
++- the two literature checks: `briefs/ceiling-novelty-refresh-findings.md` (with
++  `experiments/ceiling_novelty_check.py`) and `briefs/ceiling-ccchallenge-sweep-findings.md`;
++- the `m = p` re-check: `briefs/cycles-12-4-recheck-findings.md` (with
++  `experiments/cycles_12_4_recheck.py`);
++- the threshold theorem: `briefs/staircase-x0-threshold-findings.md` (with
++  `experiments/staircase_x0_threshold.py`).
+-- 
+2.45.2.windows.1
+
