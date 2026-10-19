@@ -102,8 +102,8 @@ Kept, and said so in App D "Notation" and App H: `T` (the map), `Λ` (the linear
 | C-2.1 | Def B.1 | §3 |
 | C-2.2(i), (ii), (iii) | Prop B.2 | §2 (i)–(ii), §3 (ii)–(iii) |
 | C-2.3(a), (b), (c) | Thm B.3 | §3 "Nothing is lost" |
-| C-3.N, C-3.eq1 | App C opening, eq. (1) | §4 "The anchor" (background only) |
-| C-3.1 | Def C.1 and the parity paragraph | §4 "The anchor" |
+| C-3.N, C-3.eq1 | App C opening, eq. (1) | — |
+| C-3.1 | Def C.1 and the parity paragraph | §4 "The valuation law" (the definition and `M(1) = 0`; the parity clause is formal only) |
 | C-3.2 | Lemma C.2 | §1 (ii) ("one squaring lemma") |
 | C-3.3(a), (b) | Thm C.3 | §4 "The valuation law" and its table |
 | C-3.3(c) | proof of Thm C.3 | — |
@@ -133,7 +133,7 @@ Kept, and said so in App D "Notation" and App H: `T` (the map), `Λ` (the linear
 | C-4.6(ii)a, (ii)b, (ii)c | Thm D.6(ii) | §5 "Sharpness" bullet 2 |
 | C-4.6(iii)a | Thm D.6(iii) | §5 "Sharpness" bullet 2 |
 | C-4.6(iii)b, (iii)c | Thm D.6(iii) | §5 bullet 3 (via C-4.thr.4) |
-| C-4.6(iv) | Thm D.6(iv) (`S − 6 → s_tot − 6`) | §5 "The staircase, as a picture" (with `s_tot − 6 = 49` written out, `K = 149`) |
+| C-4.6(iv) Δ (U27) | Thm D.6(iv) (`S − 6 → s_tot − 6`; the 84 and the constant restated, §7a) | §5 "The staircase, as a picture" (with `s_tot − 6 = 49` written out, `K = 149`) |
 | C-4.6.close | Thm D.6 closing sentence; proof, last paragraph | §5 "What is left" |
 | C-4.thr.1, C-4.thr.2 | App D "The threshold, explicitly" | §5 "Sharpness" bullet 2 (values, "no closed form… nothing below") |
 | C-4.thr.3 | App D "The threshold, explicitly" | — |
@@ -227,6 +227,32 @@ Nothing in the main text was found to strengthen a row on re-reading; two drafts
 2. **§1's "What this paper does not claim" (p. 4)** and the **Version note (p. 2)** — the scope box is new, and the Version note now says the statements are renumbered and v3 stays the pinned citation (including for the Merle ledger). Both are yours to approve.
 3. **§5 (pp. 7–10)** — the cycles section is where most scope words live (`p ≥ 3`, `p ≥ p₁(X₀)`, "nothing at `p = 1`", "no bracket at `p ∈ {2,4}`", "not the inequality of Lemme 4", "none bears on whether cycles exist"). The staircase picture is the `p = 7` instance.
 4. Then §4 and §6 in order. The appendices are v4's formal text, unchanged apart from the renames in §4 above.
+
+## 7a. Revision round (after the check at `38ea5ee`, `briefs/paper1-v4-readable-check-findings.md`)
+
+**The check's 14 fixes, applied** (one line each):
+1. §5 "What is left": "Every statement about the staircase concerns…" (was "in this section", false beside Thm D.4 and Hercher).
+2. §5 "What is left": "Parts (i)–(iii) were each checked by independently written code…" (was "Each part", which took in (iv)).
+3. §5 trim history: "In this paper's notation, and up to an additive constant, the bound…" (C-4.5.cr's qualifier restored).
+4. §1 not-claimed: credit split, "…one, two or three blocks is classical (Steiner; Rozier 1990; Simons–de Weger; Hercher), and so is the uniform trim (Rozier 1991; Simons–de Weger; finiteness at each period is Brox's)".
+5. §4 "The next depth": the displacement is "half the difference between the depth and the anchor, taken 2-adically".
+6. Version note: "the statements, with their proofs or the record sections that hold them, are in Appendices B–E". The Merle/v3 sentence is unchanged, awaiting the author.
+7. §2 opening: "Long stretches of a Collatz orbit are forced."
+8. §5 opening: "…or an orbit that falls into a cycle not containing 1."
+9. App H: "The symbols below are renamed; no meaning changed."
+10. App H: the rename row is now `S` (Theorem 4.6(iv)) → `s_tot` (Theorem D.6(iv) and its proof).
+11. App G, the Theorem D.6(i) row: the 45 checks are attributed to `staircase_gamma_upper.py` alone, and the sweep, bracket, window counts and construction to the two `staircase_allp` scripts.
+12. App G's record-only list: four items added — `cycles.md` Remark 12.6.1.7 (the integer form of the elimination identity), `cycles.md` §12.4 (the deep-entry clause of the dictionary), `aeh.md` §13.6 (the depth renewal law) and `aeh.md` §13.6.5 (the `Syrac` normalisation). The record's construction, wrongly listed earlier, had already been removed.
+13. "Each result stated informally…" (§1); §2 now says "it is the mechanism of the author's hand-drawn note of March 2023".
+14. X-1 and X-2 became U26 and U27, below.
+
+**Readability.** §1 "What is new" is rewritten in plain words, each item led by what it does for the reader, with the technical name, the pointer and every scope word in the closing parenthesis. §4 drops the 2-adic preamble and the counter analogy. The anchor is now defined inside the valuation law, with one sentence of support: "The law describes a step; it does not shortcut one: computing `M(ω)` to the digits needed costs about as much as computing the valuation directly", cited to the record (`briefs/williams-letter-findings.md`, which states it). That sentence is not a ledger row. The parity clause of C-3.1 (`M(ω)` even iff `ω ≡ ±1 (8)`) is no longer restated in the main text; it lives only in Definition C.1.
+
+**Locked-text corrections (content; ledger rows updated):**
+- **U26.** In "The threshold, explicitly", `p₁ − log_L X₀ ∈ [2.784, 10.629]` becomes **`[2.783, 10.630]`**, rounded outward. The exact extremes are `2.7839895` (`j = 143`, `p₁ = 218`) and `10.6294771` (`j = 74`, `p₁ = 122`), recomputed here from those `p₁` values at 30 digits. The same change is made in ledger row C-4.thr.1, in `briefs/staircase-x0-threshold-findings.md` (two places) and in `briefs/x0-threshold-independent-check-findings.md`. No wiki page carries the range. `briefs/paper1-v4-fixpass-findings.md` U20 is left as it stands, as the record of that pass.
+- **U27.** In Theorem D.6(iv), and in §5's picture, the 84 instances are now said plainly. They come from a seeded random search at `p = 6` (`experiments/uniform_trim.py`, `random.seed(41)`), and none of them falls below the period-3 trim's constant, now defined as `γ > 0.1157n − 2` (`cycles.md` Lemma 12.7.4): each clears it by at least `0.698`. Only the `p = 7` instance falls below it. Re-run this window: 84 passers, `n ∈ {20, 22, 27, 29, 34, 41, 46}`, minimum margin `0.6987`, none divisible. Ledger row C-4.6(iv) was updated (marked Δ) and App G's row too.
+
+**Build:** 3× in the temp dir, 33 pp, 0 undefined references, 0 overfull boxes. Encoding scan clean. Content commit `03fdf7b`.
 
 ## 8. Record
 
