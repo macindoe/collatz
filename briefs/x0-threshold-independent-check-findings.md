@@ -59,7 +59,7 @@ Brief: `briefs/x0-threshold-independent-check-brief.md`. Branch `x0-threshold-in
 
 1. **"`p₁ − log_L X₀ ∈ [2.92, 10.42]` over the table" is true only of the original's sampled rows.**
    - The original tabulates `j ∈ {0..20, 30, 40, …, 200}`, and the extremes `2.920` (`j=16`) and `10.415` (`j=17`) reproduce exactly here.
-   - Over every `j ≤ 200`, which is what the Verified line's "`p₁` for `X₀ = 2^j`, `j ≤ 200`" suggests, the range is **`[2.784, 10.629]`**, attained at `j = 143` (`p₁ = 218`) and `j = 74` (`p₁ = 122`).
+   - Over every `j ≤ 200`, which is what the Verified line's "`p₁` for `X₀ = 2^j`, `j ≤ 200`" suggests, the range is **`[2.783, 10.630]`** (rounded outward; the exact extremes `2.7839895` and `10.6294771` are attained at `j = 143` (`p₁ = 218`) and `j = 74` (`p₁ = 122`)).
    - Diagnosis: the original samples `j` in steps of 10 above 20. Every `p₁` value the two computations share agrees.
    - Fix: either quote `[2.78, 10.63]` over all `j ≤ 200`, or say "over the tabulated rows".
 2. **"For `X₀ ≥ 5.541`" is a hair low.** The switch point is `2^λ − 1 = 5.54100467…` (certified `> 5.541`). On `[5.541, 5.5410047)`, `g = 1+λ`, so `γ ≤ log₂(X₀+1)+2` is not implied. Fix: write `X₀ ≥ 5.5411` (or `X₀+1 ≥ 2^λ`). This is the same genre as the 0.0541 correction.
