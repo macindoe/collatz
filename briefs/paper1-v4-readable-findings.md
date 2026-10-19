@@ -254,6 +254,43 @@ Nothing in the main text was found to strengthen a row on re-reading; two drafts
 
 **Build:** 3× in the temp dir, 33 pp, 0 undefined references, 0 overfull boxes. Encoding scan clean. Content commit `03fdf7b`.
 
+## 7b. Readability round 2 (branch `paper1-v4-readable-2`, base `c7c3c69`)
+
+**The author's verdict:** "still too clunky to read; e.g. χ is mentioned without introduction". Presentation only; no locked claim changed.
+
+**Main-text symbols.** §§1–8 now use only these: `x`, `T`, `m`, `s`, `a`, `ω`, `d`, `(ω, d)`, `F`, `p`, `n`, `K`, `q`, `γ`, `X₀`, `p₁(X₀)`. Each is introduced in words before it is used, and all are listed on the new "Symbols at a glance" page after §1. There is one exception: the provenance paragraph in §8 is kept verbatim, with its `x + 1 = 2^m 3^a ω`; its `(λ, k)` are introduced in the same sentence. Gone from the main text: `χ_t`, `σ`, `k`, `D`, `π_{k,D}`, `θ`, `τ`, `N`, `b`, `H_N`, `E_N`, `ε`, `X_N`, `J`, `S`, `M(ω)`, `ΔM`, `a₊`, `m₊`, `s₊`, `R_r`, `κ_p`, `λ₀`, `c_p`, `log₂3` as a symbol (now "1.585…, the base-2 logarithm of 3"), `x_exit`, `u`, `W`, `z`.
+
+**Formula sentences removed: 53**, counted by section: §1 3, §2 3, §3 5, §4 13, §5 19, §6 9, §7 1. Each is now said in words, and its pointer is kept. Every formula removed was already in the appendix statement it points to, with one set of exceptions: `T`'s formula, the definitions of `v₂` and `v₃`, and the rising-step identity `T(x) + 1 = (3/2)(x + 1)`. These moved into Appendix B's opening paragraph; that paragraph is the only text added to Appendices B–E. Constants in the main text are now either exact numbers quoted as numbers (`0.054`, `0.698`, the `p₁` values) or approximations marked "about" with the exact statement named (`3.68`/`5.14` for Thm D.6(i); `2.71`/`4.21` for `λ₀`, `λ₀ + 1.5`).
+
+**Paraphrases to check first** (main text only; the formal statements are unchanged):
+- §5 "Sharpness", bullet 2: "the base-2 logarithm of its least element lies within about the base-2 logarithm of `p` of `γ`", for `γ − 1 ≤ log₂(x_min + 1) < γ + log₂ p` (Thm D.6(ii)).
+- §5, bullet 1: "the factor in any trim of this shape that holds for every size-passer is smaller than 1.585… to the power `−p` times a quantity growing only like the logarithm of `p`", for `c_p < (5.140212 + log₂ p) L^{−p}`.
+- §4: "finitely many binary digits of `ω` and of `d`, together with the low digits of the absorption" (Thm C.7's exact residues).
+- §4 digit budget: "at most a number of decided steps proportional to its length" (`O(W/(k + 6))`).
+- §6: the coding fact, now "any run of consecutive integers whose length is a power of 2 … on the event that they have divided out fewer factors of 2 than the exponent of that power".
+- §6: "protected", now "above any level that grows more slowly than every fixed power of the starting size" (`log X_N = o(log N)`).
+
+**New:**
+- "Symbols at a glance": the main-text symbols with meaning and place, and the words used as names (block, anchor, configuration, size-passer, trim, letter).
+- **Appendix I, Symbol index:** every symbol of the paper, with meaning and defining location. Overloaded letters are listed once per meaning: `n`, `q`, `r`, `k`, `X₀`, `β`, `A`, `S_t`, `e_t`, `σ` (also "5σ"), `ε`.
+
+**Version note:** "Outside work that cites this paper's statements by number, including the cycle ledger shared with Eric Merle, cites v3, …" is now "For outside citations of this paper's statements by number, v3 remains the pinned citation." This is the author's decision.
+
+**Pages (37):**
+- front matter pp. 1–2;
+- §1 pp. 2–4;
+- Symbols at a glance p. 5;
+- §§2–8 pp. 5–14;
+- appendices A–I pp. 14–35 (I is pp. 33–35);
+- references pp. 35–37.
+
+Main text ≈ 13 pp.
+
+**Build and commits:**
+- **Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean.
+- **Content commit:** `35abcdb`.
+- **This record:** the following commit.
+
 ## 8. Record
 
 **Commits** (branch `paper1-v4-readable`, base `46e7464`):
