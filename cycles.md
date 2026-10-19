@@ -1,5 +1,5 @@
 ---
-status: periods 1–3 CLOSED; uniform trim RESOLVED (12.8; the trim classical — Rozier 1991, Simons–de Weger 2005); all-p sharpness PROVED (12.8.6 — unconditional for p ≥ 16, finite check for 3 ≤ p ≤ 15, p ∈ {2,4} by exhibition); X₀-threshold sharpness PROVED for p ≥ p₁(X₀) (12.8.7); front PARKED per stopping rules
+status: periods 1–3 CLOSED; uniform trim RESOLVED (12.8; the trim classical — Rozier 1991, Simons–de Weger 2005); all-p sharpness PROVED (12.8.6 — unconditional for p ≥ 16, finite check for 3 ≤ p ≤ 15, p ∈ {2,4} by exhibition); X₀-threshold sharpness PROVED for p ≥ p₁(X₀) (12.8.7), independently re-verified 2026-10-19; front PARKED per stopping rules
 scope: new section 12 (post-monolith; first page with no monolith source)
 updated: 2026-10-19
 source: new material; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md)
@@ -469,7 +469,7 @@ Then the profile has all entries `≥ 1` and `Σ m_t = n`, and crash depth `c = 
 
 ∎
 
-**The deep crash.** (H1′)'s `n`-slope is `ε_p`, the trim's own. 12.8.6.2's (H1) has slope `(L−1)/(L^{p−1} − 1) ≈ L·ε_p`. Where `γ < Γ(p, n)`, the budget never binds and `c` is large. The last block then continues the geometric climb, which is Rozier's extremal `m_j = c·L^{j−1}` in integers. Under (H1) the crash is a unit block.
+**The deep crash.** (H1′)'s `n`-slope is `ε_p`, the trim's own. 12.8.6.2's (H1) has slope `(L−1)/(L^{p−1} − 1) ≈ L·ε_p`. Where `γ < Γ(p, n)` the budget can stay unbound and `c` can be large (`Γ` is sufficient, not necessary: about half the checked points with `γ < Γ` still land at `c = 1`). The last block then continues the geometric climb, which is Rozier's extremal `m_j = c·L^{j−1}` in integers. Under (H1) the crash is a unit block.
 
 **Corollary 12.8.7.3 (the sandwich at given `(p, n)`).** Fix `p`, `n` with (H0), and `K = ⌈nL⌉`.
 
@@ -492,10 +492,10 @@ Since `Λ` depends on `n` alone, this is Simons–de Weger's "worst case for giv
 *Statement.* For every `p ≥ p₁(X₀)`, the window `[n* − N + 1, n*]`, with `n* = ⌊(g − λ)/ε_p⌋`, contains an `n` at which Construction B satisfies (S) and (X), with
 
 ```text
-g ≤ γ ≤ g + 1,     λ ≤ γ − ε_p n ≤ λ + 1.5,     ε_p n ≤ m_0 ≤ γ,     γ − 1 ≤ log₂(x_min + 1) ≤ γ + 1.874469 .
+g ≤ γ ≤ g + 1,     λ ≤ γ − ε_p n ≤ λ + 1.5,     ε_p n ≤ m_0 ≤ γ,     γ − 1 ≤ log₂(x_min + 1) ≤ γ + 1.87447 .
 ```
 
-For `X₀ ≥ 5.541` this reads `log₂(X₀+1) + 1 ≤ γ ≤ log₂(X₀+1) + 2`. Moreover `Λ ≥ 2^{−γ} ≥ 2^{−(λ+1.5)}·2^{−ε_p n} = 0.05405…·2^{−ε_p n} > 0.054·2^{−ε_p n}`.
+For `X₀ ≥ 2^λ − 1 = 5.5411…` this reads `log₂(X₀+1) + 1 ≤ γ ≤ log₂(X₀+1) + 2`. Moreover `Λ ≥ 2^{−γ} ≥ 2^{−(λ+1.5)}·2^{−ε_p n} = 0.05405…·2^{−ε_p n} > 0.054·2^{−ε_p n}`.
 
 *Every scale.* Any level `g′ ≥ g` works the same way, and the window may sit anywhere in `[3p + 40, (g − λ)/ε_p]`.
 
@@ -503,7 +503,7 @@ For `X₀ ≥ 5.541` this reads `log₂(X₀+1) + 1 ≤ γ ≤ log₂(X₀+1) + 
 
 - **The window.** On it, `ε_p n + λ ≤ g`, so (H1′) and (X) hold wherever `γ(n) ≥ g`. Its bottom exceeds `1/(2ε_p) ≥ 3p + 40`, which gives (H0) and `η ≤ 2^{−20}`.
 - **The sweep.** `δ(n₀ + j) = δ(n₀) − jL mod 1`. By the three-distance theorem in its two-length case (Sós 1958; Świerczkowski, Fund. Math. 46, 1958), `N = q_k + q_{k−1}` consecutive points have maximal gap `θ_{k−1} ≤ ℓ`. So some `n` in the window has `δ(n) ∈ [δ(g+1), δ(g)]`, i.e. `γ ∈ [g, g+1]`.
-- **The brackets.** `γ − ε_p n < λ + 1 + ε_p N ≤ λ + 1.5`. The cap on `x_min` is `x_0 + 1 = 2^γ[(1 − 2^{−s_c}) + ½Σ_t 2^{−e_t − δ}]` with `e_t = (L−1)T_t − t − 1`. Here `e_t` grows by `≥ 2L − 3` per climb block while the budget is free, and `T_t ≥ n − p + 1` after it binds; with `m_0 ≥ 3` and `p ≥ 10` this gives `1.874469`.
+- **The brackets.** `γ − ε_p n < λ + 1 + ε_p N ≤ λ + 1.5`. The cap on `x_min` is `x_0 + 1 = 2^γ[(1 − 2^{−s_c}) + ½Σ_t 2^{−e_t − δ}]` with `e_t = (L−1)T_t − t − 1`. Here `e_t` grows by `≥ 2L − 3` per climb block while the budget is free, and `T_t ≥ n − p + 1` after it binds; with `m_0 ≥ 3` and `p ≥ 10` this gives `1.87447` (`1.874469…` rounded up).
 
 ∎
 
@@ -518,7 +518,7 @@ Over the table, `p₁ − log_L X₀ ∈ [2.92, 10.42]`. A closed form uniform i
 **Remark 12.8.7.5 (the obstruction for the staircase as built).**
 
 - **At the canonical scale.** At `n ≈ L^p`, `12.8.6.2` under (H1), with a unit crash block, carries the threshold by Diophantine quality alone. But there `γ − ε_p n ≈ log₂ X₀`: that family tests Corollary 5 (`Λ < m/X₀`), not Lemma 7.
-- **At the Lemma 7 scale** (`ε_p n ≈ log₂ X₀`), `12.8.7.1`(iii) excludes every size-passer with a unit block at every `γ ≤ ε_p n + λ + 1.5` once `(L−1)ε_p n > λ + 2.09 + log₂ p`. In the checked table that holds from `X₀ = 2^{20}` (`p = 36`) through `2^{200}`. So the deep crash is forced, not chosen.
+- **At the Lemma 7 scale** (`ε_p n ≈ log₂ X₀`), `12.8.7.1`(iii) excludes every size-passer with a unit block at every `γ ≤ ε_p n + λ + 1.5` once `(L−1)ε_p n > λ + 2.09 + log₂ p` (the constant `2.09` is valid for `p ≥ 12`; it is applied here only at `p ≥ 36`). In the checked table that holds from `X₀ = 2^{20}` (`p = 36`) through `2^{200}`. So the deep crash is forced, not chosen.
 - **Below that scale**, the `log₂ p` slack leaves crash depth `1` undecided.
 
 **Remark 12.8.7.6 (relation to the literature, exactly; and the stronger condition).**
@@ -529,7 +529,7 @@ Over the table, `p₁ − log_L X₀ ∈ [2.92, 10.42]`. A closed form uniform i
   - *Open, as they leave it:* whether `m c_m` can be lowered *to* a constant, i.e. whether `12.8.7.1`'s `log₂ p` can be removed at the Lemma 7 scale.
 - **The stronger condition `X₀ q ≤ R_r`.** The same proofs with `q → X₀ q` give sufficiency at `γ ≥ log₂ X₀ + max(2 + η, Γ′(p, n))` and necessity `γ + log₂ p > log₂ X₀ + ε_p n`. That is a sum, not a maximum.
 
-*Verified* (2026-10-19; `experiments/staircase_x0_threshold.py`, fresh code, exact integers; one command, committed output, 188 checks, 0 failures):
+*Verified* (2026-10-19; `experiments/staircase_x0_threshold.py`, fresh code, exact integers; one command, committed output, 188 checks, 0 failures; independently re-implemented from this text in `experiments/x0_threshold_independent_check.py`, exact integers and 720-bit certified intervals, 43 checks over 87,396 configurations and 257 Construction B instances, 0 failures, nine instances of the first script reproduced to every printed digit, Thm `12.8.7.2` re-derived by hand):
 
 - `L` enclosed to `2^{−1380}`;
 - on 30,000 random configurations: the dictionary, the sandwich, the trim, the unit-block bound and Rozier's minimax;
