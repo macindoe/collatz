@@ -1,0 +1,65 @@
+From 2e14315e59ad0734fdf12269a9ee644b8d1c1ce4 Mon Sep 17 00:00:00 2001
+From: Ben Macindoe <macindoebenjamin@gmail.com>
+Date: Mon, 19 Oct 2026 13:56:33 +1100
+Subject: [PATCH 2/3] LEDGER.md: L-A12 seeded at one key -- size arguments are
+ sharp at Simons-de Weger's own threshold
+
+The staircase with every cycle element >= X0 (cycles.md 12.8.7). Necessity
+in every configuration: gamma - 1 <= log2(x_min + 1) < gamma + log2 p, so
+the threshold costs log2 X0 and combines with the trim as a maximum.
+Sufficiency at every X0 >= 1 and every p >= p1(X0): the 12.8.6.2
+construction under a weaker hypothesis lands with a deep crash and meets
+every rotation's size condition with x_min >= X0, at the scale where SdW's
+Lemma 7 binds, with Lambda >= 0.0541 * 2^(-eps_p n). p1 explicit from the
+continued fraction of log2 3 (98 at SdW's 5*2^60, 110 at 2^71). The
+unit-block staircase provably cannot do this at that scale.
+
+Grade: theorem, size-only -- no divisibility test, no exclusion, not
+formalised. Relations to Rozier 1991 p. 11 and SdW 2005 p. 69 stated
+exactly, including what stays open (the log2 p gap; SdW's "at best a
+constant"). Regime column filled. Artifact: experiments/
+staircase_x0_threshold.py at macindoe/collatz 85f42d3, 188 checks, 0
+failures. Pure addition after L-A11; no other line of the ledger moves.
+---
+ LEDGER.md | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/LEDGER.md b/LEDGER.md
+index fb2da01..886776a 100644
+--- a/LEDGER.md
++++ b/LEDGER.md
+@@ -550,3 +550,31 @@ is admissible at every length and carries **`R ≥ k/2`**, with **`R/k → 1/(2
+ **Artifacts — Merle:** `ericmerle3789/one-obstruction-three-faces-lean` at commit `fcd35d1`: `experiments/run_123.py` (P1, P2, P5; 30 checks total in the file, 0 failures; `mpmath` at 60 digits, integer comparisons for admissibility) with `run_123_output.txt`.
+ 
+ **Key status: two keys** — Macindoe's turned in the round-15 review (2026-09-22; `experiments/merle_r15_check.py`, 66 checks, 0 failures, every figure of the entry reproduced). One grading note on that artifact is returned in the round-15 PR comment and is his to adjudicate, not ours.
++
++---
++
++## L-A12 — Size arguments are sharp at Simons–de Weger's own threshold: the staircase with every element `≥ X₀` (Macindoe, round 19, 2026-10-19)
++
++**Seeded at one key (ours), yours invited.** Offered in `rounds/R19-macindoe.md` §2. Record: `cycles.md` §12.8.7.
++
++**Notation and dictionary.** As in [1] §4 and `cycles.md` 12.8: a configuration has `p` blocks with entry depths `m_t ≥ 1` and exit valuations `s_t ≥ 1`; `n = Σ m_t` (odd steps), `K = n + Σ s_t`, `q = 2^K − 3^n > 0`, `γ = K − log₂ q`, `Λ = K·ln 2 − n·ln 3`, `L = log₂3`, `ε_p = (L − 1)/(L^p − 1)`, `R_r` the rotation numerators. Against Simons–de Weger 2005 (Acta Arith. 117): their `m` (local minima) is `p` exactly, their `K` is `n`, their `a_i` is `R_r/q`, and the start of block `r` — a local minimum of the rational Terras cycle — is `x_r = 2^{m_r}·R_r/q − 1`, with `x_min = min_r x_r` the smallest element. Their Lemma 7 uses exactly two size facts, `a_i ≥ 1` and `x_i ≥ X₀`. So a **size-passer at threshold `X₀`** satisfies (S) `q ≤ R_r` at every rotation and (X) `x_min ≥ X₀`.
++
++**Claim.**
++1. *Necessity, every configuration.* `γ − 1 ≤ log₂(x_min + 1) < γ + log₂ p`. With the trim (Rozier 1991, Lemme 4; Simons–de Weger 2005, Lemma 7; [1] Theorem 4.5 — not claimed here), every size-passer at threshold `X₀` has `γ > max(ε_p·n, log₂(X₀ + 1)) − log₂ p`. The threshold costs `log₂ X₀` in `γ` and combines with the trim's `ε_p·n` as a maximum, not a sum.
++2. *Sufficiency, every period from `p₁(X₀)`.* For every real `X₀ ≥ 1` and every `p ≥ p₁(X₀)`, the staircase construction of `cycles.md` 12.8.6.2, run unchanged under a weaker hypothesis — under which its last block continues the geometric climb instead of collapsing to a unit block (the *deep crash*) — gives configurations satisfying (S) at every rotation and (X), with `γ ≤ max(log₂(X₀ + 1), 2.71) + 2` and `2.7095 ≤ γ − ε_p·n ≤ 4.2096`, at the scale `ε_p·n ≥ log₂(X₀ + 1) − 2.21` where Simons–de Weger's Lemma 7 is the operative bound (below it, their Corollary 5, `Λ < m/X₀`, is). There `Λ ≥ 2^{−γ} ≥ 0.0541·2^{−ε_p·n}`.
++3. *`p₁(X₀)` is explicit* from the continued fraction of `log₂3`: `p₁ = 10` for `X₀ ≤ 16`, `22` for `2^8 ≤ X₀ ≤ 2^12`, `98` at Simons–de Weger's `X₀ = 5·2^60` (consistent with their size-only exclusion of `m ≤ 75` there), `110` at `2^71`, `309` at `2^200`; `p₁ − log_L X₀ ∈ [2.92, 10.42]` over `X₀ = 2^j`, `j ≤ 200`.
++4. *The staircase as built cannot do this.* Every size-passer with a unit block has `γ + log₂ p > (L − 1)(n − L^{p−1})/(L^{p−1} − 1) ≈ L·ε_p·n − (L − 1)`, so at the Lemma 7 scale the unit-block shape is excluded once `(L − 1)·ε_p·n > 4.80 + log₂ p` (in the tabulated rows, from `X₀ = 2^20` on). The deep crash is forced, not chosen.
++
++**Grade.** Theorem, **size-only**. No divisibility: `q | R_r` is never evaluated on these configurations, so — unlike `cycles.md` 12.8.6, whose witnesses were all tested and all fail — this entry says nothing about divisibility. **No exclusion**: it bears on the reach of size arguments, not on cycle existence. Not formalised. One input is cited, not re-proved: the three-distance theorem in its two-length case (Sós 1958; Świerczkowski, Fund. Math. 46, 1958), checked exactly for `k ≤ 13`.
++
++**Relation to the two sources, exactly.**
++- *Rozier 1991 (Singularité 2(5), p. 11).* His Lemme 4 is the trim, and his remark that it is optimal over positive real tuples of fixed sum, with extremal `m_j = c·L^{j−1}`, is his; neither is claimed. Added here: an integer realization meeting every rotation's exact size condition, with Rozier's quantity `ρ = max_j (m_j − (L − 1)·M_{j−1}) = m_0 ∈ [ε_p·n, ε_p·n + 4.21]`. Lemme 4's own inequality, with its additive `2^p`, is vacuous throughout the family's range (`ε_p·n < p` there): what is attained is his minimax value, not that inequality.
++- *Simons–de Weger 2005, p. 69:* "We believe that Lemma 7 is almost sharp for the worst case, in the sense that at best we expect that the factor `m c_m` may be improved to a constant, but the exponential dependence on `m` in the term `2^{−((δ−1)/(δ^m−1))K}` seems unavoidable." Proved here, for size-passers under their two hypotheses: the exponential dependence on `m` is attained at every `X₀`, and `m c_m` cannot be lowered below `0.0541`. Their quantifier "for given `m` and `K`" is answered by claim 1 with the construction: at given `(p, n)`, existence is decided by `γ(n) − max(ε_p·n, log₂(X₀ + 1))` to within `(−log₂ p, 2.7096]`.
++
++**Left open, as they leave it.** Whether `m c_m` can be lowered *to* a constant — their "at best" — i.e. whether the `log₂ p` in claim 1 can be removed at the Lemma 7 scale. Some configurations attain that `log₂ p` (repeated blocks), but far below the Lemma 7 scale; nothing here decides it there. Also not claimed: a closed form for `p₁(X₀)` uniform in `X₀` (it would need a bound on the partial quotients of `log₂3` or an effective irrationality measure); anything below `p₁(X₀)`; a necessary period threshold (that would be a per-period exclusion).
++
++**Regime.** Discharged by proof at every real `X₀ ≥ 1` and every `p ≥ p₁(X₀)`; checked in exact integers at `X₀ ∈ {1, 10, 31, 100, 1000, 4096}`, 95 `(X₀, p)` points, `p ≤ 32`, `n ≤ 4,412,888` (every `p` size condition and `x_min ≥ X₀` decided exactly; measured `γ − ε_p·n ∈ [2.7532, 3.8267]`); `p₁` certified for `X₀ = 2^j`, `j ≤ 200`. Second regime, chosen against the equality (the coefficient `1` on `log₂ X₀`, on both sides): 30,000 random configurations built by no construction — the sandwich, the trim and Rozier's minimax in every rotation order hold on all of them, and the sandwich's ends are approached to `10⁻⁶` and `0.0014` bits — and the stronger condition `X₀·q ≤ R_r` (`a_i ≥ X₀`, not theirs), under which the cost becomes a sum, `log₂ X₀ + ε_p·n`, as the proof predicts.
++
++**Artifacts — Macindoe:** [`macindoe/collatz` at `85f42d3`](https://github.com/macindoe/collatz/blob/85f42d3/cycles.md): `experiments/staircase_x0_threshold.py` with `experiments/staircase_x0_threshold_output.txt` (fresh code importing nothing from the earlier staircase scripts; exact integers and rationals decide every size condition, threshold condition and witness; one command, about three minutes; **188 checks, 0 failures**, 2026-10-19, re-run byte-identical modulo line endings the same day; five negative controls that bite); the derivation in full at `briefs/staircase-x0-threshold-findings.md`.
++
++**Key status: one key (Macindoe).** Yours is invited on the necessity sandwich (claim 1), the construction under the weaker hypothesis, and the availability theorem; the two relations to the sources are a reading, offered for your check against the two pages.
+-- 
+2.45.2.windows.1
+
