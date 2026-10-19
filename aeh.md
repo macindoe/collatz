@@ -1,7 +1,7 @@
 ---
 status: hypothesis FORMALIZED (13.2.1); unconditional base case PROVED (13.2.4, every θ < 1/4); calibrated clean within three stated limits (13.4–13.5); genericity form proved (13.6); proof effort parked per stopping rules
 scope: new section 13 (post-monolith)
-updated: 2026-09-04
+updated: 2026-10-19
 source: new material; builds on 11.8.4.4 (ledger), 11.8.7.6–7 (window/digit budget), 12.8.4 (staircase)
 ---
 
@@ -144,7 +144,7 @@ One cell initially refused to clear: bulk visits to class `(ω ≡ 1 mod 8, d = 
 
 **Lemma 13.5.1 (deterministic routing from class `(1,1)`).** For `ω ≡ 1 (mod 8)`, `d = 1`, the residue `ω mod 32` exactly determines the next class: `1 → (1,1)` (immediate self-return), `9 → (7,1)`, `17 → (5,1)`, `25 → (3,1)` — the last being the lifting class. **Proof.** `s = 1` and `C = 3ω + 1`, so `v_2(C) = 2` and `ω_+ = (3ω+1)/4`, whose residue mod `24` is a fixed function of `ω mod 32`; `a_+ = 0` since `C ≡ 1 (mod 3)`. Verified exhaustively on `26,673` sampled states, zero exceptions. ∎
 
-**The artifact mechanism.** The earlier estimator took per-orbit *ratios* over each orbit's qualifying visits, with early stopping. By Lemma `13.5.1`, residue `1` self-loops (creating runs of consecutive visits), while residue `25` routes into the deep-descent lifting class. Orbits drawing more `25`s therefore descend faster and accumulate *fewer* qualifying visits, so each `25` carries a larger per-orbit weight — a textbook ratio-estimator bias, aimed at exactly one residue of exactly one class by exact arithmetic. This also explains the cell-specificity: `(1,1)` is the unique class with a deterministic self-loop channel. The absorption tail of long runs (orbits reaching the fixed point and tallying `ω = 1` forever) produces the complementary distortion.
+**The artifact mechanism.** The earlier estimator took per-orbit *ratios* over each orbit's qualifying visits, with early stopping. By Lemma `13.5.1`, residue `1` self-loops (creating runs of consecutive visits), while residue `25` routes into the deep-descent lifting class. Orbits drawing more `25`s therefore descend faster and accumulate *fewer* qualifying visits, so each `25` carries a larger per-orbit weight — a textbook ratio-estimator bias, aimed at exactly one residue of exactly one class by exact arithmetic. This also explains the cell-specificity: the bias is aimed at the class `(1,1)`, whose residue `1` returns to it deterministically (a self-loop channel, Lemma `13.5.1`). The absorption tail of long runs (orbits reaching the fixed point and tallying `ω = 1` forever) produces the complementary distortion.
 
 **Standing rule (added to the calibration methodology).** Statistics on this page use fixed-horizon, unweighted, per-visit sampling from uniform starts. Ratio estimators over correlated visit sequences are forbidden — this cell is the reason. `13.2.1` is written to instantiate this rule rather than to require it as a side condition: its horizon is a fixed block count, its inclusion rule is predictable, and its denominator is deterministic at every admissible rate (`13.2.3`).
 
