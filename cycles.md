@@ -1,5 +1,5 @@
 ---
-status: periods 1–3 CLOSED; uniform trim RESOLVED (12.8); all-p sharpness PROVED (12.8.6 — unconditional for p ≥ 16, finite check for 3 ≤ p ≤ 15, p ∈ {2,4} by exhibition); X₀-threshold sharpness PROVED for p ≥ p₁(X₀) (12.8.7); front PARKED per stopping rules
+status: periods 1–3 CLOSED; uniform trim RESOLVED (12.8; the trim classical — Rozier 1991, Simons–de Weger 2005); all-p sharpness PROVED (12.8.6 — unconditional for p ≥ 16, finite check for 3 ≤ p ≤ 15, p ∈ {2,4} by exhibition); X₀-threshold sharpness PROVED for p ≥ p₁(X₀) (12.8.7); front PARKED per stopping rules
 scope: new section 12 (post-monolith; first page with no monolith source)
 updated: 2026-10-19
 source: new material; builds on 9.8.4 (spine.md) and 11.8.7 (stage4.md)
