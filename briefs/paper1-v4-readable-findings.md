@@ -365,6 +365,83 @@ Branch `paper1-v4-readable-2`, on top of `6eb5946`. The author gave the go-ahead
 
 **Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean. Content commit `c565330`.
 
+## 7d. Readability round 4
+
+Branch `paper1-v4-readable-2`, head `c9ef1bb` at the start of the round. The inputs were the round-3 scope check (`904dcc6:briefs/paper1-v4-readable-3-check-findings.md`) and cold read 2 (`briefs/paper1-v4-coldread-2.md`, 97 flags). Presentation only, apart from the scope fixes, which restore locked scope. The only appendix changes are the navigation fix in Appendix I and the paragraph that round 3 moved into Appendix F. Content commit `60522a7`.
+
+**Scope check, §4 (11 scope changes, 1 unsupported sentence): all done.**
+
+| Id | Done as |
+|---|---|
+| 1 (Ab10, I15) | "no cycles other than 1, 4, 2, 1" made of / with one, two or three blocks (abstract; §1 (v)) |
+| 2 (Ab11) | "how many odd steps (multiplications by 3)" |
+| 3 (Ab14) | "with their measure of closeness exceeding the classical bound's own exponent by at most a fixed amount" |
+| 4 (Ab16) | "ruling out cycles of every length at once needs divisibility" |
+| 5 (Ab17) | "the record's length, itself a fixed multiple of the start's number of binary digits" |
+| 6 (Ab19) | "shows that the fair-coin conjecture holds outright … (the proof is assembled in the project record)" |
+| 7 | = 1 |
+| 8 (A30) | "The three outcomes were run along real orbits, 21,296 steps, with zero errors" |
+| 9 (C22) | "the more multiplications by 3 a cycle has (the larger n)" |
+| 10 (C30) | "at seven blocks the requirement must be weaker than at three. (That it must weaken exponentially … is part (i) below.)" |
+| 11 (C50) | "The staircases pass every size condition, and every one tested fails the divisibility conditions." |
+| 12 (A11, unsupported) | "The law describes a step; it is not offered as a faster way to compute one." The cost claim and the `briefs/` pointer are gone. |
+
+**Navigation notes (4) and the optional one: all done.** The `p`-adic / `m`-cycle note is on the symbols page. The running example now "runs through Sections 2–4, and its blocks return in Section 6". Appendix I now says "before Section 1". The §8 gloss now says "elsewhere in this paper `cascade' means only the block's final burst of halvings". H25 now reads "for the proportion of its steps that are odd".
+
+**Coordinator items 2–6:**
+- **§4.** The section is rebuilt as:
+  1. the eight-kind table;
+  2. on six kinds `s` is the entry; on the two lifting kinds `s ≥ 3`, set by "a fixed binary pattern that belongs to ω";
+  3. the ω = 1 table, d = 2, 4, 6, 8 → s = 3, 4, 3, 5, checked by hand: `3^d − 1` = 8, 80, 728, 6560 = 8·1, 16·5, 8·91, 32·205;
+  4. "why the table holds";
+  5. only then, the name "anchor", with the pointer to Definition C.1.
+
+  "2-adic logarithm" and "infinite binary arithmetic" are gone from §4. "Anchor displacement" is replaced by "how `d` compares with the anchor (Theorem C.5)". The only remaining "2-adic logarithm" in the main text is in §7's third direction, glossed as "the digits of the anchors — in the usual terms, …". It keeps C-D.3's wording findable.
+- **§5.**
+  - The trim + Rhin step is now three numbered lines: (a) the trim, (b) Rhin's lower bound on how close the powers can be, (c) linear against logarithmic.
+  - Simons and de Weger's `m`-cycle is now "a p-cycle in Simons and de Weger's sense (their `m-cycle', …)".
+  - "One object" is now "in this one configuration, the cycle side and the ever-growing side of the problem meet".
+  - The trim is named and pointed to at its first use in §1 and in the §5 opening.
+- **§1.**
+  - "eight kinds" now reads "Section 4 sorts the states into eight kinds by two simple remainders".
+  - "three labels" is spelled out.
+  - "the trim" is introduced as "that Section 5 calls the trim".
+  - The one-line identity is marked "(stated in Section 5)".
+- **Out-of-paper pointers.**
+  - `aeh.md Lemma 13.2.4` → "Appendix E, 'The unconditional base case'; proof assembled in the project record, Appendix G".
+  - `aeh.md Proposition 13.2.5` → "Appendix E, 'What the hypothesis implies'; proof assembled in the project record, Appendix G".
+  - `briefs/williams-letter-findings.md` → removed with the cost claim.
+- **§7.** "A single question wearing two costumes" is now "one difficulty, seen from two sides", and the staircase is "a single configuration that belongs to both sides". The divisibility pointer is now Proposition D.1, with Theorem D.6 for "size alone cannot decide" (cold-read 92).
+
+**Cold read 2 (97 items): 73 fixed, 18 needed no fix, 6 not fixed.**
+
+| Items | Status |
+|---|---|
+| 1–5, 10–21, 24, 28–34, 36–46, 48–50, 53–55, 57–59, 61–68, 70, 72–74, 76, 78–86, 88–93 | fixed |
+| 9, 22, 23, 25, 26, 27, 35, 47, 51, 52, 56, 60, 69, 71, 75, 77, 87, 94 | no fix needed: the reader marked them READABLE or the arithmetic OK |
+| 6, 7 (Author's note) | not fixed: verbatim, the author's voice |
+| 8 (version chain) | not fixed: the version note must carry v3 → v4 |
+| 95, 96, 97 (provenance paragraph) | not fixed: verbatim, apart from round 3's "Williams's" |
+
+**Paraphrases to check:**
+- §4: "s is set by a fixed binary pattern that belongs to ω, running on to the left without end" (C-3.3(a));
+- §4: the next entry depth "by an exact formula in s and in how d compares with the anchor" (C-3.5);
+- §5: (b) "γ can grow at most like a fixed multiple of the logarithm of n", from Rhin's display in Thm D.5;
+- §5: "That multiplier currently depends on p" (C-4.thr.5);
+- §5: "(These are samples …; the record computes p₁(X₀) at every power of 2 up to 2^200)" (C-4.ver(a));
+- §6: "(1) and (2) … artifacts of including small starting values, which the sharper control set aside" (C-5.cal);
+- §6: the 1024-integer reason, "each such class equally often" (C-5.base).
+
+**Pages (42):**
+- front matter and Symbols at a glance pp. 1–3;
+- §1 pp. 3–6;
+- §§2–8 pp. 6–18 (main text ≈ 17 pp);
+- Technical summary p. 18;
+- Appendices A–I pp. 18–41;
+- references pp. 41–42.
+
+**Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean.
+
 ## 8. Record
 
 **Commits** (branch `paper1-v4-readable`, base `46e7464`):
