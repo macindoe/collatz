@@ -32,14 +32,10 @@
 % DOI: replace the placeholder below with the v4 version-specific DOI once it is minted
 % (it is used on the title page and in the Version note).
 \newcommand{\vfourdoi}{\href{https://doi.org/10.5281/zenodo.23501162}{10.5281/zenodo.23501162}}
-% PIN-AT-BUILD: replace with the commit of the public record at which every wiki section and
-% script named in this paper is cited (the record's main is not yet pushed; do not cite an
-% unreachable commit as reachable). Used in Appendix D ("Verification and record") and Appendix A.
-\newcommand{\recordcommit}{\textbf{[record commit, pinned at release]}}
+\newcommand{\recordcommit}{\href{https://github.com/macindoe/collatz/tree/110f8b69c065bb1345d865ad2d0431e59146222d}{\texttt{110f8b6}}}
 
 \title{Reduced coordinates for the Collatz map:\\ exact per-step laws, anchor dynamics,\\ and the limits of counting arguments for cycles}
 \author{Ben Macindoe\thanks{\texttt{macindoebenjamin@gmail.com}. Developed through extensive AI-assisted research, with ChatGPT (OpenAI) from December 2025 to March 2026 and with Claude (Anthropic) from March 2026; the division of labor and the verification protocol are stated in Appendix~\ref{app:method}.}}
-% PIN-AT-BUILD: the month is the month of minting.
 \date{v4, October 2026 $\;\cdot\;$ DOI: \vfourdoi{} $\;\cdot\;$ concept DOI: \href{https://doi.org/10.5281/zenodo.21273547}{10.5281/zenodo.21273547}}
 
 \hypersetup{
@@ -63,7 +59,6 @@ Finally the paper states the `fair-coin' assumption behind the classical heurist
 
 \subsection*{Version note}
 % DOI: the version-specific DOI enters through \vfourdoi (preamble).
-% PIN-AT-BUILD: the month below is the month of minting.
 v4, October 2026 (DOI \vfourdoi). It supersedes v3 (DOI 10.5281/zenodo.21730505, August 2026), v2 (10.5281/zenodo.21421120) and v1 (10.5281/zenodo.21273548, July 2026); the concept DOI 10.5281/zenodo.21273547 resolves to the latest version. v4 attributes the uniform trim (Theorem~\ref{thm:uniform}) to Rozier and to Simons--de~Weger, with finiteness at each period to Rozier and Brox, and presents it as a rederivation; states the sharpness of that trim (Theorem~\ref{thm:staircase}) at every number of blocks from $3$ on, and at every size threshold from an explicit threshold number of blocks on, with its proof, in place of the assessment and status report of v3; cites the classical and contemporary sources of the reduced coordinates' objects and of the elimination identity; and corrects the attribution of Theorem~\ref{thm:vlaw}'s unconditional bound at the odd core $1$. v4 is also rewritten for a curious reader without training in mathematics: the main text carries the ideas in words, and the statements, with their proofs or the sections of the project record that hold them, are in Appendices~\ref{app:reduced}--\ref{app:aeh}. Its statements are therefore renumbered, and Appendix~\ref{app:concordance} maps v3's numbers to v4's. For outside citations of this paper's statements by number, v3 remains the pinned citation. The history of every version, item by item, is at \texttt{paper/collatz-reduced-version-history.md} in the project record.
 
 \subsection*{Author's note}
@@ -285,7 +280,6 @@ Finally we state the equidistribution (`fair-coin') hypothesis implicit in the c
 
 \section{Methodology, responsibility, and records}\label{app:method}
 This work runs from a hand-drawn origin note (13 March 2023) through seventy-nine drafts to a research wiki whose pages carry status headers, verification records, and refuted claims with their refutation data. It was developed through extensive AI-assisted research in two phases. From December 2025 to March 2026 the author worked with ChatGPT (OpenAI): exploratory definitions, the early CollatzScout drafts, and, alongside them, the author's own hand computations in spreadsheets. From March 2026 the author worked with Claude (Anthropic). The author is responsible for the published claims, the research direction, and the standards of evidence; the AI collaborators carried out the mathematical development within the author's coordinate system --- formulations, proofs, computations, and connections to the literature. Because this division of labor is unusual, correctness claims rest on the documented verification protocol rather than on authorial authority alone: every computational claim is backed by a runnable script, named here or at the record section cited; every result labeled proved was re-verified with independently written code before being so labeled; the calibration campaign's four dissolved anomalies, and two corrected search-filter errors on the cycle side, are documented rather than smoothed over. The complete record (wiki, code, draft history, origin note) is public at \url{https://github.com/macindoe/collatz}; every wiki section and script named in this paper is cited at commit \recordcommit.
-% PIN-AT-BUILD: \recordcommit (preamble) must name a commit reachable on the public repository.
 
 \section{The reduced system: definitions and proofs}\label{app:reduced}
 
@@ -657,7 +651,6 @@ a unit block costs a factor $\LL$ in the slope. Against $\gamma \le \kp n + \lam
 \end{remark}
 
 \paragraph{Verification and record.}
-% PIN-AT-BUILD: the record commit is \recordcommit (preamble), the same as Appendix A.
 Prompted by correspondence with Eric Merle concerning the sharpness hedge of this theorem's statement in v1--v3 (his related formal work is \cite{merle}), parts (i)--(iii) were proved in the project record, \texttt{cycles.md} \S12.8.6 and \S12.8.7 at the commit of Appendix~\ref{app:method}, each checked there by independently written code with exact integer arithmetic at every size decision: part~(i) by the scripts \texttt{experiments/staircase\_gamma\_upper.py} ($45$ checks, $0$ failures), \texttt{experiments/\allowbreak staircase\_allp\_construction.py} and \texttt{experiments/\allowbreak staircase\_allp\_diophantine.py} (the sweep, the bracket, the window counts, and the construction at every period from $3$ to $32$ apart from $p = 4$, including the finite range $3 \le p \le 15$; the exhibitions at $p \in \{2,4\}$ are by \texttt{experiments/staircase\_allp.py}, \S12.8.6.4), and parts (ii)--(iii) by \texttt{experiments/staircase\_x0\_threshold.py} ($188$ checks, $0$ failures: the sandwich and the trim on $30{,}000$ random configurations, the two-distance structure, $p_1(X_0)$ for $X_0 = 2^j$, $j \le 200$, and the construction end to end at $95$ pairs $(X_0, p)$), and again by an independent re-implementation, \texttt{experiments/x0\_threshold\_independent\_check.py} ($43$ checks, $0$ failures). The proof printed above composes the record's availability theorem for (i) (\S12.8.6.1) with its construction under the weaker hypothesis of \S12.8.7.2. The configurations of (i) computed in the record all fail the divisibility conditions $q \mid R_r$, as those of (iv) do; those of (iii) were not tested. Every statement here concerns the reach of size arguments, and none bears on whether cycles exist.
 
 \section{The equidistribution hypothesis in full}\label{app:aeh}
