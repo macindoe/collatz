@@ -1,0 +1,147 @@
+depth_law_reverify.py -- Stage 3 laws on every valid state, w < 3000, 1 <= d < 64
+anchor precision 2^256, certified; anchor-side valuations required < 224
+
+STATE COUNT
+  values of w < 3000 with gcd(w, 6) = 1: 1000
+  depths 1 <= d < 64: 63
+  valid states checked: 63000
+  62,937 diagnosis: states with w > 1: 62937; states with w < 2999 (largest w = 2999 dropped): 62937
+    63,000 - 62,937 = 63 = one value of w times 63 depths
+
+PER RESIDUE-PARITY CLASS (w mod 8, d mod 2); branch per Prop 11.8.1.3.1
+  w=1 mod 8, d even      lifting (s >= 3)  states   7750  checks  124000  failures 0
+  w=1 mod 8, d odd       s = 1             states   8000  checks   72000  failures 0
+  w=3 mod 8, d even      s = 1             states   7750  checks   69750  failures 0
+  w=3 mod 8, d odd       lifting (s >= 3)  states   8000  checks  120000  failures 0
+  w=5 mod 8, d even      s = 2             states   7750  checks   69750  failures 0
+  w=5 mod 8, d odd       s = 1             states   8000  checks   72000  failures 0
+  w=7 mod 8, d even      s = 1             states   7750  checks   69750  failures 0
+  w=7 mod 8, d odd       s = 2             states   8000  checks   72000  failures 0
+
+PER LAW (all classes)
+  3-gain iff s even                          checks  63000  failures 0
+  C identities (spine 5.6)                   checks  63000  failures 0
+  M(w) = 2N(3w) + 1                          checks   8000  failures 0
+  M(w) = 2N(w)                               checks   7750  failures 0
+  absorption a_+ (11.8.6.2.1)                checks  63000  failures 0
+  branch class (11.8.1.3.1)                  checks  63000  failures 0
+  d_+ = m_+ + a_+ (11.8.6.3.6)               checks  63000  failures 0
+  entry depth m_+ (11.8.6.3.3)               checks  15750  failures 0
+  entry depth m_+ (11.8.6.3.5, s=1)          checks  31500  failures 0
+  entry depth m_+ (11.8.6.3.5, s=2)          checks  15750  failures 0
+  forced carry v2(eps + delta) >= s - 2      checks  15750  failures 0
+  forced carry v2(eps) = s - 3               checks  15750  failures 0
+  h(s) formula                               checks  63000  failures 0
+  m_+ >= 1                                   checks  63000  failures 0
+  next state valid                           checks  63000  failures 0
+  target shift (11.8.6.3.1)                  checks   7750  failures 0
+  unified law s = 2 + v2(d - M)              checks  15750  failures 0
+  v2(delta_s) = s - 3                        checks  15750  failures 0
+  valuation law s = 3 + v2(eps)              checks  15750  failures 0
+
+RANGES MET
+  max m_+ = 17; max s = 18; lifting s values met: 3..18
+  m_+ histogram: 1:31505, 2:15741, 3:7879, 4:3932, 5:1976, 6:982, 7:497, 8:236, 9:129, 10:59, 11:34, 12:14, 13:6, 14:7, 15:1, 16:1, 17:1
+  resonant states d = h(s) in the sweep: 331 (with v3(w + beta) > 0: 165)
+  v2(delta_s) = s - 3 for 3 <= s <= 200: failures 0
+
+W = 1 SEPARATELY (N(1) = 0, M(1) = 0 mod 2^256)
+  states: 63; checks: 784; failures: 0
+    3-gain iff s even                           63
+    C identities (spine 5.6)                    63
+    M(w) = 2N(w)                                31
+    absorption a_+ (11.8.6.2.1)                 63
+    branch class (11.8.1.3.1)                   63
+    d_+ = m_+ + a_+ (11.8.6.3.6)                63
+    entry depth m_+ (11.8.6.3.3)                31
+    entry depth m_+ (11.8.6.3.5, s=1)           32
+    forced carry v2(eps + delta) >= s - 2       31
+    forced carry v2(eps) = s - 3                31
+    h(s) formula                                63
+    m_+ >= 1                                    63
+    next state valid                            63
+    target shift (11.8.6.3.1)                   31
+    unified law s = 2 + v2(d - M)               31
+    v2(delta_s) = s - 3                         31
+    valuation law s = 3 + v2(eps)               31
+  rows d: s m_+ a_+ -> (w_+, d_+)   [branch]
+    d= 1: s= 1 m=1 a=0 -> (1, 1)  [s=1]
+    d= 2: s= 3 m=1 a=0 -> (1, 1)  [lift]
+    d= 3: s= 1 m=1 a=0 -> (7, 1)  [s=1]
+    d= 4: s= 4 m=1 a=1 -> (1, 2)  [lift]
+    d= 5: s= 1 m=1 a=0 -> (61, 1)  [s=1]
+    d= 6: s= 3 m=2 a=0 -> (23, 2)  [lift]
+    d= 7: s= 1 m=1 a=0 -> (547, 1)  [s=1]
+    d= 8: s= 5 m=1 a=0 -> (103, 1)  [lift]
+    d= 9: s= 1 m=1 a=0 -> (4921, 1)  [s=1]
+    d=10: s= 3 m=1 a=0 -> (3691, 1)  [lift]
+    d=11: s= 1 m=1 a=0 -> (44287, 1)  [s=1]
+    d=12: s= 4 m=6 a=1 -> (173, 7)  [lift]
+    d=13: s= 1 m=1 a=0 -> (398581, 1)  [s=1]
+    d=14: s= 3 m=4 a=0 -> (37367, 4)  [lift]
+    d=15: s= 1 m=1 a=0 -> (3587227, 1)  [s=1]
+    d=16: s= 6 m=1 a=2 -> (37367, 3)  [lift]
+    d=17: s= 1 m=1 a=0 -> (32285041, 1)  [s=1]
+    d=18: s= 3 m=1 a=0 -> (24213781, 1)  [lift]
+    d=19: s= 1 m=1 a=0 -> (290565367, 1)  [s=1]
+    d=20: s= 4 m=1 a=1 -> (36320671, 2)  [lift]
+    d=21: s= 1 m=1 a=0 -> (2615088301, 1)  [s=1]
+    d=22: s= 3 m=2 a=0 -> (980658113, 2)  [lift]
+    d=23: s= 1 m=1 a=0 -> (23535794707, 1)  [s=1]
+    d=24: s= 5 m=3 a=0 -> (1103240377, 3)  [lift]
+    d=25: s= 1 m=1 a=0 -> (211822152361, 1)  [s=1]
+    d=26: s= 3 m=1 a=0 -> (158866614271, 1)  [lift]
+    d=27: s= 1 m=1 a=0 -> (1906399371247, 1)  [s=1]
+    d=28: s= 4 m=2 a=1 -> (119149960703, 3)  [lift]
+    d=29: s= 1 m=1 a=0 -> (17157594341221, 1)  [s=1]
+    d=30: s= 3 m=3 a=0 -> (3217048938979, 3)  [lift]
+    d=31: s= 1 m=1 a=0 -> (154418349070987, 1)  [s=1]
+    d=32: s= 7 m=1 a=0 -> (7238360112703, 1)  [lift]
+    d=33: s= 1 m=1 a=0 -> (1389765141638881, 1)  [s=1]
+    d=34: s= 3 m=1 a=0 -> (1042323856229161, 1)  [lift]
+    d=35: s= 1 m=1 a=0 -> (12507886274749927, 1)  [s=1]
+    d=36: s= 4 m=1 a=1 -> (1563485784343741, 2)  [lift]
+    d=37: s= 1 m=1 a=0 -> (112570976472749341, 1)  [s=1]
+    d=38: s= 3 m=2 a=0 -> (42214116177281003, 2)  [lift]
+    d=39: s= 1 m=1 a=0 -> (1013138788254744067, 1)  [s=1]
+    d=40: s= 5 m=1 a=0 -> (189963522797764513, 1)  [lift]
+    d=41: s= 1 m=1 a=0 -> (9118249094292696601, 1)  [s=1]
+    d=42: s= 3 m=1 a=0 -> (6838686820719522451, 1)  [lift]
+    d=43: s= 1 m=1 a=0 -> (82064241848634269407, 1)  [s=1]
+    d=44: s= 4 m=3 a=1 -> (2564507557769820919, 4)  [lift]
+    d=45: s= 1 m=1 a=0 -> (738578176637708424661, 1)  [s=1]
+    d=46: s= 3 m=6 a=0 -> (17310426014946291203, 6)  [lift]
+    d=47: s= 1 m=1 a=0 -> (6647203589739375821947, 1)  [s=1]
+    d=48: s= 6 m=3 a=2 -> (17310426014946291203, 5)  [lift]
+    d=49: s= 1 m=1 a=0 -> (59824832307654382397521, 1)  [s=1]
+    d=50: s= 3 m=1 a=0 -> (44868624230740786798141, 1)  [lift]
+    d=51: s= 1 m=1 a=0 -> (538423490768889441577687, 1)  [s=1]
+    d=52: s= 4 m=1 a=1 -> (67302936346111180197211, 2)  [lift]
+    d=53: s= 1 m=1 a=0 -> (4845811416920004974199181, 1)  [s=1]
+    d=54: s= 3 m=2 a=0 -> (1817179281345001865324693, 2)  [lift]
+    d=55: s= 1 m=1 a=0 -> (43612302752280044767792627, 1)  [s=1]
+    d=56: s= 5 m=2 a=0 -> (4088653383026254196980559, 2)  [lift]
+    d=57: s= 1 m=1 a=0 -> (392510724770520402910133641, 1)  [s=1]
+    d=58: s= 3 m=1 a=0 -> (294383043577890302182600231, 1)  [lift]
+    d=59: s= 1 m=1 a=0 -> (3532596522934683626191202767, 1)  [s=1]
+    d=60: s= 4 m=2 a=1 -> (220787282683417726636950173, 3)  [lift]
+    d=61: s= 1 m=1 a=0 -> (31793368706412152635720824901, 1)  [s=1]
+    d=62: s= 3 m=3 a=0 -> (5961256632452278619197654669, 3)  [lift]
+    d=63: s= 1 m=1 a=0 -> (286140318357709373721487424107, 1)  [s=1]
+
+WORKED CASES (stage3.md 11.8.6.3)
+  (1,4): A=80 s=4 x_exit=5 m=1; eps=2, delta_4=2 mod 8, v2(eps+delta)=2: ok
+  (17,2): A=152 s=3 x_exit=19 m=2; N(17)=6, eps=3, delta_3=1 mod 8, v2=2: ok
+
+NEGATIVE CONTROLS (perturbed law; must disagree with the truth somewhere)
+  lifting law with delta_(s+1) for delta_s         wrong on  15750 of  15750  bites
+  lifting law without the shift (m = 3 - s + v2(eps)) wrong on  15750 of  15750  bites
+  s=1 law with d + 1 for d                         wrong on  31500 of  31500  bites
+  s=1 law with N(w^2)+1 for M(w)                   wrong on  31500 of  31500  bites
+  s=2 law with d for d - 1                         wrong on  15750 of  15750  bites
+  s=2 law with M(3w) for M(w)                      wrong on  15750 of  15750  bites
+  lifting law, digit s+1 of delta_s flipped (m >= 4 only) wrong on   1968 of  15750  bites
+  s=1 law, digit 3 of M(w) flipped (m >= 4 only)   wrong on   3938 of  31500  bites
+  absorption with the resonant branch d = h(s) dropped wrong on    165 of  63000  bites
+
+TOTAL: 669250 checks on 63000 states, 0 failures; controls 9/9 bite; verdict PASS
