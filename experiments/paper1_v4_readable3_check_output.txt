@@ -1,0 +1,180 @@
+paper 1 v4 readability round 3: fresh-code check at cbcc8b8
+command: python experiments/paper1_v4_readable3_check.py
+
+== A. Technical summary against the abstracts
+PASS the dropped sentence is in the pre-round-3 abstract (6eb5946)
+PASS Technical summary == 6eb5946 abstract minus that sentence, character for character (blank-line paragraph breaks included)
+PASS Technical summary has the three paragraphs of the round-1 abstract
+     word-level hunks between the locked abstract and the Technical summary: 5
+       insert: lock '' -> summary 'The Collatz map sends an odd number $x$ to $3x+1$ with every factor of $2$ divided out. Much of an orbit is bookkeeping: while $x+1$ is divisible by $4$, each step trades one factor of $2$ in $x+1$ for a factor of $3$.'
+       replace: lock 'study the Collatz dynamics in a reduced coordinate system that compresses' -> summary 'compress'
+       insert: lock '' -> summary 'such'
+       replace: lock 'accounting' -> summary 'accounting, stated as a heuristic,'
+       insert: lock '' -> summary '(`fair-coin')'
+PASS the Technical summary differs from the locked abstract by exactly the round-1 changes already checked as declared (5 word-level hunks) -- 5 hunks
+CONTROL rejected a summary that kept the round-1 layout sentence would not equal the declared text
+
+== B. Appendices B-E: cbcc8b8 against c7c3c69
+     line hunks in Appendices B-E: 1
+       replace old 3-3 new 3-5
+PASS exactly one hunk in Appendices B-E
+PASS the hunk is App B's opening paragraph and keeps its old sentence
+PASS App B's added text was main text at c7c3c69: \[ T(x) = \frac{3x+1}{2^{\vt{3x+1}}} \qquad (x \text{ odd an
+PASS App B's added text was main text at c7c3c69: Tao's Syracuse map $\mathrm{Syr}$ \cite{tao}
+PASS App B's added text was main text at c7c3c69: the Collatz conjecture asserts that every $T$-orbit reaches 
+PASS App B's added text was main text at c7c3c69: $\vt{n}$, the \emph{$2$-adic valuation} of $n$, is the numbe
+PASS App B's added text was main text at c7c3c69: T(x) + 1 = \tfrac{3}{2}\,(x+1)
+PASS App B's added text: the identity is now written \tfrac32\,(x+1) (same formula)
+PASS App B's added text: the one clause not taken from the old main text is the definition of v_3 (a definition; v_3 was used undefined in the lock)
+PASS Prop B.2(i)'s proof (the identity's new pointer) contains T(y)+1 = 2^{k-1}(3v)
+PASS Appendix F's new paragraph is c7c3c69's section 8 contemporary-work paragraph verbatim
+PASS section 8 provenance paragraph: c7c3c69 text with only 'Her open problem' -> 'Williams's open problem'
+CONTROL rejected a provenance paragraph with any other word changed is detected
+
+== C1. Section 2: the orbit of 7, one rising run
+PASS table row 0: x = 7 -- got 7
+PASS   binary of 7 is 111, of 7+1 is 1000
+PASS   7+1 = 2^3 3^0 * 1
+PASS table row 1: x = 11 -- got 11
+PASS   binary of 11 is 1011, of 11+1 is 1100
+PASS   11+1 = 2^2 3^1 * 1
+PASS table row 2: x = 17 -- got 17
+PASS   binary of 17 is 10001, of 17+1 is 10010
+PASS   17+1 = 2^1 3^2 * 1
+PASS table row 3: x = 13 -- got 13
+PASS   binary of 13 is 1101, of 13+1 is 1110
+PASS   13+1 = 2^1 3^0 * 7
+PASS 3*8 = 24 is a multiple of 4 and 22 = 24 - 2 halves once, to 11
+PASS 11+1 = 12 = (3/2)(7+1); 17+1 = 18 = (3/2)*12
+PASS rising step: x+1 divisible by 4 => 3x+1 = 3(x+1) - 2 is 2 mod 4, halves once, result > x (every x = 3 mod 4 below 200001)
+PASS trade stops: x+1 = 2*odd => 3x+1 divisible by 4 (every x = 1 mod 4 below 200001)
+PASS 3*17+1 = 52 = 110100 in binary, halves twice, to 13
+PASS block of 7: m = 3, numbers 7, 11, 17, cascade 52 -> 26 -> 13, s = 1, exit 13
+PASS m = number of trailing 1s of x, and the next m-1 steps rise, then a cascade of >= 2 halvings (every odd x below 100001)
+PASS one-division map from 7: odd 7, 11, 17, then even 26, then 13
+PASS one-division map: a block (m, s) is m odd terms then s even terms (every odd x < 50001)
+
+== C2. Section 3: states and the reduced map
+PASS x = 7: x+1 = 8, m = 3, a = 0, omega = 1, d = 3, state (1,3)
+PASS 17 + 1 = 18 = 2 * 1 * 3^2, with d - 1 = 2 threes
+PASS after the m-1 rising steps, x+1 = 2 * 3^(d-1) * omega (every odd x < 100001)
+PASS numbers of state (1,3) below 2^17: exactly 7 (m=3), 11 (m=2, 12 = 4*3), 17 (m=1, 18 = 2*9)
+PASS all three exit at 13
+PASS exactly d odd numbers per state, all with one exit (32768 states with every representative below 2^17)
+PASS every valid state (omega < 3000, d <= 20) is the state of 2^d omega - 1
+PASS states run (1,3), (7,1), (1,2), (1,1), (1,1)
+PASS 13+1 = 14 = 2*7; 3*13+1 = 40 halves three times (s = 2) to 5
+PASS 5+1 = 6 = 2*3; 3*5+1 = 16 halves four times (s = 3) to 1
+PASS 1+1 = 2: state (1,1); 3*1+1 = 4 halves twice (s = 1), back to 1
+PASS F(1,1) = (1,1) and the only number of state (1,1) is 1
+PASS R(T^m x) = F(R x) for every odd x < 2^17
+
+== C3. Section 4: the exact laws on the example
+PASS (1,3): 27 - 1 = 26 = 2*13, s = 1
+PASS cascade starts from 2(3^d omega - 1) (every odd x < 50001)
+PASS powers of 3 mod 8: 3, 1, 3, 1, ...
+PASS the printed eight-kind table, every cell (40000 states, omega < 3001, d <= 40)
+PASS lifting = (1, even) or (3, odd)
+PASS example kinds: (1,3) and (1,1) are (1, odd) with s = 1; (7,1) is (7, odd) with s = 2
+PASS anchor of 1 is the all-zero string (M(1) = 0 mod 2^64)
+PASS s = 2 + (number of lowest binary digits on which d and the anchor agree), on all 10000 lifting states of the table range
+PASS (1,2): d = 2 = 10b, one trailing zero, s = 3; 3*5+1 = 16 halves four times = 1 + s
+PASS powers of 2 mod 3: 2, 1, 2, 1, ...
+PASS the next state gains a factor of 3 exactly when s is even (omega < 3001, d <= 40)
+PASS (7,1): 21 + 3 = 24, a multiple of 3; next state (1,2) has a = 1
+PASS blocks with s = 1 and s = 3 in the example gain none
+PASS from (7,1): next number 5, 6 = 2*3: entry depth 1, absorption 1, next depth 2
+PASS next entry depth >= 1 (omega < 3001, d <= 40)
+PASS on lifting states the displacement is half of d - M(omega): d - M(omega) is even (all lifting states of the range)
+PASS undecided rate at depth 4: 1/2^5 = 1/32 under the capped model for every cap D >= k+2 (checked D = 6..15); printed 3.125%
+PASS undecided rate at depth 8: 1/2^9 = 1/512 under the capped model for every cap D >= k+2 (checked D = 10..19); printed 0.195%
+PASS under the model s and the next entry depth each average 2, so s + m_+ averages 4 (closed form sum_j j 2^-j = 2; partial sums exact to 2 - (J+2)/2^J)
+
+== C4. Section 5: the trivial cycle and the p = 7 staircase
+PASS trivial cycle: n = 1, K = 2, q = 1, gamma = 2, R = 4 - 3 = 1 = q
+PASS 3 = 4 * (1 - 1/4)
+PASS staircase: p = 7, n = 94, exit valuations total 55, K = 94 + 55 = 149
+PASS K = 149 = ceil(94 log2 3): 2^148 < 3^94 < 2^149
+PASS the two cycle-cofactor computations agree (rational cycle vs Prop D.1's R_r)
+PASS passes all seven size tests -- min R_r/q = 1.42063
+PASS gamma = 6.74 -- 6.743758383
+PASS three-block constant 0.1157 n - 2 at n = 94 is 8.8758, printed 'above 8.9'
+PASS fails divisibility at every rotation
+PASS first six depths grow roughly geometrically (ratios 1.75, 1.29, 1.67, 1.53, 1.52) -- 1.750, 1.286, 1.667, 1.533, 1.522
+PASS seeded search (seed 41) at six blocks: 84 staircase size-passers -- 84
+PASS none below the three-block constant; each clears it by at least 0.698 -- min margin 0.698728
+PASS all 84 fail the divisibility conditions
+PASS the 84 at n in {20, 22, 27, 29, 34, 41, 46}
+
+== C5. Section 5: sharpness constants and the threshold p1(X0)
+PASS Gamma* = 1.05 L (L-1) + 1/(L-1) + 1 = 3.68301..., 'about 3.68'; >= 3.683012 -- 3.683012101
+PASS phi(0.0415) = 5.14021..., 'about 5.14'; <= 5.140212 -- 5.140211486
+PASS for every p = 16..60 some n in [L^p, 1.05 L^p] (within its first 200) has gamma(n, ceil(nL)) in [3.683012, 5.140212] (gamma via phi(delta_n); exact big-integer gamma agrees at p <= 20)
+PASS lambda_0 = L/(L-1) + 2^-20 = 2.70951..., 'about 2.71'; lambda_0 + 1.5 'about 4.21' -- 2.709512245
+PASS 2^-(lambda_0 + 1.5) = 0.05405 >= 0.054 ('cannot be lowered below 0.054') -- 0.0540518
+     p1: 1->10, 2->10, 10->10, 16->10, 2^8->22, 2^9->22, 2^10.5->22, 2^12->22, 2^20->36, 5*2^60->98, 2^71->110, 2^200->309
+PASS p1 = 10 for X0 <= 16 (X0 = 1, 2, 10, 16)
+PASS p1 = 22 for 2^8 <= X0 <= 2^12 (2^8, 2^9, 2^10.5, 2^12)
+PASS p1(2^20) = 36
+PASS p1(5 * 2^60) = 98
+PASS p1(2^71) = 110
+PASS p1(2^200) = 309
+PASS p1 nondecreasing in X0 (X0 = 2^(j/4), j = 0, 7, ..., 798)
+
+== C6. Section 6: letters, the tally example, the base case
+PASS letters of the running example: (3,1), (1,2), (1,3), (1,1)
+PASS letter (1,2) has chance 1/2 * 1/4 = 1/8
+PASS 1/4 + 1/16 + 1/64 + ... = 1/3 (geometric series, and the even-s mass under halving law)
+PASS tally example, b = floor(log2 N) = 39 (a start with about 40 binary digits): horizon ceil(b/10) = 4 blocks; budget ceil(b/2) = 20, 'fewer than 20 halvings'
+PASS tally example, b = floor(log2 N) = 40 (a start with about 40 binary digits): horizon ceil(b/10) = 4 blocks; budget ceil(b/2) = 20, 'fewer than 20 halvings'
+PASS 4 x 1/10 < 1/2
+PASS a budget rate tau with 4 theta < tau < 1 exists iff theta < 1/4 (theta on a grid of 1/1000)
+PASS 1024 consecutive integers = ten binary digits' worth
+PASS base-case example: in each of 10 windows of 1024 consecutive integers, every pattern of first blocks (start's own block included) with fewer than ten halvings in all (255 patterns) occurs among the 512 odd numbers exactly 512 / 2^S times
+
+== D. Witnesses for the findings
+PASS WITNESS abstract / What-is-new (v): the trivial cycle is a one-block cycle that meets every size and divisibility condition (so 'no cycles made of one ... block' needs 'other than 1, 4, 2, 1')
+PASS WITNESS 'rising steps' for n: in the staircase n = 94 but its rising steps number n - p = 87
+PASS WITNESS abstract 'exceeding the classical bound's own requirement by at most a fixed amount': read as the trim's requirement on gamma (n kappa_p - log2 p), the D.6(iii) upper excess lambda_0 + 1.5 + log2 p is not fixed: 7.53 at p = 10, 12.48 at p = 309
+
+== C7. Quoted figures: main text against the ledger (transcription)
+PASS measured undecided rate, depth 4: main text '$2.75\%$ at depth $4$' / ledger '0.0275'
+PASS measured undecided rate, depth 8: main text '$0.19\%$ at depth $8$' / ledger '0.0019'
+PASS fourth anomaly statistic: main text '$0.2503 \pm 0.0015$' / ledger '0.2503 ± 0.0015'
+PASS fourth anomaly visits: main text '$84{,}739$ visits' / ledger '84,739 visits'
+PASS bottom-regime bias: main text 'up to $41$ standard deviations' / ledger 'z = 41'
+PASS the 2^40 cut: main text 'below $2$ to the power $40$' / ledger '2^{40}'
+PASS the fourth anomaly: main text 'five standard deviations' / ledger '5σ'
+PASS Hercher: main text 'at most $91$ blocks' / ledger 'p ≤ 91'
+PASS p = 6 search: main text '$84$ further staircase size-passers' / ledger '84 further staircase size-passers'
+PASS p = 6 margin: main text 'at least $0.698$' / ledger 'at least 0.698'
+PASS prefactor: main text 'below $0.054$' / ledger 'below `0.054`'
+PASS p1 at 2^71: main text '$110$ at $2^{71}$' / ledger '`110` at `2^{71}`'
+PASS p1 at 2^200: main text '$309$ at $2^{200}$' / ledger '`309` at `2^{200}`'
+PASS p1 at 5*2^60: main text '$98$ at the threshold Simons and de~Weger used' / ledger '`98` at SdW's'
+PASS calibration rounds: main text 'An eight-round test campaign' / ledger 'An eight-round campaign'
+
+== D. Negative controls
+CONTROL rejected a table with (5, d even) -> s = 1
+CONTROL rejected K = 150 for the staircase
+CONTROL rejected last exit 48 keeps K = 149
+CONTROL rejected a flat profile (13 x 7 ... ) passes the size tests
+CONTROL rejected p1(2^20) = 35
+CONTROL rejected states run (1,3), (7,1), (1,1)
+CONTROL rejected letters (3,1), (1,3), (1,2), (1,1)
+CONTROL rejected patterns with ten halvings (S = 10, one past the range) are also exact in a 1024-window
+CONTROL rejected a two-block configuration (m, s) = ((1,1),(1,1)) is a cycle other than 1,4,2,1
+CONTROL rejected the tally example with b = 41 still follows 4 blocks
+
+== Totals
+   A. Technical summary against the abstracts: 4 pass, 0 fail
+   B. Appendices B-E: cbcc8b8 against c7c3c69: 12 pass, 0 fail
+   C1. Section 2: the orbit of 7, one rising run: 21 pass, 0 fail
+   C2. Section 3: states and the reduced map: 13 pass, 0 fail
+   C3. Section 4: the exact laws on the example: 19 pass, 0 fail
+   C4. Section 5: the trivial cycle and the p = 7 staircase: 14 pass, 0 fail
+   C5. Section 5: sharpness constants and the threshold p1(X0): 12 pass, 0 fail
+   C6. Section 6: letters, the tally example, the base case: 9 pass, 0 fail
+   D. Witnesses for the findings: 3 pass, 0 fail
+   C7. Quoted figures: main text against the ledger (transcription): 15 pass, 0 fail
+   checks: 122 pass, 0 fail; negative controls: 12 rejected, 0 not rejected
