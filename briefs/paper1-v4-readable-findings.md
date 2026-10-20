@@ -480,6 +480,69 @@ Branch `paper1-v4-readable-2`, starting from `e0da786` (which adds cold read 3).
 
 **Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean.
 
+## 7f. Final polish (round 6)
+
+Branch `paper1-v4-readable-6`, cut from `main` at `56d6b3b`. That commit has round 5 merged, cold read 4 (`briefs/paper1-v4-coldread-4.md`) and the round-5 check (`briefs/paper1-v4-readable-5-check-findings.md`). Presentation only; the formal statements are untouched. Content commit `92881dd`.
+
+**Round-5 check:**
+- **Required (A-9).** §4 "Why it matters" now uses the check's fix verbatim. The heuristic label governs the premise ("But, by an accounting stated as a heuristic and not proved (Heuristic C.9), each decided step uses up binary digits … and nothing restores them; this suggests …").
+- **Optional (a)–(d), all applied:**
+  - (a) §5 now reads "only slightly larger than 3 to the power n, and by less the larger the cycle's numbers are".
+  - (b) "Counting ('size') arguments use only this closeness, through the cycle's size conditions (Appendix D)".
+  - (c) "for 2 and 4 blocks, passing examples only".
+  - (d) §6's conjecture keeps the tolerance ("every finite pattern of letters and every tolerance").
+- **The two Appendix D guided-account edits that §7e did not record:**
+  1. "This section explains … and proves that they go no further" → "This account explains … and why they go no further". The account explains; the formal part proves it (C-Abs.10).
+  2. "that three-block threshold" → "that three-block bound". This applies the round-4 check's optional note on C-13. Same quantity.
+- **Also applied.** Appendix C's guided account now names `experiments/depth_law_reverify.py` in its 63,000 sentence. "Apply it to the staircase" in App D's guided account is now "Apply it to the staircases of part (i)" (the check's optional note on cold read 3 item 41).
+
+**Coordinator items (a)–(h):**
+- **(a)** Letters are written `m|s` (`3|1`, `1|2`, `1|3`, `1|1`) in §6, in Appendix E's guided account and on the Symbols page. The formal Hypothesis E.1 keeps its `ℓ_n`.
+- **(b)** §1 (3) now says the trivial cycle 1, 4, 2, 1 corresponds to the state of 1, which the reduced map sends to itself, and that every other cycle corresponds to exactly one other cycle of states.
+- **(c)** §8's gloss paragraph now ends "In Williams's picture a row is a pair: a skeleton λ (our odd core) and a depth k (our depth)." The provenance sentences now read: "When a trajectory leaves a row, Section 4's laws give the exit valuation and the entry position, and so the depth k of the row it lands in. They give no law for the skeleton λ of that row: on that, F only restates Williams's Proposition 3.10." **To confirm against the ledger:** C-RW.23 read "hence the row entered" as the row's depth. That is the coordinator's reading.
+- **(d)** "Minimax value" is gone from the abstract and §1. It is now "the optimum of Rozier's 1991 analysis — the best worst case over block depths allowed to be any real numbers". The Technical summary and Appendix D keep "minimax".
+- **(e)** §6 now has a list for horizon and budget, then "admissible" defined in words, then the conjecture with the tolerance, then the base case.
+- **(f)** §7 now lists its three directions with plain headings: going beyond size for cycles; following windows step by step ("the mathematical method called transfer operators"); the anchors' digits.
+- **(g)** The Symbols page now gains rows for `γ` and the letter `m|s`, and a line defining *anchor*, *lifting* and *absorption* in words.
+- **(h)** §2 now says why: "(a number 2 more than a multiple of 4 is twice an odd number)".
+
+**Cold read 4 (46 items): 41 fixed, 1 partly, 4 not fixed.**
+
+| Items | Status | Note |
+|---|---|---|
+| 1, 2, 4, 5, 6 | fixed | abstract: orbit glossed; "three numbers describing the step"; the conjecture split, with "admissible" glossed; closeness measure glossed; minimax in plain words |
+| 3 | partly | the anchor is now described on the Symbols page and in §4 (a fixed binary string belonging to ω, all zeros for ω = 1, Definition C.1). How it is computed stays in Appendix C, because the main text keeps no 2-adic arithmetic |
+| 7 | not fixed | DOI placeholder, filled at minting (PIN-AT-BUILD) |
+| 8, 9 | not fixed | Author's note, verbatim |
+| 10 | not fixed | the version note stays in the front matter (earlier rounds' decision) |
+| 11, 12, 13 | fixed | Symbols: anchor/lifting/absorption; `n` as a sum; `K` as `n` plus the exit valuations |
+| 14–24 | fixed | §1: sentence split; trivial cycle; "exit rule"; "determine"; minimax; proof/check scope; "It does not prove that …"; Brox; "no claim about their closeness measure"; descent and drift glossed; "stray from the coin pattern" |
+| 25–29 | fixed | §2–§3: twice an odd number; "not counting its first"; split sentence; "a block of one odd number (m = 1)"; parenthesis |
+| 30, 31, 32 | fixed | §4: ω is odd, so the remainders are 1, 3, 5, 7; lifting defined in words; "s = 2 is even" |
+| 33–38 | fixed | §5: Rhin glossed and Brox credited; three sentences; near-cycle glossed; "fails at least one"; `n` as a sum; `γ` defined in words; "Theorem D.6(i)" |
+| 39, 40, 41, 42 | fixed | §6: list and admissible; "shrinks to zero"; the reason for the base case; letters `m\|s` |
+| 43 | fixed | §7 in plain words |
+| 44, 45, 46 | fixed | §8: density and 3-adic glossed; the three terms said to be "for objects of Sections 2–3", with only "skeleton rows" attributed to Williams; row = (skeleton, depth) |
+
+**Paraphrases to check against the ledger:**
+- §1 (3), the cycle correspondence (C-2.3(c));
+- the abstract's and §1's "the best worst case over block depths allowed to be any real numbers" (C-Abs.13, C-4.thr.6);
+- §5 "that there are only finitely many was first proved by Brox" (C-RW.15);
+- §5's `γ` in words, "the gap between the two powers is 2^K divided by 2^γ" (C-4.cfg(a), `q = 2^{K−γ}`);
+- §6's "admissible" (C-5.adm, in words);
+- §8's depth/skeleton sentence (C-RW.23).
+
+**Pages (45):**
+- front matter pp. 1–3;
+- Symbols at a glance p. 3;
+- §1 pp. 4–6;
+- §§2–8 pp. 6–12 (sections ≈ 9 pp);
+- Technical summary pp. 12–13;
+- Appendices A–I pp. 13–44;
+- references pp. 44–45.
+
+**Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean.
+
 ## 8. Record
 
 **Commits** (branch `paper1-v4-readable`, base `46e7464`):
