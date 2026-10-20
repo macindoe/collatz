@@ -442,6 +442,44 @@ Branch `paper1-v4-readable-2`, head `c9ef1bb` at the start of the round. The inp
 
 **Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean.
 
+## 7e. Readability round 5 (option A)
+
+Branch `paper1-v4-readable-2`, starting from `e0da786` (which adds cold read 3). The author chose option A on 2026-10-20. Presentation only. Content commit `ee20c3a`.
+
+**Restructure.** §§4, 5 and 6 are now one page each, in four parts: what is claimed, why it matters, one worked example, and the full account. Everything else they carried moved, in its round-4 wording with the fixes below, into a plain-language "A guided account" at the start of Appendices C, D and E, before the formal statements ("The formal statements" in C and D; in E, the existing subsections from "The window law" on). The guided accounts carry exactly what §§4–6 carried in round 4, so every ledger location that round 4 put in §§4–6 is now in the matching guided account. §7 is now one paragraph. "How to read" describes the new shape. The Symbols page drops `q`, `γ`, `X₀`, `p₁(X₀)`, which no longer appear in the main text, and points to the appendices for them.
+
+**Round-4 scope check (`98665e3`), all four fixes applied:**
+1. §1: "that is not the same as saying that almost no orbits misbehave".
+2. App E guided account: "a question about the digits of the anchors … — in the usual terms, digits of 2-adic logarithms of whole numbers … — and questions of that kind are older and broader than the Collatz problem". §7 attaches the phrase the same way.
+3. App D guided account: Lemme 4's extra term is now "larger throughout this range than 2 to the power (n times the shrinking factor)".
+4. App E guided account: the clause ", which the sharper control set aside" is dropped.
+
+**Cold read 3's four inconsistencies:**
+- **(a)** §1 (ii) now reads "the number of halvings, beyond the first, that end each block". §4 uses the same wording.
+- **(b)** The `p = 7` staircase is v3's instance: it is in v3's `.tex` with `γ = 6.74`. Its `γ` lies outside part (i)'s bracket `[3.683012, 5.140212]`; part (i) covers `p ≥ 16` by proof and `3 ≤ p ≤ 15` in the same bracket. It is Theorem D.6(iv), from `uniform_trim.py`. §5 and the App D guided account now both say "v3's instance, … not a member of the family of part (i), whose closeness measure lies between about 3.68 and 5.14 — this one's is 6.74". Checked against v3 and Appendix D before writing.
+- **(c)** §8 now reads "Section 4 answers it in part. It gives exact laws for where a trajectory leaving a row lands — the exit valuation and the entry position, and hence which row is entered. It gives no law for which skeleton is entered: on that question, F only restates Williams's Proposition 3.10." Only that sentence of the provenance paragraph changed.
+- **(d)** The 62,937 sentence is left in place and marked `% PENDING-REVERIFY` in all three places it lives: App C's guided account, before Remark C.6, and before App G's table.
+
+**The new main-text §§4–6, ledger-relevant paraphrases to check:**
+- **§4.** Claimed: exact rules for `s` (eight kinds; six fixed at 1 or 2; lifting `s ≥ 3`, from the anchor's digits), for the factor of 3 (exactly when `s` is even), and for the next depth; and the window never errs (C-3.3, C-3.4, C-3.5, C-3.7, C-3.8). Why: the digit budget, "stated as a heuristic and not proved" (C-3.9, N-1); "the difficulty sits in one place" (C-Int.14).
+- **§5.** The trim's history in one line; "with Rhin's theorem it leaves only finitely many candidates at each p" (C-4.5(c)); the rederivations (C-4.4, "no cycles other than 1, 4, 2, 1"); the staircase scope: "every choice of starting block, from 3 on (16 by proof, 3–15 by computer check; 2 and 4 examples without that range)", and the threshold clause without symbols (C-Abs.11–12, C-4.6). Why: divisibility, Halbeisen–Hungerbühler, "every one tested fails", "none bears on whether cycles exist" (C-4.6.close, C-4.ver(c)(d)).
+- **§6.** The conjecture, with budget, horizon, admissibility and every finite length kept (C-Abs.15, C-5.1); "part of it is proved … (the unconditional base case; proof assembled in the project record, Appendix G)" (C-5.thm); "its consequences are proved on the condition that it holds" (C-Abs.16); "says nothing about where any single orbit ends up" (N-15).
+
+**Pages (44):**
+- front matter and Symbols at a glance pp. 1–3;
+- §1 pp. 3–6;
+- §§2–3 pp. 6–8;
+- §4 p. 8;
+- §5 p. 9;
+- §6 pp. 9–10;
+- §§7–8 pp. 10–11;
+- **main text ≈ 9 pp of sections (pp. 3–11)**;
+- Technical summary pp. 11–12;
+- Appendices A–I pp. 12–43;
+- references pp. 43–44.
+
+**Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean.
+
 ## 8. Record
 
 **Commits** (branch `paper1-v4-readable`, base `46e7464`):
