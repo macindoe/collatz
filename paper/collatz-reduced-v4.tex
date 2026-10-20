@@ -31,7 +31,7 @@
 \setlength{\emergencystretch}{3em}
 % DOI: replace the placeholder below with the v4 version-specific DOI once it is minted
 % (it is used on the title page and in the Version note).
-\newcommand{\vfourdoi}{\textbf{[v4 version DOI]}}
+\newcommand{\vfourdoi}{\href{https://doi.org/10.5281/zenodo.23501162}{10.5281/zenodo.23501162}}
 % PIN-AT-BUILD: replace with the commit of the public record at which every wiki section and
 % script named in this paper is cited (the record's main is not yet pushed; do not cite an
 % unreachable commit as reachable). Used in Appendix D ("Verification and record") and Appendix A.
@@ -253,6 +253,8 @@ In these coordinates one step is under exact control: the anchor governs it, apa
 \item \emph{Following windows step by step.} Study how one exact window of Theorem~\ref{thm:onestep} leads to the next, treating the sequence as a chain (the mathematical method called transfer operators).
 \item \emph{The anchors' digits.} Any progress on the digits of the anchors --- in standard terms, digits of $2$-adic logarithms of whole numbers (Appendix~\ref{app:laws}) --- a problem this paper inherits rather than creates.
 \end{itemize}
+
+The map run backwards is worked out in a companion paper \cite{mirror}: the predecessors of every state, the states with none, and a lower bound on how many starting values reach $1$, from the backward tree. Work on the problem from the backward direction should start there.
 
 \section{Credit and provenance}\label{sec:credit}
 
@@ -1149,6 +1151,7 @@ $\nu$ & a per-start empirical law & ``Calibration'' \\
 \bibitem{hh} L.~Halbeisen, N.~Hungerb\"uhler, \emph{Optimal bounds for the length of rational Collatz cycles}, Acta Arith.\ 78 (1997), no.~3, 227--239; DOI 10.4064/aa-78-3-227-239.
 \bibitem{brox} T.~Brox, \emph{Collatz cycles with few descents}, Acta Arith.\ 92 (2000), no.~2, 181--188; DOI 10.4064/aa-92-2-181-188.
 \bibitem{ladue} M.~D.~LaDue, \emph{Clusters of integers with equal total stopping times in the $3x+1$ problem}, Fibonacci Quart.\ 56 (2018), no.~2, 156--162; DOI 10.1080/00150517.2018.12427710; arXiv:1709.02979.
+\bibitem{mirror} B.~Macindoe, \emph{The $3$-adic mirror of the reduced Collatz dynamics: duality, dead ends, and a density bound}, preprint, Zenodo DOI 10.5281/zenodo.21303918 (July 2026).
 \bibitem{williams} J.~Williams, \emph{A Coordinate System for Collatz Dynamics}, arXiv:2607.01718v1 (2 July 2026); DOI 10.48550/arXiv.2607.01718.
 \bibitem{sos} V.~T.~S\'os, \emph{On the distribution mod~1 of the sequence $n\alpha$}, Ann.\ Univ.\ Sci.\ Budapest.\ E\"otv\"os Sect.\ Math.\ 1 (1958), 127--134.
 \bibitem{swierczkowski} S.~\'Swierczkowski, \emph{On successive settings of an arc on the circumference of a circle}, Fund.\ Math.\ 46 (1958), 187--189; DOI 10.4064/fm-46-2-187-189.
