@@ -5,7 +5,7 @@ updated: 2026-10-20
 source: sources/drafts/collatz_reduction_rewrite_v078.md (last monolith)
 ---
 
-> **Current state.** Stage 3: decomposition of C. The 3-adic absorption law for a_+, the target-shift lemma, the entry-depth law for m_+ on all six residue-parity classes, and the per-step depth law d_+ = m_+ + a_+. Independently re-verified numerically (exhaustively on all 63,000 valid states with ω < 3000, 1 ≤ d < 64, ω = 1 included, 2026-10-20 — §11.8.6.3; 8,000 random states re-checked 2026-07-06).
+> **Current state.** Stage 3: decomposition of C. The 3-adic absorption law for a_+, the target-shift lemma, the entry-depth law for m_+ on all eight residue-parity classes (the two lifting components and the six classes of Theorem `11.8.6.3.5`), and the per-step depth law d_+ = m_+ + a_+. Independently re-verified numerically (exhaustively on all 63,000 valid states with ω < 3000, 1 ≤ d < 64, ω = 1 included, 2026-10-20 — §11.8.6.3; 8,000 random states re-checked 2026-07-06).
 
 ### 11.8.6. Stage 3: First Decomposition of `C`
 
@@ -600,7 +600,7 @@ Nondegeneracy: `d - M(ω) = 0` would force `9^d ω^2 = 1`, hence `(ω, d) = (1, 
 d_+ = m_+ + a_+,
 ```
 
-with `m_+` given exactly by Theorems `11.8.6.3.3` and `11.8.6.3.5` on all six residue-parity classes, and `a_+ = v_3(C)` given exactly by the `3`-adic absorption law of `11.8.6.2`. Stage 3 is therefore closed at the valuation level, per reduced step, on the entire state space.
+with `m_+` given exactly by Theorems `11.8.6.3.3` and `11.8.6.3.5` on all eight residue-parity classes (the two lifting components and the six classes of Theorem `11.8.6.3.5`), and `a_+ = v_3(C)` given exactly by the `3`-adic absorption law of `11.8.6.2`. Stage 3 is therefore closed at the valuation level, per reduced step, on the entire state space.
 
 **Interpretation.** Three readings of the entry-depth law deserve emphasis.
 
