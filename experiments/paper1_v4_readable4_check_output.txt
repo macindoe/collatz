@@ -1,0 +1,95 @@
+paper1_v4_readable4_check.py -- round 4 (190b6af) against round 3 (cbcc8b8)
+
+A. The round-3 check's 12 fixes and navigation notes
+  PASS  1 abstract: no cycles other than 1, 4, 2, 1 (one, two or three blocks)
+  PASS  1/7 section 1 (v): no cycles other than 1, 4, 2, 1
+  PASS  2 abstract: odd steps (multiplications by 3)
+  PASS  3 abstract: measure of closeness exceeds the bound's own exponent
+  PASS  4 abstract: of every length at once
+  PASS  5 abstract: record's length a fixed multiple of the bit length
+  PASS  6 abstract: shows the fair-coin conjecture holds outright (proof assembled in the record)
+  PASS  8 section 4: the three outcomes run along real orbits, not 'so were'
+  PASS  9 section 5: multiplications by 3 (the larger n)
+  PASS  10 section 5: weaker at seven than at three; exponential weakening is part (i)
+  PASS  11 section 5: every one tested fails divisibility
+  PASS  12 section 4: no cost claim
+  PASS  nav: symbols page names p-adic and m-cycle
+  PASS  nav: running example Sections 2-4, blocks return in 6
+  PASS  nav: section 8 cascade gloss
+  PASS  nav (optional): H25 proportion of odd steps
+  PASS  nav: Appendix I says 'before Section 1'
+  PASS  no aeh.md / briefs/ pointers left in sections 1-8
+  PASS  ledger unchanged between cbcc8b8 and 190b6af
+
+B. Unchanged text
+  PASS  Version note + Author's note identical
+  PASS  \appendix .. Symbol index (Technical summary, App A-H) identical   [83080 chars]
+  PASS  Appendices B-E identical   [63660 chars]
+  PASS  Appendix I: exactly one token changed, after -> before   [[('after', 'before')]]
+
+C. Worked numbers new in round 4
+  PASS  sec 2: x = 3 mod 4 (x < 200001): 3x+1 halves exactly once and (3x+1)/2 > x
+  PASS  sec 2: 3*8 = 24, 22 = 24-2 -> 11
+  PASS  sec 3: after m-1 rising steps, x+1 = 2*w*3^(d-1) (odd x < 100001)
+  PASS  sec 3: 17 + 1 = 18 = 2 * 1 * 3^2 (d - 1 = 2 threes)
+  PASS  sec 3: odd x < 20001: state orbit reaches (1,1) and the number there is 1; fibre(1,1) = {1}
+  PASS  sec 4: printed table rows are those coded here
+  PASS  sec 4: eight-kind table and s >= 3 on lifting kinds   [40000 states, w < 3001, d <= 40]
+  PASS  sec 4: powers of 3 mod 8 are 3,1,3,1,...
+  PASS  sec 4: kind fixes 3^d w mod 8; lifting <-> 1; else 3,5,7 -> remainder 2,4,6 -> s = 1 or 2
+  PASS  sec 4: (1,3): 27 - 1 = 26 = 2*13, s = 1
+  PASS  sec 4: lifting kinds: s = 2 + (low digits on which d agrees with the anchor)   [10000 lifting states, w < 3001, d <= 40, anchor mod 2^64]
+  PASS  sec 4: the anchor of w = 1 is all zeros (mod 2^64)
+  PASS  sec 4: omega = 1 table d = 2,4,6,8 -> binary, trailing zeros 1,2,1,3 -> s = 3,4,3,5 (printed)
+  PASS  sec 4: 3^d - 1 = 8, 80, 728, 6560 = 8*1, 16*5, 8*91, 32*205
+  PASS  sec 4: (1,2): 3*5+1 = 16 halves four times = 1 + s, s = 3
+  PASS  sec 4: (1,3),(1,1) kind (1,odd) s = 1; (7,1) kind (7,odd) s = 2
+  PASS  sec 4: (exit+1)*2^s = 3^d w + 2^s - 1, its threes = a+, gain iff s even (w < 601, d <= 20)
+  PASS  sec 4: powers of 2 mod 3 are 2,1,2,1,...
+  PASS  sec 4: (7,1): s = 2, exit 5, (5+1)*4 = 24 = 21 + 3, next state (1,2), a = 1
+  PASS  sec 4: s = 1 and s = 3 blocks gain none
+  PASS  sec 4: next depth from (7,1): 5+1 = 6 = 2*3, entry depth 1, absorption 1, next depth 2
+  PASS  sec 4: next entry depth never below 1 (w < 601, d <= 20)
+  PASS  sec 4: under the model E[s] + E[m+] + 2 = 6 (so 'window depth plus 6')
+  PASS  sec 4: '8,000' in main text and in ledger C-3.6/C-3.10
+  PASS  sec 4: '62,937' in main text and in ledger C-3.6/C-3.10
+  PASS  sec 4: '327,980' in main text and in ledger C-3.6/C-3.10
+  PASS  sec 4: '21,296' in main text and in ledger C-3.6/C-3.10
+  PASS  sec 4: 'w below 3000 and d below 64' matches the ledger's w < 3000, d < 64
+  PASS  sec 5: 0.1157 * 94 - 2 = 8.8758 (printed 'about 8.9')
+  PASS  sec 5 (b): gamma < 1 + (13.3/ln 2)(0.46057 + ln n) at every n <= 20000 and at the convergent denominators up to Q_69 (Rhin in gamma terms: a fixed multiple of log n)   [max gamma/bound = 0.203307]
+  PASS  sec 5 (c): n0(p)/(p L^p) bounded over p = 2..60 and non-increasing (order p times 1.585^p)   [from 63.455 at p = 2 down to 21.92 at p = 60]
+  PASS  sec 5: p1 = 10 at X0 = 1, 2, 10, 16   [{1: 10, 2: 10, 10: 10, 16: 10}]
+  PASS  sec 5: p1 = 22 for X0 = 2^8 .. 2^12 (sampled 8, 9, 10, 10.5, 11, 12)   [[22, 22, 22, 22, 22, 22]]
+  PASS  sec 5: p1 = 36 at 2^20, 98 at 5*2^60, 110 at 2^71, 309 at 2^200   [(36, 98, 110, 309)]
+  PASS  sec 5: p1 never decreases (X0 = 2^(e/4), e = 0..800, plus 5*2^60)   [802 points, p1 from 10 to 309]
+  PASS  sec 5: p1 computed at every 2^j, j <= 200; p1 - log_L X0 in the ledger's [2.783, 10.630]   [min 2.7839895 at j=143, max 10.629477 at j=74]
+  PASS  sec 5: the record's committed output covers every j <= 200
+  PASS  sec 5: 2^-(lambda0 + 1.5) = 0.0540... >= 0.054 (unchanged constant, recomputed)   [0.054051848]
+  PASS  sec 6: in 7 runs of 1024 consecutive integers, every pattern with fewer than ten halvings (start's block included) occurs exactly its fair-coin share 2^-S of the 512 odd numbers   [255 patterns]
+  PASS  sec 6: each such pattern is one residue class mod 2^(S+1), a power of 2 at most 2^10 (odd x < 2^15)
+  PASS  sec 6: the running example's letters (3,1),(1,2),(1,3),(1,1); blocks of 7 return
+
+D. Witnesses for the findings
+  PASS  witness (finding 4.5): valid states with w < 3000, 1 <= d < 64 number 63000, not 62,937; excluding w = 1 gives 62937
+  PASS  witness (finding 4.3): at every X0 = 2^j, j <= 200, p1 > g + 1 - lambda0 >= kappa_p n, so 2^p exceeds 2^(kappa_p n) (the ledger's comparand)   [min margin 6.62205]
+  PASS  witness (finding 4.4): section 6 adds 'which the sharper control set aside'; Appendix E and the ledger do not
+  PASS  witness (finding 4.4): aeh.md names the controls 'larger starts, per-orbit statistics, bulk/bottom separation'
+  PASS  witness (finding 4.2): section 6 'older and broader' now attaches to 'the digits of the anchors'
+  PASS  witness (finding 4.1): not-claimed bullet says 'weaker than'; ledger says 'not a null set of orbits'
+  PASS  witness (finding 4.3): Lemma 4 clause has no comparand in the main text; ledger has 2^(kappa_p n)
+
+E. Negative controls
+  CTRL rejected  omega = 1 table with d = 6 -> s = 4
+  CTRL rejected  table cell (5, even) -> s = 1
+  CTRL rejected  exit of 13 is 7 / (5+1)*4 = 25
+  CTRL rejected  p1(2^20) = 35
+  CTRL rejected  a decreasing sequence passes the monotonicity test
+  CTRL rejected  gamma < 1 + ln n (multiplier 1) at n = 41   [gamma(41) = 6.45514]
+  CTRL rejected  n0(p) of order 1.585^p alone (n0/L^p bounded by its p = 10 value)   [n0/L^p = ['388.1', '768.7', '1315.0']]
+  CTRL rejected  exact fair-coin share at S = 10 in a run of 1024
+  CTRL rejected  62,937 is the full count of valid states w < 3000, d < 64
+  CTRL rejected  p1 > log2 X0 + 200 throughout (a comparand that fails)
+  CTRL rejected  Appendices B-E unchanged detects a one-character edit
+
+Totals: 71 checks, 0 failures; 11 controls, 11 rejected, 0 not rejected.
