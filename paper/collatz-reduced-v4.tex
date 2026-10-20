@@ -86,7 +86,7 @@ Symbol & Meaning & Introduced \\
 $x$ & an odd number of an orbit; in the running example, $x = 7$ & \S\ref{sec:block} \\
 $T$ & the Collatz map on odd numbers: multiply by $3$, add $1$, halve until odd & \S\ref{sec:block}; App.~\ref{app:reduced} \\
 $m$ & a block's \emph{entry depth}: how many times $2$ divides $x+1$ (the number of trailing $1$s of $x$ in binary) & \S\ref{sec:block} \\
-$s$ & a block's \emph{exit valuation}: how many halvings, beyond the first, end the block & \S\ref{sec:block} \\
+$s$ & the \emph{exit valuation}: how many halvings, beyond the first, end every block of a given state & \S\ref{sec:block} \\
 $a$ & how many factors of $3$ are left in $x+1$ after the factors of $2$ are removed & \S\ref{sec:reduced} \\
 $\w$ & the \emph{odd core}: what is left of $x+1$ after removing every factor of $2$ and of $3$ & \S\ref{sec:reduced} \\
 $d$ & the \emph{depth}: $m$ plus $a$ & \S\ref{sec:reduced} \\
@@ -176,7 +176,7 @@ This mechanism is classical (Steiner \cite{steiner}; see also Rozier \cite{rozie
 
 \paragraph{Why the state is enough.} After the $m-1$ rising steps, one more than the current number is $2$ times $\w$ times $3$ to the power $d - 1$. The reason: $x+1$ had $a$ factors of $3$, and each of the $m - 1$ rising steps added one more, $d-1$ in all. That number depends only on $\w$ and $d$, so the cascade, and the exit, depend only on them too (Proposition~\ref{prop:block}(ii)). In the example, $17 + 1 = 18$ is $2$ times $\w = 1$ times $3^2$, with $d - 1 = 2$ threes.
 
-So different odd numbers can share a state and exit at the same place; call them the state's \emph{representatives}. Exactly $d$ odd numbers have a given state $(\w, d)$, one for each way of writing $d$ as $m$ plus $a$ with $m$ at least $1$ (Proposition~\ref{prop:block}(iii)). For $(1,3)$ they are $7$ ($m = 3$), $11$ ($m = 2$, as $12$ is $4 \cdot 3$) and $17$ ($m = 1$, as $18$ is $2 \cdot 9$): the block of Section~\ref{sec:block} consists of exactly the numbers of its own state, and all three exit at $13$.
+So different odd numbers can share a state and exit at the same place; call them the state's \emph{representatives}. Exactly $d$ odd numbers have a given state $(\w, d)$, one for each way of writing $d$ as $m$ plus $a$ with $m$ at least $1$ (Proposition~\ref{prop:block}(iii)). For $(1,3)$ they are $7$ ($m = 3$), $11$ ($m = 2$, as $12$ is $4 \cdot 3$) and $17$ ($m = 1$, as $18$ is $2 \cdot 9$): the block of Section~\ref{sec:block} consists of exactly the numbers of its own state, and all three exit at $13$: $7$, $11$ and $17$ all end in the same cascade.
 
 \paragraph{The reduced map.} The exit is again odd and begins the next block, whose state is found the same way. The \emph{reduced map} $F$ sends each state to the state of the next block; Definition~\ref{def:reduced} gives it by formulas. For $x = 7$:
 \begin{itemize}
