@@ -1,0 +1,91 @@
+paper1_v4_readable6_check.py -- readability round 6 (final polish) scope check
+new = 73d51d4 (round 6), old = 56d6b3b (round 5 on main); TeX paper/collatz-reduced-v4.tex; ledger paper/collatz-reduced-v4-claims.md at 73d51d4
+
+PART A. The round-5 check's required fix and four optional notes
+  PASS  required fix (A-9): section 4 'Why it matters' carries the fix verbatim
+  PASS  required fix: the unhedged premise 'But each decided step uses up' is gone from the TeX
+  PASS  required fix: the hedge also reaches the premise in the order premise-after-label
+  PASS  optional (a): section 5 ties the closeness to size: 'and by less the larger the cycle's numbers are'
+  PASS  optional (b): 'use only this closeness, through the cycle's size conditions (Appendix D)'
+  PASS  optional (c): 'passing examples only' in section 5; 'without that range' gone
+  PASS  optional (d): section 6's conjecture keeps the tolerance ('every finite pattern of letters and every tolerance')
+  PASS  further note: App C guided account names experiments/depth_law_reverify.py in its 63,000 sentence
+  PASS  further note: App D guided account 'Apply it to the staircases of part (i)'; 'Apply it to the staircase,' gone
+  PASS  the claims ledger is unchanged between 56d6b3b and 73d51d4 (the baseline is the same)
+
+PART B. Unchanged text and formal statements
+  PASS  19 formal statement environments, all identical to 56d6b3b  [19 at 56d6b3b, 19 at 73d51d4]
+  PASS  Technical summary identical  [3540 chars]
+  PASS  Version note and Author's note identical
+  PASS  front matter before the abstract identical
+  PASS  from \appendix on, exactly 3 non-blank lines differ, each inside a guided account (C, D, E)  [3 old / 3 new]
+        changed: \paragraph{Checks.} The valuation, entry-depth and absorption laws were checked by independently written code, with zero ...
+        changed: Why this makes the fading unavoidable: a trim of this shape says that, for every size-passer, $\gamma$ plus the base-$2$ ...
+        changed: \paragraph{Letters and the model.} Read each block as a \emph{letter}, written $m|s$: the block's entry depth and exit v ...
+  PASS  appendices: 56d6b3b with exactly the 5 declared phrase edits equals 73d51d4  [missing []]
+  CONTROL rejected  a one-character edit inside Theorem C.5 passes as unchanged
+
+PART C. Changed-sentence inventory (abstract, Symbols page, sections 1-8, guided accounts)
+  PASS  every changed sentence (78) matches exactly one inventory entry  [0 unmatched/ambiguous: []]
+  PASS  every inventory entry matches exactly one changed sentence  [[]]
+  inventory: 78 changed sentences; 4 navigation (not counted); 74 counted: 71 same, 3 scope changed, 0 unsupported
+     AB-7   SCOPE rows C-Abs.15, C-5.adm, C-5.1: The conjecture is that these pairs occur, for patterns of every finite length, with the frequencies of independent fair-coin counts --- for every admi
+     I-nav  nav   rows C-3.3 (pointer): (This is the exit rule of Section~\ref{sec:anchor}; Theorem~\ref{thm:vlaw}.)
+     C-6    SCOPE rows C-4.5(c)(d), C-RW.15, C-4.5.cr: Combined with Rhin's theorem --- a classical limit on how close a power of $2$ can come to a power of $3$ --- it leaves only finitely many possible cy
+     C-nav  nav   rows -: The paper does three things here.
+     H-7    SCOPE rows C-5.adm, C-5.cons: Call a choice of the two multiples \emph{admissible} when the record fits inside the budget on the model's own average (four halvings per block) and t
+     O-nav  nav   rows C-D.3 (heading): Three directions are open:
+     P-nav  nav   rows C-RW.1-11 (pointer): Related work --- results about almost all starting values (`density results'), comparisons with other work on divisibility by powers of $3$ (`$3$-adic
+  PASS  the scope-change verdicts are exactly AB-7, C-6, H-7
+  PASS  every ledger row named in the inventory exists in the ledger at 73d51d4  [[]]
+  PASS  ledger C-5.adm: protection quantifies 'all but a vanishing density of starts'
+  PASS  ledger C-RW.15 says 'Brox proved finiteness for each `p`' (no priority word)
+  PASS  record: Rozier 1991, p. 8, Theoreme -- finitely many cycles for each number n of odd/even alternations (9 years before Brox)
+  PASS  App D guided account itself dates Rozier's bound 1991 and Brox's finiteness 2000
+  PASS  Symbols page: 'Section 1 and the abstract use none of them' still holds
+  PASS  Symbols page parenthesis still lists gamma among appendix-only symbols although gamma is now in the table and in section 5 (optional note)
+
+PART D. Worked numbers, fresh
+  PASS  section 2: every number 2 more than a multiple of 4 (below 10^5) is twice an odd number
+  PASS  section 2: x = 7: 3*8 = 24 is a multiple of 4, 22 = 24 - 2 halves once, to 11
+  PASS  section 3: after the m - 1 rising steps, y + 1 = 2 * w * 3^(d-1), and a + (m - 1) = d - 1 (odd x < 200001)  [0 mismatches]
+  PASS  section 3: 13 + 1 = 14 = 2*7, state (7,1), a block of one odd number (m = 1); 40 halves three times (s = 2) to 5
+  PASS  section 3: 5 + 1 = 6 = 2*3, state (1,2), again m = 1; 16 halves four times (s = 3) to 1
+  PASS  section 3: the only number with state (1,1) is 1 (a depth-1 state has exactly one representative); F(1,1) = (1,1)
+  PASS  section 4: odd w leaves remainder 1, 3, 5 or 7 on division by 8
+  PASS  section 4: lifting in words (w = 1 mod 8 with d even, or 3 mod 8 with d odd) is exactly 3^d w = 1 mod 8  [0 mismatches]
+  PASS  section 4: (7,1) is of kind (7, odd), s = 2, even; next state (1,2) gains a factor of 3 (a = 1); 6 = 2*3
+  PASS  section 5: n = 94 is the sum of the entry depths; exit valuations total 55; K = 94 + 55 = 149
+  PASS  section 5: gamma in words -- the gap 2^K - 3^n equals 2^K divided by 2^gamma (relative error < 1e-12)  [gamma = 6.743758]
+  PASS  section 5: gamma = 6.74 (2 decimals), outside part (i)'s range [3.683012, 5.140212]
+  PASS  gloss sanity: larger gamma = closer approach (trivial cycle K = 2, n = 1: gap 1 = 4 / 2^2, gamma = 2 < 6.74)
+  PASS  section 5: all seven size conditions q <= R_r hold
+  PASS  section 5: 'fails at least one of these divisibility conditions' -- q | R_r at 0 of 7 rotations
+  PASS  section 5: Rhin's limit (K log 2 - n log 3 > exp(-13.3(0.46057 + log n))) is respected by the staircase  [Lambda = 9.3748e-03, Rhin bound = 1.2505e-29]
+  PASS  section 5: Lambda = -log(1 - 2^-gamma) > 2^-gamma (closeness in the paper's two forms)
+  PASS  section 6 / App E: letters of the orbit of 7 are 3|1, 1|2, 1|3, 1|1 (then 1|1 forever)  [[(3, 1), (1, 2), (1, 3), (1, 1), (1, 1), (1, 1)]]
+  PASS  section 6: the blocks are 7, 11, 17; then 13; then 5; then 1
+  PASS  section 6: P(1|2) = 1/2 * 1/4 = 1/8
+  PASS  base case: each pattern of first blocks (counting the start's own) with S + 1 <= 16 is ONE residue class mod 2^(S+1)  [16383 patterns over odd x < 2^20]
+  PASS  base case: each such class occurs exactly 2^(20-S-1) times below 2^20, i.e. in its coin share 2^-S = prod 2^-(m+s)
+  PASS  base case: in 3 random windows of 2^16 consecutive integers, every pattern with S + 1 <= 16 occurs exactly in its coin share
+  PASS  admissibility witness: x = (2^42 - 1)/3 is an odd start in [2^40, 2^41)
+  PASS  admissibility witness: its first block ends at 1 after 42 halvings, inside the budget ceil(1.1 * 40) = 44 halvings
+  PASS  so 'the budget keeps the orbit away from the small numbers' read for every start fails at tau = 1.1 (while every tau < 4.8188... is protected for all but a vanishing share, C-5.prot)
+  PASS  consistency in words: 'the record fits inside the budget on the model's average (four halvings per block)' = 4 * theta < tau; under the coin model E[m] = E[s] = 2
+  PASS  minimax gloss: over real block depths of sum n, the best worst case max_j (m_j - (L-1)(m_0+...+m_(j-1))) is kappa_p n, attained by the geometric tuple of ratio L (p = 3..8, n = 1000)  [p=3: kappa_p n = 196.1912, min over 3000 random real tuples = 205.9832; p=4: kappa_p n = 110.1484, min over 3000 random real tuples = 139.2264]
+  PASS  section 8: Section 4's laws give the exit valuation s, the entry position (m+, a+) and so the depth k = d+ = m+ + a+ of the row entered (Theorem C.3, Theorem C.5, Lemma C.4 against F)  [5320 states w < 400, d <= 40; 0 mismatches]
+  PASS  section 8: the same (s, m+, a+, d+) occurs with different skeletons w+ (the laws do not fix the skeleton)
+
+PART E. Negative controls
+  CONTROL rejected  the pattern 1|1 is the FULL residue class mod 2^S (rather than one class mod 2^(S+1))
+  CONTROL rejected  letters of 7 with 1|2 replaced by 2|1
+  CONTROL rejected  K = 148 for the staircase
+  CONTROL rejected  q | R_r at some rotation of the staircase
+  CONTROL rejected  protection for every start at tau = 1.1 (no start reaches 1 inside the budget)
+  CONTROL rejected  the ratio-2 geometric tuple also attains the minimax value kappa_p n (p = 5)
+  CONTROL rejected  the depth of the row entered is the entry position m+ alone (absorption dropped)  [447 mismatches]
+  CONTROL rejected  gamma of the staircase lies inside part (i)'s range
+
+TOTAL: 56 checks passed, 0 failed; controls 9 rejected, 0 not rejected
+VERDICT: PASS
