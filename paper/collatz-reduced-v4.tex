@@ -143,17 +143,17 @@ The rest of the paper works at the third level: exact laws for one step (Section
 
 \emph{What this section is about.} Long stretches of a Collatz orbit are forced. This section shows the mechanism on one example, then states it in general. Everything else in the paper is built on it.
 
-From here on the paper writes $T$ for the map on odd numbers of Section~\ref{sec:intro}: multiply by $3$, add $1$, and halve until odd. Start from $x = 7$ and write each odd number of its orbit, and the number one above it, in binary:
+From here on the paper writes $T$ for the map on odd numbers of Section~\ref{sec:intro}: multiply by $3$, add $1$, and halve until odd. Start from $x = 7$ and write each odd number of its orbit, and the number one above it, in binary (the cascade row is the even number $26$, half of $3 \cdot 17 + 1$):
 \begin{center}
 \begin{tabular}{rrrrl}
 \hline
 step & $x$ & $x$ in binary & $x+1$ in binary & $x + 1$ factored \\
 \hline
-0 & 7 & \texttt{111} & \texttt{1000} & $2^3\cdot 3^0$ \\
-1 & 11 & \texttt{1011} & \texttt{1100} & $2^2\cdot 3^1$ \\
-2 & 17 & \texttt{10001} & \texttt{10010} & $2^1\cdot 3^2$ \\
+0 & 7 & \texttt{111} & \texttt{1000} & $2^3\cdot 3^0\cdot 1$ \\
+1 & 11 & \texttt{1011} & \texttt{1100} & $2^2\cdot 3^1\cdot 1$ \\
+2 & 17 & \texttt{10001} & \texttt{10010} & $2^1\cdot 3^2\cdot 1$ \\
 \hline
-\multicolumn{5}{c}{\emph{cascade:} $3\cdot 17+1 = 52 \to 26 \to 13$; a new block begins} \\
+cascade & 26 & \texttt{11010} & \texttt{11011} & $2^0\cdot 3^3\cdot 1$ \\
 \hline
 3 & 13 & \texttt{1101} & \texttt{1110} & $2^1\cdot 3^0\cdot 7$ \\
 \hline
