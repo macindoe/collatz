@@ -149,10 +149,13 @@ From here on the paper writes $T$ for the map on odd numbers of Section~\ref{sec
 \hline
 step & $x$ & $x$ in binary & $x+1$ in binary & $x + 1$ factored \\
 \hline
-0 & 7 & \texttt{111} & \texttt{1000} & $2^3$ \\
-1 & 11 & \texttt{1011} & \texttt{1100} & $2^2\cdot 3$ \\
-2 & 17 & \texttt{10001} & \texttt{10010} & $2\cdot 3^2$ \\
-3 & 13 & \texttt{1101} & \texttt{1110} & $2\cdot 7$ \\
+0 & 7 & \texttt{111} & \texttt{1000} & $2^3\cdot 3^0$ \\
+1 & 11 & \texttt{1011} & \texttt{1100} & $2^2\cdot 3^1$ \\
+2 & 17 & \texttt{10001} & \texttt{10010} & $2^1\cdot 3^2$ \\
+\hline
+\multicolumn{5}{c}{\emph{cascade:} $3\cdot 17+1 = 52 \to 26 \to 13$; a new block begins} \\
+\hline
+3 & 13 & \texttt{1101} & \texttt{1110} & $2^1\cdot 3^0\cdot 7$ \\
 \hline
 \end{tabular}
 \end{center}
