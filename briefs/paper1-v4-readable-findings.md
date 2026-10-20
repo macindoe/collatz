@@ -254,6 +254,232 @@ Nothing in the main text was found to strengthen a row on re-reading; two drafts
 
 **Build:** 3× in the temp dir, 33 pp, 0 undefined references, 0 overfull boxes. Encoding scan clean. Content commit `03fdf7b`.
 
+## 7b. Readability round 2 (branch `paper1-v4-readable-2`, base `c7c3c69`)
+
+**The author's verdict:** "still too clunky to read; e.g. χ is mentioned without introduction". Presentation only; no locked claim changed.
+
+**Main-text symbols.** §§1–8 now use only these: `x`, `T`, `m`, `s`, `a`, `ω`, `d`, `(ω, d)`, `F`, `p`, `n`, `K`, `q`, `γ`, `X₀`, `p₁(X₀)`. Each is introduced in words before it is used, and all are listed on the new "Symbols at a glance" page after §1. There is one exception: the provenance paragraph in §8 is kept verbatim, with its `x + 1 = 2^m 3^a ω`; its `(λ, k)` are introduced in the same sentence. Gone from the main text: `χ_t`, `σ`, `k`, `D`, `π_{k,D}`, `θ`, `τ`, `N`, `b`, `H_N`, `E_N`, `ε`, `X_N`, `J`, `S`, `M(ω)`, `ΔM`, `a₊`, `m₊`, `s₊`, `R_r`, `κ_p`, `λ₀`, `c_p`, `log₂3` as a symbol (now "1.585…, the base-2 logarithm of 3"), `x_exit`, `u`, `W`, `z`.
+
+**Formula sentences removed: 53**, counted by section: §1 3, §2 3, §3 5, §4 13, §5 19, §6 9, §7 1. Each is now said in words, and its pointer is kept. Every formula removed was already in the appendix statement it points to, with one set of exceptions: `T`'s formula, the definitions of `v₂` and `v₃`, and the rising-step identity `T(x) + 1 = (3/2)(x + 1)`. These moved into Appendix B's opening paragraph; that paragraph is the only text added to Appendices B–E. Constants in the main text are now either exact numbers quoted as numbers (`0.054`, `0.698`, the `p₁` values) or approximations marked "about" with the exact statement named (`3.68`/`5.14` for Thm D.6(i); `2.71`/`4.21` for `λ₀`, `λ₀ + 1.5`).
+
+**Paraphrases to check first** (main text only; the formal statements are unchanged):
+- §5 "Sharpness", bullet 2: "the base-2 logarithm of its least element lies within about the base-2 logarithm of `p` of `γ`", for `γ − 1 ≤ log₂(x_min + 1) < γ + log₂ p` (Thm D.6(ii)).
+- §5, bullet 1: "the factor in any trim of this shape that holds for every size-passer is smaller than 1.585… to the power `−p` times a quantity growing only like the logarithm of `p`", for `c_p < (5.140212 + log₂ p) L^{−p}`.
+- §4: "finitely many binary digits of `ω` and of `d`, together with the low digits of the absorption" (Thm C.7's exact residues).
+- §4 digit budget: "at most a number of decided steps proportional to its length" (`O(W/(k + 6))`).
+- §6: the coding fact, now "any run of consecutive integers whose length is a power of 2 … on the event that they have divided out fewer factors of 2 than the exponent of that power".
+- §6: "protected", now "above any level that grows more slowly than every fixed power of the starting size" (`log X_N = o(log N)`).
+
+**New:**
+- "Symbols at a glance": the main-text symbols with meaning and place, and the words used as names (block, anchor, configuration, size-passer, trim, letter).
+- **Appendix I, Symbol index:** every symbol of the paper, with meaning and defining location. Overloaded letters are listed once per meaning: `n`, `q`, `r`, `k`, `X₀`, `β`, `A`, `S_t`, `e_t`, `σ` (also "5σ"), `ε`.
+
+**Version note:** "Outside work that cites this paper's statements by number, including the cycle ledger shared with Eric Merle, cites v3, …" is now "For outside citations of this paper's statements by number, v3 remains the pinned citation." This is the author's decision.
+
+**Pages (37):**
+- front matter pp. 1–2;
+- §1 pp. 2–4;
+- Symbols at a glance p. 5;
+- §§2–8 pp. 5–14;
+- appendices A–I pp. 14–35 (I is pp. 33–35);
+- references pp. 35–37.
+
+Main text ≈ 13 pp.
+
+**Build and commits:**
+- **Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean.
+- **Content commit:** `35abcdb`.
+- **This record:** the following commit.
+
+## 7c. Readability round 3 (after the cold read, `briefs/paper1-v4-coldread-1.md`, 166 flags)
+
+Branch `paper1-v4-readable-2`, on top of `6eb5946`. The author gave the go-ahead on 2026-10-20. Presentation only; no locked claim changed. The appendices only received moved text: the technical abstract (verbatim, as the opening "Technical summary") and §8's contemporary-work paragraph (verbatim, at the end of Appendix F). One sentence of the technical abstract was dropped: "The main text tells each idea in words; …". It was my own round-1 addition, not a claim.
+
+**What changed, by the coordinator's items:**
+1. **Abstract.** It is now in plain language, with no symbols. The technical abstract is verbatim in "Technical summary" at the start of the appendices; it also serves as the Zenodo description.
+2. **Symbols at a glance.** It now sits after the Author's note and before §1, and now includes `λ`, `k`. Its claim is corrected: it lists every symbol used outside the appendices. The abstract and §1 now use no symbols. The "words used as names" paragraph is removed; each name is now defined where it is used.
+3. **Running examples.**
+   - **The orbit of 7** runs through §§2–5. §3 shows every transition: `(1,3)` exits at 13; `(7,1)` falls 40 → 5 with `s = 2`; `(1,2)` falls 16 → 1 with `s = 3`; `(1,1)` falls 4 → 1 with `s = 1`.
+   - **§4** checks each law on it: the valuation table, the lifting example `(1,2)`, the factor of 3 at `(7,1)` (`21 + 3 = 24`), and the next depth.
+   - **§5** uses two examples: the trivial cycle (`n = 1`, `K = 2`, `q = 1`, `γ = 2`, rotation number `= q`) and the `p = 7` staircase.
+   - **§6** writes the example's letters, `(3,1)`, `(1,2)`, `(1,3)`, `(1,1)`, and gives the tally example (40 digits, horizon rate 1/10, budget rate 1/2).
+4. **Gaps.** Each now has its one line of reason:
+   - why a rising step halves once;
+   - why the trade stops;
+   - why the exit depends only on `(ω, d)`: one more than the last rising number is `2 · 3^{d−1} · ω`;
+   - why exactly `d` numbers share a state;
+   - "nothing is lost", as three facts;
+   - why `s ≥ 3` on lifting kinds, and why `s` is fixed elsewhere (powers of 3 mod 8);
+   - "exactly when `s` is even" (powers of 2 mod 3);
+   - "`q` is at most each" (a positive multiple of `q` is `≥ q`);
+   - "consequently … intrinsic" (the trim applied to the staircase);
+   - the 1/3 rate (`1/4 + 1/16 + … = 1/3`);
+   - the mean of 4 halvings per block;
+   - why the averages are not controlled;
+   - budget rate below 1 ⟺ horizon rate below 1/4.
+5. **Jargon.** Each term is glossed at first use or removed from the main text. Long sentences are split into short ones and lists (§4's three outcomes, §5's history and sharpness, §6's "would not give" and the calibration).
+6. **§8.** The contemporary-work paragraph is in Appendix F. A plain paragraph before the provenance paragraph glosses its three terms (skeleton rows, representative fibre, intra-block cascade). "Her open problem" is now "Williams's open problem". The provenance paragraph is otherwise verbatim.
+7. **(d)** The staircase now reads "the exit valuations total 55; and so the halvings total `K = 94 + 55 = 149`". §5 says that a block halves `m + s` times, so `K = n + Σ s`. **(e)** §6 now has a paragraph "What is proved, and what is conjectured": the base case (budget rate below 1) is proved, assembled in the record; the rest is conjectured. §1's not-claimed bullet reads "a conjecture, apart from the range where it is proved".
+
+**Cold-read items: 157 fixed, 1 partly fixed, 8 not fixed.**
+
+| Items | Status | Note |
+|---|---|---|
+| 1–19 (abstract) | fixed | new plain abstract; the technical terms are in the Technical summary |
+| 20 (version note: theorem labels before content) | not fixed | the version note must list v3 → v4 changes, and the labels are links; its symbols are removed |
+| 21 (record sections) | fixed | "sections of the project record" |
+| 22 (pinned citation) | not fixed | the author's own wording (round 2) |
+| 23, 24, 25 (Author's note) | not fixed | verbatim, the author's voice; 24 is mitigated by Symbols at a glance directly after |
+| 26–51 (§1) | fixed | §1 rewritten without symbols; terms glossed or moved to their section |
+| 52–56 (symbols page) | fixed | moved before §1, completed, claim corrected, names paragraph removed |
+| 57–64 (§2) | fixed | reasons and worked numbers added; one-division map named |
+| 65–71 (§3) | fixed | reasons, transitions, three facts |
+| 72–76, 78–93 (§4) | fixed | |
+| 77 (no-shortcut sentence: no reason given) | not fixed | the record states it without proof (`briefs/williams-letter-findings.md`); a reason would add a claim |
+| 94–131 (§5) | fixed | 113 (55 vs 149) resolved by saying what `K` counts |
+| 132–155 (§6) | fixed | 143 resolved by "What is proved, and what is conjectured" |
+| 156–159 (§7) | fixed | 158: the costumes metaphor is kept, now glossed by the staircase sentence |
+| 160–162 (§8) | fixed | related work moved to App F |
+| 163 (mechanism "comes from … and is classical") | not fixed | verbatim provenance paragraph; §2 now separates the two |
+| 164 (skeleton rows, fibre, cascade, `λ`, `k`) | fixed | glossed in the paragraph before; `λ`, `k` in the symbols page |
+| 165 ("Her open problem …") | partly | "Williams's open problem"; the rest of the sentence is the verbatim provenance paragraph |
+| 166 (analytical superstructure) | not fixed | verbatim provenance paragraph |
+
+**New paraphrases to check against the ledger:**
+- the plain abstract, whole (C-Abs.1–18);
+- §1 "What is new" (v), "reaches the optimum Rozier identified (the minimax value of his extremal profile)" (C-Int.9);
+- §5: "a bound as strong as the three-block one would wrongly exclude this seven-block size-passer, and the requirement must weaken as the number of blocks grows" (C-4.6(iv)). The second clause is a reading of the example;
+- §5 history: Brox, "only finitely many cycles can have any given number of local minima" (C-RW.15);
+- §6: the base-case example, "among the odd numbers of any run of 1024 consecutive integers … each pattern of first blocks that uses fewer than ten halvings in all, counting the start's own block, occurs in exactly its fair-coin share" (C-5.base, `S + 1 ≤ J` with `J = 10`);
+- §6 "would not give", bullet 1 (C-5.union) and bullet 4 (C-5.exc, non-iteration);
+- §6: Inselmann's crossing, "for the range within which an orbit stays and for its average" (the trajectory envelope and first moment, C-5.Korec).
+
+**Pages (41):**
+- front matter pp. 1–2;
+- Symbols at a glance pp. 2–3;
+- §1 pp. 3–6;
+- §§2–8 pp. 6–17 (main text ≈ 16 pp);
+- Technical summary p. 17;
+- Appendices A–I pp. 17–39;
+- references pp. 39–41.
+
+**Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean. Content commit `c565330`.
+
+## 7d. Readability round 4
+
+Branch `paper1-v4-readable-2`, head `c9ef1bb` at the start of the round. The inputs were the round-3 scope check (`904dcc6:briefs/paper1-v4-readable-3-check-findings.md`) and cold read 2 (`briefs/paper1-v4-coldread-2.md`, 97 flags). Presentation only, apart from the scope fixes, which restore locked scope. The only appendix changes are the navigation fix in Appendix I and the paragraph that round 3 moved into Appendix F. Content commit `60522a7`.
+
+**Scope check, §4 (11 scope changes, 1 unsupported sentence): all done.**
+
+| Id | Done as |
+|---|---|
+| 1 (Ab10, I15) | "no cycles other than 1, 4, 2, 1" made of / with one, two or three blocks (abstract; §1 (v)) |
+| 2 (Ab11) | "how many odd steps (multiplications by 3)" |
+| 3 (Ab14) | "with their measure of closeness exceeding the classical bound's own exponent by at most a fixed amount" |
+| 4 (Ab16) | "ruling out cycles of every length at once needs divisibility" |
+| 5 (Ab17) | "the record's length, itself a fixed multiple of the start's number of binary digits" |
+| 6 (Ab19) | "shows that the fair-coin conjecture holds outright … (the proof is assembled in the project record)" |
+| 7 | = 1 |
+| 8 (A30) | "The three outcomes were run along real orbits, 21,296 steps, with zero errors" |
+| 9 (C22) | "the more multiplications by 3 a cycle has (the larger n)" |
+| 10 (C30) | "at seven blocks the requirement must be weaker than at three. (That it must weaken exponentially … is part (i) below.)" |
+| 11 (C50) | "The staircases pass every size condition, and every one tested fails the divisibility conditions." |
+| 12 (A11, unsupported) | "The law describes a step; it is not offered as a faster way to compute one." The cost claim and the `briefs/` pointer are gone. |
+
+**Navigation notes (4) and the optional one: all done.** The `p`-adic / `m`-cycle note is on the symbols page. The running example now "runs through Sections 2–4, and its blocks return in Section 6". Appendix I now says "before Section 1". The §8 gloss now says "elsewhere in this paper `cascade' means only the block's final burst of halvings". H25 now reads "for the proportion of its steps that are odd".
+
+**Coordinator items 2–6:**
+- **§4.** The section is rebuilt as:
+  1. the eight-kind table;
+  2. on six kinds `s` is the entry; on the two lifting kinds `s ≥ 3`, set by "a fixed binary pattern that belongs to ω";
+  3. the ω = 1 table, d = 2, 4, 6, 8 → s = 3, 4, 3, 5, checked by hand: `3^d − 1` = 8, 80, 728, 6560 = 8·1, 16·5, 8·91, 32·205;
+  4. "why the table holds";
+  5. only then, the name "anchor", with the pointer to Definition C.1.
+
+  "2-adic logarithm" and "infinite binary arithmetic" are gone from §4. "Anchor displacement" is replaced by "how `d` compares with the anchor (Theorem C.5)". The only remaining "2-adic logarithm" in the main text is in §7's third direction, glossed as "the digits of the anchors — in the usual terms, …". It keeps C-D.3's wording findable.
+- **§5.**
+  - The trim + Rhin step is now three numbered lines: (a) the trim, (b) Rhin's lower bound on how close the powers can be, (c) linear against logarithmic.
+  - Simons and de Weger's `m`-cycle is now "a p-cycle in Simons and de Weger's sense (their `m-cycle', …)".
+  - "One object" is now "in this one configuration, the cycle side and the ever-growing side of the problem meet".
+  - The trim is named and pointed to at its first use in §1 and in the §5 opening.
+- **§1.**
+  - "eight kinds" now reads "Section 4 sorts the states into eight kinds by two simple remainders".
+  - "three labels" is spelled out.
+  - "the trim" is introduced as "that Section 5 calls the trim".
+  - The one-line identity is marked "(stated in Section 5)".
+- **Out-of-paper pointers.**
+  - `aeh.md Lemma 13.2.4` → "Appendix E, 'The unconditional base case'; proof assembled in the project record, Appendix G".
+  - `aeh.md Proposition 13.2.5` → "Appendix E, 'What the hypothesis implies'; proof assembled in the project record, Appendix G".
+  - `briefs/williams-letter-findings.md` → removed with the cost claim.
+- **§7.** "A single question wearing two costumes" is now "one difficulty, seen from two sides", and the staircase is "a single configuration that belongs to both sides". The divisibility pointer is now Proposition D.1, with Theorem D.6 for "size alone cannot decide" (cold-read 92).
+
+**Cold read 2 (97 items): 73 fixed, 18 needed no fix, 6 not fixed.**
+
+| Items | Status |
+|---|---|
+| 1–5, 10–21, 24, 28–34, 36–46, 48–50, 53–55, 57–59, 61–68, 70, 72–74, 76, 78–86, 88–93 | fixed |
+| 9, 22, 23, 25, 26, 27, 35, 47, 51, 52, 56, 60, 69, 71, 75, 77, 87, 94 | no fix needed: the reader marked them READABLE or the arithmetic OK |
+| 6, 7 (Author's note) | not fixed: verbatim, the author's voice |
+| 8 (version chain) | not fixed: the version note must carry v3 → v4 |
+| 95, 96, 97 (provenance paragraph) | not fixed: verbatim, apart from round 3's "Williams's" |
+
+**Paraphrases to check:**
+- §4: "s is set by a fixed binary pattern that belongs to ω, running on to the left without end" (C-3.3(a));
+- §4: the next entry depth "by an exact formula in s and in how d compares with the anchor" (C-3.5);
+- §5: (b) "γ can grow at most like a fixed multiple of the logarithm of n", from Rhin's display in Thm D.5;
+- §5: "That multiplier currently depends on p" (C-4.thr.5);
+- §5: "(These are samples …; the record computes p₁(X₀) at every power of 2 up to 2^200)" (C-4.ver(a));
+- §6: "(1) and (2) … artifacts of including small starting values, which the sharper control set aside" (C-5.cal);
+- §6: the 1024-integer reason, "each such class equally often" (C-5.base).
+
+**Pages (42):**
+- front matter and Symbols at a glance pp. 1–3;
+- §1 pp. 3–6;
+- §§2–8 pp. 6–18 (main text ≈ 17 pp);
+- Technical summary p. 18;
+- Appendices A–I pp. 18–41;
+- references pp. 41–42.
+
+**Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean.
+
+## 7e. Readability round 5 (option A)
+
+Branch `paper1-v4-readable-2`, starting from `e0da786` (which adds cold read 3). The author chose option A on 2026-10-20. Presentation only. Content commit `ee20c3a`.
+
+**Restructure.** §§4, 5 and 6 are now one page each, in four parts: what is claimed, why it matters, one worked example, and the full account. Everything else they carried moved, in its round-4 wording with the fixes below, into a plain-language "A guided account" at the start of Appendices C, D and E, before the formal statements ("The formal statements" in C and D; in E, the existing subsections from "The window law" on). The guided accounts carry exactly what §§4–6 carried in round 4, so every ledger location that round 4 put in §§4–6 is now in the matching guided account. §7 is now one paragraph. "How to read" describes the new shape. The Symbols page drops `q`, `γ`, `X₀`, `p₁(X₀)`, which no longer appear in the main text, and points to the appendices for them.
+
+**Round-4 scope check (`98665e3`), all four fixes applied:**
+1. §1: "that is not the same as saying that almost no orbits misbehave".
+2. App E guided account: "a question about the digits of the anchors … — in the usual terms, digits of 2-adic logarithms of whole numbers … — and questions of that kind are older and broader than the Collatz problem". §7 attaches the phrase the same way.
+3. App D guided account: Lemme 4's extra term is now "larger throughout this range than 2 to the power (n times the shrinking factor)".
+4. App E guided account: the clause ", which the sharper control set aside" is dropped.
+
+**Cold read 3's four inconsistencies:**
+- **(a)** §1 (ii) now reads "the number of halvings, beyond the first, that end each block". §4 uses the same wording.
+- **(b)** The `p = 7` staircase is v3's instance: it is in v3's `.tex` with `γ = 6.74`. Its `γ` lies outside part (i)'s bracket `[3.683012, 5.140212]`; part (i) covers `p ≥ 16` by proof and `3 ≤ p ≤ 15` in the same bracket. It is Theorem D.6(iv), from `uniform_trim.py`. §5 and the App D guided account now both say "v3's instance, … not a member of the family of part (i), whose closeness measure lies between about 3.68 and 5.14 — this one's is 6.74". Checked against v3 and Appendix D before writing.
+- **(c)** §8 now reads "Section 4 answers it in part. It gives exact laws for where a trajectory leaving a row lands — the exit valuation and the entry position, and hence which row is entered. It gives no law for which skeleton is entered: on that question, F only restates Williams's Proposition 3.10." Only that sentence of the provenance paragraph changed.
+- **(d)** The 62,937 sentence is left in place and marked `% PENDING-REVERIFY` in all three places it lives: App C's guided account, before Remark C.6, and before App G's table.
+
+**The new main-text §§4–6, ledger-relevant paraphrases to check:**
+- **§4.** Claimed: exact rules for `s` (eight kinds; six fixed at 1 or 2; lifting `s ≥ 3`, from the anchor's digits), for the factor of 3 (exactly when `s` is even), and for the next depth; and the window never errs (C-3.3, C-3.4, C-3.5, C-3.7, C-3.8). Why: the digit budget, "stated as a heuristic and not proved" (C-3.9, N-1); "the difficulty sits in one place" (C-Int.14).
+- **§5.** The trim's history in one line; "with Rhin's theorem it leaves only finitely many candidates at each p" (C-4.5(c)); the rederivations (C-4.4, "no cycles other than 1, 4, 2, 1"); the staircase scope: "every choice of starting block, from 3 on (16 by proof, 3–15 by computer check; 2 and 4 examples without that range)", and the threshold clause without symbols (C-Abs.11–12, C-4.6). Why: divisibility, Halbeisen–Hungerbühler, "every one tested fails", "none bears on whether cycles exist" (C-4.6.close, C-4.ver(c)(d)).
+- **§6.** The conjecture, with budget, horizon, admissibility and every finite length kept (C-Abs.15, C-5.1); "part of it is proved … (the unconditional base case; proof assembled in the project record, Appendix G)" (C-5.thm); "its consequences are proved on the condition that it holds" (C-Abs.16); "says nothing about where any single orbit ends up" (N-15).
+
+**Pages (44):**
+- front matter and Symbols at a glance pp. 1–3;
+- §1 pp. 3–6;
+- §§2–3 pp. 6–8;
+- §4 p. 8;
+- §5 p. 9;
+- §6 pp. 9–10;
+- §§7–8 pp. 10–11;
+- **main text ≈ 9 pp of sections (pp. 3–11)**;
+- Technical summary pp. 11–12;
+- Appendices A–I pp. 12–43;
+- references pp. 43–44.
+
+**Build:** 3× in a temp dir, 0 undefined references, 0 overfull boxes. Encoding scan clean.
+
 ## 8. Record
 
 **Commits** (branch `paper1-v4-readable`, base `46e7464`):
