@@ -1,0 +1,199 @@
+paper1_v4_readable5_check.py -- readability round 5 (option A) scope check
+new = 678ebff (round 5), old = 190b6af (round 4); TeX paper/collatz-reduced-v4.tex; ledger paper/collatz-reduced-v4-claims.md at 678ebff
+
+PART A. The round-4 check's four fixes and cold read 3's four inconsistencies
+  PASS  R4-1 section 1: 'that is not the same as saying that almost no orbits misbehave'
+  PASS  R4-1 old 'weaker than saying' gone from the whole TeX
+  PASS  R4-2 App E guided account: the round-4 fix wording verbatim
+  PASS  R4-2 old 'and that question is older' gone
+  PASS  R4-2 section 7: 'digits of $2$-adic logarithms of whole numbers, of which the anchors are instances'
+  PASS  R4-2 'older and broader' twice (App E guided account; App E formal text), both after '2-adic logarithms', none in sections 1-8
+  PASS  R4-3 App D guided account: Lemme 4 comparand restored
+  PASS  R4-3 the comparand-less form gone
+  PASS  R4-4 ', which the sharper control set aside' gone from the whole TeX
+  PASS  R4-4 item (2) now ends 'both artifacts of including small starting values;'
+  PASS  CR3-a section 1 (ii): 'the number of halvings, beyond the first, that end each block'
+  PASS  CR3-a section 4: 'how many halvings, beyond the first, end the block'
+  PASS  CR3-a Symbols page row for s: 'how many halvings, beyond the first, end the block'
+  PASS  CR3-a old 'the number of halvings that end each block' gone
+  PASS  CR3-b section 5 marks the instance as v3's, outside 3.68-5.14, with 6.74
+  PASS  CR3-b App D guided account marks it the same way
+  PASS  CR3-b v3's TeX carries the instance m = (4,7,9,15,23,35,1) with gamma = 6.74
+  PASS  CR3-b ledger C-4.6(i)a bracket is 3.683012 <= gamma <= 5.140212
+  PASS  CR3-c section 8: three sentences as recorded in 7e
+  PASS  CR3-c old self-contradicting wording gone
+  PASS  CR3-d no PENDING-REVERIFY marker remains
+  PASS  CR3-d 62,937 no longer appears in the TeX
+
+PART B. Unchanged text
+  PASS  plain abstract identical  [4178 chars]
+  PASS  Version note and Author's note identical  [2929 chars]
+  PASS  sections 2 and 3 identical  [7644 chars]
+  PASS  appendices (guided accounts removed) differ from round 4 in exactly the 5 declared lines  [5 old / 5 new non-blank lines]
+        changed: This appendix states formally what Section~\ref{sec:anchor} tells in words. It opens with a guided account in  ...
+        changed: Each law above was checked by independently written code, with zero discrepancies: the valuation law on $8{,}0 ...
+        changed: This appendix states formally what Section~\ref{sec:cycles} tells in words. It opens with a guided account in  ...
+        changed: This appendix states formally what Section~\ref{sec:aeh} tells in words. It opens with a guided account in pla ...
+        changed: Theorem~\ref{thm:vlaw}, Lemma~\ref{lem:absorption}, Theorem~\ref{thm:depth} (Remark~\ref{rem:verify1}) & Indep ...
+  PASS  Remark C.6: exactly two edits (count/range/omega = 1 clause; script named)
+  PASS  Appendix G row: exactly two edits (count/range/omega = 1 clause; script named)
+  PASS  every formal statement environment (theorem/proposition/lemma/corollary/definition/hypothesis/heuristic) identical  [19 environments]
+  CONTROL rejected  a one-character edit inside Theorem C.5 passes as unchanged
+
+PART C. Moved text: round-4 sections 4-6 against the guided accounts of Appendices C-E
+  Appendix C: round-4 section 4 1495 words, guided account 1486 words, 5 word-level differences:
+        - '\\section{The exact laws of one step}\\label{sec:anchor} \\emph{What this section is about.}'
+        + '\\subsection*{A guided account}'
+        - 'halvings'
+        + 'halvings, beyond the first,'
+        - 'The statements, formulas and proofs are in Appendix~\\ref{app:laws}.'
+        + ''
+        - '$62{,}937$'
+        + '$63{,}000$'
+        - ''
+        + '$\\w = 1$ included,'
+     edit [header: section opening -> guided-account heading (the move)]
+     edit [cold read 3 (a)]
+     edit [self-pointer dropped (the move)]
+     edit [4ee9029: the re-run count, omega = 1 included]
+  PASS  Appendix C: round-4 text with exactly the listed 4 edits applied equals the guided account  [residual differences []; missing []]
+  Appendix D: round-4 section 5 2211 words, guided account 2238 words, 10 word-level differences:
+        - '\\section{Cycles: what counting can and cannot do}\\label{sec:cycles} \\emph{What this section is about'
+        + '\\subsection*{A guided account}'
+        - 'section'
+        + 'account'
+        - 'proves that'
+        + 'why'
+        - 'Appendix~\\ref{app:cycles} has the statements, formulas and proofs.'
+        + ''
+        - ''
+        + "This seven-block instance is v3's, found by an earlier search and stated as part~(iv) of Theorem~\\re"
+        - 'threshold'
+        + 'bound'
+        - 'Appendix~\\ref{app:cycles}).'
+        + 'below).'
+        - 'range.'
+        + 'range than $2$ to the power ($n$ times the shrinking factor).'
+        - '(Appendix~\\ref{app:cycles}, ``Verification'
+        + '(``Verification'
+        - "record'';"
+        + "record'', below;"
+     edit [header (the move)]
+     edit [self-reference (the move)]
+     edit [UNDECLARED wording: 'and proves that they go no further' -> 'and why they go no further']
+     edit [self-pointer dropped (the move)]
+     edit [cold read 3 (b)]
+     edit [UNDECLARED wording: the round-4 check's optional note on C-13 ('threshold' -> 'bound')]
+     edit [pointer -> 'below' (the move)]
+     edit [round-4 fix 3]
+     edit [pointer -> 'below' (the move)]
+  PASS  Appendix D: round-4 text with exactly the listed 9 edits applied equals the guided account  [residual differences []; missing []]
+  Appendix E: round-4 section 6 1863 words, guided account 1863 words, 17 word-level differences:
+        - '\\section{The fair-coin hypothesis}\\label{sec:aeh} \\emph{What this section is about.}'
+        + '\\subsection*{A guided account}'
+        - 'section'
+        + 'account'
+        - '(Appendix~\\ref{app:aeh}'
+        + '(the formal account below'
+        - 'Appendix~\\ref{app:aeh} has it in full.'
+        + ''
+        - 'of Appendix~\\ref{app:aeh};'
+        + 'below;'
+        - 'things (Appendix~\\ref{app:aeh}).'
+        + 'things.'
+        - '(Appendix~\\ref{app:aeh}, ``The'
+        + '(``The'
+        - "case'';"
+        + "case'', below;"
+        - '(Appendix~\\ref{app:aeh});'
+        + '(below);'
+        - 'Appendix~\\ref{app:aeh},'
+        + ''
+        - "implies'';"
+        + "implies'', below;"
+        - ''
+        + '--- in the usual terms, digits of $2$-adic logarithms of whole numbers'
+        - 'precisely),'
+        + 'precisely) ---'
+        - ''
+        + 'questions of'
+        - 'question is'
+        + 'kind are'
+        - 'values, which the sharper control set aside;'
+        + 'values;'
+        - "(Appendix~\\ref{app:aeh}, ``Calibration'')."
+        + "(``Calibration'', below)."
+     edit [header (the move)]
+     edit [self-reference (the move)]
+     edit [pointer (the move)]
+     edit [self-pointer dropped (the move)]
+     edit [pointer -> 'below' (the move)]
+     edit [pointer dropped (the move)]
+     edit [pointer -> 'below' (the move)]
+     edit [pointer -> 'below' (the move)]
+     edit [pointer -> 'below' (the move)]
+     edit [round-4 fix 2]
+     edit [round-4 fix 4]
+     edit [pointer -> 'below' (the move)]
+  PASS  Appendix E: round-4 text with exactly the listed 12 edits applied equals the guided account  [residual differences []; missing []]
+  PASS  exactly two of the edits are not declared in section 7e (both noted; neither changes a claim)  [[('D', "UNDECLARED wording: 'and proves that they go no further' -> 'and why they go no further'"), ('D', "UNDECLARED wording: the round-4 check's optional note on C-13 ('threshold' -> 'bound')")]]
+  CONTROL rejected  an undeclared number change (0.698 -> 0.689) in App D's guided account passes
+
+PART D. The entry-depth verification sentence (63,000, omega = 1 included)
+  PASS  App C guided account 'Checks': 'all $63{,}000$ valid states' and omega = 1 included
+  PASS  Remark C.6: 'all $63{,}000$ valid states' and omega = 1 included
+  PASS  Appendix G row: 'all $63{,}000$ valid states' and omega = 1 included
+  PASS  Remark C.6 names experiments/depth_law_reverify.py
+  PASS  Appendix G row names depth_law_reverify.py
+  PASS  App C guided account points to Remark C.6 and to Appendix G for the scripts (it names no script itself)
+  PASS  ledger C-3.6 and C-3.5(a) say 63,000 with omega = 1 included
+  PASS  committed output: 'valid states checked: 63000'
+  PASS  committed output: omega = 1 checked separately, 63 states, 0 failures
+  PASS  committed output: 'TOTAL: 669250 checks on 63000 states, 0 failures'
+  PASS  fresh count of valid states (omega < 3000 odd, prime to 3; 1 <= d < 64) is 63,000  [63000]
+  CONTROL rejected  62,937 taken as the full count
+  PASS  fresh: Theorem C.5's entry-depth law and d+ = m+ + a+ on the 63 states (1, d), 1 <= d < 64  [0 mismatches]
+  CONTROL rejected  the omega = 1 lifting law with delta_s dropped (m+ = 3 - s + v2(n)) holds on every even d < 64  [31 mismatches]
+
+PART E. Worked numbers of the new sections 4-6
+  PASS  the eight-kind rule of section 4 (six fixed at 1 or 2, lifting >= 3) on all valid states w < 3001, d <= 40  [0 mismatches]
+  PASS  lifting kinds: s = 2 + (number of lowest binary digits on which d agrees with the anchor M(w) = N(w^2))  [10000 lifting states, w < 3001, d <= 40, anchor mod 2^64; 0 mismatches]
+  PASS  anchor of omega = 1 is all zeros (9^0 = 1)
+  PASS  (1,2): d = 2 = 0b10 has one trailing zero, s = 2 + 1 = 3 = v2(3^2 - 1)
+  PASS  (1,2): 3*5 + 1 = 16 halves four times (the first halving plus three more), to 1
+  PASS  13 has state (7,1); (7,1) is of kind (7, odd), table s = 2
+  PASS  (7,1): s = v2(3*7 - 1) = v2(20) = 2, even; exit 5
+  PASS  orbit: 3*13 + 1 = 40 halves three times (1 + s) to 5
+  PASS  next state gains a factor of 3: 5 + 1 = 6 = 2*3, next state (1,2) with a = 1
+  PASS  (5 + 1) * 2^s = 3^d w + 2^s - 1: 24 = 21 + 3
+  PASS  n = 4+7+9+15+23+35+1 = 94
+  PASS  exit valuations total 6*1 + 49 = 55; K = 94 + 55 = 149
+  PASS  K = sum over blocks of (entry depth + exit valuation): each block halves once per step plus s
+  PASS  q = 2^149 - 3^94 > 0 (2^K only slightly larger than 3^n)
+  PASS  gamma = K - log2 q = 6.74 (to 2 decimals)  [gamma = 6.743758]
+  PASS  gamma lies outside part (i)'s bracket [3.683012, 5.140212]
+  PASS  3^n = 2^K (1 - 2^-gamma) (definition of gamma, to double precision)
+  PASS  all seven size conditions q <= R_r hold (Proposition D.1)  [7/7]
+  PASS  divisibility q | R_r fails (so not a cycle)  [q | R_r at 0 of 7 rotations]
+  PASS  cross-check: R_r / q = (x_r + 1) / 2^(m_r) from the rational fixed point of the block map, every rotation
+  PASS  trivial cycle (m, s) = (1, 1): R = q = 1, size and divisibility both hold
+  PASS  first six blocks climb (s = 1), the last falls 49 extra halvings
+  PASS  letters of the orbit of 7: (3,1), (1,2), (1,3), (1,1), then (1,1) forever  [[(3, 1), (1, 2), (1, 3), (1, 1), (1, 1), (1, 1)]]
+  PASS  P(letter (1,2)) = 1/2 * 1/4 = 1/8 under the coin model
+  PASS  1/4 + 1/16 + ... = 1/3 exactly (geometric sum), partial sums to 2^-40 within 2^-40
+  PASS  a factor of 3 is gained exactly when s is even (w < 601, d <= 20)  [0 mismatches]
+  PASS  main text sections 1-8 use none of q, gamma, X_0, p_1 (dropped from the Symbols page)
+  PASS  Symbols page: 'p-adic' occurs in the Author's note, and '$m$-cycle' nowhere in sections 1-8
+  PASS  App D guided account uses q, gamma, X_0 and p_1(X_0), as the Symbols page says
+
+PART F. Negative controls
+  CONTROL rejected  letter list with (1,2) replaced by (2,1)
+  CONTROL rejected  K = 148 for the staircase
+  CONTROL rejected  P(1,2) = 1/6
+  CONTROL rejected  (7,1) given s = 1
+  CONTROL rejected  the staircase with last exit valuation 48 passes the size conditions  [q = neg]
+  CONTROL rejected  the staircase with last exit valuation 60 passes every size condition
+  CONTROL rejected  anchor of w = 3 with one digit flipped satisfies the lifting rule on d odd < 200  [25 mismatches]
+
+TOTAL: 74 checks passed, 0 failed; controls 11 rejected, 0 not rejected
+VERDICT: PASS
